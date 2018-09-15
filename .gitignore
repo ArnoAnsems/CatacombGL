@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+*.pdb
+*.iobj
+*.ipdb
+*.log
+*.tlog
+build/CatacombGL/Release/CatacombGL.res
+VS2015/.vs/CatacombGL/v14/.suo
+*.db
+*.opendb
