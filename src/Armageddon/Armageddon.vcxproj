@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameArmageddon.h" />
+    <ClInclude Include="GameDetectionArmageddon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameArmageddon.cpp" />

@@ -18,7 +18,8 @@ Current limitations as of version 0.1.0:
 * No fade-in effect when entering a level. 
 
 # How to install
-CatacombGL does not run standalone, but requires the original The Catacomb Abyss game data (levels, pictures, sounds, etc) to be present on the system. The game data can be obtained legitimately and free-of-charge by downloading the 1.13 shareware version of The Catacomb Abyss. Various websites offer the shareware version for download, see for example https://archive.org/details/TheCatacombAbyss. Alternatively, the game data can also be obtained by buying the Catacombs Pack from gog.com, see https://www.gog.com/game/catacombs_pack. The differences between the shareware and commercial versions are purely cosmetic. 
+CatacombGL does not run standalone, but requires the original The Catacomb Abyss game data (levels, pictures, sounds, etc) to be present on the system. The game data can be obtained legitimately and free-of-charge by downloading the 1.13 shareware version of The Catacomb Abyss. Various websites offer the shareware version for download, see for example https://archive.org/details/TheCatacombAbyss. Alternatively, the game data can also be obtained by buying the Catacombs Pack from gog.com, see https://www.gog.com/game/catacombs_pack. The differences between the shareware and commercial versions are purely cosmetic.
+In case the Catacombs Pack was installed via the GOG installer, simply run CatacombGL.exe from any location and the game data will be auto-detected. In case the shareware version is installed, put the CatacombGL files in the same folder as the game data and run CatacombGL.exe.
 
 # Controls
 The keyboard and mouse controls for moving, shooting, etc. can be customized via the in-game menu. The following keys are reserved and cannot be customized: 
