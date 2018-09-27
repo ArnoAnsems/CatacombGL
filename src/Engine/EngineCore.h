@@ -33,6 +33,8 @@
 #include "GameTimer.h"
 #include "ISystem.h"
 
+#include "../Armageddon/GameArmageddon.h"
+
 class EngineCore
 {
 public:

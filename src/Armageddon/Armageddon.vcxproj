@@ -124,11 +124,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioRepositoryArmageddon.h" />
+    <ClInclude Include="DecorateAll.h" />
+    <ClInclude Include="DecorateMisc.h" />
+    <ClInclude Include="EgaGraphArmageddon.h" />
     <ClInclude Include="GameArmageddon.h" />
     <ClInclude Include="GameDetectionArmageddon.h" />
+    <ClInclude Include="GameMapsArmageddon.h" />
+    <ClInclude Include="IntroViewArmageddon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameArmageddon.cpp" />
+    <ClCompile Include="IntroViewArmageddon.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

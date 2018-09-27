@@ -14,12 +14,17 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameArmageddon.h"
+#include "EgaGraphArmageddon.h"
+#include "GameMapsArmageddon.h"
+#include "IntroViewArmageddon.h"
+#include "AudioRepositoryArmageddon.h"
+#include "DecorateAll.h"
 #include "..\Engine\IRenderer.h"
 
-static const std::string ArmageddonName = "Catacomb Armageddon";
+static const std::string ArmageddonName = "Catacomb Armageddon v1.02";
 
 GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) :
-    m_gameId (0),
+    m_gameId (3),
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_introView (NULL)
@@ -56,26 +61,60 @@ GameArmageddon::~GameArmageddon()
 
 void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
 {
+    Actor* const playerState = level->GetPlayerActor();
 
-}
-
-void GameArmageddon::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory)
-{
+    for (uint16_t y = 0; y < level->GetLevelHeight(); y++)
+    {
+        for (uint16_t x = 0; x < level->GetLevelWidth(); x++)
+        {
+            const uint16_t tile = level->GetFloorTile(x, y);
+            switch (tile)
+            {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            {
+                playerState->SetX(x + 0.5f);
+                playerState->SetY(y + 0.5f);
+                playerState->SetAngle((tile - 1) * 90.0f);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+    }
 }
 
 GameMaps* GameArmageddon::GetGameMaps()
 {
-    return NULL;
+    if (m_gameMaps == NULL)
+    {
+        m_gameMaps = new GameMaps(gameMapsArmageddon, m_gamePath);
+    }
+
+    return m_gameMaps;
 }
 
 EgaGraph* GameArmageddon::GetEgaGraph()
 {
-    return NULL;
+    if (m_egaGraph == NULL)
+    {
+        m_egaGraph = new EgaGraph(egaGraphArmageddon, m_gamePath, m_renderer);
+    }
+
+    return m_egaGraph;
 }
 
 AudioRepository* GameArmageddon::GetAudioRepository()
 {
-    return NULL;
+    if (m_audioRepository == NULL)
+    {
+        m_audioRepository = new AudioRepository(audioRepositoryArmageddon, m_gamePath);
+    }
+
+    return m_audioRepository;
 }
 
 AudioPlayer* GameArmageddon::GetAudioPlayer()
@@ -90,12 +129,17 @@ AudioPlayer* GameArmageddon::GetAudioPlayer()
 
 IIntroView* GameArmageddon::GetIntroView()
 {
+    if (m_introView == NULL)
+    {
+        m_introView = new IntroViewArmageddon(m_renderer, m_gamePath);
+    }
+
     return m_introView;
 }
 
 const std::map<uint16_t, const DecorateActor>& GameArmageddon::GetDecorateActors() const
 {
-    return {};
+    return decorateArmageddonAll;
 }
 
 const std::string& GameArmageddon::GetName() const
@@ -106,4 +150,88 @@ const std::string& GameArmageddon::GetName() const
 const uint8_t GameArmageddon::GetId() const
 {
     return m_gameId;
+}
+
+void GameArmageddon::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory)
+{
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsArmageddon::STATUSPIC), 0, 120);
+
+    DrawHealth(health);
+    DrawScrolls(playerInventory);
+    DrawKeys(playerInventory);
+    DrawBonus(playerInventory);
+    DrawGems(playerInventory);
+
+    m_renderer.RenderTextCentered(locationMessage.c_str(), GetEgaGraph()->GetFont(3), EgaBrightYellow, 160, 121);
+}
+
+void GameArmageddon::DrawHealth(const int16_t health)
+{
+    const uint16_t percentage = (uint16_t)health;
+
+    m_renderer.RenderNumber(percentage, GetEgaGraph()->GetFont(3), 3, EgaBrightYellow, 74, 176);
+
+    uint16_t picnum;
+    if (percentage > 75)
+    {
+        picnum = FACE1PIC;
+    }
+    else if (percentage > 50)
+    {
+        picnum = FACE2PIC;
+    }
+    else if (percentage > 25)
+    {
+        picnum = FACE3PIC;
+    }
+    else if (percentage)
+    {
+        picnum = FACE4PIC;
+    }
+    else
+    {
+        picnum = FACE5PIC;
+    }
+
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picnum), 64, 134);
+}
+
+void GameArmageddon::DrawScrolls(const PlayerInventory& playerInventory)
+{
+    for (uint8_t loop = 0; loop<8; loop++)
+    {
+        if (playerInventory.GetScroll(loop))
+        {
+            uint8_t y = 150 + ((loop > 3) * 10);
+            uint8_t x = 209 + (loop % 4) * 8;
+            m_renderer.RenderNumber(loop + 1, GetEgaGraph()->GetFont(3), 1, EgaBlack, x, y);
+        }
+    }
+}
+
+void GameArmageddon::DrawKeys(const PlayerInventory& playerInventory)
+{
+    m_renderer.RenderNumber(playerInventory.GetKeys(RedKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 160, 149);
+    m_renderer.RenderNumber(playerInventory.GetKeys(YellowKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 184, 176);
+    m_renderer.RenderNumber(playerInventory.GetKeys(GreenKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 184, 149);
+    m_renderer.RenderNumber(playerInventory.GetKeys(BlueKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 160, 176);
+}
+
+void GameArmageddon::DrawBonus(const PlayerInventory& playerInventory)
+{
+    m_renderer.RenderNumber(playerInventory.GetBolts(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 137);
+    m_renderer.RenderNumber(playerInventory.GetNukes(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 155);
+    m_renderer.RenderNumber(playerInventory.GetPotions(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 173);
+}
+
+void GameArmageddon::DrawGems(const PlayerInventory& playerInventory)
+{
+    for (uint8_t i = 0; i < 5; i++)
+    {
+        if (playerInventory.GetGem(i))
+        {
+            const uint16_t picNum = RADAR_RGEMPIC + i;
+            m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picNum), 256 + (i * 8), 173);
+        }
+    }
 }

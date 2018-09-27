@@ -1,0 +1,42 @@
+// Copyright (C) 2018 Arno Ansems
+// 
+// This program is free software: you can redistribute it and/or modify 
+// it under the terms of the GNU General Public License as published by 
+// the Free Software Foundation, either version 3 of the License, or 
+// (at your option) any later version. 
+// 
+// This program is distributed in the hope that it will be useful, 
+// but WITHOUT ANY WARRANTY; without even the implied warranty of 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+// GNU General Public License for more details. 
+// 
+// You should have received a copy of the GNU General Public License 
+// along with this program.  If not, see http://www.gnu.org/licenses/ 
+
+//
+// IntroViewArmageddon
+//
+// Introduction screens for the Catacomb Armageddon
+//
+#pragma once
+
+#include "..\Engine\IIntroView.h"
+#include "..\Engine\Shape.h"
+#include <string>
+
+class IntroViewArmageddon : public IIntroView
+{
+public:
+    IntroViewArmageddon(IRenderer& renderer, const std::string& path);
+    ~IntroViewArmageddon();
+    void DrawIntroduction(const uint32_t timeStamp);
+    void DrawRequestDifficultyLevel();
+    void DrawNoviceSelected();
+    void DrawWarriorSelected();
+    void DrawStandBeforeGate();
+
+private:
+    Shape* m_shapeEntering;
+};
+
+#pragma once

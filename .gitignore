@@ -39,3 +39,8 @@ build/CatacombGL/Release/CatacombGL.res
 VS2015/.vs/CatacombGL/v14/.suo
 *.db
 *.opendb
+bin/CatacombGL.ilk
+*.ilk
+*.idb
+*.tmp
+build/CatacombGL/Debug/CatacombGL.res

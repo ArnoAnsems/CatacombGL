@@ -23,6 +23,8 @@
 // TODO: Move more code to the OS-independent Engine. The creation of the OpenGL window can be done via SDL2. 
 //
 
+#define RUN_ARMAGEDDON FALSE
+
 // Windows specific includes
 #include <windows.h>
 #include <gl\gl.h>
@@ -37,6 +39,8 @@
 
 #include "..\Abyss\GameAbyss.h"
 #include "..\Abyss\GameDetectionAbyss.h"
+#include "..\Armageddon\GameArmageddon.h"
+#include "..\Armageddon\GameDetectionArmageddon.h"
 
 #include "..\..\ThirdParty\RefKeen\be_st.h"
 #include "..\..\ThirdParty\RefKeen\id_sd.h"
@@ -448,6 +452,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     const uint8_t GameIdNotDetected = 0;
     const uint8_t GameIdCatacombAbyssv113 = 1;
     const uint8_t GameIdCatacombAbyssv124 = 2;
+    const uint8_t GameIdCatacombArmageddonv102 = 3;
     GameDetection gameDetection;
 
     // Try to find shareware game files in local path
@@ -457,8 +462,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         std::string gogPath;
         if (GetCatacombsPackGOGPath(gogPath))
         {
-            const std::string gogAbyssPath = gogPath + "Abyss\\";
-            gameDetection.GetDetectionReport(GameIdCatacombAbyssv124, gogAbyssPath, abyssFilesv124);  
+#if RUN_ARMAGEDDON
+            const std::string gogArmageddonPath = gogPath + "Armageddon\\";
+            gameDetection.GetDetectionReport(GameIdCatacombArmageddonv102, gogArmageddonPath, armageddonFiles);
+#endif
+            if (gameDetection.GetBestMatch().score != 0)
+            {
+                const std::string gogAbyssPath = gogPath + "Abyss\\";
+                gameDetection.GetDetectionReport(GameIdCatacombAbyssv124, gogAbyssPath, abyssFilesv124);
+            }
         }   
 
         // Try to find registered game files in local path
@@ -471,7 +483,14 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     const DetectionReport& report = gameDetection.GetBestMatch();
     if (report.score == 0)
     {
-        game = new GameAbyss(report.gameId, report.folder, renderer);
+        if (report.gameId == GameIdCatacombArmageddonv102)
+        {
+            game = new GameArmageddon(report.folder, renderer);
+        }
+        else
+        {
+            game = new GameAbyss(report.gameId, report.folder, renderer);
+        }
     }
     else
     {

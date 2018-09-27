@@ -43,6 +43,12 @@ public:
     const uint8_t GetId() const;
 
 private:
+    void DrawHealth(const int16_t health);
+    void DrawScrolls(const PlayerInventory& playerInventory);
+    void DrawKeys(const PlayerInventory& playerInventory);
+    void DrawBonus(const PlayerInventory& playerInventory);
+    void DrawGems(const PlayerInventory& playerInventory);
+
     IIntroView* m_introView;
     const uint8_t m_gameId;
     const std::string m_gamePath;

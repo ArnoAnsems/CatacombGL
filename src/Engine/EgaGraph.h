@@ -59,6 +59,7 @@ public:
     Picture* GetTilesSize8Masked();
     Font* GetFont(const uint16_t index);
     LevelLocationNames* GetWorldLocationNames(const uint16_t index);
+    uint16_t GetNumberOfWorldLocationNames() const;
 
 private:
     uint32_t GetChunkSize(const uint16_t index);

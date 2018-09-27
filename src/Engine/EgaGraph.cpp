@@ -97,7 +97,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
 
     // Initialize location names
     m_worldLocationNames = new LevelLocationNames*[m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames];
-    for (uint16_t i = 0; i < m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames; i++)
+    for (uint16_t i = 0; i < m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1; i++)
     {
         m_worldLocationNames[i] = NULL;
     }
@@ -308,17 +308,22 @@ Font* EgaGraph::GetFont(const uint16_t index)
 
 LevelLocationNames* EgaGraph::GetWorldLocationNames(const uint16_t index)
 {
-    if (m_worldLocationNames[index - m_staticData.indexOfFirstWorldLocationNames] == NULL)
+    if (m_worldLocationNames[index] == NULL)
     {
-        uint8_t* compressedLocationNames = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index)];
-        uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
+        uint8_t* compressedLocationNames = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index + m_staticData.indexOfFirstWorldLocationNames)];
+        uint32_t compressedSize = GetChunkSize(m_staticData.indexOfFirstWorldLocationNames + index) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedLocationNames;
         FileChunk* locationNamesChunk = m_huffman->Decompress(&compressedLocationNames[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        m_worldLocationNames[index - m_staticData.indexOfFirstWorldLocationNames] = new LevelLocationNames(locationNamesChunk);
+        m_worldLocationNames[index] = new LevelLocationNames(locationNamesChunk);
         delete locationNamesChunk;
     }
 
-    return m_worldLocationNames[index - m_staticData.indexOfFirstWorldLocationNames];
+    return m_worldLocationNames[index];
+}
+
+uint16_t EgaGraph::GetNumberOfWorldLocationNames() const
+{
+    return m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1;
 }
 
 uint32_t EgaGraph::GetChunkSize(const uint16_t index)

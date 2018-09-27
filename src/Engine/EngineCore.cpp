@@ -220,9 +220,9 @@ void EngineCore::DrawScene(IRenderer& renderer)
         else
         {
             const uint16_t floorTile = m_level->GetWallTile((uint16_t)(m_level->GetPlayerActor()->GetX()), (uint16_t)(m_level->GetPlayerActor()->GetY()));
-            if (floorTile > 180 && m_level->GetLevelIndex() < LEVEL20TEXT - LEVEL1TEXT)
+            if (floorTile > 180 && m_level->GetLevelIndex() < m_game.GetEgaGraph()->GetNumberOfWorldLocationNames())
             {
-                locationMessage = m_game.GetEgaGraph()->GetWorldLocationNames(LEVEL1TEXT + m_level->GetLevelIndex())->GetLocationName(floorTile - 180);
+                locationMessage = m_game.GetEgaGraph()->GetWorldLocationNames(m_level->GetLevelIndex())->GetLocationName(floorTile - 180);
             }
         }
     }

@@ -21,9 +21,30 @@
     <ClInclude Include="GameDetectionArmageddon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EgaGraphArmageddon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMapsArmageddon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroViewArmageddon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DecorateMisc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DecorateAll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioRepositoryArmageddon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameArmageddon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroViewArmageddon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
