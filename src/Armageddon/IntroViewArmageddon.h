@@ -37,6 +37,16 @@ public:
 
 private:
     Shape* m_shapeEntering;
+    Shape* m_shapePresents;
+    Shape* m_shapeSoftdisk;
+    Shape* m_shapeTitle;
+    Shape* m_shapeCreditsProgramming;
+    Shape* m_shapeCreditsArt;
+    Shape* m_shapeCreditsQA;
+    Shape* m_shapeCreditsDesign;
+    Shape* m_shapeSelectDifficulty;
+    Shape* m_shapeConfirmDifficulty;
+    Shape* m_shapeNovice;
+    Shape* m_shapeWarrior;
+    Shape* m_shapeStandBeforeGate;
 };
-
-#pragma once
