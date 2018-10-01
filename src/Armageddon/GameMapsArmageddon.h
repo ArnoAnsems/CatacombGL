@@ -34,49 +34,49 @@ const std::vector<LevelInfo> gameMapsInfoArmageddon =
     {
         "", // TOWN_MORBIDITY_MAP
         EgaBlack,
-        EgaGreen,
+        EgaBrightRed,
         true,
         true
     },
     {
         "", // DARK_FOREST_MAP
         EgaBlack,
-        EgaGreen,
+        EgaBlack,
         true,
         false
     },
     {
         "", // GARDEN_OF_SOULS_MAP
-        EgaBlack,
+        EgaBlue,
         EgaGreen,
         false,
         false
     },
     {
         "", // LOST_CITY_DAMND_MAP
-        EgaBlack,
+        EgaBrightBlue,
         EgaGreen,
-        true,
+        false,
         false
     },
     {
         "", // TEMPLE_OF_VIPER_MAP
-        EgaDarkGray,
-        EgaLightGray,
+        EgaBlack,
+        EgaRed,
         false,
         false
     },
     {
         "", // TORTURE_CHAMBER_MAP
-        EgaRed,
-        EgaMagenta,
+        EgaBlue,
+        EgaBrightRed,
         false,
         false
     },
     {
         "", // DEMONS_HOLD_MAP
-        EgaBlack,
-        EgaDarkGray,
+        EgaBrightRed,
+        EgaRed,
         false,
         false
     },
@@ -89,64 +89,64 @@ const std::vector<LevelInfo> gameMapsInfoArmageddon =
     },
     {
         "", // HALL_WRETCH_POX_MAP
-        EgaBlack,
         EgaBlue,
+        EgaBrown,
         false,
         false
     },
     {
         "", // LAIR_OF_SUCUBUS_MAP
-        EgaBlack,
-        EgaDarkGray,
+        EgaBrightBlue,
+        EgaRed,
         false,
         false
     },
     {
         "", // BLOOD_CHAMB_EYE_MAP
         EgaBlack,
-        EgaBrown,
+        EgaRed,
         false,
         false
     },
     {
         "", // FLAMING_INFERNO_MAP
         EgaBlack,
-        EgaRed,
+        EgaBrightWhite,
         false,
         false
     },
     {
         "", // SUBTERR_RIVER_MAP
         EgaBlack,
-        EgaDarkGray,
+        EgaBlue,
         false,
         false
     },
     {
         "", // CRYSTAL_MAZE_MG_MAP
-        EgaBlack,
-        EgaBrightRed,
+        EgaBlue,
+        EgaBrightBlue,
         false,
         false
     },
     {
         "", // RAMPARTS_OF_NEM_MAP
-        EgaBrown,
-        EgaBrightYellow,
+        EgaBlack,
+        EgaRed,
         false,
         false
     },
     {
         "", // FORTRESS_OF_NEM_MAP
         EgaBlack,
-        EgaDarkGray,
+        EgaRed,
         false,
         false
     },
     {
         "", // PASSAGE_TO_SURF_MAP
-        EgaBlack,
-        EgaDarkGray,
+        EgaBlue,
+        EgaGreen,
         false,
         false
     }
@@ -166,14 +166,14 @@ const std::vector<WallInfo> wallsInfoArmageddon =
     { FIRE_WALL_3PIC, FIRE_WALL_3PIC, FIRE_WALL_3PIC, FIRE_WALL_3PIC, WTSolid },
     { FIRE_WALL_4PIC, FIRE_WALL_4PIC, FIRE_WALL_4PIC, FIRE_WALL_4PIC, WTSolid },
 
-    { BRN_STONE_GATEPIC, BRN_STONE_GATEPIC, BRN_STONE_GATEPIC, BRN_STONE_GATEPIC, WTSolid },
+    { BRN_STONE_GATEPIC, BRN_STONE_GATEPIC, BRN_STONE_GATEPIC, BRN_STONE_GATEPIC, WTDoor },
     { BRN_STONE_WALL_1PIC, BRN_STONE_WALL_1PIC, BRN_STONE_WALL_2PIC, BRN_STONE_WALL_2PIC, WTSolid },
     { KUDZU_WEAK_LIGHTPIC, KUDZU_WEAK_LIGHTPIC, KUDZU_WEAK_DARKPIC, KUDZU_WEAK_DARKPIC, WTSolid },
     { KUDZU_LIGHT_WALLPIC, KUDZU_LIGHT_WALLPIC, KUDZU_DARK_WALLPIC, KUDZU_DARK_WALLPIC, WTSolid },
     { HEDGE_WALLPIC, HEDGE_WALLPIC, HEDGE_WALLPIC, HEDGE_WALLPIC, WTSolid },
     { HEDGE_EYESPIC, HEDGE_EYESPIC, HEDGE_EYESPIC, HEDGE_EYESPIC, WTSolid },
 
-    { W_GEN_DOOR1PIC, W_GEN_DOOR1PIC, W_GEN_DOOR1PIC, W_GEN_DOOR1PIC, WTSolid },
+    { W_GEN_DOOR1PIC, W_GEN_DOOR1PIC, W_GEN_DOOR1PIC, W_GEN_DOOR1PIC, WTDoor },
     { BRN_WINDOW_LIGHTPIC, BRN_WINDOW_LIGHTPIC, BRN_WINDOW_DARKPIC, BRN_WINDOW_DARKPIC, WTSolid },
 
     { ALTAR_LEFTPIC, ALTAR_LEFTPIC, ALTAR_LEFTPIC, ALTAR_LEFTPIC, WTSolid },
@@ -190,13 +190,13 @@ const std::vector<WallInfo> wallsInfoArmageddon =
 
     { LIGHT_STONE_WALLPIC, LIGHT_STONE_WALLPIC, DARK_STONE_WALLPIC, DARK_STONE_WALLPIC, WTSolid },
 
-    { W_GEN_DOOR2PIC, W_GEN_DOOR2PIC, W_GEN_DOOR2PIC, W_GEN_DOOR2PIC, WTSolid },
+    { W_GEN_DOOR2PIC, W_GEN_DOOR2PIC, W_GEN_DOOR2PIC, W_GEN_DOOR2PIC, WTDoor },
 
     { TROLL_LIGHT_STONEPIC, TROLL_LIGHT_STONEPIC, TROLL_DARK_STONEPIC, TROLL_DARK_STONEPIC, WTSolid },
 
     { BRN_FLAGSTONE_LIGHT_2PIC, BRN_FLAGSTONE_LIGHT_2PIC, BRN_FLAGSTONE_DARK_2PIC, BRN_FLAGSTONE_DARK_2PIC, WTSolid },
 
-    { W_CRYSTAL_DOORPIC, W_CRYSTAL_DOORPIC, W_CRYSTAL_DOORPIC, W_CRYSTAL_DOORPIC, WTSolid },
+    { W_CRYSTAL_DOORPIC, W_CRYSTAL_DOORPIC, W_CRYSTAL_DOORPIC, W_CRYSTAL_DOORPIC, WTDoor },
 
     { DMG_BRN_FSTN_LTPIC, DMG_BRN_FSTN_LTPIC, DMG_BRN_FSTN_DKPIC, DMG_BRN_FSTN_DKPIC, WTSolid },
 
@@ -214,22 +214,22 @@ const std::vector<WallInfo> wallsInfoArmageddon =
 
     { RED_MUD_LIGHTPIC, RED_MUD_LIGHTPIC, BRN_MUD_DARKPIC, BRN_MUD_DARKPIC, WTSolid },
 
-    { STEEL_DOOR1PIC, STEEL_DOOR1PIC, STEEL_DOOR1PIC, STEEL_DOOR1PIC, WTSolid },
+    { STEEL_DOOR1PIC, STEEL_DOOR1PIC, STEEL_DOOR1PIC, STEEL_DOOR1PIC, WTDoor },
 
     { RED_MUD_WEAK_LIGHTPIC, RED_MUD_WEAK_LIGHTPIC, BRN_MUD_WEAK_DARKPIC, BRN_MUD_WEAK_DARKPIC, WTSolid },
 
-    { STEEL_DOOR2PIC, STEEL_DOOR2PIC, STEEL_DOOR2PIC, STEEL_DOOR2PIC, WTSolid },
+    { STEEL_DOOR2PIC, STEEL_DOOR2PIC, STEEL_DOOR2PIC, STEEL_DOOR2PIC, WTDoor },
 
-    { HORN_DOORPIC, HORN_DOORPIC, HORN_DOORPIC, HORN_DOORPIC, WTSolid },
+    { HORN_DOORPIC, HORN_DOORPIC, HORN_DOORPIC, HORN_DOORPIC, WTDoor },
     { TROLL_BLOODY_LT_STONEPIC, TROLL_BLOODY_LT_STONEPIC, TROLL_BLOODY_DK_STONEPIC, TROLL_BLOODY_DK_STONEPIC, WTSolid },
-    { CLOSED_DOOR_1PIC, CLOSED_DOOR_1PIC, CLOSED_DOOR_1PIC, CLOSED_DOOR_1PIC, WTSolid },
+    { CLOSED_DOOR_1PIC, CLOSED_DOOR_1PIC, CLOSED_DOOR_1PIC, CLOSED_DOOR_1PIC, WTDoor },
 
-    { GRY_DOOR_LTPIC, GRY_DOOR_LTPIC, GRY_DOOR_DKPIC, GRY_DOOR_DKPIC, WTSolid },
+    { GRY_DOOR_LTPIC, GRY_DOOR_LTPIC, GRY_DOOR_DKPIC, GRY_DOOR_DKPIC, WTDoor },
 
-    { BRN_DOOR_LTPIC, BRN_DOOR_LTPIC, BRN_DOOR_DKPIC, BRN_DOOR_DKPIC, WTSolid },
+    { BRN_DOOR_LTPIC, BRN_DOOR_LTPIC, BRN_DOOR_DKPIC, BRN_DOOR_DKPIC, WTDoor },
 
     { GRY_FGSTN_LTPIC, GRY_FGSTN_LTPIC, GRY_FGSTN_DKPIC, GRY_FGSTN_DKPIC, WTSolid },
-    { DOOR_2PIC, DOOR_2PIC, DOOR_2PIC, DOOR_2PIC, WTSolid },
+    { DOOR_2PIC, DOOR_2PIC, DOOR_2PIC, DOOR_2PIC, WTDoor },
 
     { WATER_LIGHT_WEAK_1PIC, WATER_LIGHT_WEAK_1PIC, WATER_DARK_WEAK_1PIC, WATER_DARK_WEAK_1PIC, WTSolid },
     { WATER_LIGHT_WEAK_2PIC, WATER_LIGHT_WEAK_2PIC, WATER_DARK_WEAK_2PIC, WATER_DARK_WEAK_2PIC, WTSolid },
@@ -239,7 +239,7 @@ const std::vector<WallInfo> wallsInfoArmageddon =
     { WATER_LIGHT_2PIC, WATER_LIGHT_2PIC, WATER_DARK_2PIC, WATER_DARK_2PIC, WTSolid },
     { WATER_LIGHT_3PIC, WATER_LIGHT_3PIC, WATER_DARK_3PIC, WATER_DARK_3PIC, WTSolid },
 
-    { LIGHT_BREATH_1PIC, LIGHT_BREATH_1PIC, DARK_BREATH_1PIC, DARK_BREATH_1PIC, WTSolid },
+    { LIGHT_BREATH_1PIC, LIGHT_BREATH_1PIC, DARK_BREATH_1PIC, DARK_BREATH_1PIC, WTSolid },   // tf_SPECIAL ???
     { LIGHT_BREATH_2PIC, LIGHT_BREATH_2PIC, DARK_BREATH_2PIC, DARK_BREATH_2PIC, WTSolid },
     { LIGHT_BREATH_3PIC, LIGHT_BREATH_3PIC, DARK_BREATH_3PIC, DARK_BREATH_3PIC, WTSolid },
 
@@ -251,23 +251,23 @@ const std::vector<WallInfo> wallsInfoArmageddon =
     { WATER_EXP_WALL_2PIC, WATER_EXP_WALL_2PIC, WATER_EXP_WALL_2PIC, WATER_EXP_WALL_2PIC, WTSolid },
     { WATER_EXP_WALL_3PIC, WATER_EXP_WALL_3PIC, WATER_EXP_WALL_3PIC, WATER_EXP_WALL_3PIC, WTSolid },
 
-    { FINALWALLPIC, FINALWALLPIC, FINALWALLPIC, FINALWALLPIC, WTSolid },
+    { FINALWALLPIC, FINALWALLPIC, FINALWALLPIC, FINALWALLPIC, WTVictory },
 
     { LT_SKEL1PIC, LT_SKEL1PIC, LT_SKEL1PIC, LT_SKEL1PIC, WTSolid },
     { DK_SKEL1PIC, DK_SKEL1PIC, DK_SKEL1PIC, DK_SKEL1PIC, WTSolid },
     { LT_SKEL2PIC, LT_SKEL2PIC, LT_SKEL2PIC, LT_SKEL2PIC, WTSolid },
     { DK_SKEL2PIC, DK_SKEL2PIC, DK_SKEL2PIC, DK_SKEL2PIC, WTSolid },
 
-    { 0, 0, 0, 0, WTOpen },
+    { 0, 0, 0, 0, WTOpen }, // tf_INVISIBLE_WALL
 
     { TAP_1PIC, TAP_1PIC, TAP_1PIC, TAP_1PIC, WTSolid },
     { TAP_2PIC, TAP_2PIC, TAP_2PIC, TAP_2PIC, WTSolid },
     { TAP_3PIC, TAP_3PIC, TAP_3PIC, TAP_3PIC, WTSolid },
     { TAP_4PIC, TAP_4PIC, TAP_4PIC, TAP_4PIC, WTSolid },
-    { TAP_5PIC, TAP_5PIC, TAP_5PIC, TAP_5PIC, WTSolid },
+    { TAP_5PIC, TAP_5PIC, TAP_5PIC, TAP_5PIC, WTSolid },  
 
-    { WATER_DOOR1_PIC, WATER_DOOR1_PIC, WATER_DOOR1_PIC, WATER_DOOR1_PIC, WTSolid },
-    { WATER_DOOR2_PIC, WATER_DOOR2_PIC, WATER_DOOR2_PIC, WATER_DOOR2_PIC, WTSolid }
+    { WATER_DOOR1_PIC, WATER_DOOR1_PIC, WATER_DOOR1_PIC, WATER_DOOR1_PIC, WTDoor },
+    { WATER_DOOR2_PIC, WATER_DOOR2_PIC, WATER_DOOR2_PIC, WATER_DOOR2_PIC, WTDoor }
 };
 
 const gameMapsStaticData gameMapsArmageddon = { "GAMEMAPS.ARM", gameMapsOffsetsArmageddon, gameMapsInfoArmageddon, wallsInfoArmageddon };
