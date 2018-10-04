@@ -1402,7 +1402,7 @@ void Level::DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp)
     renderer.UnprepareFloorAndCeiling();
 }
 
-void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const bool animationFrame)
+void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks)
 {
     renderer.PrepareWalls();
 
@@ -1413,7 +1413,7 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const bool animat
             if (m_wallYVisible[(y * m_levelWidth) + x])
             {
                 const uint16_t northwallIndex = GetWallTile(x, y - 1);
-                const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, animationFrame);
+                const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, ticks);
                 if (northWall != 1)
                 {
                     Picture* northPicture = egaGraph->GetPicture(northWall);
@@ -1424,7 +1424,7 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const bool animat
             if (m_wallXVisible[(y * m_levelWidth) + x + 1])
             {
                 const uint16_t eastwallIndex = GetWallTile(x + 1, y);
-                const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, animationFrame);
+                const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, ticks);
                 if (eastWall != 1)
                 {
                     Picture* eastPicture = egaGraph->GetPicture(eastWall);
@@ -1436,7 +1436,7 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const bool animat
             if (m_wallYVisible[((y + 1) * m_levelWidth) + x])
             {
                 const uint16_t southwallIndex = GetWallTile(x, y + 1);
-                const uint16_t southWall = GetDarkWallPictureIndex(southwallIndex, animationFrame);
+                const uint16_t southWall = GetDarkWallPictureIndex(southwallIndex, ticks);
                 if (southWall != 1)
                 {
                     Picture* southPicture = egaGraph->GetPicture(southWall);
@@ -1447,7 +1447,7 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const bool animat
             if (m_wallXVisible[(y * m_levelWidth) + x])
             {
                 const uint16_t westwallIndex = GetWallTile(x - 1, y);
-                const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, animationFrame);
+                const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, ticks);
                 if (westWall != 1)
                 {
                     Picture* westPicture = egaGraph->GetPicture(westWall);
@@ -1460,14 +1460,48 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const bool animat
     renderer.UnprepareWalls();
 }
 
-uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const bool animationFrame) const
+uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
 {
-    return (tileIndex < m_wallsInfo.size()) ? (animationFrame ? m_wallsInfo.at(tileIndex).textureDark2 : m_wallsInfo.at(tileIndex).textureDark1) : 1;
+    if (tileIndex < m_wallsInfo.size())
+    {
+        if (m_wallsInfo.at(tileIndex).textureDark.size() > 1)
+        {
+            const uint32_t frameDurationInTicks = 8;
+            const uint32_t animDurationInTicks = frameDurationInTicks * m_wallsInfo.at(tileIndex).textureDark.size();
+            const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
+            return m_wallsInfo.at(tileIndex).textureDark[currentFrame];
+        }
+        else
+        {
+            return m_wallsInfo.at(tileIndex).textureDark[0];
+        }
+    }
+    else
+    {
+        return 1;
+    }
 }
 
-uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const bool animationFrame) const
+uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
 {
-    return (tileIndex < m_wallsInfo.size()) ? (animationFrame ? m_wallsInfo.at(tileIndex).textureLight2 : m_wallsInfo.at(tileIndex).textureLight1) : 1;
+    if (tileIndex < m_wallsInfo.size())
+    {
+        if (m_wallsInfo.at(tileIndex).textureLight.size() > 1)
+        {
+            const uint32_t frameDurationInTicks = 8;
+            const uint32_t animDurationInTicks = frameDurationInTicks * m_wallsInfo.at(tileIndex).textureLight.size();
+            const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
+            return m_wallsInfo.at(tileIndex).textureLight[currentFrame];
+        }
+        else
+        {
+            return m_wallsInfo.at(tileIndex).textureLight[0];
+        }
+    }
+    else
+    {
+        return 1;
+    }
 }
 void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
 {

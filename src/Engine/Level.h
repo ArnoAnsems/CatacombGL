@@ -50,10 +50,8 @@ typedef enum WallType
 
 typedef struct WallInfo
 {
-    uint16_t textureLight1;
-    uint16_t textureLight2;
-    uint16_t textureDark1;
-    uint16_t textureDark2;
+    std::vector<uint16_t> textureLight;
+    std::vector<uint16_t> textureDark;
     WallType wallType;
 } WallInfo;
 
@@ -131,12 +129,12 @@ public:
 
     void DrawVisibilityMap(IRenderer& renderer);
     void DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp);
-    void DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const bool animationFrame);
+    void DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks);
     void DrawActors(IRenderer& renderer, EgaGraph* egaGraph);
 
 private:
-    uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const bool animationFrame) const;
-    uint16_t GetLightWallPictureIndex(const uint16_t tileIndex, const bool animationFrame) const;
+    uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;
+    uint16_t GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;
     void BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall);
     bool IsActorVisibleForPlayer(const Actor* actor) const;
     void RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wallHit);

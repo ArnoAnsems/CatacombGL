@@ -155,8 +155,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
          
-        const bool animationFrame = ((m_gameTimer.GetTicksForWorld() & 8) >> 3 == 0);
-        m_level->DrawWalls(renderer, m_game.GetEgaGraph(), animationFrame);
+        m_level->DrawWalls(renderer, m_game.GetEgaGraph(), m_gameTimer.GetTicksForWorld());
 
 #ifdef DRAWVISIBILITYMAP
         m_level->DrawVisibilityMap(renderer);
