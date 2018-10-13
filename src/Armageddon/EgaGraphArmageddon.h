@@ -1615,5 +1615,6 @@ const egaGraphStaticData egaGraphArmageddon =
     NORTHICONSPR,
     FIRSTTILESIZE8MASKED,
     LEVEL1TEXT,
-    LEVEL17TEXT
+    LEVEL17TEXT,
+    HAND1PICM
 };

@@ -347,3 +347,8 @@ uint32_t EgaGraph::GetChunkSize(const uint16_t index)
 
     return m_staticData.offsets.at(next) - pos;
 }
+
+uint16_t EgaGraph::GetHandPictureIndex() const
+{
+    return m_staticData.indexOfHandPicture;
+}

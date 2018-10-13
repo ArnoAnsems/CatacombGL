@@ -177,7 +177,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
         else
         {
-            renderer.Render2DPicture(m_game.GetEgaGraph()->GetMaskedPicture(HAND1PICM), 120, 120 - m_playerActions.GetHandHeight()/*50*/);
+            renderer.Render2DPicture(m_game.GetEgaGraph()->GetMaskedPicture(m_game.GetEgaGraph()->GetHandPictureIndex()), 120, 120 - m_playerActions.GetHandHeight()/*50*/);
                     
 #ifdef DRAWTILEINFO
             char tileStr[40];
@@ -1327,9 +1327,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             m_level->ExplodeWall(x, y + 1, m_timeStampOfWorldCurrentFrame);
         }
 
-        const uint16_t WALLEXP = 15;
-        const uint16_t WATEREXP = 29;
-        m_level->SetWallTile(x, y, m_level->IsWaterLevel() ? WATEREXP : WALLEXP);
+        const uint16_t tileExplosion = m_game.GetGameMaps()->GetTileWallExplosion(m_level->IsWaterLevel());
+        m_level->SetWallTile(x, y, tileExplosion);
         uint16_t floorTile = m_level->GetFloorTile(x, y);
         floorTile &= 0xff;
         m_level->SetFloorTile(x, y, floorTile );
@@ -1342,9 +1341,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         const uint8_t x = actor->GetTileX();
         const uint8_t y = actor->GetTileY();
 
-        const uint16_t WALLEXP = 15;
-        const uint16_t WATEREXP = 29;
-        m_level->SetWallTile(x, y, m_level->IsWaterLevel() ? WATEREXP + 1 : WALLEXP + 1);
+        const uint16_t tileExplosion = m_game.GetGameMaps()->GetTileWallExplosion(m_level->IsWaterLevel()) + 1;
+        m_level->SetWallTile(x, y, tileExplosion);
 
         actor->SetActionPerformed(true);
         break;
@@ -1354,9 +1352,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         const uint8_t x = actor->GetTileX();
         const uint8_t y = actor->GetTileY();
 
-        const uint16_t WALLEXP = 15;
-        const uint16_t WATEREXP = 29;
-        m_level->SetWallTile(x, y, m_level->IsWaterLevel() ? WATEREXP + 2 : WALLEXP + 2);
+        const uint16_t tileExplosion = m_game.GetGameMaps()->GetTileWallExplosion(m_level->IsWaterLevel()) + 2;
+        m_level->SetWallTile(x, y, tileExplosion);
 
         actor->SetActionPerformed(true);
         break;

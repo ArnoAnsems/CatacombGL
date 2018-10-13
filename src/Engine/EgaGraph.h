@@ -45,6 +45,7 @@ typedef struct egaGraphStaticData
     uint16_t indexOfTileSize8Masked;
     uint16_t indexOfFirstWorldLocationNames;
     uint16_t indexOfLastWorldLocationNames;
+    uint16_t indexOfHandPicture;
 } egaGraphStaticData;
 
 class EgaGraph
@@ -60,6 +61,7 @@ public:
     Font* GetFont(const uint16_t index);
     LevelLocationNames* GetWorldLocationNames(const uint16_t index);
     uint16_t GetNumberOfWorldLocationNames() const;
+    uint16_t GetHandPictureIndex() const;
 
 private:
     uint32_t GetChunkSize(const uint16_t index);

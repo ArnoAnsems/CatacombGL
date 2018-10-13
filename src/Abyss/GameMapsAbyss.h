@@ -299,4 +299,4 @@ const std::vector<WallInfo> wallsInfoAbyss =
     { {ORCH_STATUEPIC}, {ORCH_STATUEPIC}, WTSolid }
 };
 
-const gameMapsStaticData gameMapsAbyss = {"GAMEMAPS.ABS", gameMapsOffsetsAbyss, gameMapsInfoAbyss, wallsInfoAbyss};
+const gameMapsStaticData gameMapsAbyss = {"GAMEMAPS.ABS", gameMapsOffsetsAbyss, gameMapsInfoAbyss, wallsInfoAbyss, 15, 29};

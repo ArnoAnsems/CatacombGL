@@ -270,4 +270,4 @@ const std::vector<WallInfo> wallsInfoArmageddon =
     { {WATER_DOOR2_PIC, WATER_DOOR1_PIC}, {WATER_DOOR2_PIC, WATER_DOOR1_PIC}, WTDoor }
 };
 
-const gameMapsStaticData gameMapsArmageddon = { "GAMEMAPS.ARM", gameMapsOffsetsArmageddon, gameMapsInfoArmageddon, wallsInfoArmageddon };
+const gameMapsStaticData gameMapsArmageddon = { "GAMEMAPS.ARM", gameMapsOffsetsArmageddon, gameMapsInfoArmageddon, wallsInfoArmageddon, 59, 62 };

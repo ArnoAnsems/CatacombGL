@@ -35,6 +35,8 @@ typedef struct gameMapsStaticData
     std::vector<int32_t> offsets;
     std::vector<LevelInfo> mapsInfo;
     std::vector<WallInfo> wallsInfo;
+    uint16_t tileWallExplosion;
+    uint16_t tileWaterExplosion;
 } gameMapsStaticData;
 
 class GameMaps
@@ -46,6 +48,7 @@ public:
     Level* GetLevelFromStart(const uint8_t mapIndex) const;
     Level* GetLevelFromSavedGame(std::ifstream& file) const;
     uint8_t GetNumberOfLevels() const;
+    uint16_t GetTileWallExplosion(const bool isWaterLevel) const;
 
 private:
     uint32_t GetChunkSize(const uint16_t index);

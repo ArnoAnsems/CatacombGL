@@ -113,3 +113,8 @@ uint32_t GameMaps::GetChunkSize(const uint16_t index)
 
     return m_staticData.offsets.at(next) - pos;
 }
+
+uint16_t GameMaps::GetTileWallExplosion(const bool isWaterLevel) const
+{
+    return isWaterLevel ? m_staticData.tileWaterExplosion : m_staticData.tileWallExplosion;
+}

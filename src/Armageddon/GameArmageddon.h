@@ -44,7 +44,6 @@ public:
 
 private:
     void DrawHealth(const int16_t health);
-    void DrawScrolls(const PlayerInventory& playerInventory);
     void DrawKeys(const PlayerInventory& playerInventory);
     void DrawBonus(const PlayerInventory& playerInventory);
     void DrawGems(const PlayerInventory& playerInventory);

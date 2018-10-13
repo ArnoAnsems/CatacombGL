@@ -157,7 +157,6 @@ void GameArmageddon::DrawStatusBar(const int16_t health, const std::string& loca
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsArmageddon::STATUSPIC), 0, 120);
 
     DrawHealth(health);
-    DrawScrolls(playerInventory);
     DrawKeys(playerInventory);
     DrawBonus(playerInventory);
     DrawGems(playerInventory);
@@ -169,7 +168,7 @@ void GameArmageddon::DrawHealth(const int16_t health)
 {
     const uint16_t percentage = (uint16_t)health;
 
-    m_renderer.RenderNumber(percentage, GetEgaGraph()->GetFont(3), 3, EgaBrightYellow, 74, 176);
+    m_renderer.RenderNumber(percentage, GetEgaGraph()->GetFont(3), 3, EgaBrightYellow, 90, 176);
 
     uint16_t picnum;
     if (percentage > 75)
@@ -193,35 +192,22 @@ void GameArmageddon::DrawHealth(const int16_t health)
         picnum = FACE5PIC;
     }
 
-    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picnum), 64, 134);
-}
-
-void GameArmageddon::DrawScrolls(const PlayerInventory& playerInventory)
-{
-    for (uint8_t loop = 0; loop<8; loop++)
-    {
-        if (playerInventory.GetScroll(loop))
-        {
-            uint8_t y = 150 + ((loop > 3) * 10);
-            uint8_t x = 209 + (loop % 4) * 8;
-            m_renderer.RenderNumber(loop + 1, GetEgaGraph()->GetFont(3), 1, EgaBlack, x, y);
-        }
-    }
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picnum), 80, 134);
 }
 
 void GameArmageddon::DrawKeys(const PlayerInventory& playerInventory)
 {
-    m_renderer.RenderNumber(playerInventory.GetKeys(RedKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 160, 149);
-    m_renderer.RenderNumber(playerInventory.GetKeys(YellowKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 184, 176);
-    m_renderer.RenderNumber(playerInventory.GetKeys(GreenKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 184, 149);
-    m_renderer.RenderNumber(playerInventory.GetKeys(BlueKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 160, 176);
+    m_renderer.RenderNumber(playerInventory.GetKeys(RedKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 192, 149);
+    m_renderer.RenderNumber(playerInventory.GetKeys(YellowKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 216, 176);
+    m_renderer.RenderNumber(playerInventory.GetKeys(GreenKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 216, 149);
+    m_renderer.RenderNumber(playerInventory.GetKeys(BlueKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 192, 176);
 }
 
 void GameArmageddon::DrawBonus(const PlayerInventory& playerInventory)
 {
-    m_renderer.RenderNumber(playerInventory.GetBolts(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 137);
-    m_renderer.RenderNumber(playerInventory.GetNukes(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 155);
-    m_renderer.RenderNumber(playerInventory.GetPotions(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 173);
+    m_renderer.RenderNumber(playerInventory.GetBolts(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 158, 137);
+    m_renderer.RenderNumber(playerInventory.GetNukes(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 158, 155);
+    m_renderer.RenderNumber(playerInventory.GetPotions(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 158, 173);
 }
 
 void GameArmageddon::DrawGems(const PlayerInventory& playerInventory)
