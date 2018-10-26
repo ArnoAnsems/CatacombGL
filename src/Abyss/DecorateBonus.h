@@ -117,7 +117,8 @@ const DecorateActor decorateExplosion =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -171,7 +172,8 @@ const DecorateActor decorateBolt =
     0,  // meleeDamage;
     BOOMSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -225,7 +227,8 @@ const DecorateActor decorateNuke =
     0,  // meleeDamage;
     BOOMSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -277,7 +280,8 @@ const DecorateActor decoratePotion =
     0,  // meleeDamage;
     BOOMSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -329,7 +333,8 @@ const DecorateActor decorateChest =
     0,  // meleeDamage;
     BOOMSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -370,7 +375,8 @@ const DecorateActor decorateWaterChest =
     0,  // meleeDamage;
     BOOMSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -422,7 +428,8 @@ const DecorateActor decorateFreezeTime =
     0,  // meleeDamage;
     BOOMSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -473,7 +480,8 @@ const DecorateActor decorateScroll1 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateScroll2 =
@@ -491,7 +499,8 @@ const DecorateActor decorateScroll2 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    1 // actionParameter
+    1, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateScroll3 =
@@ -509,7 +518,8 @@ const DecorateActor decorateScroll3 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    2 // actionParameter
+    2, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateScroll4 =
@@ -527,7 +537,8 @@ const DecorateActor decorateScroll4 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    3 // actionParameter
+    3, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateScroll5 =
@@ -545,7 +556,8 @@ const DecorateActor decorateScroll5 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    4 // actionParameter
+    4, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateScroll6 =
@@ -563,7 +575,8 @@ const DecorateActor decorateScroll6 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    5 // actionParameter
+    5, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateScroll7 =
@@ -581,7 +594,8 @@ const DecorateActor decorateScroll7 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    6 // actionParameter
+    6, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateScroll8 =
@@ -599,7 +613,8 @@ const DecorateActor decorateScroll8 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    7 // actionParameter
+    7, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -650,7 +665,8 @@ const DecorateActor decorateKeyRed =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -689,7 +705,8 @@ const DecorateActor decorateKeyYellow =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    1 // actionParameter
+    1, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -728,7 +745,8 @@ const DecorateActor decorateKeyGreen =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    2 // actionParameter
+    2, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -767,7 +785,8 @@ const DecorateActor decorateKeyBlue =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    3 // actionParameter
+    3, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -806,7 +825,8 @@ const DecorateActor decorateKeyRed2 =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    4 // actionParameter
+    4, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -858,7 +878,8 @@ const DecorateActor decorateGemRed =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -898,7 +919,8 @@ const DecorateActor decorateGemYellow =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    3 // actionParameter
+    3, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -938,7 +960,8 @@ const DecorateActor decorateGemGreen =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    1 // actionParameter
+    1, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -978,7 +1001,8 @@ const DecorateActor decorateGemBlue =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    2 // actionParameter
+    2, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -1018,5 +1042,6 @@ const DecorateActor decorateGemPurple =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    4 // actionParameter
+    4, // actionParameter
+    0 // ProjectileId
 };

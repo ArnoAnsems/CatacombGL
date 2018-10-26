@@ -27,7 +27,8 @@ GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) 
     m_gameId (3),
     m_gamePath (gamePath),
     m_renderer (renderer),
-    m_introView (NULL)
+    m_introView (NULL),
+    m_zombie_base_delay(0)
 {
     m_gameMaps = NULL;
     m_egaGraph = NULL;
@@ -61,6 +62,7 @@ GameArmageddon::~GameArmageddon()
 
 void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
 {
+    Actor** actors = level->GetBlockingActors();
     Actor* const playerState = level->GetPlayerActor();
 
     for (uint16_t y = 0; y < level->GetLevelHeight(); y++)
@@ -80,6 +82,129 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 playerState->SetAngle((tile - 1) * 90.0f);
                 break;
             }
+            case 5:
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBolt);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 6:
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNuke);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 7:
+
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decoratePotion);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 8:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyRed);
+                break;
+            case 9:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyYellow);
+                break;
+            case 10:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyGreen);
+                break;
+            case 11:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyBlue);
+                break;
+            case 25:
+            {
+                Actor* batActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBat);
+                actors[(y * level->GetLevelWidth()) + x] = batActor;
+                break;
+            }
+            case 36:
+            {
+                int16_t zombie_delay;
+                unsigned int tile = level->GetFloorTile(x, y + 1);
+                if (tile != 0)
+                    zombie_delay = (tile >> 8) * 30;
+                else
+                {
+                    const int16_t current_zombie_delay = (2 * 60) + rand() % (4 * 60);
+                    zombie_delay = m_zombie_base_delay + current_zombie_delay;
+                    m_zombie_base_delay += current_zombie_delay;
+                    if (m_zombie_base_delay > 8 * 60)
+                        m_zombie_base_delay = 0;
+                }
+                Actor* zombieActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateZombie);
+                zombieActor->SetTemp2(zombie_delay);
+                actors[(y * level->GetLevelWidth()) + x] = zombieActor;
+                break;
+            }
+            case 39:
+            {
+                Actor* freezeTimeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateFreezeTime);
+                actors[(y * level->GetLevelWidth()) + x] = freezeTimeActor;
+                break;
+            }
+            case 40:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemRed);
+                break;
+            case 41:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemGreen);
+                break;
+            case 42:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemBlue);
+                break;
+            case 43:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemYellow);
+                break;
+            case 44:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemPurple);
+                break;
+            case 45:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb1);
+                break;
+            case 46:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb2);
+                break;
+            case 47:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb3);
+                break;
+            case 49:
+            {
+                Actor* bonusActorChest = level->IsWaterLevel() ? new Actor(x + 0.5f, y + 0.5f, 0, decorateWaterChest) : new Actor(x + 0.5f, y + 0.5f, 0, decorateChest);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActorChest;
+                break;
+            }
+            case 50:
+            {
+                int16_t zombie_delay;
+                unsigned int tile = level->GetFloorTile(x, y + 1);
+                if (tile != 0)
+                    zombie_delay = (tile >> 8) * 30;
+                else
+                {
+                    const int16_t current_zombie_delay = (2 * 60) + rand() % (4 * 60);
+                    zombie_delay = m_zombie_base_delay + current_zombie_delay;
+                    m_zombie_base_delay += current_zombie_delay;
+                    if (m_zombie_base_delay > 8 * 60)
+                        m_zombie_base_delay = 0;
+                }
+                Actor* treeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateTree);
+                treeActor->SetTemp2(zombie_delay);
+                actors[(y * level->GetLevelWidth()) + x] = treeActor;
+                break;
+            }
+            case 54:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn);
+                break;
+            case 55:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateSulphurGas);
+                break;
+            case 56:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateFirePot);
+                break;
+            case 58:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateFountain);
+                break;
             default:
                 break;
             }

@@ -126,7 +126,10 @@
   <ItemGroup>
     <ClInclude Include="AudioRepositoryArmageddon.h" />
     <ClInclude Include="DecorateAll.h" />
+    <ClInclude Include="DecorateBonus.h" />
     <ClInclude Include="DecorateMisc.h" />
+    <ClInclude Include="DecorateMonsters.h" />
+    <ClInclude Include="DecorateProjectiles.h" />
     <ClInclude Include="EgaGraphArmageddon.h" />
     <ClInclude Include="GameArmageddon.h" />
     <ClInclude Include="GameDetectionArmageddon.h" />

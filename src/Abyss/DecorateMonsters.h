@@ -21,6 +21,7 @@
 #pragma once
 
 #include "..\Engine\Decorate.h"
+#include "DecorateProjectiles.h"
 #include "EgaGraphAbyss.h"
 #include "AudioRepositoryAbyss.h"
 
@@ -154,7 +155,8 @@ const DecorateActor decorateZombie =
     8,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2500,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -248,7 +250,8 @@ const DecorateActor decorateSkeleton =
     6,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2036,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -299,7 +302,8 @@ const DecorateActor decorateWallSkeleton =
     6,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -393,7 +397,8 @@ const DecorateActor decorateOrc =
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1536,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -487,7 +492,8 @@ const DecorateActor decorateTroll =
     8,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2500,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -581,7 +587,8 @@ const DecorateActor decorateDemon =
     15,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -675,7 +682,8 @@ const DecorateActor decorateRedDemon =
     15,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -786,7 +794,8 @@ const DecorateActor decorateSpook =
     2,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1900,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -854,7 +863,8 @@ const DecorateActor decorateBat =
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2000,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -942,7 +952,8 @@ const DecorateActor decorateMage =
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     3072,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    actorIdProjectileMageShot // ProjectileId
 };
 
 //
@@ -1022,7 +1033,8 @@ const DecorateActor decorateEye =
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1200,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    actorIdProjectileEyeShot // ProjectileId
 };
 
 //
@@ -1161,7 +1173,8 @@ const DecorateActor decorateWetMan =
     7,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1000,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -1254,5 +1267,6 @@ const DecorateActor decorateNemesis =
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    actorIdProjectileNemesisShot // ProjectileId
 };

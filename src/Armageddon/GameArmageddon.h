@@ -52,4 +52,5 @@ private:
     const uint8_t m_gameId;
     const std::string m_gamePath;
     IRenderer& m_renderer;
+    short m_zombie_base_delay;
 };

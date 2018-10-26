@@ -83,4 +83,5 @@ struct DecorateActor
     uint16_t hitSound;
     uint16_t speed;
     uint16_t actionParameter;
+    uint16_t projectileId;
 };

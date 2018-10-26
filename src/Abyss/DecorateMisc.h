@@ -21,6 +21,7 @@
 #pragma once
 
 #include "..\Engine\Decorate.h"
+#include "DecorateProjectiles.h"
 #include "EgaGraphAbyss.h"
 #include "AudioRepositoryAbyss.h"
 
@@ -72,7 +73,8 @@ const DecorateActor decorateTomb1 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter,
+    0 // ProjectileId
 };
 
 //
@@ -110,7 +112,8 @@ const DecorateActor decorateTomb2 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -148,7 +151,8 @@ const DecorateActor decorateTomb3 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -190,7 +194,8 @@ const DecorateActor decorateExplodingWall =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -240,7 +245,8 @@ const DecorateActor decorateWarpPit =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -293,7 +299,8 @@ const DecorateActor decorateWarpPortal1 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    1 // actionParameter
+    1, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateWarpPortal2 =
@@ -311,7 +318,8 @@ const DecorateActor decorateWarpPortal2 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    2 // actionParameter
+    2, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateWarpPortal3 =
@@ -329,7 +337,8 @@ const DecorateActor decorateWarpPortal3 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    3 // actionParameter
+    3, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateWarpPortal4 =
@@ -347,7 +356,8 @@ const DecorateActor decorateWarpPortal4 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    4 // actionParameter
+    4, // actionParameter
+    0 // ProjectileId
 };
 
 const DecorateActor decorateWarpPortal5 =
@@ -365,7 +375,8 @@ const DecorateActor decorateWarpPortal5 =
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;
-    5 // actionParameter
+    5, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -415,5 +426,6 @@ const DecorateActor decoratePlayer =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    actorIdProjectilePlayerShot // ProjectileId
 };

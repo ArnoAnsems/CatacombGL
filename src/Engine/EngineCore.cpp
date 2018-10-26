@@ -795,10 +795,14 @@ bool EngineCore::Think()
             {
                 if (m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame))
                 {
-                    Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfPlayerCurrentFrame, decoratePlayerShot);
-                    projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
-                    projectile->SetActive(true);
-                    m_level->AddNonBlockingActor(projectile);
+                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId);
+                    if (decorateProjectilePair != m_game.GetDecorateActors().end())
+                    {
+                        Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfPlayerCurrentFrame, decorateProjectilePair->second);
+                        projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
+                        projectile->SetActive(true);
+                        m_level->AddNonBlockingActor(projectile);
+                    }
 
                     m_game.GetAudioPlayer()->Play(SHOOTSND);
                 }
@@ -817,10 +821,14 @@ bool EngineCore::Think()
 
                 if (m_playerActions.UpdateContinueBolt(m_timeStampOfPlayerCurrentFrame))
                 {
-                    Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decoratePlayerShot);
-                    projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
-                    projectile->SetActive(true);
-                    m_level->AddNonBlockingActor(projectile);
+                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId);
+                    if (decorateProjectilePair != m_game.GetDecorateActors().end())
+                    {
+                        Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decorateProjectilePair->second);
+                        projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
+                        projectile->SetActive(true);
+                        m_level->AddNonBlockingActor(projectile);
+                    }
                 }             
            
                 if (m_playerActions.UpdateShootNuke(m_timeStampOfPlayerCurrentFrame))
@@ -828,12 +836,17 @@ bool EngineCore::Think()
                     if (m_playerInventory.TakeNuke())
                     {
                         m_game.GetAudioPlayer()->Play(USENUKESND);
-                        for (uint16_t i = 0; i < 16; i++)
+
+                        const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1);
+                        if (decorateProjectilePair != m_game.GetDecorateActors().end())
                         {
-                            Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decoratePlayerBigShot);
-                            projectile->SetAngle(i * 22.5f);
-                            projectile->SetActive(true);
-                            m_level->AddNonBlockingActor(projectile);
+                            for (uint16_t i = 0; i < 16; i++)
+                            {
+                                Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decorateProjectilePair->second);
+                                projectile->SetAngle(i * 22.5f);
+                                projectile->SetActive(true);
+                                m_level->AddNonBlockingActor(projectile);
+                            }
                         }
                     }
                     else
@@ -1117,18 +1130,13 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             if (angleInt != -1)
             {
                 Actor* projectile = NULL;
-                if (actor->GetDecorateActor().id == actorIdMonsterMage)
+                if (actor->GetDecorateActor().projectileId != 0)
                 {
-                    projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateMageShot);
-                }
-                else if (actor->GetDecorateActor().id == actorIdMonsterEye)
-                {
-                    projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateEyeShot);
-                }
-                else
-                {
-                    // Nemesis
-                    projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateNemesisShot);
+                    const auto iterator = m_game.GetDecorateActors().find(actor->GetDecorateActor().projectileId);
+                    if (iterator != m_game.GetDecorateActors().end())
+                    {
+                        projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, iterator->second);
+                    }
                 }
 
                 projectile->SetAngle((float)angleInt);

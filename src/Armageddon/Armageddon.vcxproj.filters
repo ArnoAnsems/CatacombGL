@@ -39,6 +39,15 @@
     <ClInclude Include="AudioRepositoryArmageddon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DecorateProjectiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DecorateBonus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DecorateMonsters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameArmageddon.cpp">

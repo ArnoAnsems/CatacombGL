@@ -27,8 +27,8 @@
 const uint16_t actorIdProjectilePlayerShot = 70;
 const uint16_t actorIdProjectilePlayerBigShot = 71;
 const uint16_t actorIdProjectileMageShot = 72;
-const uint16_t actorIdProjectileEyeShot = 72;
-const uint16_t actorIdProjectileNemesisShot = 72;
+const uint16_t actorIdProjectileEyeShot = 73;
+const uint16_t actorIdProjectileNemesisShot = 74;
 
 //
 // PLAYER SHOT
@@ -81,7 +81,8 @@ const DecorateActor decoratePlayerShot =
     1,  // damage;
     0, // hitSound;
     10000,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -104,7 +105,8 @@ const DecorateActor decoratePlayerBigShot =
     3,  // damage;
     0, // hitSound;
     10000,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -144,7 +146,8 @@ const DecorateActor decorateMageShot =
     2,  // damage;
     0, // hitSound;
     10000,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -184,7 +187,8 @@ const DecorateActor decorateEyeShot =
     1,  // damage;
     0, // hitSound;
     5000,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
 //
@@ -223,6 +227,7 @@ const DecorateActor decorateNemesisShot =
     25,  // damage;
     0, // hitSound;
     10000,    // speed;
-    0 // actionParameter
+    0, // actionParameter
+    0 // ProjectileId
 };
 
