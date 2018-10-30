@@ -1041,7 +1041,7 @@ void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarge
     actorDirection dirtable[9] = {northwest,north,northeast,west,nodir,east,southwest,south,southeast};
     actorDirection opposite[9] = {south,west,north,east,southwest,northwest,northeast,southeast,nodir};
 
-    actorDirection tdir;
+    actorDirection tdir = actorDirection::nodir;
     actorDirection d[3];
 
     actorDirection olddir=actor->GetDirection();

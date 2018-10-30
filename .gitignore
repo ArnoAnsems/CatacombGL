@@ -35,12 +35,13 @@
 *.ipdb
 *.log
 *.tlog
-build/CatacombGL/Release/CatacombGL.res
-VS2015/.vs/CatacombGL/v14/.suo
+VS2015/.vs
+VS2017/.vs
+VS2017_llvm/.vs
 *.db
 *.opendb
-bin/CatacombGL.ilk
+build/
+bin/
 *.ilk
 *.idb
 *.tmp
-build/CatacombGL/Debug/CatacombGL.res
