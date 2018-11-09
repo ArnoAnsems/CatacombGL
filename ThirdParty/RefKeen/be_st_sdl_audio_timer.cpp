@@ -17,6 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 #include <string.h>
+#include <stdlib.h>
 #include "..\SDL\include\SDL.h"
 #include "be_st.h"
 #include "../opl/dbopl.h"
@@ -370,7 +371,7 @@ static void BEL_ST_Simple_CallBack(void *unused, Uint8 *stream, int len)
 			g_sdlCallbackSDFuncPtr();
 		}
 		// Now generate sound
-		currNumOfSamples = BE_Cross_TypedMin(len/sizeof(BE_ST_SndSample_T), g_sdlSamplePerPart-g_sdlSampleOffsetInSound);
+		currNumOfSamples = BE_Cross_TypedMin(len/static_cast<uint32_t>(sizeof(BE_ST_SndSample_T)), g_sdlSamplePerPart-g_sdlSampleOffsetInSound);
 		// PC Speaker
 		if (g_sdlPCSpeakerOn)
 			PCSpeakerUpdateOne(currSamplePtr, currNumOfSamples);
@@ -494,7 +495,7 @@ static void BEL_ST_Resampling_CallBack(void *unused, Uint8 *stream, int len)
 		}
 
 		// Try to resample the AL data we have (as much as possible)
-		uint32_t maxSamplesToOutput = BE_Cross_TypedMin(len / sizeof(BE_ST_SndSample_T), g_sdlPCOutSamplesEnd); // Not taking plain (len / sizeof(BE_ST_SndSample_T)), just to make it safer
+		uint32_t maxSamplesToOutput = BE_Cross_TypedMin(len / static_cast<uint32_t>(sizeof(BE_ST_SndSample_T)), g_sdlPCOutSamplesEnd); // Not taking plain (len / sizeof(BE_ST_SndSample_T)), just to make it safer
 
 		uint32_t samples_consumed, samples_produced;
 
