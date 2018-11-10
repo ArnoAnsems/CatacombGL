@@ -27,6 +27,7 @@
 
 const uint16_t actorIdMonsterZombie = 50;
 const uint16_t actorIdMonsterTree = 53;
+const uint16_t actorIdMonsterBunny = 54;
 const uint16_t actorIdMonsterBat = 58;
 
 //
@@ -262,6 +263,124 @@ const DecorateActor decorateTree =
     7,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2500,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// BUNNY
+//
+
+const DecorateAnimation bunnyHiddenAnimation =
+{
+    { BUNNY_LEFT1PIC , 10, ActionHide },
+    { BUNNY_LEFT2PIC , 30, ActionHide }
+};
+
+const DecorateState bunnyStateHidden =
+{
+    bunnyHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation bunnyRiseAnimation =
+{
+    { BUNNY_META1PIC, 30, ActionNone },
+    { BUNNY_META2PIC, 30, ActionNone }
+};
+
+const DecorateState bunnyStateRise =
+{
+    bunnyRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation bunnyWalkAnimation =
+{
+    { BUNNY_WALK1PIC, 25, ActionChase },
+    { BUNNY_WALK2PIC, 25, ActionChase }
+};
+
+const DecorateState bunnyStateWalk =
+{
+    bunnyWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation bunnyAttackAnimation =
+{
+    { BUNNY_WALK1PIC, 25, ActionNone },
+    { BUNNY_WALK2PIC, 25, ActionAttack }
+};
+
+const DecorateState bunnyStateAttack =
+{
+    bunnyAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation bunnyPainAnimation =
+{
+    { BUNNY_OUCHPIC, 30, ActionNone },
+    { BUNNY_WALK1PIC, 50, ActionNone }
+};
+
+const DecorateState bunnyStatePain =
+{
+    bunnyPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation bunnyDyingAnimation =
+{
+    { BUNNY_OUCHPIC, 40, ActionNone },
+    { BUNNY_DEATH1PIC, 50, ActionNone },
+    { BUNNY_DEATH2PIC, 20, ActionNone }
+};
+
+const DecorateState bunnyStateDying =
+{
+    bunnyDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation bunnyDeadAnimation =
+{
+    { BUNNY_DEATH2PIC, 20, ActionNone }
+};
+
+const DecorateState bunnyStateDead =
+{
+    bunnyDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> bunnyStates =
+{
+    std::make_pair(StateIdHidden, bunnyStateHidden),
+    std::make_pair(StateIdRise, bunnyStateRise),
+    std::make_pair(StateIdWalk, bunnyStateWalk),
+    std::make_pair(StateIdAttack, bunnyStateAttack),
+    std::make_pair(StateIdPain, bunnyStatePain),
+    std::make_pair(StateIdDying, bunnyStateDying),
+    std::make_pair(StateIdDead, bunnyStateDead)
+};
+
+const DecorateActor decorateBunny =
+{
+    actorIdMonsterBunny,   // Id
+    51, // spawnOnAllDifficulties;
+    51, // spawnOnNormalAndHard;
+    51, // spawnOnHard;
+    10,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Always,  // radarVisibility;
+    EgaLightGray,   // radarColor;
+    bunnyStates,
+    StateIdHidden,   // initialState;
+    4,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1947,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };
