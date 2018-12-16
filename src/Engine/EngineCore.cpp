@@ -1511,7 +1511,6 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     // Projectile from monster hits player
                     if (!m_godModeIsOn)
                     {
-                        const uint8_t damage = (m_difficultyLevel == Easy) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
                         const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
                         const uint8_t damage = (m_difficultyLevel == Easy) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
