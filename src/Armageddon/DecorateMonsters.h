@@ -25,10 +25,12 @@
 #include "EgaGraphArmageddon.h"
 #include "AudioRepositoryArmageddon.h"
 
+const uint16_t actorIdMonsterMage = 59;
 const uint16_t actorIdMonsterZombie = 50;
 const uint16_t actorIdMonsterTree = 53;
 const uint16_t actorIdMonsterBunny = 54;
 const uint16_t actorIdMonsterBat = 58;
+const uint16_t actorIdMonsterNemesis = 62;
 
 //
 // ZOMBIE
@@ -452,4 +454,187 @@ const DecorateActor decorateBat =
     2000,    // speed;
     0, // actionParameter
     0 // ProjectileId
+};
+
+//
+// MAGE
+//
+
+const DecorateAnimation mageWalkAnimation =
+{
+    { MAGE1PIC, 20, ActionChaseLikeMage },
+    { MAGE2PIC, 20, ActionChaseLikeMage }
+};
+
+const DecorateState mageStateWalk =
+{
+    mageWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation mageAttackAnimation =
+{
+    { MAGEATTACKPIC, 30, ActionAttack },
+    { MAGE1PIC, 10, ActionChase }
+};
+
+const DecorateState mageStateAttack =
+{
+    mageAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation magePainAnimation =
+{
+    { MAGEOUCHPIC, 10, ActionNone }
+};
+
+const DecorateState mageStatePain =
+{
+    magePainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation mageDyingAnimation =
+{
+    { MAGEDIE1PIC, 20, ActionNone }
+};
+
+const DecorateState mageStateDying =
+{
+    mageDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation mageDeadAnimation =
+{
+    { MAGEDIE2PIC, 20, ActionNone }
+};
+
+const DecorateState mageStateDead =
+{
+    mageDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> mageStates =
+{
+    std::make_pair(StateIdWalk, mageStateWalk),
+    std::make_pair(StateIdAttack, mageStateAttack),
+    std::make_pair(StateIdPain, mageStatePain),
+    std::make_pair(StateIdDying, mageStateDying),
+    std::make_pair(StateIdDead, mageStateDead)
+};
+
+const DecorateActor decorateMage =
+{
+    actorIdMonsterMage,   // Id
+    27, // spawnOnAllDifficulties;
+    27, // spawnOnNormalAndHard;
+    27,  // spawnOnHard
+    12,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithRedGem,  // radarVisibility;
+    EgaBrightRed,   // radarColor;
+    mageStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    3072,    // speed;
+    0, // actionParameter
+    actorIdProjectileMageShot // ProjectileId
+};
+
+//
+// NEMESIS
+//
+
+const DecorateAnimation nemesisWalkAnimation =
+{
+    { GREL1PIC, 20, ActionChase },
+    { GREL2PIC, 20, ActionChase }
+};
+
+const DecorateState nemesisStateWalk =
+{
+    nemesisWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation nemesisAttackAnimation =
+{
+    { GRELATTACKPIC, 30, ActionAttack },
+    { GREL1PIC, 50, ActionNone }
+};
+
+const DecorateState nemesisStateAttack =
+{
+    nemesisAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation nemesisPainAnimation =
+{
+    { GRELHITPIC, 6, ActionNone }
+};
+
+const DecorateState nemesisStatePain =
+{
+    nemesisPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation nemesisDyingAnimation =
+{
+    { GRELDIE1PIC, 22, ActionNone },
+    { GRELDIE2PIC, 22, ActionNone },
+    { GRELDIE3PIC, 22, ActionNone },
+    { GRELDIE4PIC, 22, ActionNone },
+    { GRELDIE5PIC, 22, ActionNone },
+    { GRELDIE5PIC, 1, ActionDropItem }
+};
+
+const DecorateState nemesisStateDying =
+{
+    nemesisDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation nemesisDeadAnimation =
+{
+    { GRELDIE6PIC, 20, ActionNone }
+};
+
+const DecorateState nemesisStateDead =
+{
+    nemesisDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> nemesisStates =
+{
+    std::make_pair(StateIdWalk, nemesisStateWalk),
+    std::make_pair(StateIdAttack, nemesisStateAttack),
+    std::make_pair(StateIdPain, nemesisStatePain),
+    std::make_pair(StateIdDying, nemesisStateDying),
+    std::make_pair(StateIdDead, nemesisStateDead)
+};
+
+const DecorateActor decorateNemesis =
+{
+    actorIdMonsterNemesis,   // Id
+    28, // spawnOnAllDifficulties;
+    28, // spawnOnNormalAndHard;
+    28,  // spawnOnHard
+    100,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithAllGems,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    nemesisStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2048,    // speed;
+    0, // actionParameter
+    actorIdProjectileNemesisShot // ProjectileId
 };

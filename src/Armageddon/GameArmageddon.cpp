@@ -119,6 +119,51 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = batActor;
                 break;
             }
+            case 27:
+            {
+                Actor* mageActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateMage);
+                actors[(y * level->GetLevelWidth()) + x] = mageActor;
+                break;
+            }
+            case 28:
+            {
+                const bool dropKey = (level->GetFloorTile(x + 1, y) >> 8 == 1);
+                const uint16_t nemesisHealth = (level->GetFloorTile(x, y + 1) >> 8);
+                Actor* nemesisActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNemesis);
+                nemesisActor->SetTemp1(dropKey ? actorIdBonusKeyRed : actorIdNone);
+                if (nemesisHealth > 0)
+                {
+                    nemesisActor->SetTemp2(nemesisHealth * 3); // Shot power
+                    nemesisActor->SetHealth(nemesisHealth * 10);
+                }
+                actors[(y * level->GetLevelWidth()) + x] = nemesisActor;
+                break;
+            }
+            case 31:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal1);
+                break;
+            }
+            case 32:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal2);
+                break;
+            }
+            case 33:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal3);
+                break;
+            }
+            case 34:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal4);
+                break;
+            }
+            case 35:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal5);
+                break;
+            }
             case 36:
             {
                 int16_t zombie_delay;

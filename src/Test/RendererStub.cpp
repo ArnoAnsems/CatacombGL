@@ -43,7 +43,7 @@ void RendererStub::SetTextureFilter(const TextureFilterSetting /*textureFilter*/
 {
 }
 
-void RendererStub::SetVSync(const bool enabled)
+void RendererStub::SetVSync(const bool /*enabled*/)
 {
 }
 

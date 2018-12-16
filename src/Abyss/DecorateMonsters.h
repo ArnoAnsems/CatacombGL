@@ -1223,7 +1223,7 @@ const DecorateAnimation nemesisDyingAnimation =
     { GRELDIE3PIC, 22, ActionNone },
     { GRELDIE4PIC, 22, ActionNone },
     { GRELDIE5PIC, 22, ActionNone },
-    { GRELDIE5PIC, 1, ActionDropRedKey }
+    { GRELDIE5PIC, 1, ActionDropItem }
 };
 
 const DecorateState nemesisStateDying =

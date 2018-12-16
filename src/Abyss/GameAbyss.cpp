@@ -272,6 +272,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
             case 28:
                 {
                     Actor* nemesisActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNemesis);
+                    nemesisActor->SetTemp1(actorIdBonusKeyRed); // Always drop key;
                     actors[(y * level->GetLevelWidth()) + x] = nemesisActor;
                     break;
                 }

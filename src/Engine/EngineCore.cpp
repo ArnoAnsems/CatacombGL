@@ -1136,22 +1136,35 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     if (iterator != m_game.GetDecorateActors().end())
                     {
                         projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, iterator->second);
+                        if (actor->GetTemp2() > 0)
+                        {
+                            projectile->SetTemp2(actor->GetTemp2()); // Shot power
+                        }
+                        projectile->SetAngle((float)angleInt);
+                        m_level->AddNonBlockingActor(projectile);
                     }
                 }
-
-                projectile->SetAngle((float)angleInt);
-                m_level->AddNonBlockingActor(projectile);
             }
         }
 
         actor->SetActionPerformed(true);
         break;
     }
-    case ActionDropRedKey:
+    case ActionDropItem:
     {
         actor->SetActionPerformed(true);
-        Actor* actorKey = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateKeyRed);
-        m_level->AddNonBlockingActor(actorKey);
+        const int16_t itemId = actor->GetTemp1();
+        if (itemId != 0)
+        {
+            const auto decorateItemPair = m_game.GetDecorateActors().find(itemId);
+            if (decorateItemPair != m_game.GetDecorateActors().end())
+            {
+                Actor* actorItem = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateItemPair->second);
+                actorItem->SetActive(true);
+                m_level->AddNonBlockingActor(actorItem);
+            }
+        }
+
         m_game.GetAudioPlayer()->Play(GRELM_DEADSND);
         
         break;
@@ -1499,6 +1512,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     if (!m_godModeIsOn)
                     {
                         const uint8_t damage = (m_difficultyLevel == Easy) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
+                        const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
+                        const uint8_t damage = (m_difficultyLevel == Easy) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
                         if ( m_level->GetPlayerActor()->GetHealth() > 33)
                         {
@@ -2023,7 +2038,7 @@ bool EngineCore::RequiresMouseCapture() const
 bool EngineCore::IsOneTimeAction(const actorAction action)
 {
     return (action == ActionAttack ||
-            action == ActionDropRedKey ||
+            action == ActionDropItem ||
             action == ActionSpawnSkeleton ||
             action == ActionItemDestroyed ||
             action == ActionFreezeTime ||

@@ -26,6 +26,7 @@
 
 const uint16_t actorIdProjectilePlayerShot = 70;
 const uint16_t actorIdProjectilePlayerBigShot = 71;
+const uint16_t actorIdProjectileMageShot = 72;
 const uint16_t actorIdProjectileNemesisShot = 74;
 
 //
@@ -101,6 +102,47 @@ const DecorateActor decoratePlayerBigShot =
     playerShotStates,
     StateIdProjectileFly,   // initialState;
     3,  // damage;
+    0, // hitSound;
+    10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// MAGE SHOT
+//
+
+const DecorateAnimation mageShotFlyAnimation =
+{
+    { PSHOT1PIC , 8, ActionMonsterProjectile },
+    { PSHOT2PIC , 8, ActionMonsterProjectile }
+};
+
+const DecorateState mageShotStateFly =
+{
+    mageShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> mageShotStates =
+{
+    std::make_pair(StateIdProjectileFly, mageShotStateFly),
+    std::make_pair(StateIdDying, playerShotStateDying)
+};
+
+const DecorateActor decorateMageShot =
+{
+    actorIdProjectileMageShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    mageShotStates,
+    StateIdProjectileFly,   // initialState;
+    2,  // damage;
     0, // hitSound;
     10000,    // speed;
     0, // actionParameter
