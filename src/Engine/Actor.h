@@ -62,6 +62,7 @@ public:
     void SetTemp2(const int16_t temp2);
 
     void SetState(const DecorateStateId state, const uint32_t timestamp);
+    DecorateStateId GetState() const;
     void SetSolid(const bool solid);
     bool IsActionPerformed() const;
     void SetActionPerformed(const bool performed);

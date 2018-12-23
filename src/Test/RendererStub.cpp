@@ -124,11 +124,11 @@ void RendererStub::Render3DWall(const Picture* /*picture*/, const int16_t /*tile
 {
 }
 
-void RendererStub::Render3DSprite(const Picture* /*picture*/, const float /*offsetX*/, const float /*offsetY*/)
+void RendererStub::Render3DSprite(const Picture* /*picture*/, const float /*offsetX*/, const float /*offsetY*/, const SpriteOrientation /*orientation*/)
 {
 }
 
-void RendererStub::AddSprite(const Picture* /*picture*/, const float /*offsetX*/, const float /*offsetY*/)
+void RendererStub::AddSprite(const Picture* /*picture*/, const float /*offsetX*/, const float /*offsetY*/, const SpriteOrientation /*orientation*/)
 {
 }
 

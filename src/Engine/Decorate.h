@@ -49,7 +49,8 @@ typedef enum
     StateIdProjectileFly,
     StateIdWaitForPickup,
     StateIdPickup,
-    StateIdDecoration
+    StateIdDecoration,
+    StateIdArch
 } DecorateStateId;
 
 typedef struct DecorateAnimationFrame

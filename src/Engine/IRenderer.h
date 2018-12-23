@@ -44,6 +44,13 @@ public:
         Linear
     };
 
+    enum SpriteOrientation
+    {
+        RotatedTowardsPlayer,
+        AlongXAxis,
+        AlongYAxis
+    };
+
     virtual void Setup() = NULL;
     virtual void SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight) = NULL;
     virtual void SetPlayerAngle(const float angle) = NULL;
@@ -72,9 +79,9 @@ public:
     virtual void PrepareWalls() = NULL;
     virtual void UnprepareWalls() = NULL;
     virtual void Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation) = NULL;
-    virtual void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY) = NULL;
+    virtual void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = NULL;
 
-    virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY) = NULL;
+    virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = NULL;
     virtual void RenderAllSprites() = NULL;
     virtual void PrepareFloorAndCeiling() = NULL;
     virtual void UnprepareFloorAndCeiling() = NULL;

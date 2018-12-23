@@ -257,6 +257,11 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = bunnyActor;
                 break;
             }
+            case 52:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch1);
+                break;
+            }
             case 54:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn);
                 break;
@@ -266,9 +271,76 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 56:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateFirePot);
                 break;
+            case 57:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch13);
+                break;
+            }
             case 58:
+            {
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateFountain);
                 break;
+            }
+            case 59:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateForceField);
+                break;
+            }
+            case 60:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch2);
+                break;
+            }
+            case 61:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch3);
+                break;
+            }
+            case 62:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch4);
+                break;
+            }
+            case 63:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch5);
+                break;
+            }
+            case 64:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch6);
+                break;
+            }
+            case 66:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch12);
+                break;
+            }
+            case 67:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch7);
+                break;
+            }
+            case 68:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch8);
+                break;
+            }
+            case 69:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch9);
+                break;
+            }
+            case 70:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch10);
+                break;
+            }
+            case 71:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch11);
+                break;
+            }
             default:
                 break;
             }

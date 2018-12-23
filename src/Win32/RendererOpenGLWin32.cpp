@@ -714,13 +714,24 @@ void RendererOpenGLWin32::Render3DWall(const Picture* picture, const int16_t til
     glEnd();
 }
 
-void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float offsetX, const float offsetY)
+void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation)
 {
     glMatrixMode(GL_MODELVIEW);						// Select The Projection Matrix
     glLoadIdentity();
     
     glTranslatef(offsetX, offsetY, 0.0f);
-    glRotatef(m_playerAngle, 0.0f, 0.0f, 1.0f);
+    if (orientation == RotatedTowardsPlayer)
+    {
+        glRotatef(m_playerAngle, 0.0f, 0.0f, 1.0f);
+    }
+    else if (orientation == AlongYAxis)
+    {
+        glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+    }
+    else
+    {
+        glRotatef(0.0f, 0.0f, 0.0f, 1.0f);
+    }
     const GLfloat halfWidth = (float)(picture->GetWidth()) / 128.0f;
     const GLfloat topZ = CeilingZ + ((float)(picture->GetHeight()) / 64.0f) * (FloorZ - CeilingZ);
 
@@ -735,16 +746,18 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
 
     glNormal3f( 0.0f, 0.0f, -1.0f);
 
+    const float zOffset = (orientation == RotatedTowardsPlayer) ? 0.0625f : 0.0f;
+
     // Draw the texture as a quad
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0); glVertex3f(-halfWidth, 0.0f, CeilingZ + 0.0625f);
-    glTexCoord2i(1, 0); glVertex3f(halfWidth, 0.0f, CeilingZ + 0.0625f);
-    glTexCoord2i(1, 1); glVertex3f(halfWidth, 0.0f, topZ + 0.0625f);
-    glTexCoord2i(0, 1); glVertex3f(-halfWidth, 0.0f, topZ + 0.0625f);
+    glTexCoord2i(0, 0); glVertex3f(-halfWidth, 0.0f, CeilingZ + zOffset);
+    glTexCoord2i(1, 0); glVertex3f(halfWidth, 0.0f, CeilingZ + zOffset);
+    glTexCoord2i(1, 1); glVertex3f(halfWidth, 0.0f, topZ + zOffset);
+    glTexCoord2i(0, 1); glVertex3f(-halfWidth, 0.0f, topZ + zOffset);
     glEnd();
 }
 
-void RendererOpenGLWin32::AddSprite(const Picture* picture, const float offsetX, const float offsetY)
+void RendererOpenGLWin32::AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation)
 {
     if (m_numberOfSprites == 100)
     {
@@ -755,7 +768,7 @@ void RendererOpenGLWin32::AddSprite(const Picture* picture, const float offsetX,
     m_spritesToRender[m_numberOfSprites].offsetX = offsetX;
     m_spritesToRender[m_numberOfSprites].offsetY = offsetY;
     m_spritesToRender[m_numberOfSprites].squaredDistance = (int32_t)(((offsetX - m_playerPosX) * (offsetX - m_playerPosX)) + ((offsetY - m_playerPosY) * (offsetY - m_playerPosY)));
-
+    m_spritesToRender[m_numberOfSprites].orientation = orientation;
     m_numberOfSprites++;
 }
 
@@ -769,7 +782,7 @@ void RendererOpenGLWin32::RenderAllSprites()
 
     for (int16_t i = m_numberOfSprites - 1; i >= 0; i--)
     {
-        Render3DSprite(m_spritesToRender[i].picture, m_spritesToRender[i].offsetX, m_spritesToRender[i].offsetY);
+        Render3DSprite(m_spritesToRender[i].picture, m_spritesToRender[i].offsetX, m_spritesToRender[i].offsetY, m_spritesToRender[i].orientation);
     }
 
     glDepthMask(GL_TRUE);
@@ -814,14 +827,17 @@ void RendererOpenGLWin32::swap(uint16_t p,uint16_t q)
     dummy.offsetX = m_spritesToRender[p].offsetX;
     dummy.offsetY = m_spritesToRender[p].offsetY;
     dummy.squaredDistance = m_spritesToRender[p].squaredDistance;
+    dummy.orientation = m_spritesToRender[p].orientation;
     m_spritesToRender[p].picture = m_spritesToRender[q].picture;
     m_spritesToRender[p].offsetX = m_spritesToRender[q].offsetX;
     m_spritesToRender[p].offsetY = m_spritesToRender[q].offsetY;
     m_spritesToRender[p].squaredDistance = m_spritesToRender[q].squaredDistance;
+    m_spritesToRender[p].orientation = m_spritesToRender[q].orientation;
     m_spritesToRender[q].picture = dummy.picture;
     m_spritesToRender[q].offsetX = dummy.offsetX;
     m_spritesToRender[q].offsetY = dummy.offsetY;
     m_spritesToRender[q].squaredDistance = dummy.squaredDistance;
+    m_spritesToRender[q].orientation = dummy.orientation;
 }
 
 void RendererOpenGLWin32::PrepareFloorAndCeiling()

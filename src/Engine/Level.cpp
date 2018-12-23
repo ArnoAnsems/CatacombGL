@@ -1516,9 +1516,16 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
                 Picture* actorPicture = egaGraph->GetPicture(actor->GetPictureIndex());
                 if (actorPicture != NULL)
                 {
+                    IRenderer::SpriteOrientation orientation = IRenderer::SpriteOrientation::RotatedTowardsPlayer;
+
+                    if (actor->GetState() == StateIdArch)
+                    {
+                        orientation = (IsSolidWall(x - 1, y) || IsSolidWall(x + 1, y)) ? IRenderer::SpriteOrientation::AlongXAxis : IRenderer::SpriteOrientation::AlongYAxis;
+                    }
+
                     if (IsActorVisibleForPlayer(actor))
                     {
-                        renderer.AddSprite(actorPicture, actor->GetX(), actor->GetY());
+                        renderer.AddSprite(actorPicture, actor->GetX(), actor->GetY(), orientation);
                     }
                 }
             }
@@ -1536,7 +1543,7 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
             {
                 if (IsActorVisibleForPlayer(projectile))
                 {
-                    renderer.AddSprite(actorPicture, projectile->GetX(), projectile->GetY());
+                    renderer.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), IRenderer::SpriteOrientation::RotatedTowardsPlayer);
                 }
             }
         }

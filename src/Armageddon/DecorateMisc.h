@@ -39,6 +39,20 @@ const uint16_t actorIdColumn = 12;
 const uint16_t actorIdSulphurGas = 13;
 const uint16_t actorIdFirePot = 14;
 const uint16_t actorIdFountain = 15;
+const uint16_t actorIdArch1 = 80;
+const uint16_t actorIdArch2 = 81;
+const uint16_t actorIdArch3 = 82;
+const uint16_t actorIdArch4 = 83;
+const uint16_t actorIdArch5 = 84;
+const uint16_t actorIdArch6 = 85;
+const uint16_t actorIdArch7 = 86;
+const uint16_t actorIdArch8 = 87;
+const uint16_t actorIdArch9 = 88;
+const uint16_t actorIdArch10 = 89;
+const uint16_t actorIdArch11 = 90;
+const uint16_t actorIdArch12 = 91;
+const uint16_t actorIdArch13 = 92;
+const uint16_t actorIdForceField = 93;
 
 //
 // TOMBSTONE 1
@@ -537,5 +551,506 @@ const DecorateActor decorateFountain =
     SHOOTWALLSND, // hitSound;
     0,    // speed;
     0, // actionParameter,
+    0 // ProjectileId
+};
+
+//
+// ARCHES
+//
+
+const DecorateAnimation arch1DecorationAnimation =
+{
+    { ARCH1PIC, 20, ActionNone }
+};
+
+const DecorateState arch1StateArch =
+{
+    arch1DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch1States =
+{
+    std::make_pair(StateIdArch, arch1StateArch)
+};
+
+const DecorateActor decorateArch1 =
+{
+    actorIdArch1,   // Id
+    52, // spawnOnAllDifficulties;
+    52, // spawnOnNormalAndHard;
+    52,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch1States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch2DecorationAnimation =
+{
+    { ARCH2PIC, 20, ActionNone }
+};
+
+const DecorateState arch2StateArch =
+{
+    arch2DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch2States =
+{
+    std::make_pair(StateIdArch, arch2StateArch)
+};
+
+const DecorateActor decorateArch2 =
+{
+    actorIdArch2,   // Id
+    60, // spawnOnAllDifficulties;
+    60, // spawnOnNormalAndHard;
+    60, // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch2States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch3DecorationAnimation =
+{
+    { ARCH3PIC, 20, ActionNone }
+};
+
+const DecorateState arch3StateArch =
+{
+    arch3DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch3States =
+{
+    std::make_pair(StateIdArch, arch3StateArch)
+};
+
+const DecorateActor decorateArch3 =
+{
+    actorIdArch3,   // Id
+    63, // spawnOnAllDifficulties;
+    63, // spawnOnNormalAndHard;
+    63,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch3States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch4DecorationAnimation =
+{
+    { ARCH4PIC, 20, ActionNone }
+};
+
+const DecorateState arch4StateArch =
+{
+    arch4DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch4States =
+{
+    std::make_pair(StateIdArch, arch4StateArch)
+};
+
+const DecorateActor decorateArch4 =
+{
+    actorIdArch4,   // Id
+    62, // spawnOnAllDifficulties;
+    62, // spawnOnNormalAndHard;
+    62,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch4States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch5DecorationAnimation =
+{
+    { ARCH5PIC, 20, ActionNone }
+};
+
+const DecorateState arch5StateArch =
+{
+    arch5DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch5States =
+{
+    std::make_pair(StateIdArch, arch5StateArch)
+};
+
+const DecorateActor decorateArch5 =
+{
+    actorIdArch5,   // Id
+    63, // spawnOnAllDifficulties;
+    63, // spawnOnNormalAndHard;
+    63,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch5States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch6DecorationAnimation =
+{
+    { ARCH6PIC, 20, ActionNone }
+};
+
+const DecorateState arch6StateArch =
+{
+    arch6DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch6States =
+{
+    std::make_pair(StateIdArch, arch6StateArch)
+};
+
+const DecorateActor decorateArch6 =
+{
+    actorIdArch6,   // Id
+    64, // spawnOnAllDifficulties;
+    64, // spawnOnNormalAndHard;
+    64,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch6States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch7DecorationAnimation =
+{
+    { ARCH7PIC, 20, ActionNone }
+};
+
+const DecorateState arch7StateArch =
+{
+    arch7DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch7States =
+{
+    std::make_pair(StateIdArch, arch7StateArch)
+};
+
+const DecorateActor decorateArch7 =
+{
+    actorIdArch7,   // Id
+    67, // spawnOnAllDifficulties;
+    67, // spawnOnNormalAndHard;
+    67,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch7States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch8DecorationAnimation =
+{
+    { ARCH8PIC, 20, ActionNone }
+};
+
+const DecorateState arch8StateArch =
+{
+    arch8DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch8States =
+{
+    std::make_pair(StateIdArch, arch8StateArch)
+};
+
+const DecorateActor decorateArch8 =
+{
+    actorIdArch8,   // Id
+    68, // spawnOnAllDifficulties;
+    68, // spawnOnNormalAndHard;
+    68,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch8States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch9DecorationAnimation =
+{
+    { ARCH9PIC, 20, ActionNone }
+};
+
+const DecorateState arch9StateArch =
+{
+    arch9DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch9States =
+{
+    std::make_pair(StateIdArch, arch9StateArch)
+};
+
+const DecorateActor decorateArch9 =
+{
+    actorIdArch9,   // Id
+    69, // spawnOnAllDifficulties;
+    69, // spawnOnNormalAndHard;
+    69,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch9States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch10DecorationAnimation =
+{
+    { ARCH10PIC, 20, ActionNone }
+};
+
+const DecorateState arch10StateArch =
+{
+    arch10DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch10States =
+{
+    std::make_pair(StateIdArch, arch10StateArch)
+};
+
+const DecorateActor decorateArch10 =
+{
+    actorIdArch10,   // Id
+    70, // spawnOnAllDifficulties;
+    70, // spawnOnNormalAndHard;
+    70,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch10States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch11DecorationAnimation =
+{
+    { ARCH11PIC, 20, ActionNone }
+};
+
+const DecorateState arch11StateArch =
+{
+    arch11DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch11States =
+{
+    std::make_pair(StateIdArch, arch11StateArch)
+};
+
+const DecorateActor decorateArch11 =
+{
+    actorIdArch11,   // Id
+    71, // spawnOnAllDifficulties;
+    71, // spawnOnNormalAndHard;
+    71,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch11States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch12DecorationAnimation =
+{
+    { ARCH12PIC, 20, ActionNone }
+};
+
+const DecorateState arch12StateArch =
+{
+    arch12DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch12States =
+{
+    std::make_pair(StateIdArch, arch12StateArch)
+};
+
+const DecorateActor decorateArch12 =
+{
+    actorIdArch12,   // Id
+    66, // spawnOnAllDifficulties;
+    66, // spawnOnNormalAndHard;
+    66,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch12States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateAnimation arch13DecorationAnimation =
+{
+    { ARCH13PIC, 20, ActionNone }
+};
+
+const DecorateState arch13StateArch =
+{
+    arch13DecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> arch13States =
+{
+    std::make_pair(StateIdArch, arch13StateArch)
+};
+
+const DecorateActor decorateArch13 =
+{
+    actorIdArch13,   // Id
+    57, // spawnOnAllDifficulties;
+    57, // spawnOnNormalAndHard;
+    57,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    arch13States,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// FORCEFIELD
+//
+
+const DecorateAnimation forceFieldDecorationAnimation =
+{
+    { FORCE_FIELD_1PIC, 10, ActionNone },
+    { FORCE_FIELD_2PIC, 10, ActionNone },
+    { FORCE_FIELD_3PIC, 10, ActionNone },
+    { FORCE_FIELD_4PIC, 10, ActionNone }
+};
+
+const DecorateState forceFieldStateArch =
+{
+    forceFieldDecorationAnimation,
+    StateIdArch // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> forceFieldStates =
+{
+    std::make_pair(StateIdArch, forceFieldStateArch)
+};
+
+const DecorateActor decorateForceField =
+{
+    actorIdForceField,   // Id
+    59, // spawnOnAllDifficulties;
+    59, // spawnOnNormalAndHard;
+    59,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    forceFieldStates,
+    StateIdArch,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
     0 // ProjectileId
 };

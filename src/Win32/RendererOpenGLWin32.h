@@ -58,9 +58,9 @@ public:
     void PrepareWalls() override;
     void UnprepareWalls() override;
     void Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation) override;
-    void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY) override;
+    void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
 
-    void AddSprite(const Picture* picture, const float offsetX, const float offsetY) override;
+    void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
     void RenderAllSprites();
     void PrepareFloorAndCeiling() override;
     void UnprepareFloorAndCeiling() override;
@@ -77,6 +77,7 @@ private:
         float offsetX;
         float offsetY;
         int32_t squaredDistance;
+        SpriteOrientation orientation;
     } spriteToRender;
 
     static rgbColor EgaToRgb(const egaColor ega);

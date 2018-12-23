@@ -38,7 +38,7 @@ Actor::Actor(const float x, const float y, const uint32_t timestamp, const Decor
 
 {
     SetState(decorateActor.initialState, m_timestamp);
-    m_solid = (m_stateId != StateIdHidden && m_stateId != StateIdWaitForPickup);
+    m_solid = (m_stateId != StateIdHidden && m_stateId != StateIdWaitForPickup && m_stateId != StateIdArch);
 }
 
 Actor::Actor(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors) :
@@ -241,6 +241,11 @@ void Actor::SetState(const DecorateStateId state, const uint32_t timestamp)
         m_animationFrame = 0;
         m_actionPerformed = false;
     }
+}
+
+DecorateStateId Actor::GetState() const
+{
+    return m_stateId;
 }
 
 void Actor::SetSolid(const bool solid)
