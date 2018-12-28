@@ -1419,6 +1419,33 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
         break;
     }
+    case ActionForceField:
+    {
+        if (m_level->GetPlayerActor()->WouldCollideWithActor(actor->GetX(), actor->GetY(), actor->GetDecorateActor().size))
+        {
+            // Player touches forcefield
+            if (!m_godModeIsOn)
+            {
+                const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
+                const uint8_t damage = (m_difficultyLevel == Easy) ? baseDamage / 2 : baseDamage;
+                m_level->GetPlayerActor()->Damage(damage);
+                if (m_level->GetPlayerActor()->GetHealth() > 33)
+                {
+                    m_game.GetAudioPlayer()->Play(TAKEDAMAGESND);
+                }
+                else if (m_level->GetPlayerActor()->GetHealth() > 0)
+                {
+                    m_game.GetAudioPlayer()->Play(TAKEDMGHURTSND);
+                }
+                else
+                {
+                    m_game.GetAudioPlayer()->Play(GAMEOVERSND);
+                }
+            }
+        }
+        actor->SetActionPerformed(true);
+        break;
+    }
     case ActionPlayerProjectile:
     case ActionMonsterProjectile:
     {
@@ -1476,7 +1503,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     {
                         if (action == ActionPlayerProjectile)
                         {
-                            if ((otherActor->IsSolid() || otherActor->GetAction() == ActionWaitForPickup) && 
+                            if ((otherActor->IsSolid() || otherActor->GetAction() == ActionWaitForPickup || otherActor->GetAction() == ActionForceField
+                                ) && 
                                 (abs(basex - otherActor->GetX()) < size + otherActor->GetDecorateActor().size) &&
                                 (abs(basey - otherActor->GetY()) < size + otherActor->GetDecorateActor().size))
                             {
@@ -2053,7 +2081,8 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionExplodeWall3 ||
             action == ActionExplodeWall4 ||
             action == ActionWarpToOtherLevel ||
-            action == ActionWarpInsideLevel);
+            action == ActionWarpInsideLevel ||
+            action == ActionForceField);
 }
 
 void EngineCore::ToggleMenu()

@@ -1019,10 +1019,10 @@ const DecorateActor decorateArch13 =
 
 const DecorateAnimation forceFieldDecorationAnimation =
 {
-    { FORCE_FIELD_1PIC, 10, ActionNone },
-    { FORCE_FIELD_2PIC, 10, ActionNone },
-    { FORCE_FIELD_3PIC, 10, ActionNone },
-    { FORCE_FIELD_4PIC, 10, ActionNone }
+    { FORCE_FIELD_1PIC, 10, ActionForceField },
+    { FORCE_FIELD_2PIC, 10, ActionForceField },
+    { FORCE_FIELD_3PIC, 10, ActionForceField },
+    { FORCE_FIELD_4PIC, 10, ActionForceField }
 };
 
 const DecorateState forceFieldStateArch =
@@ -1031,9 +1031,20 @@ const DecorateState forceFieldStateArch =
     StateIdArch // Loop
 };
 
+const DecorateAnimation forceFieldDyingAnimation =
+{
+    { 0 , 7, ActionRemove },
+};
+const DecorateState forceFieldStateDying =
+{
+    forceFieldDyingAnimation,
+    StateIdDying   // Loop
+};
+
 const std::map<DecorateStateId, DecorateState> forceFieldStates =
 {
-    std::make_pair(StateIdArch, forceFieldStateArch)
+    std::make_pair(StateIdArch, forceFieldStateArch),
+    std::make_pair(StateIdDying, forceFieldStateDying)
 };
 
 const DecorateActor decorateForceField =
@@ -1042,14 +1053,14 @@ const DecorateActor decorateForceField =
     59, // spawnOnAllDifficulties;
     59, // spawnOnNormalAndHard;
     59,  // spawnOnHard
-    1,  // initialHealth;
+    20,  // initialHealth;
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     forceFieldStates,
     StateIdArch,   // initialState;
-    0,  // meleeDamage;
-    0, // hitSound;
+    20,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
     0,    // speed;
     0, // actionParameter
     0 // ProjectileId

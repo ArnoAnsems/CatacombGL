@@ -28,7 +28,7 @@
 const float pixelRadius = 1.0f / 128.0f;
 
 typedef enum {ActionNone, ActionChase, ActionChaseLikeMage, ActionChaseLikeWetMan, ActionRunAway, ActionHide, ActionHideUnderWater, ActionAttack,
-              ActionRemove, ActionPlayerProjectile, ActionMonsterProjectile, ActionDropItem, ActionSpawnSkeleton,
+              ActionRemove, ActionPlayerProjectile, ActionMonsterProjectile, ActionDropItem, ActionSpawnSkeleton, ActionForceField,
               ActionWaitForPickup, ActionFreezeTime, ActionGiveChest, ActionGiveBolt, ActionGiveNuke, ActionGivePotion,
               ActionGiveKey, ActionGiveGem, ActionGiveScroll,
               ActionItemDestroyed, ActionExplosionDelay,

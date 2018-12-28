@@ -29,6 +29,7 @@ const uint16_t actorIdMonsterMage = 59;
 const uint16_t actorIdMonsterZombie = 50;
 const uint16_t actorIdMonsterTree = 53;
 const uint16_t actorIdMonsterBunny = 54;
+const uint16_t actorIdMonsterRedDemon = 56;
 const uint16_t actorIdMonsterBat = 58;
 const uint16_t actorIdMonsterNemesis = 62;
 
@@ -452,6 +453,105 @@ const DecorateActor decorateBat =
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// RED DEMON
+//
+
+const DecorateAnimation redDemonWalkAnimation =
+{
+    { RED_DEMON1PIC, 20, ActionChase },
+    { RED_DEMON2PIC, 20, ActionChase },
+    { RED_DEMON3PIC, 20, ActionChase },
+    { RED_DEMON4PIC, 20, ActionChase }
+};
+
+const DecorateState redDemonStateWalk =
+{
+    redDemonWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation redDemonAttackAnimation =
+{
+    { RED_DEMONATTACK1PIC, 20, ActionNone },
+    { RED_DEMONATTACK2PIC, 20, ActionNone },
+    { RED_DEMONATTACK3PIC, 30, ActionAttack }
+};
+
+const DecorateState redDemonStateAttack =
+{
+    redDemonAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation redDemonPainAnimation =
+{
+    { RED_DEMONOUCHPIC, 15, ActionChase }
+};
+
+const DecorateState redDemonStatePain =
+{
+    redDemonPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation redDemonDyingAnimation =
+{
+    { RED_DEMONOUCHPIC, 9, ActionNone }, { RED_DEMONDIE1PIC, 9, ActionNone },
+    { RED_DEMONOUCHPIC, 9, ActionNone }, { RED_DEMONDIE1PIC, 9, ActionNone },
+    { RED_DEMONOUCHPIC, 9, ActionNone }, { RED_DEMONDIE1PIC, 9, ActionNone },
+    { RED_DEMONOUCHPIC, 9, ActionNone }, { RED_DEMONDIE1PIC, 9, ActionNone },
+    { RED_DEMONOUCHPIC, 9, ActionNone }, { RED_DEMONDIE1PIC, 9, ActionNone },
+    { RED_DEMONOUCHPIC, 9, ActionNone }, { RED_DEMONDIE1PIC, 9, ActionNone },
+    { RED_DEMONDIE2PIC, 20, ActionNone },
+    { RED_DEMONDIE3PIC, 10, ActionNone }
+};
+
+const DecorateState redDemonStateDying =
+{
+    redDemonDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation redDemonDeadAnimation =
+{
+    { RED_DEMONDIE3PIC, 16, ActionNone }
+};
+
+const DecorateState redDemonStateDead =
+{
+    redDemonDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> redDemonStates =
+{
+    std::make_pair(StateIdWalk, redDemonStateWalk),
+    std::make_pair(StateIdAttack, redDemonStateAttack),
+    std::make_pair(StateIdPain, redDemonStatePain),
+    std::make_pair(StateIdDying, redDemonStateDying),
+    std::make_pair(StateIdDead, redDemonStateDead)
+};
+
+const DecorateActor decorateRedDemon =
+{
+    actorIdMonsterRedDemon,   // Id
+    20, // spawnOnAllDifficulties;
+    24, // spawnOnNormalAndHard;
+    30,  // spawnOnHard; Actually, should include 20 and 24 as well.
+    50,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithRedGem,  // radarVisibility;
+    EgaRed,   // radarColor;
+    redDemonStates,
+    StateIdWalk,   // initialState;
+    15,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2048,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };
