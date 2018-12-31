@@ -32,6 +32,7 @@ const uint16_t actorIdMonsterBunny = 54;
 const uint16_t actorIdMonsterRedDemon = 56;
 const uint16_t actorIdMonsterBat = 58;
 const uint16_t actorIdMonsterNemesis = 62;
+const uint16_t actorIdMonsterSuccubus = 63;
 
 //
 // ZOMBIE
@@ -643,6 +644,98 @@ const DecorateActor decorateMage =
     3072,    // speed;
     0, // actionParameter
     actorIdProjectileMageShot // ProjectileId
+};
+
+//
+// SUCCUBUS
+//
+
+const DecorateAnimation succubusWalkAnimation =
+{
+    { SUCCUBUS_WALK1PIC, 10, ActionChaseLikeMage },
+    { SUCCUBUS_WALK2PIC, 10, ActionChaseLikeMage },
+    { SUCCUBUS_WALK3PIC, 10, ActionChaseLikeMage },
+    { SUCCUBUS_WALK4PIC, 10, ActionChaseLikeMage }
+};
+
+const DecorateState succubusStateWalk =
+{
+    succubusWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation succubusAttackAnimation =
+{
+    { SUCCUBUS_ATTACK1PIC, 15, ActionNone },
+    { SUCCUBUS_ATTACK2PIC, 15, ActionAttack },
+    { SUCCUBUS_WALK2PIC, 10, ActionNone }
+};
+
+const DecorateState succubusStateAttack =
+{
+    succubusAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation succubusPainAnimation =
+{
+    { SUCCUBUS_OUCHPIC, 15, ActionNone }
+};
+
+const DecorateState succubusStatePain =
+{
+    succubusPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation succubusDyingAnimation =
+{
+    { SUCCUBUS_DEATH1PIC, 55, ActionNone }
+};
+
+const DecorateState succubusStateDying =
+{
+    succubusDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation succubusDeadAnimation =
+{
+    { SUCCUBUS_DEATH2PIC, 20, ActionNone }
+};
+
+const DecorateState succubusStateDead =
+{
+    succubusDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> succubusStates =
+{
+    std::make_pair(StateIdWalk, succubusStateWalk),
+    std::make_pair(StateIdAttack, succubusStateAttack),
+    std::make_pair(StateIdPain, succubusStatePain),
+    std::make_pair(StateIdDying, succubusStateDying),
+    std::make_pair(StateIdDead, succubusStateDead)
+};
+
+const DecorateActor decorateSuccubus =
+{
+    actorIdMonsterSuccubus,   // Id
+    23, // spawnOnAllDifficulties;
+    23, // spawnOnNormalAndHard;
+    23,  // spawnOnHard
+    12,  // initialHealth;
+    30 * pixelRadius,    // size;
+    WithBlueGem,  // radarVisibility;
+    EgaBrightBlue,   // radarColor;
+    succubusStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2500,    // speed;
+    0, // actionParameter
+    actorIdProjectileSuccubusShot // ProjectileId
 };
 
 //

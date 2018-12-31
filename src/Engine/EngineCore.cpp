@@ -1803,6 +1803,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
     {
         if (actor->GetDecorateActor().damage > 0)
         {
+            // Melee attack
             if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
             {
                 if ((rand() % 3) == 0)
@@ -1814,8 +1815,9 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
         }
         else
         {
-            if (actor->GetDecorateActor().id == actorIdMonsterNemesis || actor->GetDecorateActor().id == actorIdMonsterMage || actor->GetDecorateActor().id == actorIdMonsterEye)
+            if (actor->GetDecorateActor().projectileId != 0)
             {
+                // Projectile attack
                 if ((rand() % 60) == 0 && m_level->AngleNearPlayer(actor) != -1)
                 {
                     actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);

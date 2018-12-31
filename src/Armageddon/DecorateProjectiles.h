@@ -28,6 +28,7 @@ const uint16_t actorIdProjectilePlayerShot = 70;
 const uint16_t actorIdProjectilePlayerBigShot = 71;
 const uint16_t actorIdProjectileMageShot = 72;
 const uint16_t actorIdProjectileNemesisShot = 74;
+const uint16_t actorIdProjectileSuccubusShot = 75;
 
 //
 // PLAYER SHOT
@@ -145,6 +146,46 @@ const DecorateActor decorateMageShot =
     2,  // damage;
     0, // hitSound;
     10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// SUCCUBUS SHOT
+//
+
+const DecorateAnimation succubusShotFlyAnimation =
+{
+    { SUCCUBUS_SHOT1PIC , 12, ActionMonsterProjectile }
+};
+
+const DecorateState succubusShotStateFly =
+{
+    succubusShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> succubusShotStates =
+{
+    std::make_pair(StateIdProjectileFly, succubusShotStateFly),
+    std::make_pair(StateIdDying, playerShotStateDying)
+};
+
+const DecorateActor decorateSuccubusShot =
+{
+    actorIdProjectileSuccubusShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    succubusShotStates,
+    StateIdProjectileFly,   // initialState;
+    3,  // damage;
+    0, // hitSound;
+    6500,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

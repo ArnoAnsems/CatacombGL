@@ -119,6 +119,12 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = redDemonActor;
                 break;
             }
+            case 23:
+            {
+                Actor* succubusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSuccubus);
+                actors[(y * level->GetLevelWidth()) + x] = succubusActor;
+                break;
+            }
             case 25:
             {
                 Actor* batActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBat);
