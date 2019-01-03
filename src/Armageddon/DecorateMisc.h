@@ -21,6 +21,7 @@
 #pragma once
 
 #include "..\Engine\Decorate.h"
+#include "DecorateProjectiles.h"
 #include "EgaGraphArmageddon.h"
 //#include "AudioRepositoryArmageddon.h"
 
@@ -392,7 +393,7 @@ const DecorateActor decoratePlayer =
     0, // hitSound;
     0,    // speed;
     0, // actionParameter
-    0 // ProjectileId
+    actorIdProjectilePlayerShot // ProjectileId
 };
 
 //

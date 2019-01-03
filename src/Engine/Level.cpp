@@ -16,8 +16,6 @@
 #include "Level.h"
 #include "PlayerInventory.h"
 #include "EgaGraph.h"
-#include "..\Abyss\DecorateMisc.h"
-#include "..\Abyss\DecorateBonus.h"
 
 Level::Level(const uint8_t mapIndex, const uint16_t mapWidth, const uint16_t mapHeight, const uint16_t* plane0, const uint16_t* plane2, const LevelInfo& mapInfo, const std::vector<WallInfo>& wallsInfo):
     m_levelWidth (mapWidth),
@@ -27,7 +25,7 @@ Level::Level(const uint8_t mapIndex, const uint16_t mapWidth, const uint16_t map
     m_lightningStartTimestamp(0),
     m_levelIndex(mapIndex),
     m_visibilityMap(NULL),
-    m_playerActor(new Actor(0, 0, 0, decoratePlayer)),
+    m_playerActor(NULL),
     m_blockingActors(NULL),
     m_nonBlockingActors(NULL),
     m_wallXVisible(NULL),
@@ -920,6 +918,11 @@ Actor* const Level::GetPlayerActor()
     return m_playerActor;
 }
 
+void Level::SetPlayerActor(Actor* const actor)
+{
+    m_playerActor = actor;
+}
+
 Actor** Level::GetBlockingActors()
 {
     return m_blockingActors;
@@ -1338,28 +1341,28 @@ int16_t Level::AngleNearPlayer(const Actor* const actor) const
      return(angle);
 }
 
-void Level::ExplodeWall(const uint16_t x, const uint16_t y, const uint32_t timestamp)
+void Level::ExplodeWall(const uint16_t x, const uint16_t y, const uint32_t timestamp, const DecorateActor& explodingWallActor)
 {
     if (m_blockingActors[(y * m_levelWidth) + x] == NULL)
     {
-        m_blockingActors[(y * m_levelWidth) + x] = new Actor(x, y, timestamp, decorateExplodingWall);
+        m_blockingActors[(y * m_levelWidth) + x] = new Actor(x, y, timestamp, explodingWallActor);
         m_blockingActors[(y * m_levelWidth) + x]->SetActive(true);
     }
 }
 
-void Level::SpawnExplosion(const float x, const float y, const int16_t delay, const uint32_t timestamp)
+void Level::SpawnExplosion(const float x, const float y, const int16_t delay, const uint32_t timestamp, const DecorateActor& decorateActor)
 {
-    Actor* actor = new Actor(x, y, timestamp, decorateExplosion);
+    Actor* actor = new Actor(x, y, timestamp, decorateActor);
     actor->SetTemp2(delay);
     AddNonBlockingActor(actor);
 }
 
-void Level::SpawnBigExplosion(const float x, const float y, const uint16_t delay, const uint32_t range, const uint32_t timestamp)
+void Level::SpawnBigExplosion(const float x, const float y, const uint16_t delay, const uint32_t range, const uint32_t timestamp, const DecorateActor& decorateActor)
 {
-    SpawnExplosion(x-((rand() % range) / 65536.0f),y+((rand() % range) / 65536.0f),rand() % delay, timestamp);
-    SpawnExplosion(x+((rand() % range) / 65536.0f),y-((rand() % range) / 65536.0f),rand() % delay, timestamp);
-    SpawnExplosion(x-((rand() % range) / 65536.0f),y-((rand() % range) / 65536.0f),rand() % delay, timestamp);
-    SpawnExplosion(x+((rand() % range) / 65536.0f),y+((rand() % range) / 65536.0f),rand() % delay, timestamp);
+    SpawnExplosion(x-((rand() % range) / 65536.0f),y+((rand() % range) / 65536.0f),rand() % delay, timestamp, decorateActor);
+    SpawnExplosion(x+((rand() % range) / 65536.0f),y-((rand() % range) / 65536.0f),rand() % delay, timestamp, decorateActor);
+    SpawnExplosion(x-((rand() % range) / 65536.0f),y-((rand() % range) / 65536.0f),rand() % delay, timestamp, decorateActor);
+    SpawnExplosion(x+((rand() % range) / 65536.0f),y+((rand() % range) / 65536.0f),rand() % delay, timestamp, decorateActor);
 }
 
 bool Level::IsWaterLevel() const

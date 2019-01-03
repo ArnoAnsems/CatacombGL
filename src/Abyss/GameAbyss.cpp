@@ -64,7 +64,8 @@ GameAbyss::~GameAbyss()
 void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
 {
     Actor** actors = level->GetBlockingActors();
-    Actor* const playerState = level->GetPlayerActor();
+    Actor* const playerState = new Actor(0, 0, 0, decoratePlayer);
+    level->SetPlayerActor(playerState);
 
     for (uint16_t y = 0; y < level->GetLevelHeight(); y++)
     {
@@ -446,6 +447,21 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
     }
 }
 
+const DecorateActor& GameAbyss::GetExplosionActor()
+{
+    return decorateExplosion;
+}
+
+const DecorateActor& GameAbyss::GetExplodingWallActor()
+{
+    return decorateExplodingWall;
+}
+
+const DecorateActor& GameAbyss::GetPlayerActor()
+{
+    return decoratePlayer;
+}
+
 void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory)
 {
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsAbyss::STATUSPIC), 0, 120);
@@ -594,4 +610,9 @@ const std::string& GameAbyss::GetName() const
 const uint8_t GameAbyss::GetId() const
 {
     return m_gameId;
+}
+
+const uint16_t GameAbyss::GetMenuCursorPic() const
+{
+    return SKULL_SHOTPIC;
 }

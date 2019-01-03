@@ -44,7 +44,7 @@ public:
     bool IsActive() const;
     void SetActive(bool active);
     MenuCommand ProcessInput(const PlayerInput& playerInput);
-    void Draw(IRenderer& renderer, EgaGraph* const egaGraph);
+    void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic);
     void SetSaveGameEnabled(const bool enabled);
     const std::string& GetNewSaveGameName() const;
     void OpenRestoreGameMenu();

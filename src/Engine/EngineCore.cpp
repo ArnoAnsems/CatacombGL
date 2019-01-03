@@ -21,10 +21,7 @@
 #include <fstream>
 
 // TODO: These direct references to the Abyss game data will have to be refactored out in preparation of Armageddon support.
-#include "..\Abyss\AudioRepositoryAbyss.h"
-#include "..\Abyss\DecorateProjectiles.h"
 #include "..\Abyss\DecorateMonsters.h"
-#include "..\Abyss\DecorateBonus.h"
 
 const uint8_t versionMajor = 0;
 const uint8_t versionMinor = 1;
@@ -108,9 +105,9 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     UnloadLevel();
 
     m_level = m_game.GetGameMaps()->GetLevelFromStart(mapIndex);
-    m_level->GetPlayerActor()->SetHealth(health);
 
     m_game.SpawnActors(m_level, m_difficultyLevel);
+    m_level->GetPlayerActor()->SetHealth(health);
 
     m_timeStampOfPlayerCurrentFrame = 0;
     m_timeStampOfPlayerPreviousFrame = 0;
@@ -365,7 +362,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_extraMenu.IsActive())
     {
         DrawTiledWindow(renderer,2,1,36,13);
-        m_extraMenu.Draw(renderer, m_game.GetEgaGraph());
+        m_extraMenu.Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic());
     }
     
     renderer.Unprepare2DRendering();
@@ -1271,7 +1268,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionItemDestroyed:
     {
         DisplayStatusMessage("Item destroyed", 80 * 17);
-        m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame);
+        m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
         actor->SetActionPerformed(true);
         break;
     }
@@ -1331,21 +1328,22 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         const uint8_t x = actor->GetTileX();
         const uint8_t y = actor->GetTileY();
+        const DecorateActor& explodingWallActor = m_game.GetExplodingWallActor();
         if (x > 1 && m_level->IsExplosiveWall(x - 1, y))
         {
-            m_level->ExplodeWall(x - 1, y, m_timeStampOfWorldCurrentFrame);
+            m_level->ExplodeWall(x - 1, y, m_timeStampOfWorldCurrentFrame, explodingWallActor);
         }
         if (x < m_level->GetLevelWidth() - 2 && m_level->IsExplosiveWall(x + 1, y))
         {
-            m_level->ExplodeWall(x + 1, y, m_timeStampOfWorldCurrentFrame);
+            m_level->ExplodeWall(x + 1, y, m_timeStampOfWorldCurrentFrame, explodingWallActor);
         }
         if (y > 1 && m_level->IsExplosiveWall(x, y - 1))
         {
-            m_level->ExplodeWall(x, y - 1, m_timeStampOfWorldCurrentFrame);
+            m_level->ExplodeWall(x, y - 1, m_timeStampOfWorldCurrentFrame, explodingWallActor);
         }
         if (y < m_level->GetLevelHeight() - 2 && m_level->IsExplosiveWall(x, y + 1))
         {
-            m_level->ExplodeWall(x, y + 1, m_timeStampOfWorldCurrentFrame);
+            m_level->ExplodeWall(x, y + 1, m_timeStampOfWorldCurrentFrame, explodingWallActor);
         }
 
         const uint16_t tileExplosion = m_game.GetGameMaps()->GetTileWallExplosion(m_level->IsWaterLevel());
@@ -1493,7 +1491,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         if ((abs(basex - (float)x - 0.5f) < size + 0.5f) &&
                             (abs(basey - (float)y - 0.5f) < size + 0.5f))
                         {
-                            m_level->ExplodeWall(x, y, m_timeStampOfWorldCurrentFrame);
+                            m_level->ExplodeWall(x, y, m_timeStampOfWorldCurrentFrame, m_game.GetExplodingWallActor());
                             moveOk = false;
                         }
                     }

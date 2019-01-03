@@ -15,7 +15,6 @@
 
 #include "ExtraMenu.h"
 #include "..\Abyss\AudioRepositoryAbyss.h"
-#include "..\Abyss\EgaGraphAbyss.h"
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 
 const uint8_t subMenuMain = 0;
@@ -554,7 +553,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     return command;
 }
 
-void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph)
+void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic)
 {
     if (m_askForOverwrite)
     {  
@@ -570,7 +569,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph)
     {
         const uint16_t xOffset = 140;
         renderer.RenderTextCentered("Main menu", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(SKULL_SHOTPIC),110,4+(m_menuItemSelected * 10));
+        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),110,4+(m_menuItemSelected * 10));
         renderer.RenderTextLeftAligned("New game", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite,xOffset,30);
         renderer.RenderTextLeftAligned("Restore game", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
         const egaColor saveGameColor = (!m_saveGameEnabled) ? EgaDarkGray : (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite;
@@ -585,7 +584,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph)
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 200;
         renderer.RenderTextCentered("Video", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(SKULL_SHOTPIC),30,4+(m_menuItemSelected * 10));
+        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
         renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
         renderer.RenderTextLeftAligned("Aspect ratio", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
         const char* aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description.c_str();
@@ -615,7 +614,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph)
         const uint8_t maxRowsVisible = 8;
             
         renderer.RenderTextCentered("Controls", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(SKULL_SHOTPIC),20,4+((m_menuItemSelected - m_menuItemOffset) * 10));
+        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),20,4+((m_menuItemSelected - m_menuItemOffset) * 10));
         uint16_t index = 0;
         while (index < 8)
         {
@@ -658,7 +657,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph)
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 200;
         renderer.RenderTextCentered("Sound", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(SKULL_SHOTPIC),30,4+(m_menuItemSelected * 10));
+        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
         renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
         renderer.RenderTextLeftAligned("Sound Mode", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
         const char* soundModeStr = (m_configurationSettings.GetSoundMode() == 0) ? "Off" : "Adlib";
@@ -669,7 +668,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph)
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 150;
         renderer.RenderTextCentered("Restore game", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(SKULL_SHOTPIC),30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
+        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
 
         if (m_menuItemOffset == 0)
         {
@@ -691,7 +690,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph)
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 150;
         renderer.RenderTextCentered("Save game", egaGraph->GetFont(3), EgaBrightYellow, 160, 12);
-        renderer.Render2DPicture(egaGraph->GetPicture(SKULL_SHOTPIC), 30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
+        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic), 30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
 
         if (m_menuItemOffset == 0)
         {

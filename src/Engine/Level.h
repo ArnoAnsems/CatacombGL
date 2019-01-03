@@ -107,6 +107,7 @@ public:
     void UpdateVisibilityMap();
     bool IsTileVisibleForPlayer(const uint16_t x, const uint16_t y) const;
     Actor* const GetPlayerActor();
+    void SetPlayerActor(Actor* const actor);
     Actor** GetBlockingActors();
     Actor** GetNonBlockingActors();
     void SetBlockingActor(const uint16_t x, const uint16_t y, Actor* actor);
@@ -120,9 +121,9 @@ public:
     void RunAwayThink(Actor* const actor);
     void MoveActor(Actor* const actor, const float distance);
     int16_t AngleNearPlayer(const Actor* const actor) const;
-    void ExplodeWall(const uint16_t x, const uint16_t y, const uint32_t timestamp);
-    void SpawnExplosion(const float x, const float y, const int16_t delay, const uint32_t timestamp);
-    void SpawnBigExplosion(const float x, const float y, const uint16_t delay, const uint32_t range, const uint32_t timestamp);
+    void ExplodeWall(const uint16_t x, const uint16_t y, const uint32_t timestamp, const DecorateActor& explodingWallActor);
+    void SpawnExplosion(const float x, const float y, const int16_t delay, const uint32_t timestamp, const DecorateActor& decorateActor);
+    void SpawnBigExplosion(const float x, const float y, const uint16_t delay, const uint32_t range, const uint32_t timestamp, const DecorateActor& decorateActor);
 
     void StoreToFile(std::ofstream& file) const;
     bool IsWaterLevel() const;

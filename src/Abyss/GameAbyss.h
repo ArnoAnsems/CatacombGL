@@ -30,17 +30,21 @@ public:
     GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer);
     ~GameAbyss();
 
-    void SpawnActors(Level* level, const DifficultyLevel difficultyLevel);
-    void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory);
-    GameMaps* GetGameMaps();
-    EgaGraph* GetEgaGraph();
-    AudioRepository* GetAudioRepository();
-    AudioPlayer* GetAudioPlayer();
+    void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
+    const DecorateActor& GetExplosionActor() override;
+    const DecorateActor& GetExplodingWallActor() override;
+    const DecorateActor& GetPlayerActor() override;
+    void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory) override;
+    GameMaps* GetGameMaps() override;
+    EgaGraph* GetEgaGraph() override;
+    AudioRepository* GetAudioRepository() override;
+    AudioPlayer* GetAudioPlayer() override;
 
-    IIntroView* GetIntroView();
-    const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const;
-    const std::string& GetName() const;
-    const uint8_t GetId() const;
+    IIntroView* GetIntroView() override;
+    const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;
+    const std::string& GetName() const override;
+    const uint8_t GetId() const override;
+    const uint16_t GetMenuCursorPic() const override;
 
 private:
     void DrawHealth(const int16_t health);

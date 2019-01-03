@@ -63,7 +63,8 @@ GameArmageddon::~GameArmageddon()
 void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
 {
     Actor** actors = level->GetBlockingActors();
-    Actor* const playerState = level->GetPlayerActor();
+    Actor* const playerState = new Actor(0, 0, 0, decoratePlayer);
+    level->SetPlayerActor(playerState);
 
     for (uint16_t y = 0; y < level->GetLevelHeight(); y++)
     {
@@ -360,6 +361,21 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
     }
 }
 
+const DecorateActor& GameArmageddon::GetExplosionActor()
+{
+    return decorateExplosion;
+}
+
+const DecorateActor& GameArmageddon::GetExplodingWallActor()
+{
+    return decorateExplodingWall;
+}
+
+const DecorateActor& GameArmageddon::GetPlayerActor()
+{
+    return decoratePlayer;
+}
+
 GameMaps* GameArmageddon::GetGameMaps()
 {
     if (m_gameMaps == NULL)
@@ -493,4 +509,9 @@ void GameArmageddon::DrawGems(const PlayerInventory& playerInventory)
             m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picNum), 256 + (i * 8), 173);
         }
     }
+}
+
+const uint16_t GameArmageddon::GetMenuCursorPic() const
+{
+    return SKULL_SHOTPIC;
 }
