@@ -616,3 +616,8 @@ const uint16_t GameAbyss::GetMenuCursorPic() const
 {
     return SKULL_SHOTPIC;
 }
+
+const uint16_t GameAbyss::GetNorthIconSprite() const
+{
+    return NORTHICONSPR;
+}

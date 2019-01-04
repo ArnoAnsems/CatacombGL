@@ -45,6 +45,7 @@ public:
     const std::string& GetName() const override;
     const uint8_t GetId() const override;
     const uint16_t GetMenuCursorPic() const override;
+    const uint16_t GetNorthIconSprite() const override;
 
 private:
     void DrawHealth(const int16_t health);

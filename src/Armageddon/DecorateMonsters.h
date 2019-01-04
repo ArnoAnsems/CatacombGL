@@ -31,6 +31,7 @@ const uint16_t actorIdMonsterTree = 53;
 const uint16_t actorIdMonsterBunny = 54;
 const uint16_t actorIdMonsterRedDemon = 56;
 const uint16_t actorIdMonsterBat = 58;
+const uint16_t actorIdMonsterEye = 60;
 const uint16_t actorIdMonsterNemesis = 62;
 const uint16_t actorIdMonsterSuccubus = 63;
 
@@ -830,4 +831,85 @@ const DecorateActor decorateNemesis =
     2048,    // speed;
     0, // actionParameter
     actorIdProjectileNemesisShot // ProjectileId
+};
+
+//
+// EYE
+//
+
+const DecorateAnimation eyeWalkAnimation =
+{
+    { EYE_WALK1PIC, 20, ActionChaseLikeMage },
+    { EYE_WALK2PIC, 20, ActionChaseLikeMage },
+    { EYE_WALK3PIC, 20, ActionChaseLikeMage },
+    { EYE_WALK2PIC, 20, ActionChaseLikeMage }
+};
+
+const DecorateState eyeStateWalk =
+{
+    eyeWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation eyeAttackAnimation =
+{
+    { EYE_SCOWLPIC, 20, ActionAttack }
+};
+
+const DecorateState eyeStateAttack =
+{
+    eyeAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation eyePainAnimation =
+{
+    { EYE_OUCH1PIC, 8, ActionNone },
+    { EYE_OUCH2PIC, 8, ActionNone }
+};
+
+const DecorateState eyeStatePain =
+{
+    eyePainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation eyeDyingAnimation =
+{
+    { EYE_DEATH1PIC, 22, ActionNone },
+    { EYE_DEATH2PIC, 22, ActionNone },
+    { NULL, 22, ActionRemove }
+};
+
+const DecorateState eyeStateDying =
+{
+    eyeDyingAnimation,
+    StateIdDying  // Will not loop, due to the ActionRemove.
+};
+
+const std::map<DecorateStateId, DecorateState> eyeStates =
+{
+    std::make_pair(StateIdWalk, eyeStateWalk),
+    std::make_pair(StateIdAttack, eyeStateAttack),
+    std::make_pair(StateIdPain,eyeStatePain),
+    std::make_pair(StateIdDying, eyeStateDying)
+};
+
+const DecorateActor decorateEye =
+{
+    actorIdMonsterEye,   // Id
+    26, // spawnOnAllDifficulties;
+    26, // spawnOnNormalAndHard;
+    26,  // spawnOnHard
+    15,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithRedGem,  // radarVisibility;
+    EgaRed,   // radarColor;
+    eyeStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1200,    // speed;
+    0, // actionParameter
+    actorIdProjectileEyeShot // ProjectileId
 };

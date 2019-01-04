@@ -302,7 +302,7 @@ const DecorateActor decorateWallSkeleton =
     6,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     0,    // speed;
-    0, // actionParameter
+    actorIdMonsterSkeleton, // actionParameter
     0 // ProjectileId
 };
 

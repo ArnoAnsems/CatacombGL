@@ -54,6 +54,7 @@ public:
     virtual const std::string& GetName() const = NULL;
     virtual const uint8_t GetId() const = NULL;
     virtual const uint16_t GetMenuCursorPic() const = NULL;
+    virtual const uint16_t GetNorthIconSprite() const = NULL;
 
 protected:
     GameMaps* m_gameMaps;

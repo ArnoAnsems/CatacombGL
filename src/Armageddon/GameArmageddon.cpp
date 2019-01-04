@@ -132,6 +132,12 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = batActor;
                 break;
             }
+            case 26:
+            {
+                Actor* eyeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateEye);
+                actors[(y * level->GetLevelWidth()) + x] = eyeActor;
+                break;
+            }
             case 27:
             {
                 Actor* mageActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateMage);
@@ -514,4 +520,9 @@ void GameArmageddon::DrawGems(const PlayerInventory& playerInventory)
 const uint16_t GameArmageddon::GetMenuCursorPic() const
 {
     return SKULL_SHOTPIC;
+}
+
+const uint16_t GameArmageddon::GetNorthIconSprite() const
+{
+    return NORTHICONSPR;
 }

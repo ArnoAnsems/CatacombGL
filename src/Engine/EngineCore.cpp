@@ -21,7 +21,8 @@
 #include <fstream>
 
 // TODO: These direct references to the Abyss game data will have to be refactored out in preparation of Armageddon support.
-#include "..\Abyss\DecorateMonsters.h"
+#include "..\Abyss\AudioRepositoryAbyss.h"
+#include "..\Abyss\EgaGraphAbyss.h"
 
 const uint8_t versionMajor = 0;
 const uint8_t versionMinor = 1;
@@ -260,7 +261,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 const float northIconoffsetFromCenterY = -(radarYRadius * cos(m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f));
                 const uint16_t northIconScreenOffsetX = (uint16_t)(radarCenterX + northIconoffsetFromCenterX - 3);
                 const uint16_t northIconScreenOffsetY = (uint16_t)(radarCenterY + northIconoffsetFromCenterY - 3);
-                renderer.Render2DPicture(m_game.GetEgaGraph()->GetSprite(NORTHICONSPR), northIconScreenOffsetX, northIconScreenOffsetY);
+                renderer.Render2DPicture(m_game.GetEgaGraph()->GetSprite(m_game.GetNorthIconSprite()), northIconScreenOffsetX, northIconScreenOffsetY);
                 renderer.RenderRadarBlip(radarCenterX, radarCenterY, EgaBrightWhite);
 
                 for (uint16_t blipIndex = 0; blipIndex < m_radarModel.GetNumberOfBlips(); blipIndex++)
@@ -1239,16 +1240,20 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         {
             m_level->AddNonBlockingActor(actor);
             actor->SetActionPerformed(true);
-            Actor* skeletonActor = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateSkeleton);
-            skeletonActor->SetTile(actor->GetTileX(), actor->GetTileY());
-            for ( uint16_t i = 0; i < m_level->GetLevelWidth() * m_level->GetLevelHeight(); i++)
+            const uint16_t skeletonId = actor->GetDecorateActor().actionParameter;
+            const auto decorateSkeletonPair = m_game.GetDecorateActors().find(skeletonId);
+            if (decorateSkeletonPair != m_game.GetDecorateActors().end())
             {
-                if (m_level->GetBlockingActors()[i] == actor)
+                Actor* skeletonActor = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateSkeletonPair->second);
+                skeletonActor->SetTile(actor->GetTileX(), actor->GetTileY());
+                for (uint16_t i = 0; i < m_level->GetLevelWidth() * m_level->GetLevelHeight(); i++)
                 {
-                    m_level->GetBlockingActors()[i] = skeletonActor;
+                    if (m_level->GetBlockingActors()[i] == actor)
+                    {
+                        m_level->GetBlockingActors()[i] = skeletonActor;
+                    }
                 }
             }
-            
         }
         break;
     }
@@ -1538,7 +1543,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     if (!m_godModeIsOn)
                     {
                         const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
-                        const uint8_t damage = (m_difficultyLevel == Easy) ? baseDamage / 2 : baseDamage;
+                        const uint8_t damage = (m_difficultyLevel == Easy && baseDamage > 1) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
                         if ( m_level->GetPlayerActor()->GetHealth() > 33)
                         {
