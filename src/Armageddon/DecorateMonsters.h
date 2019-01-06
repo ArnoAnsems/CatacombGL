@@ -32,6 +32,7 @@ const uint16_t actorIdMonsterBunny = 54;
 const uint16_t actorIdMonsterRedDemon = 56;
 const uint16_t actorIdMonsterBat = 58;
 const uint16_t actorIdMonsterEye = 60;
+const uint16_t actorIdMonsterDragon = 61;
 const uint16_t actorIdMonsterNemesis = 62;
 const uint16_t actorIdMonsterSuccubus = 63;
 
@@ -737,6 +738,146 @@ const DecorateActor decorateSuccubus =
     2500,    // speed;
     0, // actionParameter
     actorIdProjectileSuccubusShot // ProjectileId
+};
+
+//
+// DRAGON
+//
+
+const DecorateAnimation dragonHiddenAnimation =
+{
+    { DRAGON_BUBBLES1PIC, 13, ActionHideUnderWater },
+    { DRAGON_BUBBLES2PIC, 15, ActionHideUnderWater },
+    { 0, 35, ActionHideUnderWater }
+};
+
+const DecorateState dragonStateHidden =
+{
+    dragonHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation dragonRiseAnimation =
+{
+    { DRAGON_BUBBLES2PIC, 15, ActionNone },
+    { DRAGON_EYESPIC, 20, ActionNone },
+    { DRAGON_RISE1PIC, 20, ActionNone },
+    { DRAGON_RISE2PIC, 20, ActionNone }
+};
+
+const DecorateState dragonStateRise =
+{
+    dragonRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation dragonSinkAnimation =
+{
+    { DRAGON_RISE2PIC, 20, ActionNone },
+    { DRAGON_RISE1PIC, 20, ActionNone },
+    { DRAGON_EYESPIC, 20, ActionNone }
+};
+
+const DecorateState dragonStateSink =
+{
+    dragonSinkAnimation,
+    StateIdHidden
+};
+
+const DecorateAnimation dragonPeekAnimation =
+{
+    { DRAGON_EYESPIC, 45, ActionNone }
+};
+
+const DecorateState dragonStatePeek =
+{
+    dragonPeekAnimation,
+    StateIdHidden
+};
+
+const DecorateAnimation dragonWalkAnimation =
+{
+    { DRAGON_WALK1PIC, 12, ActionChaseLikeWetMan },
+    { DRAGON_WALK2PIC, 12, ActionChaseLikeWetMan },
+    { DRAGON_WALK3PIC, 12, ActionChaseLikeWetMan },
+    { DRAGON_WALK4PIC, 12, ActionChaseLikeWetMan }
+};
+
+const DecorateState dragonStateWalk =
+{
+    dragonWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation dragonAttackAnimation =
+{
+    { DRAGON_ATTACK1PIC, 10, ActionNone },
+    { DRAGON_ATTACK2PIC, 20, ActionNone },
+    { DRAGON_ATTACK3PIC, 10, ActionAttack }
+};
+
+const DecorateState dragonStateAttack =
+{
+    dragonAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation dragonPainAnimation =
+{
+    { DRAGON_OUCHPIC, 10, ActionNone }
+};
+
+const DecorateState dragonStatePain =
+{
+    dragonPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation dragonDyingAnimation =
+{
+    { DRAGON_DEATH1PIC, 27, ActionNone },
+    { DRAGON_DEATH2PIC, 29, ActionNone },
+    { DRAGON_DEATH3PIC, 44, ActionNone },
+    { DRAGON_BUBBLES2PIC, 26, ActionNone },
+    { DRAGON_BUBBLES1PIC, 23, ActionNone },
+    { 0, 22, ActionRemove }
+};
+
+const DecorateState dragonStateDying =
+{
+    dragonDyingAnimation,
+    StateIdDying  // Will not loop, due to the ActionRemove.
+};
+
+const std::map<DecorateStateId, DecorateState> dragonStates =
+{
+    std::make_pair(StateIdHidden, dragonStateHidden),
+    std::make_pair(StateIdRise, dragonStateRise),
+    std::make_pair(StateIdSink, dragonStateSink),
+    std::make_pair(StateIdPeek, dragonStatePeek),
+    std::make_pair(StateIdWalk, dragonStateWalk),
+    std::make_pair(StateIdAttack, dragonStateAttack),
+    std::make_pair(StateIdPain, dragonStatePain),
+    std::make_pair(StateIdDying, dragonStateDying)
+};
+
+const DecorateActor decorateDragon =
+{
+    actorIdMonsterDragon,   // Id
+    24, // spawnOnAllDifficulties;
+    24, // spawnOnNormalAndHard;
+    24,  // spawnOnHard
+    20,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithBlueGem,  // radarVisibility;
+    EgaBlue,   // radarColor;
+    dragonStates,
+    StateIdHidden,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1000,    // speed;
+    0, // actionParameter
+    actorIdProjectileDragonShot // ProjectileId
 };
 
 //

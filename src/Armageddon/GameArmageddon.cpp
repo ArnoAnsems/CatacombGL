@@ -126,6 +126,14 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = succubusActor;
                 break;
             }
+            case 24:
+            {
+                const int16_t dragonDelay = (5 * 60) + rand() % (5 * 60);
+                Actor* dragonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateDragon);
+                dragonActor->SetTemp2(dragonDelay);
+                actors[(y * level->GetLevelWidth()) + x] = dragonActor;
+                break;
+            }
             case 25:
             {
                 Actor* batActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBat);

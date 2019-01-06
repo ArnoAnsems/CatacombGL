@@ -1134,7 +1134,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     if (iterator != m_game.GetDecorateActors().end())
                     {
                         projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, iterator->second);
-                        if (actor->GetTemp2() > 0)
+                        if (actor->GetTemp2() > 0 && actor->GetDecorateActor().initialState != StateIdHidden)
                         {
                             projectile->SetTemp2(actor->GetTemp2()); // Shot power
                         }
@@ -1804,33 +1804,37 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
 
     while (move > 0.0f)
     {
-        if (actor->GetDecorateActor().damage > 0)
+        if (actor->GetState() == StateIdWalk)
         {
-            // Melee attack
-            if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
+            // Check if actor can attack
+            if (actor->GetDecorateActor().damage > 0)
             {
-                if ((rand() % 3) == 0)
+                // Melee attack
+                if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
                 {
-                    actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
-                }
-                return true;
-            }
-        }
-        else
-        {
-            if (actor->GetDecorateActor().projectileId != 0)
-            {
-                // Projectile attack
-                if ((rand() % 60) == 0 && m_level->AngleNearPlayer(actor) != -1)
-                {
-                    actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
+                    if ((rand() % 3) == 0)
+                    {
+                        actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
+                    }
+                    return true;
                 }
             }
+            else
+            {
+                if (actor->GetDecorateActor().projectileId != 0)
+                {
+                    // Projectile attack
+                    if ((rand() % 60) == 0 && m_level->AngleNearPlayer(actor) != -1)
+                    {
+                        actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
+                    }
+                }
 
-            // Clip with player
-            if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
-            {
-                return true;
+                // Clip with player
+                if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
+                {
+                    return true;
+                }
             }
         }
 

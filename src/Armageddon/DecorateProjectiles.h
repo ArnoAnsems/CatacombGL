@@ -30,6 +30,7 @@ const uint16_t actorIdProjectileMageShot = 72;
 const uint16_t actorIdProjectileEyeShot = 73;
 const uint16_t actorIdProjectileNemesisShot = 74;
 const uint16_t actorIdProjectileSuccubusShot = 75;
+const uint16_t actorIdProjectileDragonShot = 76;
 
 //
 // PLAYER SHOT
@@ -187,6 +188,47 @@ const DecorateActor decorateSuccubusShot =
     3,  // damage;
     0, // hitSound;
     6500,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// DRAGON SHOT
+//
+
+const DecorateAnimation dragonShotFlyAnimation =
+{
+    { PSHOT1PIC , 8, ActionMonsterProjectile },
+    { PSHOT2PIC , 8, ActionMonsterProjectile }
+};
+
+const DecorateState dragonShotStateFly =
+{
+    dragonShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> dragonShotStates =
+{
+    std::make_pair(StateIdProjectileFly, dragonShotStateFly),
+    std::make_pair(StateIdDying, playerShotStateDying)
+};
+
+const DecorateActor decorateDragonShot =
+{
+    actorIdProjectileDragonShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    dragonShotStates,
+    StateIdProjectileFly,   // initialState;
+    7,  // damage;
+    0, // hitSound;
+    10000,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };
