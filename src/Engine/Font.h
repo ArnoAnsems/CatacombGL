@@ -25,7 +25,7 @@
 class Font
 {
 public:
-    Font(uint8_t width[256], uint32_t textureId);
+    Font(const uint8_t width[256], const uint32_t textureId);
     ~Font();
 
     uint32_t GetTextureId() const;
