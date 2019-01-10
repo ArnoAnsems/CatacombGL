@@ -525,6 +525,16 @@ void GameArmageddon::DrawGems(const PlayerInventory& playerInventory)
     }
 }
 
+void GameArmageddon::DrawScroll(const uint8_t scrollIndex)
+{
+    // No scrolls in Armageddon
+}
+
+void GameArmageddon::DrawFinal()
+{
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(FINALEPIC), 0, 0);
+}
+
 const uint16_t GameArmageddon::GetMenuCursorPic() const
 {
     return SKULL_SHOTPIC;
@@ -533,4 +543,9 @@ const uint16_t GameArmageddon::GetMenuCursorPic() const
 const uint16_t GameArmageddon::GetNorthIconSprite() const
 {
     return NORTHICONSPR;
+}
+
+const std::string GameArmageddon::GetSavedGamesPath() const
+{
+    return "\\Armageddon";
 }

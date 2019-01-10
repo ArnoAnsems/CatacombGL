@@ -35,6 +35,8 @@ public:
     const DecorateActor& GetExplodingWallActor() override;
     const DecorateActor& GetPlayerActor() override;
     void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory) override;
+    void DrawScroll(const uint8_t scrollIndex) override;
+    void DrawFinal() override;
     GameMaps* GetGameMaps() override;
     EgaGraph* GetEgaGraph() override;
     AudioRepository* GetAudioRepository() override;
@@ -46,6 +48,7 @@ public:
     const uint8_t GetId() const override;
     const uint16_t GetMenuCursorPic() const override;
     const uint16_t GetNorthIconSprite() const override;
+    const std::string GetSavedGamesPath() const override;
 
 private:
     void DrawHealth(const int16_t health);

@@ -45,6 +45,8 @@ public:
     virtual const DecorateActor& GetExplodingWallActor() = NULL;
     virtual const DecorateActor& GetPlayerActor() = NULL;
     virtual void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory) = NULL;
+    virtual void DrawScroll(const uint8_t scrollIndex) = NULL;
+    virtual void DrawFinal() = NULL;
     virtual GameMaps* GetGameMaps() = NULL;
     virtual EgaGraph* GetEgaGraph() = NULL;
     virtual AudioRepository* GetAudioRepository() = NULL;
@@ -55,6 +57,7 @@ public:
     virtual const uint8_t GetId() const = NULL;
     virtual const uint16_t GetMenuCursorPic() const = NULL;
     virtual const uint16_t GetNorthIconSprite() const = NULL;
+    virtual const std::string GetSavedGamesPath() const = NULL;
 
 protected:
     GameMaps* m_gameMaps;

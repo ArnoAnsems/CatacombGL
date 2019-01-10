@@ -22,7 +22,6 @@
 
 // TODO: These direct references to the Abyss game data will have to be refactored out in preparation of Armageddon support.
 #include "..\Abyss\AudioRepositoryAbyss.h"
-#include "..\Abyss\EgaGraphAbyss.h"
 
 const uint8_t versionMajor = 0;
 const uint8_t versionMinor = 1;
@@ -79,7 +78,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     const std::string filenamePath = m_system.GetConfigurationFilePath();
     const std::string filename = filenamePath + "CatacombGL.ini";
     m_configurationSettings.LoadFromFile(filename);
-    const std::string savedGamesAbyssPath = filenamePath + "\\Abyss";
+    const std::string savedGamesAbyssPath = filenamePath + m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesAbyssPath, m_savedGames);
 }
 
@@ -168,10 +167,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         if (m_readingScroll != 255)
         {
             // Read scroll
-            renderer.Render2DBar(0,0,320,120,EgaBlack);
-            renderer.Render2DPicture(m_game.GetEgaGraph()->GetPicture(SCROLLTOPPIC), 80, 0);
-            renderer.Render2DPicture(m_game.GetEgaGraph()->GetPicture(SCROLL1PIC + m_readingScroll), 80, 32);
-            renderer.Render2DPicture(m_game.GetEgaGraph()->GetPicture(SCROLLBOTTOMPIC), 80, 88);
+            m_game.DrawScroll(m_readingScroll);
         }
         else
         {
@@ -324,7 +320,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_state == Victory && m_victoryState == VictoryStateDone)
     {
-        renderer.Render2DPicture(m_game.GetEgaGraph()->GetPicture(FINALEPIC), 0, 0);
+        m_game.DrawFinal();
     }
     
     if (m_state == Introduction)
@@ -2216,7 +2212,7 @@ bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
 bool EngineCore::StoreGameToFile(const std::string filename)
 {
     const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string filenamePathAbyss = filenamePath + "\\Abyss";
+    const std::string filenamePathAbyss = filenamePath + m_game.GetSavedGamesPath();
     if (m_system.CreatePath(filenamePathAbyss))
     {
         const std::string fullPath = filenamePathAbyss + "\\" + filename + ".sav";
@@ -2267,7 +2263,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
 void EngineCore::LoadGameFromFile(const std::string filename)
 {
     const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string filenamePathAbyss = filenamePath + "\\Abyss";
+    const std::string filenamePathAbyss = filenamePath + m_game.GetSavedGamesPath();
     const std::string fullPath = filenamePathAbyss + "\\" + filename + ".sav";
     LoadGameFromFileWithFullPath(fullPath);
 }

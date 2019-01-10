@@ -546,6 +546,19 @@ void GameAbyss::DrawGems(const PlayerInventory& playerInventory)
     }
 }
 
+void GameAbyss::DrawScroll(const uint8_t scrollIndex)
+{
+    m_renderer.Render2DBar(0, 0, 320, 120, EgaBlack);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLLTOPPIC), 80, 0);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLL1PIC + scrollIndex), 80, 32);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLLBOTTOMPIC), 80, 88);
+}
+
+void GameAbyss::DrawFinal()
+{
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(FINALEPIC), 0, 0);
+}
+
 GameMaps* GameAbyss::GetGameMaps()
 {
     if (m_gameMaps == NULL)
@@ -620,4 +633,9 @@ const uint16_t GameAbyss::GetMenuCursorPic() const
 const uint16_t GameAbyss::GetNorthIconSprite() const
 {
     return NORTHICONSPR;
+}
+
+const std::string GameAbyss::GetSavedGamesPath() const
+{
+    return "\\Abyss";
 }
