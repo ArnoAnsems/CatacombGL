@@ -30,6 +30,7 @@ const uint16_t actorIdMonsterZombie = 50;
 const uint16_t actorIdMonsterTree = 53;
 const uint16_t actorIdMonsterBunny = 54;
 const uint16_t actorIdMonsterRedDemon = 56;
+const uint16_t actorIdMonsterViper = 57;
 const uint16_t actorIdMonsterBat = 58;
 const uint16_t actorIdMonsterEye = 60;
 const uint16_t actorIdMonsterDragon = 61;
@@ -162,7 +163,7 @@ const DecorateActor decorateZombie =
 
 const DecorateAnimation treeHiddenAnimation =
 {
-    { TREE_IDLEPIC , 13, ActionHide }
+    { TREE_IDLEPIC , 13, ActionStatue }
 };
 
 const DecorateState treeStateHidden =
@@ -387,6 +388,124 @@ const DecorateActor decorateBunny =
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1947,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// VIPER
+//
+
+const DecorateAnimation viperHiddenAnimation =
+{
+    { GODESS_STATUEPIC , 20, ActionStatue }
+};
+
+const DecorateState viperStateHidden =
+{
+    viperHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation viperRiseAnimation =
+{
+    { GODESS_STATUEPIC, 1, ActionNone }
+};
+
+const DecorateState viperStateRise =
+{
+    viperRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation viperWalkAnimation =
+{
+    { GODESS_WALK1PIC, 20, ActionChase },
+    { GODESS_WALK1PIC, 20, ActionChase },
+    { GODESS_WALK1PIC, 20, ActionChase }
+};
+
+const DecorateState viperStateWalk =
+{
+    viperWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation viperAttackAnimation =
+{
+    { GODESS_ATTACK1PIC, 10, ActionNone },
+    { GODESS_ATTACK2PIC, 8, ActionNone },
+    { GODESS_ATTACK3PIC, 10, ActionAttack },
+    { GODESS_WALK1PIC, 25, ActionNone }
+};
+
+const DecorateState viperStateAttack =
+{
+    viperAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation viperPainAnimation =
+{
+    { GODESS_OUCHPIC, 10, ActionNone }
+};
+
+const DecorateState viperStatePain =
+{
+    viperPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation viperDyingAnimation =
+{
+    { GODESS_OUCHPIC, 10, ActionNone },
+    { GODESS_DEATH1PIC, 65, ActionNone },
+    { GODESS_DEATH2PIC, 30, ActionNone }
+};
+
+const DecorateState viperStateDying =
+{
+    viperDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation viperDeadAnimation =
+{
+    { GODESS_DEATH2PIC, 30, ActionNone }
+};
+
+const DecorateState viperStateDead =
+{
+    viperDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> viperStates =
+{
+    std::make_pair(StateIdHidden, viperStateHidden),
+    std::make_pair(StateIdRise, viperStateRise),
+    std::make_pair(StateIdWalk, viperStateWalk),
+    std::make_pair(StateIdAttack, viperStateAttack),
+    std::make_pair(StateIdPain, viperStatePain),
+    std::make_pair(StateIdDying, viperStateDying),
+    std::make_pair(StateIdDead, viperStateDead)
+};
+
+const DecorateActor decorateViper =
+{
+    actorIdMonsterViper,   // Id
+    21, // spawnOnAllDifficulties;
+    21, // spawnOnNormalAndHard;
+    21, // spawnOnHard;
+    12,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithGreenGem,  // radarVisibility;
+    EgaGreen,   // radarColor;
+    viperStates,
+    StateIdHidden,   // initialState;
+    15,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    3000,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

@@ -1019,10 +1019,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         break;
     }
     case ActionHide:
+    case ActionStatue:
     {
         if (actor->GetTimeToNextAction() == 0)
         {
             actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 60));
+            actor->SetSolid(action == ActionStatue);
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
         {
@@ -1507,22 +1509,29 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                 (abs(basex - otherActor->GetX()) < size + otherActor->GetDecorateActor().size) &&
                                 (abs(basey - otherActor->GetY()) < size + otherActor->GetDecorateActor().size))
                             {
-                                // In the original game, the hit points of all monsters were divided by four when playing in easy mode, see function EasyHitPoints in C4_ACT1.C.
-                                // To prevent the Actor class from having to look up the difficulty mode, the damage inflicted by the players' fireball is simply multiplied by 4 here.
-                                const uint8_t damage = (m_difficultyLevel == Easy) ? actor->GetDecorateActor().damage * 4 : actor->GetDecorateActor().damage;
-                                otherActor->Damage(damage);
-                                m_game.GetAudioPlayer()->Play(otherActor->GetDecorateActor().hitSound);
-
-                                if (otherActor->IsDead())
+                                if (otherActor->GetAction() == ActionStatue)
                                 {
-                                    otherActor->SetState(StateIdDying, m_timeStampOfWorldCurrentFrame);
-                                    otherActor->SetSolid(false);
-                                    m_level->AddNonBlockingActor(otherActor);
-                                    m_level->SetBlockingActor(x, y, NULL);
+                                    m_game.GetAudioPlayer()->Play(SHOOTWALLSND);
                                 }
                                 else
                                 {
-                                    otherActor->SetState(StateIdPain, m_timeStampOfWorldCurrentFrame);
+                                    // In the original game, the hit points of all monsters were divided by four when playing in easy mode, see function EasyHitPoints in C4_ACT1.C.
+                                    // To prevent the Actor class from having to look up the difficulty mode, the damage inflicted by the players' fireball is simply multiplied by 4 here.
+                                    const uint8_t damage = (m_difficultyLevel == Easy) ? actor->GetDecorateActor().damage * 4 : actor->GetDecorateActor().damage;
+                                    otherActor->Damage(damage);
+                                    m_game.GetAudioPlayer()->Play(otherActor->GetDecorateActor().hitSound);
+
+                                    if (otherActor->IsDead())
+                                    {
+                                        otherActor->SetState(StateIdDying, m_timeStampOfWorldCurrentFrame);
+                                        otherActor->SetSolid(false);
+                                        m_level->AddNonBlockingActor(otherActor);
+                                        m_level->SetBlockingActor(x, y, NULL);
+                                    }
+                                    else
+                                    {
+                                        otherActor->SetState(StateIdPain, m_timeStampOfWorldCurrentFrame);
+                                    }
                                 }
                                 moveOk = false;
                             }

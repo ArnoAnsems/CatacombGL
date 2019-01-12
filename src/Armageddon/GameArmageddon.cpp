@@ -120,6 +120,25 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = redDemonActor;
                 break;
             }
+            case 21:
+            {
+                int16_t viper_delay;
+                unsigned int tile = level->GetFloorTile(x, y + 1);
+                if (tile != 0)
+                    viper_delay = (tile >> 8) * 30;
+                else
+                {
+                    const int16_t current_viper_delay = (2 * 60) + rand() % (4 * 60);
+                    viper_delay = m_zombie_base_delay + current_viper_delay;
+                    m_zombie_base_delay += current_viper_delay;
+                    if (m_zombie_base_delay > 8 * 60)
+                        m_zombie_base_delay = 0;
+                }
+                Actor* viperActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateViper);
+                viperActor->SetTemp2(viper_delay);
+                actors[(y * level->GetLevelWidth()) + x] = viperActor;
+                break;
+            }
             case 23:
             {
                 Actor* succubusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSuccubus);
