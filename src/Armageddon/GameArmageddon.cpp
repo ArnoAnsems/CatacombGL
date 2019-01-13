@@ -185,6 +185,21 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = nemesisActor;
                 break;
             }
+            case 30:
+            {
+                int16_t ant_delay;
+                unsigned int tile = level->GetFloorTile(x, y + 1);
+                if (tile != 0)
+                    ant_delay = (tile >> 8) * 30;
+                else
+                {
+                    ant_delay = (2 * 60) + rand() % (5 * 60);
+                }
+                Actor* antActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateAnt);
+                antActor->SetTemp2(ant_delay);
+                actors[(y * level->GetLevelWidth()) + x] = antActor;
+                break;
+            }
             case 31:
             {
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal1);

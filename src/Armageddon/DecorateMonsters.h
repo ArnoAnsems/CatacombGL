@@ -36,6 +36,7 @@ const uint16_t actorIdMonsterEye = 60;
 const uint16_t actorIdMonsterDragon = 61;
 const uint16_t actorIdMonsterNemesis = 62;
 const uint16_t actorIdMonsterSuccubus = 63;
+const uint16_t actorIdMonsterAnt = 63;
 
 //
 // ZOMBIE
@@ -153,6 +154,123 @@ const DecorateActor decorateZombie =
     8,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2500,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// ANT
+//
+
+const DecorateAnimation antHiddenAnimation =
+{
+    { ANT_EGG1PIC , 10, ActionHide }
+};
+
+const DecorateState antStateHidden =
+{
+    antHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation antRiseAnimation =
+{
+    { ANT_EGG2PIC, 45, ActionNone }
+};
+
+const DecorateState antStateRise =
+{
+    antRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation antWalkAnimation =
+{
+    { ANT_WALK1PIC, 20, ActionChase },
+    { ANT_WALK2PIC, 20, ActionChase },
+    { ANT_WALK3PIC, 20, ActionChase }
+};
+
+const DecorateState antStateWalk =
+{
+    antWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation antAttackAnimation =
+{
+    { ANT_ATTACKPIC, 20, ActionNone },
+    { ANT_WALK2PIC, 15, ActionAttack }
+};
+
+const DecorateState antStateAttack =
+{
+    antAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation antPainAnimation =
+{
+    { ANT_WALK1PIC, 15, ActionNone }
+};
+
+const DecorateState antStatePain =
+{
+    antPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation antDyingAnimation =
+{
+    { ANT_DEATH1PIC, 40, ActionNone },
+    { ANT_DEATH2PIC, 10, ActionNone },
+    { ANT_DEATH3PIC, 10, ActionNone }
+};
+
+const DecorateState antStateDying =
+{
+    antDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation antDeadAnimation =
+{
+    { ANT_DEATH2PIC, 10, ActionNone },
+    { ANT_DEATH3PIC, 10, ActionNone }
+};
+
+const DecorateState antStateDead =
+{
+    antDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> antStates =
+{
+    std::make_pair(StateIdHidden, antStateHidden),
+    std::make_pair(StateIdRise, antStateRise),
+    std::make_pair(StateIdWalk, antStateWalk),
+    std::make_pair(StateIdAttack, antStateAttack),
+    std::make_pair(StateIdPain, antStatePain),
+    std::make_pair(StateIdDying, antStateDying),
+    std::make_pair(StateIdDead, antStateDead)
+};
+
+const DecorateActor decorateAnt =
+{
+    actorIdMonsterAnt,   // Id
+    30, // spawnOnAllDifficulties;
+    30, // spawnOnNormalAndHard;
+    30, // spawnOnHard;
+    15,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithYellowGem,  // radarVisibility;
+    EgaBrown,   // radarColor;
+    antStates,
+    StateIdHidden,   // initialState;
+    2,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1900,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };
