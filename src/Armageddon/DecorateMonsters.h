@@ -29,6 +29,7 @@ const uint16_t actorIdMonsterMage = 59;
 const uint16_t actorIdMonsterZombie = 50;
 const uint16_t actorIdMonsterTree = 53;
 const uint16_t actorIdMonsterBunny = 54;
+const uint16_t actorIdMonsterWretchedPox = 55;
 const uint16_t actorIdMonsterRedDemon = 56;
 const uint16_t actorIdMonsterViper = 57;
 const uint16_t actorIdMonsterBat = 58;
@@ -693,6 +694,103 @@ const DecorateActor decorateBat =
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// WRETCHED POX
+//
+
+const DecorateAnimation wretchedPoxWalkAnimation =
+{
+    { FATDEMON_WALK1PIC, 13, ActionChase },
+    { FATDEMON_WALK2PIC, 13, ActionChase },
+    { FATDEMON_WALK3PIC, 13, ActionChase },
+    { FATDEMON_WALK4PIC, 13, ActionChase }
+};
+
+const DecorateState wretchedPoxStateWalk =
+{
+    wretchedPoxWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation wretchedPoxAttackAnimation =
+{
+    { FATDEMON_ATTACK1PIC, 20, ActionNone },
+    { FATDEMON_ATTACK2PIC, 20, ActionAttack },
+    { FATDEMON_WALK1PIC, 40, ActionNone }
+};
+
+const DecorateState wretchedPoxStateAttack =
+{
+    wretchedPoxAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation wretchedPoxPainAnimation =
+{
+    { FATDEMON_OUCHPIC, 14, ActionNone }
+};
+
+const DecorateState wretchedPoxStatePain =
+{
+    wretchedPoxPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation wretchedPoxDyingAnimation =
+{
+    { FATDEMON_BLOWUP1PIC, 25, ActionNone },{ FATDEMON_BLOWUP2PIC, 25, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 15, ActionNone },{ FATDEMON_BLOWUP2PIC, 15, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone }, // TODO: Check count
+    { FATDEMON_BLOWUP3PIC, 30, ActionNone },
+    { FATDEMON_EXPLODEPIC, 40, ActionNone }, // TODO: Explode sound
+    { FATDEMON_FEETPIC, 30, ActionNone },
+};
+
+const DecorateState wretchedPoxStateDying =
+{
+    wretchedPoxDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation wretchedPoxDeadAnimation =
+{
+    { FATDEMON_FEETPIC, 30, ActionNone }
+};
+
+const DecorateState wretchedPoxStateDead =
+{
+    wretchedPoxDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> wretchedPoxStates =
+{
+    std::make_pair(StateIdWalk, wretchedPoxStateWalk),
+    std::make_pair(StateIdAttack, wretchedPoxStateAttack),
+    std::make_pair(StateIdPain, wretchedPoxStatePain),
+    std::make_pair(StateIdDying, wretchedPoxStateDying),
+    std::make_pair(StateIdDead, wretchedPoxStateDead)
+};
+
+const DecorateActor decorateWretchedPox =
+{
+    actorIdMonsterWretchedPox,   // Id
+    22, // spawnOnAllDifficulties;
+    22, // spawnOnNormalAndHard;
+    22,  // spawnOnHard; Actually, should include 20 and 24 as well.
+    10,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithGreenGem,  // radarVisibility;
+    EgaBrightGreen,   // radarColor;
+    wretchedPoxStates,
+    StateIdWalk,   // initialState;
+    8,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2500,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

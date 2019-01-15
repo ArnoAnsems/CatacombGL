@@ -139,6 +139,12 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = viperActor;
                 break;
             }
+            case 22:
+            {
+                Actor* wretchedPoxActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWretchedPox);
+                actors[(y * level->GetLevelWidth()) + x] = wretchedPoxActor;
+                break;
+            }
             case 23:
             {
                 Actor* succubusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSuccubus);
