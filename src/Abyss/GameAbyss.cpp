@@ -413,14 +413,17 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                     int16_t xofs[] = {0,0,-1,+1};
                     int16_t yofs[] = {-1,+1,0,0};
                     uint16_t floorTile = 0;
-                    for (int16_t loop=0; loop<4; loop++)
+                    int16_t loop = 0;
+                    bool tileFound = false;
+                    while (loop<4 && !tileFound)
                     {
                         const uint16_t wallTile = level->GetWallTile(x + xofs[loop], y + yofs[loop]);
                         if (wallTile == 6 || wallTile == 7 || wallTile == 8 || wallTile == 41 || wallTile == 42 || wallTile == 43 || wallTile == 44)
                         {
                             floorTile = level->GetFloorTile(x + xofs[loop], y + yofs[loop]);
+                            tileFound = true;
                         }
-
+                        loop++;
                     }
                     int16_t zombie_delay;
                     if (floorTile > 0)
@@ -638,4 +641,10 @@ const uint16_t GameAbyss::GetNorthIconSprite() const
 const std::string GameAbyss::GetSavedGamesPath() const
 {
     return "\\Abyss";
+}
+
+const std::vector<std::vector<uint16_t>> wallSkeletonAnimations = { { 6, 7, 8, 6 }, { 41, 43, 41}, {42, 44, 42 } };
+const std::vector<std::vector<uint16_t>>& GameAbyss::GetWallSkeletonAnimations() const
+{
+    return wallSkeletonAnimations;
 }

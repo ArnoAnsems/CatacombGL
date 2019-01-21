@@ -27,6 +27,8 @@
 
 const uint16_t actorIdMonsterMage = 59;
 const uint16_t actorIdMonsterZombie = 50;
+const uint16_t actorIdMonsterSkeleton = 51;
+const uint16_t actorIdMonsterWallSkeleton = 52;
 const uint16_t actorIdMonsterTree = 53;
 const uint16_t actorIdMonsterBunny = 54;
 const uint16_t actorIdMonsterWretchedPox = 55;
@@ -508,6 +510,153 @@ const DecorateActor decorateBunny =
     SHOOTMONSTERSND, // hitSound;
     1947,    // speed;
     0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// SKELETON
+//
+
+const DecorateAnimation skeletonWalkAnimation =
+{
+    { SKELETON_1PIC, 10, ActionChase },
+    { SKELETON_2PIC, 10, ActionChase },
+    { SKELETON_3PIC, 10, ActionChase },
+    { SKELETON_4PIC, 10, ActionChase }
+};
+
+const DecorateState skeletonStateWalk =
+{
+    skeletonWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation skeletonAttackAnimation =
+{
+    { SKELETON_ATTACK_1PIC, 12, ActionNone },
+    { SKELETON_ATTACK_2PIC, 12, ActionNone },
+    { SKELETON_ATTACK_3PIC, 12, ActionAttack },
+    { SKELETON_1PIC, 40, ActionNone }
+};
+
+const DecorateState skeletonStateAttack =
+{
+    skeletonAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation skeletonPainAnimation =
+{
+    { SKELETON_OUCHPIC, 8, ActionNone }
+};
+
+const DecorateState skeletonStatePain =
+{
+    skeletonPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation skeletonDyingAnimation =
+{
+    { SKELETON_OUCHPIC, 18, ActionNone },
+    { SKELETON_DEATH_1PIC, 18, ActionNone },
+    { SKELETON_DEATH_2PIC, 18, ActionNone }
+};
+
+const DecorateState skeletonStateDying =
+{
+    skeletonDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation skeletonDeadAnimation =
+{
+    { SKELETON_DEATH_2PIC, 16, ActionNone }
+};
+
+const DecorateState skeletonStateDead =
+{
+    skeletonDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> skeletonStates =
+{
+    std::make_pair(StateIdWalk, skeletonStateWalk),
+    std::make_pair(StateIdAttack, skeletonStateAttack),
+    std::make_pair(StateIdPain, skeletonStatePain),
+    std::make_pair(StateIdDying, skeletonStateDying),
+    std::make_pair(StateIdDead, skeletonStateDead)
+};
+
+const DecorateActor decorateSkeleton =
+{
+    actorIdMonsterSkeleton,   // Id
+    37, // spawnOnAllDifficulties;
+    37, // spawnOnNormalAndHard;
+    37,  // spawnOnHard;
+    12,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithYellowGem,  // radarVisibility;
+    EgaBrightYellow,   // radarColor;
+    skeletonStates,
+    StateIdWalk,   // initialState;
+    6,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2036,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// WALL SKELETON
+//
+
+const DecorateAnimation wallSkeletonHiddenAnimation =
+{
+    { 0 , 13, ActionHide }
+};
+
+const DecorateState wallSkeletonStateHidden =
+{
+    wallSkeletonHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation wallSkeletonRiseAnimation =
+{
+    { 0, 4400, ActionSpawnSkeleton },
+    { 0, 12, ActionRemove }
+};
+
+const DecorateState wallSkeletonStateRise =
+{
+    wallSkeletonRiseAnimation,
+    StateIdRise
+};
+
+const std::map<DecorateStateId, DecorateState> wallSkeletonStates =
+{
+    std::make_pair(StateIdHidden, wallSkeletonStateHidden),
+    std::make_pair(StateIdRise, wallSkeletonStateRise),
+};
+
+const DecorateActor decorateWallSkeleton =
+{
+    actorIdMonsterWallSkeleton,   // Id
+    38, // spawnOnAllDifficulties;
+    38, // spawnOnNormalAndHard;
+    38,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightYellow,   // radarColor;
+    wallSkeletonStates,
+    StateIdHidden,   // initialState;
+    6,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    0,    // speed;
+    actorIdMonsterSkeleton, // actionParameter
     0 // ProjectileId
 };
 

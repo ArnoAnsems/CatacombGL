@@ -250,6 +250,47 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = zombieActor;
                 break;
             }
+            case 37:
+            {
+                Actor* skeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSkeleton);
+                actors[(y * level->GetLevelWidth()) + x] = skeletonActor;
+                break;
+            }
+            case 38:
+            {
+                int16_t xofs[] = { 0,0,-1,+1 };
+                int16_t yofs[] = { -1,+1,0,0 };
+                uint16_t floorTile = 0;
+                int16_t loop = 0;
+                bool tileFound = false;
+                while (loop<4 && !tileFound)
+                {
+                    const uint16_t wallTile = level->GetWallTile(x + xofs[loop], y + yofs[loop]);
+                    if (wallTile == 66 || wallTile == 67 || wallTile == 68 || wallTile == 69)
+                    {
+                        floorTile = level->GetFloorTile(x + xofs[loop], y + yofs[loop]);
+                        tileFound = true;
+                    }
+                    loop++;
+                }
+                int16_t zombie_delay;
+                if (floorTile > 0)
+                {
+                    zombie_delay = (floorTile >> 8) * 30;
+                }
+                else
+                {
+                    const int16_t current_zombie_delay = (2 * 60) + rand() % (4 * 60);
+                    zombie_delay = m_zombie_base_delay + current_zombie_delay;
+                    m_zombie_base_delay += current_zombie_delay;
+                    if (m_zombie_base_delay > 8 * 60)
+                        m_zombie_base_delay = 0;
+                }
+                Actor* wallSkeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWallSkeleton);
+                wallSkeletonActor->SetTemp2(zombie_delay);
+                actors[(y * level->GetLevelWidth()) + x] = wallSkeletonActor;
+                break;
+            }
             case 39:
             {
                 Actor* freezeTimeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateFreezeTime);
@@ -588,4 +629,10 @@ const uint16_t GameArmageddon::GetNorthIconSprite() const
 const std::string GameArmageddon::GetSavedGamesPath() const
 {
     return "\\Armageddon";
+}
+
+const std::vector<std::vector<uint16_t>> wallSkeletonAnimations = { { 66, 68, 21 },{ 67, 69, 21 } };
+const std::vector<std::vector<uint16_t>>& GameArmageddon::GetWallSkeletonAnimations() const
+{
+    return wallSkeletonAnimations;
 }

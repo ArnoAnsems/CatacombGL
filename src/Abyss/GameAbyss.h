@@ -49,6 +49,7 @@ public:
     const uint16_t GetMenuCursorPic() const override;
     const uint16_t GetNorthIconSprite() const override;
     const std::string GetSavedGamesPath() const override;
+    const std::vector<std::vector<uint16_t>>& GetWallSkeletonAnimations() const override;
 
 private:
     void DrawHealth(const int16_t health);

@@ -58,6 +58,7 @@ public:
     virtual const uint16_t GetMenuCursorPic() const = NULL;
     virtual const uint16_t GetNorthIconSprite() const = NULL;
     virtual const std::string GetSavedGamesPath() const = NULL;
+    virtual const std::vector<std::vector<uint16_t>>& GetWallSkeletonAnimations() const = NULL;
 
 protected:
     GameMaps* m_gameMaps;

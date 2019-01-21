@@ -1175,80 +1175,57 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             actor->SetSolid(true);
         }
 
-        for (int16_t loop=0; loop<4; loop++)
+        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
         {
-            const uint16_t tile = m_level->GetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop]);
-            if (tile == 6)
+            bool tileFound = false;
+            int16_t loop = 0;
+            while (loop < 4 && !tileFound)
             {
-                m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], 7);
-                actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 2000);
-                break;
-            }
-            if (tile == 41)
-            {
-                m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], 43);
-                actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 2000);
-                break;
-            }
-            if (tile == 42)
-            {
-                m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], 44);
-                actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 2000);
-                break;
-            }
-            if (tile == 7)
-            {
-                if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
+                const uint16_t tile = m_level->GetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop]);
+                const std::vector<std::vector<uint16_t>>& wallSkeletonAnimations = m_game.GetWallSkeletonAnimations();
+                uint8_t anim = 0;
+                while ( anim < wallSkeletonAnimations.size() && !tileFound)
                 {
-                    m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], 8);
-                    actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 2000);
+                    const std::vector<uint16_t>& wallSkeletonAnimation = wallSkeletonAnimations.at(anim);
+                    uint8_t frame = 0;
+                    while (frame < wallSkeletonAnimation.size() - 1 && !tileFound)
+                    {
+                        if (wallSkeletonAnimation.at(frame) == tile)
+                        {
+                            tileFound = true;
+                            m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], wallSkeletonAnimation.at(frame + 1));
+                            if (frame == wallSkeletonAnimation.size() - 2)
+                            {
+                                spawnSkeleton = true;
+                            }
+                            else
+                            {
+                                actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 2000);
+                            }
+                        }
+                        frame++;
+                    }
+                    anim++;
                 }
-                break;
-            }
-            if (tile == 43)
-            {
-                if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
-                {
-                    m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], 41);
-                    spawnSkeleton = true;
-                }
-                break;
-            }
-            if (tile == 44)
-            {
-                if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
-                {
-                    m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], 42);
-                    spawnSkeleton = true;
-                }
-                break;
-            }
-            if (tile == 8)
-            {
-                if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
-                {
-                    m_level->SetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop], 6);
-                    spawnSkeleton = true;
-                }
-                break;
+                loop++;
             }
 
-        }
-        if (spawnSkeleton)
-        {
-            m_level->AddNonBlockingActor(actor);
-            actor->SetActionPerformed(true);
-            const uint16_t skeletonId = actor->GetDecorateActor().actionParameter;
-            const auto decorateSkeletonPair = m_game.GetDecorateActors().find(skeletonId);
-            if (decorateSkeletonPair != m_game.GetDecorateActors().end())
+            if (spawnSkeleton)
             {
-                Actor* skeletonActor = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateSkeletonPair->second);
-                skeletonActor->SetTile(actor->GetTileX(), actor->GetTileY());
-                for (uint16_t i = 0; i < m_level->GetLevelWidth() * m_level->GetLevelHeight(); i++)
+                m_level->AddNonBlockingActor(actor);
+                actor->SetActionPerformed(true);
+                const uint16_t skeletonId = actor->GetDecorateActor().actionParameter;
+                const auto decorateSkeletonPair = m_game.GetDecorateActors().find(skeletonId);
+                if (decorateSkeletonPair != m_game.GetDecorateActors().end())
                 {
-                    if (m_level->GetBlockingActors()[i] == actor)
+                    Actor* skeletonActor = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, decorateSkeletonPair->second);
+                    skeletonActor->SetTile(actor->GetTileX(), actor->GetTileY());
+                    for (uint16_t i = 0; i < m_level->GetLevelWidth() * m_level->GetLevelHeight(); i++)
                     {
-                        m_level->GetBlockingActors()[i] = skeletonActor;
+                        if (m_level->GetBlockingActors()[i] == actor)
+                        {
+                            m_level->GetBlockingActors()[i] = skeletonActor;
+                        }
                     }
                 }
             }
