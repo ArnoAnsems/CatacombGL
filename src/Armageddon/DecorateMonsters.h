@@ -40,6 +40,7 @@ const uint16_t actorIdMonsterDragon = 61;
 const uint16_t actorIdMonsterNemesis = 62;
 const uint16_t actorIdMonsterSuccubus = 63;
 const uint16_t actorIdMonsterAnt = 63;
+const uint16_t actorIdMonsterSkeletonHanging = 64;
 
 //
 // ZOMBIE
@@ -657,6 +658,62 @@ const DecorateActor decorateWallSkeleton =
     SHOOTMONSTERSND, // hitSound;
     0,    // speed;
     actorIdMonsterSkeleton, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// SKELETON HANGING
+//
+
+const DecorateAnimation skeletonHangingHiddenAnimation =
+{
+    { SKEL_HANGPIC , 20, ActionHangingSkeleton }
+};
+
+const DecorateState skeletonHangingStateHidden =
+{
+    skeletonHangingHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation skeletonHangingRiseAnimation =
+{
+    { SKEL_HANGPIC , 20, ActionNone }
+};
+
+const DecorateState skeletonHangingStateRise =
+{
+    skeletonHangingRiseAnimation,
+    StateIdWalk
+};
+
+const std::map<DecorateStateId, DecorateState> skeletonHangingStates =
+{
+    std::make_pair(StateIdHidden, skeletonHangingStateHidden),
+    std::make_pair(StateIdRise, skeletonHangingStateRise),
+    std::make_pair(StateIdWalk, skeletonStateWalk),
+    std::make_pair(StateIdAttack, skeletonStateAttack),
+    std::make_pair(StateIdPain, skeletonStatePain),
+    std::make_pair(StateIdDying, skeletonStateDying),
+    std::make_pair(StateIdDead, skeletonStateDead)
+};
+
+const DecorateActor decorateSkeletonHanging =
+{
+    actorIdMonsterSkeletonHanging,   // Id
+    65, // spawnOnAllDifficulties;
+    65, // spawnOnNormalAndHard;
+    65,  // spawnOnHard;
+    12,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightYellow,   // radarColor;
+    skeletonHangingStates,
+    StateIdHidden,   // initialState;
+    6,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2036,    // speed;
+    0, // actionParameter
     0 // ProjectileId
 };
 

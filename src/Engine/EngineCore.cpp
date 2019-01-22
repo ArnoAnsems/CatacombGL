@@ -273,13 +273,23 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         renderer.Render2DBar(0,0,320,120,EgaBlack);
         uint16_t width = (uint16_t)strlen(m_level->GetLevelName());
-        if (width < 20)
+        if (width == 0)
         {
-            width = 20;
+            const char* enterAreaText = "You enter a new area ...";
+            width = (uint16_t)strlen(enterAreaText);
+            DrawCenteredTiledWindow(renderer, width, 3);
+            renderer.RenderTextCentered(enterAreaText, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 54);
         }
-        DrawCenteredTiledWindow(renderer, width, 5);
-        renderer.RenderTextCentered("You have arrived at", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 49);
-        renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 58);
+        else
+        {
+            if (width < 20)
+            {
+                width = 20;
+            }
+            DrawCenteredTiledWindow(renderer, width, 5);
+            renderer.RenderTextCentered("You have arrived at", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 49);
+            renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 58);
+        }
     }
 
     if (m_state == InGame)
@@ -1020,6 +1030,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     case ActionHide:
     case ActionStatue:
+    case ActionHangingSkeleton:
     {
         if (actor->GetTimeToNextAction() == 0)
         {
@@ -1481,12 +1492,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     {
                         if (action == ActionPlayerProjectile)
                         {
-                            if ((otherActor->IsSolid() || otherActor->GetAction() == ActionWaitForPickup || otherActor->GetAction() == ActionForceField
+                            if ((otherActor->IsSolid() || otherActor->GetAction() == ActionWaitForPickup || otherActor->GetAction() == ActionForceField || otherActor->GetAction() == ActionHangingSkeleton
                                 ) && 
                                 (abs(basex - otherActor->GetX()) < size + otherActor->GetDecorateActor().size) &&
                                 (abs(basey - otherActor->GetY()) < size + otherActor->GetDecorateActor().size))
                             {
-                                if (otherActor->GetAction() == ActionStatue)
+                                if (otherActor->GetAction() == ActionStatue || otherActor->GetAction() == ActionHangingSkeleton)
                                 {
                                     m_game.GetAudioPlayer()->Play(SHOOTWALLSND);
                                 }

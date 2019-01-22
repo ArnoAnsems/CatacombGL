@@ -78,10 +78,15 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 3:
             case 4:
             {
-                playerState->SetX(x + 0.5f);
-                playerState->SetY(y + 0.5f);
-                playerState->SetAngle((tile - 1) * 90.0f);
-                break;
+                if (playerState->GetX() < 0.1f || playerState->GetY() < 0.1f)
+                {
+                    // Only set the playerState when no player start was found yet.
+                    // There is a second player start in a wall of The Ramparts of Nemesis, which should not be used.
+                    playerState->SetX(x + 0.5f);
+                    playerState->SetY(y + 0.5f);
+                    playerState->SetAngle((tile - 1) * 90.0f);
+                    break;
+                }
             }
             case 5:
             {
@@ -273,22 +278,27 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                     }
                     loop++;
                 }
-                int16_t zombie_delay;
-                if (floorTile > 0)
+
+                // Only spawn a wall skeleton when an appropriate nearby wall tile was found!
+                if (tileFound)
                 {
-                    zombie_delay = (floorTile >> 8) * 30;
+                    int16_t zombie_delay;
+                    if (floorTile > 0)
+                    {
+                        zombie_delay = (floorTile >> 8) * 30;
+                    }
+                    else
+                    {
+                        const int16_t current_zombie_delay = (2 * 60) + rand() % (4 * 60);
+                        zombie_delay = m_zombie_base_delay + current_zombie_delay;
+                        m_zombie_base_delay += current_zombie_delay;
+                        if (m_zombie_base_delay > 8 * 60)
+                            m_zombie_base_delay = 0;
+                    }
+                    Actor* wallSkeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWallSkeleton);
+                    wallSkeletonActor->SetTemp2(zombie_delay);
+                    actors[(y * level->GetLevelWidth()) + x] = wallSkeletonActor;
                 }
-                else
-                {
-                    const int16_t current_zombie_delay = (2 * 60) + rand() % (4 * 60);
-                    zombie_delay = m_zombie_base_delay + current_zombie_delay;
-                    m_zombie_base_delay += current_zombie_delay;
-                    if (m_zombie_base_delay > 8 * 60)
-                        m_zombie_base_delay = 0;
-                }
-                Actor* wallSkeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWallSkeleton);
-                wallSkeletonActor->SetTemp2(zombie_delay);
-                actors[(y * level->GetLevelWidth()) + x] = wallSkeletonActor;
                 break;
             }
             case 39:
@@ -417,6 +427,21 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 64:
             {
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch6);
+                break;
+            }
+            case 65:
+            {
+                int16_t skeleton_delay;
+                unsigned int tile = level->GetFloorTile(x, y + 1);
+                if (tile != 0)
+                    skeleton_delay = (tile >> 8) * 30;
+                else
+                {
+                    skeleton_delay = (3 * 60) + rand() % (4 * 60);
+                }
+                Actor* skeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSkeletonHanging);
+                skeletonActor->SetTemp2(skeleton_delay);
+                actors[(y * level->GetLevelWidth()) + x] = skeletonActor;
                 break;
             }
             case 66:
