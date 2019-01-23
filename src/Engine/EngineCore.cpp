@@ -1797,7 +1797,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
 
     while (move > 0.0f)
     {
-        if (actor->GetState() == StateIdWalk)
+        if (actor->GetState() == StateIdWalk || actor->GetState() == StateIdPain)
         {
             // Check if actor can attack
             if (actor->GetDecorateActor().damage > 0)

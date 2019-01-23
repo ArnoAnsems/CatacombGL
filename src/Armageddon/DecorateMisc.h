@@ -30,6 +30,7 @@ const uint16_t actorIdTomb1 = 1;
 const uint16_t actorIdTomb2 = 2;
 const uint16_t actorIdTomb3 = 3;
 const uint16_t actorIdExplodingWall = 4;
+const uint16_t actorIdWarpAntHill = 5;
 const uint16_t actorIdWarpPortal1 = 6;
 const uint16_t actorIdWarpPortal2 = 7;
 const uint16_t actorIdWarpPortal3 = 8;
@@ -214,6 +215,58 @@ const DecorateActor decorateExplodingWall =
     0, // actionParameter
     0 // ProjectileId
 };
+
+//
+// ANT HILL
+//
+
+const DecorateAnimation warpAntHillWaitForPickupAnimation =
+{
+    { ANT_HILLPIC, 20, ActionWaitForPickup }
+};
+
+const DecorateState warpAntHillStateWaitForPickup =
+{
+    warpAntHillWaitForPickupAnimation,
+    StateIdWaitForPickup // Loop
+};
+
+const DecorateAnimation warpAntHillPickupAnimation =
+{
+    { ANT_HILLPIC, 8, ActionWarpToOtherLevel }
+};
+
+const DecorateState warpAntHillStatePickup =
+{
+    warpAntHillPickupAnimation,
+    StateIdWaitForPickup
+};
+
+const std::map<DecorateStateId, DecorateState> warpAntHillStates =
+{
+    std::make_pair(StateIdWaitForPickup, warpAntHillStateWaitForPickup),
+    std::make_pair(StateIdPickup, warpAntHillStatePickup)
+};
+
+const DecorateActor decorateWarpAntHill =
+{
+    actorIdWarpAntHill,   // Id
+    53, // spawnOnAllDifficulties;
+    53, // spawnOnNormalAndHard;
+    53,  // spawnOnHard
+    1,  // initialHealth;
+    0.333f,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    warpAntHillStates,
+    StateIdWaitForPickup,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
 
 //
 // WARP PORTAL

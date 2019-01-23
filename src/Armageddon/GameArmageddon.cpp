@@ -78,15 +78,10 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 3:
             case 4:
             {
-                if (playerState->GetX() < 0.1f || playerState->GetY() < 0.1f)
-                {
-                    // Only set the playerState when no player start was found yet.
-                    // There is a second player start in a wall of The Ramparts of Nemesis, which should not be used.
-                    playerState->SetX(x + 0.5f);
-                    playerState->SetY(y + 0.5f);
-                    playerState->SetAngle((tile - 1) * 90.0f);
-                    break;
-                }
+                playerState->SetX(x + 0.5f);
+                playerState->SetY(y + 0.5f);
+                playerState->SetAngle((tile - 1) * 90.0f);
+                break;
             }
             case 5:
             {
@@ -380,6 +375,11 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch1);
                 break;
             }
+            case 53:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpAntHill);
+                break;
+            }
             case 54:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn);
                 break;
@@ -472,6 +472,14 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 71:
             {
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateArch11);
+                break;
+            }
+            case 64000:
+            {
+                // This is a special tile, which is used in Armageddon to indicate that the neigbouring tile contains
+                // the floor and ceiling colors. In CatacombGL, these colors are obtained from GameMapsArmageddon.h instead.
+                // So we just remove the color encoding and continue.
+                level->SetFloorTile(x + 1, y, 0);
                 break;
             }
             default:

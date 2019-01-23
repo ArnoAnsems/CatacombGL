@@ -886,7 +886,7 @@ const DecorateState mageStateWalk =
 const DecorateAnimation mageAttackAnimation =
 {
     { MAGEATTACKPIC, 30, ActionAttack },
-    { MAGE1PIC, 10, ActionChase }
+    { MAGE1PIC, 10, ActionChaseLikeMage }
 };
 
 const DecorateState mageStateAttack =

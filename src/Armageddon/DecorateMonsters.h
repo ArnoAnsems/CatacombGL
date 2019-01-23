@@ -1085,8 +1085,8 @@ const DecorateActor decorateRedDemon =
 {
     actorIdMonsterRedDemon,   // Id
     20, // spawnOnAllDifficulties;
-    24, // spawnOnNormalAndHard;
-    30,  // spawnOnHard; Actually, should include 20 and 24 as well.
+    20, // spawnOnNormalAndHard;
+    20,  // spawnOnHard;
     50,  // initialHealth;
     35 * pixelRadius,    // size;
     WithRedGem,  // radarVisibility;
@@ -1119,7 +1119,7 @@ const DecorateState mageStateWalk =
 const DecorateAnimation mageAttackAnimation =
 {
     { MAGEATTACKPIC, 30, ActionAttack },
-    { MAGE1PIC, 10, ActionChase }
+    { MAGE1PIC, 10, ActionChaseLikeMage }
 };
 
 const DecorateState mageStateAttack =
