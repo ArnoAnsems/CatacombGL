@@ -492,22 +492,23 @@ const DecorateActor decorateColumn =
 // SULPHUR GAS
 //
 
-const DecorateAnimation sulphurGasDecorationAnimation =
+// This object is not really hidden, but unlike the other decorative items it is non-solid and projectiles fly through it.
+const DecorateAnimation sulphurGasHiddenAnimation =
 {
     { SULPHUR_GAS_1PIC, 20, ActionNone },
     { SULPHUR_GAS_2PIC, 20, ActionNone },
     { SULPHUR_GAS_3PIC, 20, ActionNone }
 };
 
-const DecorateState sulphurGasStateDecoration =
+const DecorateState sulphurGasStateHidden =
 {
-    sulphurGasDecorationAnimation,
-    StateIdDecoration // Loop
+    sulphurGasHiddenAnimation,
+    StateIdHidden // Loop
 };
 
 const std::map<DecorateStateId, DecorateState> sulphurGasStates =
 {
-    std::make_pair(StateIdDecoration, sulphurGasStateDecoration)
+    std::make_pair(StateIdHidden, sulphurGasStateHidden)
 };
 
 const DecorateActor decorateSulphurGas =
@@ -521,7 +522,7 @@ const DecorateActor decorateSulphurGas =
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     sulphurGasStates,
-    StateIdDecoration,   // initialState;
+    StateIdHidden,   // initialState;
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
     0,    // speed;

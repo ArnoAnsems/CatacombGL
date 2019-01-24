@@ -648,3 +648,8 @@ const std::vector<std::vector<uint16_t>>& GameAbyss::GetWallSkeletonAnimations()
 {
     return wallSkeletonAnimations;
 }
+
+void GameAbyss::PlaySoundBodyExplode()
+{
+    // Not applicable
+}

@@ -669,3 +669,8 @@ const std::vector<std::vector<uint16_t>>& GameArmageddon::GetWallSkeletonAnimati
 {
     return wallSkeletonAnimations;
 }
+
+void GameArmageddon::PlaySoundBodyExplode()
+{
+    m_audioPlayer->Play(BODY_EXPLODESND);
+}

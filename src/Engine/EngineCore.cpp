@@ -278,7 +278,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
             const char* enterAreaText = "You enter a new area ...";
             width = (uint16_t)strlen(enterAreaText);
             DrawCenteredTiledWindow(renderer, width, 3);
-            renderer.RenderTextCentered(enterAreaText, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 54);
+            renderer.RenderTextCentered(enterAreaText, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);
         }
         else
         {
@@ -1567,6 +1567,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
         break;
     }
+    case ActionExplodeSound:
+    {
+        m_game.PlaySoundBodyExplode();
+        actor->SetActionPerformed(true);
+        break;
+    }
     }
 }
 
@@ -2084,7 +2090,9 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionExplodeWall4 ||
             action == ActionWarpToOtherLevel ||
             action == ActionWarpInsideLevel ||
-            action == ActionForceField);
+            action == ActionForceField ||
+            action == ActionExplodeSound
+        );
 }
 
 void EngineCore::ToggleMenu()

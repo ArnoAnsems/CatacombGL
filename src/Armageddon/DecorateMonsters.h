@@ -950,9 +950,18 @@ const DecorateAnimation wretchedPoxDyingAnimation =
 {
     { FATDEMON_BLOWUP1PIC, 25, ActionNone },{ FATDEMON_BLOWUP2PIC, 25, ActionNone },
     { FATDEMON_BLOWUP1PIC, 15, ActionNone },{ FATDEMON_BLOWUP2PIC, 15, ActionNone },
-    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone }, // TODO: Check count
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
+    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
     { FATDEMON_BLOWUP3PIC, 30, ActionNone },
-    { FATDEMON_EXPLODEPIC, 40, ActionNone }, // TODO: Explode sound
+    { FATDEMON_EXPLODEPIC, 40, ActionExplodeSound },
     { FATDEMON_FEETPIC, 30, ActionNone },
 };
 
