@@ -653,3 +653,131 @@ void GameAbyss::PlaySoundBodyExplode()
 {
     // Not applicable
 }
+
+void GameAbyss::PlaySoundHitGate()
+{
+    m_audioPlayer->Play(HIT_GATESND);
+}
+
+void GameAbyss::PlaySoundPlayerHurt(const int16_t playerHealth)
+{
+    if (playerHealth > 33)
+    {
+        m_audioPlayer->Play(TAKEDAMAGESND);
+    }
+    else if (playerHealth > 0)
+    {
+        m_audioPlayer->Play(TAKEDMGHURTSND);
+    }
+    else
+    {
+        m_audioPlayer->Play(GAMEOVERSND);
+    }
+}
+
+void GameAbyss::PlaySoundGetPotion()
+{
+    m_audioPlayer->Play(GETPOTIONSND);
+}
+
+void GameAbyss::PlaySoundUsePotion()
+{
+    m_audioPlayer->Play(USEPOTIONSND);
+}
+
+void GameAbyss::PlaySoundNoItem()
+{
+    m_audioPlayer->Play(NOITEMSND);
+}
+
+void GameAbyss::PlaySoundGetBolt()
+{
+    m_audioPlayer->Play(GETBOLTSND);
+}
+
+void GameAbyss::PlaySoundGetNuke()
+{
+    m_audioPlayer->Play(GETNUKESND);
+}
+
+void GameAbyss::PlaySoundGetScroll()
+{
+    m_audioPlayer->Play(GETSCROLLSND);
+}
+
+void GameAbyss::PlaySoundGetGem()
+{
+    m_audioPlayer->Play(GETGEMSND);
+}
+
+void GameAbyss::PlaySoundGetKey()
+{
+    m_audioPlayer->Play(GETKEYSND);
+}
+
+void GameAbyss::PlaySoundGetPoints()
+{
+    m_audioPlayer->Play(GETPOINTSSND);
+}
+
+void GameAbyss::PlaySoundUseKey()
+{
+    m_audioPlayer->Play(USEKEYSND);
+}
+
+void GameAbyss::PlaySoundUseBolt()
+{
+    m_audioPlayer->Play(USEBOLTSND);
+}
+
+void GameAbyss::PlaySoundUseNuke()
+{
+    m_audioPlayer->Play(USENUKESND);
+}
+
+void GameAbyss::PlaySoundFreezeTime()
+{
+    m_audioPlayer->Play(FREEZETIMESND);
+}
+
+void GameAbyss::PlaySoundFreezeTimeTick(const int32_t seconds)
+{
+    if (seconds == 0)
+    {
+        m_audioPlayer->Play(TIMERETURNSND);
+    }
+    else if (seconds < 20)
+    {
+        m_audioPlayer->Play(TICKSND);
+    }
+}
+
+void GameAbyss::PlaySoundWalk(const bool walk1)
+{
+    m_audioPlayer->Play(walk1 ? WALK1SND : WALK2SND);
+}
+
+void GameAbyss::PlaySoundBossDeath()
+{
+    m_audioPlayer->Play(GRELM_DEADSND);
+}
+
+void GameAbyss::PlaySoundShoot()
+{
+    m_audioPlayer->Play(SHOOTSND);
+}
+
+void GameAbyss::PlaySoundShootWall()
+{
+    m_audioPlayer->Play(SHOOTWALLSND);
+}
+
+void GameAbyss::PlaySoundBoom()
+{
+    m_audioPlayer->Play(BOOMSND);
+}
+
+void GameAbyss::PlaySoundWarp(const bool up)
+{
+    m_audioPlayer->Play(up ? WARPUPSND : WARPDOWNSND);
+}

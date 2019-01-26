@@ -33,12 +33,12 @@ enum KeyId
     NoKey
 };
 
-class AudioPlayer;
+class IGame;
 
 class PlayerInventory
 {
 public:
-    PlayerInventory(AudioPlayer* audioPlayer);
+    PlayerInventory(IGame& game);
     ~PlayerInventory();
 
     uint8_t GetBolts() const;
@@ -83,6 +83,6 @@ private:
     uint8_t m_nukesInChest;
     uint8_t m_potionsInChest;
 
-    AudioPlayer* m_audioPlayer;
+    IGame& m_game;
 };
 

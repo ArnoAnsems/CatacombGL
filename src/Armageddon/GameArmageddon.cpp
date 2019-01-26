@@ -674,3 +674,131 @@ void GameArmageddon::PlaySoundBodyExplode()
 {
     m_audioPlayer->Play(BODY_EXPLODESND);
 }
+
+void GameArmageddon::PlaySoundHitGate()
+{
+    m_audioPlayer->Play(HIT_GATESND);
+}
+
+void GameArmageddon::PlaySoundPlayerHurt(const int16_t playerHealth)
+{
+    if (playerHealth > 33)
+    {
+        m_audioPlayer->Play(TAKEDAMAGESND);
+    }
+    else if (playerHealth > 0)
+    {
+        m_audioPlayer->Play(TAKEDMGHURTSND);
+    }
+    else
+    {
+        m_audioPlayer->Play(GAMEOVERSND);
+    }
+}
+
+void GameArmageddon::PlaySoundGetPotion()
+{
+    m_audioPlayer->Play(GETPOTIONSND);
+}
+
+void GameArmageddon::PlaySoundUsePotion()
+{
+    m_audioPlayer->Play(USEPOTIONSND);
+}
+
+void GameArmageddon::PlaySoundNoItem()
+{
+    m_audioPlayer->Play(NOITEMSND);
+}
+
+void GameArmageddon::PlaySoundGetBolt()
+{
+    m_audioPlayer->Play(GETBOLTSND);
+}
+
+void GameArmageddon::PlaySoundGetNuke()
+{
+    m_audioPlayer->Play(GETNUKESND);
+}
+
+void GameArmageddon::PlaySoundGetScroll()
+{
+    m_audioPlayer->Play(GETSCROLLSND);
+}
+
+void GameArmageddon::PlaySoundGetGem()
+{
+    m_audioPlayer->Play(GETGEMSND);
+}
+
+void GameArmageddon::PlaySoundGetKey()
+{
+    m_audioPlayer->Play(GETKEYSND);
+}
+
+void GameArmageddon::PlaySoundGetPoints()
+{
+    m_audioPlayer->Play(GETPOINTSSND);
+}
+
+void GameArmageddon::PlaySoundUseKey()
+{
+    m_audioPlayer->Play(USEKEYSND);
+}
+
+void GameArmageddon::PlaySoundUseBolt()
+{
+    m_audioPlayer->Play(USEBOLTSND);
+}
+
+void GameArmageddon::PlaySoundUseNuke()
+{
+    m_audioPlayer->Play(USENUKESND);
+}
+
+void GameArmageddon::PlaySoundFreezeTime()
+{
+    m_audioPlayer->Play(FREEZETIMESND);
+}
+
+void GameArmageddon::PlaySoundFreezeTimeTick(const int32_t seconds)
+{
+    if (seconds == 0)
+    {
+        m_audioPlayer->Play(TIMERETURNSND);
+    }
+    else if (seconds < 20)
+    {
+        m_audioPlayer->Play(TICKSND);
+    }
+}
+
+void GameArmageddon::PlaySoundWalk(const bool walk1)
+{
+    m_audioPlayer->Play(walk1 ? WALK1SND : WALK2SND);
+}
+
+void GameArmageddon::PlaySoundBossDeath()
+{
+    m_audioPlayer->Play(GRELM_DEADSND);
+}
+
+void GameArmageddon::PlaySoundShoot()
+{
+    m_audioPlayer->Play(SHOOTSND);
+}
+
+void GameArmageddon::PlaySoundShootWall()
+{
+    m_audioPlayer->Play(SHOOTWALLSND);
+}
+
+void GameArmageddon::PlaySoundBoom()
+{
+    m_audioPlayer->Play(BOOMSND);
+}
+
+void GameArmageddon::PlaySoundWarp(const bool up)
+{
+    m_audioPlayer->Play(up ? WARPUPSND : WARPDOWNSND);
+}

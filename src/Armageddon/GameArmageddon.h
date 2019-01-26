@@ -51,6 +51,28 @@ public:
     const std::string GetSavedGamesPath() const override;
     const std::vector<std::vector<uint16_t>>& GetWallSkeletonAnimations() const override;
     void PlaySoundBodyExplode() override;
+    void PlaySoundHitGate() override;
+    void PlaySoundPlayerHurt(const int16_t playerHealth) override;
+    void PlaySoundGetPotion() override;
+    void PlaySoundUsePotion() override;
+    void PlaySoundNoItem() override;
+    void PlaySoundGetBolt() override;
+    void PlaySoundGetNuke() override;
+    void PlaySoundGetScroll() override;
+    void PlaySoundGetGem() override;
+    void PlaySoundGetKey() override;
+    void PlaySoundGetPoints() override;
+    void PlaySoundUseKey() override;
+    void PlaySoundUseBolt() override;
+    void PlaySoundUseNuke() override;
+    void PlaySoundFreezeTime() override;
+    void PlaySoundFreezeTimeTick(const int32_t seconds) override;
+    void PlaySoundWalk(const bool walk1) override;
+    void PlaySoundBossDeath() override;
+    void PlaySoundShoot() override;
+    void PlaySoundShootWall() override;
+    void PlaySoundBoom() override;
+    void PlaySoundWarp(const bool up) override;
 
 private:
     void DrawHealth(const int16_t health);

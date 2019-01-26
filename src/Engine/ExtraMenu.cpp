@@ -14,7 +14,6 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ExtraMenu.h"
-#include "..\Abyss\AudioRepositoryAbyss.h"
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 
 const uint8_t subMenuMain = 0;
@@ -23,6 +22,8 @@ const uint8_t subMenuControls = 2;
 const uint8_t subMenuSound = 3;
 const uint8_t subMenuRestoreGame = 4;
 const uint8_t subMenuSaveGame = 5;
+
+const uint16_t browseMenuSound = 0;
 
 ExtraMenu::ExtraMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames) :
     m_menuActive (false),
@@ -134,7 +135,7 @@ void ExtraMenu::MenuDown()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(HITWALLSND);
+        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuMain)
         {
             if (m_menuItemSelected == 6)
@@ -227,7 +228,7 @@ void ExtraMenu::MenuUp()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(HITWALLSND);
+        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuMain)
         {
             if (m_menuItemSelected == 0)
@@ -320,7 +321,7 @@ void ExtraMenu::MenuLeft()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(HITWALLSND);
+        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
             if (m_menuItemSelected == 2)
@@ -352,7 +353,7 @@ void ExtraMenu::MenuRight()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(HITWALLSND);
+        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
             if (m_menuItemSelected == 2)

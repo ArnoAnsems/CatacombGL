@@ -60,6 +60,29 @@ public:
     virtual const std::string GetSavedGamesPath() const = NULL;
     virtual const std::vector<std::vector<uint16_t>>& GetWallSkeletonAnimations() const = NULL;
     virtual void PlaySoundBodyExplode() = NULL;
+    virtual void PlaySoundHitGate() = NULL;
+    virtual void PlaySoundPlayerHurt(const int16_t playerHealth) = NULL;
+    virtual void PlaySoundGetPotion() = NULL;
+    virtual void PlaySoundUsePotion() = NULL;
+    virtual void PlaySoundNoItem() = NULL;
+    virtual void PlaySoundGetBolt() = NULL;
+    virtual void PlaySoundGetNuke() = NULL;
+    virtual void PlaySoundGetScroll() = NULL;
+    virtual void PlaySoundGetGem() = NULL;
+    virtual void PlaySoundGetKey() = NULL;
+    virtual void PlaySoundGetPoints() = NULL;
+    virtual void PlaySoundUseKey() = NULL;
+    virtual void PlaySoundUseBolt() = NULL;
+    virtual void PlaySoundUseNuke() = NULL;
+    virtual void PlaySoundFreezeTime() = NULL;
+    virtual void PlaySoundFreezeTimeTick(const int32_t seconds) = NULL;
+    virtual void PlaySoundWalk(const bool walk1) = NULL;
+    virtual void PlaySoundBossDeath() = NULL;
+    virtual void PlaySoundShoot() = NULL;
+    virtual void PlaySoundShootWall() = NULL;
+    virtual void PlaySoundBoom() = NULL;
+    virtual void PlaySoundWarp(const bool up) = NULL;
+
 
 protected:
     GameMaps* m_gameMaps;

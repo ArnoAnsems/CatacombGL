@@ -14,11 +14,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "PlayerInventory.h"
-#include "AudioPlayer.h"
-#include "..\Abyss\AudioRepositoryAbyss.h"
+#include "IGame.h"
 
-PlayerInventory::PlayerInventory(AudioPlayer* audioPlayer) :
-    m_audioPlayer(audioPlayer),
+PlayerInventory::PlayerInventory(IGame& game) :
+    m_game(game),
     m_bolts(0),
     m_nukes(0),
     m_potions(0),
@@ -84,7 +83,7 @@ void PlayerInventory::GivePotion()
         return;
     }
 
-    m_audioPlayer->Play(GETPOTIONSND);
+    m_game.PlaySoundGetPotion();
     m_potions++;
 }
 
@@ -92,13 +91,13 @@ bool PlayerInventory::UsePotion()
 {
     if (m_potions > 0)
     {
-        m_audioPlayer->Play(USEPOTIONSND);
+        m_game.PlaySoundUsePotion();
         m_potions--;
         return true;
     }
     else
     {
-        m_audioPlayer->Play(NOITEMSND);
+        m_game.PlaySoundNoItem();
         return false;
     }
 }
@@ -108,7 +107,7 @@ void PlayerInventory::GiveBolt()
     if (m_bolts == 99)
         return;
 
-    m_audioPlayer->Play(GETBOLTSND);
+    m_game.PlaySoundGetBolt();
     m_bolts++;
 }
 
@@ -148,7 +147,7 @@ void PlayerInventory::GiveNuke()
     if (m_nukes == 99)
         return;
 
-    m_audioPlayer->Play(GETNUKESND);
+    m_game.PlaySoundGetNuke();
     m_nukes++;
 }
 
@@ -159,7 +158,7 @@ void PlayerInventory::GiveScroll(const uint8_t scrollId)
         return;
     }
 
-    m_audioPlayer->Play(GETSCROLLSND);
+    m_game.PlaySoundGetScroll();
 
     m_scrolls[scrollId] = true;
 }
@@ -171,7 +170,7 @@ void PlayerInventory::GiveGem(const uint8_t gemId)
         return;
     }
 
-    m_audioPlayer->Play(GETGEMSND);
+    m_game.PlaySoundGetGem();
 
     m_gems[gemId] = true;
 }
@@ -189,7 +188,7 @@ void PlayerInventory::GiveKey(const uint8_t keyId)
         m_keys[keyId]++;
     }
 
-    m_audioPlayer->Play(GETKEYSND);
+    m_game.PlaySoundGetKey();
 }
 
 void PlayerInventory::TakeKey(const uint8_t keyId)

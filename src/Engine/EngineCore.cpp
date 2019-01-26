@@ -20,9 +20,6 @@
 #include <math.h>
 #include <fstream>
 
-// TODO: These direct references to the Abyss game data will have to be refactored out in preparation of Armageddon support.
-#include "..\Abyss\AudioRepositoryAbyss.h"
-
 const uint8_t versionMajor = 0;
 const uint8_t versionMinor = 1;
 const uint8_t versionLevel = 0;
@@ -62,7 +59,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_godModeIsOn(false),
     m_victoryState(VictoryStatePlayGetBolt),
     m_lastFreezeTimeTick(0),
-    m_playerInventory(game.GetAudioPlayer()),
+    m_playerInventory(game),
     m_playerActions(),
     m_startTakeKey(0),
     m_timeStampToEnterGame(0),
@@ -232,14 +229,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
             if (remainingFreezeTimeInSec != m_lastFreezeTimeTick)
             {
                 m_lastFreezeTimeTick = remainingFreezeTimeInSec;
-                if (m_lastFreezeTimeTick == 0)
-                {
-                    m_game.GetAudioPlayer()->Play(TIMERETURNSND);
-                }
-                else if (m_lastFreezeTimeTick < 20)
-                {
-                    m_game.GetAudioPlayer()->Play(TICKSND);
-                }
+                m_game.PlaySoundFreezeTimeTick(m_lastFreezeTimeTick);
             }
             char freezeMessage[100];
             sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeInSec);
@@ -704,37 +694,37 @@ bool EngineCore::Think()
         {
         case VictoryStatePlayGetBolt:
             {
-                m_game.GetAudioPlayer()->Play(GETBOLTSND);
+                m_game.PlaySoundGetBolt();
                 m_victoryState++;
                 break;
             }
         case VictoryStatePlayGetNuke:
             {
-                m_game.GetAudioPlayer()->Play(GETNUKESND);
+                m_game.PlaySoundGetNuke();
                 m_victoryState++;
                 break;
             }
         case VictoryStatePlayGetPotion:
             {
-                m_game.GetAudioPlayer()->Play(GETPOTIONSND);
+                m_game.PlaySoundGetPotion();
                 m_victoryState++;
                 break;
             }
         case VictoryStatePlayGetKey:
             {
-                m_game.GetAudioPlayer()->Play(GETKEYSND);
+                m_game.PlaySoundGetKey();
                 m_victoryState++;
                 break;
             }
         case VictoryStatePlayGetScroll:
             {
-                m_game.GetAudioPlayer()->Play(GETSCROLLSND);
+                m_game.PlaySoundGetScroll();
                 m_victoryState++;
                 break;
             }
         case VictoryStatePlayGetPoint:
             {
-                m_game.GetAudioPlayer()->Play(GETPOINTSSND);
+                m_game.PlaySoundGetPoints();
                 m_victoryState++;
                 break;
             }
@@ -781,7 +771,7 @@ bool EngineCore::Think()
                     m_startTakeKey = m_gameTimer.GetActualTime();
                     m_gameTimer.Pause();
                     _sprintf_p(m_messageInPopup, 256, "You use a %s key", GetKeyName((KeyId)m_keyToTake));
-                    m_game.GetAudioPlayer()->Play(USEKEYSND);
+                    m_game.PlaySoundUseKey();
                 }   
             }
 
@@ -808,18 +798,18 @@ bool EngineCore::Think()
                         m_level->AddNonBlockingActor(projectile);
                     }
 
-                    m_game.GetAudioPlayer()->Play(SHOOTSND);
+                    m_game.PlaySoundShoot();
                 }
                 if (m_playerActions.IsReadyToShootBolt(m_timeStampOfPlayerCurrentFrame))
                 {
                     if (m_playerInventory.TakeBolt())
                     {
                         m_playerActions.ShootBolt(m_timeStampOfPlayerCurrentFrame);
-                        m_game.GetAudioPlayer()->Play(USEBOLTSND);
+                        m_game.PlaySoundUseBolt();
                     }
                     else
                     {
-                        m_game.GetAudioPlayer()->Play(NOITEMSND);
+                        m_game.PlaySoundNoItem();
                     }
                 }
 
@@ -839,7 +829,7 @@ bool EngineCore::Think()
                 {
                     if (m_playerInventory.TakeNuke())
                     {
-                        m_game.GetAudioPlayer()->Play(USENUKESND);
+                        m_game.PlaySoundUseNuke();
 
                         const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1);
                         if (decorateProjectilePair != m_game.GetDecorateActors().end())
@@ -855,7 +845,7 @@ bool EngineCore::Think()
                     }
                     else
                     {
-                        m_game.GetAudioPlayer()->Play(NOITEMSND);
+                        m_game.PlaySoundNoItem();
                     }
                 }
                 const float degreesPerTic = (m_playerActions.GetActionActive(QuickTurn)) ? 3.0f : 1.0f;
@@ -1115,18 +1105,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 {
                     const uint8_t damage = (m_difficultyLevel == Easy) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
                     m_level->GetPlayerActor()->Damage(damage);
-                    if ( m_level->GetPlayerActor()->GetHealth() > 33)
-                    {
-                        m_game.GetAudioPlayer()->Play(TAKEDAMAGESND);
-                    }
-                    else if ( m_level->GetPlayerActor()->GetHealth() > 0)
-                    {
-                        m_game.GetAudioPlayer()->Play(TAKEDMGHURTSND);
-                    }
-                    else
-                    {
-                        m_game.GetAudioPlayer()->Play(GAMEOVERSND);
-                    }
+                    m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                 }
             }
         }
@@ -1172,7 +1151,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             }
         }
 
-        m_game.GetAudioPlayer()->Play(GRELM_DEADSND);
+        m_game.PlaySoundBossDeath();
         
         break;
     }
@@ -1383,14 +1362,14 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         const uint8_t nextLevel = m_level->GetFloorTile(actor->GetTileX(), actor->GetTileY() + 1) >> 8;
         m_warpToLevel = nextLevel;
-        m_game.GetAudioPlayer()->Play(WARPUPSND);
+        m_game.PlaySoundWarp(true);
         actor->SetActionPerformed(true);
         break;
     }
     case ActionWarpInsideLevel:
     {
         WarpInsideLevel(actor);
-        m_game.GetAudioPlayer()->Play(WARPUPSND);
+        m_game.PlaySoundWarp(true);
         actor->SetActionPerformed(true);
         break;
     }
@@ -1404,7 +1383,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         {
             actor->SetState(StateIdDying, m_timeStampOfWorldCurrentFrame);
             actor->SetTimeToNextAction(0);
-            m_game.GetAudioPlayer()->Play(BOOMSND);
+            m_game.PlaySoundBoom();
         }
         break;
     }
@@ -1418,18 +1397,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
                 const uint8_t damage = (m_difficultyLevel == Easy) ? baseDamage / 2 : baseDamage;
                 m_level->GetPlayerActor()->Damage(damage);
-                if (m_level->GetPlayerActor()->GetHealth() > 33)
-                {
-                    m_game.GetAudioPlayer()->Play(TAKEDAMAGESND);
-                }
-                else if (m_level->GetPlayerActor()->GetHealth() > 0)
-                {
-                    m_game.GetAudioPlayer()->Play(TAKEDMGHURTSND);
-                }
-                else
-                {
-                    m_game.GetAudioPlayer()->Play(GAMEOVERSND);
-                }
+                m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
             }
         }
         actor->SetActionPerformed(true);
@@ -1472,7 +1440,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         if ((abs(basex - (float)x - 0.5f) < size + 0.5f) &&
                             (abs(basey - (float)y - 0.5f) < size + 0.5f))
                         {
-                            m_game.GetAudioPlayer()->Play(SHOOTWALLSND);
+                            m_game.PlaySoundShootWall();
                             moveOk = false;
                         }
                     }
@@ -1499,7 +1467,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                             {
                                 if (otherActor->GetAction() == ActionStatue || otherActor->GetAction() == ActionHangingSkeleton)
                                 {
-                                    m_game.GetAudioPlayer()->Play(SHOOTWALLSND);
+                                    m_game.PlaySoundShootWall();
                                 }
                                 else
                                 {
@@ -1538,18 +1506,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
                         const uint8_t damage = (m_difficultyLevel == Easy && baseDamage > 1) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
-                        if ( m_level->GetPlayerActor()->GetHealth() > 33)
-                        {
-                            m_game.GetAudioPlayer()->Play(TAKEDAMAGESND);
-                        }
-                        else if ( m_level->GetPlayerActor()->GetHealth() > 0)
-                        {
-                            m_game.GetAudioPlayer()->Play(TAKEDMGHURTSND);
-                        }
-                        else
-                        {
-                            m_game.GetAudioPlayer()->Play(GAMEOVERSND);
-                        }
+                        m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                     }
                     moveOk = false;
                 }
@@ -1667,7 +1624,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
             m_gameTimer.Pause();
             _sprintf_p(m_messageInPopup, 256, "You need a %s key", GetKeyName(requiredKey));
             WaitForAnyKeyPressed();
-            m_game.GetAudioPlayer()->Play(HIT_GATESND);
+            m_game.PlaySoundHitGate();
         }
         else
         {
@@ -1680,7 +1637,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 m_gameTimer.Pause();
                 _sprintf_p(m_messageInPopup, 256, "The door is blocked");
                 WaitForAnyKeyPressed();
-                m_game.GetAudioPlayer()->Play(HIT_GATESND);
+                m_game.PlaySoundHitGate();
             }
             else if (m_level->IsRemovableDoor(tileX, tileY))
             {
@@ -1693,7 +1650,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 // Exit the map
                 m_warpToLevel = m_level->GetLevelIndex() + 1;
                 m_gameTimer.Pause();
-                m_game.GetAudioPlayer()->Play(HIT_GATESND);
+                m_game.PlaySoundHitGate();
                 m_state = VerifyGateExit;
             }
             else
@@ -1701,7 +1658,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 const uint16_t spot = (m_level->GetFloorTile(tileX,tileY) >> 8);
                 m_warpToLevel = (uint8_t)spot;
                 m_gameTimer.Pause();
-                m_game.GetAudioPlayer()->Play(HIT_GATESND);
+                m_game.PlaySoundHitGate();
                 m_state = VerifyGateExit;
             }
         }
@@ -1755,14 +1712,7 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
 
         if (ticks>>5 != ((ticks - 2)>>5))
         {
-            if (ticks&32)
-            {
-                m_game.GetAudioPlayer()->Play(WALK1SND);
-            }
-            else
-            {
-                m_game.GetAudioPlayer()->Play(WALK2SND);
-            }
+            m_game.PlaySoundWalk((ticks & 32) == 0);
         }
     }
     xmove = -distance * (float)sin((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
@@ -2038,7 +1988,7 @@ void EngineCore::FreezeTimeCheat()
 
     if (m_gameTimer.GetRemainingFreezeTime() == 0)
     {
-        m_game.GetAudioPlayer()->Play(FREEZETIMESND);
+        m_game.PlaySoundFreezeTime();
     }
     m_gameTimer.FreezeTime();
 }
@@ -2104,7 +2054,7 @@ void EngineCore::ToggleMenu()
         {
             m_gameTimer.Resume();
         }
-        m_game.GetAudioPlayer()->Play(WARPDOWNSND);
+        m_game.PlaySoundWarp(false);
     }
     else
     {
@@ -2113,7 +2063,7 @@ void EngineCore::ToggleMenu()
         {
             m_gameTimer.Pause();
         }
-        m_game.GetAudioPlayer()->Play(WARPUPSND);
+        m_game.PlaySoundWarp(true);
     }
 }
 
