@@ -355,9 +355,9 @@ const DecorateState treeStateDying =
 
 const DecorateAnimation treeDeadAnimation =
 {
-    { TREE_DEATH1PIC, 15, ActionNone },
-    { TREE_DEATH2PIC, 15, ActionNone },
-    { TREE_DEATH3PIC, 15, ActionNone }
+    { TREE_DEATH1PIC, 15, ActionBurningTree },
+    { TREE_DEATH2PIC, 15, ActionBurningTree },
+    { TREE_DEATH3PIC, 15, ActionBurningTree },
 };
 
 const DecorateState treeStateDead =

@@ -70,6 +70,7 @@ public:
     uint32_t GetTimeToNextAction() const;
     float GetAngle() const;
     void SetAngle(const float angle);
+    void SetAnimationFrame(const uint16_t frame);
 
     const DecorateActor& GetDecorateActor() const;
     void StoreToFile(std::ofstream& file) const;

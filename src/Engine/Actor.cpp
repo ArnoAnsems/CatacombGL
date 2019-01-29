@@ -301,6 +301,19 @@ void Actor::SetAngle(const float angle)
     }
 }
 
+void Actor::SetAnimationFrame(const uint16_t frame)
+{
+    const auto stateIt = m_decorateActor.states.find(m_stateId);
+    if (stateIt != m_decorateActor.states.end())
+    {
+        DecorateState decorateState = stateIt->second;
+        if (frame < decorateState.animation.size())
+        {
+            m_animationFrame = frame;
+        }
+    }
+}
+
 void Actor::StoreToFile(std::ofstream& file) const
 {
     const uint16_t id = m_decorateActor.id;

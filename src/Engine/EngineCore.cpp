@@ -1530,6 +1530,40 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         actor->SetActionPerformed(true);
         break;
     }
+    case ActionBurningTree:
+    {
+        int16_t fireFrame = actor->GetTemp1();
+        const uint8_t nextFireFrame = rand() % 2;
+
+        if (fireFrame == 3)
+        {
+            actor->SetAnimationFrame(nextFireFrame == 0 ? 1 : 2);
+            fireFrame = 4;
+        }
+        else if (fireFrame == 4)
+        {
+            actor->SetAnimationFrame(nextFireFrame == 0 ? 0 : 2);
+            fireFrame = 5;
+        }
+        else
+        {
+            actor->SetAnimationFrame(nextFireFrame == 0 ? 0 : 1);
+            fireFrame = 3;
+        }
+        actor->SetTemp1(fireFrame);
+
+        if (m_level->GetPlayerActor()->WouldCollideWithActor(actor->GetX(), actor->GetY(), 1.1f))
+        {
+            if (!m_godModeIsOn)
+            {
+                const int16_t damage = 1;
+                m_level->GetPlayerActor()->Damage(damage);
+                m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+            }
+        }
+        actor->SetActionPerformed(true);
+        break;
+    }
     }
 }
 
@@ -2041,7 +2075,8 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionWarpToOtherLevel ||
             action == ActionWarpInsideLevel ||
             action == ActionForceField ||
-            action == ActionExplodeSound
+            action == ActionExplodeSound ||
+            action == ActionBurningTree
         );
 }
 
