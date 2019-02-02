@@ -258,7 +258,7 @@ const std::vector<WallInfo> wallsInfoArmageddon =
     { {LT_SKEL2PIC}, {LT_SKEL2PIC}, WTSolid },
     { {DK_SKEL2PIC}, {DK_SKEL2PIC}, WTSolid },
 
-    { {0}, {0}, WTOpen }, // tf_INVISIBLE_WALL
+    { {0}, {0}, WTInvisibleWall },
 
     { {TAP_1PIC}, {TAP_1PIC}, WTSolid },
     { {TAP_2PIC}, {TAP_2PIC}, WTSolid },

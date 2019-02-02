@@ -202,6 +202,17 @@ bool Level::IsSolidWall(const uint16_t x, const uint16_t y) const
     return ((wallTile < m_wallsInfo.size()) && (m_wallsInfo.at(wallTile).wallType != WTOpen));
 }
 
+bool Level::IsVisibleTile(const uint16_t x, const uint16_t y) const
+{
+    const uint16_t wallTile = GetWallTile(x, y);
+    if (wallTile < m_wallsInfo.size())
+    {
+        return (m_wallsInfo.at(wallTile).wallType == WTOpen || m_wallsInfo.at(wallTile).wallType == WTInvisibleWall);
+    }
+
+    return true;
+}
+
 bool Level::IsExplosiveWall(const uint16_t x, const uint16_t y) const
 {
     const uint16_t spot = (GetFloorTile(x,y) >> 8);
@@ -376,7 +387,7 @@ void Level::UpdateVisibilityMap()
     {
         for (uint16_t y = 1; y < m_levelHeight - 1; y++)
         {
-            if (!IsSolidWall(x,y) &&
+            if (IsVisibleTile(x,y) &&
                 (m_wallXVisible[(y * m_levelWidth) + x] ||
                 m_wallXVisible[(y * m_levelWidth) + x + 1] ||
                 m_wallYVisible[(y * m_levelWidth) + x] ||
@@ -749,7 +760,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateX = WallIsFurtherAway;
                     }
-                    else if (IsSolidWall((uint16_t)tileX, (uint16_t)hitWallX_y))
+                    else if (!IsVisibleTile((uint16_t)tileX, (uint16_t)hitWallX_y))
                     {
                         traceStateX = WallFound;
                     }
@@ -783,7 +794,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateX = WallIsFurtherAway;
                     }
-                    else if (IsSolidWall((uint16_t)tileX - 1, (uint16_t)hitWallX_y))
+                    else if (!IsVisibleTile((uint16_t)tileX - 1, (uint16_t)hitWallX_y))
                     {
                         traceStateX = WallFound;
                     }
@@ -820,7 +831,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateY = WallIsFurtherAway;
                     }
-                    else if (IsSolidWall((uint16_t)hitWallY_x, (uint16_t)tileY))
+                    else if (!IsVisibleTile((uint16_t)hitWallY_x, (uint16_t)tileY))
                     {
                         traceStateY = WallFound;
                     }
@@ -854,7 +865,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateY = WallIsFurtherAway;
                     }
-                    else if (IsSolidWall((uint16_t)hitWallY_x, (uint16_t)tileY - 1))
+                    else if (!IsVisibleTile((uint16_t)hitWallY_x, (uint16_t)tileY - 1))
                     {
                         traceStateY = WallFound;
                     }

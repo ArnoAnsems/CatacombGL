@@ -1352,7 +1352,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         const uint8_t x = actor->GetTileX();
         const uint8_t y = actor->GetTileY();
 
-        m_level->SetWallTile(x, y, 70);
+        m_level->SetWallTile(x, y, 0);
         m_level->SetFloorTile(x, y, 0);
 
         actor->SetActionPerformed(true);
@@ -1676,7 +1676,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
             else if (m_level->IsRemovableDoor(tileX, tileY))
             {
                 // Open the door
-                m_level->SetWallTile(tileX, tileY, 70);
+                m_level->SetWallTile(tileX, tileY, 0);
                 m_level->SetFloorTile(tileX, tileY, 0);
             }
             else if (m_level->IsExitDoor(tileX, tileY))

@@ -45,7 +45,8 @@ typedef enum WallType
     WTSolid,
     WTVictory,
     WTDoor,
-    WTDoorRedKeyRequired
+    WTDoorRedKeyRequired,
+    WTInvisibleWall
 } WallType;
 
 typedef struct WallInfo
@@ -92,6 +93,7 @@ public:
     void SetFloorTile(const uint16_t x, const uint16_t y, const uint16_t floorTile);
 
     bool IsSolidWall(const uint16_t x, const uint16_t y) const;
+    bool IsVisibleTile(const uint16_t x, const uint16_t y) const;
     bool IsExplosiveWall(const uint16_t x, const uint16_t y) const;
     bool IsDoor(const uint16_t x, const uint16_t y) const;
     bool IsRemovableDoor(const uint16_t x, const uint16_t y) const;
