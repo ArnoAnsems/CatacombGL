@@ -1564,6 +1564,37 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         actor->SetActionPerformed(true);
         break;
     }
+    case ActionHarmlessBunny:
+    {
+        if (actor->GetTimeToNextAction() == 0)
+        {
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 60));
+            actor->SetSolid(false);
+        }
+        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
+        {
+            // Time to transform from harmless bunny to evil bunny!
+            // Check that the player is not on top of the bunny.
+            if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
+                (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
+            {
+                // Put the bunny at the center of the tile, such that the chase routine can start from there.
+                actor->SetX((float)(actor->GetTileX()) + 0.5f);
+                actor->SetY((float)(actor->GetTileY()) + 0.5f);
+
+                // Enter the transformation state.
+                actor->SetState(StateIdRise, m_timeStampOfWorldCurrentFrame);
+                actor->SetSolid(true);
+                actor->SetTimeToNextAction(0);
+            }
+        }
+        else
+        {
+            // Hop from left to right as a harmless bunny.
+            BunnyHopping(actor);
+        }
+        break;
+    }
     }
 }
 
@@ -1879,6 +1910,135 @@ void EngineCore::RunAway(Actor* actor)
         {
             break;			// no possible move
         }
+    }
+}
+
+void EngineCore::BunnyHopping(Actor* actor)
+{
+    // This function is based on T_HarmlessBunnyWalk of C5_ACT2.C, with the simplification that
+    // the bunny cannot leave the tile he spawned upon while hopping from left to right.
+
+    actorDirection valid_dir[8][2] =
+    { 
+    { west,east }, // north
+    { north,south }, // east
+    { east,west }, // south
+    { south,north }, // west
+    { northwest,southeast }, // northeast
+    { northeast,southwest }, // southeast
+    { southeast,northwest }, // southwest
+    { southwest,northeast } // northwest
+    };
+
+    actorDirection player_dir;
+    const float playerAngle = m_level->GetPlayerActor()->GetAngle();
+    if ((playerAngle > 337) || (playerAngle <= 22))
+    {
+        player_dir = north;
+    }
+    else if (playerAngle <= 67)
+    {
+        player_dir = northeast;
+    }
+    else if (playerAngle <= 112)
+    {
+        player_dir = east;
+    }
+    else if (playerAngle <= 157)
+    {
+        player_dir = southeast;
+    }
+    else if (playerAngle <= 202)
+    {
+        player_dir = south;
+    }
+    else if (playerAngle <= 247)
+    {
+        player_dir = southwest;
+    }
+    else if (playerAngle <= 292)
+    {
+        player_dir = west;
+    }
+    else if (playerAngle <= 337)
+    {
+        player_dir = northwest;
+    }
+                                    
+    actor->SetDirection(valid_dir[player_dir][actor->GetState() == StateIdHidden ? 0 : 1]);
+
+    if (actor->GetTemp1() == 0)
+    {
+        actor->SetTemp1(1000 + rand() % 2000);
+    }
+
+    const float harmlessBunnySpeed = 300.0f;
+    const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
+    const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
+    float move = harmlessBunnySpeed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+
+    // Calculate new (x,y) coordinates based on the direction of the bunny and the distance to travel.
+    float x = actor->GetX();
+    float y = actor->GetY();
+    switch (actor->GetDirection())
+    {
+    case north:
+        y -= move;
+        break;
+    case northeast:
+        x += move;
+        y -= move;
+        break;
+    case east:
+        x += move;
+        break;
+    case southeast:
+        x += move;
+        y += move;
+        break;
+    case south:
+        y += move;
+        break;
+    case southwest:
+        x -= move;
+        y += move;
+        break;
+    case west:
+        x -= move;
+        break;
+    case northwest:
+        x -= move;
+        y -= move;
+        break;
+    case nodir:
+        break;
+    }
+
+    bool changeDir = false;
+    if (x > actor->GetTileX() + 0.2f && x < actor->GetTileX() + 0.8f &&
+        y > actor->GetTileY() + 0.2f && y < actor->GetTileY() + 0.8f &&
+        move < actor->GetTemp1() / 10000.0f)
+    {
+        actor->SetX(x);
+        actor->SetY(y);
+    }
+    else
+    {
+        // The bunny is getting near the edge of his tile or the intended distance is traveled.
+        // Change direction and go the other way
+        changeDir = true;
+    }
+
+    if (changeDir)
+    {
+        // Set a new intended distance to travel.
+        actor->SetTemp1(1000 + rand() % 2000);
+        actor->SetState(actor->GetState() == StateIdHidden ? StateIdPeek : StateIdHidden, m_timeStampOfWorldCurrentFrame);
+    }
+    else
+    {
+        // Deduct the traveled distance from the intended distance.
+        actor->SetTemp1(actor->GetTemp1() - (int16_t)(move * 10000.0f));
     }
 }
 

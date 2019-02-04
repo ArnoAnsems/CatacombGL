@@ -83,6 +83,7 @@ private:
 
     bool Chase(Actor* actor, const bool diagonal, const ChaseTarget target);
     void RunAway(Actor* actor);
+    void BunnyHopping(Actor* actor);
 
     const char* GetKeyName(const KeyId keyId) const;
 

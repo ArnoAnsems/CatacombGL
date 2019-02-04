@@ -400,16 +400,31 @@ const DecorateActor decorateTree =
 // BUNNY
 //
 
+// This monster initially spawns as a harmless bunny, hopping from left (StateIdHidden) to right (StateIdPeek).
 const DecorateAnimation bunnyHiddenAnimation =
 {
-    { BUNNY_LEFT1PIC , 10, ActionHide },
-    { BUNNY_LEFT2PIC , 30, ActionHide }
+    { BUNNY_LEFT1PIC , 55, ActionNone },
+    { BUNNY_LEFT1PIC , 10, ActionHarmlessBunny },
+    { BUNNY_LEFT2PIC , 30, ActionNone }
 };
 
 const DecorateState bunnyStateHidden =
 {
     bunnyHiddenAnimation,
     StateIdHidden   // Loop
+};
+
+const DecorateAnimation bunnyPeekAnimation =
+{
+    { BUNNY_RIGHT1PIC , 55, ActionNone },
+    { BUNNY_RIGHT1PIC , 10, ActionHarmlessBunny },
+    { BUNNY_RIGHT2PIC , 30, ActionNone }
+};
+
+const DecorateState bunnyStatePeek =
+{
+    bunnyPeekAnimation,
+    StateIdPeek   // Loop
 };
 
 const DecorateAnimation bunnyRiseAnimation =
@@ -487,6 +502,7 @@ const DecorateState bunnyStateDead =
 const std::map<DecorateStateId, DecorateState> bunnyStates =
 {
     std::make_pair(StateIdHidden, bunnyStateHidden),
+    std::make_pair(StateIdPeek, bunnyStatePeek),
     std::make_pair(StateIdRise, bunnyStateRise),
     std::make_pair(StateIdWalk, bunnyStateWalk),
     std::make_pair(StateIdAttack, bunnyStateAttack),

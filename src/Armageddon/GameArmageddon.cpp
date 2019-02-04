@@ -353,20 +353,9 @@ void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyL
             }
             case 51:
             {
-                int16_t zombie_delay = rand() % 30;
-                unsigned int tile = level->GetFloorTile(x, y + 1);
-                if (tile != 0)
-                    zombie_delay = (tile >> 8) * 30;
-                else
-                {
-                    const int16_t current_zombie_delay = (2 * 60) + rand() % (4 * 60);
-                    zombie_delay = m_zombie_base_delay + current_zombie_delay;
-                    m_zombie_base_delay += current_zombie_delay;
-                    if (m_zombie_base_delay > 8 * 60)
-                        m_zombie_base_delay = 0;
-                }
+                const int16_t bunny_delay = rand() % 600;
                 Actor* bunnyActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBunny);
-                bunnyActor->SetTemp2(zombie_delay);
+                bunnyActor->SetTemp2(bunny_delay);
                 actors[(y * level->GetLevelWidth()) + x] = bunnyActor;
                 break;
             }
