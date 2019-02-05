@@ -592,6 +592,26 @@ const uint8_t fontWidth[256] =
 
 Font* fontForGameSelection = NULL;
 
+void DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height)
+{
+    renderer.Render2DBar(x, y, width, 1, EgaBrightWhite);
+    renderer.Render2DBar(x + width - 1, y + 1, 1, height - 1, EgaBrightWhite);
+    renderer.Render2DBar(x, y + 1, 1, height - 1, EgaDarkGray);
+    renderer.Render2DBar(x + 1, y + height - 1, width - 2, 1, EgaDarkGray);
+
+    renderer.Render2DBar(x + 1, y + 1, width - 2, 4, EgaLightGray);
+    renderer.Render2DBar(x + 1, y + height - 5, width - 2, 4, EgaLightGray);
+    renderer.Render2DBar(x + 1, y + 5, 4, height - 10, EgaLightGray);
+    renderer.Render2DBar(x + width - 5, y + 5, 4, height - 10, EgaLightGray);
+
+    renderer.Render2DBar(x + 5, y + 5, width - 10, 1, EgaBlue);
+    renderer.Render2DBar(x + width - 6, y + 6, 1, height - 11, EgaBlue);
+    renderer.Render2DBar(x + 5, y + 6, 1, height - 12, EgaBrightBlue);
+    renderer.Render2DBar(x + 5, y + height - 6, width - 11, 1, EgaBrightBlue);
+
+    renderer.Render2DBar(x + 6, y + 6, width - 12, height - 12, EgaDarkGray);
+}
+
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
 	if (height==0)										// Prevent A Divide By Zero By
@@ -1049,9 +1069,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         {
             renderer.Prepare3DRendering(false, 1.0f, 25);
             renderer.Prepare2DRendering();
-            renderer.RenderTextLeftAligned("1. Catacomb Abyss Shareware", fontForGameSelection, EgaBrightWhite, 10, 10);
-            renderer.RenderTextLeftAligned("2. Catacomb Abyss Registered", fontForGameSelection, EgaBrightWhite, 10, 30);
-            renderer.RenderTextLeftAligned("3. Catacomb Armageddon", fontForGameSelection, EgaBrightWhite, 10, 50);
+            DrawBox(2, 2, 316, 80);
+            renderer.RenderTextLeftAligned("1. Catacomb Abyss Shareware", fontForGameSelection, EgaBrightWhite, 16, 15);
+            renderer.RenderTextLeftAligned("2. Catacomb Abyss Registered", fontForGameSelection, EgaBrightWhite, 16, 35);
+            renderer.RenderTextLeftAligned("3. Catacomb Armageddon", fontForGameSelection, EgaBrightWhite, 16, 55);
             renderer.Unprepare2DRendering();
             SwapBuffers(hDC);					// Swap Buffers (Double Buffering)
         }
