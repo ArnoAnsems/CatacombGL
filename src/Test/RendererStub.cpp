@@ -84,7 +84,7 @@ void RendererStub::RenderNumber(const uint16_t /*value*/, const Font* /*font*/, 
 {
 }
 
-void RendererStub::Prepare2DRendering()
+void RendererStub::Prepare2DRendering(const bool /*helpWindow*/)
 {
 }
 

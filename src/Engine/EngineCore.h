@@ -67,7 +67,8 @@ private:
         FreeItemsCheatDialog,
         Victory,
         VerifyGateExit,
-        ExitGame
+        ExitGame,
+        Help
     };
 
     void LoadLevel(const uint8_t mapIndex);

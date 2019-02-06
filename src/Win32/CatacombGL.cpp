@@ -1068,7 +1068,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         else										// If There Are No Messages
         {
             renderer.Prepare3DRendering(false, 1.0f, 25);
-            renderer.Prepare2DRendering();
+            renderer.Prepare2DRendering(false);
             DrawBox(2, 2, 316, 80);
             renderer.RenderTextLeftAligned("1. Catacomb Abyss Shareware", fontForGameSelection, EgaBrightWhite, 16, 15);
             renderer.RenderTextLeftAligned("2. Catacomb Abyss Registered", fontForGameSelection, EgaBrightWhite, 16, 35);

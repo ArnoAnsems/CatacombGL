@@ -46,7 +46,7 @@ public:
     void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
     void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
 
-    void Prepare2DRendering() override;
+    void Prepare2DRendering(const bool helpWindow) override;
     void Unprepare2DRendering() override;
     void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) override;
     void Render2DTileSize8Masked(const Picture* tiles, const uint16_t tileIndex, const uint16_t offsetX, const uint16_t offsetY) override;

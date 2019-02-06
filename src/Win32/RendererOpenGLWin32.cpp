@@ -408,7 +408,7 @@ void RendererOpenGLWin32::RenderNumber(const uint16_t value, const Font* font, c
     RenderTextLeftAligned(str, font, colorIndex, offsetX + widthOfBlanks, offsetY);
 }
 
-void RendererOpenGLWin32::Prepare2DRendering()
+void RendererOpenGLWin32::Prepare2DRendering(const bool helpWindow)
 {
     // Set the viewport to the entire window
     glViewport(0, 0, m_windowWidth, m_windowHeight);
@@ -431,23 +431,25 @@ void RendererOpenGLWin32::Prepare2DRendering()
     const float windowAspectRatio = (float)m_windowWidth / (float)m_windowHeight;
 
     double top, bottom, left, right;
+    const double classicWidthInPixels = helpWindow ? 640.0f : 320.0f;
+    const double classicHeightInPixels = 200.0f;
     if (windowAspectRatio > classicAspectRatio)
     {
         top = 0.0;
-        bottom = 200.0;
+        bottom = classicHeightInPixels;
         double classicWidth = (double)m_windowWidth / windowAspectRatio * classicAspectRatio;
-        double windowWidthInClassicPixels = ((double)m_windowWidth / classicWidth) * 320.0;
-        double borderWidth = (windowWidthInClassicPixels - 320.0) * 0.5;
+        double windowWidthInClassicPixels = ((double)m_windowWidth / classicWidth) * classicWidthInPixels;
+        double borderWidth = (windowWidthInClassicPixels - classicWidthInPixels) * 0.5;
         left = -borderWidth;
         right = windowWidthInClassicPixels - borderWidth;
     }
     else
     {
         left = 0.0;
-        right = 320.0;
+        right = classicWidthInPixels;
         double classicHeight =  (double)m_windowHeight / (1.0 / windowAspectRatio) * (1.0 / classicAspectRatio);
-        double windowHeightInClassicPixels = ((double)m_windowHeight / classicHeight) * 200.0;
-        double borderHeight = (windowHeightInClassicPixels - 200.0) * 0.5;
+        double windowHeightInClassicPixels = ((double)m_windowHeight / classicHeight) * classicHeightInPixels;
+        double borderHeight = (windowHeightInClassicPixels - classicHeightInPixels) * 0.5;
         top = -borderHeight;
         bottom = windowHeightInClassicPixels - borderHeight;
     }

@@ -157,7 +157,16 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_level->DrawActors(renderer, m_game.GetEgaGraph());
     }
 
-    renderer.Prepare2DRendering();
+    renderer.Prepare2DRendering(m_state == Help);
+
+    if (m_state == Help)
+    {
+        DrawTiledWindow(renderer, 1, 1, 78, 23);
+
+        // Placeholder help text
+        renderer.RenderTextCentered("Play Help for", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 320, 8);
+        renderer.RenderTextCentered("THE CATACOMB ABYSS 3-D", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 320, 24);
+    }
 
     if (m_state == InGame)
     {
@@ -646,9 +655,17 @@ bool EngineCore::Think()
         }
     }
 
-    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
+    if (m_state != Help && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
     {
         ToggleMenu();
+    }
+    else if (m_state == Help && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        m_state = InGame;
+    }
+    else if (m_state == InGame && m_playerInput.IsKeyJustPressed(SDLK_F1))
+    {
+        m_state = Help;
     }
 
     for (uint8_t i = 0; i < 0xff; i++)
