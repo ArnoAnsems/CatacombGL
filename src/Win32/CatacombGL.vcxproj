@@ -22,7 +22,7 @@
     <SccProjectName />
     <SccLocalPath />
     <ProjectGuid>{B443C62D-3E75-4729-B34F-D65B811FE5BA}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -48,6 +48,7 @@
     <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -69,21 +70,23 @@
     <_ProjectFileVersion>11.0.61030.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\bin\</OutDir>
+    <OutDir>..\..\bin\$(Platform)\</OutDir>
     <IntDir>..\..\build\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\bin\$(Platform)\</OutDir>
+    <IntDir>..\..\build\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\bin\</OutDir>
+    <OutDir>..\..\bin\$(Platform)\</OutDir>
     <IntDir>..\..\build\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\bin\</OutDir>
+    <OutDir>..\..\bin\$(Platform)\</OutDir>
     <IntDir>..\..\build\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,7 +107,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\CatacombGL_Engine.lib;..\..\bin\CatacombGL_Abyss.lib;..\..\bin\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\Win32\CatacombGL_Engine.lib;..\..\bin\Win32\CatacombGL_Abyss.lib;..\..\bin\Win32\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(OutDir)\CatacombGL.pdb</ProgramDatabaseFile>
@@ -122,6 +125,12 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x1009</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>xcopy ..\..\ThirdParty\SDL\lib\x86\SDL2.dll ..\..\bin\$(Platform)\ /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy SDL binary</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -141,8 +150,9 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\CatacombGL_Engine.lib;..\..\bin\CatacombGL_Abyss.lib;..\..\bin\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(OutDir)\CatacombGL.pdb</ProgramDatabaseFile>
@@ -159,6 +169,12 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x1009</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>xcopy ..\..\ThirdParty\SDL\lib\x64\SDL2.dll ..\..\bin\$(Platform)\ /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy SDL binary</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -177,7 +193,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\CatacombGL_Engine.lib;..\..\bin\CatacombGL_Abyss.lib;..\..\bin\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\Win32\CatacombGL_Engine.lib;..\..\bin\Win32\CatacombGL_Abyss.lib;..\..\bin\Win32\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -195,6 +211,12 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x1009</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>xcopy ..\..\ThirdParty\SDL\lib\x86\SDL2.dll ..\..\bin\$(Platform)\ /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy SDL binary</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -215,7 +237,7 @@
     <Link>
       <AdditionalOptions>
       </AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\CatacombGL_Engine.lib;..\..\bin\CatacombGL_Abyss.lib;..\..\bin\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -232,6 +254,10 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x1009</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>xcopy ..\..\ThirdParty\SDL\lib\x64\SDL2.dll ..\..\bin\$(Platform)\ /Y</Command>
+      <Message>Copy SDL binary</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="RendererOpenGLWin32.h" />

@@ -627,7 +627,7 @@ bool GetCatacombsPackGOGPath(std::string& path)
     CHAR gog_catacombs_path[256];
     DWORD dwType = 0;
     DWORD dwSize = sizeof(gog_catacombs_path);
-    LSTATUS status = SHGetValueA(HKEY_LOCAL_MACHINE, "SOFTWARE\\GOG.COM\\GOGCATACOMBSPACK", "PATH", &dwType, gog_catacombs_path, &dwSize);
+    LSTATUS status = SHGetValueA(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\GOG.com\\GOGCATACOMBSPACK", "PATH", &dwType, gog_catacombs_path, &dwSize);
     const bool isGogCatacombsPathFound = ((status == ERROR_SUCCESS) && (dwType == REG_SZ));
     if (isGogCatacombsPathFound)
     {
