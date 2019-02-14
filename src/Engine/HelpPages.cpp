@@ -18,16 +18,31 @@
 static const char endOfPageMarker = '@';
 static const char centeredLineMarker = '^';
 static const char endOfLineMarker = '\n';
+static const char returnMarker = '\r';
+
+const std::vector<HelpPage> helpFileNotFoundPages =
+{ {
+    {"", true},
+    {"Error loading HELP file.", true},
+    {"",true},
+    {"Press ESC",true}
+} };
+
+HelpPages::HelpPages()
+{
+	m_pages = helpFileNotFoundPages;
+}
 
 HelpPages::HelpPages(const std::string& helpText)
 {
-	//uint16_t lineIndex = 0;
 	HelpLine currentLine;
+	currentLine.centered = false;
 	HelpPage currentPage;
 	uint16_t charIndex = 0;
 	while (charIndex < helpText.size())
 	{
-		if (helpText.at(charIndex) == endOfPageMarker)
+		const char currentChar = helpText.at(charIndex);
+		if (currentChar == endOfPageMarker)
 		{
 			if (!currentPage.empty() && (currentPage.size() != 1 || !currentPage.at(0).line.empty()))
 			{
@@ -35,11 +50,19 @@ HelpPages::HelpPages(const std::string& helpText)
 			}
 			currentPage.clear();
 		}
-		else if (helpText.at(charIndex) == endOfLineMarker)
+		else if (currentChar == endOfLineMarker)
 		{
 			currentPage.push_back(currentLine);
 			currentLine.line.clear();
 			currentLine.centered = false;
+		}
+        else if (currentChar == returnMarker)
+        {
+            // ignore
+        }
+		else if (currentChar == centeredLineMarker)
+		{
+			currentLine.centered = true;
 		}
 		else
 		{

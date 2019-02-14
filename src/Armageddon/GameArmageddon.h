@@ -43,6 +43,7 @@ public:
     AudioPlayer* GetAudioPlayer() override;
 
     IIntroView* GetIntroView() override;
+    HelpPages* GetHelpPages() override;
     const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;
     const std::string& GetName() const override;
     const uint8_t GetId() const override;
@@ -85,4 +86,5 @@ private:
     const std::string m_gamePath;
     IRenderer& m_renderer;
     short m_zombie_base_delay;
+    HelpPages* m_helpPages;
 };

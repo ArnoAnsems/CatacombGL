@@ -34,6 +34,7 @@ GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) 
     m_egaGraph = NULL;
     m_audioRepository = NULL;
     m_audioPlayer = NULL;
+    m_helpPages = NULL;
 }
 
 GameArmageddon::~GameArmageddon()
@@ -57,6 +58,10 @@ GameArmageddon::~GameArmageddon()
     if (m_introView != NULL)
     {
         delete m_introView;
+    }
+    if (m_helpPages != NULL)
+    {
+        delete m_helpPages;
     }
 }
 
@@ -541,6 +546,17 @@ IIntroView* GameArmageddon::GetIntroView()
     }
 
     return m_introView;
+}
+
+HelpPages* GameArmageddon::GetHelpPages()
+{
+    if (m_helpPages == NULL)
+    {
+        // TODO: Get help pages from INSTRUCT.TXT
+        m_helpPages = new HelpPages();
+    }
+
+    return m_helpPages;
 }
 
 const std::map<uint16_t, const DecorateActor>& GameArmageddon::GetDecorateActors() const

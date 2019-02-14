@@ -34,6 +34,7 @@ typedef std::vector<HelpLine> HelpPage;
 class HelpPages
 {
 public:
+	HelpPages();
 	HelpPages(const std::string& helpText);
 
 	uint8_t GetNumberOfPages() const;

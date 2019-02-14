@@ -43,6 +43,7 @@ public:
     AudioPlayer* GetAudioPlayer() override;
 
     IIntroView* GetIntroView() override;
+    HelpPages* GetHelpPages() override;
     const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;
     const std::string& GetName() const override;
     const uint8_t GetId() const override;
@@ -86,4 +87,5 @@ private:
     const uint8_t m_gameId;
     const std::string m_gamePath;
     IRenderer& m_renderer;
+    HelpPages* m_helpPages;
 };

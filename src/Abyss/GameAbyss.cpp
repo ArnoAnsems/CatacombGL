@@ -35,6 +35,7 @@ GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer
     m_egaGraph = NULL;
     m_audioRepository = NULL;
     m_audioPlayer = NULL;
+    m_helpPages = NULL;
 }
 
 GameAbyss::~GameAbyss()
@@ -58,6 +59,10 @@ GameAbyss::~GameAbyss()
     if (m_introView != NULL)
     {
         delete m_introView;
+    }
+    if (m_helpPages != NULL)
+    {
+        delete m_helpPages;
     }
 }
 
@@ -611,6 +616,33 @@ IIntroView* GameAbyss::GetIntroView()
     }
 
     return m_introView;
+}
+
+HelpPages* GameAbyss::GetHelpPages()
+{
+    if (m_helpPages == NULL)
+    {
+        std::ifstream file;
+        const std::string fullPath = m_gamePath + "HELP.TXT";
+        file.open(fullPath, std::ifstream::binary);
+        if (file.is_open())
+        {
+            std::string str;
+            char c = 0;
+            while (file.get(c))
+            {
+                str.append(1, c);
+            }
+            file.close();
+            m_helpPages = new HelpPages(str);
+        }
+        else
+        {
+            m_helpPages = new HelpPages();
+        }
+    }
+
+    return m_helpPages;
 }
 
 const std::map<uint16_t, const DecorateActor>& GameAbyss::GetDecorateActors() const

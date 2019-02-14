@@ -163,9 +163,20 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         DrawTiledWindow(renderer, 1, 1, 78, 23);
 
-        // Placeholder help text
-        renderer.RenderTextCentered("Play Help for", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 320, 8);
-        renderer.RenderTextCentered("THE CATACOMB ABYSS 3-D", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 320, 24);
+        HelpPages* helpPages = m_game.GetHelpPages();
+
+        // TODO: Show more help pages. Just get the first help page for now.
+        const HelpPage& helpPage = helpPages->GetPage(0);
+        uint16_t yOffset = 8;
+        for (uint16_t lineIndex = 0; lineIndex < helpPage.size(); lineIndex++)
+        {
+            const HelpLine& helpLine = helpPage.at(lineIndex);
+            if (helpLine.centered)
+            {
+                renderer.RenderTextCentered(helpLine.line.c_str(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 320, yOffset);
+            }
+            yOffset += 8;
+        }
     }
 
     if (m_state == InGame)
@@ -666,6 +677,12 @@ bool EngineCore::Think()
     else if (m_state == InGame && m_playerInput.IsKeyJustPressed(SDLK_F1))
     {
         m_state = Help;
+
+        // Close menu
+        if (m_extraMenu.IsActive())
+        {
+            m_extraMenu.SetActive(false);
+        }
     }
 
     for (uint8_t i = 0; i < 0xff; i++)

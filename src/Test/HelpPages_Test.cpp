@@ -40,4 +40,11 @@ TEST(HelpPages_Test, TwoRegularPages)
 	const HelpPage& page0 = helpPages.GetPage(0);
 	EXPECT_EQ(4, page0.size());
 	EXPECT_STREQ("First line", page0.at(0).line.c_str());
+	EXPECT_FALSE(page0.at(0).centered);
+	EXPECT_STREQ("Centered second line", page0.at(1).line.c_str());
+	EXPECT_TRUE(page0.at(1).centered);
+
+	const HelpPage& page1 = helpPages.GetPage(1);
+	EXPECT_EQ(2, page1.size());
+
 }
