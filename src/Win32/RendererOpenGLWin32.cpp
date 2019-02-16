@@ -396,6 +396,52 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     glColor3f(1.0f, 1.0f, 1.0f);
 }
 
+uint8_t RendererOpenGLWin32::RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
+{
+    uint8_t numberOfLines = 0;
+
+    if (strlen(text) == 0)
+    {
+        numberOfLines = 1;
+    }
+    else
+    {
+        const uint16_t maxWidth = 600;
+        uint16_t chari = 0;
+        uint16_t startLine = 0;
+        char dest[200];
+        while (chari < strlen(text))
+        {
+            uint16_t posLastSpaceBeforeMaxWidth = 0;
+            uint16_t totalWidth = 0;
+            chari = startLine;
+            while (totalWidth < maxWidth && chari < strlen(text))
+            {
+                const uint8_t charIndex = text[chari];
+                if (charIndex == ' ')
+                {
+                    posLastSpaceBeforeMaxWidth = chari;
+                }
+                totalWidth += font->GetCharacterWidth(charIndex);
+                chari++;
+            }
+            if (chari == strlen(text) && totalWidth < maxWidth)
+            {
+                posLastSpaceBeforeMaxWidth = chari;
+            }
+
+            memset(dest, 0, 200);
+            strncpy_s(dest, text + startLine, posLastSpaceBeforeMaxWidth - startLine);
+            RenderTextLeftAligned(dest, font, colorIndex, offsetX, offsetY + (9 * numberOfLines));
+
+            startLine = posLastSpaceBeforeMaxWidth + 1;
+            numberOfLines++;
+        }
+    }
+
+    return numberOfLines;
+}
+
 void RendererOpenGLWin32::RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
 {
     char str[10];

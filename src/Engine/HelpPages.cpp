@@ -49,6 +49,14 @@ HelpPages::HelpPages(const std::string& helpText)
 				m_pages.push_back(currentPage);
 			}
 			currentPage.clear();
+            if (charIndex < helpText.size() - 1 && helpText.at(charIndex + 1) == returnMarker)
+            {
+                charIndex++;
+            }
+            if (charIndex < helpText.size() - 1 && helpText.at(charIndex + 1) == endOfLineMarker)
+            {
+                charIndex++;
+            }
 		}
 		else if (currentChar == endOfLineMarker)
 		{

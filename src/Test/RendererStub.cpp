@@ -76,6 +76,11 @@ void RendererStub::RenderTextLeftAligned(const char* /*text*/, const Font* /*fon
 {
 }
 
+uint8_t RendererStub::RenderTextLeftAlignedMultiLine(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
+{
+    return 1;
+}
+
 void RendererStub::RenderTextCentered(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
 {
 }

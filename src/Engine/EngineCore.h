@@ -165,4 +165,5 @@ private:
     GameTimer m_gameTimer;
     const ISystem& m_system;
     std::vector<std::string> m_savedGames;
+    uint8_t m_helpPageIndex;
 };
