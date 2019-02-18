@@ -29,7 +29,8 @@ GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_zombie_base_delay (0),
-    m_introView (NULL)
+    m_introView (NULL),
+    m_helpPageIndex(0)
 {
     m_gameMaps = NULL;
     m_egaGraph = NULL;
@@ -616,6 +617,53 @@ IIntroView* GameAbyss::GetIntroView()
     }
 
     return m_introView;
+}
+
+void GameAbyss::DrawHelpPage()
+{
+    HelpPages* helpPages = GetHelpPages();
+
+    const HelpPage& helpPage = helpPages->GetPage(m_helpPageIndex);
+    uint16_t yOffset = 8;
+    for (uint16_t lineIndex = 0; lineIndex < helpPage.size(); lineIndex++)
+    {
+        const HelpLine& helpLine = helpPage.at(lineIndex);
+        if (helpLine.centered)
+        {
+            m_renderer.RenderTextCentered(helpLine.line.c_str(), GetEgaGraph()->GetFont(3), EgaDarkGray, 320, yOffset);
+            yOffset += 9;
+        }
+        else
+        {
+            const uint8_t numberOfLines = m_renderer.RenderTextLeftAlignedMultiLine(helpLine.line.c_str(), GetEgaGraph()->GetFont(3), EgaDarkGray, 16, yOffset);
+            yOffset += (numberOfLines * 9);
+        }
+    }
+}
+
+bool GameAbyss::ProcessInputOnHelpPage(PlayerInput& playerInput)
+{
+    if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        m_helpPageIndex = 0;
+        return true;
+    }
+    else if (playerInput.IsKeyJustPressed(SDLK_LEFT) || playerInput.IsKeyJustPressed(SDLK_UP))
+    {
+        if (m_helpPageIndex > 0)
+        {
+            m_helpPageIndex--;
+        }
+    }
+    else if (playerInput.IsKeyJustPressed(SDLK_RIGHT) || playerInput.IsKeyJustPressed(SDLK_DOWN))
+    {
+        if (m_helpPageIndex < GetHelpPages()->GetNumberOfPages() - 1)
+        {
+            m_helpPageIndex++;
+        }
+    }
+
+    return false;
 }
 
 HelpPages* GameAbyss::GetHelpPages()

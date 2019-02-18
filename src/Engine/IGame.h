@@ -29,7 +29,7 @@
 #include "IIntroView.h"
 #include <map>
 #include "Actor.h"
-#include "HelpPages.h"
+#include "PlayerInput.h"
 
 enum DifficultyLevel
 {
@@ -53,7 +53,8 @@ public:
     virtual AudioRepository* GetAudioRepository() = NULL;
     virtual AudioPlayer* GetAudioPlayer() = NULL;
     virtual IIntroView* GetIntroView() = NULL;
-    virtual HelpPages* GetHelpPages() = NULL;
+    virtual void DrawHelpPage() = NULL;
+    virtual bool ProcessInputOnHelpPage(PlayerInput& playerInput) = NULL;
     virtual const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const = NULL;
     virtual const std::string& GetName() const = NULL;
     virtual const uint8_t GetId() const = NULL;

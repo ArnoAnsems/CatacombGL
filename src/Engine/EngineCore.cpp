@@ -68,8 +68,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_keyToTake(KeyId::NoKey),
     m_playerInput(keyboardInput),
     m_savedGames(),
-    m_extraMenu(m_configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames),
-    m_helpPageIndex(0)
+    m_extraMenu(m_configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames)
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -163,25 +162,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_state == Help)
     {
         DrawTiledWindow(renderer, 1, 1, 78, 23);
-
-        HelpPages* helpPages = m_game.GetHelpPages();
-
-        const HelpPage& helpPage = helpPages->GetPage(m_helpPageIndex);
-        uint16_t yOffset = 8;
-        for (uint16_t lineIndex = 0; lineIndex < helpPage.size(); lineIndex++)
-        {
-            const HelpLine& helpLine = helpPage.at(lineIndex);
-            if (helpLine.centered)
-            {
-                renderer.RenderTextCentered(helpLine.line.c_str(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 320, yOffset);
-                yOffset += 9;
-            }
-            else
-            {
-                const uint8_t numberOfLines = renderer.RenderTextLeftAlignedMultiLine(helpLine.line.c_str(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 16, yOffset);
-                yOffset += (numberOfLines * 9);
-            }
-        }
+        m_game.DrawHelpPage();
     }
 
     if (m_state == InGame)
@@ -677,23 +658,9 @@ bool EngineCore::Think()
     }
     else if (m_state == Help)
     {
-        if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+        if (m_game.ProcessInputOnHelpPage(m_playerInput))
         {
             m_state = InGame;
-        }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_LEFT) || m_playerInput.IsKeyJustPressed(SDLK_UP))
-        {
-            if (m_helpPageIndex > 0)
-            {
-                m_helpPageIndex--;
-            }
-        }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_RIGHT) || m_playerInput.IsKeyJustPressed(SDLK_DOWN))
-        {
-            if (m_helpPageIndex < m_game.GetHelpPages()->GetNumberOfPages() - 1)
-            {
-                m_helpPageIndex++;
-            }
         }
     }
     else if (m_state == InGame && m_playerInput.IsKeyJustPressed(SDLK_F1))

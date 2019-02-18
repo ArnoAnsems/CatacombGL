@@ -22,6 +22,7 @@
 
 #include "..\Engine\IGame.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\HelpPages.h"
 #include <map>
 
 class GameAbyss: public IGame
@@ -43,7 +44,8 @@ public:
     AudioPlayer* GetAudioPlayer() override;
 
     IIntroView* GetIntroView() override;
-    HelpPages* GetHelpPages() override;
+    void DrawHelpPage() override;
+    bool ProcessInputOnHelpPage(PlayerInput& playerInput) override;
     const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;
     const std::string& GetName() const override;
     const uint8_t GetId() const override;
@@ -81,6 +83,7 @@ private:
     void DrawKeys(const PlayerInventory& playerInventory);
     void DrawBonus(const PlayerInventory& playerInventory);
     void DrawGems(const PlayerInventory& playerInventory);
+    HelpPages* GetHelpPages();
 
     short m_zombie_base_delay;
     IIntroView* m_introView;
@@ -88,4 +91,5 @@ private:
     const std::string m_gamePath;
     IRenderer& m_renderer;
     HelpPages* m_helpPages;
+    uint8_t m_helpPageIndex;
 };
