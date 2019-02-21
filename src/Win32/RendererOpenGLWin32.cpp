@@ -16,21 +16,13 @@
 #include "RendererOpenGLWin32.h"
 #include <gl\gl.h>
 #include <gl\glu.h>
+#include "..\..\ThirdParty\SDL\include\SDL_video.h"
 
 const float FloorZ = 2.0f;
 const float CeilingZ = 1.0f;
 const float PlayerZ = 1.5f;
 
 #define GL_CLAMP_TO_EDGE 0x812F
-
-typedef bool (APIENTRY *squall2)       (int T);
-typedef const char* (APIENTRY *squall) ();
-
-extern squall wglGetExtensionsStringEXT;
-extern squall2 wglSwapIntervalEXT;
-
-squall wglGetExtensionsStringEXT = NULL;
-squall2 wglSwapIntervalEXT = NULL;
 
 // Constructor
 RendererOpenGLWin32::RendererOpenGLWin32()
@@ -64,12 +56,7 @@ void RendererOpenGLWin32::Setup()
         m_singleColorTexture[color] = generateSingleColorTexture(color);
     }
 
-    wglGetExtensionsStringEXT = (squall)wglGetProcAddress("wglGetExtensionsStringEXT");
-    m_isVSyncSupported = IsWGLExtensionSupported("WGL_EXT_swap_control");
-    if (m_isVSyncSupported)
-    {
-        wglSwapIntervalEXT = (squall2)wglGetProcAddress("wglSwapIntervalEXT");
-    }
+    m_isVSyncSupported = (SDL_GL_SetSwapInterval(0) == 0);
 }
 
 const RendererOpenGLWin32::rgbColor egaToRgbMap[EgaRange] =
@@ -951,17 +938,9 @@ void RendererOpenGLWin32::SetVSync(const bool enabled)
     const int32_t requestedSwapInterval = (enabled) ? 1 : 0;
     if (requestedSwapInterval != m_currentSwapInterval)
     {
-        if (wglSwapIntervalEXT != NULL)
-        {
-            wglSwapIntervalEXT(requestedSwapInterval);
-        }
+        SDL_GL_SetSwapInterval(enabled ? 1 : 0);
         m_currentSwapInterval = requestedSwapInterval;
-    }   
-}
-
-bool RendererOpenGLWin32::IsWGLExtensionSupported(const char *extension_name)
-{
-    return (strstr(wglGetExtensionsStringEXT(), extension_name) != NULL);
+    }
 }
 
 bool RendererOpenGLWin32::IsVSyncSupported()

@@ -36,9 +36,9 @@ PlayerInput::~PlayerInput()
 
 }
 
-void PlayerInput::SetKeyPressed(const uint8_t keyCode, const bool pressed)
+void PlayerInput::SetKeyPressed(const SDL_Keycode keyCode, const bool pressed)
 {
-    const SDL_Keycode sdlCode = asciiKeyToSDL[keyCode];
+    const SDL_Keycode sdlCode = keyCode; // asciiKeyToSDL[keyCode];
     auto it = m_keyPressed.find(sdlCode);
     if (it != m_keyPressed.end())
     {

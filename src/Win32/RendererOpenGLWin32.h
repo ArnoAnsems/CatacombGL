@@ -82,7 +82,6 @@ private:
     } spriteToRender;
 
     static rgbColor EgaToRgb(const egaColor ega);
-    static bool IsWGLExtensionSupported(const char *extension_name);
 
     void quickSort(uint16_t p,uint16_t q);
     uint16_t partition(uint16_t p,uint16_t q);

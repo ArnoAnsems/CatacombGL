@@ -291,7 +291,7 @@ class PlayerInput
 public:
     PlayerInput();
     ~PlayerInput();
-    void SetKeyPressed(const uint8_t keyCode, const bool pressed);
+    void SetKeyPressed(const SDL_Keycode keyCode, const bool pressed);
     bool IsKeyJustPressed(const SDL_Keycode keyCode) const;
     bool IsKeyPressed(const SDL_Keycode keyCode) const;
     void ClearJustPressed();

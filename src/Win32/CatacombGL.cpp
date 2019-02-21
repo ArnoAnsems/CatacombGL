@@ -17,11 +17,6 @@
 // This source file is the main entry point of the CatacombGL executable. It contains the WinMain function.
 // It creates the OpenGL window and an instance of the EngineCore class. Then it runs the main game loop.
 //
-// The code to create the OpenGL window was taken from "Your First Polygon", an OpenGL tutorial from Nehe Productions.
-// http://nehe.gamedev.net/tutorial/your_first_polygon/13002/
-//
-// TODO: Move more code to the OS-independent Engine. The creation of the OpenGL window can be done via SDL2. 
-//
 
 // Windows specific includes
 #include <windows.h>
@@ -43,23 +38,19 @@
 #include "..\..\ThirdParty\RefKeen\be_st.h"
 #include "..\..\ThirdParty\RefKeen\id_sd.h"
 #include "..\..\ThirdParty\SDL\include\SDL_mouse.h"
+#include "..\..\ThirdParty\SDL\include\SDL.h"
 
-HDC			hDC=NULL;		// Private GDI Device Context
-HGLRC		hRC=NULL;		// Permanent Rendering Context
-HWND		hWnd=NULL;		// Holds Our Window Handle
-HINSTANCE	hInstance;		// Holds The Instance Of The Application
+bool	active = true;		// Window Active Flag
 
-bool	active=TRUE;		// Window Active Flag Set To TRUE By Default
-
-LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
-RECT orgMouseClipArea;
+SDL_Window* SDLwindow;
+SDL_Renderer* SDLrenderer;
+SDL_GLContext glcontext;
 
 EngineCore* engineCore;
 IGame* game;
 RendererOpenGLWin32 renderer;
 PlayerInput playerInput;
 SystemWin32 systemWin32;
-int32_t cursorDisplayCount = 0;
 
 // The hard-coded font data below is used to display text in the game selection dialog, even when no game data was found at all.
 // TODO: Move font data to a separate utility class.
@@ -636,159 +627,42 @@ bool GetCatacombsPackGOGPath(std::string& path)
     return isGogCatacombsPathFound;
 }
 
-GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
+GLvoid KillGLWindow(GLvoid)
 {
-	if (hRC)											// Do We Have A Rendering Context?
-	{
-		if (!wglMakeCurrent(NULL,NULL))					// Are We Able To Release The DC And RC Contexts?
-		{
-			MessageBox(NULL,"Release Of DC And RC Failed.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
-		}
-
-		if (!wglDeleteContext(hRC))						// Are We Able To Delete The RC?
-		{
-			MessageBox(NULL,"Release Rendering Context Failed.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
-		}
-		hRC=NULL;										// Set RC To NULL
-	}
-
-	if (hDC && !ReleaseDC(hWnd,hDC))					// Are We Able To Release The DC
-	{
-		MessageBox(NULL,"Release Device Context Failed.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
-		hDC=NULL;										// Set DC To NULL
-	}
-
-	if (hWnd && !DestroyWindow(hWnd))					// Are We Able To Destroy The Window?
-	{
-		MessageBox(NULL,"Could Not Release hWnd.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
-		hWnd=NULL;										// Set hWnd To NULL
-	}
-
-	if (!UnregisterClass("OpenGL",hInstance))			// Are We Able To Unregister Class
-	{
-		MessageBox(NULL,"Could Not Unregister Class.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
-		hInstance=NULL;									// Set hInstance To NULL
-	}
+    SDL_GL_DeleteContext(glcontext);
+    SDL_DestroyRenderer(SDLrenderer);
+    SDL_DestroyWindow(SDLwindow);
 }
  
 BOOL CreateGLWindow(int width, int height, int bits)
 {
-	GLuint		PixelFormat;			// Holds The Results After Searching For A Match
-	WNDCLASS	wc;						// Windows Class Structure
-	DWORD		dwExStyle;				// Window Extended Style
-	DWORD		dwStyle;				// Window Style
-	RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
-	WindowRect.left=(long)0;			// Set Left Value To 0
-	WindowRect.right=(long)width;		// Set Right Value To Requested Width
-	WindowRect.top=(long)0;				// Set Top Value To 0
-	WindowRect.bottom=(long)height;		// Set Bottom Value To Requested Height
-
-	hInstance			= GetModuleHandle(NULL);				// Grab An Instance For Our Window
-	wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;	// Redraw On Size, And Own DC For Window.
-	wc.lpfnWndProc		= (WNDPROC) WndProc;					// WndProc Handles Messages
-	wc.cbClsExtra		= 0;									// No Extra Window Data
-	wc.cbWndExtra		= 0;									// No Extra Window Data
-	wc.hInstance		= hInstance;							// Set The Instance
-	wc.hIcon			= LoadIcon(NULL, IDI_WINLOGO);			// Load The Default Icon
-	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
-	wc.hbrBackground	= NULL;									// No Background Required For GL
-	wc.lpszMenuName		= NULL;									// We Don't Want A Menu
-	wc.lpszClassName	= "OpenGL";								// Set The Class Name
-
-	if (!RegisterClass(&wc))									// Attempt To Register The Window Class
-	{
-		MessageBox(NULL,"Failed To Register The Window Class.","ERROR",MB_OK|MB_ICONEXCLAMATION);
-		return FALSE;											// Return FALSE
-	}
-	
-	dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;			// Window Extended Style
-	dwStyle=WS_OVERLAPPEDWINDOW;							// Windows Style
-
-	AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);		// Adjust Window To True Requested Size
+    SDL_Init(SDL_INIT_VIDEO);
 
     const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo();
+    SDLwindow = SDL_CreateWindow(
+        windowTitle.c_str(),                  // window title
+        SDL_WINDOWPOS_UNDEFINED,           // initial x position
+        SDL_WINDOWPOS_UNDEFINED,           // initial y position
+        width,                               // width, in pixels
+        height,                               // height, in pixels
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE                  // flags - see below
+    );
 
-	// Create The Window
-	if (!(hWnd=CreateWindowEx(	dwExStyle,							// Extended Style For The Window
-								"OpenGL",							// Class Name
-                                windowTitle.c_str(),				// Window Title
-								dwStyle |							// Defined Window Style
-								WS_CLIPSIBLINGS |					// Required Window Style
-								WS_CLIPCHILDREN,					// Required Window Style
-								0, 0,								// Window Position
-								WindowRect.right-WindowRect.left,	// Calculate Window Width
-								WindowRect.bottom-WindowRect.top,	// Calculate Window Height
-								NULL,								// No Parent Window
-								NULL,								// No Menu
-								hInstance,							// Instance
-								NULL)))								// Dont Pass Anything To WM_CREATE
-	{
-		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Window Creation Error.","ERROR",MB_OK|MB_ICONEXCLAMATION);
-		return FALSE;								// Return FALSE
-	}
+    // Check that the window was successfully created
+    if (SDLwindow == NULL) {
+    // In the case that the window could not be made...
+    printf("Could not create window: %s\n", SDL_GetError());
+    return FALSE;
+    }
 
-	static	PIXELFORMATDESCRIPTOR pfd=				// pfd Tells Windows How We Want Things To Be
-	{
-		sizeof(PIXELFORMATDESCRIPTOR),				// Size Of This Pixel Format Descriptor
-		1,											// Version Number
-		PFD_DRAW_TO_WINDOW |						// Format Must Support Window
-		PFD_SUPPORT_OPENGL |						// Format Must Support OpenGL
-		PFD_DOUBLEBUFFER,							// Must Support Double Buffering
-		PFD_TYPE_RGBA,								// Request An RGBA Format
-		(BYTE)bits,										// Select Our Color Depth
-		0, 0, 0, 0, 0, 0,							// Color Bits Ignored
-		0,											// No Alpha Buffer
-		0,											// Shift Bit Ignored
-		0,											// No Accumulation Buffer
-		0, 0, 0, 0,									// Accumulation Bits Ignored
-		16,											// 16Bit Z-Buffer (Depth Buffer)  
-		0,											// No Stencil Buffer
-		0,											// No Auxiliary Buffer
-		PFD_MAIN_PLANE,								// Main Drawing Layer
-		0,											// Reserved
-		0, 0, 0										// Layer Masks Ignored
-	};
-	
-	if (!(hDC=GetDC(hWnd)))							// Did We Get A Device Context?
-	{
-		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Create A GL Device Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
-		return FALSE;								// Return FALSE
-	}
+    SDLrenderer = SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED);
 
-	if (!(PixelFormat=ChoosePixelFormat(hDC,&pfd)))	// Did Windows Find A Matching Pixel Format?
-	{
-		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Find A Suitable PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
-		return FALSE;								// Return FALSE
-	}
+    SDL_ShowWindow(SDLwindow);
 
-	if(!SetPixelFormat(hDC,PixelFormat,&pfd))		// Are We Able To Set The Pixel Format?
-	{
-		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Set The PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
-		return FALSE;								// Return FALSE
-	}
+    glcontext = SDL_GL_CreateContext(SDLwindow);
 
-	if (!(hRC=wglCreateContext(hDC)))				// Are We Able To Get A Rendering Context?
-	{
-		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Create A GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
-		return FALSE;								// Return FALSE
-	}
-
-	if(!wglMakeCurrent(hDC,hRC))					// Try To Activate The Rendering Context
-	{
-		KillGLWindow();								// Reset The Display
-		MessageBox(NULL,"Can't Activate The GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
-		return FALSE;								// Return FALSE
-	}
-
-	ShowWindow(hWnd,SW_SHOW);						// Show The Window
-	SetForegroundWindow(hWnd);						// Slightly Higher Priority
-	SetFocus(hWnd);									// Sets Keyboard Focus To The Window
     renderer.Setup();
+    
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
 
     BE_ST_InitCommon();
@@ -799,190 +673,40 @@ BOOL CreateGLWindow(int width, int height, int bits)
 	return TRUE;									// Success
 }
 
-// Function MapLeftRightKeys was first published on StackOverflow by Michael Burr:
-// https://stackoverflow.com/questions/5681284/how-do-i-distinguish-between-left-and-right-keys-ctrl-and-alt
-WPARAM MapLeftRightKeys(WPARAM vk, LPARAM lParam)
+void UpdatePlayerInput()
 {
-    WPARAM new_vk = vk;
-    UINT scancode = (lParam & 0x00ff0000) >> 16;
-    int extended = (lParam & 0x01000000) != 0;
+    SDL_PumpEvents();
+    int numKeys;
+    const Uint8 *state = SDL_GetKeyboardState(&numKeys);
 
-    switch (vk) {
-    case VK_SHIFT:
-        new_vk = MapVirtualKey(scancode, MAPVK_VSC_TO_VK_EX);
-        break;
-    case VK_CONTROL:
-        new_vk = extended ? VK_RCONTROL : VK_LCONTROL;
-        break;
-    case VK_MENU:
-        new_vk = extended ? VK_RMENU : VK_LMENU;
-        break;
-    default:
-        // not a key we map from generic to left/right specialized
-        //  just return it.
-        new_vk = vk;
-        break;
+    for (int i = 0; i < numKeys; i++)
+    {
+        playerInput.SetKeyPressed(SDL_GetKeyFromScancode((SDL_Scancode)(i)), state[i]);
     }
 
-    return new_vk;
+    int x, y;
+    const uint32_t mouseState = SDL_GetRelativeMouseState(&x, &y);
+    playerInput.SetMouseXPos(x);
+    playerInput.SetMouseYPos(y);
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseState & SDL_BUTTON(SDL_BUTTON_LEFT));
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE));
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT));
+    playerInput.SetHasFocus(SDL_GetMouseFocus() == SDLwindow);
 }
 
-LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
-							UINT	uMsg,			// Message For This Window
-							WPARAM	wParam,			// Additional Message Information
-							LPARAM	lParam)			// Additional Message Information
+void HandleWindowEvent(const SDL_WindowEvent * event)
 {
-	switch (uMsg)									// Check For Windows Messages
-	{
-		case WM_ACTIVATE:							// Watch For Window Activate Message
-		{
-			if (!HIWORD(wParam))					// Check Minimization State
-			{
-				active=TRUE;						// Program Is Active
-			}
-			else
-			{
-				active=FALSE;						// Program Is No Longer Active
-			}
-
-			return 0;								// Return To The Message Loop
-		}
-
-		case WM_SYSCOMMAND:
-		{
-			switch (wParam)
-			{
-				case SC_SCREENSAVE:
-				case SC_MONITORPOWER:
-					return 0;
-			}
-			break;
-		}
-
-		case WM_CLOSE:								// Did We Receive A Close Message?
-		{
-			PostQuitMessage(0);						// Send A Quit Message
-			return 0;								// Jump Back
-		}
-
-		case WM_KEYDOWN:							// Is A Key Being Held Down?
-		{
-            playerInput.SetKeyPressed(MapLeftRightKeys(wParam, lParam), true);
-			return 0;
-		}
-
-		case WM_KEYUP:								// Has A Key Been Released?
-		{
-			playerInput.SetKeyPressed(MapLeftRightKeys(wParam, lParam), false);					// If So, Mark It As FALSE
-			return 0;
-		}
-
-        case WM_SYSKEYDOWN:
-            {
-                if (wParam == VK_F10)
-                {
-                    playerInput.SetKeyPressed(wParam, true);
-                }
-                if (wParam == VK_MENU)
-                {
-                    playerInput.SetKeyPressed(MapLeftRightKeys(wParam, lParam), true);
-                }
-                return 0;
-            }
-
-        case WM_SYSKEYUP:
-            {
-                if (wParam == VK_F10)
-                {
-                    playerInput.SetKeyPressed(wParam, false);
-                }
-                if (wParam == VK_MENU)
-                {
-                    playerInput.SetKeyPressed(MapLeftRightKeys(wParam, lParam), false);
-                }
-                return 0;
-            }
-
-		case WM_SIZE:								// Resize The OpenGL Window
-		{
-			ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));  // LoWord=Width, HiWord=Height
-			return 0;								// Jump Back
-		}
-
-        case WM_INPUT: 
-            {
-                UINT dwSize;
-
-                GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize, 
-                    sizeof(RAWINPUTHEADER));
-                LPBYTE lpb = new BYTE[dwSize];
-                if (lpb == NULL) 
-                {
-                    return 0;
-                } 
-
-                if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, 
-                    sizeof(RAWINPUTHEADER)) != dwSize )
-                {
-
-                }
-
-                RAWINPUT* raw = (RAWINPUT*)lpb;
-
-                if (raw->header.dwType == RIM_TYPEMOUSE) 
-                {
-                    playerInput.SetMouseXPos(raw->data.mouse.lLastX);
-                    playerInput.SetMouseYPos(raw->data.mouse.lLastY);
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_LEFT, true);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_UP)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_LEFT, false);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_MIDDLE_BUTTON_DOWN)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, true);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_MIDDLE_BUTTON_UP)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, false);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_RIGHT, true);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_UP)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_RIGHT, false);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_BUTTON_4_DOWN)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_X1, true);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_BUTTON_4_UP)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_X1, false);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_BUTTON_5_DOWN)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_X2, true);
-                    }
-                    if (raw->data.mouse.usButtonFlags & RI_MOUSE_BUTTON_5_UP)
-                    {
-                        playerInput.SetMouseButtonPressed(SDL_BUTTON_X2, false);
-                    }
-                } 
-
-                delete[] lpb; 
-                return 0;
-            } 
-
-	}
-
-	// Pass All Unhandled Messages To DefWindowProc
-	return DefWindowProc(hWnd,uMsg,wParam,lParam);
+    switch (event->event) {
+    case SDL_WINDOWEVENT_RESIZED:
+    case SDL_WINDOWEVENT_SIZE_CHANGED:
+        int w, h;
+        SDL_GetWindowSize(SDLwindow, &w, &h);
+        ReSizeGLScene(w, h);
+        break;
+    case SDL_WINDOWEVENT_CLOSE:
+        active = false;
+        break;
+    }
 }
 
 
@@ -991,10 +715,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					LPSTR		lpCmdLine,			// Command Line Parameters
 					int			nCmdShow)			// Window Show State
 {
-	MSG		msg;									// Windows Message Structure
-
     /* initialize random seed: */
     srand ((unsigned int)time(NULL));
+
+    SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS);
 
     const uint8_t GameIdNotDetected = 0;
     const uint8_t GameIdCatacombAbyssv113 = 1;
@@ -1031,52 +755,35 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     }
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow(1024,768,16))
+	if (!CreateGLWindow(800,600,16))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
 
-    RAWINPUTDEVICE Rid[1];
-
-    Rid[0].usUsagePage = 0x01; 
-    Rid[0].usUsage = 0x02; 
-    Rid[0].dwFlags = RIDEV_INPUTSINK; //0x0; //RIDEV_NOLEGACY;   // adds HID mouse and also ignores legacy mouse messages
-    Rid[0].hwndTarget = hWnd;
-
-    RegisterRawInputDevices(Rid, 1, sizeof(Rid[0]));
-    GetClipCursor(&orgMouseClipArea);
-
     const uint32_t fontTextureId = renderer.LoadFontIntoTexture(fontData);
     fontForGameSelection = new Font(fontWidth, fontTextureId);
 
-    BOOL done = FALSE;
-
-    while (selectedGame == GameIdNotDetected && done == FALSE)
+    while (selectedGame == GameIdNotDetected && active)
     {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))	// Is There A Message Waiting?
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
         {
-            if (msg.message == WM_QUIT)				// Have We Received A Quit Message?
+            if (event.type == SDL_WINDOWEVENT)
             {
-                done = TRUE;							// If So done=TRUE
+                HandleWindowEvent(&event.window);
             }
-            else									// If Not, Deal With Window Messages
-            {
-                TranslateMessage(&msg);				// Translate The Message
-                DispatchMessage(&msg);				// Dispatch The Message
-            }
-        }
-        else										// If There Are No Messages
-        {
-            renderer.Prepare3DRendering(false, 1.0f, 25);
-            renderer.Prepare2DRendering(false);
-            DrawBox(2, 2, 316, 80);
-            renderer.RenderTextLeftAligned("1. Catacomb Abyss Shareware", fontForGameSelection, EgaBrightWhite, 16, 15);
-            renderer.RenderTextLeftAligned("2. Catacomb Abyss Registered", fontForGameSelection, EgaBrightWhite, 16, 35);
-            renderer.RenderTextLeftAligned("3. Catacomb Armageddon", fontForGameSelection, EgaBrightWhite, 16, 55);
-            renderer.Unprepare2DRendering();
-            SwapBuffers(hDC);					// Swap Buffers (Double Buffering)
         }
 
+        renderer.Prepare3DRendering(false, 1.0f, 25);
+        renderer.Prepare2DRendering(false);
+        DrawBox(2, 2, 316, 80);
+        renderer.RenderTextLeftAligned("1. Catacomb Abyss Shareware", fontForGameSelection, EgaBrightWhite, 16, 15);
+        renderer.RenderTextLeftAligned("2. Catacomb Abyss Registered", fontForGameSelection, EgaBrightWhite, 16, 35);
+        renderer.RenderTextLeftAligned("3. Catacomb Armageddon", fontForGameSelection, EgaBrightWhite, 16, 55);
+        renderer.Unprepare2DRendering();
+        SDL_GL_SwapWindow(SDLwindow);
+
+        UpdatePlayerInput();
         if (playerInput.IsKeyPressed(SDLK_1))
         {
             selectedGame = GameIdCatacombAbyssv113;
@@ -1120,69 +827,42 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
     // Update the window title with the selected game info.
     const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo() + " [" + game->GetName() + "]";
-    SetWindowText(hWnd, windowTitle.c_str());
+    SDL_SetWindowTitle(SDLwindow, windowTitle.c_str());
 
-	while(!done)									// Loop That Runs While done=FALSE
+	while(active)									// Loop That Runs While done=FALSE
 	{
-		if (PeekMessage(&msg,NULL,0,0,PM_REMOVE))	// Is There A Message Waiting?
-		{
-			if (msg.message==WM_QUIT)				// Have We Received A Quit Message?
-			{
-				done=TRUE;							// If So done=TRUE
-			}
-			else									// If Not, Deal With Window Messages
-			{
-				TranslateMessage(&msg);				// Translate The Message
-				DispatchMessage(&msg);				// Dispatch The Message
-			}
-		}
-		else										// If There Are No Messages
-		{
-            if (!active || engineCore->Think())
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_WINDOWEVENT)
             {
-                done=TRUE;
+                HandleWindowEvent(&event.window);
             }
-			else								// Not Time To Quit, Update Screen
-			{
-                playerInput.SetHasFocus(GetFocus() != NULL);
-                engineCore->DrawScene(renderer);
-				SwapBuffers(hDC);					// Swap Buffers (Double Buffering)
-			}
+        }
 
-            if (engineCore->RequiresMouseCapture())
-            {
-                RECT r;
-                GetWindowRect( hWnd, &r);
-                if (r.bottom - r.top > 60 && r.right - r.left > 45)
-                {
-                    r.top += 35;
-                    r.bottom -= 20;
-                    r.right -= 20;
-                    r.left += 20;
-                }
-                ClipCursor( &r );
-                while (cursorDisplayCount >= 0)
-                {
-                    cursorDisplayCount = ShowCursor(FALSE);
-                }	
-            }
-            else
-            {
-                ClipCursor(&orgMouseClipArea);
-                while (cursorDisplayCount < 0)
-                {
-                    cursorDisplayCount = ShowCursor(TRUE);
-                }
-            }
+        if (engineCore->Think())
+        {
+            active = false;
+        }
+		else								// Not Time To Quit, Update Screen
+		{
+            UpdatePlayerInput();
+            SDL_SetRelativeMouseMode(engineCore->RequiresMouseCapture() ? SDL_TRUE : SDL_FALSE);
+            engineCore->DrawScene(renderer);
+            SDL_GL_SwapWindow(SDLwindow);
 		}
+
 	}
+
+    // Kill The Window
+    KillGLWindow();
 
 	// Shutdown
     SD_Shutdown();
     BE_ST_ShutdownAll();
-
-	KillGLWindow();									// Kill The Window
+						
     delete engineCore;
     delete game;
-	return (msg.wParam);							// Exit The Program
+
+    return TRUE;
 }
