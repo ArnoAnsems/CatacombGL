@@ -36,6 +36,13 @@ const AspectRatioData aspectRatios[2] =
     { 10.0f, "Fit to window" }
 };
 
+enum ScreenMode
+{
+    Windowed,
+    Fullscreen,
+    BorderlessWindowed
+};
+
 class ConfigurationSettings
 {
 public:
@@ -43,6 +50,9 @@ public:
 
     void LoadFromFile(const std::string& configurationFile);
     void StoreToFile(const std::string& configurationFile) const;
+
+    ScreenMode GetScreenMode() const;
+    void SetScreenMode(const ScreenMode screenMode);
 
     uint8_t GetAspectRatio() const;
     void SetAspectRatio(const uint8_t ratio);
@@ -75,6 +85,7 @@ public:
     void SetMouseLook(const bool enabled);
 
 private:
+    ScreenMode m_screenMode;
     uint8_t m_aspectRatio;
     uint8_t m_fov;
     IRenderer::TextureFilterSetting m_textureFilter;

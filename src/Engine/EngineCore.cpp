@@ -2440,3 +2440,8 @@ void EngineCore::LoadGameFromFile(const std::string filename)
     const std::string fullPath = filenamePathAbyss + "\\" + filename + ".sav";
     LoadGameFromFileWithFullPath(fullPath);
 }
+
+ScreenMode EngineCore::GetScreenMode() const
+{
+    return m_configurationSettings.GetScreenMode();
+}

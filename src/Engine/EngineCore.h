@@ -53,6 +53,9 @@ public:
     // CatacombGL version info; to be displayed at the top of the application window.
     static const std::string GetVersionInfo();
 
+    // Get the screen mode from the current configuration
+    ScreenMode GetScreenMode() const;
+
 private:
     enum State
     {

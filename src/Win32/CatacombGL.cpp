@@ -42,9 +42,10 @@
 
 bool	active = true;		// Window Active Flag
 
-SDL_Window* SDLwindow;
-SDL_Renderer* SDLrenderer;
-SDL_GLContext glcontext;
+SDL_Window* SDLwindow = NULL;
+SDL_Renderer* SDLrenderer = NULL;
+SDL_GLContext glcontext = NULL;
+ScreenMode m_screenMode = Windowed;
 
 EngineCore* engineCore;
 IGame* game;
@@ -709,6 +710,28 @@ void HandleWindowEvent(const SDL_WindowEvent * event)
     }
 }
 
+void SetScreenMode(const ScreenMode screenMode)
+{
+    if (screenMode == Fullscreen)
+    {
+        // Set the width and height of the fullscreen to the width and height of the desktop area of the
+        // display in use.
+        const int displayIndex = SDL_GetWindowDisplayIndex(SDLwindow);
+        SDL_Rect r;
+        SDL_GetDisplayBounds(displayIndex, &r);
+        const SDL_DisplayMode displayMode = { SDL_PIXELFORMAT_RGB24, r.w, r.h, 0, 0 };
+        SDL_SetWindowDisplayMode(SDLwindow, &displayMode);
+        SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN);
+    }
+    else if (screenMode == BorderlessWindowed)
+    {
+        SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    }
+    else // Windowed
+    {
+        SDL_SetWindowFullscreen(SDLwindow, 0);
+    }
+}
 
 int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					HINSTANCE	hPrevInstance,		// Previous Instance
@@ -847,6 +870,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 		else								// Not Time To Quit, Update Screen
 		{
             UpdatePlayerInput();
+            if (m_screenMode != engineCore->GetScreenMode())
+            {
+                m_screenMode = engineCore->GetScreenMode();
+                SetScreenMode(m_screenMode);
+            }
             SDL_SetRelativeMouseMode(engineCore->RequiresMouseCapture() ? SDL_TRUE : SDL_FALSE);
             engineCore->DrawScene(renderer);
             SDL_GL_SwapWindow(SDLwindow);
