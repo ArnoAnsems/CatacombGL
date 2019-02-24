@@ -147,6 +147,7 @@
     <ClCompile Include="ConfigurationSettings.cpp" />
     <ClCompile Include="ControlsMap.cpp" />
     <ClCompile Include="Decompressor.cpp" />
+    <ClCompile Include="DefaultFont.cpp" />
     <ClCompile Include="EgaGraph.cpp" />
     <ClCompile Include="ExtraMenu.cpp" />
     <ClCompile Include="FileChunk.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="ControlsMap.h" />
     <ClInclude Include="Decompressor.h" />
     <ClInclude Include="Decorate.h" />
+    <ClInclude Include="DefaultFont.h" />
     <ClInclude Include="EgaColor.h" />
     <ClInclude Include="EgaGraph.h" />
     <ClInclude Include="ExtraMenu.h" />
