@@ -156,6 +156,7 @@
     <ClCompile Include="GameDetection.cpp" />
     <ClCompile Include="GameMaps.cpp" />
     <ClCompile Include="EngineCore.cpp" />
+    <ClCompile Include="GameSelection.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HelpPages.cpp" />
     <ClCompile Include="Huffman.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="FileChunk.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FramesCounter.h" />
+    <ClInclude Include="GameSelection.h" />
     <ClInclude Include="HelpPages.h" />
     <ClInclude Include="IGame.h" />
     <ClInclude Include="GameDetection.h" />

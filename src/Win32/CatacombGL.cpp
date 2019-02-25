@@ -30,6 +30,7 @@
 #include "..\Engine\PlayerInput.h"
 #include "..\Engine\GameDetection.h"
 #include "..\Engine\DefaultFont.h"
+#include "..\Engine\GameSelection.h"
 
 #include "..\Abyss\GameAbyss.h"
 #include "..\Abyss\GameDetectionAbyss.h"
@@ -53,26 +54,6 @@ IGame* game;
 RendererOpenGLWin32 renderer;
 PlayerInput playerInput;
 SystemWin32 systemWin32;
-
-void DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height)
-{
-    renderer.Render2DBar(x, y, width, 1, EgaBrightWhite);
-    renderer.Render2DBar(x + width - 1, y + 1, 1, height - 1, EgaBrightWhite);
-    renderer.Render2DBar(x, y + 1, 1, height - 1, EgaDarkGray);
-    renderer.Render2DBar(x + 1, y + height - 1, width - 2, 1, EgaDarkGray);
-
-    renderer.Render2DBar(x + 1, y + 1, width - 2, 4, EgaLightGray);
-    renderer.Render2DBar(x + 1, y + height - 5, width - 2, 4, EgaLightGray);
-    renderer.Render2DBar(x + 1, y + 5, 4, height - 10, EgaLightGray);
-    renderer.Render2DBar(x + width - 5, y + 5, 4, height - 10, EgaLightGray);
-
-    renderer.Render2DBar(x + 5, y + 5, width - 10, 1, EgaBlue);
-    renderer.Render2DBar(x + width - 6, y + 6, 1, height - 11, EgaBlue);
-    renderer.Render2DBar(x + 5, y + 6, 1, height - 12, EgaBrightBlue);
-    renderer.Render2DBar(x + 5, y + height - 6, width - 11, 1, EgaBrightBlue);
-
-    renderer.Render2DBar(x + 6, y + 6, width - 12, height - 12, EgaDarkGray);
-}
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
@@ -253,6 +234,17 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 		return 0;									// Quit If Window Was Not Created
 	}
 
+    GameSelection gameSelection(renderer);
+
+    GameSelectionPresentation gameSelectionPresentation;
+    const GameDetectionState abyssv133DetectionState = (gameDetectionAbyssV113.GetBestMatch().score == 0) ? NotDetected : Detected;
+    gameSelectionPresentation.gameList.push_back(std::make_pair("1. Catacomb Abyss Shareware v1.13", abyssv133DetectionState));
+    const GameDetectionState abyssv124DetectionState = (gameDetectionAbyssV124.GetBestMatch().score == 0) ? NotDetected : Detected;
+    gameSelectionPresentation.gameList.push_back(std::make_pair("2. Catacomb Abyss Registered v1.24", abyssv124DetectionState));
+    const GameDetectionState armageddonDetectionState = (gameDetectionArmageddonv102.GetBestMatch().score == 0) ? NotDetected : Detected;
+    gameSelectionPresentation.gameList.push_back(std::make_pair("3. Catacomb Armageddon v1.02", armageddonDetectionState));
+    gameSelectionPresentation.gameList.push_back(std::make_pair("4. Catacomb Apocalypse", NotSupported));
+
     while (selectedGame == GameIdNotDetected && active)
     {
         SDL_Event event;
@@ -264,14 +256,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             }
         }
 
-        renderer.Prepare3DRendering(false, 1.0f, 25);
-        renderer.Prepare2DRendering(false);
-        DrawBox(2, 2, 316, 80);
-        const Font* defaultFont = DefaultFont::Get(renderer);
-        renderer.RenderTextLeftAligned("1. Catacomb Abyss Shareware", defaultFont, EgaBrightWhite, 16, 15);
-        renderer.RenderTextLeftAligned("2. Catacomb Abyss Registered", defaultFont, EgaBrightWhite, 16, 35);
-        renderer.RenderTextLeftAligned("3. Catacomb Armageddon", defaultFont, EgaBrightWhite, 16, 55);
-        renderer.Unprepare2DRendering();
+        gameSelection.Draw(gameSelectionPresentation);
         SDL_GL_SwapWindow(SDLwindow);
 
         UpdatePlayerInput();
