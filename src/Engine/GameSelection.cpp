@@ -28,46 +28,82 @@ GameSelection::~GameSelection()
 
 }
 
-void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height)
+void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const char* title)
 {
-    m_renderer.Render2DBar(x, y, width, 1, EgaBrightWhite);
-    m_renderer.Render2DBar(x + width - 1, y + 1, 1, height - 1, EgaBrightWhite);
-    m_renderer.Render2DBar(x, y + 1, 1, height - 1, EgaDarkGray);
-    m_renderer.Render2DBar(x + 1, y + height - 1, width - 2, 1, EgaDarkGray);
+    const uint8_t shadowHor = 1;
+    const uint8_t shadowVert = 2;
+    const uint8_t borderHor = 3;
+    const uint8_t borderVert = 6;
+    // Outer shadow
+    m_renderer.Render2DBar(x, y, width, shadowHor, EgaBrightWhite); // top
+    m_renderer.Render2DBar(x, y + height - shadowHor, width, shadowHor, EgaDarkGray); // bottom
+    m_renderer.Render2DBar(x, y + shadowHor, shadowVert, height - (2 * shadowHor), EgaDarkGray); // left
+    m_renderer.Render2DBar(x + width - shadowVert, y + shadowHor, shadowVert, height - (2 * shadowHor), EgaBrightWhite);
 
-    m_renderer.Render2DBar(x + 1, y + 1, width - 2, 4, EgaLightGray);
-    m_renderer.Render2DBar(x + 1, y + height - 5, width - 2, 4, EgaLightGray);
-    m_renderer.Render2DBar(x + 1, y + 5, 4, height - 10, EgaLightGray);
-    m_renderer.Render2DBar(x + width - 5, y + 5, 4, height - 10, EgaLightGray);
+    // Border
+    m_renderer.Render2DBar(x + shadowVert, y + shadowHor, width - (2 * shadowVert), borderHor, EgaLightGray); // top
+    m_renderer.Render2DBar(x + shadowVert, y + height - shadowHor - borderHor, width - (2 * shadowVert), borderHor, EgaLightGray); // bottom
+    m_renderer.Render2DBar(x + shadowVert, y + shadowHor + borderHor, borderVert, height - (2 * (borderHor + shadowHor)), EgaLightGray); // left
+    m_renderer.Render2DBar(x + width - shadowVert - borderVert, y + shadowHor + borderHor, borderVert, height - (2 * (borderHor + shadowHor)), EgaLightGray);
 
-    m_renderer.Render2DBar(x + 5, y + 5, width - 10, 1, EgaBlue);
-    m_renderer.Render2DBar(x + width - 6, y + 6, 1, height - 11, EgaBlue);
-    m_renderer.Render2DBar(x + 5, y + 6, 1, height - 12, EgaBrightBlue);
-    m_renderer.Render2DBar(x + 5, y + height - 6, width - 11, 1, EgaBrightBlue);
+    // Inner shadow
+    m_renderer.Render2DBar(x + shadowVert + borderVert, y + shadowHor + borderHor, width - (2 * (shadowVert + borderVert)), shadowHor, EgaBlue); // top
+    m_renderer.Render2DBar(x + shadowVert + borderVert, y + height - (2 * shadowHor) - borderHor, width - (2 * (shadowVert + borderVert)), shadowHor, EgaBrightBlue); // bottom
+    m_renderer.Render2DBar(x + shadowVert + borderVert, y + (2 * shadowHor) + borderHor, shadowVert, height - (4 * shadowHor) - (2 * borderHor), EgaBrightBlue); // left
+    m_renderer.Render2DBar(x + width - (2 * shadowVert) - borderVert, y + (2 * shadowHor) + borderHor, shadowVert, height - (4 * shadowHor) - (2 * borderHor), EgaBlue); // right
 
-    m_renderer.Render2DBar(x + 6, y + 6, width - 12, height - 12, EgaDarkGray);
+    // Inner area
+    m_renderer.Render2DBar(x + (2 * shadowVert) + borderVert, y + (2 * shadowHor) + borderHor, width - (4 * shadowVert) - (2 * borderVert), height - (4 * shadowHor) - (2 * borderHor), EgaDarkGray);
+
+    if (title != NULL)
+    {
+        m_renderer.Render2DBar(x + (2 * shadowVert) + borderVert, y + (2 * shadowHor) + borderHor, width - (4 * shadowVert) - (2 * borderVert), 11, EgaLightGray);
+        m_renderer.RenderTextCentered(title, DefaultFont::Get(m_renderer), EgaBlack, x + (width / 2), y + (2 * shadowHor) + borderHor + 1);
+    }
 }
 
 void GameSelection::Draw(const GameSelectionPresentation& presentation)
 {
+    const Font* defaultFont = DefaultFont::Get(m_renderer);
     m_renderer.Prepare3DRendering(false, 1.0f, 25);
     m_renderer.Prepare2DRendering(true);
-    DrawBox(2, 2, 636, 80);
-    const Font* defaultFont = DefaultFont::Get(m_renderer);
-    for (uint8_t gameIndex = 0; gameIndex < presentation.gameList.size(); gameIndex++)
+    DrawBox(2, 2, 636, 44, "Catacomb Games Library");
+    m_renderer.RenderTextLeftAligned("Launch a game by pressing the corresponding number [1-6] on the keyboard.", defaultFont, EgaBrightWhite, 18, 19);
+    m_renderer.RenderTextLeftAligned("In case a game is not found, use the ENTER and arrow keys to browse to the game data.", defaultFont, EgaBrightWhite, 18, 29);
+    DrawBox(2, 48, 316, 68, "Catacombs Pack (GOG)");
+    DrawBox(322, 48, 316, 68, "Shareware");
+    for (uint8_t gameIndex = 0; gameIndex < presentation.gameListCatacombsPack.size(); gameIndex++)
     {
-        const char* gameName = presentation.gameList.at(gameIndex).first.c_str();
-        m_renderer.RenderTextLeftAligned(gameName, defaultFont, EgaBrightWhite, 16, 15 + (15 * gameIndex));
-        const GameDetectionState detectionState = presentation.gameList.at(gameIndex).second;
+        const char* gameName = presentation.gameListCatacombsPack.at(gameIndex).first.c_str();
+        m_renderer.RenderTextLeftAligned(gameName, defaultFont, EgaBrightWhite, 18, 68 + (10 * gameIndex));
+        const GameDetectionState detectionState = presentation.gameListCatacombsPack.at(gameIndex).second;
         const char* detectionStateStr =
-            (detectionState == Detected) ? "Detected" :
-            (detectionState == NotDetected) ? "Not Detected" :
-            "Not Supported";
+            (detectionState == Detected) ? "Ready" :
+            (detectionState == NotDetected) ? "Not Found" :
+            "N/A";
         const egaColor detectionStateColor =
             (detectionState == Detected) ? EgaGreen :
             (detectionState == NotDetected) ? EgaRed :
             EgaLightGray;
-        m_renderer.RenderTextCentered(detectionStateStr, defaultFont, detectionStateColor, 300, 15 + (15 * gameIndex));
+        m_renderer.RenderTextCentered(detectionStateStr, defaultFont, detectionStateColor, 274, 68 + (10 * gameIndex));
     }
+    for (uint8_t gameIndex = 0; gameIndex < presentation.gameListShareware.size(); gameIndex++)
+    {
+        const char* gameName = presentation.gameListShareware.at(gameIndex).first.c_str();
+        m_renderer.RenderTextLeftAligned(gameName, defaultFont, EgaBrightWhite, 338, 68 + (10 * gameIndex));
+        const GameDetectionState detectionState = presentation.gameListShareware.at(gameIndex).second;
+        const char* detectionStateStr =
+            (detectionState == Detected) ? "Ready" :
+            (detectionState == NotDetected) ? "Not Found" :
+            "N/A";
+        const egaColor detectionStateColor =
+            (detectionState == Detected) ? EgaGreen :
+            (detectionState == NotDetected) ? EgaRed :
+            EgaLightGray;
+        m_renderer.RenderTextCentered(detectionStateStr, defaultFont, detectionStateColor, 594, 68 + (10 * gameIndex));
+    }
+
+    DrawBox(2, 118, 636, 80, "Browse");
+
     m_renderer.Unprepare2DRendering();
 }

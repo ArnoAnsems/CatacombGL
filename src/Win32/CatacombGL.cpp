@@ -237,13 +237,16 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     GameSelection gameSelection(renderer);
 
     GameSelectionPresentation gameSelectionPresentation;
-    const GameDetectionState abyssv133DetectionState = (gameDetectionAbyssV113.GetBestMatch().score == 0) ? NotDetected : Detected;
-    gameSelectionPresentation.gameList.push_back(std::make_pair("1. Catacomb Abyss Shareware v1.13", abyssv133DetectionState));
-    const GameDetectionState abyssv124DetectionState = (gameDetectionAbyssV124.GetBestMatch().score == 0) ? NotDetected : Detected;
-    gameSelectionPresentation.gameList.push_back(std::make_pair("2. Catacomb Abyss Registered v1.24", abyssv124DetectionState));
-    const GameDetectionState armageddonDetectionState = (gameDetectionArmageddonv102.GetBestMatch().score == 0) ? NotDetected : Detected;
-    gameSelectionPresentation.gameList.push_back(std::make_pair("3. Catacomb Armageddon v1.02", armageddonDetectionState));
-    gameSelectionPresentation.gameList.push_back(std::make_pair("4. Catacomb Apocalypse", NotSupported));
+    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("1. Catacomb 3-D: The Descent v1.22", NotSupported));
+    const GameDetectionState abyssv124DetectionState = (gameDetectionAbyssV124.GetBestMatch().score == 0) ? Detected : NotDetected;
+    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("2. Catacomb Abyss v1.24", abyssv124DetectionState));
+    const GameDetectionState armageddonDetectionState = (gameDetectionArmageddonv102.GetBestMatch().score == 0) ? Detected : NotDetected;
+    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("3. Catacomb Armageddon v1.02", armageddonDetectionState));
+    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("4. Catacomb Apocalypse v1.01", NotSupported));
+
+    gameSelectionPresentation.gameListShareware.push_back(std::make_pair("5. Catacomb Abyss v1.12", NotSupported));
+    const GameDetectionState abyssv133DetectionState = (gameDetectionAbyssV113.GetBestMatch().score == 0) ? Detected : NotDetected;
+    gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
 
     while (selectedGame == GameIdNotDetected && active)
     {
@@ -260,7 +263,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         SDL_GL_SwapWindow(SDLwindow);
 
         UpdatePlayerInput();
-        if (playerInput.IsKeyPressed(SDLK_1))
+        if (playerInput.IsKeyPressed(SDLK_6))
         {
             selectedGame = GameIdCatacombAbyssv113;
         }

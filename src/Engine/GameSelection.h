@@ -26,7 +26,8 @@ enum GameDetectionState
 
 struct GameSelectionPresentation
 {
-    std::vector<std::pair<const std::string, const GameDetectionState>> gameList;
+    std::vector<std::pair<const std::string, const GameDetectionState>> gameListCatacombsPack;
+    std::vector<std::pair<const std::string, const GameDetectionState>> gameListShareware;
 };
 
 class GameSelection
@@ -38,7 +39,7 @@ public:
     void Draw(const GameSelectionPresentation& presentation);
 
 private:
-    void DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
+    void DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const char* title);
 
     IRenderer& m_renderer;
 };
