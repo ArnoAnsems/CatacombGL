@@ -234,6 +234,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 		return 0;									// Quit If Window Was Not Created
 	}
 
+    std::string initialSearchFolder = SDL_GetBasePath();
     GameSelection gameSelection(renderer);
 
     GameSelectionPresentation gameSelectionPresentation;
@@ -247,6 +248,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     gameSelectionPresentation.gameListShareware.push_back(std::make_pair("5. Catacomb Abyss v1.12", NotSupported));
     const GameDetectionState abyssv133DetectionState = (gameDetectionAbyssV113.GetBestMatch().score == 0) ? Detected : NotDetected;
     gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
+
+    gameSelectionPresentation.searchFolder = initialSearchFolder;
 
     while (selectedGame == GameIdNotDetected && active)
     {

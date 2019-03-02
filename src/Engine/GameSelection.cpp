@@ -104,6 +104,7 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
     }
 
     DrawBox(2, 118, 636, 80, "Browse");
+    m_renderer.RenderTextLeftAlignedTruncated(presentation.searchFolder.c_str(), defaultFont, EgaBrightYellow, 18, 138, 550);
 
     m_renderer.Unprepare2DRendering();
 }

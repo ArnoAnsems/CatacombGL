@@ -383,6 +383,96 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     glColor3f(1.0f, 1.0f, 1.0f);
 }
 
+void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength)
+{
+    if (text == NULL || font == NULL)
+    {
+        // Nothing to render
+        return;
+    }
+
+    // Set the MODELVIEW matrix to the requested offset
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(GLfloat(offsetX), GLfloat(offsetY), 0.0f);
+
+    // Select the texture from the picture
+    glBindTexture(GL_TEXTURE_2D, font->GetTextureId());
+
+    // Do not wrap the texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
+
+    rgbColor color = EgaToRgb(colorIndex);
+
+    const uint8_t charIndexDot = '.';
+    const uint16_t dotsLength = font->GetCharacterWidth(charIndexDot) * 3;
+
+    uint16_t combinedWidth = 0;
+    for (uint16_t chari = 0; chari < strlen(text); chari++)
+    {
+        const uint8_t charIndex = text[chari];
+        uint16_t charWidth = font->GetCharacterWidth(charIndex);
+        combinedWidth += charWidth;
+    }
+
+    char truncatedText[300];
+    if (combinedWidth <= maxLength)
+    {
+        strcpy_s(truncatedText, text);
+    }
+    else
+    {
+        combinedWidth = 0;
+        uint16_t chari = strlen(text) - 1;
+        bool maxLengthReached = false;
+        while (chari != 0  && !maxLengthReached)
+        {
+            const uint8_t charIndex = text[chari];
+            uint16_t charWidth = font->GetCharacterWidth(charIndex);
+            combinedWidth += charWidth;
+            maxLengthReached = (combinedWidth > maxLength);
+            chari--;
+        }
+        strcpy_s(truncatedText, "...");
+        chari += 2;
+        uint16_t i = 3;
+        while (chari < strlen(text))
+        {
+            truncatedText[i] = text[chari];
+            chari++;
+            i++;
+        }
+        truncatedText[i] = 0;
+    }
+
+    // Draw the texture as a quad
+    combinedWidth = 0;
+    glBegin(GL_QUADS);
+    glColor3f((float)(color.red) / 256.0f, (float)(color.green) / 256.0f, (float)(color.blue) / 256.0f);
+    for (uint16_t chari = 0; chari < strlen(truncatedText); chari++)
+    {
+        const uint8_t charIndex = truncatedText[chari];
+        uint16_t charWidth = font->GetCharacterWidth(charIndex);
+        float textureHeight = 1.0f / 16.0f;
+        float textureWidth = (float)(charWidth) / 256.0f;
+        float textureOffsetX = float(charIndex % 16) / 16.0f;
+        float textureOffsetY = float(charIndex / 16) / 16.0f;
+
+
+        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, 10);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, 10);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(combinedWidth + charWidth, 0);
+        glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(combinedWidth, 0);
+        combinedWidth += charWidth;
+    }
+    glEnd();
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+}
+
 uint8_t RendererOpenGLWin32::RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
 {
     uint8_t numberOfLines = 0;
