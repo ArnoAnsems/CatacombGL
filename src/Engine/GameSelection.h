@@ -29,6 +29,7 @@ struct GameSelectionPresentation
     std::vector<std::pair<const std::string, const GameDetectionState>> gameListCatacombsPack;
     std::vector<std::pair<const std::string, const GameDetectionState>> gameListShareware;
     std::string searchFolder;
+    std::vector<std::string> subFolders;
 };
 
 class GameSelection

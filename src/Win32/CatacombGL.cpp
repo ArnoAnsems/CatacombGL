@@ -251,6 +251,28 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
     gameSelectionPresentation.searchFolder = initialSearchFolder;
 
+    std::string ffsearchFolder = initialSearchFolder + '*';
+    WIN32_FIND_DATA findData;
+    HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, NULL, 0);
+
+    if (searchHandle != NULL)
+    {
+        if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0)
+        {
+            gameSelectionPresentation.subFolders.push_back(findData.cFileName);
+        }
+            
+        while (FindNextFile(searchHandle, &findData))
+        {
+            if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0)
+            {
+                gameSelectionPresentation.subFolders.push_back(findData.cFileName);
+            }
+        }
+        FindClose(searchHandle);
+    }
+
+
     while (selectedGame == GameIdNotDetected && active)
     {
         SDL_Event event;
