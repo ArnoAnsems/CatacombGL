@@ -184,6 +184,33 @@ void SetScreenMode(const ScreenMode screenMode)
     }
 }
 
+void GetSubFolders(const std::string selectedFolder, std::vector<std::string>& subFolders)
+{
+    subFolders.clear();
+    subFolders.push_back(".."); // Make sure the "return to parent" folder ends up at the top of the list.
+
+    std::string ffsearchFolder = selectedFolder + '*';
+    WIN32_FIND_DATA findData;
+    HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, NULL, 0);
+
+    if (searchHandle != NULL)
+    {
+        if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
+        {
+            subFolders.push_back(findData.cFileName);
+        }
+
+        while (FindNextFile(searchHandle, &findData))
+        {
+            if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
+            {
+                subFolders.push_back(findData.cFileName);
+            }
+        }
+        FindClose(searchHandle);
+    }
+}
+
 int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					HINSTANCE	hPrevInstance,		// Previous Instance
 					LPSTR		lpCmdLine,			// Command Line Parameters
@@ -250,28 +277,9 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
 
     gameSelectionPresentation.searchFolder = initialSearchFolder;
+    gameSelectionPresentation.selectedSubFolder = 0;
 
-    std::string ffsearchFolder = initialSearchFolder + '*';
-    WIN32_FIND_DATA findData;
-    HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, NULL, 0);
-
-    if (searchHandle != NULL)
-    {
-        if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0)
-        {
-            gameSelectionPresentation.subFolders.push_back(findData.cFileName);
-        }
-            
-        while (FindNextFile(searchHandle, &findData))
-        {
-            if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0)
-            {
-                gameSelectionPresentation.subFolders.push_back(findData.cFileName);
-            }
-        }
-        FindClose(searchHandle);
-    }
-
+    GetSubFolders(initialSearchFolder, gameSelectionPresentation.subFolders);
 
     while (selectedGame == GameIdNotDetected && active)
     {
@@ -302,7 +310,57 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         {
             selectedGame = GameIdCatacombArmageddonv102;
         }
+
+        if (playerInput.IsKeyJustPressed(SDLK_UP))
+        {
+            if (gameSelectionPresentation.selectedSubFolder == 0)
+            {
+                gameSelectionPresentation.selectedSubFolder = (uint32_t)gameSelectionPresentation.subFolders.size() - 1;
+            }
+            else
+            {
+                gameSelectionPresentation.selectedSubFolder--;
+            }
+        }
+
+        if (playerInput.IsKeyJustPressed(SDLK_DOWN))
+        {
+            if (gameSelectionPresentation.selectedSubFolder == (uint32_t)gameSelectionPresentation.subFolders.size() - 1)
+            {
+                gameSelectionPresentation.selectedSubFolder = 0;
+            }
+            else
+            {
+                gameSelectionPresentation.selectedSubFolder++;
+            }
+        }
+
+        if (playerInput.IsKeyJustPressed(SDLK_RETURN))
+        {
+            const std::string subFolder = gameSelectionPresentation.subFolders.at(gameSelectionPresentation.selectedSubFolder);
+
+            if (subFolder != "..")
+            {
+                gameSelectionPresentation.searchFolder += subFolder;
+                gameSelectionPresentation.searchFolder += "\\";
+                gameSelectionPresentation.selectedSubFolder = 0;
+            }
+            else
+            {
+                size_t backslashPos = gameSelectionPresentation.searchFolder.find_last_of('\\', gameSelectionPresentation.searchFolder.size() - 2);
+                if (backslashPos != std::string::npos)
+                {
+                    gameSelectionPresentation.searchFolder.erase(backslashPos + 1);
+                }
+            }
+
+            GetSubFolders(gameSelectionPresentation.searchFolder, gameSelectionPresentation.subFolders);
+        }
+
+        playerInput.ClearJustPressed();
     }
+
+
 
     const DetectionReport& report =
         (selectedGame == GameIdCatacombAbyssv113) ? gameDetectionAbyssV113.GetBestMatch() :
