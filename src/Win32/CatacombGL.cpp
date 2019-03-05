@@ -187,27 +187,47 @@ void SetScreenMode(const ScreenMode screenMode)
 void GetSubFolders(const std::string selectedFolder, std::vector<std::string>& subFolders)
 {
     subFolders.clear();
-    subFolders.push_back(".."); // Make sure the "return to parent" folder ends up at the top of the list.
-
-    std::string ffsearchFolder = selectedFolder + '*';
-    WIN32_FIND_DATA findData;
-    HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, NULL, 0);
-
-    if (searchHandle != NULL)
+    if (selectedFolder.empty())
     {
-        if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
+        // No search folder. List all the logical drives instead.
+        uint32_t logicalDrives = GetLogicalDrives();
+        for (uint32_t driveIndex = 0; driveIndex < 26; driveIndex++)
         {
-            subFolders.push_back(findData.cFileName);
+            const uint32_t logicalDriveBit = 1 << driveIndex;
+            if (logicalDrives & logicalDriveBit)
+            {
+                char logicalDriveName[3];
+                logicalDriveName[0] = 'A' + driveIndex;
+                logicalDriveName[1] = ':';
+                logicalDriveName[2] = 0;
+                subFolders.push_back(logicalDriveName);
+            }
         }
+    }
+    else
+    {
+        subFolders.push_back(".."); // Make sure the "return to parent" folder ends up at the top of the list.
 
-        while (FindNextFile(searchHandle, &findData))
+        std::string ffsearchFolder = selectedFolder + '*';
+        WIN32_FIND_DATA findData;
+        HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, NULL, 0);
+
+        if (searchHandle != NULL)
         {
             if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
             {
                 subFolders.push_back(findData.cFileName);
             }
+
+            while (FindNextFile(searchHandle, &findData))
+            {
+                if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
+                {
+                    subFolders.push_back(findData.cFileName);
+                }
+            }
+            FindClose(searchHandle);
         }
-        FindClose(searchHandle);
     }
 }
 
@@ -278,6 +298,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
     gameSelectionPresentation.searchFolder = initialSearchFolder;
     gameSelectionPresentation.selectedSubFolder = 0;
+    gameSelectionPresentation.subFolderOffset = 0;
 
     GetSubFolders(initialSearchFolder, gameSelectionPresentation.subFolders);
 
@@ -316,10 +337,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             if (gameSelectionPresentation.selectedSubFolder == 0)
             {
                 gameSelectionPresentation.selectedSubFolder = (uint32_t)gameSelectionPresentation.subFolders.size() - 1;
+                gameSelectionPresentation.subFolderOffset = ((uint32_t)gameSelectionPresentation.subFolders.size() > 4) ? (uint32_t)gameSelectionPresentation.subFolders.size() - 4 : 0;
             }
             else
             {
                 gameSelectionPresentation.selectedSubFolder--;
+                if (gameSelectionPresentation.selectedSubFolder < gameSelectionPresentation.subFolderOffset)
+                {
+                    gameSelectionPresentation.subFolderOffset = gameSelectionPresentation.selectedSubFolder;
+                }
             }
         }
 
@@ -328,10 +354,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             if (gameSelectionPresentation.selectedSubFolder == (uint32_t)gameSelectionPresentation.subFolders.size() - 1)
             {
                 gameSelectionPresentation.selectedSubFolder = 0;
+                gameSelectionPresentation.subFolderOffset = 0;
             }
             else
             {
                 gameSelectionPresentation.selectedSubFolder++;
+                if (gameSelectionPresentation.selectedSubFolder > gameSelectionPresentation.subFolderOffset + 3)
+                {
+                    gameSelectionPresentation.subFolderOffset = gameSelectionPresentation.selectedSubFolder - 3;
+                }
             }
         }
 
@@ -352,7 +383,14 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
                 {
                     gameSelectionPresentation.searchFolder.erase(backslashPos + 1);
                 }
+                else
+                {
+                    // We were already in the root of a logical drive.
+                    // Empty the search folder. All the logical drives will be listed.
+                    gameSelectionPresentation.searchFolder.clear();
+                }
             }
+            gameSelectionPresentation.subFolderOffset = 0;
 
             GetSubFolders(gameSelectionPresentation.searchFolder, gameSelectionPresentation.subFolders);
         }

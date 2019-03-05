@@ -31,6 +31,7 @@ struct GameSelectionPresentation
     std::string searchFolder;
     std::vector<std::string> subFolders;
     uint32_t selectedSubFolder;
+    uint32_t subFolderOffset;
 };
 
 class GameSelection

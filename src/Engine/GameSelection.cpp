@@ -106,12 +106,12 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
     DrawBox(2, 118, 636, 80, "Browse");
     m_renderer.RenderTextLeftAlignedTruncated(presentation.searchFolder.c_str(), defaultFont, EgaBrightYellow, 18, 138, 550);
     const uint32_t maxSubFoldersVisible = 4;
-    const uint32_t numberOfSubFolders = ((uint32_t)presentation.subFolders.size() > maxSubFoldersVisible ? maxSubFoldersVisible : (uint32_t)presentation.subFolders.size());
-    for (uint32_t subFolderIndex = 0; subFolderIndex < numberOfSubFolders; subFolderIndex++)
+    const uint32_t endOfSubFolders = ((uint32_t)presentation.subFolders.size() - presentation.subFolderOffset > maxSubFoldersVisible ? presentation.subFolderOffset + maxSubFoldersVisible : (uint32_t)presentation.subFolders.size());
+    for (uint32_t subFolderIndex = presentation.subFolderOffset; subFolderIndex < endOfSubFolders; subFolderIndex++)
     {
         const char* subFolderName = presentation.subFolders.at(subFolderIndex).c_str();
-        const egaColor subFolderColor = (subFolderIndex == presentation.selectedSubFolder) ? EgaBrightBlue : EgaBrightWhite;
-        m_renderer.RenderTextLeftAlignedTruncated(subFolderName, defaultFont, subFolderColor, 22, 148 + (10 * subFolderIndex), 550);
+        const egaColor subFolderColor = (subFolderIndex == presentation.selectedSubFolder) ? EgaBrightCyan : EgaBrightWhite;
+        m_renderer.RenderTextLeftAlignedTruncated(subFolderName, defaultFont, subFolderColor, 22, 148 + (10 * (subFolderIndex - presentation.subFolderOffset)), 550);
     }
     m_renderer.Unprepare2DRendering();
 }
