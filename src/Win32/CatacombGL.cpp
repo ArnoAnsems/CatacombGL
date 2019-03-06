@@ -285,17 +285,6 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     GameSelection gameSelection(renderer);
 
     GameSelectionPresentation gameSelectionPresentation;
-    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("1. Catacomb 3-D: The Descent v1.22", NotSupported));
-    const GameDetectionState abyssv124DetectionState = (gameDetectionAbyssV124.GetBestMatch().score == 0) ? Detected : NotDetected;
-    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("2. Catacomb Abyss v1.24", abyssv124DetectionState));
-    const GameDetectionState armageddonDetectionState = (gameDetectionArmageddonv102.GetBestMatch().score == 0) ? Detected : NotDetected;
-    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("3. Catacomb Armageddon v1.02", armageddonDetectionState));
-    gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("4. Catacomb Apocalypse v1.01", NotSupported));
-
-    gameSelectionPresentation.gameListShareware.push_back(std::make_pair("5. Catacomb Abyss v1.12", NotSupported));
-    const GameDetectionState abyssv133DetectionState = (gameDetectionAbyssV113.GetBestMatch().score == 0) ? Detected : NotDetected;
-    gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
-
     gameSelectionPresentation.searchFolder = initialSearchFolder;
     gameSelectionPresentation.selectedSubFolder = 0;
     gameSelectionPresentation.subFolderOffset = 0;
@@ -311,6 +300,23 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             {
                 HandleWindowEvent(&event.window);
             }
+        }
+
+        if (gameSelectionPresentation.gameListCatacombsPack.empty())
+        {
+            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("1. Catacomb 3-D: The Descent v1.22", NotSupported));
+            const GameDetectionState abyssv124DetectionState = (gameDetectionAbyssV124.GetBestMatch().score == 0) ? Detected : NotDetected;
+            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("2. Catacomb Abyss v1.24", abyssv124DetectionState));
+            const GameDetectionState armageddonDetectionState = (gameDetectionArmageddonv102.GetBestMatch().score == 0) ? Detected : NotDetected;
+            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("3. Catacomb Armageddon v1.02", armageddonDetectionState));
+            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("4. Catacomb Apocalypse v1.01", NotSupported));
+        }
+
+        if (gameSelectionPresentation.gameListShareware.empty())
+        {
+            gameSelectionPresentation.gameListShareware.push_back(std::make_pair("5. Catacomb Abyss v1.12", NotSupported));
+            const GameDetectionState abyssv133DetectionState = (gameDetectionAbyssV113.GetBestMatch().score == 0) ? Detected : NotDetected;
+            gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
         }
 
         gameSelection.Draw(gameSelectionPresentation);
@@ -393,6 +399,28 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             gameSelectionPresentation.subFolderOffset = 0;
 
             GetSubFolders(gameSelectionPresentation.searchFolder, gameSelectionPresentation.subFolders);
+
+            // Check if games can be detected in the new folder
+            if (!gameSelectionPresentation.searchFolder.empty())
+            {
+                if (gameDetectionAbyssV113.GetBestMatch().score != 0)
+                {
+                    gameDetectionAbyssV113.GetDetectionReport(GameIdCatacombAbyssv113, gameSelectionPresentation.searchFolder, abyssFilesv113);
+                    gameSelectionPresentation.gameListShareware.clear();
+                }
+
+                if (gameDetectionAbyssV124.GetBestMatch().score != 0)
+                {
+                    gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, gameSelectionPresentation.searchFolder + "Abyss\\", abyssFilesv124);
+                    gameSelectionPresentation.gameListCatacombsPack.clear();
+                }
+
+                if (gameDetectionArmageddonv102.GetBestMatch().score != 0)
+                {
+                    gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, gameSelectionPresentation.searchFolder + "Armageddon\\", armageddonFiles);
+                    gameSelectionPresentation.gameListCatacombsPack.clear();
+                }
+            }
         }
 
         playerInput.ClearJustPressed();
