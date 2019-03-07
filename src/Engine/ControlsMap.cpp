@@ -17,22 +17,11 @@
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 #include "..\..\ThirdParty\SDL\include\SDL_mouse.h"
 
-const std::vector<SDL_Keycode> allowedKeys =
-{
-    SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n,
-    SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z,
-    SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN,
-    SDLK_SPACE, SDLK_TAB, SDLK_INSERT, SDLK_DELETE,
-    SDLK_LCTRL, SDLK_RCTRL, SDLK_LALT, SDLK_RALT, SDLK_LSHIFT, SDLK_RSHIFT,
-    SDLK_KP_0, SDLK_KP_1, SDLK_KP_2, SDLK_KP_3, SDLK_KP_4, SDLK_KP_5, SDLK_KP_6, SDLK_KP_7, SDLK_KP_8, SDLK_KP_9,
-    SDLK_KP_MULTIPLY, SDLK_KP_PLUS, SDLK_KP_MINUS, SDLK_KP_DIVIDE
-};
-
 ControlsMap::ControlsMap()
 {
-    for (uint8_t i = 0; i < allowedKeys.size(); i++)
+    for (uint8_t i = 0; i < GetAllowedKeys().size(); i++)
     {
-        std::pair<SDL_Keycode, ControlAction> pair = std::make_pair(allowedKeys.at(i), None);
+        std::pair<SDL_Keycode, ControlAction> pair = std::make_pair(GetAllowedKeys().at(i), None);
         m_KeyToActionMap.insert(pair);
     }
 
@@ -212,7 +201,18 @@ std::vector<uint8_t> ControlsMap::GetMouseButtonsFromAction(const ControlAction 
 
 const std::vector<SDL_Keycode>& ControlsMap::GetAllowedKeys()
 {
-    return allowedKeys;
+    static const std::vector<SDL_Keycode> allAllowedKeys =
+    {
+        SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n,
+        SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z,
+        SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN,
+        SDLK_SPACE, SDLK_TAB, SDLK_INSERT, SDLK_DELETE,
+        SDLK_LCTRL, SDLK_RCTRL, SDLK_LALT, SDLK_RALT, SDLK_LSHIFT, SDLK_RSHIFT,
+        SDLK_KP_0, SDLK_KP_1, SDLK_KP_2, SDLK_KP_3, SDLK_KP_4, SDLK_KP_5, SDLK_KP_6, SDLK_KP_7, SDLK_KP_8, SDLK_KP_9,
+        SDLK_KP_MULTIPLY, SDLK_KP_PLUS, SDLK_KP_MINUS, SDLK_KP_DIVIDE
+    };
+
+    return allAllowedKeys;
 }
 
 const ControlAction ControlsMap::StringToAction(const std::string& str)

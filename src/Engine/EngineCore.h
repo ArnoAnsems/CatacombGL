@@ -38,7 +38,7 @@
 class EngineCore
 {
 public:
-    EngineCore(IGame& game, const ISystem& system, PlayerInput& playerInput);
+    EngineCore(IGame& game, const ISystem& system, PlayerInput& playerInput, ConfigurationSettings& configurationSettings);
     ~EngineCore();
 
     // Draw the current state of the game.
@@ -129,7 +129,7 @@ private:
     void LoadGameFromFile(const std::string filename);
 
     IGame& m_game;
-    ConfigurationSettings m_configurationSettings;
+    ConfigurationSettings& m_configurationSettings;
 
     // Timer
     uint32_t m_timeStampOfPlayerCurrentFrame;

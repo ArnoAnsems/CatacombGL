@@ -51,6 +51,15 @@ public:
     void LoadFromFile(const std::string& configurationFile);
     void StoreToFile(const std::string& configurationFile) const;
 
+    const std::string& GetPathAbyssv113() const;
+    void SetPathAbyssv113(const std::string path);
+
+    const std::string& GetPathAbyssv124() const;
+    void SetPathAbyssv124(const std::string path);
+
+    const std::string& GetPathArmageddonv102() const;
+    void SetPathArmageddonv102(const std::string path);
+
     ScreenMode GetScreenMode() const;
     void SetScreenMode(const ScreenMode screenMode);
 
@@ -96,4 +105,7 @@ private:
     uint8_t m_soundMode;
     uint8_t m_mouseSensitivity;
     bool m_mouseLook;
+    std::string m_pathAbyssv113;
+    std::string m_pathAbyssv124;
+    std::string m_pathArmageddonv102;
 };

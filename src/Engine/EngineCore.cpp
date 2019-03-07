@@ -39,7 +39,7 @@ const uint8_t VictoryStatePlayGetPoint = 10;
 const uint8_t VictoryStatePlayingGetPoint = 11;
 const uint8_t VictoryStateDone = 12;
 
-EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput) :
+EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput, ConfigurationSettings& configurationSettings) :
     m_gameTimer(),
     m_game(game),
     m_system(system),
@@ -68,13 +68,13 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_keyToTake(KeyId::NoKey),
     m_playerInput(keyboardInput),
     m_savedGames(),
-    m_extraMenu(m_configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames)
+    m_extraMenu(configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames),
+    m_configurationSettings(configurationSettings)
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
+
     const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string filename = filenamePath + "CatacombGL.ini";
-    m_configurationSettings.LoadFromFile(filename);
     const std::string savedGamesAbyssPath = filenamePath + m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesAbyssPath, m_savedGames);
 }

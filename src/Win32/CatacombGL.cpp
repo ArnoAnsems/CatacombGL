@@ -31,6 +31,7 @@
 #include "..\Engine\GameDetection.h"
 #include "..\Engine\DefaultFont.h"
 #include "..\Engine\GameSelection.h"
+#include "..\Engine\ConfigurationSettings.h"
 
 #include "..\Abyss\GameAbyss.h"
 #include "..\Abyss\GameDetectionAbyss.h"
@@ -54,6 +55,7 @@ IGame* game;
 RendererOpenGLWin32 renderer;
 PlayerInput playerInput;
 SystemWin32 systemWin32;
+ConfigurationSettings m_configurationSettings;
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
@@ -241,6 +243,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
     SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS);
 
+    const std::string filenamePath = systemWin32.GetConfigurationFilePath();
+    const std::string filename = filenamePath + "CatacombGL.ini";
+    m_configurationSettings.LoadFromFile(filename);
+
     const uint8_t GameIdNotDetected = 0;
     const uint8_t GameIdCatacombAbyssv113 = 1;
     const uint8_t GameIdCatacombAbyssv124 = 2;
@@ -263,6 +269,22 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
         const std::string gogAbyssPath = gogPath + "Abyss\\";
         gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, gogAbyssPath, abyssFilesv124);
+    }
+
+    // Try to find game files via configuration file
+    if (gameDetectionAbyssV113.GetBestMatch().score != 0 && !m_configurationSettings.GetPathAbyssv113().empty())
+    {
+        gameDetectionAbyssV113.GetDetectionReport(GameIdCatacombAbyssv113, m_configurationSettings.GetPathAbyssv113(), abyssFilesv113);
+    }
+
+    if (gameDetectionAbyssV124.GetBestMatch().score != 0 && !m_configurationSettings.GetPathAbyssv124().empty())
+    {
+        gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, m_configurationSettings.GetPathAbyssv124(), abyssFilesv124);
+    }
+
+    if (gameDetectionArmageddonv102.GetBestMatch().score != 0 && !m_configurationSettings.GetPathArmageddonv102().empty())
+    {
+        gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, m_configurationSettings.GetPathArmageddonv102(), armageddonFiles);
     }
  
     // Try to find registered game files in local path
@@ -451,7 +473,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         return 0;
     }
 
-    engineCore = new EngineCore(*game, systemWin32, playerInput);
+    engineCore = new EngineCore(*game, systemWin32, playerInput, m_configurationSettings);
 
     // Update the window title with the selected game info.
     const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo() + " [" + game->GetName() + "]";
@@ -485,6 +507,22 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             SDL_GL_SwapWindow(SDLwindow);
 		}
 	}
+
+    // If game data was found, remember the path!
+    if (gameDetectionAbyssV113.GetBestMatch().score == 0)
+    {
+        m_configurationSettings.SetPathAbyssv113(gameDetectionAbyssV113.GetBestMatch().folder);
+    }
+
+    if (gameDetectionAbyssV124.GetBestMatch().score == 0)
+    {
+        m_configurationSettings.SetPathAbyssv124(gameDetectionAbyssV124.GetBestMatch().folder);
+    }
+
+    if (gameDetectionArmageddonv102.GetBestMatch().score == 0)
+    {
+        m_configurationSettings.SetPathArmageddonv102(gameDetectionArmageddonv102.GetBestMatch().folder);
+    }
 
     // Kill The Window
     KillGLWindow();
