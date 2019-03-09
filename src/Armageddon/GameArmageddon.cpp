@@ -697,6 +697,11 @@ const std::vector<std::vector<uint16_t>>& GameArmageddon::GetWallSkeletonAnimati
     return wallSkeletonAnimations;
 }
 
+const SDL_Keycode GameArmageddon::GetCheatsKeyCode() const
+{
+    return SDLK_BACKSPACE;
+}
+
 void GameArmageddon::PlaySoundBodyExplode()
 {
     m_audioPlayer->Play(BODY_EXPLODESND);

@@ -52,6 +52,7 @@ public:
     const uint16_t GetNorthIconSprite() const override;
     const std::string GetSavedGamesPath() const override;
     const std::vector<std::vector<uint16_t>>& GetWallSkeletonAnimations() const override;
+    const SDL_Keycode GetCheatsKeyCode() const override;
     void PlaySoundBodyExplode() override;
     void PlaySoundHitGate() override;
     void PlaySoundPlayerHurt(const int16_t playerHealth) override;

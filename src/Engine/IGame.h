@@ -30,6 +30,7 @@
 #include <map>
 #include "Actor.h"
 #include "PlayerInput.h"
+#include "../../ThirdParty//SDL/include/SDL_keycode.h"
 
 enum DifficultyLevel
 {
@@ -62,6 +63,7 @@ public:
     virtual const uint16_t GetNorthIconSprite() const = NULL;
     virtual const std::string GetSavedGamesPath() const = NULL;
     virtual const std::vector<std::vector<uint16_t>>& GetWallSkeletonAnimations() const = NULL;
+    virtual const SDL_Keycode GetCheatsKeyCode() const = NULL;
     virtual void PlaySoundBodyExplode() = NULL;
     virtual void PlaySoundHitGate() = NULL;
     virtual void PlaySoundPlayerHurt(const int16_t playerHealth) = NULL;

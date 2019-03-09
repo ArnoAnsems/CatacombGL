@@ -69,7 +69,8 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_playerInput(keyboardInput),
     m_savedGames(),
     m_extraMenu(configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames),
-    m_configurationSettings(configurationSettings)
+    m_configurationSettings(configurationSettings),
+    m_scrollsArePresent(AreScrollsPresent())
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -81,8 +82,6 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
 
 EngineCore::~EngineCore()
 {
-    StoreConfigurationToFile();
-
     UnloadLevel();
 }
 
@@ -615,7 +614,7 @@ bool EngineCore::Think()
         {
             KeyYPressed();
         }
-        if (m_playerInput.IsKeyPressed(SDLK_F10))
+        if (m_playerInput.IsKeyPressed(m_game.GetCheatsKeyCode()))
         {
             // Check for cheat codes
             if (m_playerInput.IsKeyPressed(SDLK_w)) // W = warp to level
@@ -1815,7 +1814,7 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
 
 void EngineCore::ReadScroll(const uint8_t scrollIndex)
 {
-    if (m_playerInventory.GetScroll(scrollIndex))
+    if (m_playerInventory.GetScroll(scrollIndex) && m_scrollsArePresent)
     {
         m_gameTimer.Pause();
         m_readingScroll = scrollIndex;
@@ -2285,16 +2284,6 @@ void EngineCore::ToggleMenu()
     }
 }
 
-void EngineCore::StoreConfigurationToFile() const
-{
-    const std::string filenamePath = m_system.GetConfigurationFilePath();
-    if (m_system.CreatePath(filenamePath))
-    {
-        const std::string filename = filenamePath + "CatacombGL.ini";
-        m_configurationSettings.StoreToFile(filename);
-    }
-}
-
 bool EngineCore::IsActionActive(const ControlAction action) const
 {
     bool isActive = false;
@@ -2444,4 +2433,26 @@ void EngineCore::LoadGameFromFile(const std::string filename)
 ScreenMode EngineCore::GetScreenMode() const
 {
     return m_configurationSettings.GetScreenMode();
+}
+
+bool EngineCore::AreScrollsPresent() const
+{
+    bool scrollsArePresent = false;
+    auto decorateActors = m_game.GetDecorateActors();
+    for (auto decorateActorPair : decorateActors)
+    {
+        for (auto decorateStatePair : decorateActorPair.second.states)
+        {
+            auto anim = decorateStatePair.second.animation;
+            for (uint8_t frameIndex = 0; frameIndex < anim.size(); frameIndex++)
+            {
+                if (anim.at(frameIndex).action == ActionGiveScroll)
+                {
+                    scrollsArePresent = true;
+                }
+            }
+        }
+    }
+
+    return scrollsArePresent;
 }

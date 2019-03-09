@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\ThirdParty\GoogleTest\src\gtest-all.cc" />
     <ClCompile Include="FramesCounter_Test.cpp" />
     <ClCompile Include="GameAbyss_Test.cpp" />
+    <ClCompile Include="GameArmageddon_Test.cpp" />
     <ClCompile Include="HelpPages_Test.cpp" />
     <ClCompile Include="LevelLocationNames_Test.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="FramesCounter_Test.h" />
     <ClInclude Include="GameAbyss_Test.h" />
+    <ClInclude Include="GameArmageddon_Test.h" />
     <ClInclude Include="HelpPages_Test.h" />
     <ClInclude Include="LevelLocationNames_Test.h" />
     <ClInclude Include="RendererStub.h" />

@@ -99,8 +99,6 @@ private:
     static bool IsOneTimeAction(const actorAction action);
     void Thrust (const uint16_t angle, const float distance);
 
-    void StoreConfigurationToFile() const;
-
     void ShowWarpCheatDialog();
     void ShowGodModeCheatDialog();
     void ShowFreeItemsCheatDialog();
@@ -127,6 +125,7 @@ private:
     bool StoreGameToFile(const std::string filename);
     void LoadGameFromFileWithFullPath(const std::string filename);
     void LoadGameFromFile(const std::string filename);
+    bool AreScrollsPresent() const;
 
     IGame& m_game;
     ConfigurationSettings& m_configurationSettings;
@@ -168,4 +167,5 @@ private:
     GameTimer m_gameTimer;
     const ISystem& m_system;
     std::vector<std::string> m_savedGames;
+    const bool m_scrollsArePresent;
 };

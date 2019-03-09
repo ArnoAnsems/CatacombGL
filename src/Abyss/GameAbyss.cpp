@@ -729,6 +729,11 @@ const std::vector<std::vector<uint16_t>>& GameAbyss::GetWallSkeletonAnimations()
     return wallSkeletonAnimations;
 }
 
+const SDL_Keycode GameAbyss::GetCheatsKeyCode() const
+{
+    return SDLK_F10;
+}
+
 void GameAbyss::PlaySoundBodyExplode()
 {
     // Not applicable

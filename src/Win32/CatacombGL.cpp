@@ -530,6 +530,12 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	// Shutdown
     SD_Shutdown();
     BE_ST_ShutdownAll();
+
+    // Store configuration
+    if (systemWin32.CreatePath(filenamePath))
+    {
+        m_configurationSettings.StoreToFile(filename);
+    }
 						
     delete engineCore;
     delete game;
