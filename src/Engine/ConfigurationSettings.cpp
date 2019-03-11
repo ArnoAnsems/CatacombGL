@@ -30,6 +30,8 @@ ConfigurationSettings::ConfigurationSettings() :
     m_soundMode(1),
     m_mouseSensitivity(10),
     m_mouseLook(true),
+    m_turnSpeed(100),
+    m_alwaysRun(false),
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
@@ -142,6 +144,19 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_mouseSensitivity = (sensitivity < 5) ? 5 : (sensitivity > 15) ? 15: sensitivity;
         }
 
+        auto turnSpeedPair = keyValuePairs.find("turnSpeed");
+        if (turnSpeedPair != keyValuePairs.end())
+        {
+            int32_t turnSpeed = std::stoi(turnSpeedPair->second);
+            m_turnSpeed = (turnSpeed < 100) ? 100 : (turnSpeed > 250) ? 250 : (uint8_t)turnSpeed;
+        }
+
+        auto alwaysRunPair = keyValuePairs.find("alwaysRun");
+        if (alwaysRunPair != keyValuePairs.end())
+        {
+            m_alwaysRun = (alwaysRunPair->second.compare("Enabled") == 0);
+        }
+
         const std::vector<SDL_Keycode>& allowedKeys = ControlsMap::GetAllowedKeys();
         for (const auto key: allowedKeys)
         {
@@ -203,6 +218,10 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "mlook=" << mlookValue << "\n"; 
         std::string mouseSensitivityValue = std::to_string(m_mouseSensitivity);
         file << "mouseSensitivity=" << mouseSensitivityValue << "\n";
+        std::string turnSpeedValue = std::to_string(m_turnSpeed);
+        file << "turnSpeed=" << turnSpeedValue << "\n";
+        const std::string alwaysRunValue = (m_alwaysRun) ? "Enabled" : "Disabled";
+        file << "alwaysRun=" << alwaysRunValue << "\n";
         file << "# Key bindings\n";
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
 	    {
@@ -363,4 +382,24 @@ bool ConfigurationSettings::GetMouseLook() const
 void ConfigurationSettings::SetMouseLook(const bool enabled)
 {
     m_mouseLook = enabled;
+}
+
+uint8_t ConfigurationSettings::GetTurnSpeed() const
+{
+    return m_turnSpeed;
+}
+
+void ConfigurationSettings::SetTurnSpeed(const uint8_t speed)
+{
+    m_turnSpeed = speed;
+}
+
+bool ConfigurationSettings::GetAlwaysRun() const
+{
+    return m_alwaysRun;
+}
+
+void ConfigurationSettings::SetAlwaysRun(const bool alwaysRun)
+{
+    m_alwaysRun = alwaysRun;
 }

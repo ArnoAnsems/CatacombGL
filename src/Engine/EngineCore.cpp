@@ -874,19 +874,21 @@ bool EngineCore::Think()
                 const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
                 const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
                 const float deltaTimeInTics = (truncatedDeltaTimeInMs * 60.0f) / 1000.0f;
+                const float turnSpeedFactor = m_configurationSettings.GetTurnSpeed() / 100.0f;
                 if (m_playerActions.GetActionActive(TurnLeft))
                 {
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
                 }
                 if (m_playerActions.GetActionActive(TurnRight))
                 {
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
                 }
                 const float playerSpeed = 5120.0f / 65536.0f;
                 const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 60.0f;
-                const float distance = playerSpeed * tics;
+                const bool isRunning = m_configurationSettings.GetAlwaysRun() != m_playerActions.GetActionActive(Run);
+                const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
                 if (m_playerActions.GetActionActive(MoveForward) && m_playerActions.GetActionActive(StrafeLeft))
                 { 
                     Thrust(315, distance);

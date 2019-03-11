@@ -164,7 +164,7 @@ void ExtraMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuControls)
         {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
             {
                 m_menuItemSelected = 0;
                 m_menuItemOffset = 0;
@@ -255,11 +255,11 @@ void ExtraMenu::MenuUp()
                 m_menuItemSelected--;
             }
         }
-        else if (m_subMenuSelected == 2)
+        else if (m_subMenuSelected == subMenuControls)
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1;
+                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3;
                 m_menuItemOffset = m_menuItemSelected - 7;
             }
             else
@@ -345,6 +345,13 @@ void ExtraMenu::MenuLeft()
                     m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() - 1);
                 }
             }
+            else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            {
+                if (m_configurationSettings.GetTurnSpeed() > 100)
+                {
+                    m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() - 10);
+                }
+            }
         }
     }
 }
@@ -375,6 +382,13 @@ void ExtraMenu::MenuRight()
                 if (m_configurationSettings.GetMouseSensitivity() < 15)
                 {
                     m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() + 1);
+                }
+            }
+            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            {
+                if (m_configurationSettings.GetTurnSpeed() < 250)
+                {
+                    m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() + 10);
                 }
             }
         }
@@ -496,7 +510,12 @@ MenuCommand ExtraMenu::EnterKeyPressed()
             // Mouse look
             m_configurationSettings.SetMouseLook(!m_configurationSettings.GetMouseLook());
         }
-        else
+        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
+        {
+            // Always run
+            m_configurationSettings.SetAlwaysRun(!m_configurationSettings.GetAlwaysRun());
+        }
+        else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size())
         {
             // Any of the control options
             if (!m_waitingForKeyToBind)
@@ -670,6 +689,19 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
                 char mouseSensitivityStr[5];
                 sprintf_s(mouseSensitivityStr, 5, "%d", m_configurationSettings.GetMouseSensitivity());
                 renderer.RenderTextLeftAligned(mouseSensitivityStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
+            }
+            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            {
+                renderer.RenderTextLeftAligned("Turn Speed", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                char turnSpeedStr[5];
+                sprintf_s(turnSpeedStr, 5, "%d", m_configurationSettings.GetTurnSpeed());
+                renderer.RenderTextLeftAligned(turnSpeedStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+            }
+            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
+            {
+                renderer.RenderTextLeftAligned("Always Run", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const char* alwaysRunStr = (m_configurationSettings.GetAlwaysRun()) ? "Enabled" : "Disabled";
+                renderer.RenderTextLeftAligned(alwaysRunStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             index++;
         }

@@ -93,6 +93,12 @@ public:
     bool GetMouseLook() const;
     void SetMouseLook(const bool enabled);
 
+    uint8_t GetTurnSpeed() const;
+    void SetTurnSpeed(const uint8_t speed);
+
+    bool GetAlwaysRun() const;
+    void SetAlwaysRun(const bool alwaysRun);
+
 private:
     ScreenMode m_screenMode;
     uint8_t m_aspectRatio;
@@ -105,6 +111,9 @@ private:
     uint8_t m_soundMode;
     uint8_t m_mouseSensitivity;
     bool m_mouseLook;
+    uint8_t m_turnSpeed;
+    bool m_alwaysRun;
+
     std::string m_pathAbyssv113;
     std::string m_pathAbyssv124;
     std::string m_pathArmageddonv102;

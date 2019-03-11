@@ -47,6 +47,7 @@ ControlsMap::ControlsMap()
     AssignActionToKey(ShootXterminator, SDLK_x);
     AssignActionToKey(UsePotion, SDLK_c);
     AssignActionToKey(UsePotion, SDLK_SPACE);
+    // Since the original game did not have a run action, by default no key is assigned to the run action.
 
     AssignActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
     AssignActionToMouseButton(ShootZappper, SDL_BUTTON_MIDDLE);
@@ -158,6 +159,8 @@ std::string ControlsMap::GetMouseButtonName(const uint8_t buttonCode)
     return (buttonCode == SDL_BUTTON_LEFT) ? "Left Mouse" :
            (buttonCode == SDL_BUTTON_MIDDLE) ? "Middle Mouse" :
            (buttonCode == SDL_BUTTON_RIGHT) ? "Right Mouse" :
+           (buttonCode == SDL_BUTTON_X1) ? "X1" :
+           (buttonCode == SDL_BUTTON_X2) ? "X2" :
            "";
 }
 
