@@ -54,6 +54,9 @@ void ExtraMenu::SetActive(bool active)
     {
         m_waitingForKeyToBind = false;
         m_waitingForNewSaveGameName = false;
+        m_subMenuSelected = subMenuMain;
+        m_menuItemSelected = 0;
+        m_menuItemOffset = 0;
     }
 }
 
@@ -515,7 +518,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
             // Always run
             m_configurationSettings.SetAlwaysRun(!m_configurationSettings.GetAlwaysRun());
         }
-        else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size())
+        else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
         {
             // Any of the control options
             if (!m_waitingForKeyToBind)

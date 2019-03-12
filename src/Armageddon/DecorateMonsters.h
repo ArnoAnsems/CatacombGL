@@ -38,9 +38,9 @@ const uint16_t actorIdMonsterBat = 58;
 const uint16_t actorIdMonsterEye = 60;
 const uint16_t actorIdMonsterDragon = 61;
 const uint16_t actorIdMonsterNemesis = 62;
-const uint16_t actorIdMonsterSuccubus = 63;
 const uint16_t actorIdMonsterAnt = 63;
-const uint16_t actorIdMonsterSkeletonHanging = 64;
+const uint16_t actorIdMonsterSuccubus = 64;
+const uint16_t actorIdMonsterSkeletonHanging = 65;
 
 //
 // ZOMBIE

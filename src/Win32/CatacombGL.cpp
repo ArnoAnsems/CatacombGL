@@ -87,6 +87,29 @@ GLvoid KillGLWindow(GLvoid)
     SDL_DestroyRenderer(SDLrenderer);
     SDL_DestroyWindow(SDLwindow);
 }
+
+void SetScreenMode(const ScreenMode screenMode)
+{
+    if (screenMode == Fullscreen)
+    {
+        // Set the width and height of the fullscreen to the width and height of the desktop area of the
+        // display in use.
+        const int displayIndex = SDL_GetWindowDisplayIndex(SDLwindow);
+        SDL_Rect r;
+        SDL_GetDisplayBounds(displayIndex, &r);
+        const SDL_DisplayMode displayMode = { SDL_PIXELFORMAT_RGB24, r.w, r.h, 0, 0 };
+        SDL_SetWindowDisplayMode(SDLwindow, &displayMode);
+        SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN);
+    }
+    else if (screenMode == BorderlessWindowed)
+    {
+        SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    }
+    else // Windowed
+    {
+        SDL_SetWindowFullscreen(SDLwindow, 0);
+    }
+}
  
 BOOL CreateGLWindow(int width, int height, int bits)
 {
@@ -116,6 +139,9 @@ BOOL CreateGLWindow(int width, int height, int bits)
     glcontext = SDL_GL_CreateContext(SDLwindow);
 
     renderer.Setup();
+    renderer.SetVSync(m_configurationSettings.GetVSync());
+    renderer.SetTextureFilter(m_configurationSettings.GetTextureFilter());
+    SetScreenMode(m_configurationSettings.GetScreenMode());
     
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
 
@@ -160,29 +186,6 @@ void HandleWindowEvent(const SDL_WindowEvent * event)
     case SDL_WINDOWEVENT_CLOSE:
         active = false;
         break;
-    }
-}
-
-void SetScreenMode(const ScreenMode screenMode)
-{
-    if (screenMode == Fullscreen)
-    {
-        // Set the width and height of the fullscreen to the width and height of the desktop area of the
-        // display in use.
-        const int displayIndex = SDL_GetWindowDisplayIndex(SDLwindow);
-        SDL_Rect r;
-        SDL_GetDisplayBounds(displayIndex, &r);
-        const SDL_DisplayMode displayMode = { SDL_PIXELFORMAT_RGB24, r.w, r.h, 0, 0 };
-        SDL_SetWindowDisplayMode(SDLwindow, &displayMode);
-        SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN);
-    }
-    else if (screenMode == BorderlessWindowed)
-    {
-        SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    }
-    else // Windowed
-    {
-        SDL_SetWindowFullscreen(SDLwindow, 0);
     }
 }
 

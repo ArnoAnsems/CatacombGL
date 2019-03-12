@@ -130,8 +130,13 @@ bool Actor::TargetReached() const
 uint16_t Actor::GetPictureIndex() const
 {
 
-    const DecorateState& currentState = m_decorateActor.states.find(m_stateId)->second;
-    return currentState.animation.at(m_animationFrame).pictureIndex;
+    const auto currentStatePair = m_decorateActor.states.find(m_stateId);
+    if (currentStatePair == m_decorateActor.states.end())
+    {
+        return 0;
+    }
+
+    return currentStatePair->second.animation.at(m_animationFrame).pictureIndex;
 }
 
 void Actor::Think(const uint32_t currentTimestamp)

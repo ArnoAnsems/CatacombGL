@@ -21,7 +21,7 @@
 #include <fstream>
 
 const uint8_t versionMajor = 0;
-const uint8_t versionMinor = 1;
+const uint8_t versionMinor = 2;
 const uint8_t versionLevel = 0;
 const std::string versionPhase = "Alpha";
 

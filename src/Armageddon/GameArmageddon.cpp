@@ -545,6 +545,7 @@ IIntroView* GameArmageddon::GetIntroView()
 
 void GameArmageddon::DrawHelpPage()
 {
+    m_renderer.Render2DBar(0, 0, 640, 200, EgaLightGray);
     const Font* font = GetEgaGraph()->GetFont(3);
     m_renderer.RenderTextLeftAligned("                    SUMMARY OF GAME CONTROLS", font, EgaBlue, 128, 19);
     m_renderer.RenderTextLeftAligned("         ACTION", font, EgaRed, 128, 37);
