@@ -118,9 +118,9 @@ const DecorateActor decorateExplosion =
 
 const DecorateAnimation boltWaitForPickupAnimation =
 {
-    { BOLTOBJPIC, 8, ActionWaitForPickup },
-    { BOLT2OBJPIC, 8, ActionWaitForPickup },
-    { BOLT3OBJPIC, 8, ActionWaitForPickup },
+    { BOLTOBJPIC, 8, ActionWaitForPickupDestructable },
+    { BOLT2OBJPIC, 8, ActionWaitForPickupDestructable },
+    { BOLT3OBJPIC, 8, ActionWaitForPickupDestructable },
 };
 
 const DecorateState boltWaitForPickup =
@@ -173,9 +173,9 @@ const DecorateActor decorateBolt =
 
 const DecorateAnimation nukeWaitForPickupAnimation =
 {
-    { NUKEOBJPIC, 8, ActionWaitForPickup },
-    { NUKE2OBJPIC, 8, ActionWaitForPickup },
-    { NUKE3OBJPIC, 8, ActionWaitForPickup },
+    { NUKEOBJPIC, 8, ActionWaitForPickupDestructable },
+    { NUKE2OBJPIC, 8, ActionWaitForPickupDestructable },
+    { NUKE3OBJPIC, 8, ActionWaitForPickupDestructable },
 };
 
 const DecorateState nukeWaitForPickup =
@@ -228,7 +228,7 @@ const DecorateActor decorateNuke =
 
 const DecorateAnimation potionWaitForPickupAnimation =
 {
-    { POTIONOBJPIC, 8, ActionWaitForPickup }
+    { POTIONOBJPIC, 8, ActionWaitForPickupDestructable }
 };
 
 const DecorateState potionWaitForPickup =
@@ -281,7 +281,7 @@ const DecorateActor decoratePotion =
 
 const DecorateAnimation chestWaitForPickupAnimation
 {
-    { CHESTOBJPIC, 8, ActionWaitForPickup }
+    { CHESTOBJPIC, 8, ActionWaitForPickupDestructable }
 };
 
 const DecorateState chestWaitForPickup =
@@ -334,8 +334,8 @@ const DecorateActor decorateChest =
 
 const DecorateAnimation waterChestWaitForPickupAnimation =
 {
-    { O_WATER_CHEST1PIC, 8, ActionWaitForPickup },
-    { O_WATER_CHEST2PIC, 8, ActionWaitForPickup }
+    { O_WATER_CHEST1PIC, 8, ActionWaitForPickupDestructable },
+    { O_WATER_CHEST2PIC, 8, ActionWaitForPickupDestructable }
 };
 
 const DecorateState waterChestWaitForPickup =

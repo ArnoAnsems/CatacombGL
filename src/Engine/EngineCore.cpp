@@ -1252,6 +1252,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         break;
     }
     case ActionWaitForPickup:
+    case ActionWaitForPickupDestructable:
     {
         if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size) && (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size))
         {
@@ -1484,12 +1485,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     {
                         if (action == ActionPlayerProjectile)
                         {
-                            if ((otherActor->IsSolid() || otherActor->GetAction() == ActionWaitForPickup || otherActor->GetAction() == ActionForceField || otherActor->GetAction() == ActionHangingSkeleton
+                            if ((otherActor->IsSolid() || otherActor->GetAction() == ActionWaitForPickupDestructable || otherActor->GetAction() == ActionForceField || otherActor->GetAction() == ActionHangingSkeleton || otherActor->GetAction() == ActionBurningTree
                                 ) && 
                                 (abs(basex - otherActor->GetX()) < size + otherActor->GetDecorateActor().size) &&
                                 (abs(basey - otherActor->GetY()) < size + otherActor->GetDecorateActor().size))
                             {
-                                if (otherActor->GetAction() == ActionStatue || otherActor->GetAction() == ActionHangingSkeleton)
+                                if (otherActor->GetAction() == ActionStatue || otherActor->GetAction() == ActionHangingSkeleton || otherActor->GetAction() == ActionBurningTree)
                                 {
                                     m_game.PlaySoundShootWall();
                                 }
@@ -1505,8 +1506,14 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                     {
                                         otherActor->SetState(StateIdDying, m_timeStampOfWorldCurrentFrame);
                                         otherActor->SetSolid(false);
-                                        m_level->AddNonBlockingActor(otherActor);
-                                        m_level->SetBlockingActor(x, y, NULL);
+
+                                        auto deadStatePair = otherActor->GetDecorateActor().states.find(StateIdDead);
+                                        const actorAction deadAction = (deadStatePair != otherActor->GetDecorateActor().states.end()) ? deadStatePair->second.animation.at(0).action : ActionNone;
+                                        if (deadAction != ActionBurningTree)
+                                        {
+                                            m_level->AddNonBlockingActor(otherActor);
+                                            m_level->SetBlockingActor(x, y, NULL);
+                                        }
                                     }
                                     else
                                     {

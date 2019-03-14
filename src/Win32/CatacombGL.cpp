@@ -50,8 +50,8 @@ SDL_Renderer* SDLrenderer = NULL;
 SDL_GLContext glcontext = NULL;
 ScreenMode m_screenMode = Windowed;
 
-EngineCore* engineCore;
-IGame* game;
+EngineCore* engineCore = NULL;
+IGame* game = NULL;
 RendererOpenGLWin32 renderer;
 PlayerInput playerInput;
 SystemWin32 systemWin32;
@@ -301,7 +301,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     }
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow(800,600,16))
+	if (!CreateGLWindow(1024,768,16))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
@@ -448,39 +448,49 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             }
         }
 
+        if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+        {
+            // Exit
+            active = false;
+        }
+
         playerInput.ClearJustPressed();
     }
 
-
-
-    const DetectionReport& report =
-        (selectedGame == GameIdCatacombAbyssv113) ? gameDetectionAbyssV113.GetBestMatch() :
-        (selectedGame == GameIdCatacombAbyssv124) ? gameDetectionAbyssV124.GetBestMatch() :
-        gameDetectionArmageddonv102.GetBestMatch();
-
-    if (report.score == 0)
+    if (active)
     {
-        if (report.gameId == GameIdCatacombArmageddonv102)
+        const DetectionReport& report =
+            (selectedGame == GameIdCatacombAbyssv113) ? gameDetectionAbyssV113.GetBestMatch() :
+            (selectedGame == GameIdCatacombAbyssv124) ? gameDetectionAbyssV124.GetBestMatch() :
+            gameDetectionArmageddonv102.GetBestMatch();
+
+        if (report.score == 0)
         {
-            game = new GameArmageddon(report.folder, renderer);
+            if (report.gameId == GameIdCatacombArmageddonv102)
+            {
+                game = new GameArmageddon(report.folder, renderer);
+            }
+            else
+            {
+                game = new GameAbyss(report.gameId, report.folder, renderer);
+            }
         }
         else
         {
-            game = new GameAbyss(report.gameId, report.folder, renderer);
+            const std::string errorMessage = "Failed to detect game files! Please make sure the Catacombs Pack [GOG.com] is correctly installed. Alternatively, the (shareware) game files can be placed in the same folder as CatacombGL.exe. Detailed info: " + report.infoString;
+            MessageBox(NULL, errorMessage.c_str(), "CatacombGL ERROR", MB_OK | MB_ICONERROR);
+            active = false;
+        }
+
+        if (active)
+        {
+            engineCore = new EngineCore(*game, systemWin32, playerInput, m_configurationSettings);
+
+            // Update the window title with the selected game info.
+            const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo() + " [" + game->GetName() + "]";
+            SDL_SetWindowTitle(SDLwindow, windowTitle.c_str());
         }
     }
-    else
-    {
-        const std::string errorMessage = "Failed to detect game files! Please make sure the Catacombs Pack [GOG.com] is correctly installed. Alternatively, the (shareware) game files can be placed in the same folder as CatacombGL.exe. Detailed info: " + report.infoString;
-        MessageBox(NULL, errorMessage.c_str(), "CatacombGL ERROR", MB_OK | MB_ICONERROR);
-        return 0;
-    }
-
-    engineCore = new EngineCore(*game, systemWin32, playerInput, m_configurationSettings);
-
-    // Update the window title with the selected game info.
-    const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo() + " [" + game->GetName() + "]";
-    SDL_SetWindowTitle(SDLwindow, windowTitle.c_str());
 
 	while(active)									// Loop That Runs While done=FALSE
 	{
@@ -539,9 +549,16 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     {
         m_configurationSettings.StoreToFile(filename);
     }
-						
-    delete engineCore;
-    delete game;
+	
+    if (engineCore != NULL)
+    {
+        delete engineCore;
+    }
+    
+    if (game != NULL)
+    {
+        delete game;
+    }
 
     return TRUE;
 }

@@ -1055,7 +1055,7 @@ void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarge
     actorDirection dirtable[9] = {northwest,north,northeast,west,nodir,east,southwest,south,southeast};
     actorDirection opposite[9] = {south,west,north,east,southwest,northwest,northeast,southeast,nodir};
 
-    actorDirection tdir = actorDirection::nodir;
+    actorDirection tdir = nodir;
     actorDirection d[3];
 
     actorDirection olddir=actor->GetDirection();
@@ -1158,7 +1158,7 @@ void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarge
 
     if ((rand() % 2) == 0) 	//randomly determine direction of search
     {
-        for (int8_t i = (int8_t)north;tdir<=(int8_t)west;i++)
+        for (int8_t i = (int8_t)north; i <= (int8_t)west;i++)
         {
             tdir = (actorDirection)i;
             if (tdir!=turnaround)
@@ -1231,7 +1231,7 @@ void Level::RunAwayThink(Actor* const actor)
     actorDirection dirtable[9] = { northwest,north,northeast,west,nodir,east,southwest,south,southeast };
 
     actorDirection oldDir = actor->GetDirection();
-    actorDirection tdir;
+    actorDirection tdir = nodir;
     actorDirection d[3];
 
     const float targetX = m_playerActor->GetX();
@@ -1275,7 +1275,7 @@ void Level::RunAwayThink(Actor* const actor)
 
     if ((rand() % 2) == 0) 	//randomly determine direction of search
     {
-        for (int8_t i = (int8_t)north; tdir <= (int8_t)west; i++)
+        for (int8_t i = (int8_t)north; i <= (int8_t)west; i++)
         {
             tdir = (actorDirection)i;
             actor->SetDirection(tdir);

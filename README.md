@@ -23,19 +23,26 @@ In case the Catacombs Pack was installed via the GOG installer, simply run Catac
 
 # Controls
 The keyboard and mouse controls for moving, shooting, etc. can be customized via the in-game menu. The following keys are reserved and cannot be customized: 
-ESC - open/close the menu 
-Function keys - various shortcuts, such as F3 for saving the game and F4 for restoring the game
-Numerical keys - read scrolls
+* ESC - open/close the menu 
+* Function keys - various shortcuts, such as F3 for saving the game and F4 for restoring the game
+* Numerical keys - read scrolls
 
 # License
 CatacombGL is developed by Arno Ansems and licensed under the GNU GPLv3 license. See gpl3.txt for details. 
 CatacombGL would not have been possible without reusing code that was generously made available by various other projects, namely: 
 * The Catacomb Abyss, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombAbyss). 
+* The Catacomb Armageddon, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombArmageddon). 
 * The Catacomb Apocalypse, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombApocalypse). 
 * Reflection Keen, developed by NY00123, released under the GPLv2 license, see gpl2.txt (https://github.com/NY00123/refkeen). 
 * DOSBox OPL emulator, developed by the DOSBox Team, released under the GPLv2 license, see gpl2.txt (https://github.com/NY00123/refkeen/tree/master/src/opl).
 * Simple DirectMedia Layer, developed by Sam Lantinga. See SDL2.txt for license details. (http://www.libsdl.org/)
 * GoogleTest, developed by the GoogleTest team. See GoogleTest.txt for license details. (https://github.com/google/googletest). 
 
+# History
+* Version 0.1.0. (2019-09-10) Initial release. This source port is currently a work-in-progress and as such in the alpha development phase. Some functionality has yet to be implemented and existing functionality was only tested on a very limited set of test systems. However, with the current version it is possible to play through the entire game, as all levels, monsters and bonus items are present and functional.
+
 # Roadmap
-On the short term, the plan is to implement some of the missing features in The Catacomb Abyss, such as the help screens and a proper full screen mode. On the long-term roadmap is support for The Catacomb Armageddon, eventually followed by support for all the games in the Catacomb 3D series. 
+The following releases are planned:
+* Version 0.2.0: support for the Catacomb Armageddon, help screens (F1) and a proper full screen mode.
+* Version 0.3.0: support for the Catacomb Apocalypse.
+* Version 0.4.0: support for Catacomb 3-D: The Descent.
