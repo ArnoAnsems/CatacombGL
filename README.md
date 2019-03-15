@@ -39,10 +39,10 @@ CatacombGL would not have been possible without reusing code that was generously
 * GoogleTest, developed by the GoogleTest team. See GoogleTest.txt for license details. (https://github.com/google/googletest). 
 
 # History
-* Version 0.1.0. (2019-09-10) Initial release. This source port is currently a work-in-progress and as such in the alpha development phase. Some functionality has yet to be implemented and existing functionality was only tested on a very limited set of test systems. However, with the current version it is possible to play through the entire game, as all levels, monsters and bonus items are present and functional.
+* Version 0.1.0 (2018-09-10) Initial release. This source port is currently a work-in-progress and as such in the alpha development phase. Some functionality has yet to be implemented and existing functionality was only tested on a very limited set of test systems. However, with the current version it is possible to play through the entire game, as all levels, monsters and bonus items are present and functional.
 
 # Roadmap
 The following releases are planned:
-* Version 0.2.0: support for the Catacomb Armageddon, help screens (F1) and a proper full screen mode.
+* Version 0.2.0: support for the Catacomb Armageddon, help screens (F1 key) and a proper full screen mode.
 * Version 0.3.0: support for the Catacomb Apocalypse.
 * Version 0.4.0: support for Catacomb 3-D: The Descent.

@@ -1387,14 +1387,14 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         const uint8_t nextLevel = m_level->GetFloorTile(actor->GetTileX(), actor->GetTileY() + 1) >> 8;
         m_warpToLevel = nextLevel;
-        m_game.PlaySoundWarp(true);
+        m_game.PlaySoundWarpUpOrDown(true);
         actor->SetActionPerformed(true);
         break;
     }
     case ActionWarpInsideLevel:
     {
         WarpInsideLevel(actor);
-        m_game.PlaySoundWarp(true);
+        m_game.PlaySoundWarp();
         actor->SetActionPerformed(true);
         break;
     }
@@ -2280,7 +2280,7 @@ void EngineCore::ToggleMenu()
         {
             m_gameTimer.Resume();
         }
-        m_game.PlaySoundWarp(false);
+        m_game.PlaySoundWarpUpOrDown(false);
     }
     else
     {
@@ -2289,7 +2289,7 @@ void EngineCore::ToggleMenu()
         {
             m_gameTimer.Pause();
         }
-        m_game.PlaySoundWarp(true);
+        m_game.PlaySoundWarpUpOrDown(true);
     }
 }
 

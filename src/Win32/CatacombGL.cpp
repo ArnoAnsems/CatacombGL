@@ -301,7 +301,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     }
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow(1024,768,16))
+	if (!CreateGLWindow(800,600,16))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}

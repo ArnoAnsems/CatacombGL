@@ -76,7 +76,8 @@ public:
     void PlaySoundShoot() override;
     void PlaySoundShootWall() override;
     void PlaySoundBoom() override;
-    void PlaySoundWarp(const bool up) override;
+    void PlaySoundWarpUpOrDown(const bool up) override;
+    void PlaySoundWarp() override;
 
 private:
     void DrawHealth(const int16_t health);
