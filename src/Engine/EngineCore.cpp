@@ -1485,7 +1485,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     {
                         if (action == ActionPlayerProjectile)
                         {
-                            if ((otherActor->IsSolid() || otherActor->GetAction() == ActionWaitForPickupDestructable || otherActor->GetAction() == ActionForceField || otherActor->GetAction() == ActionHangingSkeleton || otherActor->GetAction() == ActionBurningTree
+                            if (((otherActor->IsSolid() && otherActor->GetState() != StateIdRise && otherActor->GetState() != StateIdSink) || otherActor->GetAction() == ActionWaitForPickupDestructable || otherActor->GetAction() == ActionForceField || otherActor->GetAction() == ActionHangingSkeleton || otherActor->GetAction() == ActionBurningTree
                                 ) && 
                                 (abs(basex - otherActor->GetX()) < size + otherActor->GetDecorateActor().size) &&
                                 (abs(basey - otherActor->GetY()) < size + otherActor->GetDecorateActor().size))
@@ -1517,7 +1517,15 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                     }
                                     else
                                     {
-                                        otherActor->SetState(StateIdPain, m_timeStampOfWorldCurrentFrame);
+                                        if (m_game.GetId() == 3 && otherActor->GetDecorateActor().id == 56 && rand() % 8 != 0)
+                                        {
+                                            // The red demon from Armageddon has a pain chance of 1:8, see C5_STATE.C.
+                                            // Every other monster is always in pain when hit.
+                                        }
+                                        else
+                                        {
+                                            otherActor->SetState(StateIdPain, m_timeStampOfWorldCurrentFrame);
+                                        }
                                     }
                                 }
                                 moveOk = false;
