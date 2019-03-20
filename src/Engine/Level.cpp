@@ -1534,7 +1534,7 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
 
                     if (actor->GetState() == StateIdArch)
                     {
-                        orientation = (IsSolidWall(x - 1, y) || IsSolidWall(x + 1, y)) ? IRenderer::SpriteOrientation::AlongXAxis : IRenderer::SpriteOrientation::AlongYAxis;
+                        orientation = (IsSolidWall(x - 1, y) && !IsExplosiveWall(x - 1, y) && IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y)) ? IRenderer::SpriteOrientation::AlongXAxis : IRenderer::SpriteOrientation::AlongYAxis;
                     }
 
                     if (IsActorVisibleForPlayer(actor))
