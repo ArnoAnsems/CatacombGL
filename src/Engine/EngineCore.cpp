@@ -1876,7 +1876,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
                 if (actor->GetDecorateActor().projectileId != 0)
                 {
                     // Projectile attack
-                    if ((rand() % (1500 / deltaTimeInMs)) == 0 && m_level->AngleNearPlayer(actor) != -1)
+                    if ((rand() % (1000 / deltaTimeInMs)) == 0 && m_level->AngleNearPlayer(actor) != -1)
                     {
                         actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
                     }
