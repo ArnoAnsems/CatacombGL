@@ -1301,7 +1301,7 @@ int16_t Level::AngleNearPlayer(const Actor* const actor) const
     int16_t angle = -1;
     const float dx =  m_playerActor->GetX() - actor->GetX();
     const float dy =  m_playerActor->GetY() - actor->GetY();
-    if (abs(dx) < 1.0)
+    if (abs(dx) < 0.5)
     {
         if (dy < 0)
         {
@@ -1312,7 +1312,7 @@ int16_t Level::AngleNearPlayer(const Actor* const actor) const
             angle = 180;
         }
     }
-    else if (abs(dy) < 1.0)
+    else if (abs(dy) < 0.5)
     {
         if (dx < 0)
         {

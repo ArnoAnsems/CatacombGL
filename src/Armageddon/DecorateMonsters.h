@@ -1437,7 +1437,7 @@ const DecorateActor decorateDragon =
     StateIdHidden,   // initialState;
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
-    1000,    // speed;
+    2200,    // speed;
     0, // actionParameter
     actorIdProjectileDragonShot // ProjectileId
 };

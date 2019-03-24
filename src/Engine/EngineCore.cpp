@@ -1070,14 +1070,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             // Sink after between 4 and 7 seconds
             actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 4000 + (rand() % 4) * 1000);
         }
-        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
+        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction() &&
+            ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
+            (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size)))
         {
-            if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
-                (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
-            {
-                actor->SetState(StateIdSink, m_timeStampOfWorldCurrentFrame);
-                actor->SetTimeToNextAction(0);
-            }
+            actor->SetState(StateIdSink, m_timeStampOfWorldCurrentFrame);
+            actor->SetTimeToNextAction(0);
         }
         else
         {
@@ -1849,7 +1847,14 @@ void EngineCore::KeyWPressed()
 // Based on Chase() in C4_STATE.C of the Catacomb Abyss source code.
 bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget target)
 {
-    const uint16_t speed = actor->GetDecorateActor().speed;
+    uint16_t speed = actor->GetDecorateActor().speed;
+
+    // The water troll in Abyss and the water dragon in Armageddon move slower when under water.
+    if (actor->GetState() == StateIdHidden &&
+        ((m_game.GetId() == 1 || m_game.GetId() == 2 || m_game.GetId() == 3) && actor->GetDecorateActor().id == 61))
+    {
+        speed = 1200;
+    }
 
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
@@ -1863,7 +1868,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
             if (actor->GetDecorateActor().damage > 0)
             {
                 // Melee attack
-                const bool performRandomAttack = (rand() % (5000 / deltaTimeInMs) == 0);
+                const bool performRandomAttack = (rand() % (5000 / truncatedDeltaTimeInMs) == 0);
                 const bool playerInRange = actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f);
                 if (playerInRange || performRandomAttack)
                 {
@@ -1876,18 +1881,18 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
                 if (actor->GetDecorateActor().projectileId != 0)
                 {
                     // Projectile attack
-                    if ((rand() % (1000 / deltaTimeInMs)) == 0 && m_level->AngleNearPlayer(actor) != -1)
+                    if ((rand() % (1000 / truncatedDeltaTimeInMs)) == 0 && m_level->AngleNearPlayer(actor) != -1)
                     {
                         actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
                     }
                 }
-
-                // Clip with player
-                if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
-                {
-                    return true;
-                }
             }
+        }
+
+        // Clip with player
+        if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
+        {
+            return true;
         }
 
         if (move < actor->GetDistanceToTarget())
