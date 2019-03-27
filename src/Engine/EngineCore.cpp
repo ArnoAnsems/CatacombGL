@@ -1473,7 +1473,10 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         if ((abs(basex - (float)x - 0.5f) < size + 0.5f) &&
                             (abs(basey - (float)y - 0.5f) < size + 0.5f))
                         {
-                            m_level->ExplodeWall(x, y, m_timeStampOfWorldCurrentFrame, m_game.GetExplodingWallActor());
+                            if (action == ActionPlayerProjectile)
+                            {
+                                m_level->ExplodeWall(x, y, m_timeStampOfWorldCurrentFrame, m_game.GetExplodingWallActor());
+                            }
                             moveOk = false;
                         }
                     }
