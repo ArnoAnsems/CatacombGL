@@ -962,11 +962,17 @@ Actor* Level::GetNonBlockingActor(const uint16_t index) const
 void Level::AddNonBlockingActor(Actor* projectile)
 {
     uint16_t i = 0;
-    while (m_nonBlockingActors[i] != NULL && i < 100)
+
+    // To ensure that there is always a free index available when Nemesis needs to drop a key,
+    // the last five indices can only be occupied by bonus items.
+    const bool isBonusItem = (projectile->GetDecorateActor().initialState == StateIdWaitForPickup);
+    const uint8_t maxActorIndex = isBonusItem ? 100 : 95;
+    
+    while (m_nonBlockingActors[i] != NULL && i < maxActorIndex)
     {
         i++;
     }
-    if (i < 100)
+    if (i < maxActorIndex)
     {
         m_nonBlockingActors[i] = projectile;
     }
@@ -1534,7 +1540,7 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
 
                     if (actor->GetState() == StateIdArch)
                     {
-                        orientation = (IsSolidWall(x - 1, y) && !IsExplosiveWall(x - 1, y) && IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y)) ? IRenderer::SpriteOrientation::AlongXAxis : IRenderer::SpriteOrientation::AlongYAxis;
+                        orientation = (IsSolidWall(x - 1, y) && !IsExplosiveWall(x - 1, y) || IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y)) ? IRenderer::SpriteOrientation::AlongXAxis : IRenderer::SpriteOrientation::AlongYAxis;
                     }
 
                     if (IsActorVisibleForPlayer(actor))

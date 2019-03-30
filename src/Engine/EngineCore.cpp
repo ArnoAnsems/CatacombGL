@@ -672,16 +672,11 @@ bool EngineCore::Think()
             m_extraMenu.SetActive(false);
         }
     }
-
-    for (uint8_t i = 0; i < 0xff; i++)
+    else if (m_state == Victory && m_victoryState == VictoryStateDone && m_playerInput.IsAnyKeyPressed() && !m_extraMenu.IsActive())
     {
-        if (m_playerInput.IsKeyJustPressed(i))
-        {
-            m_playerActions.SetAnyKeyIsPressed(true);
-        }
+        // Open the menu when any key is pressed in the victory screen.
+        m_extraMenu.SetActive(true);
     }
-
-    m_playerInput.ClearJustPressed();
 
     // Status message
     if (m_timeStampOfPlayerCurrentFrame > m_timeStampEndOfStatusMessage)
@@ -770,11 +765,6 @@ bool EngineCore::Think()
     {
         if (!m_level->GetPlayerActor()->IsDead())
         {
-            if (m_state != InGame || m_readingScroll != 255 || m_level->GetPlayerActor()->IsDead())
-            {
-                return false;
-            }
-
             if (m_keyToTake != NoKey)
             {
                 if (m_startTakeKey != 0)
@@ -799,11 +789,10 @@ bool EngineCore::Think()
 
             if (_strcmpi(m_messageInPopup, "") != 0)
             {
-                if (m_startTakeKey == 0 && m_playerActions.GetAnyKeyWasPressed())
+                if (m_startTakeKey == 0 && m_playerInput.IsAnyKeyPressed())
                 {
                     _sprintf_p(m_messageInPopup, 256, "");
                     m_gameTimer.Resume();
-                    m_playerActions.SetAnyKeyIsPressed(false);
                 }
             }
 
@@ -972,6 +961,8 @@ bool EngineCore::Think()
             m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
         }
     }
+
+    m_playerInput.ClearJustPressed();
 
     return false;
 }
@@ -2235,7 +2226,6 @@ void EngineCore::FreezeTimeCheat()
 
 void EngineCore::WaitForAnyKeyPressed()
 {
-    m_playerActions.SetAnyKeyIsPressed(false);
     m_playerActions.SetActionActive(MoveForward, false);
     m_playerActions.SetActionActive(MoveBackward, false);
     m_playerActions.SetActionActive(Shoot, false);
@@ -2246,6 +2236,7 @@ void EngineCore::WaitForAnyKeyPressed()
     m_playerActions.SetActionActive(TurnLeft, false);
     m_playerActions.SetActionActive(TurnRight, false);
     m_playerActions.SetActionActive(QuickTurn, false);
+    m_playerActions.SetActionActive(Run, false);
 }
 
 bool EngineCore::RequiresMouseCapture() const

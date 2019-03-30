@@ -32,6 +32,7 @@ public:
     void SetKeyPressed(const SDL_Keycode keyCode, const bool pressed);
     bool IsKeyJustPressed(const SDL_Keycode keyCode) const;
     bool IsKeyPressed(const SDL_Keycode keyCode) const;
+    bool IsAnyKeyPressed() const;
     void ClearJustPressed();
     void SetMouseButtonPressed(const uint8_t buttonCode, const bool pressed);
     bool IsMouseButtonPressed(const uint8_t buttonCode) const;

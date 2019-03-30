@@ -38,8 +38,6 @@ public:
 
     const char* GetStatusMessage() const;
 
-    void SetAnyKeyIsPressed(const bool pressed);
-    bool GetAnyKeyWasPressed() const;
     void ResetForNewLevel();
 
     bool GetActionActive(const ControlAction action) const;
@@ -57,6 +55,5 @@ private:
 
     int16_t m_boltsLeft;
 
-    bool m_anyKeyIsPressed;
     bool m_controlActionActive[MaxControlAction];
 };

@@ -100,6 +100,17 @@ bool PlayerInput::IsKeyPressed(const SDL_Keycode keyCode) const
     return false;
 }
 
+bool PlayerInput::IsAnyKeyPressed() const
+{
+    bool pressed = false;
+    for (auto& pair : m_keyJustPressed)
+    {
+        pressed |= pair.second;
+    }
+
+    return pressed;
+}
+
 void PlayerInput::ClearJustPressed()
 {
     for (auto& pair : m_keyJustPressed)
