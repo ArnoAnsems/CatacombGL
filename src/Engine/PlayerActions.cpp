@@ -209,13 +209,3 @@ const char* PlayerActions::GetStatusMessage() const
         return "Viewing";
     }
 }
-
-void PlayerActions::SetAnyKeyIsPressed(const bool pressed)
-{
-    m_anyKeyIsPressed = pressed;
-}
-
-bool PlayerActions::GetAnyKeyWasPressed() const
-{
-    return m_anyKeyIsPressed;
-}

@@ -972,10 +972,6 @@ const DecorateAnimation wretchedPoxDyingAnimation =
     { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
     { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
     { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
-    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
-    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
-    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
-    { FATDEMON_BLOWUP1PIC, 6, ActionNone },{ FATDEMON_BLOWUP2PIC, 6, ActionNone },
     { FATDEMON_BLOWUP3PIC, 30, ActionNone },
     { FATDEMON_EXPLODEPIC, 40, ActionExplodeSound },
     { FATDEMON_FEETPIC, 30, ActionNone },
@@ -1441,7 +1437,7 @@ const DecorateActor decorateDragon =
     StateIdHidden,   // initialState;
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
-    1000,    // speed;
+    2200,    // speed;
     0, // actionParameter
     actorIdProjectileDragonShot // ProjectileId
 };

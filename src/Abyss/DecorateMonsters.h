@@ -1172,7 +1172,7 @@ const DecorateActor decorateWetMan =
     StateIdHidden,   // initialState;
     7,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
-    1000,    // speed;
+    2200,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

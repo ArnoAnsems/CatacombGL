@@ -177,7 +177,7 @@ void ExtraMenu::MenuDown()
                 m_menuItemSelected++;
                 if (m_menuItemSelected - m_menuItemOffset > 7)
                 {
-                    m_menuItemOffset = m_menuItemSelected - 7;
+                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
                 }
             }
         }
@@ -204,7 +204,7 @@ void ExtraMenu::MenuDown()
                 m_menuItemSelected++;
                 if (m_menuItemSelected - m_menuItemOffset > 7)
                 {
-                    m_menuItemOffset = m_menuItemSelected - 7;
+                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
                 }
             }
         }
@@ -220,7 +220,7 @@ void ExtraMenu::MenuDown()
                 m_menuItemSelected++;
                 if (m_menuItemSelected - m_menuItemOffset > 7)
                 {
-                    m_menuItemOffset = m_menuItemSelected - 7;
+                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
                 }
             }
         }
@@ -263,7 +263,7 @@ void ExtraMenu::MenuUp()
             if (m_menuItemSelected == 0)
             {
                 m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3;
-                m_menuItemOffset = m_menuItemSelected - 7;
+                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
             }
             else
             {
@@ -290,7 +290,7 @@ void ExtraMenu::MenuUp()
             if (m_menuItemSelected == 0)
             {
                 m_menuItemSelected = (uint8_t)m_savedGames.size();
-                m_menuItemOffset = m_menuItemSelected - 7;
+                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
             }
             else
             {
@@ -306,7 +306,7 @@ void ExtraMenu::MenuUp()
             if (m_menuItemSelected == 0)
             {
                 m_menuItemSelected = (uint8_t)m_savedGames.size() + 1;
-                m_menuItemOffset = m_menuItemSelected - 7;
+                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
             }
             else
             {

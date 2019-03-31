@@ -385,8 +385,8 @@ const DecorateActor decorateWaterChest =
 
 const DecorateAnimation freezeTimeWaitForPickupAnimation =
 {
-    { TIMEOBJ1PIC, 6, ActionWaitForPickup },
-    { TIMEOBJ2PIC, 6, ActionWaitForPickup }
+    { TIMEOBJ1PIC, 6, ActionWaitForPickupDestructable },
+    { TIMEOBJ2PIC, 6, ActionWaitForPickupDestructable }
 };
 
 const DecorateState freezeTimeWaitForPickup =
@@ -411,6 +411,7 @@ const std::map<DecorateStateId, DecorateState> freezeTimeStates =
 {
     std::make_pair(StateIdWaitForPickup, freezeTimeWaitForPickup),
     std::make_pair(StateIdPickup, freezeTimePickup),
+    std::make_pair(StateIdDying, bonusStateDying)
 };
 
 const DecorateActor decorateFreezeTime =

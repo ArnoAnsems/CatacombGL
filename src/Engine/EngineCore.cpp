@@ -672,16 +672,11 @@ bool EngineCore::Think()
             m_extraMenu.SetActive(false);
         }
     }
-
-    for (uint8_t i = 0; i < 0xff; i++)
+    else if (m_state == Victory && m_victoryState == VictoryStateDone && m_playerInput.IsAnyKeyPressed() && !m_extraMenu.IsActive())
     {
-        if (m_playerInput.IsKeyJustPressed(i))
-        {
-            m_playerActions.SetAnyKeyIsPressed(true);
-        }
+        // Open the menu when any key is pressed in the victory screen.
+        m_extraMenu.SetActive(true);
     }
-
-    m_playerInput.ClearJustPressed();
 
     // Status message
     if (m_timeStampOfPlayerCurrentFrame > m_timeStampEndOfStatusMessage)
@@ -770,11 +765,6 @@ bool EngineCore::Think()
     {
         if (!m_level->GetPlayerActor()->IsDead())
         {
-            if (m_state != InGame || m_readingScroll != 255 || m_level->GetPlayerActor()->IsDead())
-            {
-                return false;
-            }
-
             if (m_keyToTake != NoKey)
             {
                 if (m_startTakeKey != 0)
@@ -799,11 +789,10 @@ bool EngineCore::Think()
 
             if (_strcmpi(m_messageInPopup, "") != 0)
             {
-                if (m_startTakeKey == 0 && m_playerActions.GetAnyKeyWasPressed())
+                if (m_startTakeKey == 0 && m_playerInput.IsAnyKeyPressed())
                 {
                     _sprintf_p(m_messageInPopup, 256, "");
                     m_gameTimer.Resume();
-                    m_playerActions.SetAnyKeyIsPressed(false);
                 }
             }
 
@@ -973,6 +962,8 @@ bool EngineCore::Think()
         }
     }
 
+    m_playerInput.ClearJustPressed();
+
     return false;
 }
 
@@ -1070,14 +1061,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             // Sink after between 4 and 7 seconds
             actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 4000 + (rand() % 4) * 1000);
         }
-        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
+        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction() &&
+            ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
+            (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size)))
         {
-            if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
-                (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
-            {
-                actor->SetState(StateIdSink, m_timeStampOfWorldCurrentFrame);
-                actor->SetTimeToNextAction(0);
-            }
+            actor->SetState(StateIdSink, m_timeStampOfWorldCurrentFrame);
+            actor->SetTimeToNextAction(0);
         }
         else
         {
@@ -1475,7 +1464,10 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         if ((abs(basex - (float)x - 0.5f) < size + 0.5f) &&
                             (abs(basey - (float)y - 0.5f) < size + 0.5f))
                         {
-                            m_level->ExplodeWall(x, y, m_timeStampOfWorldCurrentFrame, m_game.GetExplodingWallActor());
+                            if (action == ActionPlayerProjectile)
+                            {
+                                m_level->ExplodeWall(x, y, m_timeStampOfWorldCurrentFrame, m_game.GetExplodingWallActor());
+                            }
                             moveOk = false;
                         }
                     }
@@ -1849,7 +1841,14 @@ void EngineCore::KeyWPressed()
 // Based on Chase() in C4_STATE.C of the Catacomb Abyss source code.
 bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget target)
 {
-    const uint16_t speed = actor->GetDecorateActor().speed;
+    uint16_t speed = actor->GetDecorateActor().speed;
+
+    // The water troll in Abyss and the water dragon in Armageddon move slower when under water.
+    if (actor->GetState() == StateIdHidden &&
+        ((m_game.GetId() == 1 || m_game.GetId() == 2 || m_game.GetId() == 3) && actor->GetDecorateActor().id == 61))
+    {
+        speed = 1200;
+    }
 
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
@@ -1863,12 +1862,11 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
             if (actor->GetDecorateActor().damage > 0)
             {
                 // Melee attack
-                if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
+                const bool performRandomAttack = (rand() % (5000 / truncatedDeltaTimeInMs) == 0);
+                const bool playerInRange = actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f);
+                if (playerInRange || performRandomAttack)
                 {
-                    if ((rand() % 3) == 0)
-                    {
-                        actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
-                    }
+                    actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
                     return true;
                 }
             }
@@ -1877,18 +1875,18 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
                 if (actor->GetDecorateActor().projectileId != 0)
                 {
                     // Projectile attack
-                    if ((rand() % 60) == 0 && m_level->AngleNearPlayer(actor) != -1)
+                    if ((rand() % (1000 / truncatedDeltaTimeInMs)) == 0 && m_level->AngleNearPlayer(actor) != -1)
                     {
                         actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
                     }
                 }
-
-                // Clip with player
-                if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
-                {
-                    return true;
-                }
             }
+        }
+
+        // Clip with player
+        if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
+        {
+            return true;
         }
 
         if (move < actor->GetDistanceToTarget())
@@ -2228,7 +2226,6 @@ void EngineCore::FreezeTimeCheat()
 
 void EngineCore::WaitForAnyKeyPressed()
 {
-    m_playerActions.SetAnyKeyIsPressed(false);
     m_playerActions.SetActionActive(MoveForward, false);
     m_playerActions.SetActionActive(MoveBackward, false);
     m_playerActions.SetActionActive(Shoot, false);
@@ -2239,6 +2236,7 @@ void EngineCore::WaitForAnyKeyPressed()
     m_playerActions.SetActionActive(TurnLeft, false);
     m_playerActions.SetActionActive(TurnRight, false);
     m_playerActions.SetActionActive(QuickTurn, false);
+    m_playerActions.SetActionActive(Run, false);
 }
 
 bool EngineCore::RequiresMouseCapture() const
