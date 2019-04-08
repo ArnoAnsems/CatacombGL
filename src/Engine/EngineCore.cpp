@@ -980,8 +980,13 @@ void EngineCore::ThinkActors()
             }
             if (m_level->GetBlockingActors()[i]->IsActive())
             {
-                m_level->GetBlockingActors()[i]->Think(m_timeStampOfWorldCurrentFrame);
                 PerformActionOnActor(m_level->GetBlockingActors()[i]);
+
+                // Another check on NULL is necessary, as the actor could have been deleted by performing ActionRemove.
+                if (m_level->GetBlockingActors()[i] != NULL)
+                {
+                    m_level->GetBlockingActors()[i]->Think(m_timeStampOfWorldCurrentFrame);
+                }
             }
         }
     }
@@ -1635,8 +1640,13 @@ void EngineCore::ThinkNonBlockingActors()
     {
         if (m_level->GetNonBlockingActors()[i] != NULL)
         {
-            m_level->GetNonBlockingActors()[i]->Think(m_timeStampOfWorldCurrentFrame);
             PerformActionOnActor(m_level->GetNonBlockingActors()[i]);
+
+            // Another check on NULL is necessary, as the actor could have been deleted by performing ActionRemove.
+            if (m_level->GetNonBlockingActors()[i] != NULL)
+            {
+                m_level->GetNonBlockingActors()[i]->Think(m_timeStampOfWorldCurrentFrame);
+            }
         }
     }
 }
