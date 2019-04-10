@@ -574,11 +574,19 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 m_waitingForNewSaveGameName = true;
                 m_newSaveGameName = "";
             }
-            else
+            else 
             {
-                command = MenuCommandSaveGame;
+                if (IsNewSaveGameNameAlreadyInUse())
+                {
+                    m_askForOverwrite = true;
+                }
+                else
+                {
+                    command = MenuCommandSaveGame;
+                    m_menuItemSelected = 0;
+                }
+                
                 m_waitingForNewSaveGameName = false;
-                m_menuItemSelected = 0;
             }
         }
         else
@@ -823,4 +831,15 @@ void ExtraMenu::OpenSoundMenu()
     m_menuItemOffset = 0;
     m_waitingForKeyToBind = false;
     m_waitingForNewSaveGameName = false;
+}
+
+bool ExtraMenu::IsNewSaveGameNameAlreadyInUse() const
+{
+    bool isInUse = false;
+    for (uint16_t i = 0; i < m_savedGames.size(); i++)
+    {
+        isInUse |= (m_savedGames.at(i) == m_newSaveGameName);
+    }
+
+    return isInUse;
 }

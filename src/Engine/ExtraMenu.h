@@ -58,6 +58,7 @@ private:
     void MenuRight();
     MenuCommand EnterKeyPressed();
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
+    bool IsNewSaveGameNameAlreadyInUse() const;
 
     bool m_menuActive;
     uint8_t m_menuItemSelected;
