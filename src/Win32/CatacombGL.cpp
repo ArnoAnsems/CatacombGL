@@ -297,7 +297,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     }
     if (gameDetectionArmageddonv102.GetBestMatch().score != 0)
     {
-        gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombAbyssv124, ".\\", armageddonFiles);
+        gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, ".\\", armageddonFiles);
     }
 
 	// Create Our OpenGL Window
