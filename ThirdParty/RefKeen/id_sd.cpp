@@ -79,7 +79,7 @@ static	uint16_t			alFXReg;
 static void
 SDL_SetTimer0(uint16_t speed)
 {
-	BE_ST_SetTimer(speed, false); // HACK for different timing with music on
+	BE_ST_SetTimer(speed); // HACK for different timing with music on
 
 }
 
@@ -209,7 +209,7 @@ SDL_ShutPC(void)
 void
 alOut(uint8_t n,uint8_t b)
 {
-	BE_ST_ALOut(n, b);
+    BE_ST_OPL2Write(n, b);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -546,7 +546,7 @@ SD_Startup(void)
 	/*** (REFKEEN) UNUSED ***/
 	//SDL_InitDelay();			// SDL_InitDelay() uses t0OldService
 
-	BE_ST_StartAudioSDService(&SDL_t0Service);
+    BE_ST_StartAudioAndTimerInt(&SDL_t0Service);
 	//setvect(8,SDL_t0Service);	// Set to my timer 0 ISR
 	/*LocalTime = TimeCount =*/ alTimeCount = 0;
 
@@ -605,7 +605,7 @@ SD_Shutdown(void)
 	if (!SD_Started)
 		return;
 
-	BE_ST_StopAudioSDService();
+    BE_ST_StopAudioAndTimerInt();
 
 	SDL_ShutDevice();
 	SDL_CleanDevice();

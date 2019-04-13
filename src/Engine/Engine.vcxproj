@@ -137,7 +137,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ThirdParty\opl\dbopl.cpp" />
-    <ClCompile Include="..\..\ThirdParty\RefKeen\be_st_sdl.cpp" />
     <ClCompile Include="..\..\ThirdParty\RefKeen\be_st_sdl_audio_timer.cpp" />
     <ClCompile Include="..\..\ThirdParty\RefKeen\id_sd.cpp" />
     <ClCompile Include="Actor.cpp" />

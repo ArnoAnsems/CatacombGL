@@ -145,8 +145,7 @@ BOOL CreateGLWindow(int width, int height, int bits)
     
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
 
-    BE_ST_InitCommon();
-    BE_ST_PrepareForGameStartup();
+    BE_ST_InitAudio();
 
     SD_Startup();
 
@@ -542,7 +541,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
 	// Shutdown
     SD_Shutdown();
-    BE_ST_ShutdownAll();
+    BE_ST_ShutdownAudio();
 
     // Store configuration
     if (systemWin32.CreatePath(filenamePath))

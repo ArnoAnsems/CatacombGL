@@ -36,9 +36,6 @@
     <ClCompile Include="..\..\ThirdParty\opl\dbopl.cpp">
       <Filter>Source Files\ThirdParty\opl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ThirdParty\RefKeen\be_st_sdl.cpp">
-      <Filter>Source Files\ThirdParty\RefKeen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ThirdParty\RefKeen\be_st_sdl_audio_timer.cpp">
       <Filter>Source Files\ThirdParty\RefKeen</Filter>
     </ClCompile>
