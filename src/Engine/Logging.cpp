@@ -15,8 +15,24 @@
 #pragma once
 
 #include "Logging.h"
+#include <fstream>
+#include <iostream>
 
-Logging::Logging()
+Logging::Logging(const std::string traceFileName) :
+    m_traceFileName(traceFileName)
+{
+    m_allLogMessages.clear();
+
+    std::ofstream file;
+    file.open(m_traceFileName);
+    if (file.is_open())
+    {
+        file << "=== CATACOMBGL Log file ===\n";
+        file.close();
+    }
+}
+
+Logging::~Logging()
 {
     m_allLogMessages.clear();
 }
@@ -24,6 +40,13 @@ Logging::Logging()
 void Logging::AddLogMessage(const std::string& logline)
 {
     m_allLogMessages.push_back(logline);
+    std::ofstream file;
+    file.open(m_traceFileName, std::ios_base::app);
+    if (file.is_open())
+    {
+        file << logline << "\n";
+        file.close();
+    }
 }
 
 const std::vector<std::string>& Logging::GetAllLogMessages() const

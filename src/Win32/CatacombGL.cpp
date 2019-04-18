@@ -32,6 +32,7 @@
 #include "..\Engine\DefaultFont.h"
 #include "..\Engine\GameSelection.h"
 #include "..\Engine\ConfigurationSettings.h"
+#include "..\Engine\Logging.h"
 
 #include "..\Abyss\GameAbyss.h"
 #include "..\Abyss\GameDetectionAbyss.h"
@@ -56,6 +57,7 @@ RendererOpenGLWin32 renderer;
 PlayerInput playerInput;
 SystemWin32 systemWin32;
 ConfigurationSettings m_configurationSettings;
+Logging* m_logging;
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
@@ -137,6 +139,15 @@ BOOL CreateGLWindow(int width, int height, int bits)
     SDL_ShowWindow(SDLwindow);
 
     glcontext = SDL_GL_CreateContext(SDLwindow);
+
+    const char* glVendor = (const char*)glGetString(GL_VENDOR);
+    m_logging->AddLogMessage("Graphics adapter vendor: " + std::string(glVendor));
+
+    const char* glRenderer = (const char*)glGetString(GL_RENDERER);
+    m_logging->AddLogMessage("Graphics adapter model: " + std::string(glRenderer));
+
+    const char* glVersion = (const char*)glGetString(GL_VERSION);
+    m_logging->AddLogMessage("OpenGL version: " + std::string(glVersion));
 
     renderer.Setup();
     renderer.SetVSync(m_configurationSettings.GetVSync());
@@ -235,6 +246,18 @@ void GetSubFolders(const std::string selectedFolder, std::vector<std::string>& s
     }
 }
 
+void LogSdlVersion()
+{
+    SDL_version sdlVersion;
+    SDL_GetVersion(&sdlVersion);
+    const std::string sdlVersionString =
+        "SDL version: " +
+        std::to_string(sdlVersion.major) + "." +
+        std::to_string(sdlVersion.minor) + "." +
+        std::to_string(sdlVersion.patch);
+    m_logging->AddLogMessage(sdlVersionString);
+}
+
 int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					HINSTANCE	hPrevInstance,		// Previous Instance
 					LPSTR		lpCmdLine,			// Command Line Parameters
@@ -243,11 +266,19 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     /* initialize random seed: */
     srand ((unsigned int)time(NULL));
 
-    SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS);
-
     const std::string filenamePath = systemWin32.GetConfigurationFilePath();
-    const std::string filename = filenamePath + "CatacombGL.ini";
-    m_configurationSettings.LoadFromFile(filename);
+
+    const std::string logFilename = filenamePath + "CatacombGL_log.txt";
+    m_logging = new Logging(logFilename);
+
+    m_logging->AddLogMessage("CatacombGL version: " + EngineCore::GetVersionInfo());
+
+    const std::string configFilename = filenamePath + "CatacombGL.ini";
+    m_configurationSettings.LoadFromFile(configFilename);
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+
+    LogSdlVersion();
 
     const uint8_t GameIdNotDetected = 0;
     const uint8_t GameIdCatacombAbyssv113 = 1;
@@ -546,7 +577,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     // Store configuration
     if (systemWin32.CreatePath(filenamePath))
     {
-        m_configurationSettings.StoreToFile(filename);
+        m_configurationSettings.StoreToFile(configFilename);
     }
 	
     if (engineCore != NULL)
@@ -558,6 +589,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     {
         delete game;
     }
+
+    delete m_logging;
 
     return TRUE;
 }
