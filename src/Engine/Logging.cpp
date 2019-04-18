@@ -17,6 +17,7 @@
 #include "Logging.h"
 #include <fstream>
 #include <iostream>
+#include "..\..\ThirdParty\SDL\include\SDL_messagebox.h"
 
 Logging::Logging(const std::string traceFileName) :
     m_traceFileName(traceFileName)
@@ -27,7 +28,7 @@ Logging::Logging(const std::string traceFileName) :
     file.open(m_traceFileName);
     if (file.is_open())
     {
-        file << "=== CATACOMBGL Log file ===\n";
+        file << "=== CatacombGL Log file ===\n";
         file.close();
     }
 }
@@ -52,4 +53,14 @@ void Logging::AddLogMessage(const std::string& logline)
 const std::vector<std::string>& Logging::GetAllLogMessages() const
 {
     return m_allLogMessages;
+}
+
+void Logging::FatalError(const std::string& message)
+{
+    AddLogMessage("FATAL ERROR: " + message);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+        "CatacombGL FATAL ERROR",
+        message.c_str(),
+        NULL);
+    exit(1);
 }

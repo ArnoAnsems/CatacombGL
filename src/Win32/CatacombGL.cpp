@@ -113,10 +113,8 @@ void SetScreenMode(const ScreenMode screenMode)
     }
 }
  
-BOOL CreateGLWindow(int width, int height, int bits)
+void CreateGLWindow(int width, int height, int bits)
 {
-    SDL_Init(SDL_INIT_VIDEO);
-
     const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo();
     SDLwindow = SDL_CreateWindow(
         windowTitle.c_str(),                  // window title
@@ -128,17 +126,25 @@ BOOL CreateGLWindow(int width, int height, int bits)
     );
 
     // Check that the window was successfully created
-    if (SDLwindow == NULL) {
-    // In the case that the window could not be made...
-    printf("Could not create window: %s\n", SDL_GetError());
-    return FALSE;
+    if (SDLwindow == NULL)
+    {
+        // In the case that the window could not be made...
+        m_logging->FatalError("SDL_CreateWindow failed: " + std::string(SDL_GetError()));
     }
 
     SDLrenderer = SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED);
+    if (SDLrenderer == NULL)
+    {
+        m_logging->FatalError("SDL_CreateRenderer failed: " + std::string(SDL_GetError()));
+    }
 
     SDL_ShowWindow(SDLwindow);
 
     glcontext = SDL_GL_CreateContext(SDLwindow);
+    if (glcontext == NULL)
+    {
+        m_logging->FatalError("SDL_GL_CreateContext failed: " + std::string(SDL_GetError()));
+    }
 
     const char* glVendor = (const char*)glGetString(GL_VENDOR);
     m_logging->AddLogMessage("Graphics adapter vendor: " + std::string(glVendor));
@@ -159,8 +165,6 @@ BOOL CreateGLWindow(int width, int height, int bits)
     BE_ST_InitAudio();
 
     SD_Startup();
-
-	return TRUE;									// Success
 }
 
 void UpdatePlayerInput()
@@ -276,7 +280,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     const std::string configFilename = filenamePath + "CatacombGL.ini";
     m_configurationSettings.LoadFromFile(configFilename);
 
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        m_logging->FatalError("SDL_Init failed: " + std::string(SDL_GetError()));
+    }
 
     LogSdlVersion();
 
@@ -331,10 +338,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     }
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow(800,600,16))
-	{
-		return 0;									// Quit If Window Was Not Created
-	}
+    CreateGLWindow(800, 600, 16);
 
     std::string initialSearchFolder = SDL_GetBasePath();
     GameSelection gameSelection(renderer);
@@ -589,6 +593,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     {
         delete game;
     }
+
+    SDL_Quit();
 
     delete m_logging;
 

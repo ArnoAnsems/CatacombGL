@@ -25,6 +25,7 @@ public:
 
     void AddLogMessage(const std::string& logline);
     const std::vector<std::string>& GetAllLogMessages() const;
+    void FatalError(const std::string& message);
 
 private:
     std::vector<std::string> m_allLogMessages;
