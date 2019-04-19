@@ -147,7 +147,7 @@ void RendererOpenGLWin32::SetPlayerPosition(const float posX, const float posY)
     m_playerPosY = posY;
 }
 
-uint32_t RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent)
+unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
@@ -179,15 +179,13 @@ uint32_t RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* decompre
     }
     const int16_t format = transparent ? GL_RGBA : GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
-    //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR );
-    //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR );   // GL_NEAREST
 
     delete textureImage;
 
     return textureId;
 }
 
-uint32_t RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height)
+unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
@@ -221,7 +219,7 @@ uint32_t RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk* de
     return textureId;
 }
 
-uint32_t RendererOpenGLWin32::generateSingleColorTexture(const egaColor color) const
+unsigned int RendererOpenGLWin32::generateSingleColorTexture(const egaColor color) const
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
@@ -247,7 +245,7 @@ uint32_t RendererOpenGLWin32::generateSingleColorTexture(const egaColor color) c
     return textureId;
 }
 
-uint32_t RendererOpenGLWin32::LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk)
+unsigned int RendererOpenGLWin32::LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
@@ -282,15 +280,13 @@ uint32_t RendererOpenGLWin32::LoadTilesSize8MaskedIntoTexture(const FileChunk* d
         }
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, numberOfTiles * 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
-    //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR );
-    //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR );   // GL_NEAREST
 
     delete textureImage;
 
     return textureId;
 }
 
-uint32_t RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture)
+unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
@@ -349,6 +345,10 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
 
     // Select the texture from the picture
     glBindTexture(GL_TEXTURE_2D, font->GetTextureId());
+    if (glGetError() == GL_INVALID_VALUE)
+    {
+        // 
+    }
 
     // Do not wrap the texture
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);

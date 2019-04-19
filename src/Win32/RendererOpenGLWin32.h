@@ -37,10 +37,10 @@ public:
     void SetTextureFilter(const TextureFilterSetting textureFilter) override;
     void SetVSync(const bool enabled) override;
     bool IsVSyncSupported() override;
-    uint32_t LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) override;
-    uint32_t LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) override;
-    uint32_t LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) override;
-    uint32_t LoadFontIntoTexture(const bool* fontPicture) override;
+    unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) override;
+    unsigned int  LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) override;
+    unsigned int LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) override;
+    unsigned int LoadFontIntoTexture(const bool* fontPicture) override;
 
     void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
     void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength) override;
@@ -87,7 +87,7 @@ private:
     void quickSort(uint16_t p,uint16_t q);
     uint16_t partition(uint16_t p,uint16_t q);
     void swap(uint16_t p,uint16_t q);
-    uint32_t generateSingleColorTexture(const egaColor color) const;
+    unsigned int generateSingleColorTexture(const egaColor color) const;
 
     uint16_t m_windowWidth;
     uint16_t m_windowHeight;
@@ -95,7 +95,7 @@ private:
     float m_playerPosX, m_playerPosY;
     spriteToRender* m_spritesToRender;
     uint16_t m_numberOfSprites;
-    uint32_t m_singleColorTexture[EgaRange];
+    unsigned int m_singleColorTexture[EgaRange];
 
     GLint m_textureFilter;
     int32_t m_currentSwapInterval;

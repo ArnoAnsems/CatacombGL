@@ -269,7 +269,7 @@ EXIT_FUNC:;
 		}
 	}
 
-    const uint32_t textureId = m_renderer.LoadFileChunkIntoTexture(chunk, m_bytesPerRow * 8, m_height, false);
+    const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(chunk, m_bytesPerRow * 8, m_height, false);
     delete chunk;
 
     m_picture = new Picture(textureId, m_width, m_height);

@@ -25,16 +25,16 @@
 class Picture
 {
 public:
-    Picture(const uint32_t textureId, const uint16_t width, const uint16_t height);
+    Picture(const unsigned int textureId, const uint16_t width, const uint16_t height);
     ~Picture();
 
-    uint32_t GetTextureId() const;
+    unsigned int GetTextureId() const;
     uint16_t GetWidth() const;
     uint16_t GetHeight() const;
 
 private:
     uint16_t m_width;
     uint16_t m_height;
-    uint32_t m_textureId;
+    unsigned int m_textureId;
 };
 

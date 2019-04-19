@@ -58,10 +58,10 @@ public:
     virtual void SetTextureFilter(const TextureFilterSetting textureFilter) = NULL;
     virtual void SetVSync(const bool enabled) = NULL;
     virtual bool IsVSyncSupported() = NULL;
-    virtual uint32_t LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) = NULL;
-    virtual uint32_t LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) = NULL;
-    virtual uint32_t LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) = NULL;
-    virtual uint32_t LoadFontIntoTexture(const bool* fontPicture) = NULL;
+    virtual unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) = NULL;
+    virtual unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) = NULL;
+    virtual unsigned int LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) = NULL;
+    virtual unsigned int LoadFontIntoTexture(const bool* fontPicture) = NULL;
 
     virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
     virtual void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength) = NULL;

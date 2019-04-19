@@ -15,7 +15,7 @@
 
 #include "Picture.h"
 
-Picture::Picture(const uint32_t textureId, const uint16_t width, const uint16_t height)
+Picture::Picture(const unsigned int textureId, const uint16_t width, const uint16_t height)
 {
     m_width = width;
     m_height = height;
@@ -27,7 +27,7 @@ Picture::~Picture()
 
 }
 
-uint32_t Picture::GetTextureId() const
+unsigned int Picture::GetTextureId() const
 {
     return m_textureId;
 }

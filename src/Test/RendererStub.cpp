@@ -52,22 +52,22 @@ bool RendererStub::IsVSyncSupported()
     return true;
 }
 
-uint32_t RendererStub::LoadFileChunkIntoTexture(const FileChunk* /*decompressedChunk*/, const uint16_t /*width*/, const uint16_t /*height*/, const bool /*transparent*/)
+unsigned int RendererStub::LoadFileChunkIntoTexture(const FileChunk* /*decompressedChunk*/, const uint16_t /*width*/, const uint16_t /*height*/, const bool /*transparent*/)
 {
     return 0u;
 }
 
-uint32_t RendererStub::LoadMaskedFileChunkIntoTexture(const FileChunk* /*decompressedChunk*/, const uint16_t /*width*/, const uint16_t /*height*/)
+unsigned int RendererStub::LoadMaskedFileChunkIntoTexture(const FileChunk* /*decompressedChunk*/, const uint16_t /*width*/, const uint16_t /*height*/)
 {
     return 0u;
 }
 
-uint32_t RendererStub::LoadTilesSize8MaskedIntoTexture(const FileChunk* /*decompressedChunk*/)
+unsigned int RendererStub::LoadTilesSize8MaskedIntoTexture(const FileChunk* /*decompressedChunk*/)
 {
     return 0;
 }
 
-uint32_t RendererStub::LoadFontIntoTexture(const bool* /*fontPicture*/)
+unsigned int RendererStub::LoadFontIntoTexture(const bool* /*fontPicture*/)
 {
     return 0u;
 }

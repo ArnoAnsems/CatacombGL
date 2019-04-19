@@ -173,7 +173,7 @@ Picture* EgaGraph::GetPicture(const uint16_t index)
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedPicture;
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        const uint32_t textureId = m_renderer.LoadFileChunkIntoTexture(pictureChunk, m_pictureTable->GetWidth(pictureIndex), m_pictureTable->GetHeight(pictureIndex), transparent);
+        const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(pictureChunk, m_pictureTable->GetWidth(pictureIndex), m_pictureTable->GetHeight(pictureIndex), transparent);
         m_pictures[pictureIndex] = new Picture(textureId, m_pictureTable->GetWidth(pictureIndex), m_pictureTable->GetHeight(pictureIndex));
         delete pictureChunk;
     }
@@ -196,7 +196,7 @@ Picture* EgaGraph::GetMaskedPicture(const uint16_t index)
         uint32_t uncompressedSize = *(uint32_t*)compressedPicture;
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
         uint16_t height = 72;  // TODO ????
-        const uint32_t textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, m_maskedPictureTable->GetWidth(pictureIndex), height);
+        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, m_maskedPictureTable->GetWidth(pictureIndex), height);
         m_maskedPictures[pictureIndex] = new Picture(textureId, m_maskedPictureTable->GetWidth(pictureIndex), height);
         delete pictureChunk;
     }
@@ -218,7 +218,7 @@ Picture* EgaGraph::GetSprite(const uint16_t index)
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedPicture;
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        const uint32_t textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, m_spriteTable->GetWidth(pictureIndex), m_spriteTable->GetHeight(pictureIndex));
+        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, m_spriteTable->GetWidth(pictureIndex), m_spriteTable->GetHeight(pictureIndex));
         m_sprites[pictureIndex] = new Picture(textureId, m_spriteTable->GetWidth(pictureIndex), m_spriteTable->GetHeight(pictureIndex));
         delete pictureChunk;
     }
@@ -235,7 +235,7 @@ Picture* EgaGraph::GetTilesSize8Masked()
         uint32_t compressedSize = GetChunkSize(pictureIndex);
         uint32_t uncompressedSize = 40 * 36;
         FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
-        const uint32_t textureId = m_renderer.LoadTilesSize8MaskedIntoTexture(pictureChunk);
+        const unsigned int textureId = m_renderer.LoadTilesSize8MaskedIntoTexture(pictureChunk);
         m_tilesSize8Masked = new Picture(textureId, 8, 8 * 36);
         delete pictureChunk;
     }
@@ -299,7 +299,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
         }
     }
 
-    uint32_t textureId = m_renderer.LoadFontIntoTexture(fontPicture);
+    unsigned int textureId = m_renderer.LoadFontIntoTexture(fontPicture);
     m_font = new Font(width, textureId);
     delete fontChunk;
 

@@ -547,7 +547,7 @@ const Font* DefaultFont::Get(IRenderer& renderer)
 {
     if (defaultFont == NULL)
     {
-        const uint32_t fontTextureId = renderer.LoadFontIntoTexture(fontData);
+        const unsigned int fontTextureId = renderer.LoadFontIntoTexture(fontData);
         defaultFont = new Font(fontWidth, fontTextureId);
     }
 

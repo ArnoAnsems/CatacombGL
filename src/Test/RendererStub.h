@@ -29,10 +29,10 @@ public:
     void SetTextureFilter(const TextureFilterSetting textureFilter) override;
     void SetVSync(const bool enabled) override;
     bool IsVSyncSupported() override;
-    uint32_t LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) override;
-    uint32_t LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) override;
-    uint32_t LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) override;
-    uint32_t LoadFontIntoTexture(const bool* fontPicture) override;
+    unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) override;
+    unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) override;
+    unsigned int LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) override;
+    unsigned int LoadFontIntoTexture(const bool* fontPicture) override;
 
     void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
     void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength) override;
