@@ -59,7 +59,7 @@ void Logging::FatalError(const std::string& message)
 {
     AddLogMessage("FATAL ERROR: " + message);
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-        "CatacombGL FATAL ERROR",
+        "CatacombGL",
         message.c_str(),
         NULL);
     exit(1);

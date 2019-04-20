@@ -144,6 +144,7 @@
     <ClCompile Include="AudioPlayer.cpp" />
     <ClCompile Include="AudioRepository.cpp" />
     <ClCompile Include="ConfigurationSettings.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlsMap.cpp" />
     <ClCompile Include="Decompressor.cpp" />
     <ClCompile Include="DefaultFont.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="AudioRepository.h" />
     <ClInclude Include="ConfigurationSettings.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="ControlsMap.h" />
     <ClInclude Include="Decompressor.h" />
     <ClInclude Include="Decorate.h" />

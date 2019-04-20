@@ -25,7 +25,8 @@ const float PlayerZ = 1.5f;
 #define GL_CLAMP_TO_EDGE 0x812F
 
 // Constructor
-RendererOpenGLWin32::RendererOpenGLWin32()
+RendererOpenGLWin32::RendererOpenGLWin32(Logging* const logging) :
+    m_logging(logging)
 {
     m_playerAngle = 0.0f;
     m_playerPosX = 2.5f;
@@ -57,6 +58,8 @@ void RendererOpenGLWin32::Setup()
     }
 
     m_isVSyncSupported = (SDL_GL_SetSwapInterval(0) == 0);
+    const std::string vSyncLogMessage = m_isVSyncSupported ? "VSync is supported" : "VSync is NOT supported";
+    m_logging->AddLogMessage(vSyncLogMessage);
 }
 
 const RendererOpenGLWin32::rgbColor egaToRgbMap[EgaRange] =
@@ -347,7 +350,7 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     glBindTexture(GL_TEXTURE_2D, font->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
     {
-        // 
+        m_logging->FatalError("Font has invalid texture name (" + std::to_string(font->GetTextureId()) + ")");
     }
 
     // Do not wrap the texture

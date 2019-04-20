@@ -20,6 +20,7 @@
 #include "..\Engine\Decompressor.h"
 #include "..\Engine\EgaColor.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\Logging.h"
 
 #include <windows.h>		// Header File For Windows
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
@@ -27,7 +28,7 @@
 class RendererOpenGLWin32: public IRenderer
 {
 public:
-    RendererOpenGLWin32();
+    RendererOpenGLWin32(Logging* const logging);
     ~RendererOpenGLWin32();
 
     void Setup() override;
@@ -100,5 +101,6 @@ private:
     GLint m_textureFilter;
     int32_t m_currentSwapInterval;
     bool m_isVSyncSupported;
+    Logging* const m_logging;
 };
 
