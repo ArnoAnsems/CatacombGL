@@ -15,11 +15,14 @@
 
 #include "Console.h"
 #include "DefaultFont.h"
+#include "..\..\ThirdParty\SDL\include\SDL_timer.h"
 
 Console::Console(const Logging* logging, const std::string& label) :
     m_logging(logging),
     m_active(false),
-    m_label(label)
+    m_label(label),
+    m_openTimestamp(0),
+    m_closeTimestamp(0)
 {
 
 }
@@ -28,22 +31,34 @@ Console::~Console()
 
 }
 
-void Console::Draw(IRenderer& renderer) const
+void Console::Draw(IRenderer& renderer)
 {
-    if(!m_active)
+    const uint32_t timestamp = SDL_GetTicks();
+    const uint32_t animationDurationInMs = 300;
+    const uint32_t maxNumberOfLinesShown = 16;
+    const uint32_t numberOfLinesShown =
+        m_active && (timestamp - m_openTimestamp >= animationDurationInMs) ? maxNumberOfLinesShown :
+        m_active ? (uint32_t)(maxNumberOfLinesShown * ((float)(timestamp - m_openTimestamp) / (float)animationDurationInMs)) :
+        (timestamp - m_closeTimestamp >= animationDurationInMs) ? 0 :
+        maxNumberOfLinesShown - (uint32_t)((maxNumberOfLinesShown * ((float)(timestamp - m_closeTimestamp) / (float)animationDurationInMs)));
+
+    if (numberOfLinesShown == 0)
     {
         return;
     }
 
     renderer.Prepare2DRendering(true);
-    renderer.Render2DBar(0, 0, 640, 180, EgaDarkGray);
+    renderer.Render2DBar(0, 0, 640, (numberOfLinesShown * 10) + 20, EgaDarkGray);
     const Font* defaultFont = DefaultFont::Get(renderer);
-    for (uint16_t i = 0; i < m_logging->GetAllLogMessages().size(); i++)
+    const uint32_t numberOfLogMessages = (uint32_t)m_logging->GetAllLogMessages().size();
+    const uint32_t firstMessage = (numberOfLogMessages > numberOfLinesShown) ? numberOfLogMessages - numberOfLinesShown : 0;
+    const int16_t offset = (numberOfLogMessages > numberOfLinesShown) ? 0 - firstMessage : numberOfLinesShown - numberOfLogMessages;
+    for (uint32_t i = firstMessage; i < numberOfLogMessages; i++)
     {
         const std::string& logMessage = m_logging->GetAllLogMessages().at(i);
-        renderer.RenderTextLeftAlignedTruncated(logMessage.c_str(), defaultFont, EgaBrightWhite, 8, 8 + (10 * i), 620);
+        renderer.RenderTextLeftAlignedTruncated(logMessage.c_str(), defaultFont, EgaBrightWhite, 8, 10 + (10 * (i + offset)), 620);
     }
-    renderer.RenderTextLeftAlignedTruncated(m_label.c_str(), defaultFont, EgaLightGray, 480, 170, 170);
+    renderer.RenderTextLeftAlignedTruncated(m_label.c_str(), defaultFont, EgaLightGray, 480, (numberOfLinesShown * 10) + 10, 170);
     renderer.Unprepare2DRendering();
 }
 
@@ -51,6 +66,15 @@ void Console::ProcessInput(PlayerInput& playerInput)
 {
     if (playerInput.IsKeyJustPressed(SDLK_BACKQUOTE))
     {
+        const uint32_t timestamp = SDL_GetTicks();
+        if (m_active)
+        {
+            m_closeTimestamp = timestamp;
+        }
+        else
+        {
+            m_openTimestamp = timestamp;
+        }
         m_active = !m_active;
     }
 }
