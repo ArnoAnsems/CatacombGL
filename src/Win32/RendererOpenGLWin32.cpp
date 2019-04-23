@@ -401,7 +401,7 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
 
 void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength)
 {
-    if (text == NULL || font == NULL)
+    if (text == NULL || font == NULL || strlen(text) == 0)
     {
         // Nothing to render
         return;
@@ -446,7 +446,7 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     else
     {
         combinedWidth = 0;
-        uint16_t chari = strlen(text) - 1;
+        uint16_t chari = (uint16_t)strlen(text) - 1;
         bool maxLengthReached = false;
         while (chari != 0  && !maxLengthReached)
         {
@@ -604,9 +604,7 @@ void RendererOpenGLWin32::Prepare2DRendering(const bool helpWindow)
 
 void RendererOpenGLWin32::Unprepare2DRendering()
 {
-
     glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
 }
 
 void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY)
@@ -689,7 +687,7 @@ void RendererOpenGLWin32::Render2DTileSize8Masked(const Picture* tiles, const ui
 
 void RendererOpenGLWin32::Render2DBar(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex)
 {
-     glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 
     const rgbColor color = EgaToRgb(colorIndex);
     glMatrixMode(GL_MODELVIEW);
@@ -822,8 +820,6 @@ void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const floa
 
 void RendererOpenGLWin32::PrepareWalls()
 {
-    glEnable(GL_TEXTURE_2D);
-
     glCullFace(GL_FRONT);
     glEnable(GL_CULL_FACE);
 }
@@ -1003,7 +999,6 @@ void RendererOpenGLWin32::swap(uint16_t p,uint16_t q)
 
 void RendererOpenGLWin32::PrepareFloorAndCeiling()
 {
-    glEnable(GL_TEXTURE_2D);
 }
 
 void RendererOpenGLWin32::UnprepareFloorAndCeiling()
@@ -1087,7 +1082,6 @@ void RendererOpenGLWin32::PrepareVisibilityMap()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glEnable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
 }
 
