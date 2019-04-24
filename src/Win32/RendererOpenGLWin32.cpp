@@ -156,13 +156,16 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* deco
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    const uint32_t bytesPerPixel = transparent ? 4 : 3;
-    const uint32_t planeSize = decompressedChunk->GetSize() / 4;
-    const uint32_t textureImageSize = planeSize * 8 * bytesPerPixel;
+    const uint32_t bytesPerOutputPixel = transparent ? 4 : 3;
+    const uint32_t numberOfPlanes = 4;
+    const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
+    const uint32_t numberOfEgaPixelsPerByte = 8;
+    const uint32_t numberOfPixels = planeSize * numberOfEgaPixelsPerByte;
+    const uint32_t textureImageSize = numberOfPixels * bytesPerOutputPixel;
 
-    if (textureImageSize < width * height * bytesPerPixel)
+    if (textureImageSize < width * height * bytesPerOutputPixel)
     {
-        m_logging->FatalError("Decompressed chunk of size " + std::to_string(textureImageSize) + " is too small to contain image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerPixel) + ")");
+        m_logging->FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
     }
 
     GLubyte* textureImage = new GLubyte[textureImageSize];
@@ -170,21 +173,28 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* deco
 
     for (uint32_t i = 0; i < planeSize; i++)
     {
-        for (int j = 0; j < 8; j++)
+        for (uint32_t j = 0; j < numberOfEgaPixelsPerByte; j++)
         {
-            bool blueplane = ((chunk[i] & (1 <<j)) > 0);
-            bool greenplane =  ((chunk[i + planeSize] & (1 << j)) > 0);
-            bool redplane =  ((chunk[i + (2 * planeSize)] & (1 << j)) > 0);
-            bool intensityplane = ((chunk[i + (3 * planeSize)] & (1 << j)) > 0);
-            const egaColor colorIndex = (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) + (redplane ? EgaRed : EgaBlack) + (greenplane ? EgaGreen : EgaBlack) + (blueplane ? EgaBlue : EgaBlack));
+            const unsigned char bitValue = (1 << j);
+            const bool blueplane =      ((chunk[i] & bitValue) > 0);
+            const bool greenplane =     ((chunk[i + planeSize] & bitValue) > 0);
+            const bool redplane =       ((chunk[i + (2 * planeSize)] & bitValue) > 0);
+            const bool intensityplane = ((chunk[i + (3 * planeSize)] & bitValue) > 0);
+            const egaColor colorIndex =
+                (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                           (redplane ? EgaRed : EgaBlack) +
+                           (greenplane ? EgaGreen : EgaBlack) +
+                           (blueplane ? EgaBlue : EgaBlack));
             const bool transparentPixel = transparent && (colorIndex == 5);
-            const rgbColor color1 = EgaToRgb(transparentPixel ? EgaBlack : colorIndex);
-            textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel)] = color1.red;
-            textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 1] = color1.green;
-            textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 2] = color1.blue;
+            const rgbColor outputColor = EgaToRgb(transparentPixel ? EgaBlack : colorIndex);
+
+            const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
+            textureImage[outputPixelOffset] = outputColor.red;
+            textureImage[outputPixelOffset + 1] = outputColor.green;
+            textureImage[outputPixelOffset + 2] = outputColor.blue;
             if (transparent)
             {
-                textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 3] = transparentPixel ? 0 : 255;
+                textureImage[outputPixelOffset + 3] = transparentPixel ? 0 : 255;
             }
         }
     }
@@ -201,13 +211,16 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    const uint32_t bytesPerPixel = 4;
-    const uint32_t planeSize = decompressedChunk->GetSize() / 5;
-    const uint32_t textureImageSize = planeSize * 8 * bytesPerPixel;
+    const uint32_t bytesPerOutputPixel = 4;
+    const uint32_t numberOfPlanes = 5;
+    const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
+    const uint32_t numberOfEgaPixelsPerByte = 8;
+    const uint32_t numberOfPixels = planeSize * numberOfEgaPixelsPerByte;
+    const uint32_t textureImageSize = numberOfPixels * bytesPerOutputPixel;
     
-    if (textureImageSize < width * height * bytesPerPixel)
+    if (textureImageSize < width * height * bytesPerOutputPixel)
     {
-        m_logging->FatalError("Decompressed chunk of size " + std::to_string(textureImageSize) + " is too small to contain masked image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerPixel) + ")");
+        m_logging->FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain masked image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
     }
 
     GLubyte* textureImage = new GLubyte[textureImageSize];
@@ -215,19 +228,25 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk
 
     for (uint32_t i = 0; i < planeSize; i++)
     {
-        for (int j = 0; j < 8; j++)
+        for (uint32_t j = 0; j < numberOfEgaPixelsPerByte; j++)
         {
-            bool transparencyplane =  ((chunk[i] & (1 <<j)) > 0);
-            bool blueplane = ((chunk[i + planeSize] & (1 << j)) > 0);
-            bool greenplane =  ((chunk[i + (2 * planeSize)] & (1 << j)) > 0);
-            bool redplane = ((chunk[i + (3 * planeSize)] & (1 << j)) > 0);
-            bool intensityplane = ((chunk[i + (4 * planeSize)] & (1 << j)) > 0);
-            const egaColor colorIndex = (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) + (redplane ? EgaRed : EgaBlack) + (greenplane ? EgaGreen : EgaBlack) + (blueplane ? EgaBlue : EgaBlack));
-            const rgbColor color1 = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
-            textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel)] = color1.red;
-            textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 1] = color1.green;
-            textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 2] = color1.blue;
-            textureImage[(i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 3] = transparencyplane ? 0 : 255;
+            const unsigned char bitValue = (1 << j);
+            const bool transparencyplane = ((chunk[i] & bitValue) > 0);
+            const bool blueplane =         ((chunk[i + planeSize] & bitValue) > 0);
+            const bool greenplane =        ((chunk[i + (2 * planeSize)] & bitValue) > 0);
+            const bool redplane =          ((chunk[i + (3 * planeSize)] & bitValue) > 0);
+            const bool intensityplane =    ((chunk[i + (4 * planeSize)] & bitValue) > 0);
+            const egaColor colorIndex =
+                (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                           (redplane ? EgaRed : EgaBlack) +
+                           (greenplane ? EgaGreen : EgaBlack) +
+                           (blueplane ? EgaBlue : EgaBlack));
+            const rgbColor outputColor = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
+            const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
+            textureImage[outputPixelOffset] = outputColor.red;
+            textureImage[outputPixelOffset + 1] = outputColor.green;
+            textureImage[outputPixelOffset + 2] = outputColor.blue;
+            textureImage[outputPixelOffset + 3] = transparencyplane ? 0 : 255;
         }
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
@@ -242,21 +261,22 @@ unsigned int RendererOpenGLWin32::generateSingleColorTexture(const egaColor colo
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    const uint32_t bytesPerPixel = 3;
-    GLubyte* textureImage = new GLubyte[64 * 64 * bytesPerPixel];
+    const uint32_t bytesPerOutputPixel = 3;
+    const uint32_t width = 64;
+    const uint32_t height = 64;
+    GLubyte* textureImage = new GLubyte[width * height * bytesPerOutputPixel];
 
-    const rgbColor color1 = EgaToRgb(color);
-    for (uint32_t i = 0; i < 64 * 64; i++)
+    const rgbColor outputColor = EgaToRgb(color);
+    uint32_t outputPixelOffset = 0;
+    for (uint32_t i = 0; i < width * height; i++)
     {
-        for (int j = 0; j < 8; j++)
-        {
-            textureImage[(i * bytesPerPixel)] = color1.red;
-            textureImage[(i * bytesPerPixel) + 1] = color1.green;
-            textureImage[(i * bytesPerPixel) + 2] = color1.blue;
-        }
+        textureImage[outputPixelOffset] = outputColor.red;
+        textureImage[outputPixelOffset + 1] = outputColor.green;
+        textureImage[outputPixelOffset + 2] = outputColor.blue;
+        outputPixelOffset += bytesPerOutputPixel;
     }
     const int16_t format = GL_RGB;
-    glTexImage2D(GL_TEXTURE_2D, 0, format, 64, 64, 0, format, GL_UNSIGNED_BYTE, textureImage);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
 
     delete textureImage;
 
@@ -268,32 +288,39 @@ unsigned int RendererOpenGLWin32::LoadTilesSize8MaskedIntoTexture(const FileChun
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    const uint32_t bytesPerPixel = 4;
-    const uint32_t numberOfTiles = decompressedChunk->GetSize() / 40;
-    GLubyte* textureImage = new GLubyte[numberOfTiles * 8 * 8 * bytesPerPixel];
+    const uint32_t bytesPerOutputPixel = 4;
+    const uint32_t inputSizeOfTileInBytes = 40;
+    const uint32_t numberOfPixelsInTile = 64; // 8 x 8
+    const uint32_t numberOfTiles = decompressedChunk->GetSize() / inputSizeOfTileInBytes;
+    GLubyte* textureImage = new GLubyte[numberOfTiles * numberOfPixelsInTile * bytesPerOutputPixel];
     const uint32_t planeSize = 8;
     unsigned char* chunk = decompressedChunk->GetChunk();
 
     for (uint32_t tile = 0; tile < numberOfTiles; tile++)
     {
-        const uint32_t tileChunkOffset = tile * 40;
-        const uint32_t tileTextureOffset = tile * 8 * 8 * bytesPerPixel;
+        const uint32_t tileChunkOffset = tile * inputSizeOfTileInBytes;
+        const uint32_t tileTextureOffset = tile * numberOfPixelsInTile * bytesPerOutputPixel;
         for (uint32_t i = 0; i < planeSize; i++)
         {
-            for (int j = 0; j < 8; j++)
+            for (uint32_t j = 0; j < 8; j++)
             {
-
-                bool transparencyplane =  ((chunk[tileChunkOffset + i] & (1 <<j)) > 0);
-                bool blueplane = ((chunk[tileChunkOffset + i + planeSize] & (1 << j)) > 0);
-                bool greenplane =  ((chunk[tileChunkOffset + i + (2 * planeSize)] & (1 << j)) > 0);
-                bool redplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & (1 << j)) > 0);
-                bool intensityplane = ((chunk[tileChunkOffset + i + (4 * planeSize)] & (1 << j)) > 0);
-                const egaColor colorIndex = (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) + (redplane ? EgaRed : EgaBlack) + (greenplane ? EgaGreen : EgaBlack) + (blueplane ? EgaBlue : EgaBlack));
-                const rgbColor color1 = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
-                textureImage[tileTextureOffset + (i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel)] = color1.red;
-                textureImage[tileTextureOffset + (i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 1] = color1.green;
-                textureImage[tileTextureOffset + (i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 2] = color1.blue;
-                textureImage[tileTextureOffset + (i * 8 * bytesPerPixel) + ((7 - j) * bytesPerPixel) + 3] = transparencyplane ? 0 : 255;
+                const unsigned char bitValue = (1 << j);
+                const bool transparencyplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                const bool blueplane =         ((chunk[tileChunkOffset + i + planeSize] & bitValue) > 0);
+                const bool greenplane =        ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                const bool redplane =          ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                const bool intensityplane =    ((chunk[tileChunkOffset + i + (4 * planeSize)] & bitValue) > 0);
+                const egaColor colorIndex =
+                    (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                               (redplane ? EgaRed : EgaBlack) +
+                               (greenplane ? EgaGreen : EgaBlack) +
+                               (blueplane ? EgaBlue : EgaBlack));
+                const rgbColor outputColor = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
+                const uint32_t outputPixelOffset = tileTextureOffset + ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                textureImage[outputPixelOffset] = outputColor.red;
+                textureImage[outputPixelOffset + 1] = outputColor.green;
+                textureImage[outputPixelOffset + 2] = outputColor.blue;
+                textureImage[outputPixelOffset + 3] = transparencyplane ? 0 : 255;
             }
         }
     }
@@ -309,17 +336,24 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture)
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    GLubyte* textureImage = new GLubyte[256 * 16 * 10 * 4];
-    for (uint32_t i = 0; i < 256 * 16 * 10; i++)
+    const uint32_t bytesPerOutputPixel = 4;
+    const uint32_t width = 256;
+    const uint32_t height = 16 * 10;
+    const uint32_t numberOfPixelsInFont = width * height;
+    GLubyte* textureImage = new GLubyte[numberOfPixelsInFont * bytesPerOutputPixel];
+    
+    uint32_t outputPixelOffset = 0;
+    for (uint32_t i = 0; i < numberOfPixelsInFont; i++)
     {
         const bool fontBit = fontPicture[i];
-        textureImage[i * 4] = 255;
-        textureImage[(i * 4) + 1] = 255;
-        textureImage[(i * 4) + 2] =  255;
-        textureImage[(i * 4) + 3] = fontBit ? 255 : 0;
+        textureImage[outputPixelOffset] = 255;
+        textureImage[outputPixelOffset + 1] = 255;
+        textureImage[outputPixelOffset + 2] =  255;
+        textureImage[outputPixelOffset + 3] = fontBit ? 255 : 0;
+        outputPixelOffset += bytesPerOutputPixel;
     }
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 16 * 10, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
 
     delete textureImage;
 
