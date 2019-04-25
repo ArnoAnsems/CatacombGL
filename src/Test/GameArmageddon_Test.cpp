@@ -30,7 +30,8 @@ GameArmageddon_Test::~GameArmageddon_Test()
 TEST(GameArmageddon_Test, CheckGetDecorateActors)
 {
     RendererStub renderer;
-    GameArmageddon gameArmageddon(".\\", renderer);
+    Logging logging("test.txt");
+    GameArmageddon gameArmageddon(".\\", renderer, &logging);
     auto decorateActors = gameArmageddon.GetDecorateActors();
     ASSERT_GT(decorateActors.size(), 0u);
 

@@ -23,12 +23,13 @@
 
 static const std::string ArmageddonName = "Catacomb Armageddon v1.02";
 
-GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) :
+GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer, Logging* logging) :
     m_gameId (3),
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_introView (NULL),
-    m_zombie_base_delay(0)
+    m_zombie_base_delay(0),
+    m_logging(logging)
 {
     m_gameMaps = NULL;
     m_egaGraph = NULL;
@@ -507,7 +508,7 @@ EgaGraph* GameArmageddon::GetEgaGraph()
 {
     if (m_egaGraph == NULL)
     {
-        m_egaGraph = new EgaGraph(egaGraphArmageddon, m_gamePath, m_renderer);
+        m_egaGraph = new EgaGraph(egaGraphArmageddon, m_gamePath, m_renderer, m_logging);
     }
 
     return m_egaGraph;

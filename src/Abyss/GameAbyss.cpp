@@ -24,13 +24,14 @@
 static const std::string AbyssV113Name = "Catacomb Abyss v1.13 Shareware";
 static const std::string AbyssV124Name = "Catacomb Abyss v1.24 Registered";
 
-GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer) :
+GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer, Logging* logging) :
     m_gameId (gameId),
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_zombie_base_delay (0),
     m_introView (NULL),
-    m_helpPageIndex(0)
+    m_helpPageIndex(0),
+    m_logging(logging)
 {
     m_gameMaps = NULL;
     m_egaGraph = NULL;
@@ -583,7 +584,7 @@ EgaGraph* GameAbyss::GetEgaGraph()
     if (m_egaGraph == NULL)
     {
         const egaGraphStaticData& staticData = (m_gameId == 1) ? egaGraphAbyss : egaGraphAbyssV124;
-        m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer);
+        m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer, m_logging);
     }
 
     return m_egaGraph;

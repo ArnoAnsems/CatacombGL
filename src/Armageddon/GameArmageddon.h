@@ -22,12 +22,13 @@
 
 #include "..\Engine\IGame.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\Logging.h"
 #include <map>
 
 class GameArmageddon: public IGame
 {
 public:
-    GameArmageddon(const std::string gamePath, IRenderer& renderer);
+    GameArmageddon(const std::string gamePath, IRenderer& renderer, Logging* logging);
     ~GameArmageddon();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -89,4 +90,5 @@ private:
     const std::string m_gamePath;
     IRenderer& m_renderer;
     short m_zombie_base_delay;
+    Logging* m_logging;
 };

@@ -509,11 +509,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         {
             if (report.gameId == GameIdCatacombArmageddonv102)
             {
-                game = new GameArmageddon(report.folder, *m_renderer);
+                game = new GameArmageddon(report.folder, *m_renderer, m_logging);
             }
             else
             {
-                game = new GameAbyss(report.gameId, report.folder, *m_renderer);
+                game = new GameAbyss(report.gameId, report.folder, *m_renderer, m_logging);
             }
             m_logging->AddLogMessage("Initializing game " + game->GetName());
         }

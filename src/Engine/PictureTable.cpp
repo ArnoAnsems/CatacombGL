@@ -15,26 +15,33 @@
 
 #include "PictureTable.h"
 
-PictureTable::PictureTable(FileChunk* decompressedChunk)
+PictureTable::PictureTable(FileChunk* decompressedChunk) :
+    m_count(0),
+    m_width(NULL),
+    m_height(NULL)
 {
     m_count = (uint16_t)decompressedChunk->GetSize() / 4;
-    m_width = new uint16_t[m_count];
-    m_height = new uint16_t[m_count];
-    uint8_t* chunk = decompressedChunk->GetChunk();
-    for (uint16_t i = 0; i < m_count; i++)
+
+    if (m_count > 0)
     {
-        m_width[i] = *(uint16_t*)&chunk[i * 4] * 8;
-        m_height[i] = *(uint16_t*)&chunk[(i * 4) + 2];
+        m_width = new uint16_t[m_count];
+        m_height = new uint16_t[m_count];
+        uint8_t* chunk = decompressedChunk->GetChunk();
+        for (uint16_t i = 0; i < m_count; i++)
+        {
+            m_width[i] = *(uint16_t*)&chunk[i * 4] * 8;
+            m_height[i] = *(uint16_t*)&chunk[(i * 4) + 2];
+        }
     }
 }
 
 PictureTable::~PictureTable()
 {
-    if (m_width != 0)
+    if (m_width != NULL)
     {
         delete m_width;
     }
-    if (m_height != 0)
+    if (m_height != NULL)
     {
         delete m_height;
     }

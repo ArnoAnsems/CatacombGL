@@ -23,10 +23,13 @@
 #include "SpriteTable.h"
 #include "LevelLocationNames.h"
 
-EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer) :
+EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer, Logging* logging) :
     m_staticData(staticData),
-    m_renderer(renderer)
+    m_renderer(renderer),
+    m_logging(logging)
 {
+    m_logging->AddLogMessage("Loading " + m_staticData.filename);
+
     // Initialize Huffman table
     m_huffman = new Huffman(m_staticData.table);
 
@@ -39,12 +42,15 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     if (file.is_open())
     {
         file.read((char*)m_rawData->GetChunk(), fileSize);
+        if (file.fail())
+        {
+            m_logging->FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
+        }
         file.close();
     }
     else
     {
-        // Oops!
-        return;
+        m_logging->FatalError("Failed to open " + fullPath);
     }
 
     // Initialize picture table
@@ -53,6 +59,11 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     uint32_t uncompressedSize = *(uint32_t*)compressedPictureTable;
     FileChunk* pictureTableChunk = m_huffman->Decompress(&compressedPictureTable[sizeof(uint32_t)], compressedSize, uncompressedSize);
     m_pictureTable = new PictureTable(pictureTableChunk);
+
+    if (m_staticData.indexOfFirstMaskedPicture - m_staticData.indexOfFirstPicture > m_pictureTable->GetCount())
+    {
+        m_logging->FatalError("Picture table only contains " + std::to_string(m_pictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfHandPicture - m_staticData.indexOfFirstPicture) + " pictures in " + m_staticData.filename);
+    }
 
     // Initialize Pictures
     m_pictures = new Picture*[m_pictureTable->GetCount()];
@@ -68,6 +79,11 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     FileChunk* maskedPictureTableChunk = m_huffman->Decompress(&compressedMaskedPictureTable[sizeof(uint32_t)], compressedSize2, uncompressedSize2);
     m_maskedPictureTable = new PictureTable(maskedPictureTableChunk);
 
+    if (m_staticData.indexOfFirstSprite - m_staticData.indexOfFirstMaskedPicture > m_maskedPictureTable->GetCount())
+    {
+        m_logging->FatalError("Masked picture table only contains " + std::to_string(m_maskedPictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfFirstSprite - m_staticData.indexOfFirstMaskedPicture) + " masked pictures in " + m_staticData.filename);
+    }
+
     // Initialize Masked Pictures
     m_maskedPictures = new Picture*[m_maskedPictureTable->GetCount()];
     for (uint16_t i = 0; i < m_maskedPictureTable->GetCount(); i++)
@@ -82,7 +98,12 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     FileChunk* spritesTableChunk = m_huffman->Decompress(&compressedSpritesTable[sizeof(uint32_t)], compressedSize3, uncompressedSize3);
     m_spriteTable = new SpriteTable(spritesTableChunk);
 
-    // Initialize Masked Pictures
+    if (m_spriteTable->GetCount() == 0)
+    {
+        m_logging->FatalError("Sprite table in " + m_staticData.filename + " has no entries.");
+    }
+
+    // Initialize sprites
     m_sprites = new Picture*[m_spriteTable->GetCount()];
     for (uint16_t i = 0; i < m_spriteTable->GetCount(); i++)
     {
@@ -195,9 +216,10 @@ Picture* EgaGraph::GetMaskedPicture(const uint16_t index)
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedPicture;
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        uint16_t height = 72;  // TODO ????
-        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, m_maskedPictureTable->GetWidth(pictureIndex), height);
-        m_maskedPictures[pictureIndex] = new Picture(textureId, m_maskedPictureTable->GetWidth(pictureIndex), height);
+        const uint16_t width = m_maskedPictureTable->GetWidth(pictureIndex);
+        const uint16_t height = m_maskedPictureTable->GetHeight(pictureIndex);
+        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, width, height);
+        m_maskedPictures[pictureIndex] = new Picture(textureId, width, height);
         delete pictureChunk;
     }
 
@@ -233,10 +255,10 @@ Picture* EgaGraph::GetTilesSize8Masked()
         const uint16_t pictureIndex = m_staticData.indexOfTileSize8Masked;
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
         uint32_t compressedSize = GetChunkSize(pictureIndex);
-        uint32_t uncompressedSize = 40 * 36;
+        uint32_t uncompressedSize = 40 * 12;
         FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
         const unsigned int textureId = m_renderer.LoadTilesSize8MaskedIntoTexture(pictureChunk);
-        m_tilesSize8Masked = new Picture(textureId, 8, 8 * 36);
+        m_tilesSize8Masked = new Picture(textureId, 8, 8 * 12);
         delete pictureChunk;
     }
 
@@ -247,7 +269,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
 {
     if (index != 3)
     {
-        return NULL;
+        m_logging->FatalError("No font found at index " + std::to_string(index) + " in " + m_staticData.filename);
     }
 
     if (m_font != NULL)
@@ -350,5 +372,5 @@ uint32_t EgaGraph::GetChunkSize(const uint16_t index)
 
 uint16_t EgaGraph::GetHandPictureIndex() const
 {
-    return m_staticData.indexOfHandPicture;
+    return m_staticData.indexOfFirstMaskedPicture;
 }
