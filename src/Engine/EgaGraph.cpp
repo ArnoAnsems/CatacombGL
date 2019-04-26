@@ -38,7 +38,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_rawData = new FileChunk(fileSize);
     std::ifstream file;
     const std::string fullPath = path + m_staticData.filename;
-    file.open(fullPath, std::ifstream::binary);
+    file.open(fullPath, std::ifstream::in | std::ifstream::binary);
     if (file.is_open())
     {
         file.read((char*)m_rawData->GetChunk(), fileSize);

@@ -573,7 +573,7 @@ GameMaps* GameAbyss::GetGameMaps()
 {
     if (m_gameMaps == NULL)
     {
-        m_gameMaps = new GameMaps(gameMapsAbyss, m_gamePath);
+        m_gameMaps = new GameMaps(gameMapsAbyss, m_gamePath, m_logging);
     }
 
     return m_gameMaps;

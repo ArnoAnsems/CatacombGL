@@ -498,7 +498,7 @@ GameMaps* GameArmageddon::GetGameMaps()
 {
     if (m_gameMaps == NULL)
     {
-        m_gameMaps = new GameMaps(gameMapsArmageddon, m_gamePath);
+        m_gameMaps = new GameMaps(gameMapsArmageddon, m_gamePath, m_logging);
     }
 
     return m_gameMaps;

@@ -18,22 +18,32 @@
 #include "Decompressor.h"
 
 
-GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path) :
-    m_staticData(staticData)
+GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path, Logging* logging) :
+    m_staticData(staticData),
+    m_logging(logging)
 {
+    m_logging->AddLogMessage("Loading " + m_staticData.filename);
+
     // Read the entire GameMaps file into memory
     uint32_t fileSize = staticData.offsets.back();
     m_rawData = new FileChunk(fileSize);
 
     std::ifstream file;
     const std::string fullPath = path + staticData.filename;
-    file.open(fullPath, std::ifstream::binary);
+    file.open(fullPath, std::ifstream::in | std::ifstream::binary);
     if (file.is_open())
     {
         file.read((char*)m_rawData->GetChunk(), fileSize);
+        if (file.fail())
+        {
+            m_logging->FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
+        }
         file.close();
     }
-
+    else
+    {
+        m_logging->FatalError("Failed to open " + fullPath);
+    }
 }
 
 GameMaps::~GameMaps()
@@ -43,6 +53,7 @@ GameMaps::~GameMaps()
 
 Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 {
+    m_logging->AddLogMessage("Loading map " + std::to_string(mapIndex) + " from start");
     uint16_t rlewTag = 0xABCD; //*(uint16_t*)(m_rawData->GetChunk());
     uint8_t* headerStart = &(m_rawData->GetChunk()[m_staticData.offsets.at(mapIndex)]);
     const uint32_t plane0Offset = *(uint32_t*)(headerStart);
@@ -67,6 +78,9 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
 {
     uint8_t mapIndex = 0;
     file.read((char*)&mapIndex, sizeof(mapIndex));
+
+    m_logging->AddLogMessage("Loading map " + std::to_string(mapIndex) + " from saved game");
+
     uint16_t mapWidth = 0;
     file.read((char*)&mapWidth, sizeof(mapWidth));
     uint16_t mapHeight = 0;

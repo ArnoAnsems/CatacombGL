@@ -24,6 +24,7 @@
 #include <vector>
 #include "FileChunk.h"
 #include "Level.h"
+#include "Logging.h"
 
 const uint16_t wallSolid = 1;
 const uint16_t wallSpecial = 2;
@@ -42,7 +43,7 @@ typedef struct gameMapsStaticData
 class GameMaps
 {
 public:
-    GameMaps(const gameMapsStaticData& staticData, const std::string& path);
+    GameMaps(const gameMapsStaticData& staticData, const std::string& path, Logging* logging);
     ~GameMaps();
 
     Level* GetLevelFromStart(const uint8_t mapIndex) const;
@@ -55,5 +56,6 @@ private:
 
     const gameMapsStaticData& m_staticData;
     FileChunk* m_rawData;
+    Logging* m_logging;
 };
 

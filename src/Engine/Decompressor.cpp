@@ -417,7 +417,7 @@ FileChunk* Decompressor::RLEW_Decompress(const uint8_t* compressedChunk, const u
     FileChunk* decompressedChunk = new FileChunk(decompressedSize);
 
     uint16_t* destination = (uint16_t*)decompressedChunk->GetChunk();
-    uint16_t* end = &destination[decompressedSize / sizeof(uint16_t)];
+    uint16_t* end = destination + (decompressedSize / sizeof(uint16_t));
 
     uint16_t value, count;
 
