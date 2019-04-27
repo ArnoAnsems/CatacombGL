@@ -285,6 +285,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
     m_logging->AddLogMessage("Initializing CatacombGL " + EngineCore::GetVersionInfo());
 
+    m_logging->AddLogMessage("Running " + systemWin32.GetOSVersion());
+
     const std::string configFilename = filenamePath + "CatacombGL.ini";
     m_logging->AddLogMessage("Loading CatacombGL.ini");
     m_configurationSettings.LoadFromFile(configFilename);

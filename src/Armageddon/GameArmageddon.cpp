@@ -518,7 +518,7 @@ AudioRepository* GameArmageddon::GetAudioRepository()
 {
     if (m_audioRepository == NULL)
     {
-        m_audioRepository = new AudioRepository(audioRepositoryArmageddon, m_gamePath);
+        m_audioRepository = new AudioRepository(audioRepositoryArmageddon, m_gamePath, m_logging);
     }
 
     return m_audioRepository;

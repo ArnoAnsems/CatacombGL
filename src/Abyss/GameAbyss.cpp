@@ -594,7 +594,7 @@ AudioRepository* GameAbyss::GetAudioRepository()
 {
     if (m_audioRepository == NULL)
     {
-        m_audioRepository = new AudioRepository(audioRepositoryAbyss, m_gamePath);
+        m_audioRepository = new AudioRepository(audioRepositoryAbyss, m_gamePath, m_logging);
     }
 
     return m_audioRepository;

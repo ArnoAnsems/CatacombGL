@@ -78,6 +78,11 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     const std::string filenamePath = m_system.GetConfigurationFilePath();
     const std::string savedGamesAbyssPath = filenamePath + m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesAbyssPath, m_savedGames);
+
+    // Pre-load game data from disk
+    m_game.GetEgaGraph();
+    m_game.GetAudioRepository();
+    m_game.GetGameMaps();
 }
 
 EngineCore::~EngineCore()

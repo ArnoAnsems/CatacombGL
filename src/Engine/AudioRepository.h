@@ -18,6 +18,7 @@
 #include <vector>
 #include <string>
 #include "Huffman.h"
+#include "Logging.h"
 
 class AdlibSound;
 class PCSound;
@@ -33,7 +34,7 @@ typedef struct audioRepositoryStaticData
 class AudioRepository
 {
 public:
-    AudioRepository(const audioRepositoryStaticData& staticData, const std::string& path);
+    AudioRepository(const audioRepositoryStaticData& staticData, const std::string& path, Logging* logging);
     ~AudioRepository();
 
     PCSound* GetPCSound(const uint16_t index);
@@ -48,5 +49,6 @@ private:
     PCSound** m_pcSounds;
     AdlibSound** m_adlibSounds;
     Huffman* m_huffman;
+    Logging* m_logging;
 };
 
