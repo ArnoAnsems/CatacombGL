@@ -327,7 +327,7 @@ void ExtraMenu::MenuLeft()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 2)
+            if (m_menuItemSelected == 3)
             {
                 if (m_configurationSettings.GetFov() > 25)
                 {
@@ -366,7 +366,7 @@ void ExtraMenu::MenuRight()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 2)
+            if (m_menuItemSelected == 3)
             {
                 if (m_configurationSettings.GetFov() < 45)
                 {

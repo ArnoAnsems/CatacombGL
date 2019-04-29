@@ -283,9 +283,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     m_logging = new Logging(logFilename);
     m_console = new Console(m_logging, "CatacombGL " + EngineCore::GetVersionInfo());
 
-    m_logging->AddLogMessage("Initializing CatacombGL " + EngineCore::GetVersionInfo());
+    const std::string buildBitInfo(systemWin32.isBuiltIn64Bit() ? " (64 bit)" : " (32 bit)");
+    m_logging->AddLogMessage("Initializing CatacombGL " + EngineCore::GetVersionInfo() + buildBitInfo);
 
-    m_logging->AddLogMessage("Running " + systemWin32.GetOSVersion());
+    m_logging->AddLogMessage("Running on " + systemWin32.GetOSVersion());
 
     const std::string configFilename = filenamePath + "CatacombGL.ini";
     m_logging->AddLogMessage("Loading CatacombGL.ini");
@@ -310,11 +311,16 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     std::string gogPath;
     if (GetCatacombsPackGOGPath(gogPath))
     {
+        m_logging->AddLogMessage("Catacombs Pack is present in Windows registry: " + gogPath);
         const std::string gogArmageddonPath = gogPath + "Armageddon\\";
         gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, gogArmageddonPath, armageddonFiles);
 
         const std::string gogAbyssPath = gogPath + "Abyss\\";
         gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, gogAbyssPath, abyssFilesv124);
+    }
+    else
+    {
+        m_logging->AddLogMessage("Catacombs Pack is not present in Windows registry");
     }
 
     // Try to find game files via configuration file
@@ -341,6 +347,33 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     if (gameDetectionArmageddonv102.GetBestMatch().score != 0)
     {
         gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, ".\\", armageddonFiles);
+    }
+
+    if (gameDetectionAbyssV113.GetBestMatch().score == 0)
+    {
+        m_logging->AddLogMessage("Catacomb Abyss v1.13 detected at " + gameDetectionAbyssV113.GetBestMatch().folder);
+    }
+    else
+    {
+        m_logging->AddLogMessage("Catacomb Abyss v1.13 not detected");
+    }
+    
+    if (gameDetectionAbyssV124.GetBestMatch().score == 0)
+    {
+        m_logging->AddLogMessage("Catacomb Abyss v1.24 detected at " + gameDetectionAbyssV124.GetBestMatch().folder);
+    }
+    else
+    {
+        m_logging->AddLogMessage("Catacomb Abyss v1.24 not detected");
+    }
+
+    if (gameDetectionArmageddonv102.GetBestMatch().score == 0)
+    {
+        m_logging->AddLogMessage("Catacomb Armageddon v1.02 detected at " + gameDetectionArmageddonv102.GetBestMatch().folder);
+    }
+    else
+    {
+        m_logging->AddLogMessage("Catacomb Armageddon v1.02 not detected");
     }
 
 	// Create Our OpenGL Window
@@ -527,7 +560,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
         if (active)
         {
-            engineCore = new EngineCore(*game, systemWin32, playerInput, m_configurationSettings);
+            engineCore = new EngineCore(*game, systemWin32, playerInput, m_configurationSettings, m_logging);
 
             // Update the window title with the selected game info.
             const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo() + " [" + game->GetName() + "]";

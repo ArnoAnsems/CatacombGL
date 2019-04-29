@@ -141,3 +141,12 @@ std::string SystemWin32::GetOSVersion() const
 
     return ver;
 }
+
+bool SystemWin32::isBuiltIn64Bit() const
+{
+#ifdef _WIN64
+    return true;
+#else
+    return false;
+#endif
+}

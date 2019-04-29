@@ -25,6 +25,7 @@ public:
     virtual void GetSavedGameNamesFromFolder(const std::string& path, std::vector<std::string>& filesFound) const override;
     virtual bool CreatePath(const std::string& path) const override;
     virtual std::string GetOSVersion() const override;
+    virtual bool isBuiltIn64Bit() const override;
 
 private:
     std::string FindConfigurationFilePath() const;

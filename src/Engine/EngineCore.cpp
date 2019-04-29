@@ -39,7 +39,7 @@ const uint8_t VictoryStatePlayGetPoint = 10;
 const uint8_t VictoryStatePlayingGetPoint = 11;
 const uint8_t VictoryStateDone = 12;
 
-EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput, ConfigurationSettings& configurationSettings) :
+EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput, ConfigurationSettings& configurationSettings, Logging* logging) :
     m_gameTimer(),
     m_game(game),
     m_system(system),
@@ -70,7 +70,8 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_savedGames(),
     m_extraMenu(configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames),
     m_configurationSettings(configurationSettings),
-    m_scrollsArePresent(AreScrollsPresent())
+    m_scrollsArePresent(AreScrollsPresent()),
+    m_logging(logging)
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -1634,6 +1635,15 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             // Hop from left to right as a harmless bunny.
             BunnyHopping(actor);
         }
+        break;
+    }
+    case ActionNone:
+    {
+        break;
+    }
+    default:
+    {
+        m_logging->FatalError("Unknown action (" + std::to_string(action) + ") for actor with id (" + std::to_string(actor->GetDecorateActor().id) + ") and state (" + std::to_string(actor->GetState()) + ")");
         break;
     }
     }

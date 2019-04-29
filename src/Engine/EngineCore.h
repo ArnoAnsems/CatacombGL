@@ -32,13 +32,14 @@
 #include "ExtraMenu.h"
 #include "GameTimer.h"
 #include "ISystem.h"
+#include "Logging.h"
 
 #include "../Armageddon/GameArmageddon.h"
 
 class EngineCore
 {
 public:
-    EngineCore(IGame& game, const ISystem& system, PlayerInput& playerInput, ConfigurationSettings& configurationSettings);
+    EngineCore(IGame& game, const ISystem& system, PlayerInput& playerInput, ConfigurationSettings& configurationSettings, Logging* logging);
     ~EngineCore();
 
     // Draw the current state of the game.
@@ -168,4 +169,5 @@ private:
     const ISystem& m_system;
     std::vector<std::string> m_savedGames;
     const bool m_scrollsArePresent;
+    Logging* m_logging;
 };
