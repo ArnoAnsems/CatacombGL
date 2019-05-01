@@ -115,7 +115,7 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
             std::to_string(mapWidth) + " and a height of " + std::to_string(mapHeight));
     }
 
-    return new Level(mapIndex, mapWidth, mapHeight, (uint16_t*)(decompressedPlane0->GetChunk()), (uint16_t*)(decompressedPlane2->GetChunk()), m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
+    return new Level(mapIndex, mapWidth, mapHeight, (uint16_t*)(decompressedPlane0->GetChunk()), (uint16_t*)(decompressedPlane2->GetChunk()), m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo, m_logging);
 }
 
 Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
@@ -177,7 +177,7 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
         m_logging->FatalError("Failed to lightningStartTimestamp from saved game");
     }
 
-    Level* level = new Level(mapIndex, mapWidth, mapHeight, plane0, plane2, m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
+    Level* level = new Level(mapIndex, mapWidth, mapHeight, plane0, plane2, m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo, m_logging);
     delete plane0;
     delete plane2;
 

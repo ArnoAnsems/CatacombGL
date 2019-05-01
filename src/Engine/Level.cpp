@@ -17,7 +17,15 @@
 #include "PlayerInventory.h"
 #include "EgaGraph.h"
 
-Level::Level(const uint8_t mapIndex, const uint16_t mapWidth, const uint16_t mapHeight, const uint16_t* plane0, const uint16_t* plane2, const LevelInfo& mapInfo, const std::vector<WallInfo>& wallsInfo):
+Level::Level(
+    const uint8_t mapIndex,
+    const uint16_t mapWidth,
+    const uint16_t mapHeight,
+    const uint16_t* plane0,
+    const uint16_t* plane2,
+    const LevelInfo& mapInfo,
+    const std::vector<WallInfo>& wallsInfo,
+    Logging* logging):
     m_levelWidth (mapWidth),
     m_levelHeight (mapHeight),
     m_levelInfo (mapInfo),
@@ -29,7 +37,8 @@ Level::Level(const uint8_t mapIndex, const uint16_t mapWidth, const uint16_t map
     m_blockingActors(NULL),
     m_nonBlockingActors(NULL),
     m_wallXVisible(NULL),
-    m_wallYVisible(NULL)
+    m_wallYVisible(NULL),
+    m_logging(logging)
 {
     const uint16_t mapSize = m_levelWidth * m_levelHeight;
     m_plane0 = new uint16_t[mapSize];
@@ -63,6 +72,10 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
     m_playerActor = new Actor(file, decorateActors);
     uint16_t numberOfBlockingActors = 0;
     file.read((char*)&numberOfBlockingActors, sizeof(numberOfBlockingActors));
+    if (file.fail())
+    {
+        m_logging->FatalError("Failed to read number of blocking actors from saved game");
+    }
     for (uint16_t i = 0; i < numberOfBlockingActors; i++)
     {
         Actor* blockingActor = new Actor(file, decorateActors);
@@ -71,6 +84,14 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
 
     uint16_t numberOfNonBlockingActors = 0;
     file.read((char*)&numberOfNonBlockingActors, sizeof(numberOfNonBlockingActors));
+    if (file.fail())
+    {
+        m_logging->FatalError("Failed to read number of non-blocking actors from saved game");
+    }
+    if (numberOfNonBlockingActors > 100)
+    {
+        m_logging->FatalError("Saved game contains " + std::to_string(numberOfNonBlockingActors) + " non-blocking actors, while 100 is the maximum");
+    }
     for (uint16_t i = 0; i < numberOfNonBlockingActors; i++)
     {
         Actor* nonBlockingActor = new Actor(file, decorateActors);
@@ -178,21 +199,41 @@ uint16_t Level::GetLevelHeight() const
 
 uint16_t Level::GetWallTile(const uint16_t x, const uint16_t y) const
 {
+    if (x >= m_levelWidth || y >= m_levelHeight)
+    {
+        m_logging->FatalError("GetWallTile(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+    }
+
     return m_plane0[(y * m_levelWidth) + x];
 }
 
 uint16_t Level::GetFloorTile(const uint16_t x, const uint16_t y) const
 {
+    if (x >= m_levelWidth || y >= m_levelHeight)
+    {
+        m_logging->FatalError("GetFloorTile(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+    }
+
     return m_plane2[(y * m_levelWidth) + x];
 }
 
 void Level::SetWallTile(const uint16_t x, const uint16_t y, const uint16_t wallTile)
 {
+    if (x >= m_levelWidth || y >= m_levelHeight)
+    {
+        m_logging->FatalError("SetWallTile(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(wallTile) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+    }
+
     m_plane0[(y * m_levelWidth) + x] = wallTile;
 }
 
 void Level::SetFloorTile(const uint16_t x, const uint16_t y, const uint16_t floorTile)
 {
+    if (x >= m_levelWidth || y >= m_levelHeight)
+    {
+        m_logging->FatalError("SetFloorTile(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(floorTile) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+    }
+
     m_plane2[(y * m_levelWidth) + x] = floorTile;
 }
 
@@ -946,11 +987,21 @@ Actor** Level::GetNonBlockingActors()
 
 void Level::SetBlockingActor(const uint16_t x, const uint16_t y, Actor* actor)
 {
+    if (x >= m_levelWidth || y >= m_levelHeight)
+    {
+        m_logging->FatalError("SetBlockingActor(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+    }
+
     m_blockingActors[(y * m_levelWidth) + x] = actor;
 }
 
 Actor* Level::GetBlockingActor(const uint16_t x, const uint16_t y) const
 {
+    if (x >= m_levelWidth || y >= m_levelHeight)
+    {
+        m_logging->FatalError("GetBlockingActor(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+    }
+
     return m_blockingActors[(y * m_levelWidth) + x];
 }
 
@@ -1360,6 +1411,11 @@ int16_t Level::AngleNearPlayer(const Actor* const actor) const
 
 void Level::ExplodeWall(const uint16_t x, const uint16_t y, const uint32_t timestamp, const DecorateActor& explodingWallActor)
 {
+    if (x >= m_levelWidth || y >= m_levelHeight)
+    {
+        m_logging->FatalError("ExplodeWall(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+    }
+
     if (m_blockingActors[(y * m_levelWidth) + x] == NULL)
     {
         m_blockingActors[(y * m_levelWidth) + x] = new Actor(x, y, timestamp, explodingWallActor);

@@ -2408,17 +2408,25 @@ bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
         file.close();
         result = true;
     }
+    else
+    {
+        m_logging->AddLogMessage("WARNING: Unable to write to file " + filename);
+    }
     return result;
 }
 
 bool EngineCore::StoreGameToFile(const std::string filename)
 {
     const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string filenamePathAbyss = filenamePath + m_game.GetSavedGamesPath();
-    if (m_system.CreatePath(filenamePathAbyss))
+    const std::string filenamePathForGame = filenamePath + m_game.GetSavedGamesPath();
+    if (m_system.CreatePath(filenamePathForGame))
     {
-        const std::string fullPath = filenamePathAbyss + "\\" + filename + ".sav";
+        const std::string fullPath = filenamePathForGame + "\\" + filename + ".sav";
         return StoreGameToFileWithFullPath(fullPath);
+    }
+    else
+    {
+        m_logging->AddLogMessage("WARNING: Unable to create path " + filenamePathForGame);
     }
 
     return false;
@@ -2430,11 +2438,18 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
     file.open(filename, std::ifstream::binary);
     if (file.is_open())
     {
+        m_logging->AddLogMessage("Loading saved game " + filename);
         char headerString[11];
         file.read(headerString, 11);
-        uint8_t versionMajorRead = 0;;
+        if (file.fail())
+        {
+            m_logging->AddLogMessage("WARNING: Unable to read header from " + filename);
+            file.close();
+            return;
+        }
+        uint8_t versionMajorRead = 0;
         file.read((char*)&versionMajorRead, sizeof(versionMajorRead));
-        uint8_t versionMinorRead = 0;;
+        uint8_t versionMinorRead = 0;
         file.read((char*)&versionMinorRead, sizeof(versionMinorRead));
         uint8_t gameId = 0;
         file.read((char*)&gameId, sizeof(gameId));
@@ -2459,6 +2474,10 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         m_timeStampOfPlayerCurrentFrame = currentTimestampOfPlayer;
         m_timeStampOfWorldPreviousFrame = m_timeStampOfWorldCurrentFrame;
         m_timeStampOfWorldCurrentFrame = currentTimestampOfWorld;
+    }
+    else
+    {
+        m_logging->AddLogMessage("WARNING: Unable to open file " + filename);
     }
 }
 

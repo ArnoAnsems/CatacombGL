@@ -27,6 +27,7 @@
 #include "PlayerInventory.h"
 #include "Actor.h"
 #include "IRenderer.h"
+#include "Logging.h"
 
 class EgaGraph;
 
@@ -81,7 +82,15 @@ typedef struct LevelWall
 class Level
 {
 public:
-    Level(const uint8_t levelIndex, const uint16_t levelWidth, const uint16_t levelHeight, const uint16_t* plane0, const uint16_t* plane2, const LevelInfo& mapInfo, const std::vector<WallInfo>& wallsInfo);
+    Level(
+        const uint8_t levelIndex,
+        const uint16_t levelWidth,
+        const uint16_t levelHeight,
+        const uint16_t* plane0,
+        const uint16_t* plane2,
+        const LevelInfo& mapInfo,
+        const std::vector<WallInfo>& wallsInfo,
+        Logging* logging);
     bool LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
     ~Level();
 
@@ -162,4 +171,6 @@ private:
 
     bool* m_wallXVisible;
     bool* m_wallYVisible;
+
+    Logging* m_logging;
 };
