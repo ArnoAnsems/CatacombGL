@@ -15,58 +15,58 @@
 
 #include "IntroViewArmageddon.h"
 
-IntroViewArmageddon::IntroViewArmageddon(IRenderer& renderer, const std::string& path) :
-    IIntroView(renderer)
+IntroViewArmageddon::IntroViewArmageddon(IRenderer& renderer, const std::string& path, Logging* logging) :
+    IIntroView(renderer, logging)
 {
-    m_shapeEntering = new Shape(renderer);
+    m_shapeEntering = new Shape(renderer, m_logging);
     const std::string shp8 = path + "SHP8.ARM";
     m_shapeEntering->LoadFromFile(shp8.c_str());
 
-    m_shapePresents = new Shape(renderer);
+    m_shapePresents = new Shape(renderer, m_logging);
     const std::string shp14 = path + "SHP14.ARM";
     m_shapePresents->LoadFromFile(shp14.c_str());
 
-    m_shapeSoftdisk = new Shape(renderer);
+    m_shapeSoftdisk = new Shape(renderer, m_logging);
     const std::string shp1 = path + "SHP1.ARM";
     m_shapeSoftdisk->LoadFromFile(shp1.c_str());
 
-    m_shapeTitle = new Shape(renderer);
+    m_shapeTitle = new Shape(renderer, m_logging);
     const std::string shp2 = path + "SHP2.ARM";
     m_shapeTitle->LoadFromFile(shp2.c_str());
 
-    m_shapeCreditsProgramming = new Shape(renderer);
+    m_shapeCreditsProgramming = new Shape(renderer, m_logging);
     const std::string shp3 = path + "SHP3.ARM";
     m_shapeCreditsProgramming->LoadFromFile(shp3.c_str());
 
-    m_shapeCreditsArt = new Shape(renderer);
+    m_shapeCreditsArt = new Shape(renderer, m_logging);
     const std::string shp4 = path + "SHP4.ARM";
     m_shapeCreditsArt->LoadFromFile(shp4.c_str());
 
-    m_shapeCreditsQA = new Shape(renderer);
+    m_shapeCreditsQA = new Shape(renderer, m_logging);
     const std::string shp5 = path + "SHP5.ARM";
     m_shapeCreditsQA->LoadFromFile(shp5.c_str());
 
-    m_shapeCreditsDesign = new Shape(renderer);
+    m_shapeCreditsDesign = new Shape(renderer, m_logging);
     const std::string shp6 = path + "SHP6.ARM";
     m_shapeCreditsDesign->LoadFromFile(shp6.c_str());
 
-    m_shapeSelectDifficulty = new Shape(renderer);
+    m_shapeSelectDifficulty = new Shape(renderer, m_logging);
     const std::string shp10 = path + "SHP10.ARM";
     m_shapeSelectDifficulty->LoadFromFile(shp10.c_str());
 
-    m_shapeConfirmDifficulty = new Shape(renderer);
+    m_shapeConfirmDifficulty = new Shape(renderer, m_logging);
     const std::string shp9 = path + "SHP9.ARM";
     m_shapeConfirmDifficulty->LoadFromFile(shp9.c_str());
 
-    m_shapeNovice = new Shape(renderer);
+    m_shapeNovice = new Shape(renderer, m_logging);
     const std::string shp11 = path + "SHP11.ARM";
     m_shapeNovice->LoadFromFile(shp11.c_str());
 
-    m_shapeWarrior = new Shape(renderer);
+    m_shapeWarrior = new Shape(renderer, m_logging);
     const std::string shp12 = path + "SHP12.ARM";
     m_shapeWarrior->LoadFromFile(shp12.c_str());
 
-    m_shapeStandBeforeGate = new Shape(renderer);
+    m_shapeStandBeforeGate = new Shape(renderer, m_logging);
     const std::string shp7 = path + "SHP7.ARM";
     m_shapeStandBeforeGate->LoadFromFile(shp7.c_str());
 }

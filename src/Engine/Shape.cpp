@@ -24,19 +24,12 @@
 #include "stdio.h"
 #include "IRenderer.h"
 
-Shape::Shape(IRenderer& renderer) :
-    m_renderer (renderer)
+Shape::Shape(IRenderer& renderer, Logging* logging) :
+    m_renderer (renderer),
+    m_logging(logging)
 {
-    m_dataSize = 0;
-    m_bytesPerRow = 0;
-    m_width = 0;
-    m_height = 0;
     m_offsetX = 0;
     m_offsetY = 0;
-    m_numberOfPlanes = 0;
-    m_transparent = 0;
-    m_compressed = 0;
-    m_pad = 0;
     m_picture = NULL;
 }
 
@@ -126,6 +119,14 @@ bool Shape::LoadFromFile(const char* filename)
     (*(ptr+3) == *(Name+3)) \
     )
 
+    uint8_t* data = NULL;
+    int32_t dataSize = 0;
+    uint16_t bytesPerRow = 0;
+    uint16_t width = 0;
+    uint16_t height = 0;
+    uint8_t numberOfPlanes = 0;
+    uint8_t compressed = 0;
+
     // Decompress to ram and return ptr to data and return len of data in
     //	passed variable...
 
@@ -152,8 +153,7 @@ bool Shape::LoadFromFile(const char* filename)
         goto EXIT_FUNC;
     ptr += 4;
 
-    FileLen += 4;
-    while (FileLen)
+    while (FileLen != 0)
     {
         uint32_t ChunkLen = BE_Cross_Swap32(*(int32_t*)(ptr+4));
         ChunkLen = (ChunkLen+1) & 0xFFFFFFFE;
@@ -161,35 +161,47 @@ bool Shape::LoadFromFile(const char* filename)
         if (CHUNK("BMHD"))
         {
             ptr += 8;
-            m_width = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->w);
-            m_height = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->h);
+            width = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->w);
+            height = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->h);
             m_offsetX = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->x);
             m_offsetY = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->y);
 
-            m_numberOfPlanes = ((struct BitMapHeader*)ptr)->d;
-            m_transparent = ((struct BitMapHeader*)ptr)->trans;
-            m_compressed = ((struct BitMapHeader*)ptr)->comp;
-            m_pad = ((struct BitMapHeader*)ptr)->pad;
+            numberOfPlanes = ((struct BitMapHeader*)ptr)->d;
+            if (numberOfPlanes != 4)
+            {
+                m_logging->FatalError("Failed to read shape " + std::string(filename) + ": number of planes is " + std::to_string(numberOfPlanes) + "; expected: 4");
+            }
+
+            const uint8_t transparent = ((struct BitMapHeader*)ptr)->trans;
+            compressed = ((struct BitMapHeader*)ptr)->comp;
+            const uint8_t pad = ((struct BitMapHeader*)ptr)->pad;
 
             ptr += ChunkLen;
         }
-        else
-            if (CHUNK("BODY"))
-            {
-                ptr += 4;
-                m_dataSize = BE_Cross_Swap32(*((int32_t*)ptr));
-                ptr += 4;
-                m_bytesPerRow = (m_width + 7) >> 3;
-                m_data = new uint8_t[m_dataSize];
-                if (!m_data)
-                    goto EXIT_FUNC;
-                memcpy(m_data,ptr,m_dataSize);
-                ptr += ChunkLen;
+        else if (CHUNK("BODY"))
+        {
+            ptr += 4;
+            dataSize = BE_Cross_Swap32(*((int32_t*)ptr));
+            ptr += 4;
 
-                break;
+            if ((int32_t)FileLen < dataSize)
+            {
+                m_logging->AddLogMessage("Failed to read shape " + std::string(filename) + ": body reports data size of " + std::to_string(dataSize) + " bytes, but only " + std::to_string(FileLen) + " bytes remaining in the file");
             }
-            else
-                ptr += ChunkLen+8;
+
+            bytesPerRow = (width + 7) >> 3;
+            data = new uint8_t[dataSize];
+            if (!data)
+                goto EXIT_FUNC;
+            memcpy(data,ptr,dataSize);
+            ptr += ChunkLen;
+
+            break;
+        }
+        else
+        {
+            ptr += ChunkLen + 8;
+        }
 
         FileLen -= ChunkLen+8;
     }
@@ -201,23 +213,28 @@ EXIT_FUNC:;
         IFFfile = NULL;
     }
 
-    FileChunk* chunk = new FileChunk(m_bytesPerRow * m_numberOfPlanes * m_height);
+    FileChunk* chunk = new FileChunk(bytesPerRow * numberOfPlanes * height);
 
-	const bool NotWordAligned = m_bytesPerRow & 1;
+	const bool NotWordAligned = bytesPerRow & 1;
 
-	int8_t* Src = (int8_t *)(m_data);
-    const uint32_t planeSize = m_bytesPerRow * m_height;
-    for (int16_t currentRow = 0; currentRow < m_height; currentRow++)
+    if (data == NULL)
+    {
+        m_logging->AddLogMessage("Failed to read shape " + std::string(filename) + ": body not found");
+    }
+
+	int8_t* Src = (int8_t *)(data);
+    const uint32_t planeSize = bytesPerRow * height;
+    for (int16_t currentRow = 0; currentRow < height; currentRow++)
 	{
-		for (int8_t currentPlane = 0; currentPlane < m_numberOfPlanes; currentPlane++)
+		for (int8_t currentPlane = 0; currentPlane < numberOfPlanes; currentPlane++)
 		{
             uint16_t offset = 0;
 
-			uint16_t remainingBytesInRow = ((m_bytesPerRow+1) >> 1) << 1;               // IGNORE WORD ALIGN
+			uint16_t remainingBytesInRow = ((bytesPerRow+1) >> 1) << 1;               // IGNORE WORD ALIGN
 			while (remainingBytesInRow)
 			{
                 int8_t n;
-				if (m_compressed)
+				if (compressed)
                 {
 					n = *Src++;
                 }
@@ -240,7 +257,7 @@ EXIT_FUNC:;
 
 						while (n--)
                         {
-                            chunk->GetChunk()[(planeSize * currentPlane) + (currentRow * m_bytesPerRow) + offset] = Rep;
+                            chunk->GetChunk()[(planeSize * currentPlane) + (currentRow * bytesPerRow) + offset] = Rep;
                             offset++;
                         }
 					}
@@ -258,7 +275,7 @@ EXIT_FUNC:;
 
 					while (n--)
                     {
-                        chunk->GetChunk()[(planeSize * currentPlane) + (currentRow * m_bytesPerRow) + offset] = *Src++;
+                        chunk->GetChunk()[(planeSize * currentPlane) + (currentRow * bytesPerRow) + offset] = *Src++;
                         offset++;
                     }
 
@@ -269,10 +286,12 @@ EXIT_FUNC:;
 		}
 	}
 
-    const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(chunk, m_bytesPerRow * 8, m_height, false);
+    delete data;
+
+    const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(chunk, bytesPerRow * numberOfPlanes * 2, height, false);
     delete chunk;
 
-    m_picture = new Picture(textureId, m_width, m_height);
+    m_picture = new Picture(textureId, width, height);
 
     return true;
 }

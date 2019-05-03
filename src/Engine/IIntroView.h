@@ -22,11 +22,12 @@
 #pragma once
 
 #include "IRenderer.h"
+#include "Logging.h"
 
 class IIntroView
 {
 public:
-    IIntroView(IRenderer& renderer);
+    IIntroView(IRenderer& renderer, Logging* logging);
     virtual void DrawIntroduction(const uint32_t timeStamp) = 0;
     virtual void DrawRequestDifficultyLevel() = 0;
     virtual void DrawNoviceSelected() = 0;
@@ -35,5 +36,6 @@ public:
 
 protected:
     IRenderer& m_renderer;
+    Logging* m_logging;
 };
 

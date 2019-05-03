@@ -15,50 +15,50 @@
 
 #include "IntroViewAbyss.h"
 
-IntroViewAbyss::IntroViewAbyss(IRenderer& renderer, const std::string& path) :
-    IIntroView(renderer)
+IntroViewAbyss::IntroViewAbyss(IRenderer& renderer, const std::string& path, Logging* logging) :
+    IIntroView(renderer, logging)
 {
-    m_shapeEntering = new Shape(renderer);
+    m_shapeEntering = new Shape(renderer, m_logging);
     const std::string shp05 = path + "SHP05.ABS";
     m_shapeEntering->LoadFromFile(shp05.c_str());
 
-    m_shapePresents = new Shape(renderer);
+    m_shapePresents = new Shape(renderer, m_logging);
     const std::string shp12 = path + "SHP12.ABS";
     m_shapePresents->LoadFromFile(shp12.c_str());
 
-    m_shapeSoftdisk = new Shape(renderer);
+    m_shapeSoftdisk = new Shape(renderer, m_logging);
     const std::string shp01 = path + "SHP01.ABS";
     m_shapeSoftdisk->LoadFromFile(shp01.c_str());
 
-    m_shapeTitle = new Shape(renderer);
+    m_shapeTitle = new Shape(renderer, m_logging);
     const std::string shp02 = path + "SHP02.ABS";
     m_shapeTitle->LoadFromFile(shp02.c_str());
 
-    m_shapeCredits = new Shape(renderer);
+    m_shapeCredits = new Shape(renderer, m_logging);
     const std::string shp03 = path + "SHP03.ABS";
     m_shapeCredits->LoadFromFile(shp03.c_str());
 
-    m_shapeTrilogy = new Shape(renderer);
+    m_shapeTrilogy = new Shape(renderer, m_logging);
     const std::string shp11 = path + "SHP11.ABS";
     m_shapeTrilogy->LoadFromFile(shp11.c_str());
 
-    m_shapeSelectDifficulty = new Shape(renderer);
+    m_shapeSelectDifficulty = new Shape(renderer, m_logging);
     const std::string shp07 = path + "SHP07.ABS";
     m_shapeSelectDifficulty->LoadFromFile(shp07.c_str());
 
-    m_shapeConfirmDifficulty = new Shape(renderer);
+    m_shapeConfirmDifficulty = new Shape(renderer, m_logging);
     const std::string shp06 = path + "SHP06.ABS";
     m_shapeConfirmDifficulty->LoadFromFile(shp06.c_str());
 
-    m_shapeNovice = new Shape(renderer);
+    m_shapeNovice = new Shape(renderer, m_logging);
     const std::string shp08 = path + "SHP08.ABS";
     m_shapeNovice->LoadFromFile(shp08.c_str());
 
-    m_shapeWarrior = new Shape(renderer);
+    m_shapeWarrior = new Shape(renderer, m_logging);
     const std::string shp09 = path + "SHP09.ABS";
     m_shapeWarrior->LoadFromFile(shp09.c_str());
 
-    m_shapeStandBeforeGate = new Shape(renderer);
+    m_shapeStandBeforeGate = new Shape(renderer, m_logging);
     const std::string shp04 = path + "SHP04.ABS";
     m_shapeStandBeforeGate->LoadFromFile(shp04.c_str());
 

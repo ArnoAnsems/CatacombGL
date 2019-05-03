@@ -538,7 +538,7 @@ IIntroView* GameArmageddon::GetIntroView()
 {
     if (m_introView == NULL)
     {
-        m_introView = new IntroViewArmageddon(m_renderer, m_gamePath);
+        m_introView = new IntroViewArmageddon(m_renderer, m_gamePath, m_logging);
     }
 
     return m_introView;

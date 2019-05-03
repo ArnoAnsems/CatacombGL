@@ -22,11 +22,12 @@
 
 #include "Picture.h"
 #include "IRenderer.h"
+#include "Logging.h"
 
 class Shape
 {
 public:
-    Shape(IRenderer& renderer);
+    Shape(IRenderer& renderer, Logging* logging);
     ~Shape();
     bool LoadFromFile(const char* filename);
 
@@ -35,17 +36,9 @@ public:
     Picture* GetPicture() const;
 
 private:
-    uint8_t* m_data;
-    int32_t m_dataSize;
-    uint16_t m_bytesPerRow;
-    uint16_t m_width;
-    uint16_t m_height;
     uint16_t m_offsetX;
     uint16_t m_offsetY;
-    uint8_t m_numberOfPlanes;
-    uint8_t m_transparent;
-    uint8_t m_compressed;
-    uint8_t m_pad;
     Picture* m_picture;
     IRenderer& m_renderer;
+    Logging* m_logging;
 };

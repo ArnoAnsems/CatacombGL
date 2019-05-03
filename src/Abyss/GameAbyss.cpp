@@ -614,7 +614,7 @@ IIntroView* GameAbyss::GetIntroView()
 {
     if (m_introView == NULL)
     {
-        m_introView = new IntroViewAbyss(m_renderer, m_gamePath);
+        m_introView = new IntroViewAbyss(m_renderer, m_gamePath, m_logging);
     }
 
     return m_introView;

@@ -922,12 +922,12 @@ bool EngineCore::Think()
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + (mouseMovement * tics * (abs(mouseMovement / 30.0f))));
                     m_playerInput.SetMouseXPos(0);
                 }
+
+                m_level->UpdateVisibilityMap();
+
+                ThinkActors();
+                ThinkNonBlockingActors();
             }
-
-            m_level->UpdateVisibilityMap();
-
-            ThinkActors();
-            ThinkNonBlockingActors();
         }
 
         if (m_takingChest)

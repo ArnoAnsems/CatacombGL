@@ -15,8 +15,9 @@
 
 #include "IIntroView.h"
 
-IIntroView::IIntroView(IRenderer& renderer) :
-    m_renderer(renderer)
+IIntroView::IIntroView(IRenderer& renderer, Logging* logging) :
+    m_renderer(renderer),
+    m_logging(logging)
 {
 
 }
