@@ -117,8 +117,9 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_font = NULL;
 
     // Initialize location names
-    m_worldLocationNames = new LevelLocationNames*[m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames];
-    for (uint16_t i = 0; i < m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1; i++)
+    const uint16_t numberOfWorldLocationNames = m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1;
+    m_worldLocationNames = new LevelLocationNames*[numberOfWorldLocationNames];
+    for (uint16_t i = 0; i < numberOfWorldLocationNames; i++)
     {
         m_worldLocationNames[i] = NULL;
     }
@@ -156,7 +157,8 @@ EgaGraph::~EgaGraph()
     delete[] m_sprites;
     delete m_spriteTable;
 
-    for (uint16_t i = 0; i < m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames; i++)
+    const uint16_t numberOfWorldLocationNames = m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1;
+    for (uint16_t i = 0; i < numberOfWorldLocationNames; i++)
     {
         if (m_worldLocationNames[i] != NULL)
         {
