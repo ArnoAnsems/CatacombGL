@@ -17,6 +17,7 @@
 #include <gl\gl.h>
 #include <gl\glu.h>
 #include "..\..\ThirdParty\SDL\include\SDL_video.h"
+#include "..\Engine\Logging.h"
 
 const float FloorZ = 2.0f;
 const float CeilingZ = 1.0f;
@@ -26,8 +27,7 @@ const uint8_t MaxSpritesToRender = 100;
 #define GL_CLAMP_TO_EDGE 0x812F
 
 // Constructor
-RendererOpenGLWin32::RendererOpenGLWin32(Logging* const logging) :
-    m_logging(logging)
+RendererOpenGLWin32::RendererOpenGLWin32()
 {
     m_playerAngle = 0.0f;
     m_playerPosX = 2.5f;
@@ -60,7 +60,7 @@ void RendererOpenGLWin32::Setup()
 
     m_isVSyncSupported = (SDL_GL_SetSwapInterval(0) == 0);
     const std::string vSyncLogMessage = m_isVSyncSupported ? "VSync is supported" : "VSync is NOT supported";
-    m_logging->AddLogMessage(vSyncLogMessage);
+    Logging::Instance().AddLogMessage(vSyncLogMessage);
 }
 
 const RendererOpenGLWin32::rgbColor egaToRgbMap[EgaRange] =
@@ -165,7 +165,7 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* deco
 
     if (textureImageSize < width * height * bytesPerOutputPixel)
     {
-        m_logging->FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
+        Logging::Instance().FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
     }
 
     GLubyte* textureImage = new GLubyte[textureImageSize];
@@ -220,7 +220,7 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk
     
     if (textureImageSize < width * height * bytesPerOutputPixel)
     {
-        m_logging->FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain masked image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
+        Logging::Instance().FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain masked image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
     }
 
     GLubyte* textureImage = new GLubyte[textureImageSize];
@@ -397,7 +397,7 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     glBindTexture(GL_TEXTURE_2D, font->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Font has invalid texture name (" + std::to_string(font->GetTextureId()) + ")");
+        Logging::Instance().FatalError("Font has invalid texture name (" + std::to_string(font->GetTextureId()) + ")");
     }
 
     // Do not wrap the texture
@@ -450,7 +450,7 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     glBindTexture(GL_TEXTURE_2D, font->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Font has invalid texture name (" + std::to_string(font->GetTextureId()) + ")");
+        Logging::Instance().FatalError("Font has invalid texture name (" + std::to_string(font->GetTextureId()) + ")");
     }
 
     // Do not wrap the texture
@@ -658,7 +658,7 @@ void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t
     glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Picture has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
+        Logging::Instance().FatalError("Picture has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
     }
 
     // Do not wrap the texture
@@ -696,7 +696,7 @@ void RendererOpenGLWin32::Render2DTileSize8Masked(const Picture* tiles, const ui
     glBindTexture(GL_TEXTURE_2D, tiles->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Picture of type TileSize8Masked has invalid texture name (" + std::to_string(tiles->GetTextureId()) + ")");
+        Logging::Instance().FatalError("Picture of type TileSize8Masked has invalid texture name (" + std::to_string(tiles->GetTextureId()) + ")");
     }
 
     // Do not wrap the texture
@@ -881,7 +881,7 @@ void RendererOpenGLWin32::Render3DWall(const Picture* picture, const int16_t til
     glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Picture of type wall texture has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
+        Logging::Instance().FatalError("Picture of type wall texture has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
     }
 
     // Only wrap the texture in horizontal direction
@@ -926,7 +926,7 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
     glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Picture of type sprite has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
+        Logging::Instance().FatalError("Picture of type sprite has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
     }
 
     // Do not wrap the texture
@@ -1046,7 +1046,7 @@ void RendererOpenGLWin32::RenderFloor(const uint16_t tileX, const uint16_t tileY
     glBindTexture(GL_TEXTURE_2D, m_singleColorTexture[colorIndex]);
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Picture of type floor texture has invalid texture name (" + std::to_string(m_singleColorTexture[colorIndex]) + ")");
+        Logging::Instance().FatalError("Picture of type floor texture has invalid texture name (" + std::to_string(m_singleColorTexture[colorIndex]) + ")");
     }
 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
@@ -1071,7 +1071,7 @@ void RendererOpenGLWin32::RenderCeiling(const uint16_t tileX, const uint16_t til
     glBindTexture(GL_TEXTURE_2D, m_singleColorTexture[colorIndex]);
     if (glGetError() == GL_INVALID_VALUE)
     {
-        m_logging->FatalError("Picture of type ceiling texture has invalid texture name (" + std::to_string(m_singleColorTexture[colorIndex]) + ")");
+        Logging::Instance().FatalError("Picture of type ceiling texture has invalid texture name (" + std::to_string(m_singleColorTexture[colorIndex]) + ")");
     }
 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);

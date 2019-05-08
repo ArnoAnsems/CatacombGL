@@ -19,8 +19,20 @@
 #include <iostream>
 #include "..\..\ThirdParty\SDL\include\SDL_messagebox.h"
 
-Logging::Logging(const std::string traceFileName) :
-    m_traceFileName(traceFileName)
+static Logging* m_instance = NULL;
+
+Logging& Logging::Instance()
+{
+    if (m_instance == NULL)
+    {
+        m_instance = new Logging();
+    }
+
+    return *m_instance;
+}
+
+Logging::Logging() :
+    m_traceFileName("")
 {
     m_allLogMessages.clear();
 
@@ -36,6 +48,11 @@ Logging::Logging(const std::string traceFileName) :
 Logging::~Logging()
 {
     m_allLogMessages.clear();
+}
+
+void Logging::SetLogFile(const std::string traceFileName)
+{
+    m_traceFileName = traceFileName;
 }
 
 void Logging::AddLogMessage(const std::string& logline)

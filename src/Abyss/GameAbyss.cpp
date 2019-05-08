@@ -24,14 +24,13 @@
 static const std::string AbyssV113Name = "Catacomb Abyss v1.13 Shareware";
 static const std::string AbyssV124Name = "Catacomb Abyss v1.24 Registered";
 
-GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer, Logging* logging) :
+GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer) :
     m_gameId (gameId),
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_zombie_base_delay (0),
     m_introView (NULL),
-    m_helpPageIndex(0),
-    m_logging(logging)
+    m_helpPageIndex(0)
 {
     m_gameMaps = NULL;
     m_egaGraph = NULL;
@@ -573,7 +572,7 @@ GameMaps* GameAbyss::GetGameMaps()
 {
     if (m_gameMaps == NULL)
     {
-        m_gameMaps = new GameMaps(gameMapsAbyss, m_gamePath, m_logging);
+        m_gameMaps = new GameMaps(gameMapsAbyss, m_gamePath);
     }
 
     return m_gameMaps;
@@ -584,7 +583,7 @@ EgaGraph* GameAbyss::GetEgaGraph()
     if (m_egaGraph == NULL)
     {
         const egaGraphStaticData& staticData = (m_gameId == 1) ? egaGraphAbyss : egaGraphAbyssV124;
-        m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer, m_logging);
+        m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer);
     }
 
     return m_egaGraph;
@@ -594,7 +593,7 @@ AudioRepository* GameAbyss::GetAudioRepository()
 {
     if (m_audioRepository == NULL)
     {
-        m_audioRepository = new AudioRepository(audioRepositoryAbyss, m_gamePath, m_logging);
+        m_audioRepository = new AudioRepository(audioRepositoryAbyss, m_gamePath);
     }
 
     return m_audioRepository;
@@ -614,7 +613,7 @@ IIntroView* GameAbyss::GetIntroView()
 {
     if (m_introView == NULL)
     {
-        m_introView = new IntroViewAbyss(m_renderer, m_gamePath, m_logging);
+        m_introView = new IntroViewAbyss(m_renderer, m_gamePath);
     }
 
     return m_introView;

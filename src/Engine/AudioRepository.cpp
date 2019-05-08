@@ -18,16 +18,15 @@
 #include "AdlibSound.h"
 #include "PCSound.h"
 
-AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, const std::string& path, Logging* logging) :
-    m_staticData(staticData),
-    m_logging(logging)
+AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, const std::string& path) :
+    m_staticData(staticData)
 {
-    m_logging->AddLogMessage("Loading " + m_staticData.filename);
+    Logging::Instance().AddLogMessage("Loading " + m_staticData.filename);
 
     // Check that there are sufficient entries for both PC sounds and Adlib sounds
     if (m_staticData.offsets.size() < (uint32_t)(m_staticData.lastSound * 2) + 1)
     {
-        m_logging->FatalError("Insufficient entries (" + std::to_string(m_staticData.offsets.size()) + ") in " +
+        Logging::Instance().FatalError("Insufficient entries (" + std::to_string(m_staticData.offsets.size()) + ") in " +
             m_staticData.filename + " for " + std::to_string(m_staticData.lastSound) + " PC and adlib sounds");
     }
 
@@ -45,13 +44,13 @@ AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, co
         file.read((char*)m_rawData->GetChunk(), fileSize);
         if (file.fail())
         {
-            m_logging->FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
+            Logging::Instance().FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
         }
         file.close();
     }
     else
     {
-        m_logging->FatalError("Failed to open " + fullPath);
+        Logging::Instance().FatalError("Failed to open " + fullPath);
     }
 
     // Initialize PC and Adlib sounds

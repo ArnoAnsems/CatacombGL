@@ -23,12 +23,11 @@
 #include "SpriteTable.h"
 #include "LevelLocationNames.h"
 
-EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer, Logging* logging) :
+EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer) :
     m_staticData(staticData),
-    m_renderer(renderer),
-    m_logging(logging)
+    m_renderer(renderer)
 {
-    m_logging->AddLogMessage("Loading " + m_staticData.filename);
+    Logging::Instance().AddLogMessage("Loading " + m_staticData.filename);
 
     // Initialize Huffman table
     m_huffman = new Huffman(m_staticData.table);
@@ -44,13 +43,13 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
         file.read((char*)m_rawData->GetChunk(), fileSize);
         if (file.fail())
         {
-            m_logging->FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
+            Logging::Instance().FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
         }
         file.close();
     }
     else
     {
-        m_logging->FatalError("Failed to open " + fullPath);
+        Logging::Instance().FatalError("Failed to open " + fullPath);
     }
 
     // Initialize picture table
@@ -62,7 +61,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
 
     if (m_staticData.indexOfFirstMaskedPicture - m_staticData.indexOfFirstPicture > m_pictureTable->GetCount())
     {
-        m_logging->FatalError("Picture table only contains " + std::to_string(m_pictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfHandPicture - m_staticData.indexOfFirstPicture) + " pictures in " + m_staticData.filename);
+        Logging::Instance().FatalError("Picture table only contains " + std::to_string(m_pictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfHandPicture - m_staticData.indexOfFirstPicture) + " pictures in " + m_staticData.filename);
     }
 
     // Initialize Pictures
@@ -81,7 +80,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
 
     if (m_staticData.indexOfFirstSprite - m_staticData.indexOfFirstMaskedPicture > m_maskedPictureTable->GetCount())
     {
-        m_logging->FatalError("Masked picture table only contains " + std::to_string(m_maskedPictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfFirstSprite - m_staticData.indexOfFirstMaskedPicture) + " masked pictures in " + m_staticData.filename);
+        Logging::Instance().FatalError("Masked picture table only contains " + std::to_string(m_maskedPictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfFirstSprite - m_staticData.indexOfFirstMaskedPicture) + " masked pictures in " + m_staticData.filename);
     }
 
     // Initialize Masked Pictures
@@ -100,7 +99,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
 
     if (m_spriteTable->GetCount() == 0)
     {
-        m_logging->FatalError("Sprite table in " + m_staticData.filename + " has no entries.");
+        Logging::Instance().FatalError("Sprite table in " + m_staticData.filename + " has no entries.");
     }
 
     // Initialize sprites
@@ -271,7 +270,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
 {
     if (index != 3)
     {
-        m_logging->FatalError("No font found at index " + std::to_string(index) + " in " + m_staticData.filename);
+        Logging::Instance().FatalError("No font found at index " + std::to_string(index) + " in " + m_staticData.filename);
     }
 
     if (m_font != NULL)

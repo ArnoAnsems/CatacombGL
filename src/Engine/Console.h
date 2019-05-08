@@ -21,14 +21,13 @@
 class Console
 {
 public:
-    Console(const Logging* logging, const std::string& label);
+    Console(const std::string& label);
     ~Console();
 
     void Draw(IRenderer& renderer);
     void ProcessInput(PlayerInput& playerInput);
 
 private:
-    const Logging* m_logging;
     bool m_active;
     const std::string m_label;
     uint32_t m_openTimestamp;

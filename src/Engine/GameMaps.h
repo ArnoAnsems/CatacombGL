@@ -43,7 +43,7 @@ typedef struct gameMapsStaticData
 class GameMaps
 {
 public:
-    GameMaps(const gameMapsStaticData& staticData, const std::string& path, Logging* logging);
+    GameMaps(const gameMapsStaticData& staticData, const std::string& path);
     ~GameMaps();
 
     Level* GetLevelFromStart(const uint8_t mapIndex) const;
@@ -56,6 +56,5 @@ private:
 
     const gameMapsStaticData& m_staticData;
     FileChunk* m_rawData;
-    Logging* m_logging;
 };
 

@@ -24,9 +24,8 @@
 #include "stdio.h"
 #include "IRenderer.h"
 
-Shape::Shape(IRenderer& renderer, Logging* logging) :
-    m_renderer (renderer),
-    m_logging(logging)
+Shape::Shape(IRenderer& renderer) :
+    m_renderer (renderer)
 {
     m_offsetX = 0;
     m_offsetY = 0;
@@ -169,7 +168,7 @@ bool Shape::LoadFromFile(const char* filename)
             numberOfPlanes = ((struct BitMapHeader*)ptr)->d;
             if (numberOfPlanes != 4)
             {
-                m_logging->FatalError("Failed to read shape " + std::string(filename) + ": number of planes is " + std::to_string(numberOfPlanes) + "; expected: 4");
+                Logging::Instance().FatalError("Failed to read shape " + std::string(filename) + ": number of planes is " + std::to_string(numberOfPlanes) + "; expected: 4");
             }
 
             const uint8_t transparent = ((struct BitMapHeader*)ptr)->trans;
@@ -186,7 +185,7 @@ bool Shape::LoadFromFile(const char* filename)
 
             if ((int32_t)FileLen < dataSize)
             {
-                m_logging->AddLogMessage("Failed to read shape " + std::string(filename) + ": body reports data size of " + std::to_string(dataSize) + " bytes, but only " + std::to_string(FileLen) + " bytes remaining in the file");
+                Logging::Instance().AddLogMessage("Failed to read shape " + std::string(filename) + ": body reports data size of " + std::to_string(dataSize) + " bytes, but only " + std::to_string(FileLen) + " bytes remaining in the file");
             }
 
             bytesPerRow = (width + 7) >> 3;
@@ -219,7 +218,7 @@ EXIT_FUNC:;
 
     if (data == NULL)
     {
-        m_logging->AddLogMessage("Failed to read shape " + std::string(filename) + ": body not found");
+        Logging::Instance().AddLogMessage("Failed to read shape " + std::string(filename) + ": body not found");
     }
 
 	int8_t* Src = (int8_t *)(data);

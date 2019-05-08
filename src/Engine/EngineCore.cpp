@@ -39,7 +39,7 @@ const uint8_t VictoryStatePlayGetPoint = 10;
 const uint8_t VictoryStatePlayingGetPoint = 11;
 const uint8_t VictoryStateDone = 12;
 
-EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput, ConfigurationSettings& configurationSettings, Logging* logging) :
+EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput, ConfigurationSettings& configurationSettings) :
     m_gameTimer(),
     m_game(game),
     m_system(system),
@@ -70,8 +70,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_savedGames(),
     m_extraMenu(configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames),
     m_configurationSettings(configurationSettings),
-    m_scrollsArePresent(AreScrollsPresent()),
-    m_logging(logging)
+    m_scrollsArePresent(AreScrollsPresent())
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -1643,7 +1642,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     default:
     {
-        m_logging->FatalError("Unknown action (" + std::to_string(action) + ") for actor with id (" + std::to_string(actor->GetDecorateActor().id) + ") and state (" + std::to_string(actor->GetState()) + ")");
+        Logging::Instance().FatalError("Unknown action (" + std::to_string(action) + ") for actor with id (" + std::to_string(actor->GetDecorateActor().id) + ") and state (" + std::to_string(actor->GetState()) + ")");
         break;
     }
     }
@@ -2410,7 +2409,7 @@ bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
     }
     else
     {
-        m_logging->AddLogMessage("WARNING: Unable to write to file " + filename);
+        Logging::Instance().AddLogMessage("WARNING: Unable to write to file " + filename);
     }
     return result;
 }
@@ -2426,7 +2425,7 @@ bool EngineCore::StoreGameToFile(const std::string filename)
     }
     else
     {
-        m_logging->AddLogMessage("WARNING: Unable to create path " + filenamePathForGame);
+        Logging::Instance().AddLogMessage("WARNING: Unable to create path " + filenamePathForGame);
     }
 
     return false;
@@ -2438,12 +2437,12 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
     file.open(filename, std::ifstream::binary);
     if (file.is_open())
     {
-        m_logging->AddLogMessage("Loading saved game " + filename);
+        Logging::Instance().AddLogMessage("Loading saved game " + filename);
         char headerString[11];
         file.read(headerString, 11);
         if (file.fail())
         {
-            m_logging->AddLogMessage("WARNING: Unable to read header from " + filename);
+            Logging::Instance().AddLogMessage("WARNING: Unable to read header from " + filename);
             file.close();
             return;
         }
@@ -2477,7 +2476,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
     }
     else
     {
-        m_logging->AddLogMessage("WARNING: Unable to open file " + filename);
+        Logging::Instance().AddLogMessage("WARNING: Unable to open file " + filename);
     }
 }
 

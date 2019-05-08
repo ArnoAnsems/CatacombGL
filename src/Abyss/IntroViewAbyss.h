@@ -27,7 +27,7 @@
 class IntroViewAbyss : public IIntroView
 {
 public:
-    IntroViewAbyss(IRenderer& renderer, const std::string& path, Logging* logging);
+    IntroViewAbyss(IRenderer& renderer, const std::string& path);
     ~IntroViewAbyss();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();

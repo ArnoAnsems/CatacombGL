@@ -20,14 +20,17 @@
 class Logging
 {
 public:
-    Logging(const std::string traceFileName);
-    ~Logging();
+    static Logging& Instance();
 
     void AddLogMessage(const std::string& logline);
     const std::vector<std::string>& GetAllLogMessages() const;
     void FatalError(const std::string& message);
+    void SetLogFile(const std::string traceFileName);
 
 private:
+    Logging();
+    ~Logging();
+
     std::vector<std::string> m_allLogMessages;
-    const std::string m_traceFileName;
+    std::string m_traceFileName;
 };

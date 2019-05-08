@@ -27,7 +27,7 @@
 class IntroViewArmageddon : public IIntroView
 {
 public:
-    IntroViewArmageddon(IRenderer& renderer, const std::string& path, Logging* logging);
+    IntroViewArmageddon(IRenderer& renderer, const std::string& path);
     ~IntroViewArmageddon();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();

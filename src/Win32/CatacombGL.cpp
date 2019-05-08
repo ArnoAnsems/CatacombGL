@@ -58,7 +58,6 @@ RendererOpenGLWin32* m_renderer;
 PlayerInput playerInput;
 SystemWin32 systemWin32;
 ConfigurationSettings m_configurationSettings;
-Logging* m_logging;
 Console* m_console;
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
@@ -117,7 +116,7 @@ void SetScreenMode(const ScreenMode screenMode)
  
 void CreateGLWindow(int width, int height, int bits)
 {
-    m_logging->AddLogMessage("Initializing OpenGL renderer");
+    Logging::Instance().AddLogMessage("Initializing OpenGL renderer");
 
     const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo();
     SDLwindow = SDL_CreateWindow(
@@ -133,13 +132,13 @@ void CreateGLWindow(int width, int height, int bits)
     if (SDLwindow == NULL)
     {
         // In the case that the window could not be made...
-        m_logging->FatalError("SDL_CreateWindow failed: " + std::string(SDL_GetError()));
+        Logging::Instance().FatalError("SDL_CreateWindow failed: " + std::string(SDL_GetError()));
     }
 
     SDLrenderer = SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED);
     if (SDLrenderer == NULL)
     {
-        m_logging->FatalError("SDL_CreateRenderer failed: " + std::string(SDL_GetError()));
+        Logging::Instance().FatalError("SDL_CreateRenderer failed: " + std::string(SDL_GetError()));
     }
 
     SDL_ShowWindow(SDLwindow);
@@ -147,16 +146,16 @@ void CreateGLWindow(int width, int height, int bits)
     glcontext = SDL_GL_CreateContext(SDLwindow);
     if (glcontext == NULL)
     {
-        m_logging->FatalError("SDL_GL_CreateContext failed: " + std::string(SDL_GetError()));
+        Logging::Instance().FatalError("SDL_GL_CreateContext failed: " + std::string(SDL_GetError()));
     }
 
     const char* glRenderer = (const char*)glGetString(GL_RENDERER);
-    m_logging->AddLogMessage("Running on graphics adapter model " + std::string(glRenderer));
+    Logging::Instance().AddLogMessage("Running on graphics adapter model " + std::string(glRenderer));
 
     const char* glVersion = (const char*)glGetString(GL_VERSION);
-    m_logging->AddLogMessage("Running on OpenGL " + std::string(glVersion));
+    Logging::Instance().AddLogMessage("Running on OpenGL " + std::string(glVersion));
 
-    m_renderer = new RendererOpenGLWin32(m_logging);
+    m_renderer = new RendererOpenGLWin32();
     m_renderer->Setup();
     m_renderer->SetVSync(m_configurationSettings.GetVSync());
     m_renderer->SetTextureFilter(m_configurationSettings.GetTextureFilter());
@@ -261,11 +260,11 @@ void InitializeSDL()
         std::to_string(sdlVersion.major) + "." +
         std::to_string(sdlVersion.minor) + "." +
         std::to_string(sdlVersion.patch);
-    m_logging->AddLogMessage(sdlLogMessage);
+    Logging::Instance().AddLogMessage(sdlLogMessage);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        m_logging->FatalError("SDL_Init failed: " + std::string(SDL_GetError()));
+        Logging::Instance().FatalError("SDL_Init failed: " + std::string(SDL_GetError()));
     }
 }
 
@@ -280,16 +279,16 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     const std::string filenamePath = systemWin32.GetConfigurationFilePath();
 
     const std::string logFilename = filenamePath + "CatacombGL_log.txt";
-    m_logging = new Logging(logFilename);
-    m_console = new Console(m_logging, "CatacombGL " + EngineCore::GetVersionInfo());
+    Logging::Instance().SetLogFile(logFilename);
+    m_console = new Console("CatacombGL " + EngineCore::GetVersionInfo());
 
     const std::string buildBitInfo(systemWin32.isBuiltIn64Bit() ? " (64 bit)" : " (32 bit)");
-    m_logging->AddLogMessage("Initializing CatacombGL " + EngineCore::GetVersionInfo() + buildBitInfo);
+    Logging::Instance().AddLogMessage("Initializing CatacombGL " + EngineCore::GetVersionInfo() + buildBitInfo);
 
-    m_logging->AddLogMessage("Running on " + systemWin32.GetOSVersion());
+    Logging::Instance().AddLogMessage("Running on " + systemWin32.GetOSVersion());
 
     const std::string configFilename = filenamePath + "CatacombGL.ini";
-    m_logging->AddLogMessage("Loading CatacombGL.ini");
+    Logging::Instance().AddLogMessage("Loading CatacombGL.ini");
     m_configurationSettings.LoadFromFile(configFilename);
 
     InitializeSDL();
@@ -311,7 +310,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     std::string gogPath;
     if (GetCatacombsPackGOGPath(gogPath))
     {
-        m_logging->AddLogMessage("Catacombs Pack is present in Windows registry: " + gogPath);
+        Logging::Instance().AddLogMessage("Catacombs Pack is present in Windows registry: " + gogPath);
         const std::string gogArmageddonPath = gogPath + "Armageddon\\";
         gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, gogArmageddonPath, armageddonFiles);
 
@@ -320,7 +319,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     }
     else
     {
-        m_logging->AddLogMessage("Catacombs Pack is not present in Windows registry");
+        Logging::Instance().AddLogMessage("Catacombs Pack is not present in Windows registry");
     }
 
     // Try to find game files via configuration file
@@ -351,29 +350,29 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
     if (gameDetectionAbyssV113.GetBestMatch().score == 0)
     {
-        m_logging->AddLogMessage("Catacomb Abyss v1.13 detected at " + gameDetectionAbyssV113.GetBestMatch().folder);
+        Logging::Instance().AddLogMessage("Catacomb Abyss v1.13 detected at " + gameDetectionAbyssV113.GetBestMatch().folder);
     }
     else
     {
-        m_logging->AddLogMessage("Catacomb Abyss v1.13 not detected");
+        Logging::Instance().AddLogMessage("Catacomb Abyss v1.13 not detected");
     }
     
     if (gameDetectionAbyssV124.GetBestMatch().score == 0)
     {
-        m_logging->AddLogMessage("Catacomb Abyss v1.24 detected at " + gameDetectionAbyssV124.GetBestMatch().folder);
+        Logging::Instance().AddLogMessage("Catacomb Abyss v1.24 detected at " + gameDetectionAbyssV124.GetBestMatch().folder);
     }
     else
     {
-        m_logging->AddLogMessage("Catacomb Abyss v1.24 not detected");
+        Logging::Instance().AddLogMessage("Catacomb Abyss v1.24 not detected");
     }
 
     if (gameDetectionArmageddonv102.GetBestMatch().score == 0)
     {
-        m_logging->AddLogMessage("Catacomb Armageddon v1.02 detected at " + gameDetectionArmageddonv102.GetBestMatch().folder);
+        Logging::Instance().AddLogMessage("Catacomb Armageddon v1.02 detected at " + gameDetectionArmageddonv102.GetBestMatch().folder);
     }
     else
     {
-        m_logging->AddLogMessage("Catacomb Armageddon v1.02 not detected");
+        Logging::Instance().AddLogMessage("Catacomb Armageddon v1.02 not detected");
     }
 
 	// Create Our OpenGL Window
@@ -544,23 +543,23 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         {
             if (report.gameId == GameIdCatacombArmageddonv102)
             {
-                game = new GameArmageddon(report.folder, *m_renderer, m_logging);
+                game = new GameArmageddon(report.folder, *m_renderer);
             }
             else
             {
-                game = new GameAbyss(report.gameId, report.folder, *m_renderer, m_logging);
+                game = new GameAbyss(report.gameId, report.folder, *m_renderer);
             }
-            m_logging->AddLogMessage("Initializing game " + game->GetName());
+            Logging::Instance().AddLogMessage("Initializing game " + game->GetName());
         }
         else
         {
             const std::string errorMessage = "Failed to detect game files! Please make sure the Catacombs Pack [GOG.com] is correctly installed. Alternatively, the (shareware) game files can be placed in the same folder as CatacombGL.exe. Detailed info: " + report.infoString;
-            m_logging->FatalError(errorMessage);
+            Logging::Instance().FatalError(errorMessage);
         }
 
         if (active)
         {
-            engineCore = new EngineCore(*game, systemWin32, playerInput, m_configurationSettings, m_logging);
+            engineCore = new EngineCore(*game, systemWin32, playerInput, m_configurationSettings);
 
             // Update the window title with the selected game info.
             const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo() + " [" + game->GetName() + "]";
@@ -640,7 +639,6 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
     SDL_Quit();
 
-    delete m_logging;
     delete m_renderer;
 
     return TRUE;

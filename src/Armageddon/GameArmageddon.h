@@ -28,7 +28,7 @@
 class GameArmageddon: public IGame
 {
 public:
-    GameArmageddon(const std::string gamePath, IRenderer& renderer, Logging* logging);
+    GameArmageddon(const std::string gamePath, IRenderer& renderer);
     ~GameArmageddon();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -90,5 +90,4 @@ private:
     const std::string m_gamePath;
     IRenderer& m_renderer;
     short m_zombie_base_delay;
-    Logging* m_logging;
 };

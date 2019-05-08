@@ -23,13 +23,12 @@
 
 static const std::string ArmageddonName = "Catacomb Armageddon v1.02";
 
-GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer, Logging* logging) :
+GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) :
     m_gameId (3),
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_introView (NULL),
-    m_zombie_base_delay(0),
-    m_logging(logging)
+    m_zombie_base_delay(0)
 {
     m_gameMaps = NULL;
     m_egaGraph = NULL;
@@ -498,7 +497,7 @@ GameMaps* GameArmageddon::GetGameMaps()
 {
     if (m_gameMaps == NULL)
     {
-        m_gameMaps = new GameMaps(gameMapsArmageddon, m_gamePath, m_logging);
+        m_gameMaps = new GameMaps(gameMapsArmageddon, m_gamePath);
     }
 
     return m_gameMaps;
@@ -508,7 +507,7 @@ EgaGraph* GameArmageddon::GetEgaGraph()
 {
     if (m_egaGraph == NULL)
     {
-        m_egaGraph = new EgaGraph(egaGraphArmageddon, m_gamePath, m_renderer, m_logging);
+        m_egaGraph = new EgaGraph(egaGraphArmageddon, m_gamePath, m_renderer);
     }
 
     return m_egaGraph;
@@ -518,7 +517,7 @@ AudioRepository* GameArmageddon::GetAudioRepository()
 {
     if (m_audioRepository == NULL)
     {
-        m_audioRepository = new AudioRepository(audioRepositoryArmageddon, m_gamePath, m_logging);
+        m_audioRepository = new AudioRepository(audioRepositoryArmageddon, m_gamePath);
     }
 
     return m_audioRepository;
@@ -538,7 +537,7 @@ IIntroView* GameArmageddon::GetIntroView()
 {
     if (m_introView == NULL)
     {
-        m_introView = new IntroViewArmageddon(m_renderer, m_gamePath, m_logging);
+        m_introView = new IntroViewArmageddon(m_renderer, m_gamePath);
     }
 
     return m_introView;

@@ -89,8 +89,7 @@ public:
         const uint16_t* plane0,
         const uint16_t* plane2,
         const LevelInfo& mapInfo,
-        const std::vector<WallInfo>& wallsInfo,
-        Logging* logging);
+        const std::vector<WallInfo>& wallsInfo);
     bool LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
     ~Level();
 
@@ -171,6 +170,4 @@ private:
 
     bool* m_wallXVisible;
     bool* m_wallYVisible;
-
-    Logging* m_logging;
 };

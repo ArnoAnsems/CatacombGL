@@ -17,8 +17,7 @@
 #include "DefaultFont.h"
 #include "..\..\ThirdParty\SDL\include\SDL_timer.h"
 
-Console::Console(const Logging* logging, const std::string& label) :
-    m_logging(logging),
+Console::Console(const std::string& label) :
     m_active(false),
     m_label(label),
     m_openTimestamp(0),
@@ -50,12 +49,12 @@ void Console::Draw(IRenderer& renderer)
     renderer.Prepare2DRendering(true);
     renderer.Render2DBar(0, 0, 640, (numberOfLinesShown * 10) + 20, EgaDarkGray);
     const Font* defaultFont = DefaultFont::Get(renderer);
-    const uint32_t numberOfLogMessages = (uint32_t)m_logging->GetAllLogMessages().size();
+    const uint32_t numberOfLogMessages = (uint32_t)Logging::Instance().GetAllLogMessages().size();
     const uint32_t firstMessage = (numberOfLogMessages > numberOfLinesShown) ? numberOfLogMessages - numberOfLinesShown : 0;
     const int16_t offset = (numberOfLogMessages > numberOfLinesShown) ? 0 - firstMessage : numberOfLinesShown - numberOfLogMessages;
     for (uint32_t i = firstMessage; i < numberOfLogMessages; i++)
     {
-        const std::string& logMessage = m_logging->GetAllLogMessages().at(i);
+        const std::string& logMessage = Logging::Instance().GetAllLogMessages().at(i);
         renderer.RenderTextLeftAlignedTruncated(logMessage.c_str(), defaultFont, EgaBrightWhite, 8, 10 + (10 * (i + offset)), 620);
     }
     renderer.RenderTextLeftAlignedTruncated(m_label.c_str(), defaultFont, EgaLightGray, 480, (numberOfLinesShown * 10) + 10, 170);

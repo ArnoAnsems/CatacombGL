@@ -20,11 +20,10 @@
 static const uint16_t MaxMapWidth = 128;
 static const uint16_t MaxMapHeight = 128;
 
-GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path, Logging* logging) :
-    m_staticData(staticData),
-    m_logging(logging)
+GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path) :
+    m_staticData(staticData)
 {
-    m_logging->AddLogMessage("Loading " + m_staticData.filename);
+    Logging::Instance().AddLogMessage("Loading " + m_staticData.filename);
 
     // Read the entire GameMaps file into memory
     uint32_t fileSize = staticData.offsets.back();
@@ -38,13 +37,13 @@ GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path
         file.read((char*)m_rawData->GetChunk(), fileSize);
         if (file.fail())
         {
-            m_logging->FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
+            Logging::Instance().FatalError("Failed to read " + std::to_string(fileSize) + " bytes from " + m_staticData.filename);
         }
         file.close();
     }
     else
     {
-        m_logging->FatalError("Failed to open " + fullPath);
+        Logging::Instance().FatalError("Failed to open " + fullPath);
     }
 }
 
@@ -55,7 +54,7 @@ GameMaps::~GameMaps()
 
 Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 {
-    m_logging->AddLogMessage("Loading map " + std::to_string(mapIndex) + " from start");
+    Logging::Instance().AddLogMessage("Loading map " + std::to_string(mapIndex) + " from start");
 
     const uint16_t rlewTag = 0xABCD;    
     const uint8_t* headerStart = m_rawData->GetChunk() + m_staticData.offsets.at(mapIndex);
@@ -67,14 +66,14 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
     // Sanity check on plane 0 and 2
     if (plane0Offset + plane0Length > m_rawData->GetSize())
     {
-        m_logging->FatalError("Corrupt plane 0 info for level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
+        Logging::Instance().FatalError("Corrupt plane 0 info for level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
             " (plane0Offset: " + std::to_string(plane0Offset) +
             " ,plane0Length: " + std::to_string(plane0Length) +
             " ,total size: " + std::to_string(m_rawData->GetSize()) + ")");
     }
     if (plane2Offset + plane2Length > m_rawData->GetSize())
     {
-        m_logging->FatalError("Corrupt plane 2 info for level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
+        Logging::Instance().FatalError("Corrupt plane 2 info for level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
             " (plane2Offset: " + std::to_string(plane0Offset) +
             " ,plane2Length: " + std::to_string(plane0Length) +
             " ,total size: " + std::to_string(m_rawData->GetSize()) + ")");
@@ -86,11 +85,11 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
     // Sanity check on map width and height
     if (mapWidth > MaxMapWidth)
     {
-        m_logging->FatalError("Map width (" + std::to_string(mapWidth) + ") too large for level " + std::to_string(mapIndex) + " in " + m_staticData.filename);
+        Logging::Instance().FatalError("Map width (" + std::to_string(mapWidth) + ") too large for level " + std::to_string(mapIndex) + " in " + m_staticData.filename);
     }
     if (mapHeight > MaxMapHeight)
     {
-        m_logging->FatalError("Map height (" + std::to_string(mapHeight) + ") too large for level " + std::to_string(mapIndex) + " in " + m_staticData.filename);
+        Logging::Instance().FatalError("Map height (" + std::to_string(mapHeight) + ") too large for level " + std::to_string(mapIndex) + " in " + m_staticData.filename);
     }
 
     uint8_t* plane0Source = &(m_rawData->GetChunk()[plane0Offset]);
@@ -99,7 +98,7 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 
     if ((decompressedPlane0->GetSize() / sizeof(uint16_t)) < (uint32_t)mapWidth * (uint32_t)mapHeight)
     {
-        m_logging->FatalError("Plane 0 of level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
+        Logging::Instance().FatalError("Plane 0 of level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
             " is " + std::to_string(decompressedPlane0->GetSize()) + " bytes in size, which is too small for a level with a width of " +
             std::to_string(mapWidth) + " and a height of " + std::to_string(mapHeight));
     }
@@ -110,12 +109,12 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 
     if ((decompressedPlane2->GetSize() / sizeof(uint16_t)) < (uint32_t)mapWidth * (uint32_t)mapHeight)
     {
-        m_logging->FatalError("Plane 2 of level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
+        Logging::Instance().FatalError("Plane 2 of level " + std::to_string(mapIndex) + " in " + m_staticData.filename +
             " is " + std::to_string(decompressedPlane2->GetSize()) + " bytes in size, which is too small for a level with a width of " +
             std::to_string(mapWidth) + " and a height of " + std::to_string(mapHeight));
     }
 
-    return new Level(mapIndex, mapWidth, mapHeight, (uint16_t*)(decompressedPlane0->GetChunk()), (uint16_t*)(decompressedPlane2->GetChunk()), m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo, m_logging);
+    return new Level(mapIndex, mapWidth, mapHeight, (uint16_t*)(decompressedPlane0->GetChunk()), (uint16_t*)(decompressedPlane2->GetChunk()), m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
 }
 
 Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
@@ -125,17 +124,17 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
 
     if (file.fail())
     {
-        m_logging->FatalError("Failed to read level index from saved game");
+        Logging::Instance().FatalError("Failed to read level index from saved game");
     }
 
     const uint8_t numberOfLevels = GetNumberOfLevels();
     if (mapIndex >= numberOfLevels)
     {
-        m_logging->FatalError("Read level index " + std::to_string(mapIndex) + " from saved game, but " +
+        Logging::Instance().FatalError("Read level index " + std::to_string(mapIndex) + " from saved game, but " +
             m_staticData.filename + " contains only " + std::to_string(numberOfLevels) + " levels");
     }
 
-    m_logging->AddLogMessage("Loading map " + std::to_string(mapIndex) + " from saved game");
+    Logging::Instance().AddLogMessage("Loading map " + std::to_string(mapIndex) + " from saved game");
 
     uint16_t mapWidth = 0;
     file.read((char*)&mapWidth, sizeof(mapWidth));
@@ -144,17 +143,17 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
 
     if (file.fail())
     {
-        m_logging->FatalError("Failed to read level width and height from saved game");
+        Logging::Instance().FatalError("Failed to read level width and height from saved game");
     }
 
     // Sanity check on map width and height
     if (mapWidth > MaxMapWidth)
     {
-        m_logging->FatalError("Map width (" + std::to_string(mapWidth) + ") too large for saved game");
+        Logging::Instance().FatalError("Map width (" + std::to_string(mapWidth) + ") too large for saved game");
     }
     if (mapHeight > MaxMapHeight)
     {
-        m_logging->FatalError("Map height (" + std::to_string(mapHeight) + ") too large for saved game");
+        Logging::Instance().FatalError("Map height (" + std::to_string(mapHeight) + ") too large for saved game");
     }
 
     const uint16_t mapSize = mapWidth * mapHeight;
@@ -166,7 +165,7 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
 
     if (file.fail())
     {
-        m_logging->FatalError("Failed to read plane info from saved game");
+        Logging::Instance().FatalError("Failed to read plane info from saved game");
     }
 
     uint32_t lightningStartTimestamp = 0;
@@ -174,10 +173,10 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
 
     if (file.fail())
     {
-        m_logging->FatalError("Failed to lightningStartTimestamp from saved game");
+        Logging::Instance().FatalError("Failed to lightningStartTimestamp from saved game");
     }
 
-    Level* level = new Level(mapIndex, mapWidth, mapHeight, plane0, plane2, m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo, m_logging);
+    Level* level = new Level(mapIndex, mapWidth, mapHeight, plane0, plane2, m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
     delete plane0;
     delete plane2;
 

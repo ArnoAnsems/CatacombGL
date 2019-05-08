@@ -24,8 +24,7 @@ Level::Level(
     const uint16_t* plane0,
     const uint16_t* plane2,
     const LevelInfo& mapInfo,
-    const std::vector<WallInfo>& wallsInfo,
-    Logging* logging):
+    const std::vector<WallInfo>& wallsInfo):
     m_levelWidth (mapWidth),
     m_levelHeight (mapHeight),
     m_levelInfo (mapInfo),
@@ -37,8 +36,7 @@ Level::Level(
     m_blockingActors(NULL),
     m_nonBlockingActors(NULL),
     m_wallXVisible(NULL),
-    m_wallYVisible(NULL),
-    m_logging(logging)
+    m_wallYVisible(NULL)
 {
     const uint16_t mapSize = m_levelWidth * m_levelHeight;
     m_plane0 = new uint16_t[mapSize];
@@ -74,7 +72,7 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
     file.read((char*)&numberOfBlockingActors, sizeof(numberOfBlockingActors));
     if (file.fail())
     {
-        m_logging->FatalError("Failed to read number of blocking actors from saved game");
+        Logging::Instance().FatalError("Failed to read number of blocking actors from saved game");
     }
     for (uint16_t i = 0; i < numberOfBlockingActors; i++)
     {
@@ -86,11 +84,11 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
     file.read((char*)&numberOfNonBlockingActors, sizeof(numberOfNonBlockingActors));
     if (file.fail())
     {
-        m_logging->FatalError("Failed to read number of non-blocking actors from saved game");
+        Logging::Instance().FatalError("Failed to read number of non-blocking actors from saved game");
     }
     if (numberOfNonBlockingActors > 100)
     {
-        m_logging->FatalError("Saved game contains " + std::to_string(numberOfNonBlockingActors) + " non-blocking actors, while 100 is the maximum");
+        Logging::Instance().FatalError("Saved game contains " + std::to_string(numberOfNonBlockingActors) + " non-blocking actors, while 100 is the maximum");
     }
     for (uint16_t i = 0; i < numberOfNonBlockingActors; i++)
     {
@@ -201,7 +199,7 @@ uint16_t Level::GetWallTile(const uint16_t x, const uint16_t y) const
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
     {
-        m_logging->FatalError("GetWallTile(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+        Logging::Instance().FatalError("GetWallTile(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
     return m_plane0[(y * m_levelWidth) + x];
@@ -211,7 +209,7 @@ uint16_t Level::GetFloorTile(const uint16_t x, const uint16_t y) const
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
     {
-        m_logging->FatalError("GetFloorTile(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+        Logging::Instance().FatalError("GetFloorTile(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
     return m_plane2[(y * m_levelWidth) + x];
@@ -221,7 +219,7 @@ void Level::SetWallTile(const uint16_t x, const uint16_t y, const uint16_t wallT
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
     {
-        m_logging->FatalError("SetWallTile(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(wallTile) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+        Logging::Instance().FatalError("SetWallTile(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(wallTile) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
     m_plane0[(y * m_levelWidth) + x] = wallTile;
@@ -231,7 +229,7 @@ void Level::SetFloorTile(const uint16_t x, const uint16_t y, const uint16_t floo
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
     {
-        m_logging->FatalError("SetFloorTile(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(floorTile) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+        Logging::Instance().FatalError("SetFloorTile(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(floorTile) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
     m_plane2[(y * m_levelWidth) + x] = floorTile;
@@ -989,7 +987,7 @@ void Level::SetBlockingActor(const uint16_t x, const uint16_t y, Actor* actor)
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
     {
-        m_logging->FatalError("SetBlockingActor(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+        Logging::Instance().FatalError("SetBlockingActor(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
     m_blockingActors[(y * m_levelWidth) + x] = actor;
@@ -999,7 +997,7 @@ Actor* Level::GetBlockingActor(const uint16_t x, const uint16_t y) const
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
     {
-        m_logging->FatalError("GetBlockingActor(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+        Logging::Instance().FatalError("GetBlockingActor(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
     return m_blockingActors[(y * m_levelWidth) + x];
@@ -1413,7 +1411,7 @@ void Level::ExplodeWall(const uint16_t x, const uint16_t y, const uint32_t times
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
     {
-        m_logging->FatalError("ExplodeWall(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
+        Logging::Instance().FatalError("ExplodeWall(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
     if (m_blockingActors[(y * m_levelWidth) + x] == NULL)

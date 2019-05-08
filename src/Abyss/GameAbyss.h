@@ -29,7 +29,7 @@
 class GameAbyss: public IGame
 {
 public:
-    GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer, Logging* logging);
+    GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer);
     ~GameAbyss();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -95,5 +95,4 @@ private:
     IRenderer& m_renderer;
     HelpPages* m_helpPages;
     uint8_t m_helpPageIndex;
-    Logging* m_logging;
 };

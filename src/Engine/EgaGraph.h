@@ -52,7 +52,7 @@ typedef struct egaGraphStaticData
 class EgaGraph
 {
 public:
-    EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer, Logging* logging);
+    EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer);
     ~EgaGraph();
 
     Picture* GetPicture(const uint16_t index);
@@ -81,6 +81,5 @@ private:
     Huffman* m_huffman;
     Font* m_font;
     IRenderer& m_renderer;
-    Logging* m_logging;
 };
 

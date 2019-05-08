@@ -30,8 +30,7 @@ GameAbyss_Test::~GameAbyss_Test()
 TEST(GameAbyss_Test, CheckGetDecorateActors)
 {
     RendererStub renderer;
-    Logging logging("test.txt");
-    GameAbyss gameAbyss(0, ".\\", renderer, &logging);
+    GameAbyss gameAbyss(0, ".\\", renderer);
     auto decorateActors = gameAbyss.GetDecorateActors();
     ASSERT_GT(decorateActors.size(), 0u);
 
