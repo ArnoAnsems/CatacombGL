@@ -1949,6 +1949,12 @@ void EngineCore::RunAway(Actor* actor)
 
     while (move > 0.0f)
     {
+        // Clip with player
+        if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
+        {
+            break;
+        }
+
         if (move < actor->GetDistanceToTarget())
         {
             m_level->MoveActor(actor, move);
