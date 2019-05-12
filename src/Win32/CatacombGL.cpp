@@ -262,7 +262,7 @@ void InitializeSDL()
         std::to_string(sdlVersion.patch);
     Logging::Instance().AddLogMessage(sdlLogMessage);
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
         Logging::Instance().FatalError("SDL_Init failed: " + std::string(SDL_GetError()));
     }

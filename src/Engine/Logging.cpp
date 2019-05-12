@@ -35,14 +35,6 @@ Logging::Logging() :
     m_traceFileName("")
 {
     m_allLogMessages.clear();
-
-    std::ofstream file;
-    file.open(m_traceFileName);
-    if (file.is_open())
-    {
-        file << "=== CatacombGL Log file ===\n";
-        file.close();
-    }
 }
 
 Logging::~Logging()
@@ -53,13 +45,21 @@ Logging::~Logging()
 void Logging::SetLogFile(const std::string traceFileName)
 {
     m_traceFileName = traceFileName;
+
+    std::ofstream file;
+    file.open(m_traceFileName, std::ofstream::out | std::ofstream::trunc);
+    if (file.is_open())
+    {
+        file << "=== CatacombGL Log file ===\n";
+        file.close();
+    }
 }
 
 void Logging::AddLogMessage(const std::string& logline)
 {
     m_allLogMessages.push_back(logline);
     std::ofstream file;
-    file.open(m_traceFileName, std::ios_base::app);
+    file.open(m_traceFileName, std::ofstream::out | std::ios_base::app);
     if (file.is_open())
     {
         file << logline << "\n";

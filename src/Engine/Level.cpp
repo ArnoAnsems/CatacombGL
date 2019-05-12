@@ -1014,8 +1014,11 @@ void Level::AddNonBlockingActor(Actor* projectile)
 
     // To ensure that there is always a free index available when Nemesis needs to drop a key,
     // the last five indices can only be occupied by bonus items.
+    // To ensure that the corpses of fallen monsters can spawn after crystal hour glass usages, the
+    // ten indices before that cannot be occupied by projectiles.
     const bool isBonusItem = (projectile->GetDecorateActor().initialState == StateIdWaitForPickup);
-    const uint8_t maxActorIndex = isBonusItem ? 100 : 95;
+    const bool isProjectile = (projectile->GetDecorateActor().initialState == StateIdProjectileFly);
+    const uint8_t maxActorIndex = isBonusItem ? 100 : isProjectile ? 85 : 95;
     
     while (m_nonBlockingActors[i] != NULL && i < maxActorIndex)
     {
@@ -1541,7 +1544,7 @@ uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t
         if (m_wallsInfo.at(tileIndex).textureDark.size() > 1)
         {
             const uint32_t frameDurationInTicks = 8;
-            const uint32_t animDurationInTicks = frameDurationInTicks * m_wallsInfo.at(tileIndex).textureDark.size();
+            const uint32_t animDurationInTicks = frameDurationInTicks * (uint32_t)m_wallsInfo.at(tileIndex).textureDark.size();
             const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
             return m_wallsInfo.at(tileIndex).textureDark[currentFrame];
         }
@@ -1563,7 +1566,7 @@ uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_
         if (m_wallsInfo.at(tileIndex).textureLight.size() > 1)
         {
             const uint32_t frameDurationInTicks = 8;
-            const uint32_t animDurationInTicks = frameDurationInTicks * m_wallsInfo.at(tileIndex).textureLight.size();
+            const uint32_t animDurationInTicks = frameDurationInTicks * (uint32_t)m_wallsInfo.at(tileIndex).textureLight.size();
             const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
             return m_wallsInfo.at(tileIndex).textureLight[currentFrame];
         }
