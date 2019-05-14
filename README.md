@@ -9,7 +9,7 @@ Main features:
 * Supports The Catacomb Armageddon version 1.02 (as included in the Catacombs Pack from gog.com).
 * WASD and mouselook.
 
-Current limitations as of version 0.2.0: 
+Current limitations as of version 0.2.1: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 * Only Adlib sound card emulation; no PC speaker emulation. 
@@ -26,6 +26,7 @@ The keyboard and mouse controls for moving, shooting, etc. can be customized via
 * Function keys - various shortcuts, such as F3 for saving the game and F4 for restoring the game
 * Numerical keys - read scrolls
 * Backspace - cheat codes in Armageddon
+* Tilde (~) - show log
 
 # License
 CatacombGL is licensed under the GNU GPLv3 license. See gpl3.txt for details. 
@@ -47,6 +48,16 @@ The following software tools have proven to be very helpful in the development o
 CatacombGL is developed by Arno Ansems. Special thanks goes to Roland Ansems for playtesting every level and reporting various bugs.
 
 # History
+* Version 0.2.1 (2019-05-14) New in this release:
+  * The game now creates a log file at %appdata%\CatacombGL\CatacombGL_log.txt. The log file can also be viewed in-game via the tilde (~) key.
+  * Fix: there was a buffer overflow during initialization of the location names, which could randomly crash the game shortly after starting it.
+  * Fix: the hand of the player was not shown in the Catacomb Abyss Shareware.
+  * Fix: the FOV could not be adjusted via the arrow keys in the video menu.
+  * Fix: a warning message is now provided in case the name of an exising save game file is typed in the save game menu.
+  * Fix: the Armageddon game files were not detected when CatacombGL.exe was residing in the same folder.
+  * Fix: picked up keys were not added to the inventory in case of low frame rates (< 10 fps)
+  * Fix: the bat was able to fly through the player, but gets properly clipped now.
+
 * Version 0.2.0 (2019-03-31) New in this release:
   * Support for the Catacomb Armageddon! All levels and monsters are present. Requires the Catacombs Pack.
   * Game selection screen with the option to manually browse to a folder with game data. Suggested by Master O.
