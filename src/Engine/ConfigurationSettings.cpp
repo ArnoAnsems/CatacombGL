@@ -35,7 +35,8 @@ ConfigurationSettings::ConfigurationSettings() :
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
-    m_pathArmageddonv102("")
+    m_pathArmageddonv102(""),
+    m_pathApocalypsev101("")
 {
 
 }
@@ -77,6 +78,12 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         if (pathArmageddonv102Pair != keyValuePairs.end())
         {
             m_pathArmageddonv102 = pathArmageddonv102Pair->second;
+        }
+
+        auto pathApocalypsev101Pair = keyValuePairs.find("pathapocalypsev101");
+        if (pathApocalypsev101Pair != keyValuePairs.end())
+        {
+            m_pathApocalypsev101 = pathApocalypsev101Pair->second;
         }
 
         auto screenModePair = keyValuePairs.find("screenmode");
@@ -192,6 +199,7 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "pathabyssv113=" << m_pathAbyssv113 << "\n";
         file << "pathabyssv124=" << m_pathAbyssv124 << "\n";
         file << "patharmageddonv102=" << m_pathArmageddonv102 << "\n";
+        file << "pathapocalypsev101=" << m_pathApocalypsev101 << "\n";
         file << "# Video settings\n";
         const std::string screenModeValue =
             (m_screenMode == Windowed) ? "windowed" :
@@ -272,6 +280,16 @@ const std::string& ConfigurationSettings::GetPathArmageddonv102() const
 void ConfigurationSettings::SetPathArmageddonv102(const std::string path)
 {
     m_pathArmageddonv102 = path;
+}
+
+const std::string& ConfigurationSettings::GetPathApocalypsev101() const
+{
+    return m_pathApocalypsev101;
+}
+
+void ConfigurationSettings::SetPathApocalypsev101(const std::string path)
+{
+    m_pathApocalypsev101 = path;
 }
 
 ScreenMode ConfigurationSettings::GetScreenMode() const

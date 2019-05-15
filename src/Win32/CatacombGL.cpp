@@ -39,6 +39,7 @@
 #include "..\Abyss\GameDetectionAbyss.h"
 #include "..\Armageddon\GameArmageddon.h"
 #include "..\Armageddon\GameDetectionArmageddon.h"
+#include "..\Apocalypse\GameDetectionApocalypse.h"
 
 #include "..\..\ThirdParty\RefKeen\be_st.h"
 #include "..\..\ThirdParty\RefKeen\id_sd.h"
@@ -297,9 +298,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     const uint8_t GameIdCatacombAbyssv113 = 1;
     const uint8_t GameIdCatacombAbyssv124 = 2;
     const uint8_t GameIdCatacombArmageddonv102 = 3;
+    const uint8_t GameIdCatacombApocalypsev101 = 4;
     GameDetection gameDetectionAbyssV113;
     GameDetection gameDetectionAbyssV124;
     GameDetection gameDetectionArmageddonv102;
+    GameDetection gameDetectionApocalypsev101;
 
     uint8_t selectedGame = GameIdNotDetected;
 
@@ -313,6 +316,9 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         Logging::Instance().AddLogMessage("Catacombs Pack is present in Windows registry: " + gogPath);
         const std::string gogArmageddonPath = gogPath + "Armageddon\\";
         gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, gogArmageddonPath, armageddonFiles);
+
+        const std::string gogApocalypsePath = gogPath + "Apocalypse\\";
+        gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, gogApocalypsePath, apocalypseFiles);
 
         const std::string gogAbyssPath = gogPath + "Abyss\\";
         gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, gogAbyssPath, abyssFilesv124);
@@ -337,6 +343,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     {
         gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, m_configurationSettings.GetPathArmageddonv102(), armageddonFiles);
     }
+
+    if (gameDetectionApocalypsev101.GetBestMatch().score != 0 && !m_configurationSettings.GetPathApocalypsev101().empty())
+    {
+        gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, m_configurationSettings.GetPathApocalypsev101(), apocalypseFiles);
+    }
  
     // Try to find registered game files in local path
     if (gameDetectionAbyssV124.GetBestMatch().score != 0)
@@ -346,6 +357,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     if (gameDetectionArmageddonv102.GetBestMatch().score != 0)
     {
         gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, ".\\", armageddonFiles);
+    }
+
+    if (gameDetectionApocalypsev101.GetBestMatch().score != 0)
+    {
+        gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, ".\\", apocalypseFiles);
     }
 
     if (gameDetectionAbyssV113.GetBestMatch().score == 0)
@@ -373,6 +389,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     else
     {
         Logging::Instance().AddLogMessage("Catacomb Armageddon v1.02 not detected");
+    }
+
+    if (gameDetectionApocalypsev101.GetBestMatch().score == 0)
+    {
+        Logging::Instance().AddLogMessage("Catacomb Apocalypse v1.01 detected at " + gameDetectionApocalypsev101.GetBestMatch().folder);
+    }
+    else
+    {
+        Logging::Instance().AddLogMessage("Catacomb Apocalypse v1.01 not detected");
     }
 
 	// Create Our OpenGL Window
@@ -406,7 +431,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("2. Catacomb Abyss v1.24", abyssv124DetectionState));
             const GameDetectionState armageddonDetectionState = (gameDetectionArmageddonv102.GetBestMatch().score == 0) ? Detected : NotDetected;
             gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("3. Catacomb Armageddon v1.02", armageddonDetectionState));
-            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("4. Catacomb Apocalypse v1.01", NotSupported));
+            const GameDetectionState apocalypseDetectionState = (gameDetectionApocalypsev101.GetBestMatch().score == 0) ? Detected : NotDetected;
+            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("4. Catacomb Apocalypse v1.01", apocalypseDetectionState));
         }
 
         if (gameSelectionPresentation.gameListShareware.empty())
@@ -434,6 +460,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         if (playerInput.IsKeyPressed(SDLK_3))
         {
             selectedGame = GameIdCatacombArmageddonv102;
+        }
+
+        if (playerInput.IsKeyPressed(SDLK_4))
+        {
+            selectedGame = GameIdCatacombApocalypsev101;
         }
 
         if (playerInput.IsKeyJustPressed(SDLK_UP))
@@ -518,6 +549,12 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
                     gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, gameSelectionPresentation.searchFolder + "Armageddon\\", armageddonFiles);
                     gameSelectionPresentation.gameListCatacombsPack.clear();
                 }
+
+                if (gameDetectionApocalypsev101.GetBestMatch().score != 0)
+                {
+                    gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, gameSelectionPresentation.searchFolder + "Apocalypse\\", apocalypseFiles);
+                    gameSelectionPresentation.gameListCatacombsPack.clear();
+                }
             }
         }
 
@@ -537,7 +574,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         const DetectionReport& report =
             (selectedGame == GameIdCatacombAbyssv113) ? gameDetectionAbyssV113.GetBestMatch() :
             (selectedGame == GameIdCatacombAbyssv124) ? gameDetectionAbyssV124.GetBestMatch() :
-            gameDetectionArmageddonv102.GetBestMatch();
+            (selectedGame == GameIdCatacombArmageddonv102) ? gameDetectionArmageddonv102.GetBestMatch() :
+            gameDetectionApocalypsev101.GetBestMatch();
 
         if (report.score == 0)
         {
@@ -612,6 +650,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     if (gameDetectionArmageddonv102.GetBestMatch().score == 0)
     {
         m_configurationSettings.SetPathArmageddonv102(gameDetectionArmageddonv102.GetBestMatch().folder);
+    }
+
+    if (gameDetectionApocalypsev101.GetBestMatch().score == 0)
+    {
+        m_configurationSettings.SetPathApocalypsev101(gameDetectionApocalypsev101.GetBestMatch().folder);
     }
 
     // Kill The Window

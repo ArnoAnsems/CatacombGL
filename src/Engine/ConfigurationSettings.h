@@ -60,6 +60,9 @@ public:
     const std::string& GetPathArmageddonv102() const;
     void SetPathArmageddonv102(const std::string path);
 
+    const std::string& GetPathApocalypsev101() const;
+    void SetPathApocalypsev101(const std::string path);
+
     ScreenMode GetScreenMode() const;
     void SetScreenMode(const ScreenMode screenMode);
 
@@ -117,4 +120,5 @@ private:
     std::string m_pathAbyssv113;
     std::string m_pathAbyssv124;
     std::string m_pathArmageddonv102;
+    std::string m_pathApocalypsev101;
 };
