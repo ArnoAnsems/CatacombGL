@@ -77,7 +77,7 @@ public:
     std::vector<SDL_Keycode> GetKeysFromAction(const ControlAction action) const;
     std::vector<uint8_t> GetMouseButtonsFromAction(const ControlAction action) const;
     static std::string GetMouseButtonName(const uint8_t buttonCode);
-    static const std::vector<SDL_Keycode>& GetAllowedKeys();
+    static const std::vector<SDL_Keycode>& GetNotAllowedKeys();
     static const ControlAction StringToAction(const std::string& str);
 
 private:

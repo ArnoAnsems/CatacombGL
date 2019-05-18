@@ -164,17 +164,16 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_alwaysRun = (alwaysRunPair->second.compare("Enabled") == 0);
         }
 
-        const std::vector<SDL_Keycode>& allowedKeys = ControlsMap::GetAllowedKeys();
-        for (const auto key: allowedKeys)
+        for (auto keyPair : keyValuePairs)
         {
-            const std::string keyName = SDL_GetKeyName(key);
-            const auto keyPair = keyValuePairs.find(keyName);
-            if (keyPair != keyValuePairs.end())
+            SDL_Keycode keyCode = SDL_GetKeyFromName(keyPair.first.c_str());
+            if (keyCode != SDLK_UNKNOWN)
             {
-                const ControlAction action = ControlsMap::StringToAction(keyPair->second);
-                m_controlsMap.AssignActionToKey(action, key);
+                const ControlAction action = ControlsMap::StringToAction(keyPair.second);
+                m_controlsMap.AssignActionToKey(action, keyCode);
             }
         }
+
         for (uint8_t i = 1; i < 4; i++)
         {
             const std::string buttonName = ControlsMap::GetMouseButtonName(i);

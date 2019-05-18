@@ -19,12 +19,6 @@
 
 ControlsMap::ControlsMap()
 {
-    for (uint8_t i = 0; i < GetAllowedKeys().size(); i++)
-    {
-        std::pair<SDL_Keycode, ControlAction> pair = std::make_pair(GetAllowedKeys().at(i), None);
-        m_KeyToActionMap.insert(pair);
-    }
-
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_LEFT, None));
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_MIDDLE, None));
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_RIGHT, None));
@@ -61,32 +55,45 @@ ControlsMap::~ControlsMap()
 
 bool ControlsMap::AssignActionToKey(const ControlAction action, const SDL_Keycode keyCode)
 {
-    const auto it = m_KeyToActionMap.find(keyCode);
-    if (it != m_KeyToActionMap.end())
+    const std::vector<SDL_Keycode>& notAllowedKeys = GetNotAllowedKeys();
+    for (int i = 0; i < notAllowedKeys.size(); i++)
     {
-        if (action != None)
+        if (notAllowedKeys.at(i) == keyCode)
         {
-            const std::vector<SDL_Keycode> otherKeysWithThisAction = GetKeysFromAction(action);
-            const std::vector<uint8_t> otherMouseButtonsWithThisAction = GetMouseButtonsFromAction(action);
-            if (otherKeysWithThisAction.size() + otherMouseButtonsWithThisAction.size() > 1)
+            return false;
+        }
+    }
+
+    if (action != None)
+    {
+        const std::vector<SDL_Keycode> otherKeysWithThisAction = GetKeysFromAction(action);
+        const std::vector<uint8_t> otherMouseButtonsWithThisAction = GetMouseButtonsFromAction(action);
+        if (otherKeysWithThisAction.size() + otherMouseButtonsWithThisAction.size() > 1)
+        {
+            // More than 2 keys or mouse buttons bound to the same action not allowed.
+            // Clear the action from the other keys and buttons.
+            for (uint8_t i = 0; i < otherKeysWithThisAction.size(); i++)
             {
-                // More than 2 keys or mouse buttons bound to the same action not allowed.
-                // Clear the action from the other keys and buttons.
-                for (uint8_t i = 0; i < otherKeysWithThisAction.size(); i++)
-                {
-                    AssignActionToKey(None, otherKeysWithThisAction.at(i));
-                }
-                for (uint8_t i = 0; i < otherMouseButtonsWithThisAction.size(); i++)
-                {
-                    AssignActionToMouseButton(None, otherMouseButtonsWithThisAction.at(i));
-                }
+                AssignActionToKey(None, otherKeysWithThisAction.at(i));
+            }
+            for (uint8_t i = 0; i < otherMouseButtonsWithThisAction.size(); i++)
+            {
+                AssignActionToMouseButton(None, otherMouseButtonsWithThisAction.at(i));
             }
         }
-
-        m_KeyToActionMap[keyCode] = action;
-		return true;
     }
-	return false;
+
+    const auto it = m_KeyToActionMap.find(keyCode);
+    if (it == m_KeyToActionMap.end())
+    {
+        m_KeyToActionMap.insert(std::make_pair(keyCode, action));
+    }
+    else
+    {
+        m_KeyToActionMap[keyCode] = action;
+    }
+
+	return true;
 }
 
 bool ControlsMap::AssignActionToMouseButton(const ControlAction action, const uint8_t buttonCode)
@@ -202,20 +209,16 @@ std::vector<uint8_t> ControlsMap::GetMouseButtonsFromAction(const ControlAction 
     return result;
 }
 
-const std::vector<SDL_Keycode>& ControlsMap::GetAllowedKeys()
+const std::vector<SDL_Keycode>& ControlsMap::GetNotAllowedKeys()
 {
-    static const std::vector<SDL_Keycode> allAllowedKeys =
+    static const std::vector<SDL_Keycode> allNotAllowedKeys =
     {
-        SDLK_a, SDLK_b, SDLK_c, SDLK_d, SDLK_e, SDLK_f, SDLK_g, SDLK_h, SDLK_i, SDLK_j, SDLK_k, SDLK_l, SDLK_m, SDLK_n,
-        SDLK_o, SDLK_p, SDLK_q, SDLK_r, SDLK_s, SDLK_t, SDLK_u, SDLK_v, SDLK_w, SDLK_x, SDLK_y, SDLK_z,
-        SDLK_RIGHT, SDLK_LEFT, SDLK_UP, SDLK_DOWN,
-        SDLK_SPACE, SDLK_TAB, SDLK_INSERT, SDLK_DELETE,
-        SDLK_LCTRL, SDLK_RCTRL, SDLK_LALT, SDLK_RALT, SDLK_LSHIFT, SDLK_RSHIFT,
-        SDLK_KP_0, SDLK_KP_1, SDLK_KP_2, SDLK_KP_3, SDLK_KP_4, SDLK_KP_5, SDLK_KP_6, SDLK_KP_7, SDLK_KP_8, SDLK_KP_9,
-        SDLK_KP_MULTIPLY, SDLK_KP_PLUS, SDLK_KP_MINUS, SDLK_KP_DIVIDE
+        SDLK_F1, SDLK_F2, SDLK_F3, SDLK_F4, SDLK_F5, SDLK_F6, SDLK_F7, SDLK_F8, SDLK_F9, SDLK_F10,
+        SDLK_1, SDLK_2, SDLK_3, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8,
+        SDLK_BACKSPACE, SDLK_ESCAPE, SDLK_BACKQUOTE
     };
 
-    return allAllowedKeys;
+    return allNotAllowedKeys;
 }
 
 const ControlAction ControlsMap::StringToAction(const std::string& str)
