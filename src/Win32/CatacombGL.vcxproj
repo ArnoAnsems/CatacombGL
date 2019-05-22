@@ -107,7 +107,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\Win32\CatacombGL_Engine.lib;..\..\bin\Win32\CatacombGL_Abyss.lib;..\..\bin\Win32\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\Win32\CatacombGL_Engine.lib;..\..\bin\Win32\CatacombGL_Abyss.lib;..\..\bin\Win32\CatacombGL_Armageddon.lib;..\..\bin\Win32\CatacombGL_Apocalypse.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(OutDir)\CatacombGL.pdb</ProgramDatabaseFile>
@@ -152,7 +152,7 @@
     <Link>
       <AdditionalOptions>
       </AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;..\..\bin\x64\CatacombGL_Apocalypse.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(OutDir)\CatacombGL.pdb</ProgramDatabaseFile>
@@ -193,7 +193,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\Win32\CatacombGL_Engine.lib;..\..\bin\Win32\CatacombGL_Abyss.lib;..\..\bin\Win32\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x86\SDL2.lib;..\..\bin\Win32\CatacombGL_Engine.lib;..\..\bin\Win32\CatacombGL_Abyss.lib;..\..\bin\Win32\CatacombGL_Armageddon.lib;..\..\bin\Win32\CatacombGL_Apocalypse.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -237,7 +237,7 @@
     <Link>
       <AdditionalOptions>
       </AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;..\..\bin\x64\CatacombGL_Apocalypse.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>

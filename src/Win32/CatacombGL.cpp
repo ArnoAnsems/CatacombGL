@@ -39,6 +39,7 @@
 #include "..\Abyss\GameDetectionAbyss.h"
 #include "..\Armageddon\GameArmageddon.h"
 #include "..\Armageddon\GameDetectionArmageddon.h"
+#include "..\Apocalypse\GameApocalypse.h"
 #include "..\Apocalypse\GameDetectionApocalypse.h"
 
 #include "..\..\ThirdParty\RefKeen\be_st.h"
@@ -582,6 +583,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             if (report.gameId == GameIdCatacombArmageddonv102)
             {
                 game = new GameArmageddon(report.folder, *m_renderer);
+            }
+            else if(report.gameId == GameIdCatacombApocalypsev101)
+            {
+                game = new GameApocalypse(report.folder, *m_renderer);
             }
             else
             {

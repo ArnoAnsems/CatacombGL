@@ -136,9 +136,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioRepositoryApocalypse.h" />
+    <ClInclude Include="DecorateAll.h" />
+    <ClInclude Include="DecorateBonus.h" />
+    <ClInclude Include="DecorateMisc.h" />
+    <ClInclude Include="DecorateProjectiles.h" />
+    <ClInclude Include="EgaGraphApocalypse.h" />
+    <ClInclude Include="GameApocalypse.h" />
     <ClInclude Include="GameDetectionApocalypse.h" />
+    <ClInclude Include="GameMapsApocalypse.h" />
+    <ClInclude Include="IntroViewApocalypse.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameApocalypse.cpp" />
+    <ClCompile Include="IntroViewApocalypse.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
