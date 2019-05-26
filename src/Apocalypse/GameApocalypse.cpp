@@ -83,6 +83,88 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 playerState->SetAngle((tile - 1) * 90.0f);
                 break;
             }
+            case 5:
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBolt);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 6:
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNuke);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 7:
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decoratePotion);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 8:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyRed);
+                break;
+            case 9:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyYellow);
+                break;
+            case 10:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyGreen);
+                break;
+            case 11:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyBlue);
+                break;
+
+            case 31:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn5);
+                break;
+            case 36:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn1);
+                break;
+
+            case 39:
+            {
+                Actor* freezeTimeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateFreezeTime);
+                actors[(y * level->GetLevelWidth()) + x] = freezeTimeActor;
+                break;
+            }
+            case 40:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemRed);
+                break;
+            case 41:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemGreen);
+                break;
+            case 42:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemBlue);
+                break;
+            case 43:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemYellow);
+                break;
+            case 44:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemPurple);
+                break;
+
+            case 45:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn2);
+                break;
+            case 46:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn3);
+                break;
+            case 48:
+            {
+                Actor* bonusActorOldChest = new Actor(x + 0.5f, y + 0.5f, 0, decorateOldChest);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActorOldChest;
+                break;
+            }
+            case 49:
+            {
+                Actor* bonusActorChest = level->IsWaterLevel() ? new Actor(x + 0.5f, y + 0.5f, 0, decorateWaterChest) : new Actor(x + 0.5f, y + 0.5f, 0, decorateChest);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActorChest;
+                break;
+            }
+            case 50:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn4);
+                break;
+
             case 64000:
             {
                 // This is a special tile, which is used in Armageddon to indicate that the neigbouring tile contains
