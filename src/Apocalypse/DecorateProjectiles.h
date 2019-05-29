@@ -26,6 +26,7 @@
 
 const uint16_t actorIdProjectilePlayerShot = 70;
 const uint16_t actorIdProjectilePlayerBigShot = 71;
+const uint16_t actorIdProjectileWizardShot = 72;
 
 //
 // PLAYER SHOT
@@ -98,6 +99,47 @@ const DecorateActor decoratePlayerBigShot =
     Flickering,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     playerShotStates,
+    StateIdProjectileFly,   // initialState;
+    3,  // damage;
+    0, // hitSound;
+    10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// WIZARD SHOT
+//
+
+const DecorateAnimation wizardShotFlyAnimation =
+{
+    { WIZARD_SHOT1PIC , 8, ActionMonsterProjectile },
+    { WIZARD_SHOT2PIC , 8, ActionMonsterProjectile }
+};
+
+const DecorateState wizardShotStateFly =
+{
+    wizardShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> wizardShotStates =
+{
+    std::make_pair(StateIdProjectileFly, wizardShotStateFly),
+    std::make_pair(StateIdDying, playerShotStateDying)
+};
+
+const DecorateActor decorateWizardShot =
+{
+    actorIdProjectileWizardShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    wizardShotStates,
     StateIdProjectileFly,   // initialState;
     3,  // damage;
     0, // hitSound;

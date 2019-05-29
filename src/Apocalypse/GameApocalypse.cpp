@@ -113,7 +113,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 11:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyBlue);
                 break;
-
+            case 23:
+            {
+                Actor* wizardActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWizard);
+                actors[(y * level->GetLevelWidth()) + x] = wizardActor;
+                break;
+            }
             case 31:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn5);
                 break;
@@ -532,6 +537,11 @@ void GameApocalypse::PlaySoundShootWall()
 void GameApocalypse::PlaySoundBoom()
 {
     m_audioPlayer->Play(BOOMSND);
+}
+
+void GameApocalypse::PlaySoundSmallMonster()
+{
+    m_audioPlayer->Play(SMALLMONSTERSND);
 }
 
 void GameApocalypse::PlaySoundWarpUpOrDown(const bool up)

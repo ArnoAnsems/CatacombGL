@@ -140,6 +140,7 @@
     <ClInclude Include="DecorateAll.h" />
     <ClInclude Include="DecorateBonus.h" />
     <ClInclude Include="DecorateMisc.h" />
+    <ClInclude Include="DecorateMonsters.h" />
     <ClInclude Include="DecorateProjectiles.h" />
     <ClInclude Include="EgaGraphApocalypse.h" />
     <ClInclude Include="GameApocalypse.h" />

@@ -1571,6 +1571,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         actor->SetActionPerformed(true);
         break;
     }
+    case ActionSmallMonsterSound:
+    {
+        m_game.PlaySoundSmallMonster();
+        actor->SetActionPerformed(true);
+        break;
+    }
     case ActionBurningTree:
     {
         int16_t fireFrame = actor->GetTemp1();
@@ -2303,6 +2309,7 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionWarpInsideLevel ||
             action == ActionForceField ||
             action == ActionExplodeSound ||
+            action == ActionSmallMonsterSound ||
             action == ActionBurningTree
         );
 }
