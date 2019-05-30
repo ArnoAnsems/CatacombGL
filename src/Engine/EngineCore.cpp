@@ -1874,8 +1874,10 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
     uint16_t speed = actor->GetDecorateActor().speed;
 
     // The water troll in Abyss and the water dragon in Armageddon move slower when under water.
+    // The blob from Apocalypse moves slower when in shadow mode.
     if (actor->GetState() == StateIdHidden &&
-        ((m_game.GetId() == 1 || m_game.GetId() == 2 || m_game.GetId() == 3) && actor->GetDecorateActor().id == 61))
+        (((m_game.GetId() == 1 || m_game.GetId() == 2 || m_game.GetId() == 3) && actor->GetDecorateActor().id == 61)) ||
+        ((m_game.GetId() == 4 && actor->GetDecorateActor().id == 54)))
     {
         speed = 1200;
     }

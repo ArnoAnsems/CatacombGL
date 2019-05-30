@@ -25,6 +25,7 @@
 #include "EgaGraphApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 
+const uint16_t actorIdMonsterBlob = 54;
 const uint16_t actorIdMonsterWizard = 59;
 
 //
@@ -119,4 +120,124 @@ const DecorateActor decorateWizard =
     1536,    // speed;
     0, // actionParameter
     actorIdProjectileWizardShot // ProjectileId
+};
+
+//
+// BLOB
+//
+
+const DecorateAnimation blobHiddenAnimation =
+{
+    { BLOBGND1PIC, 13, ActionHideUnderWater },
+    { BLOBGND1PIC, 15, ActionHideUnderWater }
+};
+
+const DecorateState blobStateHidden =
+{
+    blobHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation blobRiseAnimation =
+{
+    { BLOBRISE1PIC, 20, ActionNone },
+    { BLOBRISE2PIC, 20, ActionNone }
+};
+
+const DecorateState blobStateRise =
+{
+    blobRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation blobSinkAnimation =
+{
+    { BLOBRISE2PIC, 20, ActionNone },
+    { BLOBRISE1PIC, 20, ActionNone }
+};
+
+const DecorateState blobStateSink =
+{
+    blobSinkAnimation,
+    StateIdHidden
+};
+
+const DecorateAnimation blobWalkAnimation =
+{
+    { BLOBWALK1PIC, 15, ActionChaseLikeWetMan },
+    { BLOBWALK2PIC, 15, ActionChaseLikeWetMan },
+    { BLOBWALK3PIC, 15, ActionChaseLikeWetMan }
+};
+
+const DecorateState blobStateWalk =
+{
+    blobWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation blobAttackAnimation =
+{
+    { BLOBWALK1PIC, 1, ActionAttack }
+};
+
+const DecorateState blobStateAttack =
+{
+    blobAttackAnimation,
+    StateIdWalk
+};
+
+
+const DecorateAnimation blobPainAnimation =
+{
+    { BLOBRISE2PIC, 10, ActionChaseLikeWetMan }
+};
+
+const DecorateState blobStatePain =
+{
+    blobPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation blobDyingAnimation =
+{
+    { BLOBDEATH1PIC, 30, ActionExplodeSound },
+    { BLOBDEATH2PIC, 30, ActionNone },
+    { BLOBDEATH3PIC, 30, ActionNone },
+    { 0, 30, ActionRemove }
+};
+
+const DecorateState blobStateDying =
+{
+    blobDyingAnimation,
+    StateIdDying  // Will not loop, due to the ActionRemove.
+};
+
+const std::map<DecorateStateId, DecorateState> blobStates =
+{
+    std::make_pair(StateIdHidden, blobStateHidden),
+    std::make_pair(StateIdRise, blobStateRise),
+    std::make_pair(StateIdSink, blobStateSink),
+    std::make_pair(StateIdWalk, blobStateWalk),
+    std::make_pair(StateIdAttack, blobStateAttack),
+    std::make_pair(StateIdPain, blobStatePain),
+    std::make_pair(StateIdDying, blobStateDying)
+};
+
+const DecorateActor decorateBlob =
+{
+    actorIdMonsterBlob,   // Id
+    13, // spawnOnAllDifficulties;
+    13, // spawnOnNormalAndHard;
+    13,  // spawnOnHard
+    13,  // initialHealth;
+    14 * pixelRadius,    // size;
+    WithRedGem,  // radarVisibility;
+    EgaBrightRed,   // radarColor;
+    blobStates,
+    StateIdHidden,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2200,    // speed;
+    0, // actionParameter
+    actorIdProjectileBlobShot // ProjectileId
 };

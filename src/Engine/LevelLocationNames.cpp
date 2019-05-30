@@ -29,6 +29,12 @@ LevelLocationNames::LevelLocationNames(const FileChunk* decompressedChunk)
         const char currentChar = decompressedChunk->GetChunk()[charIndex];
         if (currentChar == '\r')
         {
+            // In Apocalypse, some names start with '@' to indicate that the borders should flash.
+            // Just skip the character.
+            if (decompressedChunk->GetChunk()[startOfName] == '@')
+            {
+                startOfName++;
+            }
             const uint16_t nameLength = charIndex - startOfName;
             if (nameLength > 0)
             {
