@@ -33,6 +33,7 @@ const uint16_t actorIdColumn2 = 13;
 const uint16_t actorIdColumn3 = 14;
 const uint16_t actorIdColumn4 = 15;
 const uint16_t actorIdColumn5 = 16;
+const uint16_t actorIdFakeWall = 17;
 
 //
 // EXPLODING WALL
@@ -318,6 +319,46 @@ const DecorateActor decorateColumn5 =
     StateIdDecoration,   // initialState;
     0,  // meleeDamage;
     SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    0, // actionParameter,
+    0 // ProjectileId
+};
+
+//
+// FAKE WALL
+//
+
+// This object is not really hidden, but acts as a marker to indicate that the player can pass through the wall at this location.
+const DecorateAnimation fakeWallHiddenAnimation =
+{
+    { NULL, 10, ActionFakeWall }
+};
+
+const DecorateState fakeWallStateHidden =
+{
+    fakeWallHiddenAnimation,
+    StateIdHidden // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> fakeWallStates =
+{
+    std::make_pair(StateIdHidden, fakeWallStateHidden)
+};
+
+const DecorateActor decorateFakeWall =
+{
+    actorIdFakeWall,   // Id
+    32, // spawnOnAllDifficulties;
+    32, // spawnOnNormalAndHard;
+    32,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    fakeWallStates,
+    StateIdHidden,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
     0,    // speed;
     0, // actionParameter,
     0 // ProjectileId

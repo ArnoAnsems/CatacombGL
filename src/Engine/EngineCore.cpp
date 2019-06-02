@@ -1642,6 +1642,14 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
         break;
     }
+    case ActionFakeWall:
+    {
+        const bool playerTouchesFakeWall =
+            ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < 0.9f + actor->GetDecorateActor().size) &&
+            (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < 0.9f + actor->GetDecorateActor().size));
+        m_level->SetWallTile(actor->GetTileX(), actor->GetTileY(), playerTouchesFakeWall ? 0 : actor->GetTemp1());
+        break;
+    }
     case ActionNone:
     {
         break;

@@ -130,6 +130,14 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 31:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn5);
                 break;
+            case 32:
+            {
+                Actor* fakeWallActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateFakeWall);
+                fakeWallActor->SetTemp1(level->GetWallTile(x,y));
+                fakeWallActor->SetActive(true);
+                actors[(y * level->GetLevelWidth()) + x] = fakeWallActor;
+                break;
+            }
             case 36:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn1);
                 break;
