@@ -275,7 +275,8 @@ void EngineCore::DrawScene(IRenderer& renderer)
         uint16_t width = (uint16_t)strlen(m_level->GetLevelName());
         if (width == 0)
         {
-            const char* enterAreaText = "You enter a new area ...";
+            
+            const char* enterAreaText = (m_game.GetId() == 3) ? "You enter a new area ..." : "A new challenge awaits you.";
             width = (uint16_t)strlen(enterAreaText);
             DrawCenteredTiledWindow(renderer, width, 3);
             renderer.RenderTextCentered(enterAreaText, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);
