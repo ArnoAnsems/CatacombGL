@@ -27,6 +27,7 @@
 
 const uint16_t actorIdMonsterBlob = 54;
 const uint16_t actorIdMonsterWizard = 59;
+const uint16_t actorIdMonsterBug = 60;
 
 //
 // WIZARD
@@ -240,4 +241,97 @@ const DecorateActor decorateBlob =
     2200,    // speed;
     0, // actionParameter
     actorIdProjectileBlobShot // ProjectileId
+};
+
+//
+// BUG
+//
+
+const DecorateAnimation bugWalkAnimation =
+{
+    { BUG_WALK1PIC, 15, ActionChaseLikeMage },
+    { BUG_WALK2PIC, 15, ActionChaseLikeMage },
+    { BUG_WALK3PIC, 15, ActionChaseLikeMage }
+};
+
+const DecorateState bugStateWalk =
+{
+    bugWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation bugAttackAnimation =
+{
+    { BUG_ATTACK1PIC, 20, ActionNone },
+    { BUG_ATTACK2PIC, 20, ActionNone },
+    { BUG_ATTACK2PIC, 1, ActionAttack },
+    { BUG_ATTACK1PIC, 15, ActionAttack }
+};
+
+const DecorateState bugStateAttack =
+{
+    bugAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation bugPainAnimation =
+{
+    { BUG_WALK1PIC, 10, ActionNone }
+};
+
+const DecorateState bugStatePain =
+{
+    bugPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation bugDyingAnimation =
+{
+    { BUG_DEATH1PIC, 35, ActionSmallMonsterSound },
+    { BUG_DEATH2PIC, 10, ActionNone }
+};
+
+const DecorateState bugStateDying =
+{
+    bugDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation bugDeadAnimation =
+{
+    { BUG_DEATH2PIC, 20, ActionNone }
+};
+
+const DecorateState bugStateDead =
+{
+    bugDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> bugStates =
+{
+    std::make_pair(StateIdWalk, bugStateWalk),
+    std::make_pair(StateIdAttack, bugStateAttack),
+    std::make_pair(StateIdPain, bugStatePain),
+    std::make_pair(StateIdDying, bugStateDying),
+    std::make_pair(StateIdDead, bugStateDead)
+};
+
+const DecorateActor decorateBug =
+{
+    actorIdMonsterBug,   // Id
+    14, // spawnOnAllDifficulties;
+    14, // spawnOnNormalAndHard;
+    14,  // spawnOnHard
+    10,  // initialHealth;
+    20 * pixelRadius,    // size;
+    WithYellowGem,  // radarVisibility;
+    EgaLightGray,   // radarColor;
+    bugStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1500,    // speed;
+    0, // actionParameter
+    actorIdProjectileBugShot // ProjectileId
 };

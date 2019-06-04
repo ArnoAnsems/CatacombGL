@@ -121,6 +121,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = blobActor;
                 break;
             }
+            case 14:
+            {
+                Actor* bugActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBug);
+                actors[(y * level->GetLevelWidth()) + x] = bugActor;
+                break;
+            }
             case 23:
             {
                 Actor* wizardActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWizard);
@@ -184,6 +190,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             }
             case 50:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn4);
+                break;
+            case 52:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb1);
+                break;
+            case 53:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb2);
                 break;
 
             case 64000:

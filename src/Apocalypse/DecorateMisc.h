@@ -26,6 +26,8 @@
 #include "AudioRepositoryApocalypse.h"
 
 const uint16_t actorIdNone = 0;
+const uint16_t actorIdTomb1 = 1;
+const uint16_t actorIdTomb2 = 2;
 const uint16_t actorIdExplodingWall = 4;
 const uint16_t actorIdPlayer = 11;
 const uint16_t actorIdColumn1 = 12;
@@ -321,6 +323,84 @@ const DecorateActor decorateColumn5 =
     SHOOTWALLSND, // hitSound;
     0,    // speed;
     0, // actionParameter,
+    0 // ProjectileId
+};
+
+//
+// TOMBSTONE 1
+//
+
+const DecorateAnimation tomb1DecorationAnimation =
+{
+    { TOMB1PIC, 8, ActionNone }
+};
+
+const DecorateState tomb1StateDecoration =
+{
+    tomb1DecorationAnimation,
+    StateIdDecoration // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> tomb1States =
+{
+    std::make_pair(StateIdDecoration, tomb1StateDecoration)
+};
+
+const DecorateActor decorateTomb1 =
+{
+    actorIdTomb1,   // Id
+    52, // spawnOnAllDifficulties;
+    52, // spawnOnNormalAndHard;
+    52,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    tomb1States,
+    StateIdDecoration,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    0, // actionParameter,
+    0 // ProjectileId
+};
+
+//
+// TOMBSTONE 2
+//
+
+const DecorateAnimation tomb2DecorationAnimation =
+{
+    { TOMB2PIC, 8, ActionNone }
+};
+
+const DecorateState tomb2StateDecoration =
+{
+    tomb2DecorationAnimation,
+    StateIdDecoration // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> tomb2States =
+{
+    std::make_pair(StateIdDecoration, tomb2StateDecoration)
+};
+
+const DecorateActor decorateTomb2 =
+{
+    actorIdTomb2,   // Id
+    53, // spawnOnAllDifficulties;
+    53, // spawnOnNormalAndHard;
+    53,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    tomb2States,
+    StateIdDecoration,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    0, // actionParameter
     0 // ProjectileId
 };
 
