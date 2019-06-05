@@ -89,6 +89,7 @@ public:
     virtual void PlaySoundSmallMonster() = NULL;
     virtual void PlaySoundWarpUpOrDown(const bool up) = NULL;
     virtual void PlaySoundWarp() = NULL;
+    virtual void PlaySoundPortal() = NULL;
 
 
 protected:

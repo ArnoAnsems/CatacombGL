@@ -147,7 +147,15 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 36:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn1);
                 break;
-
+            case 38:
+            {
+                const uint16_t spot = level->GetFloorTile(x + 1, y) >> 8;
+                const int16_t portalDelay = spot * 70;
+                Actor* portalActor = new Actor(x + 0.5f, y + 0.5f, 0, decoratePortal);
+                portalActor->SetTemp2(portalDelay);
+                actors[(y * level->GetLevelWidth()) + x] = portalActor;
+                break;
+            }
             case 39:
             {
                 Actor* freezeTimeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateFreezeTime);
@@ -580,4 +588,9 @@ void GameApocalypse::PlaySoundWarpUpOrDown(const bool up)
 void GameApocalypse::PlaySoundWarp()
 {
     m_audioPlayer->Play(WARPSND);
+}
+
+void GameApocalypse::PlaySoundPortal()
+{
+    m_audioPlayer->Play(PORTALSND);
 }

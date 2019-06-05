@@ -29,6 +29,7 @@ const uint16_t actorIdNone = 0;
 const uint16_t actorIdTomb1 = 1;
 const uint16_t actorIdTomb2 = 2;
 const uint16_t actorIdExplodingWall = 4;
+const uint16_t actorIdPortal = 5;
 const uint16_t actorIdPlayer = 11;
 const uint16_t actorIdColumn1 = 12;
 const uint16_t actorIdColumn2 = 13;
@@ -441,5 +442,85 @@ const DecorateActor decorateFakeWall =
     0, // hitSound;
     0,    // speed;
     0, // actionParameter,
+    0 // ProjectileId
+};
+
+//
+// PORTAL
+//
+
+const DecorateAnimation portalHiddenAnimation =
+{
+    { 0, 13, ActionHide }
+};
+
+const DecorateState portalStateHidden =
+{
+    portalHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation portalRiseAnimation =
+{
+    { 0, 1, ActionPortalSound }
+};
+
+const DecorateState portalStateRise =
+{
+    portalRiseAnimation,
+    StateIdWaitForPickup
+};
+
+const DecorateAnimation portalWaitForPickupAnimation =
+{
+    { PORTAL1PIC, 6, ActionWaitForPickup },
+    { PORTAL2PIC, 6, ActionWaitForPickup },
+    { PORTAL3PIC, 6, ActionWaitForPickup },
+    { PORTAL4PIC, 6, ActionWaitForPickup },
+    { PORTAL5PIC, 6, ActionWaitForPickup },
+    { PORTAL6PIC, 6, ActionWaitForPickup }
+};
+
+const DecorateState portalStateWaitForPickup =
+{
+    portalWaitForPickupAnimation,
+    StateIdWaitForPickup // Loop
+};
+
+const DecorateAnimation portalPickupAnimation =
+{
+    { PORTAL1PIC, 6, ActionWarpToOtherLevel }
+};
+
+const DecorateState portalStatePickup =
+{
+    portalPickupAnimation,
+    StateIdWaitForPickup
+};
+
+const std::map<DecorateStateId, DecorateState> portalStates =
+{
+    std::make_pair(StateIdHidden, portalStateHidden),
+    std::make_pair(StateIdRise, portalStateRise),
+    std::make_pair(StateIdWaitForPickup, portalStateWaitForPickup),
+    std::make_pair(StateIdPickup, portalStatePickup)
+};
+
+const DecorateActor decoratePortal =
+{
+    actorIdPortal,   // Id
+    38, // spawnOnAllDifficulties;
+    38, // spawnOnNormalAndHard;
+    38,  // spawnOnHard
+    1,  // initialHealth;
+    0.333f,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    portalStates,
+    StateIdHidden,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
     0 // ProjectileId
 };

@@ -1254,6 +1254,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionWaitForPickup:
     case ActionWaitForPickupDestructable:
     {
+        actor->SetSolid(false);
         if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size) && (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size))
         {
             actor->SetState(StateIdPickup, m_timeStampOfWorldCurrentFrame);
@@ -1575,6 +1576,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionSmallMonsterSound:
     {
         m_game.PlaySoundSmallMonster();
+        actor->SetActionPerformed(true);
+        break;
+    }
+    case ActionPortalSound:
+    {
+        m_game.PlaySoundPortal();
         actor->SetActionPerformed(true);
         break;
     }
@@ -2321,6 +2328,7 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionForceField ||
             action == ActionExplodeSound ||
             action == ActionSmallMonsterSound ||
+            action == ActionPortalSound ||
             action == ActionBurningTree
         );
 }

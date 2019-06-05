@@ -876,3 +876,8 @@ void GameAbyss::PlaySoundWarp()
 {
     m_audioPlayer->Play(WARPSND);
 }
+
+void GameAbyss::PlaySoundPortal()
+{
+
+}

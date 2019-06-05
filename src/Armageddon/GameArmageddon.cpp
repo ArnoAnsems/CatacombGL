@@ -844,3 +844,8 @@ void GameArmageddon::PlaySoundWarp()
 {
     m_audioPlayer->Play(WARPSND);
 }
+
+void GameArmageddon::PlaySoundPortal()
+{
+
+}

@@ -80,6 +80,7 @@ public:
     void PlaySoundSmallMonster() override;
     void PlaySoundWarpUpOrDown(const bool up) override;
     void PlaySoundWarp() override;
+    void PlaySoundPortal() override;
 
 private:
     void DrawHealth(const int16_t health);
