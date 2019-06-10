@@ -37,6 +37,8 @@ const uint16_t actorIdColumn3 = 14;
 const uint16_t actorIdColumn4 = 15;
 const uint16_t actorIdColumn5 = 16;
 const uint16_t actorIdFakeWall = 17;
+const uint16_t actorIdFutureFirePot = 18;
+const uint16_t actorIdOldFirePot = 19;
 
 //
 // EXPLODING WALL
@@ -159,7 +161,7 @@ const DecorateActor decorateColumn1 =
     36, // spawnOnNormalAndHard;
     36,  // spawnOnHard
     1,  // initialHealth;
-    35 * pixelRadius,    // size;
+    10 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     column1States,
@@ -198,7 +200,7 @@ const DecorateActor decorateColumn2 =
     45, // spawnOnNormalAndHard;
     45,  // spawnOnHard
     1,  // initialHealth;
-    35 * pixelRadius,    // size;
+    10 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     column2States,
@@ -237,7 +239,7 @@ const DecorateActor decorateColumn3 =
     46, // spawnOnNormalAndHard;
     46,  // spawnOnHard
     1,  // initialHealth;
-    35 * pixelRadius,    // size;
+    10 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     column3States,
@@ -276,7 +278,7 @@ const DecorateActor decorateColumn4 =
     50, // spawnOnNormalAndHard;
     50,  // spawnOnHard
     1,  // initialHealth;
-    35 * pixelRadius,    // size;
+    10 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     column4States,
@@ -315,7 +317,7 @@ const DecorateActor decorateColumn5 =
     31, // spawnOnNormalAndHard;
     31,  // spawnOnHard
     1,  // initialHealth;
-    35 * pixelRadius,    // size;
+    10 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     column5States,
@@ -354,7 +356,7 @@ const DecorateActor decorateTomb1 =
     52, // spawnOnNormalAndHard;
     52,  // spawnOnHard
     1,  // initialHealth;
-    35 * pixelRadius,    // size;
+    10 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     tomb1States,
@@ -393,7 +395,7 @@ const DecorateActor decorateTomb2 =
     53, // spawnOnNormalAndHard;
     53,  // spawnOnHard
     1,  // initialHealth;
-    35 * pixelRadius,    // size;
+    10 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
     tomb2States,
@@ -402,6 +404,85 @@ const DecorateActor decorateTomb2 =
     SHOOTWALLSND, // hitSound;
     0,    // speed;
     0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// FUTURE FIRE POT
+//
+
+const DecorateAnimation futureFirePotDecorationAnimation =
+{
+    { FFIRE_POTPIC, 20, ActionNone }
+};
+
+const DecorateState futureFirePotStateDecoration =
+{
+    futureFirePotDecorationAnimation,
+    StateIdDecoration // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> futureFirePotStates =
+{
+    std::make_pair(StateIdDecoration, futureFirePotStateDecoration)
+};
+
+const DecorateActor decorateFutureFirePot =
+{
+    actorIdFutureFirePot,   // Id
+    37, // spawnOnAllDifficulties;
+    37, // spawnOnNormalAndHard;
+    37,  // spawnOnHard
+    1,  // initialHealth;
+    10 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    futureFirePotStates,
+    StateIdDecoration,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    0, // actionParameter,
+    0 // ProjectileId
+};
+
+//
+// OLD FIRE POT
+//
+
+const DecorateAnimation oldFirePotDecorationAnimation =
+{
+    { OFIRE_POT1PIC, 20, ActionNone },
+    { OFIRE_POT2PIC, 20, ActionNone }
+};
+
+const DecorateState oldFirePotStateDecoration =
+{
+    oldFirePotDecorationAnimation,
+    StateIdDecoration // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> oldFirePotStates =
+{
+    std::make_pair(StateIdDecoration, oldFirePotStateDecoration)
+};
+
+const DecorateActor decorateOldFirePot =
+{
+    actorIdOldFirePot,   // Id
+    51, // spawnOnAllDifficulties;
+    51, // spawnOnNormalAndHard;
+    51,  // spawnOnHard
+    1,  // initialHealth;
+    10 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    oldFirePotStates,
+    StateIdDecoration,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    0, // actionParameter,
     0 // ProjectileId
 };
 

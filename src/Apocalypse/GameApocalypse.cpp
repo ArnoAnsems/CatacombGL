@@ -147,6 +147,9 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 36:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn1);
                 break;
+            case 37:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateFutureFirePot);
+                break;
             case 38:
             {
                 const uint16_t spot = level->GetFloorTile(x + 1, y) >> 8;
@@ -198,6 +201,9 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             }
             case 50:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn4);
+                break;
+            case 51:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateOldFirePot);
                 break;
             case 52:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb1);

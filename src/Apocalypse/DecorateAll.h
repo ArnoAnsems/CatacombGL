@@ -31,6 +31,8 @@ const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
     std::make_pair(actorIdColumn5, decorateColumn5),
     std::make_pair(actorIdTomb1, decorateTomb1),
     std::make_pair(actorIdTomb2, decorateTomb2),
+    std::make_pair(actorIdFutureFirePot, decorateFutureFirePot),
+    std::make_pair(actorIdOldFirePot, decorateOldFirePot),
     std::make_pair(actorIdFakeWall, decorateFakeWall),
     std::make_pair(actorIdBonusExplosion, decorateExplosion),
     std::make_pair(actorIdBonusBolt, decorateBolt),
