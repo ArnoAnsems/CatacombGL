@@ -133,6 +133,14 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = wizardActor;
                 break;
             }
+            case 29:
+            {
+                const int16_t timeLordDelay = (rand() % 60) + (rand() % 100);
+                Actor* timeLordActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateTimeLord);
+                timeLordActor->SetTemp2(timeLordDelay);
+                actors[(y * level->GetLevelWidth()) + x] = timeLordActor;
+                break;
+            }
             case 31:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn5);
                 break;

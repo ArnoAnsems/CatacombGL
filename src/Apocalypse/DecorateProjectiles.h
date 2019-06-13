@@ -21,6 +21,7 @@
 #pragma once
 
 #include "..\Engine\Decorate.h"
+#include "DecorateBonus.h"
 #include "EgaGraphApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 
@@ -29,6 +30,7 @@ const uint16_t actorIdProjectilePlayerBigShot = 71;
 const uint16_t actorIdProjectileWizardShot = 72;
 const uint16_t actorIdProjectileBlobShot = 73;
 const uint16_t actorIdProjectileBugShot = 74;
+const uint16_t actorIdProjectileTimeLordShot = 75;
 
 //
 // PLAYER SHOT
@@ -232,3 +234,43 @@ const DecorateActor decorateBugShot =
     0 // ProjectileId
 };
 
+//
+// TIME LORD (EGYPTIAN HEAD) SHOT
+//
+
+const DecorateAnimation timeLordShotFlyAnimation =
+{
+    { PSHOT1PIC, 10, ActionMonsterProjectile },
+    { PSHOT2PIC, 10, ActionMonsterProjectile }
+};
+
+const DecorateState timeLordShotStateFly =
+{
+    timeLordShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> timeLordShotStates =
+{
+    std::make_pair(StateIdProjectileFly, timeLordShotStateFly),
+    std::make_pair(StateIdDying, bonusStateDying)
+};
+
+const DecorateActor decorateTimeLordShot =
+{
+    actorIdProjectileTimeLordShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    bugShotStates,
+    StateIdProjectileFly,   // initialState;
+    5,  // damage;
+    0, // hitSound;
+    10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};

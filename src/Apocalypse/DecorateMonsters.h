@@ -26,6 +26,7 @@
 #include "AudioRepositoryApocalypse.h"
 
 const uint16_t actorIdMonsterBlob = 54;
+const uint16_t actorIdMonsterTimeLord = 55;
 const uint16_t actorIdMonsterWizard = 59;
 const uint16_t actorIdMonsterBug = 60;
 
@@ -334,4 +335,91 @@ const DecorateActor decorateBug =
     1500,    // speed;
     0, // actionParameter
     actorIdProjectileBugShot // ProjectileId
+};
+
+//
+// TIME LORD (EGYPTIAN HEAD)
+//
+
+const DecorateAnimation timeLordHiddenAnimation =
+{
+    { 0 , 13, ActionHide }
+};
+
+const DecorateState timeLordStateHidden =
+{
+    timeLordHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation timeLordRiseAnimation =
+{
+    { HEADPIC, 1, ActionNone }
+};
+
+const DecorateState timeLordStateRise =
+{
+    timeLordRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation timeLordWalkAnimation =
+{
+    { HEADPIC, 20, ActionChaseLikeMage }
+};
+
+const DecorateState timeLordStateWalk =
+{
+    timeLordWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation timeLordAttackAnimation =
+{
+    { HEADPIC, 20, ActionAttack }
+};
+
+const DecorateState timeLordStateAttack =
+{
+    timeLordAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation timeLordDyingAnimation =
+{
+    { 0, 1, ActionRemove }
+};
+
+const DecorateState timeLordStateDying =
+{
+    timeLordDyingAnimation,
+    StateIdDying
+};
+
+const std::map<DecorateStateId, DecorateState> timeLordStates =
+{
+    std::make_pair(StateIdHidden, timeLordStateHidden),
+    std::make_pair(StateIdRise, timeLordStateRise),
+    std::make_pair(StateIdWalk, timeLordStateWalk),
+    std::make_pair(StateIdAttack, timeLordStateAttack),
+    std::make_pair(StateIdDying, timeLordStateDying)
+};
+
+const DecorateActor decorateTimeLord =
+{
+    actorIdMonsterTimeLord,   // Id
+    29, // spawnOnAllDifficulties;
+    29, // spawnOnNormalAndHard;
+    29, // spawnOnHard;
+    16,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithYellowGem,  // radarVisibility;
+    EgaBrown,   // radarColor;
+    timeLordStates,
+    StateIdHidden,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    3000,    // speed;
+    0, // actionParameter
+    actorIdProjectileTimeLordShot // ProjectileId
 };
