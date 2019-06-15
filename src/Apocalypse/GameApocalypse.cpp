@@ -127,6 +127,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = bugActor;
                 break;
             }
+            case 17:
+            {
+                Actor* androidMageActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateAndroidMage);
+                actors[(y * level->GetLevelWidth()) + x] = androidMageActor;
+                break;
+            }
             case 23:
             {
                 Actor* wizardActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWizard);

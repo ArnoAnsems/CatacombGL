@@ -27,6 +27,7 @@
 
 const uint16_t actorIdMonsterBlob = 54;
 const uint16_t actorIdMonsterTimeLord = 55;
+const uint16_t actorIdMonsterAndroidMage = 56;
 const uint16_t actorIdMonsterWizard = 59;
 const uint16_t actorIdMonsterBug = 60;
 
@@ -422,4 +423,96 @@ const DecorateActor decorateTimeLord =
     3000,    // speed;
     0, // actionParameter
     actorIdProjectileTimeLordShot // ProjectileId
+};
+
+//
+// ANDROID MAGE
+//
+
+const DecorateAnimation androidMageWalkAnimation =
+{
+    { FMAGEWALK1PIC, 20, ActionChaseLikeMage },
+    { FMAGEWALK2PIC, 20, ActionChaseLikeMage },
+    { FMAGEWALK3PIC, 20, ActionChaseLikeMage },
+};
+
+const DecorateState androidMageStateWalk =
+{
+    androidMageWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation androidMageAttackAnimation =
+{
+    { FMAGEATTACK1PIC, 20, ActionNone },
+    { FMAGEATTACK1PIC, 1, ActionAttack },
+    { FMAGEATTACK2PIC, 30, ActionNone },
+};
+
+const DecorateState androidMageStateAttack =
+{
+    androidMageAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation androidMagePainAnimation =
+{
+    { FMAGEATTACK1PIC, 10, ActionNone }
+};
+
+const DecorateState androidMageStatePain =
+{
+    androidMagePainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation androidMageDyingAnimation =
+{
+    { FMAGEDEATH1PIC, 40, ActionNone },
+    { FMAGEDEATH2PIC, 30, ActionSmallMonsterSound },
+};
+
+const DecorateState androidMageStateDying =
+{
+    androidMageDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation androidMageDeadAnimation =
+{
+    { FMAGEDEATH3PIC, 20, ActionNone }
+};
+
+const DecorateState androidMageStateDead =
+{
+    androidMageDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> androidMageStates =
+{
+    std::make_pair(StateIdWalk, androidMageStateWalk),
+    std::make_pair(StateIdAttack, androidMageStateAttack),
+    std::make_pair(StateIdPain, androidMageStatePain),
+    std::make_pair(StateIdDying, androidMageStateDying),
+    std::make_pair(StateIdDead, androidMageStateDead)
+};
+
+const DecorateActor decorateAndroidMage =
+{
+    actorIdMonsterAndroidMage,   // Id
+    17, // spawnOnAllDifficulties;
+    17, // spawnOnNormalAndHard;
+    17,  // spawnOnHard
+    12,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithBlueGem,  // radarVisibility;
+    EgaBrightBlue,   // radarColor;
+    androidMageStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    3072,    // speed;
+    0, // actionParameter
+    actorIdProjectileAndroidMageShot // ProjectileId
 };

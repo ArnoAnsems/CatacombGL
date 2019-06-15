@@ -31,6 +31,7 @@ const uint16_t actorIdProjectileWizardShot = 72;
 const uint16_t actorIdProjectileBlobShot = 73;
 const uint16_t actorIdProjectileBugShot = 74;
 const uint16_t actorIdProjectileTimeLordShot = 75;
+const uint16_t actorIdProjectileAndroidMageShot = 76;
 
 //
 // PLAYER SHOT
@@ -269,6 +270,47 @@ const DecorateActor decorateTimeLordShot =
     bugShotStates,
     StateIdProjectileFly,   // initialState;
     5,  // damage;
+    0, // hitSound;
+    10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// ANDROID MAGE SHOT
+//
+
+const DecorateAnimation androidMageShotFlyAnimation =
+{
+    { FMAGESHOT1PIC , 8, ActionMonsterProjectile },
+    { FMAGESHOT2PIC , 8, ActionMonsterProjectile }
+};
+
+const DecorateState androidMageShotStateFly =
+{
+    androidMageShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> androidMageShotStates =
+{
+    std::make_pair(StateIdProjectileFly, androidMageShotStateFly),
+    std::make_pair(StateIdDying, bonusStateDying)
+};
+
+const DecorateActor decorateAndroidMageShot =
+{
+    actorIdProjectileAndroidMageShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    androidMageShotStates,
+    StateIdProjectileFly,   // initialState;
+    7,  // damage;
     0, // hitSound;
     10000,    // speed;
     0, // actionParameter
