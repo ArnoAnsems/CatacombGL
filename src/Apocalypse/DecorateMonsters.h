@@ -28,6 +28,7 @@
 const uint16_t actorIdMonsterBlob = 54;
 const uint16_t actorIdMonsterTimeLord = 55;
 const uint16_t actorIdMonsterAndroidMage = 56;
+const uint16_t actorIdMonsterCyborgDemon = 57;
 const uint16_t actorIdMonsterWizard = 59;
 const uint16_t actorIdMonsterBug = 60;
 
@@ -515,4 +516,97 @@ const DecorateActor decorateAndroidMage =
     3072,    // speed;
     0, // actionParameter
     actorIdProjectileAndroidMageShot // ProjectileId
+};
+
+//
+// CYBORG DEMON
+//
+
+const DecorateAnimation cyborgDemonWalkAnimation =
+{
+    { CYBORG1PIC, 20, ActionChase },
+    { CYBORG2PIC, 20, ActionChase },
+    { CYBORG3PIC, 20, ActionChase },
+    { CYBORG4PIC, 20, ActionChase }
+};
+
+const DecorateState cyborgDemonStateWalk =
+{
+    cyborgDemonWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation cyborgDemonAttackAnimation =
+{
+    { CYBORGATTACK1PIC, 20, ActionNone },
+    { CYBORGATTACK2PIC, 20, ActionNone },
+    { CYBORGATTACK3PIC, 30, ActionAttack }
+};
+
+const DecorateState cyborgDemonStateAttack =
+{
+    cyborgDemonAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation cyborgDemonPainAnimation =
+{
+    { CYBORGOUCHPIC, 30, ActionNone }
+};
+
+const DecorateState cyborgDemonStatePain =
+{
+    cyborgDemonPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation cyborgDemonDyingAnimation =
+{
+    { CYBORGOUCHPIC, 40, ActionNone },
+    { CYBORGDIE1PIC, 30, ActionLargeMonsterSound }
+};
+
+const DecorateState cyborgDemonStateDying =
+{
+    cyborgDemonDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation cyborgDemonDeadAnimation =
+{
+    { CYBORGDIE2PIC, 20, ActionNone }
+};
+
+const DecorateState cyborgDemonStateDead =
+{
+    cyborgDemonDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> cyborgDemonStates =
+{
+    std::make_pair(StateIdWalk, cyborgDemonStateWalk),
+    std::make_pair(StateIdAttack, cyborgDemonStateAttack),
+    std::make_pair(StateIdPain, cyborgDemonStatePain),
+    std::make_pair(StateIdDying, cyborgDemonStateDying),
+    std::make_pair(StateIdDead, cyborgDemonStateDead)
+};
+
+const DecorateActor decorateCyborgDemon =
+{
+    actorIdMonsterCyborgDemon,   // Id
+    15, // spawnOnAllDifficulties;
+    15, // spawnOnNormalAndHard;
+    15,  // spawnOnHard;
+    30,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithPurpleGem,  // radarVisibility;
+    EgaMagenta,   // radarColor;
+    cyborgDemonStates,
+    StateIdWalk,   // initialState;
+    15,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2048,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
 };

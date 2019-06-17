@@ -1579,6 +1579,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         actor->SetActionPerformed(true);
         break;
     }
+    case ActionLargeMonsterSound:
+    {
+        m_game.PlaySoundLargeMonster();
+        actor->SetActionPerformed(true);
+        break;
+    }
     case ActionPortalSound:
     {
         m_game.PlaySoundPortal();
@@ -2328,6 +2334,7 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionForceField ||
             action == ActionExplodeSound ||
             action == ActionSmallMonsterSound ||
+            action == ActionLargeMonsterSound ||
             action == ActionPortalSound ||
             action == ActionBurningTree
         );

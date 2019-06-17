@@ -127,6 +127,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = bugActor;
                 break;
             }
+            case 15:
+            {
+                Actor* demonCyborgActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateCyborgDemon);
+                actors[(y * level->GetLevelWidth()) + x] = demonCyborgActor;
+                break;
+            }
             case 17:
             {
                 Actor* androidMageActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateAndroidMage);
@@ -598,6 +604,11 @@ void GameApocalypse::PlaySoundBoom()
 void GameApocalypse::PlaySoundSmallMonster()
 {
     m_audioPlayer->Play(SMALLMONSTERSND);
+}
+
+void GameApocalypse::PlaySoundLargeMonster()
+{
+    m_audioPlayer->Play(LARGEMONSTERSND);
 }
 
 void GameApocalypse::PlaySoundWarpUpOrDown(const bool up)

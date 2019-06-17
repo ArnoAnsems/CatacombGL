@@ -78,6 +78,7 @@ public:
     void PlaySoundShootWall() override;
     void PlaySoundBoom() override;
     void PlaySoundSmallMonster() override;
+    void PlaySoundLargeMonster() override;
     void PlaySoundWarpUpOrDown(const bool up) override;
     void PlaySoundWarp() override;
     void PlaySoundPortal() override;

@@ -867,6 +867,11 @@ void GameAbyss::PlaySoundSmallMonster()
 
 }
 
+void GameAbyss::PlaySoundLargeMonster()
+{
+
+}
+
 void GameAbyss::PlaySoundWarpUpOrDown(const bool up)
 {
     m_audioPlayer->Play(up ? WARPUPSND : WARPDOWNSND);

@@ -835,6 +835,10 @@ void GameArmageddon::PlaySoundSmallMonster()
 {
 }
 
+void GameArmageddon::PlaySoundLargeMonster()
+{
+}
+
 void GameArmageddon::PlaySoundWarpUpOrDown(const bool up)
 {
     m_audioPlayer->Play(up ? WARPUPSND : WARPDOWNSND);

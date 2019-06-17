@@ -87,6 +87,7 @@ public:
     virtual void PlaySoundShootWall() = NULL;
     virtual void PlaySoundBoom() = NULL;
     virtual void PlaySoundSmallMonster() = NULL;
+    virtual void PlaySoundLargeMonster() = NULL;
     virtual void PlaySoundWarpUpOrDown(const bool up) = NULL;
     virtual void PlaySoundWarp() = NULL;
     virtual void PlaySoundPortal() = NULL;
