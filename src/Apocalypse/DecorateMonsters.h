@@ -29,8 +29,10 @@ const uint16_t actorIdMonsterBlob = 54;
 const uint16_t actorIdMonsterTimeLord = 55;
 const uint16_t actorIdMonsterAndroidMage = 56;
 const uint16_t actorIdMonsterCyborgDemon = 57;
+const uint16_t actorIdMonsterStompy = 58;
 const uint16_t actorIdMonsterWizard = 59;
 const uint16_t actorIdMonsterBug = 60;
+const uint16_t actorIdMonsterRunningEye = 61;
 
 //
 // WIZARD
@@ -607,6 +609,172 @@ const DecorateActor decorateCyborgDemon =
     15,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// STOMPY (WALKING RED TANK)
+//
+
+const DecorateAnimation stompyWalkAnimation =
+{
+    { STOMPYWALK1PIC, 15, ActionChaseLikeMage },
+    { STOMPYWALK2PIC, 15, ActionChaseLikeMage },
+    { STOMPYWALK3PIC, 15, ActionChaseLikeMage },
+    { STOMPYWALK4PIC, 15, ActionChaseLikeMage }
+};
+
+const DecorateState stompyStateWalk =
+{
+    stompyWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation stompyAttackAnimation =
+{
+    { STOMPYATTACK1PIC, 10, ActionNone },
+    { STOMPYATTACK2PIC, 15, ActionNone },
+    { STOMPYATTACK2PIC, 1, ActionAttack },
+    { STOMPYATTACK1PIC, 10, ActionNone }
+};
+
+const DecorateState stompyStateAttack =
+{
+    stompyAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation stompyPainAnimation =
+{
+    { STOMPYATTACK1PIC, 10, ActionNone }
+};
+
+const DecorateState stompyStatePain =
+{
+    stompyPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation stompyDyingAnimation =
+{
+    { STOMPYDEATH1PIC, 45, ActionExplodeSound },
+    { STOMPYDEATH2PIC, 30, ActionNone },
+    { STOMPYDEATH3PIC, 25, ActionNone },
+    { STOMPYDEATH4PIC, 20, ActionNone },
+    { 0, 10, ActionRemove }
+};
+
+const DecorateState stompyStateDying =
+{
+    stompyDyingAnimation,
+    StateIdDying
+};
+
+const std::map<DecorateStateId, DecorateState> stompyStates =
+{
+    std::make_pair(StateIdWalk, stompyStateWalk),
+    std::make_pair(StateIdAttack, stompyStateAttack),
+    std::make_pair(StateIdPain, stompyStatePain),
+    std::make_pair(StateIdDying, stompyStateDying)
+};
+
+const DecorateActor decorateStompy =
+{
+    actorIdMonsterStompy,   // Id
+    21, // spawnOnAllDifficulties;
+    21, // spawnOnNormalAndHard;
+    21,  // spawnOnHard
+    20,  // initialHealth;
+    25 * pixelRadius,    // size;
+    WithRedGem,  // radarVisibility;
+    EgaRed,   // radarColor;
+    stompyStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1800,    // speed;
+    0, // actionParameter
+    actorIdProjectileStompyShot // ProjectileId
+};
+
+//
+// RUNNING EYE
+//
+
+const DecorateAnimation runningEyeWalkAnimation =
+{
+    { EYE_WALK1PIC, 20, ActionNone },
+    { EYE_WALK2PIC, 20, ActionNone },
+    { EYE_WALK3PIC, 20, ActionNone },
+    { EYE_WALK2PIC, 20, ActionNone }
+};
+
+const DecorateState runningEyeStateWalk =
+{
+    runningEyeWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation runningEyePainAnimation =
+{
+    { EYE_OUCH1PIC, 8, ActionNone },
+    { EYE_OUCH2PIC, 8, ActionNone }
+};
+
+const DecorateState runningEyeStatePain =
+{
+    runningEyePainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation runningEyeDyingAnimation =
+{
+    { EYE_DEATH1PIC, 22, ActionNone },
+    { EYE_DEATH2PIC, 22, ActionSmallMonsterSound },
+    { EYE_DEATH3PIC, 22, ActionNone }
+};
+
+const DecorateState runningEyeStateDying =
+{
+    runningEyeDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation runningEyeDeadAnimation =
+{
+    { EYE_DEATH4PIC, 22, ActionNone }
+};
+
+const DecorateState runningEyeStateDead =
+{
+    runningEyeDeadAnimation,
+    StateIdDead  // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> runningEyeStates =
+{
+    std::make_pair(StateIdWalk, runningEyeStateWalk),
+    std::make_pair(StateIdPain,runningEyeStatePain),
+    std::make_pair(StateIdDying, runningEyeStateDying),
+    std::make_pair(StateIdDead, runningEyeStateDead)
+};
+
+const DecorateActor decorateRunningEye =
+{
+    actorIdMonsterRunningEye,   // Id
+    27, // spawnOnAllDifficulties;
+    27, // spawnOnNormalAndHard;
+    27,  // spawnOnHard
+    15,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithPurpleGem,  // radarVisibility;
+    EgaBrightMagenta,   // radarColor;
+    runningEyeStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    3500,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };
