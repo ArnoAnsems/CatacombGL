@@ -148,7 +148,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         if (mouseSensitivityPair != keyValuePairs.end())
         {
             int32_t sensitivity = std::stoi(mouseSensitivityPair->second);
-            m_mouseSensitivity = (sensitivity < 5) ? 5 : (sensitivity > 15) ? 15: sensitivity;
+            m_mouseSensitivity = (sensitivity < 1) ? 1 : (sensitivity > 15) ? 15: sensitivity;
         }
 
         auto turnSpeedPair = keyValuePairs.find("turnSpeed");

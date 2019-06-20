@@ -343,7 +343,7 @@ void ExtraMenu::MenuLeft()
         {
             if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
-                if (m_configurationSettings.GetMouseSensitivity() > 5)
+                if (m_configurationSettings.GetMouseSensitivity() > 1)
                 {
                     m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() - 1);
                 }

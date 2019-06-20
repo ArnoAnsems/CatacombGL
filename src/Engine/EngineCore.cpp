@@ -563,18 +563,19 @@ bool EngineCore::Think()
 
     if (m_state == WarpCheatDialog && !m_extraMenu.IsActive())
     {
-        for (uint8_t i = 0x30; i < 0x3A; i++)
+        for (int i = SDLK_0; i <= SDLK_9; i++)
         {
             if (m_playerInput.IsKeyJustPressed(i))
             {
                 TextFieldInput((char)i);
             }
         }
-        for (uint8_t i = 0x41; i < 0x5B; i++)
+        for (int i = SDLK_KP_1; i <= SDLK_KP_0; i++)
         {
             if (m_playerInput.IsKeyJustPressed(i))
             {
-                TextFieldInput((char)i);
+                const char numericChar = (char)(i == SDLK_KP_0 ? SDLK_0 : i - SDLK_KP_1 + SDLK_1);
+                TextFieldInput(numericChar);
             }
         }
 
