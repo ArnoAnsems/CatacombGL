@@ -704,10 +704,10 @@ const DecorateActor decorateStompy =
 
 const DecorateAnimation runningEyeWalkAnimation =
 {
-    { EYE_WALK1PIC, 20, ActionNone },
-    { EYE_WALK2PIC, 20, ActionNone },
-    { EYE_WALK3PIC, 20, ActionNone },
-    { EYE_WALK2PIC, 20, ActionNone }
+    { EYE_WALK1PIC, 20, ActionChaseLikeRunningEye },
+    { EYE_WALK2PIC, 20, ActionChaseLikeRunningEye },
+    { EYE_WALK3PIC, 20, ActionChaseLikeRunningEye },
+    { EYE_WALK2PIC, 20, ActionChaseLikeRunningEye }
 };
 
 const DecorateState runningEyeStateWalk =

@@ -1086,6 +1086,11 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
         break;
     }
+    case ActionChaseLikeRunningEye:
+    {
+        ChaseLikeRunningEye(actor);
+        break;
+    }
     case ActionHideUnderWater:
     {
         if (actor->GetTimeToNextAction() == 0)
@@ -1264,7 +1269,11 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     case ActionItemDestroyed:
     {
-        DisplayStatusMessage("Item destroyed", 80 * 17);
+        const bool isBonusItem = (actor->GetDecorateActor().initialState == StateIdWaitForPickup);
+        if (isBonusItem)
+        {
+            DisplayStatusMessage("Item destroyed", 80 * 17);
+        }
         m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
         actor->SetActionPerformed(true);
         break;
@@ -2002,6 +2011,61 @@ void EngineCore::RunAway(Actor* actor)
         actor->SetY((float)(actor->GetTileY()) + 0.5f);
 
         m_level->RunAwayThink(actor);
+
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = actor;	// set down a new goal marker
+        if (actor->TargetReached())
+        {
+            break;			// no possible move
+        }
+    }
+}
+
+void EngineCore::ChaseLikeRunningEye(Actor* actor)
+{
+    const uint16_t speed = actor->GetDecorateActor().speed;
+
+    const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
+    const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
+    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+
+    while (move > 0.0f)
+    {
+        // Clip with player
+        if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f))
+        {
+            break;
+        }
+
+        if (move < actor->GetDistanceToTarget())
+        {
+            m_level->MoveActor(actor, move);
+            break;
+        }
+
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = NULL;	// pick up marker from goal
+        if (actor->GetDirection() == nodir)
+            actor->SetDirection(north);
+
+        // Instantly set the actor on its target
+        move -= actor->GetDistanceToTarget();
+        actor->SetX((float)(actor->GetTileX()) + 0.5f);
+        actor->SetY((float)(actor->GetTileY()) + 0.5f);
+
+        
+        int16_t newTemp2 = m_level->GetFloorTile(actor->GetTileX(), actor->GetTileY()) >> 8;
+        if (newTemp2 != 0)
+        {
+            actor->SetTemp2(newTemp2);
+        }
+
+        const int16_t temp2 = actor->GetTemp2();
+        const actorDirection dir =
+            (temp2 == 1) ? north :
+            (temp2 == 2) ? east :
+            (temp2 == 3) ? south : west;
+        actor->SetDirection(dir);
+
+        m_level->Walk(actor);
 
         m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = actor;	// set down a new goal marker
         if (actor->TargetReached())

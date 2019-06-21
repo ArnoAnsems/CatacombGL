@@ -154,6 +154,8 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 27:
             {
                 Actor* runningEyeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateRunningEye);
+                int16_t initialDirection = level->GetFloorTile(x, y + 1) >> 8;
+                runningEyeActor->SetTemp2(initialDirection);
                 actors[(y * level->GetLevelWidth()) + x] = runningEyeActor;
                 break;
             }
