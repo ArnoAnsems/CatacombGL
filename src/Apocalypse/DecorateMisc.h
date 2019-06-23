@@ -31,14 +31,15 @@ const uint16_t actorIdTomb2 = 2;
 const uint16_t actorIdExplodingWall = 4;
 const uint16_t actorIdPortal = 5;
 const uint16_t actorIdPlayer = 11;
-const uint16_t actorIdColumn1 = 12;
-const uint16_t actorIdColumn2 = 13;
-const uint16_t actorIdColumn3 = 14;
-const uint16_t actorIdColumn4 = 15;
-const uint16_t actorIdColumn5 = 16;
-const uint16_t actorIdFakeWall = 17;
-const uint16_t actorIdFutureFirePot = 18;
-const uint16_t actorIdOldFirePot = 19;
+const uint16_t actorIdColumn1 = 80;
+const uint16_t actorIdColumn2 = 81;
+const uint16_t actorIdColumn3 = 82;
+const uint16_t actorIdColumn4 = 83;
+const uint16_t actorIdColumn5 = 84;
+const uint16_t actorIdFakeWall = 85;
+const uint16_t actorIdFutureFirePot = 86;
+const uint16_t actorIdOldFirePot = 87;
+const uint16_t actorIdForceField = 88;
 
 //
 // EXPLODING WALL
@@ -601,6 +602,59 @@ const DecorateActor decoratePortal =
     StateIdHidden,   // initialState;
     0,  // meleeDamage;
     0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// FORCEFIELD
+//
+
+const DecorateAnimation forceFieldDecorationAnimation =
+{
+    { FORCE_FIELD_1PIC, 10, ActionForceField },
+    { FORCE_FIELD_2PIC, 10, ActionForceField },
+    { FORCE_FIELD_3PIC, 10, ActionForceField },
+    { FORCE_FIELD_4PIC, 10, ActionForceField }
+};
+
+const DecorateState forceFieldStateArch =
+{
+    forceFieldDecorationAnimation,
+    StateIdArch // Loop
+};
+
+const DecorateAnimation forceFieldDyingAnimation =
+{
+    { 0 , 7, ActionRemove },
+};
+const DecorateState forceFieldStateDying =
+{
+    forceFieldDyingAnimation,
+    StateIdDying   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> forceFieldStates =
+{
+    std::make_pair(StateIdArch, forceFieldStateArch),
+    std::make_pair(StateIdDying, forceFieldStateDying)
+};
+
+const DecorateActor decorateForceField =
+{
+    actorIdForceField,   // Id
+    47, // spawnOnAllDifficulties;
+    47, // spawnOnNormalAndHard;
+    47,  // spawnOnHard
+    20,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    forceFieldStates,
+    StateIdArch,   // initialState;
+    94,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
     0,    // speed;
     0, // actionParameter
     0 // ProjectileId

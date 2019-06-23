@@ -33,6 +33,7 @@ const uint16_t actorIdMonsterStompy = 58;
 const uint16_t actorIdMonsterWizard = 59;
 const uint16_t actorIdMonsterBug = 60;
 const uint16_t actorIdMonsterRunningEye = 61;
+const uint16_t actorIdMonsterDemon = 62;
 
 //
 // WIZARD
@@ -775,6 +776,100 @@ const DecorateActor decorateRunningEye =
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     3500,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// DEMON
+//
+
+const DecorateAnimation demonWalkAnimation =
+{
+    { DEMON1PIC, 20, ActionChase },
+    { DEMON2PIC, 20, ActionChase },
+    { DEMON3PIC, 20, ActionChase },
+    { DEMON4PIC, 20, ActionChase }
+};
+
+const DecorateState demonStateWalk =
+{
+    demonWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation demonAttackAnimation =
+{
+    { DEMONATTACK1PIC, 20, ActionNone },
+    { DEMONATTACK2PIC, 20, ActionNone },
+    { DEMONATTACK3PIC, 30, ActionAttack },
+    { DEMON1PIC, 40, ActionNone }
+};
+
+const DecorateState demonStateAttack =
+{
+    demonAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation demonPainAnimation =
+{
+    { DEMONOUCHPIC, 15, ActionChase }
+};
+
+const DecorateState demonStatePain =
+{
+    demonPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation demonDyingAnimation =
+{
+    { DEMONDIE1PIC, 40, ActionNone },
+    { DEMONDIE2PIC, 30, ActionLargeMonsterSound }
+};
+
+const DecorateState demonStateDying =
+{
+    demonDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation demonDeadAnimation =
+{
+    { DEMONDIE3PIC, 16, ActionNone }
+};
+
+const DecorateState demonStateDead =
+{
+    demonDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> demonStates =
+{
+    std::make_pair(StateIdWalk, demonStateWalk),
+    std::make_pair(StateIdAttack, demonStateAttack),
+    std::make_pair(StateIdPain, demonStatePain),
+    std::make_pair(StateIdDying, demonStateDying),
+    std::make_pair(StateIdDead, demonStateDead)
+};
+
+const DecorateActor decorateDemon =
+{
+    actorIdMonsterDemon,   // Id
+    30, // spawnOnAllDifficulties;
+    30, // spawnOnNormalAndHard;
+    30,  // spawnOnHard;
+    30,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithBlueGem,  // radarVisibility;
+    EgaBlue,   // radarColor;
+    demonStates,
+    StateIdWalk,   // initialState;
+    15,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2048,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

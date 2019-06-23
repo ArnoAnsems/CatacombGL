@@ -167,6 +167,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = timeLordActor;
                 break;
             }
+            case 30:
+            {
+                Actor* demonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateDemon);
+                actors[(y * level->GetLevelWidth()) + x] = demonActor;
+                break;
+            }
             case 31:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn5);
                 break;
@@ -221,6 +227,11 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 46:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateColumn3);
                 break;
+            case 47:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateForceField);
+                break;
+            }
             case 48:
             {
                 Actor* bonusActorOldChest = new Actor(x + 0.5f, y + 0.5f, 0, decorateOldChest);
