@@ -113,6 +113,14 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 11:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyBlue);
                 break;
+            case 12:
+            {
+                const int16_t aquaManDelay = (4 * 60) + rand() % (3 * 60);
+                Actor* aquaManActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateAquaMan);
+                aquaManActor->SetTemp2(aquaManDelay);
+                actors[(y * level->GetLevelWidth()) + x] = aquaManActor;
+                break;
+            }
             case 13:
             {
                 const int16_t blobDelay = (rand() % 60) + (rand() % 100);

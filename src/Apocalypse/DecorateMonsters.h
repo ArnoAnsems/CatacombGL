@@ -34,6 +34,7 @@ const uint16_t actorIdMonsterWizard = 59;
 const uint16_t actorIdMonsterBug = 60;
 const uint16_t actorIdMonsterRunningEye = 61;
 const uint16_t actorIdMonsterDemon = 62;
+const uint16_t actorIdMonsterAquaMan = 63;
 
 //
 // WIZARD
@@ -870,6 +871,133 @@ const DecorateActor decorateDemon =
     15,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// AQUAMAN
+//
+
+const DecorateAnimation aquaManHiddenAnimation =
+{
+    { EYESTALKUNDER1PIC, 25, ActionHideUnderWater },
+    { EYESTALKUNDER2PIC, 20, ActionHideUnderWater },
+    { EYESTALKUNDER3PIC, 20, ActionHideUnderWater }
+};
+
+const DecorateState aquaManStateHidden =
+{
+    aquaManHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation aquaManRiseAnimation =
+{
+    { EYESTALKRISE1PIC, 20, ActionNone },
+    { EYESTALKRISE2PIC, 15, ActionNone }
+};
+
+const DecorateState aquaManStateRise =
+{
+    aquaManRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation aquaManSinkAnimation =
+{
+    { EYESTALKRISE2PIC, 15, ActionNone },
+    { EYESTALKRISE1PIC, 20, ActionNone }
+};
+
+const DecorateState aquaManStateSink =
+{
+    aquaManSinkAnimation,
+    StateIdHidden
+};
+
+const DecorateAnimation aquaManPeekAnimation =
+{
+    { EYESTALKUNDER4PIC, 40, ActionNone } // look left
+};
+
+const DecorateState aquaManStatePeek =
+{
+    aquaManPeekAnimation,
+    StateIdHidden
+};
+
+const DecorateAnimation aquaManWalkAnimation =
+{
+    { EYESTALKWALK1PIC, 12, ActionChaseLikeWetMan },
+    { EYESTALKWALK2PIC, 12, ActionChaseLikeWetMan }
+};
+
+const DecorateState aquaManStateWalk =
+{
+    aquaManWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation aquaManAttackAnimation =
+{
+    { EYESTALKATTACKPIC, 10, ActionNone },
+    { EYESTALKWALK1PIC, 10, ActionAttack }
+};
+
+const DecorateState aquaManStateAttack =
+{
+    aquaManAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation aquaManDyingAnimation =
+{
+    { EYESTALKDEATH1PIC, 8, ActionNone },
+    { EYESTALKDEATH2PIC, 8, ActionNone },
+    { EYESTALKDEATH1PIC, 8, ActionNone },
+    { EYESTALKDEATH2PIC, 8, ActionNone },
+    { EYESTALKDEATH1PIC, 8, ActionNone },
+    { EYESTALKDEATH2PIC, 8, ActionNone },
+    { EYESTALKDEATH2PIC, 30, ActionNone },
+    { EYESTALKDEATH3PIC, 40, ActionNone },
+    { EYESTALKDEATH4PIC, 30, ActionExplodeSound },
+    { EYESTALKDEATH5PIC, 20, ActionNone },
+    { 0, 1, ActionRemove }
+};
+
+const DecorateState aquaManStateDying =
+{
+    aquaManDyingAnimation,
+    StateIdDying  // Will not loop, due to the ActionRemove.
+};
+
+const std::map<DecorateStateId, DecorateState> aquaManStates =
+{
+    std::make_pair(StateIdHidden, aquaManStateHidden),
+    std::make_pair(StateIdRise, aquaManStateRise),
+    std::make_pair(StateIdSink, aquaManStateSink),
+    std::make_pair(StateIdPeek, aquaManStatePeek),
+    std::make_pair(StateIdWalk, aquaManStateWalk),
+    std::make_pair(StateIdAttack, aquaManStateAttack),
+    std::make_pair(StateIdDying, aquaManStateDying)
+};
+
+const DecorateActor decorateAquaMan =
+{
+    actorIdMonsterAquaMan,   // Id
+    12, // spawnOnAllDifficulties;
+    12, // spawnOnNormalAndHard;
+    12,  // spawnOnHard
+    15,  // initialHealth;
+    32 * pixelRadius,    // size;
+    WithGreenGem,  // radarVisibility;
+    EgaGreen,   // radarColor;
+    aquaManStates,
+    StateIdHidden,   // initialState;
+    7,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1000,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };
