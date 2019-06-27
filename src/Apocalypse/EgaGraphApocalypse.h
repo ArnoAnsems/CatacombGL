@@ -625,7 +625,7 @@ const std::vector<int32_t> egaGraphOffsetsApocalypse =
     310231,
     311396,
     312399,
-    313348,
+    313400,
     314438,
     315563,
     316702,
