@@ -927,6 +927,17 @@ const DecorateState aquaManStatePeek =
     StateIdHidden
 };
 
+const DecorateAnimation aquaManPeekAltAnimation =
+{
+    { EYESTALKUNDER5PIC, 40, ActionNone } // look right
+};
+
+const DecorateState aquaManStatePeekAlt =
+{
+    aquaManPeekAltAnimation,
+    StateIdHidden
+};
+
 const DecorateAnimation aquaManWalkAnimation =
 {
     { EYESTALKWALK1PIC, 12, ActionChaseLikeWetMan },
@@ -978,6 +989,7 @@ const std::map<DecorateStateId, DecorateState> aquaManStates =
     std::make_pair(StateIdRise, aquaManStateRise),
     std::make_pair(StateIdSink, aquaManStateSink),
     std::make_pair(StateIdPeek, aquaManStatePeek),
+    std::make_pair(StateIdPeekAlternative, aquaManStatePeekAlt),
     std::make_pair(StateIdWalk, aquaManStateWalk),
     std::make_pair(StateIdAttack, aquaManStateAttack),
     std::make_pair(StateIdDying, aquaManStateDying)

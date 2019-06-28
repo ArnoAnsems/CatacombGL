@@ -50,7 +50,8 @@ typedef enum
     StateIdWaitForPickup,
     StateIdPickup,
     StateIdDecoration,
-    StateIdArch
+    StateIdArch,
+    StateIdPeekAlternative
 } DecorateStateId;
 
 typedef struct DecorateAnimationFrame

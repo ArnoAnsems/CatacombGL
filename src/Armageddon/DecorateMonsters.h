@@ -400,18 +400,18 @@ const DecorateActor decorateTree =
 // BUNNY
 //
 
-// This monster initially spawns as a harmless bunny, hopping from left (StateIdHidden) to right (StateIdPeek).
-const DecorateAnimation bunnyHiddenAnimation =
+// This monster initially spawns as a harmless bunny, hopping from left (StateIdPeekAlternative) to right (StateIdPeek).
+const DecorateAnimation bunnyPeekAltAnimation =
 {
     { BUNNY_LEFT1PIC , 55, ActionNone },
     { BUNNY_LEFT1PIC , 10, ActionHarmlessBunny },
     { BUNNY_LEFT2PIC , 30, ActionNone }
 };
 
-const DecorateState bunnyStateHidden =
+const DecorateState bunnyStatePeekAlt =
 {
-    bunnyHiddenAnimation,
-    StateIdHidden   // Loop
+    bunnyPeekAltAnimation,
+    StateIdPeekAlternative   // Loop
 };
 
 const DecorateAnimation bunnyPeekAnimation =
@@ -501,7 +501,7 @@ const DecorateState bunnyStateDead =
 
 const std::map<DecorateStateId, DecorateState> bunnyStates =
 {
-    std::make_pair(StateIdHidden, bunnyStateHidden),
+    std::make_pair(StateIdPeekAlternative, bunnyStatePeekAlt),
     std::make_pair(StateIdPeek, bunnyStatePeek),
     std::make_pair(StateIdRise, bunnyStateRise),
     std::make_pair(StateIdWalk, bunnyStateWalk),
@@ -522,7 +522,7 @@ const DecorateActor decorateBunny =
     Always,  // radarVisibility;
     EgaLightGray,   // radarColor;
     bunnyStates,
-    StateIdHidden,   // initialState;
+    StateIdPeekAlternative,   // initialState;
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1947,    // speed;

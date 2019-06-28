@@ -1114,7 +1114,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         else if ((m_timeStampOfWorldCurrentFrame / 1000) % 10 == 0)
         {
             // Take a peek every 10 seconds
-            actor->SetState(StateIdPeek, m_timeStampOfWorldCurrentFrame);
+            const bool isPeekAltAvailable = (actor->GetDecorateActor().states.find(StateIdPeekAlternative) != actor->GetDecorateActor().states.end());
+            const DecorateStateId newState = (isPeekAltAvailable && rand() % 2 == 0) ? StateIdPeekAlternative : StateIdPeek;
+            actor->SetState(newState, m_timeStampOfWorldCurrentFrame);
             actor->SetActionPerformed(true);
         }
         else
@@ -2195,7 +2197,7 @@ void EngineCore::BunnyHopping(Actor* actor)
     {
         // Set a new intended distance to travel.
         actor->SetTemp1(1000 + rand() % 2000);
-        actor->SetState(actor->GetState() == StateIdHidden ? StateIdPeek : StateIdHidden, m_timeStampOfWorldCurrentFrame);
+        actor->SetState(actor->GetState() == StateIdPeekAlternative ? StateIdPeek : StateIdPeekAlternative, m_timeStampOfWorldCurrentFrame);
     }
     else
     {

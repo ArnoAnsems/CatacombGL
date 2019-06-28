@@ -38,7 +38,7 @@ Actor::Actor(const float x, const float y, const uint32_t timestamp, const Decor
 
 {
     SetState(decorateActor.initialState, m_timestamp);
-    m_solid = (m_stateId != StateIdHidden && m_stateId != StateIdWaitForPickup && m_stateId != StateIdArch);
+    m_solid = (m_stateId != StateIdHidden && m_stateId != StateIdWaitForPickup && m_stateId != StateIdArch && m_stateId != StateIdPeek && m_stateId != StateIdPeekAlternative);
 }
 
 Actor::Actor(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors) :
