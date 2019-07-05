@@ -35,6 +35,7 @@ const uint16_t actorIdMonsterBug = 60;
 const uint16_t actorIdMonsterRunningEye = 61;
 const uint16_t actorIdMonsterDemon = 62;
 const uint16_t actorIdMonsterAquaMan = 63;
+const uint16_t actorIdMonsterTroll = 64;
 
 //
 // WIZARD
@@ -1010,6 +1011,99 @@ const DecorateActor decorateAquaMan =
     7,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// TROLL
+//
+
+const DecorateAnimation trollWalkAnimation =
+{
+    { TROLL1PIC, 13, ActionChase },
+    { TROLL2PIC, 13, ActionChase },
+    { TROLL3PIC, 13, ActionChase },
+    { TROLL4PIC, 13, ActionChase }
+};
+
+const DecorateState trollStateWalk =
+{
+   trollWalkAnimation,
+   StateIdWalk // Loop
+};
+
+const DecorateAnimation trollAttackAnimation =
+{
+    { TROLLATTACK1PIC, 15, ActionNone },
+    { TROLLATTACK2PIC, 20, ActionNone },
+    { TROLL1PIC, 30, ActionAttack }
+};
+
+const DecorateState trollStateAttack =
+{
+    trollAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation trollPainAnimation =
+{
+    { TROLLOUCHPIC, 14, ActionChase }
+};
+
+const DecorateState trollStatePain =
+{
+    trollPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation trollDyingAnimation =
+{
+    { TROLLDIE1PIC, 18, ActionNone },
+    { TROLLDIE2PIC, 15, ActionLargeMonsterSound }
+};
+
+const DecorateState trollStateDying =
+{
+    trollDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation trollDeadAnimation =
+{
+    { TROLLDIE3PIC, 16, ActionNone }
+};
+
+const DecorateState trollStateDead =
+{
+    trollDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> trollStates =
+{
+    std::make_pair(StateIdWalk, trollStateWalk),
+    std::make_pair(StateIdAttack, trollStateAttack),
+    std::make_pair(StateIdPain, trollStatePain),
+    std::make_pair(StateIdDying, trollStateDying),
+    std::make_pair(StateIdDead, trollStateDead)
+};
+
+const DecorateActor decorateTroll =
+{
+    actorIdMonsterTroll,   // Id
+    22, // spawnOnAllDifficulties;
+    22, // spawnOnNormalAndHard;
+    22,  // spawnOnHard;
+    15,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithYellowGem,  // radarVisibility;
+    EgaBrightYellow,   // radarColor;
+    trollStates,
+    StateIdWalk,   // initialState;
+    10,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2500,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

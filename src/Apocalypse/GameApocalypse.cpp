@@ -153,6 +153,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = stompyActor;
                 break;
             }
+            case 22:
+            {
+                Actor* trollActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateTroll);
+                actors[(y * level->GetLevelWidth()) + x] = trollActor;
+                break;
+            }
             case 23:
             {
                 Actor* wizardActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWizard);

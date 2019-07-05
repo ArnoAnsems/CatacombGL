@@ -1536,10 +1536,22 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                         if (m_game.GetId() == 3 && otherActor->GetDecorateActor().id == 56 && rand() % 8 != 0)
                                         {
                                             // The red demon from Armageddon has a pain chance of 1:8, see C5_STATE.C.
-                                            // Every other monster is always in pain when hit.
+                                        }
+                                        else if (m_game.GetId() == 4 && otherActor->GetDecorateActor().id == 64 && rand() % 5 != 0)
+                                        {
+                                            // The yellow troll from Apocalypse has a pain chance of 1:5, see C6_STATE.C.
+                                        }
+                                        else if (m_game.GetId() == 4 && otherActor->GetDecorateActor().id == 57 && rand() % 8 != 0)
+                                        {
+                                            // The cyber demon from Apocalypse has a pain chance of 1:8, see C6_STATE.C.
+                                        }
+                                        else if (m_game.GetId() == 4 && otherActor->GetDecorateActor().id == 62 && rand() % 8 != 0)
+                                        {
+                                            // The demon from Apocalypse has a pain chance of 1:8, see C6_STATE.C.
                                         }
                                         else
                                         {
+                                            // Every other monster is always in pain when hit.
                                             otherActor->SetState(StateIdPain, m_timeStampOfWorldCurrentFrame);
                                         }
                                     }
