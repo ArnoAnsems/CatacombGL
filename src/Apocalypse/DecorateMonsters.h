@@ -36,6 +36,8 @@ const uint16_t actorIdMonsterRunningEye = 61;
 const uint16_t actorIdMonsterDemon = 62;
 const uint16_t actorIdMonsterAquaMan = 63;
 const uint16_t actorIdMonsterTroll = 64;
+const uint16_t actorIdMonsterRay = 65;
+const uint16_t actorIdMonsterSkeleton = 66;
 
 //
 // WIZARD
@@ -1106,4 +1108,194 @@ const DecorateActor decorateTroll =
     2500,    // speed;
     0, // actionParameter
     0 // ProjectileId
+};
+
+//
+// MANTA RAY
+//
+
+const DecorateAnimation rayHiddenAnimation =
+{
+    { 0, 20, ActionHideUnderWater }
+};
+
+const DecorateState rayStateHidden =
+{
+    rayHiddenAnimation,
+    StateIdHidden   // Loop
+};
+
+const DecorateAnimation rayRiseAnimation =
+{
+    { RAYRISEPIC, 30, ActionNone }
+};
+
+const DecorateState rayStateRise =
+{
+    rayRiseAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation raySinkAnimation =
+{
+    { RAYRISEPIC, 30, ActionNone }
+};
+
+const DecorateState rayStateSink =
+{
+    raySinkAnimation,
+    StateIdHidden
+};
+
+const DecorateAnimation rayWalkAnimation =
+{
+    { RAYFLY1PIC, 10, ActionChaseLikeWetMan },
+    { RAYFLY2PIC, 10, ActionChaseLikeWetMan },
+    { RAYFLY1PIC, 10, ActionChaseLikeWetMan },
+    { RAYFLY3PIC, 10, ActionChaseLikeWetMan }
+};
+
+const DecorateState rayStateWalk =
+{
+    rayWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation rayAttackAnimation =
+{
+    { RAYSHOOT1PIC, 15, ActionNone },
+    { RAYSHOOT2PIC, 1, ActionAttack },
+    { RAYSHOOT2PIC, 20, ActionNone }
+};
+
+const DecorateState rayStateAttack =
+{
+    rayAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation rayDyingAnimation =
+{
+    { RAYDEATH1PIC, 50, ActionSmallMonsterSound },
+    { RAYDEATH2PIC, 30, ActionNone },
+    { 0, 22, ActionRemove }
+};
+
+const DecorateState rayStateDying =
+{
+    rayDyingAnimation,
+    StateIdDying  // Will not loop, due to the ActionRemove.
+};
+
+const std::map<DecorateStateId, DecorateState> rayStates =
+{
+    std::make_pair(StateIdHidden, rayStateHidden),
+    std::make_pair(StateIdRise, rayStateRise),
+    std::make_pair(StateIdSink, rayStateSink),
+    std::make_pair(StateIdWalk, rayStateWalk),
+    std::make_pair(StateIdAttack, rayStateAttack),
+    std::make_pair(StateIdDying, rayStateDying)
+};
+
+const DecorateActor decorateRay =
+{
+    actorIdMonsterRay,   // Id
+    28, // spawnOnAllDifficulties;
+    28, // spawnOnNormalAndHard;
+    28,  // spawnOnHard
+    15,  // initialHealth;
+    25 * pixelRadius,    // size;
+    WithYellowGem,  // radarVisibility;
+    EgaDarkGray,   // radarColor;
+    rayStates,
+    StateIdHidden,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2200,    // speed;
+    0, // actionParameter
+    actorIdProjectileRayShot // ProjectileId
+};
+
+//
+// SKELETON
+//
+
+const DecorateAnimation skeletonWalkAnimation =
+{
+    { RAMBONEWALK1PIC, 10, ActionChaseLikeMage },
+    { RAMBONEWALK2PIC, 10, ActionChaseLikeMage },
+    { RAMBONEWALK3PIC, 10, ActionChaseLikeMage },
+    { RAMBONEWALK4PIC, 10, ActionChaseLikeMage }
+};
+
+const DecorateState skeletonStateWalk =
+{
+    skeletonWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation skeletonAttackAnimation =
+{
+    { RAMBONEATTACK1PIC, 12, ActionNone },
+    { RAMBONEATTACK2PIC, 20, ActionNone },
+    { RAMBONEATTACK2PIC, 1, ActionAttack },
+    { RAMBONEATTACK3PIC, 20, ActionNone },
+};
+
+const DecorateState skeletonStateAttack =
+{
+    skeletonAttackAnimation,
+    StateIdPain
+};
+
+const DecorateAnimation skeletonPainAnimation =
+{
+    { RAMBONEATTACK1PIC, 10, ActionNone }
+};
+
+const DecorateState skeletonStatePain =
+{
+    skeletonPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation skeletonDyingAnimation =
+{
+    { RAMBONEDEATH1PIC, 40, ActionNone },
+    { RAMBONEDEATH2PIC, 30, ActionNone },
+    { RAMBONEDEATH3PIC, 20, ActionLargeMonsterSound },
+    { 0, 15, ActionRemove }
+};
+
+const DecorateState skeletonStateDying =
+{
+    skeletonDyingAnimation,
+    StateIdDying
+};
+
+const std::map<DecorateStateId, DecorateState> skeletonStates =
+{
+    std::make_pair(StateIdWalk, skeletonStateWalk),
+    std::make_pair(StateIdAttack, skeletonStateAttack),
+    std::make_pair(StateIdPain, skeletonStatePain),
+    std::make_pair(StateIdDying, skeletonStateDying)
+};
+
+const DecorateActor decorateSkeleton =
+{
+    actorIdMonsterSkeleton,   // Id
+    20, // spawnOnAllDifficulties;
+    20, // spawnOnNormalAndHard;
+    20,  // spawnOnHard
+    12,  // initialHealth;
+    20 * pixelRadius,    // size;
+    WithYellowGem,  // radarVisibility;
+    EgaBrightYellow,   // radarColor;
+    skeletonStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2036,    // speed;
+    0, // actionParameter
+    actorIdProjectileSkeletonShot // ProjectileId
 };

@@ -1928,6 +1928,13 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
         speed = 1200;
     }
 
+    // The manta ray in Apocalypse move slower when under water.
+    if (actor->GetState() == StateIdHidden &&
+        ((m_game.GetId() == 4 && actor->GetDecorateActor().id == 65)))
+    {
+        speed = 1700;
+    }
+
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
     float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;

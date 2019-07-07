@@ -33,6 +33,8 @@ const uint16_t actorIdProjectileBugShot = 74;
 const uint16_t actorIdProjectileTimeLordShot = 75;
 const uint16_t actorIdProjectileAndroidMageShot = 76;
 const uint16_t actorIdProjectileStompyShot = 77;
+const uint16_t actorIdProjectileRayShot = 78;
+const uint16_t actorIdProjectileSkeletonShot = 79;
 
 //
 // PLAYER SHOT
@@ -369,6 +371,88 @@ const DecorateActor decorateStompyShot =
     7,  // damage;
     0, // hitSound;
     8500,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// MANTA RAY SHOT
+//
+
+const DecorateAnimation rayShotFlyAnimation =
+{
+    { RAYSHOT1PIC , 8, ActionMonsterProjectile },
+    { RAYSHOT2PIC , 8, ActionMonsterProjectile }
+};
+
+const DecorateState rayShotStateFly =
+{
+    rayShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> rayShotStates =
+{
+    std::make_pair(StateIdProjectileFly, rayShotStateFly),
+    std::make_pair(StateIdDying, playerShotStateDying)
+};
+
+const DecorateActor decorateRayShot =
+{
+    actorIdProjectileRayShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    rayShotStates,
+    StateIdProjectileFly,   // initialState;
+    5,  // damage;
+    0, // hitSound;
+    10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// SKELETON SHOT
+//
+
+const DecorateAnimation skeletonShotFlyAnimation =
+{
+    { RAMBONESHOT1PIC , 10, ActionMonsterProjectile },
+    { RAMBONESHOT2PIC , 10, ActionMonsterProjectile }
+};
+
+const DecorateState skeletonShotStateFly =
+{
+    skeletonShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> skeletonShotStates =
+{
+    std::make_pair(StateIdProjectileFly, skeletonShotStateFly),
+    std::make_pair(StateIdDying, bonusStateDying)
+};
+
+const DecorateActor decorateSkeletonShot =
+{
+    actorIdProjectileSkeletonShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    skeletonShotStates,
+    StateIdProjectileFly,   // initialState;
+    7,  // damage;
+    0, // hitSound;
+    10000,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

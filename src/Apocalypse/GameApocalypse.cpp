@@ -147,6 +147,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = androidMageActor;
                 break;
             }
+            case 20:
+            {
+                Actor* skeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSkeleton);
+                actors[(y * level->GetLevelWidth()) + x] = skeletonActor;
+                break;
+            }
             case 21:
             {
                 Actor* stompyActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateStompy);
@@ -171,6 +177,14 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 int16_t initialDirection = level->GetFloorTile(x, y + 1) >> 8;
                 runningEyeActor->SetTemp2(initialDirection);
                 actors[(y * level->GetLevelWidth()) + x] = runningEyeActor;
+                break;
+            }
+            case 28:
+            {
+                const int16_t rayDelay = (rand() % 60) + (rand() % 100);
+                Actor* rayActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateRay);
+                rayActor->SetTemp2(rayDelay);
+                actors[(y * level->GetLevelWidth()) + x] = rayActor;
                 break;
             }
             case 29:
