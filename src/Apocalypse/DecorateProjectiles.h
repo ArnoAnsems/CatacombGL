@@ -35,6 +35,7 @@ const uint16_t actorIdProjectileAndroidMageShot = 76;
 const uint16_t actorIdProjectileStompyShot = 77;
 const uint16_t actorIdProjectileRayShot = 78;
 const uint16_t actorIdProjectileSkeletonShot = 79;
+const uint16_t actorIdProjectileRoboTankShot = 79;
 
 //
 // PLAYER SHOT
@@ -453,6 +454,47 @@ const DecorateActor decorateSkeletonShot =
     7,  // damage;
     0, // hitSound;
     10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// ROBO TANK SHOT
+//
+
+const DecorateAnimation roboTankShotFlyAnimation =
+{
+    { PSHOT1PIC, 10, ActionMonsterProjectile },
+    { PSHOT2PIC, 10, ActionMonsterProjectile }
+};
+
+const DecorateState roboTankShotStateFly =
+{
+    roboTankShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> roboTankShotStates =
+{
+    std::make_pair(StateIdProjectileFly, roboTankShotStateFly),
+    std::make_pair(StateIdDying, bonusStateDying)
+};
+
+const DecorateActor decorateRoboTankShot =
+{
+    actorIdProjectileRoboTankShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    bugShotStates,
+    StateIdProjectileFly,   // initialState;
+    15,  // damage;
+    0, // hitSound;
+    7000,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

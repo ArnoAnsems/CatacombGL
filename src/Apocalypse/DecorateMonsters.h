@@ -38,6 +38,7 @@ const uint16_t actorIdMonsterAquaMan = 63;
 const uint16_t actorIdMonsterTroll = 64;
 const uint16_t actorIdMonsterRay = 65;
 const uint16_t actorIdMonsterSkeleton = 66;
+const uint16_t actorIdMonsterRoboTank = 67;
 
 //
 // WIZARD
@@ -1298,4 +1299,93 @@ const DecorateActor decorateSkeleton =
     2036,    // speed;
     0, // actionParameter
     actorIdProjectileSkeletonShot // ProjectileId
+};
+
+//
+// ROBOTANK
+//
+
+const DecorateAnimation roboTankWalkAnimation =
+{
+    { ROBOTANKWALK1PIC, 15, ActionChaseLikeMage },
+    { ROBOTANKWALK2PIC, 15, ActionChaseLikeMage },
+    { ROBOTANKWALK3PIC, 15, ActionChaseLikeMage },
+    { ROBOTANKWALK4PIC, 15, ActionChaseLikeMage }
+};
+
+const DecorateState roboTankStateWalk =
+{
+    roboTankWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation roboTankAttackAnimation =
+{
+    { ROBOTANKWALK1PIC, 15, ActionNone },
+    { ROBOTANKATTACK1PIC, 15, ActionNone },
+    { ROBOTANKATTACK1PIC, 1, ActionAttack },
+    { ROBOTANKWALK1PIC, 15, ActionNone },
+};
+
+const DecorateState roboTankStateAttack =
+{
+    roboTankAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation roboTankDyingAnimation =
+{
+    { ROBOTANKDEATH1PIC, 8, ActionNone },{ ROBOTANKDEATH2PIC, 8, ActionNone },
+    { ROBOTANKDEATH1PIC, 8, ActionNone },{ ROBOTANKDEATH2PIC, 8, ActionNone },
+    { ROBOTANKDEATH1PIC, 8, ActionNone },{ ROBOTANKDEATH2PIC, 8, ActionNone },
+    { ROBOTANKDEATH1PIC, 8, ActionNone },{ ROBOTANKDEATH2PIC, 8, ActionNone },
+    { ROBOTANKDEATH1PIC, 8, ActionNone },{ ROBOTANKDEATH2PIC, 8, ActionNone },
+    { ROBOTANKDEATH1PIC, 8, ActionNone },{ ROBOTANKDEATH2PIC, 8, ActionNone },
+    { ROBOTANKDEATH1PIC, 8, ActionNone },{ ROBOTANKDEATH2PIC, 8, ActionNone },
+    { ROBOTANKDEATH3PIC, 25, ActionExplodeSound },
+    { ROBOTANKDEATH4PIC, 20, ActionNone }
+};
+
+const DecorateState roboTankStateDying =
+{
+    roboTankDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation roboTankDeadAnimation =
+{
+    { ROBOTANKDEATH4PIC, 20, ActionNone }
+};
+
+const DecorateState roboTankStateDead =
+{
+    roboTankDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> roboTankStates =
+{
+    std::make_pair(StateIdWalk, roboTankStateWalk),
+    std::make_pair(StateIdAttack, roboTankStateAttack),
+    std::make_pair(StateIdDying, roboTankStateDying),
+    std::make_pair(StateIdDead, roboTankStateDead)
+};
+
+const DecorateActor decorateRoboTank =
+{
+    actorIdMonsterRoboTank,   // Id
+    19, // spawnOnAllDifficulties;
+    19, // spawnOnNormalAndHard;
+    19,  // spawnOnHard
+    25,  // initialHealth;
+    35 * pixelRadius,    // size;
+    WithBlueGem,  // radarVisibility;
+    EgaBrightBlue,   // radarColor;
+    roboTankStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    1700,    // speed;
+    0, // actionParameter
+    actorIdProjectileRoboTankShot // ProjectileId
 };
