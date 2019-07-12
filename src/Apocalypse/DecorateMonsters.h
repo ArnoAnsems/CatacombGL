@@ -39,6 +39,7 @@ const uint16_t actorIdMonsterTroll = 64;
 const uint16_t actorIdMonsterRay = 65;
 const uint16_t actorIdMonsterSkeleton = 66;
 const uint16_t actorIdMonsterRoboTank = 67;
+const uint16_t actorIdMonsterShooterEye = 68;
 
 //
 // WIZARD
@@ -1388,4 +1389,62 @@ const DecorateActor decorateRoboTank =
     1700,    // speed;
     0, // actionParameter
     actorIdProjectileRoboTankShot // ProjectileId
+};
+
+//
+// SHOOTER EYE
+//
+
+const DecorateAnimation shooterEyeWalkAnimation =
+{
+    { EYE_WALK1PIC, 20, ActionChaseLikeMage },
+    { EYE_WALK2PIC, 20, ActionChaseLikeMage },
+    { EYE_WALK3PIC, 20, ActionChaseLikeMage },
+    { EYE_WALK2PIC, 20, ActionChaseLikeMage }
+};
+
+const DecorateState shooterEyeStateWalk =
+{
+    shooterEyeWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation shooterEyeAttackAnimation =
+{
+    { EYE_WALK1PIC, 1, ActionAttack },
+    { EYE_WALK1PIC, 20, ActionNone }
+};
+
+const DecorateState shooterEyeStateAttack =
+{
+    shooterEyeAttackAnimation,
+    StateIdWalk
+};
+
+const std::map<DecorateStateId, DecorateState> shooterEyeStates =
+{
+    std::make_pair(StateIdWalk, shooterEyeStateWalk),
+    std::make_pair(StateIdAttack, shooterEyeStateAttack),
+    std::make_pair(StateIdPain,runningEyeStatePain),
+    std::make_pair(StateIdDying, runningEyeStateDying),
+    std::make_pair(StateIdDead, runningEyeStateDead)
+};
+
+const DecorateActor decorateShooterEye =
+{
+    actorIdMonsterShooterEye,   // Id
+    16, // spawnOnAllDifficulties;
+    16, // spawnOnNormalAndHard;
+    16,  // spawnOnHard
+    15,  // initialHealth;
+    10 * pixelRadius,    // size;
+    WithPurpleGem,  // radarVisibility;
+    EgaBrightMagenta,   // radarColor;
+    shooterEyeStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    3000,    // speed;
+    0, // actionParameter
+    actorIdProjectileEyeShot // ProjectileId
 };
