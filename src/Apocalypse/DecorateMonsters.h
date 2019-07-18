@@ -40,6 +40,7 @@ const uint16_t actorIdMonsterRay = 65;
 const uint16_t actorIdMonsterSkeleton = 66;
 const uint16_t actorIdMonsterRoboTank = 67;
 const uint16_t actorIdMonsterShooterEye = 68;
+const uint16_t actorIdMonsterInvisDude = 69;
 
 //
 // WIZARD
@@ -1447,4 +1448,109 @@ const DecorateActor decorateShooterEye =
     3000,    // speed;
     0, // actionParameter
     actorIdProjectileEyeShot // ProjectileId
+};
+
+//
+// INVISIBLE DUDE
+//
+
+const DecorateAnimation invisDudeWalkAnimation =
+{
+    { 0, 25, ActionChaseLikeInvisDude }
+};
+
+const DecorateState invisDudeStateWalk =
+{
+    invisDudeWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation invisDudeAttackAnimation =
+{
+    { 0, 1, ActionAttack },
+    { 0, 40, ActionNone }
+};
+
+const DecorateState invisDudeStateAttack =
+{
+    invisDudeAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation invisDudePainAnimation =
+{
+    { INVIS_FIZZ1PIC, 8, ActionNone },
+    { INVIS_FIZZ2PIC, 8, ActionNone },
+    { INVIS_FIZZ3PIC, 8, ActionNone }
+};
+
+const DecorateState invisDudeStatePain =
+{
+    invisDudePainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation invisDudePeekAnimation =
+{
+    { INVIS_FIZZ1PIC, 8, ActionFlash },
+    { INVIS_FIZZ2PIC, 8, ActionFlash },
+    { INVIS_FIZZ3PIC, 8, ActionFlash }
+};
+
+const DecorateState invisDudeStatePeek =
+{
+    invisDudePeekAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation invisDudeDyingAnimation =
+{
+    { INVIS_DEATH1PIC, 40, ActionNone },
+    { INVIS_DEATH2PIC, 30, ActionLargeMonsterSound }
+};
+
+const DecorateState invisDudeStateDying =
+{
+    invisDudeDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation invisDudeDeadAnimation =
+{
+    { INVIS_DEATH3PIC, 20, ActionNone }
+};
+
+const DecorateState invisDudeStateDead =
+{
+    invisDudeDeadAnimation,
+    StateIdDead //  Loop
+};
+
+const std::map<DecorateStateId, DecorateState> invisDudeStates =
+{
+    std::make_pair(StateIdWalk, invisDudeStateWalk),
+    std::make_pair(StateIdAttack, invisDudeStateAttack),
+    std::make_pair(StateIdPain, invisDudeStatePain),
+    std::make_pair(StateIdPeek, invisDudeStatePeek),
+    std::make_pair(StateIdDying, invisDudeStateDying),
+    std::make_pair(StateIdDead, invisDudeStateDead)
+};
+
+const DecorateActor decorateInvisDude =
+{
+    actorIdMonsterInvisDude,   // Id
+    18, // spawnOnAllDifficulties;
+    18, // spawnOnNormalAndHard;
+    18,  // spawnOnHard;
+    20,  // initialHealth;
+    20 * pixelRadius,    // size;
+    WithRedGem,  // radarVisibility;
+    EgaRed,   // radarColor;
+    invisDudeStates,
+    StateIdWalk,   // initialState;
+    10,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2048,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
 };

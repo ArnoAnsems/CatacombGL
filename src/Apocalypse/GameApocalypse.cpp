@@ -153,6 +153,12 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = androidMageActor;
                 break;
             }
+            case 18:
+            {
+                Actor* invisDudeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateInvisDude);
+                actors[(y * level->GetLevelWidth()) + x] = invisDudeActor;
+                break;
+            }
             case 19:
             {
                 Actor* roboTankActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateRoboTank);

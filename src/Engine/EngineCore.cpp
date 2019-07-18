@@ -1040,6 +1040,24 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         Chase(actor, true, target);
         break;
     }
+    case ActionChaseLikeInvisDude:
+    {
+        if (actor->GetTimeToNextAction() == 0)
+        {
+            // Flash once every few seconds
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + (rand() % 10000));
+        }
+        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
+        {
+            actor->SetState(StateIdPeek, m_timeStampOfWorldCurrentFrame);
+            actor->SetTimeToNextAction(0);
+        }
+        else
+        {
+            Chase(actor, true, ChasePlayer);
+            break;
+        }
+    }
     case ActionRunAway:
     {
         RunAway(actor);
@@ -1645,6 +1663,23 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
             }
+        }
+        actor->SetActionPerformed(true);
+        break;
+    }
+    case ActionFlash:
+    {
+        if (actor->GetTemp2() == 0)
+        {
+            int16_t flashFrame = actor->GetTemp1();
+            actor->SetAnimationFrame(flashFrame);
+            actor->SetTemp1(flashFrame + 1 % 3);
+            actor->SetTemp2(1);
+        }
+        else
+        {
+            actor->SetState(StateIdWalk, m_timeStampOfWorldCurrentFrame);
+            actor->SetTemp2(0);
         }
         actor->SetActionPerformed(true);
         break;
@@ -2422,7 +2457,8 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionSmallMonsterSound ||
             action == ActionLargeMonsterSound ||
             action == ActionPortalSound ||
-            action == ActionBurningTree
+            action == ActionBurningTree ||
+            action == ActionFlash
         );
 }
 
