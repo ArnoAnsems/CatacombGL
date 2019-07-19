@@ -90,6 +90,7 @@ private:
     void RunAway(Actor* actor);
     void ChaseLikeRunningEye(Actor* actor);
     void BunnyHopping(Actor* actor);
+    void Bounce(Actor* actor);
 
     const char* GetKeyName(const KeyId keyId) const;
 

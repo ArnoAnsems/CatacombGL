@@ -25,6 +25,7 @@
 #include "EgaGraphApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 
+const uint16_t actorIdMonsterBounce = 53;
 const uint16_t actorIdMonsterBlob = 54;
 const uint16_t actorIdMonsterTimeLord = 55;
 const uint16_t actorIdMonsterAndroidMage = 56;
@@ -1551,6 +1552,59 @@ const DecorateActor decorateInvisDude =
     10,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// BOUNCE
+//
+
+const DecorateAnimation bounceWalkAnimation =
+{
+    { PSHOT1PIC , 8, ActionBounce },
+    { PSHOT2PIC , 8, ActionBounce }
+};
+
+const DecorateState bounceStateWalk =
+{
+    bounceWalkAnimation,
+    StateIdWalk   // Loop
+};
+
+const DecorateAnimation bounceAttackAnimation =
+{
+    { PSHOT1PIC , 1, ActionAttack }
+};
+
+const DecorateState bounceStateAttack =
+{
+    bounceAttackAnimation,
+    StateIdWalk
+};
+
+const std::map<DecorateStateId, DecorateState> bounceStates =
+{
+    std::make_pair(StateIdWalk, bounceStateWalk),
+    std::make_pair(StateIdAttack, bounceStateAttack),
+    std::make_pair(StateIdDying, bonusStateDying)
+};
+
+const DecorateActor decorateBounce =
+{
+    actorIdMonsterBounce,   // Id
+    24, // spawnOnAllDifficulties;
+    24, // spawnOnNormalAndHard;
+    24,  // spawnOnHard;
+    10,  // initialHealth;
+    24 * pixelRadius,    // size;
+    Flickering,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    bounceStates,
+    StateIdWalk,   // initialState;
+    10,  // damage;
+    SHOOTMONSTERSND, // hitSound;
+    4096,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };

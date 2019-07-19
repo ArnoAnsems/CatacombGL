@@ -27,7 +27,7 @@
 
 const float pixelRadius = 1.0f / 128.0f;
 
-typedef enum {ActionNone, ActionChase, ActionChaseLikeMage, ActionChaseLikeWetMan, ActionChaseLikeRunningEye, ActionChaseLikeInvisDude, ActionRunAway, ActionHide, ActionHideUnderWater, ActionStatue, ActionHangingSkeleton, ActionAttack,
+typedef enum {ActionNone, ActionChase, ActionChaseLikeMage, ActionChaseLikeWetMan, ActionChaseLikeRunningEye, ActionChaseLikeInvisDude, ActionRunAway, ActionBounce, ActionHide, ActionHideUnderWater, ActionStatue, ActionHangingSkeleton, ActionAttack,
               ActionRemove, ActionPlayerProjectile, ActionMonsterProjectile, ActionDropItem, ActionSpawnSkeleton, ActionForceField, ActionExplodeSound, ActionSmallMonsterSound, ActionLargeMonsterSound, ActionPortalSound, ActionBurningTree, ActionFlash, ActionHarmlessBunny,
               ActionWaitForPickup, ActionWaitForPickupDestructable, ActionFreezeTime, ActionGiveChest, ActionGiveBolt, ActionGiveNuke, ActionGivePotion,
               ActionGiveKey, ActionGiveGem, ActionGiveScroll,

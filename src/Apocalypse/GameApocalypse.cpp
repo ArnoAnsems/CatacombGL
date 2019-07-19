@@ -189,6 +189,15 @@ void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = wizardActor;
                 break;
             }
+            case 24:
+            case 25:
+            {
+                Actor* bounceActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBounce);
+                const actorDirection dir = (tile == 24) ? north : west;
+                bounceActor->SetDirection(dir);
+                actors[(y * level->GetLevelWidth()) + x] = bounceActor;
+                break;
+            }
             case 27:
             {
                 Actor* runningEyeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateRunningEye);

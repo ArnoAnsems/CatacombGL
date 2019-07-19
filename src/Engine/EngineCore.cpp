@@ -1063,6 +1063,11 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         RunAway(actor);
         break;
     }
+    case ActionBounce:
+    {
+        Bounce(actor);
+        break;
+    }
     case ActionHide:
     case ActionStatue:
     case ActionHangingSkeleton:
@@ -2067,6 +2072,88 @@ void EngineCore::RunAway(Actor* actor)
         actor->SetY((float)(actor->GetTileY()) + 0.5f);
 
         m_level->RunAwayThink(actor);
+
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = actor;	// set down a new goal marker
+        if (actor->TargetReached())
+        {
+            break;			// no possible move
+        }
+    }
+}
+
+void EngineCore::Bounce(Actor* actor)
+{
+    const uint16_t speed = actor->GetDecorateActor().speed;
+
+    const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
+    const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
+    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+
+    while (move > 0.0f)
+    {
+        // Check if player can be attacked
+        if (actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f) && actor->GetTemp2() == 0)
+        {
+            actor->SetTemp2(1);
+            actor->SetState(StateIdAttack, m_timeStampOfWorldCurrentFrame);
+        }
+
+        if (move < actor->GetDistanceToTarget())
+        {
+            m_level->MoveActor(actor, move);
+            break;
+        }
+
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = NULL;	// pick up marker from goal
+        if (actor->GetDirection() == nodir)
+            actor->SetDirection(north);
+
+        // Instantly set the actor on its target
+        move -= actor->GetDistanceToTarget();
+        actor->SetX((float)(actor->GetTileX()) + 0.5f);
+        actor->SetY((float)(actor->GetTileY()) + 0.5f);
+
+        switch (actor->GetDirection())
+        {
+        case north:
+        {
+            if (m_level->IsSolidWall(actor->GetTileX(), actor->GetTileY() - 1))
+            {
+                actor->SetDirection(south);
+                actor->SetTemp2(0);
+            }
+            break;
+        }
+        case south:
+        {
+            if (m_level->IsSolidWall(actor->GetTileX(), actor->GetTileY() + 1))
+            {
+                actor->SetDirection(north);
+                actor->SetTemp2(0);
+            }
+            break;
+        }
+        case east:
+        {
+            if (m_level->IsSolidWall(actor->GetTileX() + 1, actor->GetTileY()))
+            {
+                actor->SetDirection(west);
+                actor->SetTemp2(0);
+            }
+            break;
+        }
+        case west:
+        {
+            if (m_level->IsSolidWall(actor->GetTileX() - 1, actor->GetTileY()))
+            {
+                actor->SetDirection(east);
+                actor->SetTemp2(0);
+            }
+            break;
+        }
+        }
+
+        m_level->Walk(actor);
 
         m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = actor;	// set down a new goal marker
         if (actor->TargetReached())
