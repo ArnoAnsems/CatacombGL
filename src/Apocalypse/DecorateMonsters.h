@@ -25,6 +25,7 @@
 #include "EgaGraphApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 
+const uint16_t actorIdMonsterNemesis = 52;
 const uint16_t actorIdMonsterBounce = 53;
 const uint16_t actorIdMonsterBlob = 54;
 const uint16_t actorIdMonsterTimeLord = 55;
@@ -42,6 +43,100 @@ const uint16_t actorIdMonsterSkeleton = 66;
 const uint16_t actorIdMonsterRoboTank = 67;
 const uint16_t actorIdMonsterShooterEye = 68;
 const uint16_t actorIdMonsterInvisDude = 69;
+
+//
+// NEMESIS
+//
+
+const DecorateAnimation nemesisWalkAnimation =
+{
+    { GREL1PIC, 20, ActionChase },
+    { GREL2PIC, 20, ActionChase }
+};
+
+const DecorateState nemesisStateWalk =
+{
+    nemesisWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation nemesisAttackAnimation =
+{
+    { GRELATTACKPIC, 30, ActionAttack },
+    { GREL1PIC, 50, ActionNone }
+};
+
+const DecorateState nemesisStateAttack =
+{
+    nemesisAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation nemesisPainAnimation =
+{
+    { GRELHITPIC, 6, ActionNone }
+};
+
+const DecorateState nemesisStatePain =
+{
+    nemesisPainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation nemesisDyingAnimation =
+{
+    { GRELDIE1PIC, 22, ActionNone },
+    { GRELDIE2PIC, 22, ActionNone },
+    { GRELDIE3PIC, 22, ActionNone },
+    { GRELDIE4PIC, 22, ActionNone },
+    { GRELDIE5PIC, 22, ActionNone },
+    { GRELDIE5PIC, 1, ActionDropItem }
+};
+
+const DecorateState nemesisStateDying =
+{
+    nemesisDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation nemesisDeadAnimation =
+{
+    { GRELDIE6PIC, 20, ActionNone }
+};
+
+const DecorateState nemesisStateDead =
+{
+    nemesisDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> nemesisStates =
+{
+    std::make_pair(StateIdWalk, nemesisStateWalk),
+    std::make_pair(StateIdAttack, nemesisStateAttack),
+    std::make_pair(StateIdPain, nemesisStatePain),
+    std::make_pair(StateIdDying, nemesisStateDying),
+    std::make_pair(StateIdDead, nemesisStateDead)
+};
+
+const DecorateActor decorateNemesis =
+{
+    actorIdMonsterNemesis,   // Id
+    26, // spawnOnAllDifficulties;
+    26, // spawnOnNormalAndHard;
+    26, // spawnOnHard
+    100,  // initialHealth;
+    25 * pixelRadius,    // size;
+    WithAllGems,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    nemesisStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2048,    // speed;
+    0, // actionParameter
+    actorIdProjectileNemesisShot // ProjectileId
+};
 
 //
 // WIZARD

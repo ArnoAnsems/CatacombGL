@@ -51,6 +51,7 @@ const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
     std::make_pair(actorIdBonusGemGreen, decorateGemGreen),
     std::make_pair(actorIdBonusGemBlue, decorateGemBlue),
     std::make_pair(actorIdBonusGemPurple, decorateGemPurple),
+    std::make_pair(actorIdMonsterNemesis, decorateNemesis),
     std::make_pair(actorIdMonsterBounce, decorateBounce),
     std::make_pair(actorIdMonsterBlob, decorateBlob),
     std::make_pair(actorIdMonsterWizard, decorateWizard),
@@ -79,5 +80,6 @@ const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
     std::make_pair(actorIdProjectileSkeletonShot, decorateSkeletonShot),
     std::make_pair(actorIdProjectileRoboTankShot, decorateRoboTankShot),
     std::make_pair(actorIdProjectileEyeShot, decorateEyeShot),
+    std::make_pair(actorIdProjectileNemesisShot, decorateNemesisShot),
     std::make_pair(actorIdForceField, decorateForceField)
 };

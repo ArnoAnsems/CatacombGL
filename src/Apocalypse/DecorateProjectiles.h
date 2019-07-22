@@ -37,6 +37,7 @@ const uint16_t actorIdProjectileRayShot = 78;
 const uint16_t actorIdProjectileSkeletonShot = 79;
 const uint16_t actorIdProjectileRoboTankShot = 80;
 const uint16_t actorIdProjectileEyeShot = 81;
+const uint16_t actorIdProjectileNemesisShot = 82;
 
 //
 // PLAYER SHOT
@@ -537,6 +538,46 @@ const DecorateActor decorateEyeShot =
     5,  // damage;
     0, // hitSound;
     5000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// NEMESIS SHOT (FLAMING SKULL)
+//
+
+const DecorateAnimation nemesisShotFlyAnimation =
+{
+    { SKULL_SHOTPIC , 8, ActionMonsterProjectile }
+};
+
+const DecorateState nemesisShotStateFly =
+{
+    nemesisShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> nemesisShotStates =
+{
+    std::make_pair(StateIdProjectileFly, nemesisShotStateFly),
+    std::make_pair(StateIdDying, playerShotStateDying)
+};
+
+const DecorateActor decorateNemesisShot =
+{
+    actorIdProjectileNemesisShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    nemesisShotStates,
+    StateIdProjectileFly,   // initialState;
+    25,  // damage;
+    0, // hitSound;
+    10000,    // speed;
     0, // actionParameter
     0 // ProjectileId
 };
