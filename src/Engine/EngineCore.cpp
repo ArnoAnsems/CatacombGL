@@ -2105,55 +2105,25 @@ void EngineCore::Bounce(Actor* actor)
         }
 
         m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = NULL;	// pick up marker from goal
-        if (actor->GetDirection() == nodir)
-            actor->SetDirection(north);
 
         // Instantly set the actor on its target
         move -= actor->GetDistanceToTarget();
         actor->SetX((float)(actor->GetTileX()) + 0.5f);
         actor->SetY((float)(actor->GetTileY()) + 0.5f);
 
-        switch (actor->GetDirection())
+        if (!m_level->Walk(actor))
         {
-        case north:
-        {
-            if (m_level->IsSolidWall(actor->GetTileX(), actor->GetTileY() - 1))
-            {
-                actor->SetDirection(south);
-                actor->SetTemp2(0);
-            }
-            break;
-        }
-        case south:
-        {
-            if (m_level->IsSolidWall(actor->GetTileX(), actor->GetTileY() + 1))
-            {
-                actor->SetDirection(north);
-                actor->SetTemp2(0);
-            }
-            break;
-        }
-        case east:
-        {
-            if (m_level->IsSolidWall(actor->GetTileX() + 1, actor->GetTileY()))
-            {
-                actor->SetDirection(west);
-                actor->SetTemp2(0);
-            }
-            break;
-        }
-        case west:
-        {
-            if (m_level->IsSolidWall(actor->GetTileX() - 1, actor->GetTileY()))
-            {
-                actor->SetDirection(east);
-                actor->SetTemp2(0);
-            }
-            break;
-        }
-        }
+            // Bouncing fireball is blocked, reverse direction
+            actorDirection reverseDirection =
+                (actor->GetDirection() == north) ? south :
+                (actor->GetDirection() == south) ? north :
+                (actor->GetDirection() == west) ? east :
+                west;
+            actor->SetDirection(reverseDirection);
 
-        m_level->Walk(actor);
+            // Ready to damage player again
+            actor->SetTemp2(0);
+        }
 
         m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = actor;	// set down a new goal marker
         if (actor->TargetReached())
