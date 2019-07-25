@@ -47,7 +47,7 @@ RendererOpenGLWin32::~RendererOpenGLWin32()
 {
     if (m_spritesToRender)
     {
-        delete m_spritesToRender;
+        delete[] m_spritesToRender;
     }
 }
 
@@ -128,7 +128,7 @@ GLuint LoadDefaultTexture()
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
-    delete textureImage;
+    delete[] textureImage;
 
     return textureId;
 }
@@ -201,7 +201,7 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* deco
     const int16_t format = transparent ? GL_RGBA : GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
 
-    delete textureImage;
+    delete[] textureImage;
 
     return textureId;
 }
@@ -251,7 +251,7 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
 
-    delete textureImage;
+    delete[] textureImage;
 
     return textureId;
 }
@@ -278,7 +278,7 @@ unsigned int RendererOpenGLWin32::generateSingleColorTexture(const egaColor colo
     const int16_t format = GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
 
-    delete textureImage;
+    delete[] textureImage;
 
     return textureId;
 }
@@ -326,7 +326,7 @@ unsigned int RendererOpenGLWin32::LoadTilesSize8MaskedIntoTexture(const FileChun
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, numberOfTiles * 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
 
-    delete textureImage;
+    delete[] textureImage;
 
     return textureId;
 }
@@ -355,7 +355,7 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture)
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
 
-    delete textureImage;
+    delete[] textureImage;
 
     return textureId;
 }

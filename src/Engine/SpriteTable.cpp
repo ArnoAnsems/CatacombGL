@@ -44,35 +44,35 @@ SpriteTable::~SpriteTable()
 {
     if (m_width != 0)
     {
-        delete m_width;
+        delete[] m_width;
     }
     if (m_height != 0)
     {
-        delete m_height;
+        delete[] m_height;
     }
     if (m_offsetX != 0)
     {
-        delete m_offsetX;
+        delete[] m_offsetX;
     }
     if (m_offsetY != 0)
     {
-        delete m_offsetY;
+        delete[] m_offsetY;
     }
     if (m_clippingLeft != 0)
     {
-        delete m_clippingLeft;
+        delete[] m_clippingLeft;
     }
     if (m_clippingTop != 0)
     {
-        delete m_clippingTop;
+        delete[] m_clippingTop;
     }
     if (m_clippingRight != 0)
     {
-        delete m_clippingRight;
+        delete[] m_clippingRight;
     }
     if (m_clippingBottom != 0)
     {
-        delete m_clippingBottom;
+        delete[] m_clippingBottom;
     }
 }
 

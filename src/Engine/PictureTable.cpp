@@ -39,11 +39,11 @@ PictureTable::~PictureTable()
 {
     if (m_width != NULL)
     {
-        delete m_width;
+        delete[] m_width;
     }
     if (m_height != NULL)
     {
-        delete m_height;
+        delete[] m_height;
     }
 }
 

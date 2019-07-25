@@ -26,7 +26,7 @@ FileChunk::~FileChunk()
 {
     if (m_chunk != NULL)
     {
-        delete m_chunk;
+        delete[] m_chunk;
     }
 }
 

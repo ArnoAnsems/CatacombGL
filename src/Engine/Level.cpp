@@ -101,14 +101,14 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
 
 Level::~Level()
 {
-    delete m_plane0;
-    delete m_plane2;
+    delete[] m_plane0;
+    delete[] m_plane2;
 
-    delete m_visibilityMap;
+    delete[] m_visibilityMap;
     m_visibilityMap = NULL;
 
-    delete m_wallXVisible;
-    delete m_wallYVisible;
+    delete[] m_wallXVisible;
+    delete[] m_wallYVisible;
 
     delete m_playerActor;
 

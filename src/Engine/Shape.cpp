@@ -285,7 +285,7 @@ EXIT_FUNC:;
 		}
 	}
 
-    delete data;
+    delete[] data;
 
     const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(chunk, bytesPerRow * numberOfPlanes * 2, height, false);
     delete chunk;

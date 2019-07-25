@@ -40,7 +40,7 @@ PCSound::~PCSound()
 {
     if (m_inverseFrequency != NULL)
     {
-        delete m_inverseFrequency;
+        delete[] m_inverseFrequency;
     }
 }
 

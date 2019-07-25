@@ -56,7 +56,7 @@ AdlibSound::~AdlibSound()
 {
     if (m_data != NULL)
     {
-        delete m_data;
+        delete[] m_data;
     }
 }
 

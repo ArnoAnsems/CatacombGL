@@ -96,6 +96,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     uint32_t uncompressedSize3 = *(uint32_t*)compressedSpritesTable;
     FileChunk* spritesTableChunk = m_huffman->Decompress(&compressedSpritesTable[sizeof(uint32_t)], compressedSize3, uncompressedSize3);
     m_spriteTable = new SpriteTable(spritesTableChunk);
+    delete spritesTableChunk;
 
     if (m_spriteTable->GetCount() == 0)
     {

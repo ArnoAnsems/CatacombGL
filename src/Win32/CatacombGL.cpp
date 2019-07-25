@@ -232,6 +232,7 @@ void GetSubFolders(const std::string selectedFolder, std::vector<std::string>& s
 
         std::string ffsearchFolder = selectedFolder + '*';
         WIN32_FIND_DATA findData;
+        memset(&findData,0, sizeof(findData));
         HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, NULL, 0);
 
         if (searchHandle != NULL)
@@ -256,6 +257,7 @@ void GetSubFolders(const std::string selectedFolder, std::vector<std::string>& s
 void InitializeSDL()
 {
     SDL_version sdlVersion;
+    memset(&sdlVersion, 0, sizeof(sdlVersion));
     SDL_GetVersion(&sdlVersion);
     const std::string sdlLogMessage =
         "Initializing SDL " +
@@ -417,6 +419,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     while (selectedGame == GameIdNotDetected && active)
     {
         SDL_Event event;
+        memset(&event, 0, sizeof(event));
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_WINDOWEVENT)

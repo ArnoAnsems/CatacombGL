@@ -177,8 +177,8 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
     }
 
     Level* level = new Level(mapIndex, mapWidth, mapHeight, plane0, plane2, m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
-    delete plane0;
-    delete plane2;
+    delete[] plane0;
+    delete[] plane2;
 
     return level;
 }
