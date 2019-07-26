@@ -173,7 +173,7 @@ void CreateGLWindow(int width, int height, int bits)
 void UpdatePlayerInput()
 {
     SDL_PumpEvents();
-    int numKeys;
+    int numKeys = 0;
     const Uint8 *state = SDL_GetKeyboardState(&numKeys);
 
     for (int i = 0; i < numKeys; i++)
@@ -181,7 +181,8 @@ void UpdatePlayerInput()
         playerInput.SetKeyPressed(SDL_GetKeyFromScancode((SDL_Scancode)(i)), state[i]);
     }
 
-    int x, y;
+    int x = 0;
+    int y = 0;
     const uint32_t mouseState = SDL_GetRelativeMouseState(&x, &y);
     playerInput.SetMouseXPos(x);
     playerInput.SetMouseYPos(y);
@@ -196,10 +197,13 @@ void HandleWindowEvent(const SDL_WindowEvent * event)
     switch (event->event) {
     case SDL_WINDOWEVENT_RESIZED:
     case SDL_WINDOWEVENT_SIZE_CHANGED:
-        int w, h;
+    {
+        int w = 0;
+        int h = 0;
         SDL_GetWindowSize(SDLwindow, &w, &h);
         ReSizeGLScene(w, h);
         break;
+    }
     case SDL_WINDOWEVENT_CLOSE:
         active = false;
         break;
@@ -616,6 +620,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	while(active)									// Loop That Runs While done=FALSE
 	{
         SDL_Event event;
+        memset(&event, 0, sizeof(event));
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_WINDOWEVENT)

@@ -63,6 +63,13 @@ Level::Level(
 
     m_wallXVisible = new bool[m_levelWidth * m_levelHeight];
     m_wallYVisible = new bool[m_levelWidth * m_levelHeight];
+
+    for (uint32_t i = 0u; i < (uint32_t)(m_levelWidth * m_levelHeight); i++)
+    {
+        m_visibilityMap[i] = false;
+        m_wallXVisible[i] = false;
+        m_wallYVisible[i] = false;
+    }
 }
 
 bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors)
