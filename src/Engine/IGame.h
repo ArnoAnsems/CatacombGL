@@ -42,6 +42,7 @@ enum DifficultyLevel
 class IGame
 {
 public:
+    virtual ~IGame() {};
     virtual void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) = NULL;
     virtual const DecorateActor& GetExplosionActor() = NULL;
     virtual const DecorateActor& GetExplodingWallActor() = NULL;

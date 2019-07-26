@@ -47,7 +47,7 @@ LevelLocationNames::LevelLocationNames(const FileChunk* decompressedChunk)
                 locationName[nameLength] = 0;
                 m_LocationNames.push_back(locationName);
 
-                delete locationName;
+                delete[] locationName;
             }
             else
             {
@@ -61,7 +61,7 @@ LevelLocationNames::LevelLocationNames(const FileChunk* decompressedChunk)
 
 LevelLocationNames::~LevelLocationNames()
 {
-
+    m_LocationNames.clear();
 }
 
 

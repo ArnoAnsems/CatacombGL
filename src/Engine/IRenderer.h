@@ -51,6 +51,7 @@ public:
         AlongYAxis
     };
 
+    virtual ~IRenderer() {};
     virtual void Setup() = NULL;
     virtual void SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight) = NULL;
     virtual void SetPlayerAngle(const float angle) = NULL;

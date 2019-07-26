@@ -114,7 +114,14 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
             std::to_string(mapWidth) + " and a height of " + std::to_string(mapHeight));
     }
 
-    return new Level(mapIndex, mapWidth, mapHeight, (uint16_t*)(decompressedPlane0->GetChunk()), (uint16_t*)(decompressedPlane2->GetChunk()), m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
+    Level* level = new Level(mapIndex, mapWidth, mapHeight, (uint16_t*)(decompressedPlane0->GetChunk()), (uint16_t*)(decompressedPlane2->GetChunk()), m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
+
+    delete carmackExpandedChunk;
+    delete decompressedPlane0;
+    delete carmackExpandedChunk2;
+    delete decompressedPlane2;
+
+    return level;
 }
 
 Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const

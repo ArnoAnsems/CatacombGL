@@ -58,6 +58,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     uint32_t uncompressedSize = *(uint32_t*)compressedPictureTable;
     FileChunk* pictureTableChunk = m_huffman->Decompress(&compressedPictureTable[sizeof(uint32_t)], compressedSize, uncompressedSize);
     m_pictureTable = new PictureTable(pictureTableChunk);
+    delete pictureTableChunk;
 
     if (m_staticData.indexOfFirstMaskedPicture - m_staticData.indexOfFirstPicture > m_pictureTable->GetCount())
     {
@@ -77,6 +78,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     uint32_t uncompressedSize2 = *(uint32_t*)compressedMaskedPictureTable;
     FileChunk* maskedPictureTableChunk = m_huffman->Decompress(&compressedMaskedPictureTable[sizeof(uint32_t)], compressedSize2, uncompressedSize2);
     m_maskedPictureTable = new PictureTable(maskedPictureTableChunk);
+    delete maskedPictureTableChunk;
 
     if (m_staticData.indexOfFirstSprite - m_staticData.indexOfFirstMaskedPicture > m_maskedPictureTable->GetCount())
     {

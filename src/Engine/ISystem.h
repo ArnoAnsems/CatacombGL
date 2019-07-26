@@ -26,9 +26,10 @@
 class ISystem
 {
 public:
-        virtual const std::string& GetConfigurationFilePath() const = NULL;
-        virtual void GetSavedGameNamesFromFolder(const std::string& path, std::vector<std::string>& filesFound) const = NULL;
-        virtual bool CreatePath(const std::string& path) const = NULL;
-        virtual std::string GetOSVersion() const = NULL;
-        virtual bool isBuiltIn64Bit() const = NULL;
+    virtual ~ISystem() {};
+    virtual const std::string& GetConfigurationFilePath() const = NULL;
+    virtual void GetSavedGameNamesFromFolder(const std::string& path, std::vector<std::string>& filesFound) const = NULL;
+    virtual bool CreatePath(const std::string& path) const = NULL;
+    virtual std::string GetOSVersion() const = NULL;
+    virtual bool isBuiltIn64Bit() const = NULL;
 };
