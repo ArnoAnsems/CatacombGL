@@ -273,7 +273,7 @@ const DecorateActor decorateTimeLordShot =
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
-    bugShotStates,
+    timeLordShotStates,
     StateIdProjectileFly,   // initialState;
     5,  // damage;
     0, // hitSound;
@@ -492,7 +492,7 @@ const DecorateActor decorateRoboTankShot =
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
     EgaBrightWhite,   // radarColor;
-    bugShotStates,
+    roboTankShotStates,
     StateIdProjectileFly,   // initialState;
     15,  // damage;
     0, // hitSound;
@@ -581,4 +581,3 @@ const DecorateActor decorateNemesisShot =
     0, // actionParameter
     0 // ProjectileId
 };
-

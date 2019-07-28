@@ -21,6 +21,7 @@
 
 const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
 {
+    // Misc
     std::make_pair(actorIdExplodingWall, decorateExplodingWall),
     std::make_pair(actorIdPortal, decoratePortal),
     std::make_pair(actorIdPlayer, decoratePlayer),
@@ -34,6 +35,9 @@ const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
     std::make_pair(actorIdFutureFirePot, decorateFutureFirePot),
     std::make_pair(actorIdOldFirePot, decorateOldFirePot),
     std::make_pair(actorIdFakeWall, decorateFakeWall),
+    std::make_pair(actorIdForceField, decorateForceField),
+
+    // Bonus
     std::make_pair(actorIdBonusExplosion, decorateExplosion),
     std::make_pair(actorIdBonusBolt, decorateBolt),
     std::make_pair(actorIdBonusNuke, decorateNuke),
@@ -51,6 +55,8 @@ const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
     std::make_pair(actorIdBonusGemGreen, decorateGemGreen),
     std::make_pair(actorIdBonusGemBlue, decorateGemBlue),
     std::make_pair(actorIdBonusGemPurple, decorateGemPurple),
+
+    // Monsters
     std::make_pair(actorIdMonsterNemesis, decorateNemesis),
     std::make_pair(actorIdMonsterBounce, decorateBounce),
     std::make_pair(actorIdMonsterBlob, decorateBlob),
@@ -69,6 +75,8 @@ const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
     std::make_pair(actorIdMonsterRoboTank, decorateRoboTank),
     std::make_pair(actorIdMonsterShooterEye, decorateShooterEye),
     std::make_pair(actorIdMonsterInvisDude, decorateInvisDude),
+
+    // Projectiles
     std::make_pair(actorIdProjectilePlayerShot, decoratePlayerShot),
     std::make_pair(actorIdProjectilePlayerBigShot, decoratePlayerBigShot),
     std::make_pair(actorIdProjectileWizardShot, decorateWizardShot),
@@ -82,5 +90,4 @@ const std::map<uint16_t, const DecorateActor> decorateApocalypseAll =
     std::make_pair(actorIdProjectileRoboTankShot, decorateRoboTankShot),
     std::make_pair(actorIdProjectileEyeShot, decorateEyeShot),
     std::make_pair(actorIdProjectileNemesisShot, decorateNemesisShot),
-    std::make_pair(actorIdForceField, decorateForceField)
 };
