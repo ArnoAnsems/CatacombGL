@@ -367,6 +367,22 @@ void EngineCore::DrawScene(IRenderer& renderer)
     renderer->RenderTextLeftAligned(ticsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,150,12);
 #endif
 
+#ifdef DRAWFONT
+    for (int x = 0; x < 16; x++)
+    {
+        {
+            for (int y = 0; y < 16; y++)
+            {
+                char s[2];
+                s[0] = (y * 16) + x;
+                s[1] = 0;
+                
+                renderer.RenderTextLeftAligned(s, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, x * 16, y * 10);
+            }
+        }
+    }
+#endif
+
     if (m_extraMenu.IsActive())
     {
         DrawTiledWindow(renderer,2,1,36,13);

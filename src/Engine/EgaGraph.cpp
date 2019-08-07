@@ -300,8 +300,8 @@ Font* EgaGraph::GetFont(const uint16_t index)
         width[i] = *(uint8_t*)&fontChunk->GetChunk()[514 + i];
     }
 
-    bool fontPicture[256 * 16 * 10];
-    memset(&fontPicture, 0, 256 * 16 * 10);
+    bool fontPicture[16 * 256 * 10];
+    memset(&fontPicture, 0, 16 * 256 * 10);
     for (int i = 0; i < 256; i++)
     {
         if (characterOffset[i] == 0)
@@ -315,11 +315,11 @@ Font* EgaGraph::GetFont(const uint16_t index)
             for (int x = 0; x < sourceLength; x++)
             {
                 uint8_t sourceByte = *(uint8_t*)&fontChunk->GetChunk()[characterOffset[i] + (y * sourceLength) + x];
-                uint16_t destinationY = ((uint16_t)(i / 16) * 10) + y;
-                uint16_t destinationX = ((uint16_t)(i % 16) * 16) + (x * 8);
+                uint16_t destinationY = (uint16_t)(i * 10) + y;
+                uint16_t destinationX = (uint16_t)(x * 8);
                 for (uint8_t b = 0; b < 8; b++)
                 {
-                    fontPicture[destinationX + (destinationY * 256) + 7 - b] = ((sourceByte & (1 << b)) > 0);
+                    fontPicture[destinationX + (destinationY * 16) + 7 - b] = ((sourceByte & (1 << b)) > 0);
                 }
             }
         }

@@ -337,8 +337,8 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture)
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t width = 256;
-    const uint32_t height = 16 * 10;
+    const uint32_t width = 16;
+    const uint32_t height = 256 * 10;
     const uint32_t numberOfPixelsInFont = width * height;
     GLubyte* textureImage = new GLubyte[numberOfPixelsInFont * bytesPerOutputPixel];
     
@@ -416,12 +416,11 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     {
         const uint8_t charIndex = text[chari];
         uint16_t charWidth =  font->GetCharacterWidth(charIndex);
-        float textureHeight = 1.0f / 16.0f;
-        float textureWidth = (float)(charWidth) / 256.0f;
-        float textureOffsetX = float(charIndex % 16) / 16.0f;
-        float textureOffsetY = float(charIndex / 16) / 16.0f;
+        float textureHeight = 1.0f / 256.0f;
+        float textureWidth = (float)(charWidth) / 16.0f;
+        float textureOffsetX = 0.0f;
+        float textureOffsetY = float(charIndex) / 256.0f;
         
-
         glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, 10);
         glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, 10);
         glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(combinedWidth + charWidth, 0);
@@ -510,10 +509,10 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     {
         const uint8_t charIndex = truncatedText[chari];
         uint16_t charWidth = font->GetCharacterWidth(charIndex);
-        float textureHeight = 1.0f / 16.0f;
-        float textureWidth = (float)(charWidth) / 256.0f;
-        float textureOffsetX = float(charIndex % 16) / 16.0f;
-        float textureOffsetY = float(charIndex / 16) / 16.0f;
+        float textureHeight = 1.0f / 256.0f;
+        float textureWidth = (float)(charWidth) / 16.0f;
+        float textureOffsetX = 0.0f;
+        float textureOffsetY = float(charIndex) / 256.0f;
 
 
         glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, 10);
