@@ -1429,37 +1429,37 @@ const bool fontData[256 * 10 * 16] =
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
     // character 128 (Ä)
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
     // character 129 (Å)
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    o,X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
-    X,X,o,o,o,X,X,o,o,o,o,o,o,o,o,o,
-    X,X,o,o,X,X,X,o,o,o,o,o,o,o,o,o,
-    X,X,o,X,X,X,X,o,o,o,o,o,o,o,o,o,
-    X,X,X,X,o,X,X,o,o,o,o,o,o,o,o,o,
-    X,X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,
-    o,X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
     // character 130 (Ç)
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
-    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
-    o,o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
-    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
-    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
-    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
-    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
-    o,o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
     // character 131 (É)
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
@@ -2840,9 +2840,110 @@ const bool fontData[256 * 10 * 16] =
 
 const uint8_t fontWidth[256] =
 {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 3, 6, 8, 7, 8, 8, 4, 5, 5, 9, 7, 5, 7, 3, 8, 8, 5, 7, 7, 8,
-    7, 7, 7, 7, 7, 3, 4, 6, 7, 7, 7, 8, 7, 7, 7, 7, 7, 7, 7, 7, 5, 7, 8, 7, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 7, 8, 5, 8, 5, 7, 9, 4, 7, 7, 7, 7, 7, 7, 7, 7, 3,
-    6, 7, 3, 11, 7, 7, 7, 7, 7, 7, 7, 7, 7, 11, 8, 7, 7, 7, 3, 7, 8, 8, 2, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 11, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0,
+    5, // space
+    3, // !
+    6, // "
+    8, // #
+    7, // $
+    8, // %
+    8, // &
+    4, // '
+    5, // (
+    5, // )
+    9, // *
+    7, // + 
+    5, // ,
+    7, // -
+    3, // .
+    8, // slash
+    8, // 0
+    5, // 1
+    7, // 2
+    7, // 3
+    8, // 4
+    7, // 5
+    7, // 6
+    7, // 7
+    7, // 8
+    7, // 9
+    3, // :
+    4, // ;
+    6, // <
+    7, // =
+    7, // >
+    7, // ?
+    8, // @
+    7, // A
+    7, // B
+    7, // C
+    7, // D
+    7, // E
+    7, // F
+    7, // G
+    7, // H
+    5, // I
+    7, // J
+    8, // K
+    7, // L
+    8, // M
+    8, // N
+    7, // O
+    7, // P
+    7, // Q
+    7, // R
+    7, // S
+    7, // T
+    7, // U
+    7, // V
+    8, // W
+    8, // X
+    7, // Y
+    8, // Z
+    5, // [
+    8, // backslash
+    5, // ]
+    7, // ^
+    9, // _
+    4, // `
+    7, // a
+    7, // b
+    7, // c
+    7, // d
+    7, // e
+    7, // f
+    7, // g
+    7, // h
+    3, // i
+    6, // j
+    7, // k
+    3, // l
+    11, // m
+    7, // n
+    7, // o
+    7, // p
+    7, // q
+    7, // r
+    7, // s
+    7, // t
+    7, // u
+    7, // v
+    11, // w
+    8, // x
+    7, // y
+    7, // z
+    7, // {
+    3, // |
+    7, // }
+    8, // ~
+    0, 
+    7, // Ä
+    0,
+    5, // ,
+    8, 8, 8, 8, 8, 8, 8, 8, 11, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
@@ -2856,4 +2957,12 @@ const Font* DefaultFont::Get(IRenderer& renderer)
     }
 
     return defaultFont;
+}
+
+void DefaultFont::AddUnicodeLatinSupplementCharacters(bool* fontData, uint8_t* fontWidth)
+{
+    for (uint16_t c = 128; c < 256; c++)
+    {
+        // TODO
+    }
 }
