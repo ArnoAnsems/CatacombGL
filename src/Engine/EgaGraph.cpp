@@ -19,6 +19,7 @@
 
 #include "Picture.h"
 #include "Font.h"
+#include "DefaultFont.h"
 #include "PictureTable.h"
 #include "SpriteTable.h"
 #include "LevelLocationNames.h"
@@ -324,6 +325,8 @@ Font* EgaGraph::GetFont(const uint16_t index)
             }
         }
     }
+
+    DefaultFont::AddWindows1252Characters(fontPicture, width);
 
     unsigned int textureId = m_renderer.LoadFontIntoTexture(fontPicture);
     m_font = new Font(width, textureId);

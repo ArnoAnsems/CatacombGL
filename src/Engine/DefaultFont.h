@@ -30,5 +30,5 @@ class DefaultFont
 {
 public:
     static const Font* Get(IRenderer& renderer);
-    static void AddUnicodeLatinSupplementCharacters(bool* fontData, uint8_t* fontWidth);
+    static void AddWindows1252Characters(bool* fontData, uint8_t* fontWidth);
 };
