@@ -51,7 +51,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         std::string line;
         while (std::getline(file, line) && file.eofbit)
         {
-            size_t pos = line.find('=');
+            size_t pos = line.rfind('=');
             if (pos != std::string::npos)
             {
                 std:: string key = line.substr(0, pos);
