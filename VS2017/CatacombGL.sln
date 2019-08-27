@@ -28,6 +28,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Armageddon", "..
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Apocalypse", "..\src\Apocalypse\Apocalypse.vcxproj", "{B9D720B1-EAAA-4F6A-8138-4295E2EBA88C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Catacomb3D", "..\src\Catacomb3D\Catacomb3D.vcxproj", "{D48C1E73-C633-49B3-9570-08113DDE8661}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -84,6 +86,14 @@ Global
 		{B9D720B1-EAAA-4F6A-8138-4295E2EBA88C}.Release|Win32.Build.0 = Release|Win32
 		{B9D720B1-EAAA-4F6A-8138-4295E2EBA88C}.Release|x64.ActiveCfg = Release|x64
 		{B9D720B1-EAAA-4F6A-8138-4295E2EBA88C}.Release|x64.Build.0 = Release|x64
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Debug|Win32.Build.0 = Debug|Win32
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Debug|x64.ActiveCfg = Debug|x64
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Debug|x64.Build.0 = Debug|x64
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Release|Win32.ActiveCfg = Release|Win32
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Release|Win32.Build.0 = Release|Win32
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Release|x64.ActiveCfg = Release|x64
+		{D48C1E73-C633-49B3-9570-08113DDE8661}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

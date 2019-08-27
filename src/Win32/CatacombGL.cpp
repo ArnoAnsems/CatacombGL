@@ -41,6 +41,7 @@
 #include "..\Armageddon\GameDetectionArmageddon.h"
 #include "..\Apocalypse\GameApocalypse.h"
 #include "..\Apocalypse\GameDetectionApocalypse.h"
+#include "..\Catacomb3D\GameDetectionCatacomb3D.h"
 
 #include "..\..\ThirdParty\RefKeen\be_st.h"
 #include "..\..\ThirdParty\RefKeen\id_sd.h"
@@ -306,10 +307,12 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     const uint8_t GameIdCatacombAbyssv124 = 2;
     const uint8_t GameIdCatacombArmageddonv102 = 3;
     const uint8_t GameIdCatacombApocalypsev101 = 4;
+    const uint8_t GameIdCatacomb3Dv122 = 5;
     GameDetection gameDetectionAbyssV113;
     GameDetection gameDetectionAbyssV124;
     GameDetection gameDetectionArmageddonv102;
     GameDetection gameDetectionApocalypsev101;
+    GameDetection gameDetectionCatacomb3Dv122;
 
     uint8_t selectedGame = GameIdNotDetected;
 
@@ -329,6 +332,9 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
         const std::string gogAbyssPath = gogPath + "Abyss\\";
         gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, gogAbyssPath, abyssFilesv124);
+
+        const std::string gogCatacomb3DPath = gogPath + "Cat3D\\";
+        gameDetectionCatacomb3Dv122.GetDetectionReport(GameIdCatacomb3Dv122, gogCatacomb3DPath, catacomb3DFiles);
     }
     else
     {
@@ -355,6 +361,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     {
         gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, m_configurationSettings.GetPathApocalypsev101(), apocalypseFiles);
     }
+
+    if (gameDetectionCatacomb3Dv122.GetBestMatch().score != 0 && !m_configurationSettings.GetPathCatacomb3Dv122().empty())
+    {
+        gameDetectionCatacomb3Dv122.GetDetectionReport(GameIdCatacomb3Dv122, m_configurationSettings.GetPathCatacomb3Dv122(), catacomb3DFiles);
+    }
  
     // Try to find registered game files in local path
     if (gameDetectionAbyssV124.GetBestMatch().score != 0)
@@ -369,6 +380,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     if (gameDetectionApocalypsev101.GetBestMatch().score != 0)
     {
         gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, ".\\", apocalypseFiles);
+    }
+
+    if (gameDetectionCatacomb3Dv122.GetBestMatch().score != 0)
+    {
+        gameDetectionCatacomb3Dv122.GetDetectionReport(GameIdCatacomb3Dv122, ".\\", catacomb3DFiles);
     }
 
     if (gameDetectionAbyssV113.GetBestMatch().score == 0)
@@ -407,6 +423,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         Logging::Instance().AddLogMessage("Catacomb Apocalypse v1.01 not detected");
     }
 
+    if (gameDetectionCatacomb3Dv122.GetBestMatch().score == 0)
+    {
+        Logging::Instance().AddLogMessage("Catacomb 3-D v1.22 detected at " + gameDetectionCatacomb3Dv122.GetBestMatch().folder);
+    }
+    else
+    {
+        Logging::Instance().AddLogMessage("Catacomb 3-D v1.22 not detected");
+    }
+
 	// Create Our OpenGL Window
     CreateGLWindow(800, 600, 16);
 
@@ -434,7 +459,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
         if (gameSelectionPresentation.gameListCatacombsPack.empty())
         {
-            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("1. Catacomb 3-D: The Descent v1.22", NotSupported));
+            const GameDetectionState catacomb3Dv122DetectionState = (gameDetectionCatacomb3Dv122.GetBestMatch().score == 0) ? Detected : NotDetected;
+            gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("1. Catacomb 3-D: The Descent v1.22", catacomb3Dv122DetectionState));
             const GameDetectionState abyssv124DetectionState = (gameDetectionAbyssV124.GetBestMatch().score == 0) ? Detected : NotDetected;
             gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("2. Catacomb Abyss v1.24", abyssv124DetectionState));
             const GameDetectionState armageddonDetectionState = (gameDetectionArmageddonv102.GetBestMatch().score == 0) ? Detected : NotDetected;
@@ -563,6 +589,12 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
                     gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, gameSelectionPresentation.searchFolder + "Apocalypse\\", apocalypseFiles);
                     gameSelectionPresentation.gameListCatacombsPack.clear();
                 }
+
+                if (gameDetectionCatacomb3Dv122.GetBestMatch().score != 0)
+                {
+                    gameDetectionCatacomb3Dv122.GetDetectionReport(GameIdCatacomb3Dv122, gameSelectionPresentation.searchFolder + "Cat3D\\", catacomb3DFiles);
+                    gameSelectionPresentation.gameListCatacombsPack.clear();
+                }
             }
         }
 
@@ -668,6 +700,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     if (gameDetectionApocalypsev101.GetBestMatch().score == 0)
     {
         m_configurationSettings.SetPathApocalypsev101(gameDetectionApocalypsev101.GetBestMatch().folder);
+    }
+
+    if (gameDetectionCatacomb3Dv122.GetBestMatch().score == 0)
+    {
+        m_configurationSettings.SetPathCatacomb3Dv122(gameDetectionCatacomb3Dv122.GetBestMatch().folder);
     }
 
     // Kill The Window

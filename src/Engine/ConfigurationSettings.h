@@ -63,6 +63,9 @@ public:
     const std::string& GetPathApocalypsev101() const;
     void SetPathApocalypsev101(const std::string path);
 
+    const std::string& GetPathCatacomb3Dv122() const;
+    void SetPathCatacomb3Dv122(const std::string path);
+
     ScreenMode GetScreenMode() const;
     void SetScreenMode(const ScreenMode screenMode);
 
@@ -121,4 +124,5 @@ private:
     std::string m_pathAbyssv124;
     std::string m_pathArmageddonv102;
     std::string m_pathApocalypsev101;
+    std::string m_pathCatacomb3Dv122;
 };
