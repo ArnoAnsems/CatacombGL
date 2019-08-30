@@ -14,10 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 //
-// AudioRepositoryAbyss
+// AudioRepositoryArmageddon
 //
-// Data structures required for reading the Catacomb Abyss audio repository.
-// Catacomb Abyss v1.13 and v1.24 share the same audio repository.
+// Data structures required for reading the Catacomb Armageddon audio repository.
 //
 #pragma once
 

@@ -136,7 +136,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioRepositoryCatacomb3D.h" />
     <ClInclude Include="GameDetectionCatacomb3D.h" />
+    <ClInclude Include="EgaGraphCatacomb3D.h" />
+    <ClInclude Include="GameMapsCatacomb3D.h" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

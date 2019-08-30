@@ -18,6 +18,15 @@
     <ClInclude Include="GameDetectionCatacomb3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EgaGraphCatacomb3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioRepositoryCatacomb3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMapsCatacomb3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
