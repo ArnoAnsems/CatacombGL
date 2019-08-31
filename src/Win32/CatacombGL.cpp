@@ -41,6 +41,7 @@
 #include "..\Armageddon\GameDetectionArmageddon.h"
 #include "..\Apocalypse\GameApocalypse.h"
 #include "..\Apocalypse\GameDetectionApocalypse.h"
+#include "..\Catacomb3D\GameCatacomb3D.h"
 #include "..\Catacomb3D\GameDetectionCatacomb3D.h"
 
 #include "..\..\ThirdParty\RefKeen\be_st.h"
@@ -481,9 +482,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         SDL_GL_SwapWindow(SDLwindow);
 
         UpdatePlayerInput();
-        if (playerInput.IsKeyPressed(SDLK_6))
+
+        if (playerInput.IsKeyPressed(SDLK_1))
         {
-            selectedGame = GameIdCatacombAbyssv113;
+            selectedGame = GameIdCatacomb3Dv122;
         }
 
         if (playerInput.IsKeyPressed(SDLK_2))
@@ -499,6 +501,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         if (playerInput.IsKeyPressed(SDLK_4))
         {
             selectedGame = GameIdCatacombApocalypsev101;
+        }
+
+        if (playerInput.IsKeyPressed(SDLK_6))
+        {
+            selectedGame = GameIdCatacombAbyssv113;
         }
 
         if (playerInput.IsKeyJustPressed(SDLK_UP))
@@ -615,11 +622,16 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             (selectedGame == GameIdCatacombAbyssv113) ? gameDetectionAbyssV113.GetBestMatch() :
             (selectedGame == GameIdCatacombAbyssv124) ? gameDetectionAbyssV124.GetBestMatch() :
             (selectedGame == GameIdCatacombArmageddonv102) ? gameDetectionArmageddonv102.GetBestMatch() :
-            gameDetectionApocalypsev101.GetBestMatch();
+            (selectedGame == GameIdCatacombApocalypsev101) ? gameDetectionApocalypsev101.GetBestMatch() :
+            gameDetectionCatacomb3Dv122.GetBestMatch();
 
         if (report.score == 0)
         {
-            if (report.gameId == GameIdCatacombArmageddonv102)
+            if (report.gameId == GameIdCatacomb3Dv122)
+            {
+                game = new GameCatacomb3D(report.folder, *m_renderer);
+            }
+            else if (report.gameId == GameIdCatacombArmageddonv102)
             {
                 game = new GameArmageddon(report.folder, *m_renderer);
             }

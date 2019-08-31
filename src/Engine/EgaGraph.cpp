@@ -63,7 +63,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
 
     if (m_staticData.indexOfFirstMaskedPicture - m_staticData.indexOfFirstPicture > m_pictureTable->GetCount())
     {
-        Logging::Instance().FatalError("Picture table only contains " + std::to_string(m_pictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfHandPicture - m_staticData.indexOfFirstPicture) + " pictures in " + m_staticData.filename);
+        Logging::Instance().FatalError("Picture table only contains " + std::to_string(m_pictureTable->GetCount()) + " entries, while there are " + std::to_string(m_staticData.indexOfFirstMaskedPicture - m_staticData.indexOfFirstPicture) + " pictures in " + m_staticData.filename);
     }
 
     // Initialize Pictures
@@ -379,5 +379,5 @@ uint32_t EgaGraph::GetChunkSize(const uint16_t index)
 
 uint16_t EgaGraph::GetHandPictureIndex() const
 {
-    return m_staticData.indexOfFirstMaskedPicture;
+    return m_staticData.indexOfHandPicture;
 }

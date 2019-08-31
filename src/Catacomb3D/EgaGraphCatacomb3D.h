@@ -961,12 +961,13 @@ const egaGraphStaticData egaGraphCatacomb3D =
     "EGAGRAPH.C3D",
     egaGraphOffsetsCatacomb3D,
     egaDictionaryCatacomb3D,
-    FINALEPIC,
+    CP_MAINMENUPIC,
     FIRSTSCALEPIC,
     FIRSTWALLPIC,
-    HAND1PICM,
+    CP_MENUMASKPICM,
     PADDLESPR,
     CP_MENUMASKPICM,
     LEVEL1TEXT,
-    LEVEL20TEXT
+    LEVEL20TEXT,
+    HAND1PICM
 };

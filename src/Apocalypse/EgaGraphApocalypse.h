@@ -1421,5 +1421,6 @@ const egaGraphStaticData egaGraphApocalypse =
     NORTHICONSPR,
     FIRSTTILESIZE8MASKED,
     LEVEL1TEXT,
-    LEVEL18TEXT
+    LEVEL18TEXT,
+    HAND1PICM
 };

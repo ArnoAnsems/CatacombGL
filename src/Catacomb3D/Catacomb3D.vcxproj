@@ -137,11 +137,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioRepositoryCatacomb3D.h" />
+    <ClInclude Include="DecorateAll.h" />
+    <ClInclude Include="DecorateBonus.h" />
+    <ClInclude Include="DecorateMisc.h" />
+    <ClInclude Include="DecorateProjectiles.h" />
+    <ClInclude Include="GameCatacomb3D.h" />
     <ClInclude Include="GameDetectionCatacomb3D.h" />
     <ClInclude Include="EgaGraphCatacomb3D.h" />
     <ClInclude Include="GameMapsCatacomb3D.h" />
+    <ClInclude Include="IntroViewCatacomb3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameCatacomb3D.cpp" />
+    <ClCompile Include="IntroViewCatacomb3D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

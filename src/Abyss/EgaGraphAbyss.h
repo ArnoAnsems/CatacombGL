@@ -2250,7 +2250,8 @@ const egaGraphStaticData egaGraphAbyss =
     NORTHICONSPR,
     FIRSTTILESIZE8MASKED,
     LEVEL1TEXT,
-    LEVEL20TEXT
+    LEVEL20TEXT,
+    HAND1PICM
 };
 
 const egaGraphStaticData egaGraphAbyssV124 =

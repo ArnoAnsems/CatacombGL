@@ -51,9 +51,9 @@ const std::vector<int32_t> gameMapsOffsetsCatacomb3D =
 const std::vector<LevelInfo> gameMapsInfoCatacomb3D =
 {
     {
-        "",
+        "The Approach",
         EgaBlack,
-        EgaBrightRed,
+        EgaDarkGray,
         false,
         false
     }
@@ -63,6 +63,39 @@ const std::vector<WallInfo> wallsInfoCatacomb3D =
 {
     // 0: No wall
     { {0}, {0}, WTOpen },
+    {{WALL1LPIC}, {WALL1DPIC}, WTSolid},
+    {{WALL2LPIC}, {WALL2DPIC}, WTSolid},
+    {{WALL3LPIC}, {WALL3DPIC}, WTSolid},
+    {{WALL4LPIC}, {WALL4DPIC}, WTSolid},
+    {{WALL5LPIC}, {WALL5DPIC}, WTSolid},
+    {{WALL6LPIC}, {WALL6DPIC}, WTSolid},
+    {{WALL7LPIC}, {WALL7DPIC}, WTSolid},
+    {{WALL1LPIC}, {WALL1DPIC}, WTSolid},
+    {{WALL2LPIC}, {WALL2DPIC}, WTSolid},
+    {{WALL3LPIC}, {WALL3DPIC}, WTSolid},
+    {{WALL4LPIC}, {WALL4DPIC}, WTSolid},
+    {{WALL5LPIC}, {WALL5DPIC}, WTSolid},
+    {{WALL6LPIC}, {WALL6DPIC}, WTSolid},
+    {{WALL7LPIC}, {WALL7DPIC}, WTSolid},
+    {{EXPWALL1PIC}, {EXPWALL1PIC}, WTSolid},
+    {{EXPWALL2PIC}, {EXPWALL2PIC}, WTSolid},
+    {{EXPWALL3PIC}, {EXPWALL3PIC}, WTSolid},
+    {{RDOOR1PIC, RDOOR2PIC}, {RDOOR1PIC, RDOOR2PIC}, WTDoor},
+    {{RDOOR2PIC, RDOOR1PIC}, {RDOOR2PIC, RDOOR1PIC}, WTDoor},
+    {{RDOOR1PIC, RDOOR2PIC}, {RDOOR1PIC, RDOOR2PIC}, WTDoor},
+    {{RDOOR2PIC, RDOOR1PIC}, {RDOOR2PIC, RDOOR1PIC}, WTDoor},
+    {{YDOOR1PIC, YDOOR2PIC}, {YDOOR1PIC, YDOOR2PIC}, WTDoor},
+    {{YDOOR2PIC, YDOOR1PIC}, {YDOOR2PIC, YDOOR1PIC}, WTDoor},
+    {{YDOOR1PIC, YDOOR2PIC}, {YDOOR1PIC, YDOOR2PIC}, WTDoor},
+    {{YDOOR2PIC, YDOOR1PIC}, {YDOOR2PIC, YDOOR1PIC}, WTDoor},
+    {{GDOOR1PIC, GDOOR2PIC}, {GDOOR1PIC, GDOOR2PIC}, WTDoor},
+    {{GDOOR2PIC, GDOOR1PIC}, {GDOOR2PIC, GDOOR1PIC}, WTDoor},
+    {{GDOOR1PIC, GDOOR2PIC}, {GDOOR1PIC, GDOOR2PIC}, WTDoor},
+    {{GDOOR2PIC, GDOOR1PIC}, {GDOOR2PIC, GDOOR1PIC}, WTDoor},
+    {{BDOOR1PIC, BDOOR2PIC}, {BDOOR1PIC, BDOOR2PIC}, WTDoor},
+    {{BDOOR2PIC, BDOOR1PIC}, {BDOOR2PIC, BDOOR1PIC}, WTDoor},
+    {{BDOOR1PIC, BDOOR2PIC}, {BDOOR1PIC, BDOOR2PIC}, WTDoor},
+    {{BDOOR2PIC, BDOOR1PIC}, {BDOOR2PIC, BDOOR1PIC}, WTDoor},
 };
 
-const gameMapsStaticData gameMapsCatacomb3D = { "GAMEMAPS.C3D", gameMapsOffsetsCatacomb3D, gameMapsInfoCatacomb3D, wallsInfoCatacomb3D, 0, 0 };
+const gameMapsStaticData gameMapsCatacomb3D = { "GAMEMAPS.C3D", gameMapsOffsetsCatacomb3D, gameMapsInfoCatacomb3D, wallsInfoCatacomb3D, 15, 15 };
