@@ -109,7 +109,7 @@ void RendererStub::Render2DTileSize8Masked(const Picture* /*tiles*/, const uint1
 {
 }
 
-void RendererStub::Render2DBar(const uint16_t /*x*/, const uint16_t /*y*/, const uint16_t /*width*/, const uint16_t /*height*/, const egaColor /*colorIndex*/)
+void RendererStub::Render2DBar(const int16_t /*x*/, const int16_t /*y*/, const uint16_t /*width*/, const uint16_t /*height*/, const egaColor /*colorIndex*/)
 {
 }
 

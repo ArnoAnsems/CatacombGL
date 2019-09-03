@@ -173,6 +173,7 @@
     <ClCompile Include="SpriteTable.cpp" />
     <ClCompile Include="LevelLocationNames.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="ViewPorts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="SpriteTable.h" />
     <ClInclude Include="LevelLocationNames.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="ViewPorts.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

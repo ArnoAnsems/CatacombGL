@@ -18,6 +18,7 @@
 #include <gl\glu.h>
 #include "..\..\ThirdParty\SDL\include\SDL_video.h"
 #include "..\Engine\Logging.h"
+#include "..\Engine\ViewPorts.h"
 
 const float FloorZ = 2.0f;
 const float CeilingZ = 1.0f;
@@ -603,34 +604,9 @@ void RendererOpenGLWin32::Prepare2DRendering(const bool helpWindow)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    const float classicAspectRatio = 4.0f / 3.0f;
-    const float windowAspectRatio = (float)m_windowWidth / (float)m_windowHeight;
+    ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, helpWindow);
 
-    double top, bottom, left, right;
-    const double classicWidthInPixels = helpWindow ? 640.0f : 320.0f;
-    const double classicHeightInPixels = 200.0f;
-    if (windowAspectRatio > classicAspectRatio)
-    {
-        top = 0.0;
-        bottom = classicHeightInPixels;
-        double classicWidth = (double)m_windowWidth / windowAspectRatio * classicAspectRatio;
-        double windowWidthInClassicPixels = ((double)m_windowWidth / classicWidth) * classicWidthInPixels;
-        double borderWidth = (windowWidthInClassicPixels - classicWidthInPixels) * 0.5;
-        left = -borderWidth;
-        right = windowWidthInClassicPixels - borderWidth;
-    }
-    else
-    {
-        left = 0.0;
-        right = classicWidthInPixels;
-        double classicHeight =  (double)m_windowHeight / (1.0 / windowAspectRatio) * (1.0 / classicAspectRatio);
-        double windowHeightInClassicPixels = ((double)m_windowHeight / classicHeight) * classicHeightInPixels;
-        double borderHeight = (windowHeightInClassicPixels - classicHeightInPixels) * 0.5;
-        top = -borderHeight;
-        bottom = windowHeightInClassicPixels - borderHeight;
-    }
-
-    gluOrtho2D(left, right, bottom, top);
+    gluOrtho2D(rect.left, rect.right, rect.bottom, rect.top);
 
     glDisable(GL_LIGHTING);
 }
@@ -718,7 +694,7 @@ void RendererOpenGLWin32::Render2DTileSize8Masked(const Picture* tiles, const ui
     glEnd();
 }
 
-void RendererOpenGLWin32::Render2DBar(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex)
+void RendererOpenGLWin32::Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex)
 {
     glDisable(GL_TEXTURE_2D);
 
@@ -767,50 +743,9 @@ void RendererOpenGLWin32::RenderRadarBlip(const float x, const float y, const eg
 
 void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov)
 {
-    const float configuredAspectRatio = aspectRatio; //1920.0 / 1080.0;
-    const float classicAspectRatio = 4.0f / 3.0f;   // EGA monitors always had a 4:3 aspect ratio.
-    const float windowAspectRatio = (float)m_windowWidth / (float)m_windowHeight;
+    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio);
 
-    const uint16_t classicScreenHeightInPixels = 200;   // Based on the classic EGA 320x200 screen resolution.
-    const uint16_t classicStatusBarHeightInPixels = 80;
-    const uint16_t classic3DViewHeightInPixels = classicScreenHeightInPixels - classicStatusBarHeightInPixels;
-    const float normalizedStatusBarHeight = (float)classicStatusBarHeightInPixels / (float)classicScreenHeightInPixels;
-    const float normalized3DViewHeight = (float)classic3DViewHeightInPixels / (float)classicScreenHeightInPixels;
-    uint16_t left, bottom, width, height;
-    if (classicAspectRatio > windowAspectRatio)
-    {
-        // The aspect ratio of the window is smaller than the classic aspect ratio, which means the view port cannot use the full height
-        // of the window. Black borders will appear above and below the game view port.
-
-        // Use the full window width
-        left = 0;
-        width = m_windowWidth;
-
-        // Adjust the height of the game view port to match with the classic aspect ratio.
-        const float gameHeight = (float)m_windowWidth / classicAspectRatio;
-        height = (uint16_t)(gameHeight * normalized3DViewHeight);
-        const uint16_t borderHeight = (uint16_t)((m_windowHeight - gameHeight) * 0.5);
-        bottom = borderHeight + (uint16_t)(gameHeight * normalizedStatusBarHeight);
-    }
-    else
-    {
-        // The aspect ratio of the window is bigger than the classic aspect ratio. If the aspect ratio of the window is bigger than
-        // the configured aspect ratio, black borders will appear left and right of the game view port.
-        
-        // Use the full window height
-        bottom = (uint16_t)(m_windowHeight * normalizedStatusBarHeight);
-        height = (uint16_t)(m_windowHeight * normalized3DViewHeight);
-
-        // The applied aspect ratio is the minimum of the window aspect ratio and the configured aspect ratio.
-        const float aspectRatio = (configuredAspectRatio < windowAspectRatio) ? configuredAspectRatio : windowAspectRatio;
-
-        // Adjust the width of the game view port to match with the applied aspect ratio. 
-        const uint16_t gameWidth = (uint16_t)(m_windowHeight * aspectRatio);
-        const uint16_t borderWidth = (uint16_t)((m_windowWidth - gameWidth) * 0.5);
-        left = borderWidth;
-        width = gameWidth;
-    }
-    glViewport(left, bottom, width, height);
+    glViewport(rect.left, rect.bottom, rect.width, rect.height);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
     
@@ -826,9 +761,8 @@ void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const floa
     glLoadIdentity();									// Reset The Projection Matrix
 
     // Calculate The Aspect Ratio Of The Window
-    gluPerspective((double)fov,(float)width / (float)height,0.1f,100.0f);
+    gluPerspective((double)fov,(float)rect.width / (float)rect.height,0.1f,100.0f);
 
-    
     glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
     glRotatef(m_playerAngle, 0.0f, 0.0f, -1.0f);
     glTranslatef(-m_playerPosX, -m_playerPosY, -PlayerZ);
