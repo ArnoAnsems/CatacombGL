@@ -1,0 +1,83 @@
+// Copyright (C) 2019 Arno Ansems
+// 
+// This program is free software: you can redistribute it and/or modify 
+// it under the terms of the GNU General Public License as published by 
+// the Free Software Foundation, either version 3 of the License, or 
+// (at your option) any later version. 
+// 
+// This program is distributed in the hope that it will be useful, 
+// but WITHOUT ANY WARRANTY; without even the implied warranty of 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+// GNU General Public License for more details. 
+// 
+// You should have received a copy of the GNU General Public License 
+// along with this program.  If not, see http://www.gnu.org/licenses/ 
+
+#include "ViewPorts_Test.h"
+#include "..\Engine\ViewPorts.h"
+
+ViewPorts_Test::ViewPorts_Test()
+{
+
+}
+
+ViewPorts_Test::~ViewPorts_Test()
+{
+
+}
+
+TEST(ViewPorts_Test, GetOrtho2DClassicWindow)
+{
+    // The window is in the classic 4:3 aspect ratio.
+    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(40, 30, false);
+
+    // Total width of Ortho2D must be the classic width of 320 pixels.
+    EXPECT_DOUBLE_EQ(rect2D.left, 0.0);
+    EXPECT_DOUBLE_EQ(rect2D.right, 320.0);
+
+    // Total height of Ortho2D must be the classic height of 200 pixels.
+    EXPECT_DOUBLE_EQ(rect2D.top, 0.0);
+    EXPECT_DOUBLE_EQ(rect2D.bottom, 200.0);
+}
+
+TEST(ViewPorts_Test, GetOrtho2DWideWindow)
+{
+    // The window is two times wider compared to the classic 4:3 aspect ratio.
+    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(80, 30, false);
+
+    // Total width of Ortho2D is 640 pixels: two times the classic width of 320 pixels.
+    EXPECT_DOUBLE_EQ(rect2D.left, -160.0);
+    EXPECT_DOUBLE_EQ(rect2D.right, 480.0);
+
+    // Total height of Ortho2D is the classic height of 200 pixels.
+    EXPECT_DOUBLE_EQ(rect2D.top, 0.0);
+    EXPECT_DOUBLE_EQ(rect2D.bottom, 200.0);
+}
+
+TEST(ViewPorts_Test, GetOrtho2DNarrowWindow)
+{
+    // The window is only half as wide compared to the classic 4:3 aspect ratio.
+    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(20, 30, false);
+
+    // Total width of Ortho2D is the classic width of 320 pixels.
+    EXPECT_DOUBLE_EQ(rect2D.left, 0.0);
+    EXPECT_DOUBLE_EQ(rect2D.right, 320.0);
+
+    // Total height of Ortho2D is 400 pixels: two times the classic height of 200 pixels.
+    EXPECT_DOUBLE_EQ(rect2D.top, -100.0);
+    EXPECT_DOUBLE_EQ(rect2D.bottom, 300.0);
+}
+
+TEST(ViewPorts_Test, Get3DClassicWindow)
+{
+    // The window is only half as wide compared to the classic 4:3 aspect ratio.
+    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(40, 30, 4.0f / 3.0f);
+
+    // The 3D viewport must be just as wide as the window.
+    EXPECT_EQ(rect3D.left, 0);
+    EXPECT_EQ(rect3D.width, 40);
+
+    // The 3D viewport will leave some height at the bottom for the statusbar.
+    EXPECT_EQ(rect3D.bottom, 12);
+    EXPECT_EQ(rect3D.height, 18);
+}
