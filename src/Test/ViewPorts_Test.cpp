@@ -16,6 +16,10 @@
 #include "ViewPorts_Test.h"
 #include "..\Engine\ViewPorts.h"
 
+static const float originalAspectRatio = 4.0f / 3.0f;
+static const float fitToWindowAspectRatio = 10.0f;
+static const ViewPorts::ViewPortRect3D original3DViewArea = { 0, 120, 320, 120 };
+
 ViewPorts_Test::ViewPorts_Test()
 {
 
@@ -35,7 +39,7 @@ TEST(ViewPorts_Test, GetOrtho2DClassicWindow)
     EXPECT_DOUBLE_EQ(rect2D.left, 0.0);
     EXPECT_DOUBLE_EQ(rect2D.right, 320.0);
 
-    // Total height of Ortho2D must be the classic height of 200 pixels.
+    // Total height of Ortho2D must be the original height of 200 pixels.
     EXPECT_DOUBLE_EQ(rect2D.top, 0.0);
     EXPECT_DOUBLE_EQ(rect2D.bottom, 200.0);
 }
@@ -49,14 +53,14 @@ TEST(ViewPorts_Test, GetOrtho2DWideWindow)
     EXPECT_DOUBLE_EQ(rect2D.left, -160.0);
     EXPECT_DOUBLE_EQ(rect2D.right, 480.0);
 
-    // Total height of Ortho2D is the classic height of 200 pixels.
+    // Total height of Ortho2D is the original height of 200 pixels.
     EXPECT_DOUBLE_EQ(rect2D.top, 0.0);
     EXPECT_DOUBLE_EQ(rect2D.bottom, 200.0);
 }
 
 TEST(ViewPorts_Test, GetOrtho2DNarrowWindow)
 {
-    // The window is only half as wide compared to the classic 4:3 aspect ratio.
+    // The window is only half as wide compared to the original 4:3 aspect ratio.
     ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(20, 30, false);
 
     // Total width of Ortho2D is the classic width of 320 pixels.
@@ -68,16 +72,44 @@ TEST(ViewPorts_Test, GetOrtho2DNarrowWindow)
     EXPECT_DOUBLE_EQ(rect2D.bottom, 300.0);
 }
 
-TEST(ViewPorts_Test, Get3DClassicWindow)
+TEST(ViewPorts_Test, Get3DWideWindowWithOriginalAspectRatio)
 {
-    // The window is only half as wide compared to the classic 4:3 aspect ratio.
-    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(40, 30, 4.0f / 3.0f);
+    // The window is two times wider compared to the classic 4:3 aspect ratio.
+    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(80, 30, originalAspectRatio, original3DViewArea);
 
-    // The 3D viewport must be just as wide as the window.
-    EXPECT_EQ(rect3D.left, 0);
+    // The 3D viewport must be only half as wide as the window.
+    EXPECT_EQ(rect3D.left, 20);
     EXPECT_EQ(rect3D.width, 40);
 
     // The 3D viewport will leave some height at the bottom for the statusbar.
     EXPECT_EQ(rect3D.bottom, 12);
     EXPECT_EQ(rect3D.height, 18);
+}
+
+TEST(ViewPorts_Test, Get3DWideWindowWithFitToWindowAspectRatio)
+{
+    // The window is two times wider compared to the classic 4:3 aspect ratio.
+    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(80, 30, fitToWindowAspectRatio, original3DViewArea);
+
+    // The 3D viewport must be just as wide as the window.
+    EXPECT_EQ(rect3D.left, 0);
+    EXPECT_EQ(rect3D.width, 80);
+
+    // The 3D viewport will leave some height at the bottom for the statusbar.
+    EXPECT_EQ(rect3D.bottom, 12);
+    EXPECT_EQ(rect3D.height, 18);
+}
+
+TEST(ViewPorts_Test, Get3DNarrowWindowWithOriginalAspectRatio)
+{
+    // The window is only half as wide compared to the original 4:3 aspect ratio.
+    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(20, 30, originalAspectRatio, original3DViewArea);
+
+    // The 3D viewport must be just as wide as the window.
+    EXPECT_EQ(rect3D.left, 0);
+    EXPECT_EQ(rect3D.width, 20);
+
+    // The 3D viewport takes half the height of the window (15 pixels) minus 6 pixels for the statusbar.
+    EXPECT_EQ(rect3D.bottom, 13);
+    EXPECT_EQ(rect3D.height, 9);
 }

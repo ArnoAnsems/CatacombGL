@@ -40,5 +40,5 @@ public:
     } ViewPortRect3D;
 
     static ViewPortRect2D GetOrtho2D(const uint16_t windowWidth, const uint16_t windowHeight, const bool helpWindow);
-    static ViewPortRect3D Get3D(const uint16_t windowWidth, const uint16_t windowHeight, const float aspectRatio);
+    static ViewPortRect3D Get3D(const uint16_t windowWidth, const uint16_t windowHeight, const float aspectRatio, const ViewPortRect3D original3DViewArea);
 };

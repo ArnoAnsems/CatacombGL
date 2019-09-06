@@ -117,8 +117,13 @@ void RendererStub::RenderRadarBlip(const float /*x*/, const float /*y*/, const e
 {
 }
 
-void RendererStub::Prepare3DRendering(const bool /*depthShading*/, const float /*aspectRatio*/, uint16_t /*fov*/)
+void RendererStub::Prepare3DRendering(const bool /*depthShading*/, const float /*aspectRatio*/, uint16_t /*fov*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/)
 {
+}
+
+uint16_t RendererStub::GetAdditionalMarginDueToWideScreen(const float /*aspectRatio*/)
+{
+    return 0;
 }
 
 void RendererStub::PrepareWalls()

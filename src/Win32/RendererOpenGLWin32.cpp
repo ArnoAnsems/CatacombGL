@@ -741,9 +741,9 @@ void RendererOpenGLWin32::RenderRadarBlip(const float x, const float y, const eg
     glEnable(GL_TEXTURE_2D);
 }
 
-void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov)
+void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio);
+    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
 
     glViewport(rect.left, rect.bottom, rect.width, rect.height);
 
@@ -783,6 +783,20 @@ void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const floa
     }
 
     glShadeModel(GL_SMOOTH);
+}
+
+uint16_t RendererOpenGLWin32::GetAdditionalMarginDueToWideScreen(const float aspectRatio)
+{
+    ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+    if (aspectRatio < (4.0f / 3.0f) + 0.0001f)
+    {
+        // Original aspect ratio
+        return 0;
+    }
+    else
+    {
+        return (uint16_t)(rect.right - rect.left - 320.0f + 1.0f) / 2;
+    }
 }
 
 void RendererOpenGLWin32::PrepareWalls()

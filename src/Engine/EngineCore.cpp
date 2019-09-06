@@ -147,7 +147,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     m_framesCounter.AddFrame(m_gameTimer.GetActualTime());
     renderer.SetTextureFilter(m_configurationSettings.GetTextureFilter());
 
-    renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov());
+    renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
 
     if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
     {
@@ -230,7 +230,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == Victory || m_state == VerifyGateExit || m_state == ExitGame)
     {
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
-        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory);
+        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
 
         if (m_state != Victory)
         {
@@ -241,29 +241,33 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 m_lastFreezeTimeTick = remainingFreezeTimeInSec;
                 m_game.PlaySoundFreezeTimeTick(m_lastFreezeTimeTick);
             }
-            char freezeMessage[100];
-            sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeInSec);
-            const char* statusMessage = (m_statusMessage != NULL) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
-            renderer.RenderTextCentered(statusMessage, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, 156, 189);
 
-            // Radar
-            if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == VerifyGateExit)
+            if (m_game.GetId() != 5)  // Status message and radar not in Catacomb 3-D
             {
-                const float radarCenterX = (31 * 8) + (51 / 2) + 2;
-                const float radarCenterY = (200 - 11 - 8) - (51 / 2) - 2;
-                const float radarXRadius = 113.0f / 5.0f;
-                const float radarYRadius = 113.0f / 7.0f;
-                const float northIconoffsetFromCenterX = -(radarXRadius * sin(m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f));
-                const float northIconoffsetFromCenterY = -(radarYRadius * cos(m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f));
-                const uint16_t northIconScreenOffsetX = (uint16_t)(radarCenterX + northIconoffsetFromCenterX - 3);
-                const uint16_t northIconScreenOffsetY = (uint16_t)(radarCenterY + northIconoffsetFromCenterY - 3);
-                renderer.Render2DPicture(m_game.GetEgaGraph()->GetSprite(m_game.GetNorthIconSprite()), northIconScreenOffsetX, northIconScreenOffsetY);
-                renderer.RenderRadarBlip(radarCenterX, radarCenterY, EgaBrightWhite);
+                char freezeMessage[100];
+                sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeInSec);
+                const char* statusMessage = (m_statusMessage != NULL) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
+                renderer.RenderTextCentered(statusMessage, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, 156, 189);
 
-                for (uint16_t blipIndex = 0; blipIndex < m_radarModel.GetNumberOfBlips(); blipIndex++)
+                // Radar
+                if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == VerifyGateExit)
                 {
-                    const radarBlip blip = m_radarModel.GetRadarBlip(blipIndex);
-                    renderer.RenderRadarBlip(radarCenterX + blip.offsetX, radarCenterY + blip.offsetY, blip.color);
+                    const float radarCenterX = (31 * 8) + (51 / 2) + 2;
+                    const float radarCenterY = (200 - 11 - 8) - (51 / 2) - 2;
+                    const float radarXRadius = 113.0f / 5.0f;
+                    const float radarYRadius = 113.0f / 7.0f;
+                    const float northIconoffsetFromCenterX = -(radarXRadius * sin(m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f));
+                    const float northIconoffsetFromCenterY = -(radarYRadius * cos(m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f));
+                    const uint16_t northIconScreenOffsetX = (uint16_t)(radarCenterX + northIconoffsetFromCenterX - 3);
+                    const uint16_t northIconScreenOffsetY = (uint16_t)(radarCenterY + northIconoffsetFromCenterY - 3);
+                    renderer.Render2DPicture(m_game.GetEgaGraph()->GetSprite(m_game.GetNorthIconSprite()), northIconScreenOffsetX, northIconScreenOffsetY);
+                    renderer.RenderRadarBlip(radarCenterX, radarCenterY, EgaBrightWhite);
+
+                    for (uint16_t blipIndex = 0; blipIndex < m_radarModel.GetNumberOfBlips(); blipIndex++)
+                    {
+                        const radarBlip blip = m_radarModel.GetRadarBlip(blipIndex);
+                        renderer.RenderRadarBlip(radarCenterX + blip.offsetX, radarCenterY + blip.offsetY, blip.color);
+                    }
                 }
             }
         }

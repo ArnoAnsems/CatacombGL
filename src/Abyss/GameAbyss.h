@@ -36,7 +36,7 @@ public:
     const DecorateActor& GetExplosionActor() override;
     const DecorateActor& GetExplodingWallActor() override;
     const DecorateActor& GetPlayerActor() override;
-    void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory) override;
+    void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin) override;
     void DrawScroll(const uint8_t scrollIndex) override;
     void DrawFinal() override;
     GameMaps* GetGameMaps() override;
@@ -82,6 +82,7 @@ public:
     void PlaySoundWarpUpOrDown(const bool up) override;
     void PlaySoundWarp() override;
     void PlaySoundPortal() override;
+    const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
 
 private:
     void DrawHealth(const int16_t health);

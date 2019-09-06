@@ -471,7 +471,7 @@ const DecorateActor& GameAbyss::GetPlayerActor()
     return decoratePlayer;
 }
 
-void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory)
+void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin)
 {
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsAbyss::STATUSPIC), 0, 120);
     
@@ -885,4 +885,11 @@ void GameAbyss::PlaySoundWarp()
 void GameAbyss::PlaySoundPortal()
 {
 
+}
+
+static ViewPorts::ViewPortRect3D original3DViewArea = { 0, 120, 320, 120 };
+
+const ViewPorts::ViewPortRect3D& GameAbyss::GetOriginal3DViewArea()
+{
+    return original3DViewArea;
 }

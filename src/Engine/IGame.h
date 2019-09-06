@@ -30,6 +30,7 @@
 #include <map>
 #include "Actor.h"
 #include "PlayerInput.h"
+#include "ViewPorts.h"
 #include "../../ThirdParty//SDL/include/SDL_keycode.h"
 
 enum DifficultyLevel
@@ -47,7 +48,7 @@ public:
     virtual const DecorateActor& GetExplosionActor() = NULL;
     virtual const DecorateActor& GetExplodingWallActor() = NULL;
     virtual const DecorateActor& GetPlayerActor() = NULL;
-    virtual void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory) = NULL;
+    virtual void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin) = NULL;
     virtual void DrawScroll(const uint8_t scrollIndex) = NULL;
     virtual void DrawFinal() = NULL;
     virtual GameMaps* GetGameMaps() = NULL;
@@ -92,6 +93,7 @@ public:
     virtual void PlaySoundWarpUpOrDown(const bool up) = NULL;
     virtual void PlaySoundWarp() = NULL;
     virtual void PlaySoundPortal() = NULL;
+    virtual const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() = NULL;
 
 
 protected:

@@ -597,7 +597,7 @@ const uint8_t GameArmageddon::GetId() const
     return m_gameId;
 }
 
-void GameArmageddon::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory)
+void GameArmageddon::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin)
 {
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsArmageddon::STATUSPIC), 0, 120);
 
@@ -852,4 +852,11 @@ void GameArmageddon::PlaySoundWarp()
 void GameArmageddon::PlaySoundPortal()
 {
 
+}
+
+static ViewPorts::ViewPortRect3D original3DViewArea = { 0, 120, 320, 120 };
+
+const ViewPorts::ViewPortRect3D& GameArmageddon::GetOriginal3DViewArea()
+{
+    return original3DViewArea;
 }
