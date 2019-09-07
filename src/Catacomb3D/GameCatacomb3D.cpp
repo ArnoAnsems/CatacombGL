@@ -211,12 +211,17 @@ const uint8_t GameCatacomb3D::GetId() const
 
 void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin)
 {
-    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 0, 144);
     const uint16_t sideBarWidth = GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC)->GetWidth();
+    m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 0, 144, 0, 0, 320 - sideBarWidth, 56);
+    m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), wideScreenMargin, 144, 320 - sideBarWidth - 2, 0, sideBarWidth + 2, 56);
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC), 320 + wideScreenMargin - sideBarWidth, 0);
     if (wideScreenMargin > 0)
     {
         m_renderer.Render2DBar(0 - (int16_t)wideScreenMargin, 144, wideScreenMargin, 56, EgaRed);
+        if (wideScreenMargin > 2)
+        {
+            m_renderer.Render2DBar(320 - (int16_t)sideBarWidth, 144, wideScreenMargin - 2, 56, EgaRed);
+        }
     }
 
     m_renderer.RenderTextCentered(locationMessage.c_str(), GetEgaGraph()->GetFont(3), EgaBrightYellow, 144, 148);

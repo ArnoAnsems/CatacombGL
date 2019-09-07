@@ -105,6 +105,10 @@ void RendererStub::Render2DPicture(const Picture* /*picture*/, const uint16_t /*
 {
 }
 
+void RendererStub::Render2DPictureSegment(const Picture* /*picture*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/, const uint16_t /*segmentOffsetX*/, const uint16_t /*segmentOffsetY*/, const uint16_t /*segmentWidth*/, const uint16_t /*segmentHeight*/)
+{
+}
+
 void RendererStub::Render2DTileSize8Masked(const Picture* /*tiles*/, const uint16_t /*tileIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
 {
 }

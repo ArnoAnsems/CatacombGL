@@ -653,6 +653,43 @@ void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t
     glEnd();
 }
 
+void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight)
+{
+    if (picture == NULL)
+    {
+        // Nothing to render
+        return;
+    }
+
+    // Set the MODELVIEW matrix to the requested offset
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(GLfloat(offsetX), GLfloat(offsetY), 0.0f);
+
+    // Select the texture from the picture
+    glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
+    if (glGetError() == GL_INVALID_VALUE)
+    {
+        Logging::Instance().FatalError("Picture has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
+    }
+
+    // Do not wrap the texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
+
+    // Draw the texture as a quad
+    const GLint width = (uint16_t)picture->GetWidth();
+    const GLint height = (uint16_t)picture->GetHeight();
+    glBegin(GL_QUADS);
+    glTexCoord2f(segmentOffsetX / (float)picture->GetWidth(), (segmentOffsetY + segmentHeight) / (float)picture->GetHeight()); glVertex2i(segmentOffsetX, segmentOffsetY + segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / (float)picture->GetWidth(), (segmentOffsetY + segmentHeight) / (float)picture->GetHeight()); glVertex2i(segmentOffsetX + segmentWidth, segmentOffsetY + segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / (float)picture->GetWidth(), segmentOffsetY / (float)picture->GetHeight()); glVertex2i(segmentOffsetX + segmentWidth, segmentOffsetY);
+    glTexCoord2f(segmentOffsetX / (float)picture->GetWidth(), segmentOffsetY / (float)picture->GetHeight()); glVertex2i(segmentOffsetX, segmentOffsetY);
+    glEnd();
+}
+
 void RendererOpenGLWin32::Render2DTileSize8Masked(const Picture* tiles, const uint16_t tileIndex, const uint16_t offsetX, const uint16_t offsetY)
 {
     if (tiles == NULL ||
