@@ -31,7 +31,7 @@ public:
     bool IsVSyncSupported() override;
     unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) override;
     unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) override;
-    unsigned int LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) override;
+    unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const bool masked) override;
     unsigned int LoadFontIntoTexture(const bool* fontPicture) override;
 
     void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;

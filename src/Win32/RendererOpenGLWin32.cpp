@@ -284,13 +284,13 @@ unsigned int RendererOpenGLWin32::generateSingleColorTexture(const egaColor colo
     return textureId;
 }
 
-unsigned int RendererOpenGLWin32::LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk)
+unsigned int RendererOpenGLWin32::LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const bool masked)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t inputSizeOfTileInBytes = 40;
+    const uint32_t inputSizeOfTileInBytes = masked ? 40 : 32;
     const uint32_t numberOfPixelsInTile = 64; // 8 x 8
     const uint32_t numberOfTiles = decompressedChunk->GetSize() / inputSizeOfTileInBytes;
     GLubyte* textureImage = new GLubyte[numberOfTiles * numberOfPixelsInTile * bytesPerOutputPixel];
@@ -305,23 +305,45 @@ unsigned int RendererOpenGLWin32::LoadTilesSize8MaskedIntoTexture(const FileChun
         {
             for (uint32_t j = 0; j < 8; j++)
             {
-                const unsigned char bitValue = (1 << j);
-                const bool transparencyplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
-                const bool blueplane =         ((chunk[tileChunkOffset + i + planeSize] & bitValue) > 0);
-                const bool greenplane =        ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
-                const bool redplane =          ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
-                const bool intensityplane =    ((chunk[tileChunkOffset + i + (4 * planeSize)] & bitValue) > 0);
-                const egaColor colorIndex =
-                    (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
-                               (redplane ? EgaRed : EgaBlack) +
-                               (greenplane ? EgaGreen : EgaBlack) +
-                               (blueplane ? EgaBlue : EgaBlack));
-                const rgbColor outputColor = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
-                const uint32_t outputPixelOffset = tileTextureOffset + ((i * 8) + 7 - j) * bytesPerOutputPixel;
-                textureImage[outputPixelOffset] = outputColor.red;
-                textureImage[outputPixelOffset + 1] = outputColor.green;
-                textureImage[outputPixelOffset + 2] = outputColor.blue;
-                textureImage[outputPixelOffset + 3] = transparencyplane ? 0 : 255;
+                if (masked)
+                {
+                    const unsigned char bitValue = (1 << j);
+                    const bool transparencyplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                    const bool blueplane = ((chunk[tileChunkOffset + i + planeSize] & bitValue) > 0);
+                    const bool greenplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                    const bool redplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                    const bool intensityplane = ((chunk[tileChunkOffset + i + (4 * planeSize)] & bitValue) > 0);
+                    const egaColor colorIndex =
+                        (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                        (redplane ? EgaRed : EgaBlack) +
+                            (greenplane ? EgaGreen : EgaBlack) +
+                            (blueplane ? EgaBlue : EgaBlack));
+                    const rgbColor outputColor = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
+                    const uint32_t outputPixelOffset = tileTextureOffset + ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                    textureImage[outputPixelOffset] = outputColor.red;
+                    textureImage[outputPixelOffset + 1] = outputColor.green;
+                    textureImage[outputPixelOffset + 2] = outputColor.blue;
+                    textureImage[outputPixelOffset + 3] = transparencyplane ? 0 : 255;
+                }
+                else
+                {
+                    const unsigned char bitValue = (1 << j);
+                    const bool blueplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                    const bool greenplane = ((chunk[tileChunkOffset + i + (1 * planeSize)] & bitValue) > 0);
+                    const bool redplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                    const bool intensityplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                    const egaColor colorIndex =
+                        (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                        (redplane ? EgaRed : EgaBlack) +
+                            (greenplane ? EgaGreen : EgaBlack) +
+                            (blueplane ? EgaBlue : EgaBlack));
+                    const rgbColor outputColor = EgaToRgb(colorIndex);
+                    const uint32_t outputPixelOffset = tileTextureOffset + ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                    textureImage[outputPixelOffset] = outputColor.red;
+                    textureImage[outputPixelOffset + 1] = outputColor.green;
+                    textureImage[outputPixelOffset + 2] = outputColor.blue;
+                    textureImage[outputPixelOffset + 3] = 255;
+                }
             }
         }
     }

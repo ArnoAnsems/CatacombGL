@@ -931,6 +931,9 @@ typedef enum {
     BALLSPR,                     // 164
     BALL1PIXELTOTHERIGHTSPR,     // 165
 
+    FIRSTTILESIZE8 = 166,
+    FIRSTTILESIZE8MASKED = 167,
+
     LEVEL1TEXT = 456,
     LEVEL2TEXT,                  // 457
     LEVEL3TEXT,                  // 458
@@ -966,7 +969,8 @@ const egaGraphStaticData egaGraphCatacomb3D =
     FIRSTWALLPIC,
     CP_MENUMASKPICM,
     PADDLESPR,
-    CP_MENUMASKPICM,
+    FIRSTTILESIZE8,
+    FIRSTTILESIZE8MASKED,
     LEVEL1TEXT,
     LEVEL20TEXT,
     HAND1PICM

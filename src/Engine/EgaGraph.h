@@ -43,6 +43,7 @@ typedef struct egaGraphStaticData
     uint16_t indexOfFirstWallPicture;
     uint16_t indexOfFirstMaskedPicture;
     uint16_t indexOfFirstSprite;
+    uint16_t indexOfTileSize8;
     uint16_t indexOfTileSize8Masked;
     uint16_t indexOfFirstWorldLocationNames;
     uint16_t indexOfLastWorldLocationNames;
@@ -58,6 +59,7 @@ public:
     Picture* GetPicture(const uint16_t index);
     Picture* GetMaskedPicture(const uint16_t index);
     Picture* GetSprite(const uint16_t index);
+    Picture* GetTilesSize8();
     Picture* GetTilesSize8Masked();
     Font* GetFont(const uint16_t index);
     LevelLocationNames* GetWorldLocationNames(const uint16_t index);
@@ -76,6 +78,7 @@ private:
     Picture** m_pictures;
     Picture** m_maskedPictures;
     Picture** m_sprites;
+    Picture* m_tilesSize8;
     Picture* m_tilesSize8Masked;
     LevelLocationNames** m_worldLocationNames;
     Huffman* m_huffman;

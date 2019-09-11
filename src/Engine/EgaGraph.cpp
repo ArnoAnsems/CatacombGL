@@ -114,6 +114,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     }
 
     // Initialize tiles
+    m_tilesSize8 = NULL;
     m_tilesSize8Masked = NULL;
 
     // Initialize font
@@ -173,6 +174,11 @@ EgaGraph::~EgaGraph()
     if (m_font != NULL)
     {
         delete m_font;
+    }
+
+    if (m_tilesSize8 != NULL)
+    {
+        delete m_tilesSize8;
     }
 
     if (m_tilesSize8Masked != NULL)
@@ -253,6 +259,24 @@ Picture* EgaGraph::GetSprite(const uint16_t index)
     return m_sprites[pictureIndex]; 
 }
 
+Picture* EgaGraph::GetTilesSize8()
+{
+    if (m_tilesSize8 == NULL)
+    {
+        const uint16_t pictureIndex = m_staticData.indexOfTileSize8;
+        uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
+        uint32_t compressedSize = GetChunkSize(pictureIndex);
+        const uint16_t numTiles = 104;
+        uint32_t uncompressedSize = 32 * numTiles;
+        FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
+        const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, false);
+        m_tilesSize8 = new Picture(textureId, 8, 8 * numTiles);
+        delete pictureChunk;
+    }
+
+    return m_tilesSize8;
+}
+
 Picture* EgaGraph::GetTilesSize8Masked()
 {
     if (m_tilesSize8Masked == NULL)
@@ -260,10 +284,11 @@ Picture* EgaGraph::GetTilesSize8Masked()
         const uint16_t pictureIndex = m_staticData.indexOfTileSize8Masked;
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
         uint32_t compressedSize = GetChunkSize(pictureIndex);
-        uint32_t uncompressedSize = 40 * 12;
+        const uint16_t numTiles = 12;
+        uint32_t uncompressedSize = 40 * numTiles;
         FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
-        const unsigned int textureId = m_renderer.LoadTilesSize8MaskedIntoTexture(pictureChunk);
-        m_tilesSize8Masked = new Picture(textureId, 8, 8 * 12);
+        const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, true);
+        m_tilesSize8Masked = new Picture(textureId, 8, 8 * numTiles);
         delete pictureChunk;
     }
 

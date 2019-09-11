@@ -62,7 +62,7 @@ unsigned int RendererStub::LoadMaskedFileChunkIntoTexture(const FileChunk* /*dec
     return 0u;
 }
 
-unsigned int RendererStub::LoadTilesSize8MaskedIntoTexture(const FileChunk* /*decompressedChunk*/)
+unsigned int RendererStub::LoadTilesSize8IntoTexture(const FileChunk* /*decompressedChunk*/, const bool /*masked*/)
 {
     return 0;
 }

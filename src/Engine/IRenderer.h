@@ -62,7 +62,7 @@ public:
     virtual bool IsVSyncSupported() = NULL;
     virtual unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) = NULL;
     virtual unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) = NULL;
-    virtual unsigned int LoadTilesSize8MaskedIntoTexture(const FileChunk* decompressedChunk) = NULL;
+    virtual unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const bool masked) = NULL;
     virtual unsigned int LoadFontIntoTexture(const bool* fontPicture) = NULL;
 
     virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
