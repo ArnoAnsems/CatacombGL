@@ -48,7 +48,7 @@ public:
     virtual const DecorateActor& GetExplosionActor() = NULL;
     virtual const DecorateActor& GetExplodingWallActor() = NULL;
     virtual const DecorateActor& GetPlayerActor() = NULL;
-    virtual void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin) = NULL;
+    virtual void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex) = NULL;
     virtual void DrawScroll(const uint8_t scrollIndex) = NULL;
     virtual void DrawFinal() = NULL;
     virtual GameMaps* GetGameMaps() = NULL;
