@@ -82,7 +82,30 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 playerState->SetAngle((tile - 1) * 90.0f);
                 break;
             }
-
+            case 12:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll1);
+                break;
+            case 13:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll2);
+                break;
+            case 14:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll3);
+                break;
+            case 15:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll4);
+                break;
+            case 16:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll5);
+                break;
+            case 17:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll6);
+                break;
+            case 18:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll7);
+                break;
+            case 19:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll8);
+                break;
             default:
                 break;
             }
@@ -280,7 +303,9 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
 
 void GameCatacomb3D::DrawScroll(const uint8_t scrollIndex)
 {
-    // TODO
+    m_renderer.Render2DBar(0, 0, 320, 120, EgaBlack);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLLTOPPIC), 0, 0);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLL1PIC + scrollIndex), 0, 32);
 }
 
 void GameCatacomb3D::DrawFinal()

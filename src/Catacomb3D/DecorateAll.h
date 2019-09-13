@@ -23,6 +23,14 @@ const std::map<uint16_t, const DecorateActor> decorateCatacomb3DAll =
     std::make_pair(actorIdExplodingWall, decorateExplodingWall),
     std::make_pair(actorIdPlayer, decoratePlayer),
     std::make_pair(actorIdBonusExplosion, decorateExplosion),
+    std::make_pair(actorIdBonusScroll1, decorateScroll1),
+    std::make_pair(actorIdBonusScroll2, decorateScroll2),
+    std::make_pair(actorIdBonusScroll3, decorateScroll3),
+    std::make_pair(actorIdBonusScroll4, decorateScroll4),
+    std::make_pair(actorIdBonusScroll5, decorateScroll5),
+    std::make_pair(actorIdBonusScroll6, decorateScroll6),
+    std::make_pair(actorIdBonusScroll7, decorateScroll7),
+    std::make_pair(actorIdBonusScroll8, decorateScroll8),
     std::make_pair(actorIdProjectilePlayerShot, decoratePlayerShot),
 };
 
