@@ -82,6 +82,37 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 playerState->SetAngle((tile - 1) * 90.0f);
                 break;
             }
+            case 5:
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBolt);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 6:
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNuke);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 7:
+
+            {
+                Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decoratePotion);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActor;
+                break;
+            }
+            case 8:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyRed);
+                break;
+            case 9:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyYellow);
+                break;
+            case 10:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyGreen);
+                break;
+            case 11:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyBlue);
+                break;
             case 12:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll1);
                 break;
@@ -106,6 +137,12 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 19:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll8);
                 break;
+            case 21:
+            {
+                Actor* bonusActorChest = new Actor(x + 0.5f, y + 0.5f, 0, decorateChest);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActorChest;
+                break;
+            }
             default:
                 break;
             }

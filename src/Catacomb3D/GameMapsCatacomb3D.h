@@ -56,6 +56,139 @@ const std::vector<LevelInfo> gameMapsInfoCatacomb3D =
         EgaDarkGray,
         false,
         false
+    },
+    {
+        "Nemesis's Keep",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Ground Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Second Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Third Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Tower One",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Tower Two",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Secret Halls",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Access Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Dungeon",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Lower Dungeon",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Catacomb",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Lower Reaches",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Warrens",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Hidden Caverns",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Fens of Insanity",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Chaos Corridors",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Labyrinth",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Halls of Blood",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Nemesis's Lair",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
     }
 };
 
