@@ -52,7 +52,6 @@
 bool	active = true;		// Window Active Flag
 
 SDL_Window* SDLwindow = NULL;
-SDL_Renderer* SDLrenderer = NULL;
 SDL_GLContext glcontext = NULL;
 ScreenMode m_screenMode = Windowed;
 
@@ -91,7 +90,6 @@ bool GetCatacombsPackGOGPath(std::string& path)
 GLvoid KillGLWindow(GLvoid)
 {
     SDL_GL_DeleteContext(glcontext);
-    SDL_DestroyRenderer(SDLrenderer);
     SDL_DestroyWindow(SDLwindow);
 }
 
@@ -137,12 +135,6 @@ void CreateGLWindow(int width, int height, int bits)
     {
         // In the case that the window could not be made...
         Logging::Instance().FatalError("SDL_CreateWindow failed: " + std::string(SDL_GetError()));
-    }
-
-    SDLrenderer = SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED);
-    if (SDLrenderer == NULL)
-    {
-        Logging::Instance().FatalError("SDL_CreateRenderer failed: " + std::string(SDL_GetError()));
     }
 
     SDL_ShowWindow(SDLwindow);
