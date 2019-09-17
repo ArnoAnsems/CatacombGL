@@ -120,6 +120,20 @@ void CreateGLWindow(int width, int height, int bits)
 {
     Logging::Instance().AddLogMessage("Initializing OpenGL renderer");
 
+    // As a minimum OpenGL version 2.0 is required, due to non-power-of-two textures.
+    if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) != 0)
+    {
+        Logging::Instance().AddLogMessage("WARNING: call to SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION) failed: " + std::string(SDL_GetError()));
+    }
+    if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) != 0)
+    {
+        Logging::Instance().AddLogMessage("WARNING: call to SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION) failed: " + std::string(SDL_GetError()));
+    }
+    if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY) != 0)
+    {
+        Logging::Instance().AddLogMessage("WARNING: call to SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK) failed: " + std::string(SDL_GetError()));
+    }
+
     const std::string windowTitle = "CatacombGL " + EngineCore::GetVersionInfo();
     SDLwindow = SDL_CreateWindow(
         windowTitle.c_str(),                  // window title

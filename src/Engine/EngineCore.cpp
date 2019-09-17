@@ -230,7 +230,9 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == Victory || m_state == VerifyGateExit || m_state == ExitGame)
     {
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
-        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio), m_level->GetPlayerActor()->GetAngle(), m_level->GetLevelIndex());
+        const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
+        const uint8_t levelIndex = (m_level != 0) ? m_level->GetLevelIndex() : 0;
+        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio), playerAngle, levelIndex);
 
         if (m_state != Victory)
         {
