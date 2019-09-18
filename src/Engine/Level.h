@@ -47,7 +47,11 @@ typedef enum WallType
     WTVictory,
     WTDoor,
     WTDoorRedKeyRequired,
-    WTInvisibleWall
+    WTDoorYellowKeyRequired,
+    WTDoorGreenKeyRequired,
+    WTDoorBlueKeyRequired,
+    WTInvisibleWall,
+    WTDestructable
 } WallType;
 
 typedef struct WallInfo

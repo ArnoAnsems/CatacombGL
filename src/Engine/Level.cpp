@@ -261,6 +261,11 @@ bool Level::IsVisibleTile(const uint16_t x, const uint16_t y) const
 
 bool Level::IsExplosiveWall(const uint16_t x, const uint16_t y) const
 {
+    const uint16_t wallTile = GetWallTile(x, y);
+    if (wallTile < m_wallsInfo.size() && m_wallsInfo.at(wallTile).wallType == WTDestructable)
+    {
+        return true;
+    }
     const uint16_t spot = (GetFloorTile(x,y) >> 8);
     return (spot == 0xfc);
 }
@@ -268,7 +273,13 @@ bool Level::IsExplosiveWall(const uint16_t x, const uint16_t y) const
 bool Level::IsDoor(const uint16_t x, const uint16_t y) const
 {
     const uint16_t wallTile = GetWallTile(x, y);
-    return ((wallTile < m_wallsInfo.size()) && (m_wallsInfo.at(wallTile).wallType == WTDoor || m_wallsInfo.at(wallTile).wallType == WTDoorRedKeyRequired));
+    return
+        ((wallTile < m_wallsInfo.size()) &&
+         (m_wallsInfo.at(wallTile).wallType == WTDoor ||
+          m_wallsInfo.at(wallTile).wallType == WTDoorRedKeyRequired ||
+          m_wallsInfo.at(wallTile).wallType == WTDoorYellowKeyRequired || 
+          m_wallsInfo.at(wallTile).wallType == WTDoorGreenKeyRequired || 
+          m_wallsInfo.at(wallTile).wallType == WTDoorBlueKeyRequired));
 }
 
 bool Level::IsRemovableDoor(const uint16_t x, const uint16_t y) const
@@ -301,6 +312,18 @@ KeyId Level::GetRequiredKeyForDoor(const uint16_t x, const uint16_t y) const
     if (m_wallsInfo.at(tile).wallType == WTDoorRedKeyRequired)
     {
         return RedKey;
+    }
+    if (m_wallsInfo.at(tile).wallType == WTDoorYellowKeyRequired)
+    {
+        return YellowKey;
+    }
+    if (m_wallsInfo.at(tile).wallType == WTDoorGreenKeyRequired)
+    {
+        return GreenKey;
+    }
+    if (m_wallsInfo.at(tile).wallType == WTDoorBlueKeyRequired)
+    {
+        return BlueKey;
     }
     const uint16_t spot = (y < m_levelHeight - 1) ? (GetFloorTile(x, y + 1) >> 8) : 0;
     return (spot > 0 && spot < 5) ? (KeyId)(spot - 1) : NoKey;
