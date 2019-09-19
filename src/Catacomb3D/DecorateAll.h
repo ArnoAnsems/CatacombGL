@@ -17,6 +17,7 @@
 #include "DecorateMisc.h"
 #include "DecorateProjectiles.h"
 #include "DecorateBonus.h"
+#include "DecorateMonsters.h"
 
 const std::map<uint16_t, const DecorateActor> decorateCatacomb3DAll =
 {
@@ -39,6 +40,8 @@ const std::map<uint16_t, const DecorateActor> decorateCatacomb3DAll =
     std::make_pair(actorIdBonusKeyYellow, decorateKeyYellow),
     std::make_pair(actorIdBonusKeyGreen, decorateKeyGreen),
     std::make_pair(actorIdBonusKeyBlue, decorateKeyBlue),
+    std::make_pair(actorIdMonsterOrc, decorateOrc),
+    std::make_pair(actorIdMonsterTroll, decorateTroll),
     std::make_pair(actorIdProjectilePlayerShot, decoratePlayerShot),
 };
 

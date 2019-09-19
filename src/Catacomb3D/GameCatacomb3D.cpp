@@ -143,6 +143,38 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = bonusActorChest;
                 break;
             }
+            case 41:
+                if (difficultyLevel < Hard)
+                {
+                    break;
+                }
+            case 36:
+                if (difficultyLevel < Normal)
+                {
+                    break;
+                }
+            case 22:
+            {
+                Actor* trollActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateTroll);
+                actors[(y * level->GetLevelWidth()) + x] = trollActor;
+                break;
+            }
+            case 42:
+                if (difficultyLevel < Hard)
+                {
+                    break;
+                }
+            case 37:
+                if (difficultyLevel < Normal)
+                {
+                    break;
+                }
+            case 23:
+            {
+                Actor* orcActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateOrc);
+                actors[(y * level->GetLevelWidth()) + x] = orcActor;
+                break;
+            }
             default:
                 break;
             }
@@ -279,7 +311,15 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     const uint16_t compasPictureIndex = COMPAS1PIC + ((uint16_t)((playerAngle + 11.25f) / 22.5f) % 16);
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(compasPictureIndex), 320 + wideScreenMargin - sideBarWidth, 144);
 
-    m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetWidth(), GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetHeight());
+    // Health status
+    if (health < 100)
+    {
+        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::NOBODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::NOBODYPIC)->GetWidth(), GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetHeight());
+    }
+    if (health > 0)
+    {
+        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetWidth(), (uint16_t)(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetHeight() * (health / 100.0f)));
+    }
 
     m_renderer.RenderTextCentered(std::to_string(levelIndex + 1).c_str(), m_egaGraph->GetFont(3), EgaBrightYellow, 12, 148);
 

@@ -45,6 +45,9 @@
     <ClInclude Include="DecorateBonus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DecorateMonsters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewCatacomb3D.cpp">
