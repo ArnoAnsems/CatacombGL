@@ -175,6 +175,9 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = orcActor;
                 break;
             }
+            case 24:
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpToLevel);
+                break;
             default:
                 break;
             }

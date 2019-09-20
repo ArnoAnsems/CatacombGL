@@ -1443,8 +1443,20 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     case ActionWarpToOtherLevel:
     {
-        const uint8_t nextLevel = m_level->GetFloorTile(actor->GetTileX(), actor->GetTileY() + 1) >> 8;
-        m_warpToLevel = nextLevel;
+        if (m_game.GetId() == 5)
+        {
+            // Catacomb 3D
+            const uint8_t wallTile = m_level->GetWallTile(actor->GetTileX(), actor->GetTileY());
+            const uint8_t nextLevel = (wallTile > 180) ? wallTile - 181 : m_level->GetLevelIndex() + 1;
+            m_warpToLevel = nextLevel;
+        }
+        else
+        {
+            // Catacomb Adventure Series
+            const uint8_t nextLevel = m_level->GetFloorTile(actor->GetTileX(), actor->GetTileY() + 1) >> 8;
+            m_warpToLevel = nextLevel;
+        }
+        
         m_game.PlaySoundWarpUpOrDown(true);
         actor->SetActionPerformed(true);
         break;

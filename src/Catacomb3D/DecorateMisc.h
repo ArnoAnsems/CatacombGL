@@ -26,6 +26,7 @@
 
 const uint16_t actorIdNone = 0;
 const uint16_t actorIdExplodingWall = 4;
+const uint16_t actorIdWarpToLevel = 5;
 const uint16_t actorIdPlayer = 11;
 
 //
@@ -64,6 +65,60 @@ const DecorateActor decorateExplodingWall =
     EgaBrightWhite,   // radarColor;
     explodingWallStates,
     StateIdDead,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// WARP TO LEVEL
+//
+
+const DecorateAnimation warpToLevelWaitForPickupAnimation =
+{
+    { WARP1PIC, 12, ActionWaitForPickup },
+    { WARP2PIC, 12, ActionWaitForPickup },
+    { WARP3PIC, 12, ActionWaitForPickup },
+    { WARP4PIC, 12, ActionWaitForPickup }
+};
+
+const DecorateState warpToLevelStateWaitForPickup =
+{
+    warpToLevelWaitForPickupAnimation,
+    StateIdWaitForPickup // Loop
+};
+
+const DecorateAnimation warpToLevelPickupAnimation =
+{
+    { WARP1PIC, 12, ActionWarpToOtherLevel }
+};
+
+const DecorateState warpToLevelStatePickup =
+{
+    warpToLevelPickupAnimation,
+    StateIdWaitForPickup
+};
+
+const std::map<DecorateStateId, DecorateState> warpToLevelStates =
+{
+    std::make_pair(StateIdWaitForPickup, warpToLevelStateWaitForPickup),
+    std::make_pair(StateIdPickup, warpToLevelStatePickup)
+};
+
+const DecorateActor decorateWarpToLevel =
+{
+    actorIdWarpToLevel,   // Id
+    24, // spawnOnAllDifficulties;
+    24, // spawnOnNormalAndHard;
+    24,  // spawnOnHard
+    1,  // initialHealth;
+    0.333f,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    warpToLevelStates,
+    StateIdWaitForPickup,   // initialState;
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
