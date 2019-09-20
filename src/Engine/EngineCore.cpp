@@ -2413,7 +2413,7 @@ void EngineCore::PlayerUsesPotion()
 
 void EngineCore::ShowGodModeCheatDialog()
 {
-    if (m_state == InGame)
+    if (m_state == InGame && m_level != NULL && m_level->GetPlayerActor()->GetHealth() > 0)
     {
         m_state = GodModeCheatDialog;
         m_godModeIsOn = !m_godModeIsOn;
@@ -2423,7 +2423,7 @@ void EngineCore::ShowGodModeCheatDialog()
 
 void EngineCore::ShowWarpCheatDialog()
 {
-    if (m_state == InGame)
+    if (m_state == InGame && m_level != NULL && m_level->GetPlayerActor()->GetHealth() > 0)
     {
         m_state = WarpCheatDialog;
         m_gameTimer.Pause();
@@ -2432,7 +2432,7 @@ void EngineCore::ShowWarpCheatDialog()
 
 void EngineCore::ShowFreeItemsCheatDialog()
 {
-    if (m_state == InGame)
+    if (m_state == InGame && m_level != NULL && m_level->GetPlayerActor()->GetHealth() > 0)
     {
         m_state = FreeItemsCheatDialog;
         for (uint8_t i = 0; i < 4; i++)
