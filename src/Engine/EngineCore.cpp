@@ -414,21 +414,21 @@ void EngineCore::DrawTiledWindow(IRenderer& renderer, const uint16_t x, const ui
 
     renderer.Render2DBar(x * 8, y * 8, width * 8, height * 8, EgaLightGray);
 
-    renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 0, sx, sy);
-    renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 6, sx, sy + sh);
+    renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(0), sx, sy);
+    renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(6), sx, sy + sh);
 
     for (uint16_t i = sx + 8;i <= sx + sw - 8;i += 8)
     {
-        renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 1, i, sy);
-        renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 7, i, sy + sh);
+        renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(1), i, sy);
+        renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(7), i, sy + sh);
     }
-    renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 2, sx + sw, sy);
-    renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 8, sx + sw, sy + sh);
+    renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(2), sx + sw, sy);
+    renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(8), sx + sw, sy + sh);
 
     for (uint16_t i = sy + 8;i <= sy + sh - 8;i += 8)
     {
-        renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 3, sx, i);
-        renderer.Render2DTileSize8Masked(m_game.GetEgaGraph()->GetTilesSize8Masked(), 5, sx + sw, i);
+        renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(3), sx, i);
+        renderer.Render2DPicture(m_game.GetEgaGraph()->GetTilesSize8Masked(5), sx + sw, i);
     }
 }
 
@@ -1446,8 +1446,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         if (m_game.GetId() == 5)
         {
             // Catacomb 3D
-            const uint8_t wallTile = m_level->GetWallTile(actor->GetTileX(), actor->GetTileY());
-            const uint8_t nextLevel = (wallTile > 180) ? wallTile - 181 : m_level->GetLevelIndex() + 1;
+            const uint16_t wallTile = m_level->GetWallTile(actor->GetTileX(), actor->GetTileY());
+            const uint8_t nextLevel = (wallTile > 180) ? (uint8_t)(wallTile - 181) : m_level->GetLevelIndex() + 1;
             m_warpToLevel = nextLevel;
         }
         else

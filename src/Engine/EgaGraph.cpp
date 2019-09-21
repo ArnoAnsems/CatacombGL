@@ -24,6 +24,9 @@
 #include "SpriteTable.h"
 #include "LevelLocationNames.h"
 
+static const uint16_t numTilesSize8 = 104;
+static const uint16_t numTilesSize8Masked = 12;
+
 EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer) :
     m_staticData(staticData),
     m_renderer(renderer)
@@ -114,8 +117,16 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     }
 
     // Initialize tiles
-    m_tilesSize8 = NULL;
-    m_tilesSize8Masked = NULL;
+    m_tilesSize8 = new Picture*[numTilesSize8];
+    for (uint16_t i = 0; i < numTilesSize8; i++)
+    {
+        m_tilesSize8[i] = NULL;
+    }
+    m_tilesSize8Masked = new Picture*[numTilesSize8Masked];
+    for (uint16_t i = 0; i < numTilesSize8Masked; i++)
+    {
+        m_tilesSize8Masked[i] = NULL;
+    }
 
     // Initialize font
     m_font = NULL;
@@ -178,11 +189,25 @@ EgaGraph::~EgaGraph()
 
     if (m_tilesSize8 != NULL)
     {
-        delete m_tilesSize8;
+        for (uint16_t i = 0; i < numTilesSize8; i++)
+        {
+            if (m_tilesSize8[i] != NULL)
+            {
+                delete m_tilesSize8[i];
+            }
+        }
+        delete[] m_tilesSize8;
     }
 
     if (m_tilesSize8Masked != NULL)
     {
+        for (uint16_t i = 0; i < numTilesSize8Masked; i++)
+        {
+            if (m_tilesSize8Masked[i] != NULL)
+            {
+                delete m_tilesSize8Masked[i];
+            }
+        }
         delete m_tilesSize8Masked;
     }
 
@@ -259,40 +284,59 @@ Picture* EgaGraph::GetSprite(const uint16_t index)
     return m_sprites[pictureIndex]; 
 }
 
-Picture* EgaGraph::GetTilesSize8()
+Picture* EgaGraph::GetTilesSize8(const uint16_t index)
 {
-    if (m_tilesSize8 == NULL)
+    if (index >= numTilesSize8)
+    {
+        return NULL;
+    }
+
+    if (m_tilesSize8[index] == NULL)
     {
         const uint16_t pictureIndex = m_staticData.indexOfTileSize8;
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
         uint32_t compressedSize = GetChunkSize(pictureIndex);
-        const uint16_t numTiles = 104;
-        uint32_t uncompressedSize = 32 * numTiles;
+        uint32_t uncompressedSize = 32 * numTilesSize8;
         FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
-        const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, false);
-        m_tilesSize8 = new Picture(textureId, 8, 8 * numTiles);
+
+        // Just load all the tiles at once, such that the pictureChunk only needs to be decompressed once.
+        for (uint16_t i = 0; i < numTilesSize8; i++)
+        {
+            const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, i, false);
+            m_tilesSize8[i] = new Picture(textureId, 8, 8);
+        }
+
         delete pictureChunk;
     }
 
-    return m_tilesSize8;
+    return m_tilesSize8[index];
 }
 
-Picture* EgaGraph::GetTilesSize8Masked()
+Picture* EgaGraph::GetTilesSize8Masked(const uint16_t index)
 {
-    if (m_tilesSize8Masked == NULL)
+    if (index >= numTilesSize8Masked)
+    {
+        return NULL;
+    }
+
+    if (m_tilesSize8Masked[index] == NULL)
     {
         const uint16_t pictureIndex = m_staticData.indexOfTileSize8Masked;
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
         uint32_t compressedSize = GetChunkSize(pictureIndex);
-        const uint16_t numTiles = 12;
-        uint32_t uncompressedSize = 40 * numTiles;
+        uint32_t uncompressedSize = 40 * numTilesSize8Masked;
         FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
-        const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, true);
-        m_tilesSize8Masked = new Picture(textureId, 8, 8 * numTiles);
+
+        // Just load all the tiles at once, such that the pictureChunk only needs to be decompressed once.
+        for (uint16_t i = 0; i < numTilesSize8Masked; i++)
+        {
+            const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, i, true);
+            m_tilesSize8Masked[i] = new Picture(textureId, 8, 8);
+        }
         delete pictureChunk;
     }
 
-    return m_tilesSize8Masked;
+    return m_tilesSize8Masked[index];
 }
 
 Font* EgaGraph::GetFont(const uint16_t index)

@@ -31,7 +31,7 @@ public:
     bool IsVSyncSupported() override;
     unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) override;
     unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) override;
-    unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const bool masked) override;
+    unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) override;
     unsigned int LoadFontIntoTexture(const bool* fontPicture) override;
 
     void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
@@ -44,7 +44,6 @@ public:
     void Unprepare2DRendering() override;
     void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) override;
     void Render2DPictureSegment(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) override;
-    void Render2DTileSize8Masked(const Picture* tiles, const uint16_t tileIndex, const uint16_t offsetX, const uint16_t offsetY) override;
     void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) override;
     void RenderRadarBlip(const float x, const float y, const egaColor colorIndex) override;
 

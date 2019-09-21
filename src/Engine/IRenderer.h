@@ -62,7 +62,7 @@ public:
     virtual bool IsVSyncSupported() = NULL;
     virtual unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) = NULL;
     virtual unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) = NULL;
-    virtual unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const bool masked) = NULL;
+    virtual unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) = NULL;
     virtual unsigned int LoadFontIntoTexture(const bool* fontPicture) = NULL;
 
     virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
@@ -75,7 +75,6 @@ public:
     virtual void Unprepare2DRendering() = NULL;
     virtual void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) = NULL;
     virtual void Render2DPictureSegment(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) = NULL;
-    virtual void Render2DTileSize8Masked(const Picture* tiles, const uint16_t tileIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
     virtual void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) = NULL;
     virtual void RenderRadarBlip(const float x, const float y, const egaColor colorIndex) = NULL;
 

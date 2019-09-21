@@ -337,17 +337,17 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     const uint8_t numBoltsToShow = (playerInventory.GetBolts() < maxItemsToShow) ? playerInventory.GetBolts() : maxItemsToShow;
     for (uint8_t i = 0; i < numBoltsToShow; i++)
     {
-        m_renderer.Render2DTileSize8Masked(GetEgaGraph()->GetTilesSize8(), BOLTCHAR, 56 + (i * 8), 165);
+        m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(BOLTCHAR), 56 + (i * 8), 165);
     }
     const uint8_t numNukesToShow = (playerInventory.GetNukes() < maxItemsToShow) ? playerInventory.GetNukes() : maxItemsToShow;
     for (uint8_t i = 0; i < numNukesToShow; i++)
     {
-        m_renderer.Render2DTileSize8Masked(GetEgaGraph()->GetTilesSize8(), NUKECHAR, 56 + (i * 8), 175);
+        m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(NUKECHAR), 56 + (i * 8), 175);
     }
     const uint8_t numPotionsToShow = (playerInventory.GetPotions() < maxItemsToShow) ? playerInventory.GetPotions() : maxItemsToShow;
     for (uint8_t i = 0; i < numPotionsToShow; i++)
     {
-        m_renderer.Render2DTileSize8Masked(GetEgaGraph()->GetTilesSize8(), POTIONCHAR, 56 + (i * 8), 185);
+        m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(POTIONCHAR), 56 + (i * 8), 185);
     }
 
     uint8_t x = 24;
@@ -356,7 +356,7 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
         const uint8_t numKeysToShow = playerInventory.GetKeys(i) > 2 ? 2 : playerInventory.GetKeys(i);
         for (uint8_t j = 0; j < numKeysToShow; j++)
         {
-            m_renderer.Render2DTileSize8Masked(GetEgaGraph()->GetTilesSize8(), KEYCHARS + i, (x * 8), 165);
+            m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(KEYCHARS + i), (x * 8), 165);
             x++;
         }
     }
@@ -365,7 +365,7 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     {
         if (playerInventory.GetScroll(i))
         {
-            m_renderer.Render2DTileSize8Masked(GetEgaGraph()->GetTilesSize8(), SCROLLCHARS + i, 192 + (i * 8), 175);
+            m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(SCROLLCHARS + i), 192 + (i * 8), 175);
         }
     }
     
