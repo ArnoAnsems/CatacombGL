@@ -178,7 +178,8 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
         else
         {
-            renderer.Render2DPicture(m_game.GetEgaGraph()->GetMaskedPicture(m_game.GetEgaGraph()->GetHandPictureIndex()), 120, 120 - m_playerActions.GetHandHeight()/*50*/);
+            const uint16_t statusbarHeight = (m_game.GetId() == 5) ? 144 : 120;
+            renderer.Render2DPicture(m_game.GetEgaGraph()->GetMaskedPicture(m_game.GetEgaGraph()->GetHandPictureIndex()), 120, statusbarHeight - m_playerActions.GetHandHeight()/*50*/);
                     
 #ifdef DRAWTILEINFO
             char tileStr[40];

@@ -51,7 +51,7 @@ public:
     void Prepare2DRendering(const bool helpWindow) override;
     void Unprepare2DRendering() override;
     void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) override;
-    void Render2DPictureSegment(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) override;
+    void Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) override;
     void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) override;
     void RenderRadarBlip(const float x, const float y, const egaColor colorIndex) override;
 

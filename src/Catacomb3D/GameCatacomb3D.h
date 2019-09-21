@@ -84,6 +84,8 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
 
 private:
+    void DrawStatusBarWideScreenMargin(const int16_t offsetX, const int16_t marginWidth);
+
     IIntroView* m_introView;
     const uint8_t m_gameId;
     const std::string m_gamePath;

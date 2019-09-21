@@ -671,7 +671,7 @@ void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t
     glEnd();
 }
 
-void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight)
+void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight)
 {
     if (picture == NULL)
     {
@@ -698,13 +698,13 @@ void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const u
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
 
     // Draw the texture as a quad
-    const GLint width = (uint16_t)picture->GetWidth();
-    const GLint height = (uint16_t)picture->GetHeight();
+    const GLfloat width = (GLfloat)picture->GetWidth();
+    const GLfloat height = (GLfloat)picture->GetHeight();
     glBegin(GL_QUADS);
-    glTexCoord2f(segmentOffsetX / (float)picture->GetWidth(), (segmentOffsetY + segmentHeight) / (float)picture->GetHeight()); glVertex2i(segmentOffsetX, segmentOffsetY + segmentHeight);
-    glTexCoord2f((segmentOffsetX + segmentWidth) / (float)picture->GetWidth(), (segmentOffsetY + segmentHeight) / (float)picture->GetHeight()); glVertex2i(segmentOffsetX + segmentWidth, segmentOffsetY + segmentHeight);
-    glTexCoord2f((segmentOffsetX + segmentWidth) / (float)picture->GetWidth(), segmentOffsetY / (float)picture->GetHeight()); glVertex2i(segmentOffsetX + segmentWidth, segmentOffsetY);
-    glTexCoord2f(segmentOffsetX / (float)picture->GetWidth(), segmentOffsetY / (float)picture->GetHeight()); glVertex2i(segmentOffsetX, segmentOffsetY);
+    glTexCoord2f(segmentOffsetX / width, (segmentOffsetY + segmentHeight) / height); glVertex2i(0, segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / width, (segmentOffsetY + segmentHeight) / height); glVertex2i(segmentWidth, segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / width, segmentOffsetY / height); glVertex2i(segmentWidth, 0);
+    glTexCoord2f(segmentOffsetX / width, segmentOffsetY / height); glVertex2i(0, 0);
     glEnd();
 }
 

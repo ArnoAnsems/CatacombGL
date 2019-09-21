@@ -20,16 +20,27 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Engine", "..\src
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Test", "..\src\Test\CatacombGL_Test.vcxproj", "{B9829A4E-8123-4909-AE38-8671C48D7322}"
 	ProjectSection(ProjectDependencies) = postProject
+		{D48C1E73-C633-49B3-9570-08113DDE8661} = {D48C1E73-C633-49B3-9570-08113DDE8661}
 		{D48C1E73-C633-49B3-9570-08113DDE8664} = {D48C1E73-C633-49B3-9570-08113DDE8664}
 		{D48C1E73-C633-49B3-9570-08113DDE8665} = {D48C1E73-C633-49B3-9570-08113DDE8665}
+		{B9D720B1-EAAA-4F6A-8138-4295E2EBA88C} = {B9D720B1-EAAA-4F6A-8138-4295E2EBA88C}
 		{6F21DCE2-9A0B-47EA-82E3-5708A0F6672E} = {6F21DCE2-9A0B-47EA-82E3-5708A0F6672E}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Armageddon", "..\src\Armageddon\Armageddon.vcxproj", "{D48C1E73-C633-49B3-9570-08113DDE8664}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6F21DCE2-9A0B-47EA-82E3-5708A0F6672E} = {6F21DCE2-9A0B-47EA-82E3-5708A0F6672E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Apocalypse", "..\src\Apocalypse\Apocalypse.vcxproj", "{B9D720B1-EAAA-4F6A-8138-4295E2EBA88C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6F21DCE2-9A0B-47EA-82E3-5708A0F6672E} = {6F21DCE2-9A0B-47EA-82E3-5708A0F6672E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatacombGL_Catacomb3D", "..\src\Catacomb3D\Catacomb3D.vcxproj", "{D48C1E73-C633-49B3-9570-08113DDE8661}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6F21DCE2-9A0B-47EA-82E3-5708A0F6672E} = {6F21DCE2-9A0B-47EA-82E3-5708A0F6672E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

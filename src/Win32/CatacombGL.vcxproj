@@ -152,7 +152,7 @@
     <Link>
       <AdditionalOptions>
       </AdditionalOptions>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;..\..\bin\x64\CatacombGL_Apocalypse.lib;..\..\bin\x64\CatacombGLCatacomb3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;Shlwapi.lib;..\..\ThirdParty\SDL\lib\x64\SDL2.lib;..\..\bin\x64\CatacombGL_Engine.lib;..\..\bin\x64\CatacombGL_Abyss.lib;..\..\bin\x64\CatacombGL_Armageddon.lib;..\..\bin\x64\CatacombGL_Apocalypse.lib;..\..\bin\x64\CatacombGL_Catacomb3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(OutDir)\CatacombGL.pdb</ProgramDatabaseFile>

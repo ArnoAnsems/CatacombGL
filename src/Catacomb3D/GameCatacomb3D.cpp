@@ -304,11 +304,37 @@ const uint8_t GameCatacomb3D::GetId() const
     return m_gameId;
 }
 
+void GameCatacomb3D::DrawStatusBarWideScreenMargin(const int16_t offsetX, const int16_t marginWidth)
+{
+    if (marginWidth > 0 && marginWidth < 8)
+    {
+        m_renderer.Render2DBar(offsetX, 144, marginWidth, 56, EgaLightGray);
+    }
+
+    if (marginWidth >= 8)
+    {
+        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), offsetX, 144, 0, 0, 4, 56);
+        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), offsetX + marginWidth - 4, 144, 258, 0, 4, 56);
+
+        if (marginWidth > 8)
+        {
+            int16_t remainingWidth = marginWidth - 8;
+
+            while (remainingWidth > 0)
+            {
+                const int16_t segmentWidth = (remainingWidth >= 10) ? 10 : remainingWidth;
+                m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), offsetX + marginWidth - 4 - remainingWidth, 144, 50, 0, segmentWidth, 56);
+                remainingWidth -= segmentWidth;
+            }
+        }
+    }
+}
+
 void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex)
 {
     const uint16_t sideBarWidth = GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC)->GetWidth();
     m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 0, 144, 0, 0, 320 - sideBarWidth, 56);
-    m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), wideScreenMargin, 144, 320 - sideBarWidth - 2, 0, sideBarWidth + 2, 56);
+    m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 320 + wideScreenMargin - sideBarWidth - 2, 144, 320 - sideBarWidth - 2, 0, sideBarWidth + 2, 56);
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC), 320 + wideScreenMargin - sideBarWidth, 0);
 
     const uint16_t compasPictureIndex = COMPAS1PIC + ((uint16_t)((playerAngle + 11.25f) / 22.5f) % 16);
@@ -368,15 +394,12 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
             m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(SCROLLCHARS + i), 192 + (i * 8), 175);
         }
     }
+
+    // Score
+    m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(NUMBERCHARS), 248, 185);
     
-    if (wideScreenMargin > 0)
-    {
-        m_renderer.Render2DBar(0 - (int16_t)wideScreenMargin, 144, wideScreenMargin, 56, EgaRed);
-        if (wideScreenMargin > 2)
-        {
-            m_renderer.Render2DBar(320 - (int16_t)sideBarWidth, 144, wideScreenMargin - 2, 56, EgaRed);
-        }
-    }
+    DrawStatusBarWideScreenMargin(0 - wideScreenMargin, wideScreenMargin);
+    DrawStatusBarWideScreenMargin(320 - sideBarWidth - 2, wideScreenMargin);
 
     m_renderer.RenderTextCentered(locationMessage.c_str(), GetEgaGraph()->GetFont(3), EgaBrightYellow, 144, 148);
 }
