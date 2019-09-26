@@ -178,6 +178,28 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 24:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpToLevel);
                 break;
+            case 44:
+                if (difficultyLevel < Hard)
+                {
+                    break;
+                }
+            case 39:
+                if (difficultyLevel < Normal)
+                {
+                    break;
+                }
+            case 26:
+            {
+                Actor* demonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateDemon);
+                actors[(y * level->GetLevelWidth()) + x] = demonActor;
+                break;
+            }
+            case 28:
+            {
+                Actor* nemesisActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNemesis);
+                actors[(y * level->GetLevelWidth()) + x] = nemesisActor;
+                break;
+            }
             default:
                 break;
             }

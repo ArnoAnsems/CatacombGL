@@ -1886,11 +1886,45 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 WaitForAnyKeyPressed();
                 m_game.PlaySoundHitGate();
             }
-            else if (m_level->IsRemovableDoor(tileX, tileY))
+            else if (m_level->IsRemovableDoor(tileX, tileY) ||
+                     m_game.GetId() == 5) // All doors in the Catacomb 3-D can be removed
             {
                 // Open the door
                 m_level->SetWallTile(tileX, tileY, 0);
                 m_level->SetFloorTile(tileX, tileY, 0);
+
+                // Open connected door tiles which require the same key in all four directions
+                if (requiredKey != NoKey)
+                {
+                    uint16_t x = tileX - 1;
+                    while (x > 1 && m_level->GetRequiredKeyForDoor(x, tileY) == requiredKey)
+                    {
+                        m_level->SetWallTile(x, tileY, 0);
+                        m_level->SetFloorTile(x, tileY, 0);
+                        x--;
+                    }
+                    x = tileX + 1;
+                    while (x < m_level->GetLevelWidth() - 1 && m_level->GetRequiredKeyForDoor(x, tileY) == requiredKey)
+                    {
+                        m_level->SetWallTile(x, tileY, 0);
+                        m_level->SetFloorTile(x, tileY, 0);
+                        x++;
+                    }
+                    uint16_t y = tileY - 1;
+                    while (y > 1 && m_level->GetRequiredKeyForDoor(tileX, y) == requiredKey)
+                    {
+                        m_level->SetWallTile(tileX, y, 0);
+                        m_level->SetFloorTile(tileX, y, 0);
+                        y--;
+                    }
+                    y = tileY + 1;
+                    while (y < m_level->GetLevelHeight() - 1 && m_level->GetRequiredKeyForDoor(tileX, y) == requiredKey)
+                    {
+                        m_level->SetWallTile(tileX, y, 0);
+                        m_level->SetFloorTile(tileX, y, 0);
+                        y++;
+                    }
+                }
             }
             else if (m_level->IsExitDoor(tileX, tileY))
             {

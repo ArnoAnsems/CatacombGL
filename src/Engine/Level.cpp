@@ -309,6 +309,12 @@ bool Level::IsBlockedDoor(const uint16_t x, const uint16_t y) const
 KeyId Level::GetRequiredKeyForDoor(const uint16_t x, const uint16_t y) const
 {
     const uint16_t tile = GetWallTile(x, y);
+    if (tile >= m_wallsInfo.size())
+    {
+        // This is a floor tile
+        return NoKey;
+    }
+
     if (m_wallsInfo.at(tile).wallType == WTDoorRedKeyRequired)
     {
         return RedKey;

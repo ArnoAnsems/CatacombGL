@@ -25,6 +25,7 @@
 #include "AudioRepositoryCatacomb3D.h"
 
 const uint16_t actorIdProjectilePlayerShot = 70;
+const uint16_t actorIdProjectileMageShot = 72;
 
 //
 // PLAYER SHOT
@@ -73,6 +74,47 @@ const DecorateActor decoratePlayerShot =
     playerShotStates,
     StateIdProjectileFly,   // initialState;
     1,  // damage;
+    0, // hitSound;
+    10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// MAGE SHOT
+//
+
+const DecorateAnimation mageShotFlyAnimation =
+{
+    { PSHOT1PIC , 8, ActionMonsterProjectile },
+    { PSHOT2PIC , 8, ActionMonsterProjectile }
+};
+
+const DecorateState mageShotStateFly =
+{
+    mageShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> mageShotStates =
+{
+    std::make_pair(StateIdProjectileFly, mageShotStateFly),
+    std::make_pair(StateIdDying, playerShotStateDying)
+};
+
+const DecorateActor decorateMageShot =
+{
+    actorIdProjectileMageShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    14 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    mageShotStates,
+    StateIdProjectileFly,   // initialState;
+    4,  // damage;
     0, // hitSound;
     10000,    // speed;
     0, // actionParameter
