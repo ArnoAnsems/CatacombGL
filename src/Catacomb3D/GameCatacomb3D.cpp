@@ -137,6 +137,12 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 19:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll8);
                 break;
+            case 20:
+            {
+                Actor* bonusActorGrelminar = new Actor(x + 0.5f, y + 0.5f, 0, decorateGrelminar);
+                actors[(y * level->GetLevelWidth()) + x] = bonusActorGrelminar;
+                break;
+            }
             case 21:
             {
                 Actor* bonusActorChest = new Actor(x + 0.5f, y + 0.5f, 0, decorateChest);

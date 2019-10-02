@@ -278,26 +278,39 @@ void EngineCore::DrawScene(IRenderer& renderer)
     
     if ( m_state == EnteringLevel)
     {
-        renderer.Render2DBar(0,0,320,120,EgaBlack);
-        uint16_t width = (uint16_t)strlen(m_level->GetLevelName());
-        if (width == 0)
+        if (m_game.GetId() == 5)
         {
-            
-            const char* enterAreaText = (m_game.GetId() == 3) ? "You enter a new area ..." : "A new challenge awaits you.";
-            width = (uint16_t)strlen(enterAreaText);
-            DrawCenteredTiledWindow(renderer, width, 3);
-            renderer.RenderTextCentered(enterAreaText, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);
+            // Catacomb 3-D
+            const uint16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
+            renderer.Render2DBar(0 - margin, 0, 264 + (2 * margin), 144, EgaBrightBlue);
+            renderer.Render2DPicture(m_game.GetEgaGraph()->GetPicture(159), 57, 52);
+            renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 132, 76);
         }
         else
         {
-            if (width < 20)
+            // Catacomb Adventure series
+            renderer.Render2DBar(0, 0, 320, 120, EgaBlack);
+            uint16_t width = (uint16_t)strlen(m_level->GetLevelName());
+            if (width == 0)
             {
-                width = 20;
+
+                const char* enterAreaText = (m_game.GetId() == 3) ? "You enter a new area ..." : "A new challenge awaits you.";
+                width = (uint16_t)strlen(enterAreaText);
+                DrawCenteredTiledWindow(renderer, width, 3);
+                renderer.RenderTextCentered(enterAreaText, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);
             }
-            DrawCenteredTiledWindow(renderer, width, 5);
-            renderer.RenderTextCentered("You have arrived at", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 49);
-            renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 58);
+            else
+            {
+                if (width < 20)
+                {
+                    width = 20;
+                }
+                DrawCenteredTiledWindow(renderer, width, 5);
+                renderer.RenderTextCentered("You have arrived at", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 49);
+                renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 58);
+            }
         }
+
     }
 
     if (m_state == InGame)
@@ -1763,6 +1776,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         m_level->SetWallTile(actor->GetTileX(), actor->GetTileY(), playerTouchesFakeWall ? 0 : actor->GetTemp1());
         break;
     }
+    case ActionVictory:
+    {
+        m_state = Victory;
+        m_victoryState = VictoryStatePlayGetPoint;
+        break;
+    }
     case ActionNone:
     {
         break;
@@ -2584,7 +2603,8 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionLargeMonsterSound ||
             action == ActionPortalSound ||
             action == ActionBurningTree ||
-            action == ActionFlash
+            action == ActionFlash ||
+            action == ActionVictory
         );
 }
 

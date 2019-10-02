@@ -41,6 +41,7 @@ const uint16_t actorIdBonusKeyRed = 35;
 const uint16_t actorIdBonusKeyYellow = 36;
 const uint16_t actorIdBonusKeyGreen = 37;
 const uint16_t actorIdBonusKeyBlue = 38;
+const uint16_t actorIdGrelminar = 45;
 
 //
 // EXPLOSION
@@ -658,5 +659,56 @@ const DecorateActor decorateKeyBlue =
     0, // hitSound;
     0,    // speed;
     3, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// GRELMINAR (ends the game when picked up)
+//
+
+const DecorateAnimation grelminarWaitForPickupAnimation
+{
+    { NEMESISPIC, 8, ActionWaitForPickup }
+};
+
+const DecorateState grelminarWaitForPickup =
+{
+    grelminarWaitForPickupAnimation,
+    StateIdWaitForPickup
+};
+
+const DecorateAnimation grelminarPickupAnimation =
+{
+    { NEMESISPIC, 60, ActionVictory }
+};
+
+const DecorateState grelminarPickup =
+{
+    grelminarPickupAnimation,
+    StateIdPickup
+};
+
+const std::map<DecorateStateId, DecorateState> grelminarStates =
+{
+    std::make_pair(StateIdWaitForPickup, grelminarWaitForPickup),
+    std::make_pair(StateIdPickup, grelminarPickup)
+};
+
+const DecorateActor decorateGrelminar =
+{
+    actorIdGrelminar,   // Id
+    20, // spawnOnAllDifficulties;
+    20, // spawnOnNormalAndHard;
+    20,  // spawnOnHard
+    1,  // initialHealth;
+    35 * pixelRadius,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    grelminarStates,
+    StateIdWaitForPickup,   // initialState;
+    0,  // meleeDamage;
+    0, // hitSound;
+    0,    // speed;
+    0, // actionParameter
     0 // ProjectileId
 };
