@@ -184,6 +184,22 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
             case 24:
                 actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpToLevel);
                 break;
+            case 43:
+                if (difficultyLevel < Hard)
+                {
+                    break;
+                }
+            case 38:
+                if (difficultyLevel < Normal)
+                {
+                    break;
+                }
+            case 25:
+            {
+                Actor* batActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBat);
+                actors[(y * level->GetLevelWidth()) + x] = batActor;
+                break;
+            }
             case 44:
                 if (difficultyLevel < Hard)
                 {
@@ -200,10 +216,55 @@ void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyL
                 actors[(y * level->GetLevelWidth()) + x] = demonActor;
                 break;
             }
+            case 45:
+                if (difficultyLevel < Hard)
+                {
+                    break;
+                }
+            case 40:
+                if (difficultyLevel < Normal)
+                {
+                    break;
+                }
+            case 27:
+            {
+                Actor* mageActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateMage);
+                actors[(y * level->GetLevelWidth()) + x] = mageActor;
+                break;
+            }
             case 28:
             {
                 Actor* nemesisActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNemesis);
                 actors[(y * level->GetLevelWidth()) + x] = nemesisActor;
+                break;
+            }
+            case 29:
+            case 30:
+            {
+                Actor* bounceActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBounce);
+                const actorDirection dir = (tile == 29) ? north : west;
+                bounceActor->SetDirection(dir);
+                actors[(y * level->GetLevelWidth()) + x] = bounceActor;
+                break;
+            }
+            case 31:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal1);
+                break;
+            }
+            case 32:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal2);
+                break;
+            }
+            case 33:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal3);
+                break;
+            }
+            case 34:
+            {
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal4);
                 break;
             }
             default:

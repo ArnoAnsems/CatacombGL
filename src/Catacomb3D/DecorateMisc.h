@@ -27,7 +27,12 @@
 const uint16_t actorIdNone = 0;
 const uint16_t actorIdExplodingWall = 4;
 const uint16_t actorIdWarpToLevel = 5;
+const uint16_t actorIdWarpPortal1 = 6;
+const uint16_t actorIdWarpPortal2 = 7;
+const uint16_t actorIdWarpPortal3 = 8;
+const uint16_t actorIdWarpPortal4 = 9;
 const uint16_t actorIdPlayer = 11;
+
 
 //
 // EXPLODING WALL
@@ -78,10 +83,10 @@ const DecorateActor decorateExplodingWall =
 
 const DecorateAnimation warpToLevelWaitForPickupAnimation =
 {
-    { WARP1PIC, 12, ActionWaitForPickup },
-    { WARP2PIC, 12, ActionWaitForPickup },
-    { WARP3PIC, 12, ActionWaitForPickup },
-    { WARP4PIC, 12, ActionWaitForPickup }
+    { WARP1PIC, 6, ActionWaitForPickup },
+    { WARP2PIC, 6, ActionWaitForPickup },
+    { WARP3PIC, 6, ActionWaitForPickup },
+    { WARP4PIC, 6, ActionWaitForPickup }
 };
 
 const DecorateState warpToLevelStateWaitForPickup =
@@ -123,6 +128,117 @@ const DecorateActor decorateWarpToLevel =
     0, // hitSound;
     0,    // speed;
     0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// WARP PORTAL
+//
+
+const DecorateAnimation warpPortalWaitForPickupAnimation =
+{
+    { WARP1PIC, 12, ActionWaitForPickup },
+    { WARP2PIC, 12, ActionWaitForPickup },
+    { WARP3PIC, 12, ActionWaitForPickup },
+    { WARP4PIC, 12, ActionWaitForPickup }
+};
+
+const DecorateState warpPortalStateWaitForPickup =
+{
+    warpPortalWaitForPickupAnimation,
+    StateIdWaitForPickup // Loop
+};
+
+const DecorateAnimation warpPortalPickupAnimation =
+{
+    { WARP1PIC, 8, ActionWarpInsideLevel }
+};
+
+const DecorateState warpPortalStatePickup =
+{
+    warpPortalPickupAnimation,
+    StateIdWaitForPickup
+};
+
+const std::map<DecorateStateId, DecorateState> warpPortalStates =
+{
+    std::make_pair(StateIdWaitForPickup, warpPortalStateWaitForPickup),
+    std::make_pair(StateIdPickup, warpPortalStatePickup)
+};
+
+const DecorateActor decorateWarpPortal1 =
+{
+    actorIdWarpPortal1,   // Id
+    31, // spawnOnAllDifficulties;
+    31, // spawnOnNormalAndHard;
+    31,  // spawnOnHard
+    1,  // initialHealth;
+    0.333f,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    warpPortalStates,
+    StateIdWaitForPickup,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    1, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateActor decorateWarpPortal2 =
+{
+    actorIdWarpPortal2,   // Id
+    32, // spawnOnAllDifficulties;
+    32, // spawnOnNormalAndHard;
+    32,  // spawnOnHard
+    1,  // initialHealth;
+    0.333f,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    warpPortalStates,
+    StateIdWaitForPickup,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    2, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateActor decorateWarpPortal3 =
+{
+    actorIdWarpPortal3,   // Id
+    33, // spawnOnAllDifficulties;
+    33, // spawnOnNormalAndHard;
+    33,  // spawnOnHard
+    1,  // initialHealth;
+    0.333f,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    warpPortalStates,
+    StateIdWaitForPickup,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    3, // actionParameter
+    0 // ProjectileId
+};
+
+const DecorateActor decorateWarpPortal4 =
+{
+    actorIdWarpPortal4,   // Id
+    34, // spawnOnAllDifficulties;
+    34, // spawnOnNormalAndHard;
+    34,  // spawnOnHard
+    1,  // initialHealth;
+    0.333f,    // size;
+    Never,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    warpPortalStates,
+    StateIdWaitForPickup,   // initialState;
+    0,  // meleeDamage;
+    SHOOTWALLSND, // hitSound;
+    0,    // speed;
+    4, // actionParameter
     0 // ProjectileId
 };
 

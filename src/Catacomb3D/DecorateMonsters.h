@@ -28,6 +28,9 @@
 const uint16_t actorIdMonsterOrc = 53;
 const uint16_t actorIdMonsterTroll = 54;
 const uint16_t actorIdMonsterDemon = 55;
+const uint16_t actorIdMonsterBounce = 56;
+const uint16_t actorIdMonsterBat = 58;
+const uint16_t actorIdMonsterMage = 59;
 const uint16_t actorIdMonsterNemesis = 62;
 
 //
@@ -403,4 +406,215 @@ const DecorateActor decorateNemesis =
     2048,    // speed;
     0, // actionParameter
     actorIdProjectileMageShot // ProjectileId
+};
+
+//
+// BAT
+//
+
+const DecorateAnimation batWalkAnimation =
+{
+    { BAT1PIC, 6, ActionNone },
+    { BAT2PIC, 6, ActionChase },
+    { BAT3PIC, 6, ActionChase },
+    { BAT4PIC, 6, ActionChase }
+};
+
+const DecorateState batStateWalk =
+{
+    batWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation batAttackAnimation =
+{
+    { BAT4PIC, 5, ActionAttack },
+    { BAT4PIC, 75, ActionRunAway }
+};
+
+const DecorateState batStateAttack =
+{
+    batAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation batDyingAnimation =
+{
+    { BATDIE1PIC, 18, ActionNone },
+    { BATDIE2PIC, 18, ActionNone },
+    { NULL, 18, ActionRemove }
+};
+
+const DecorateState batStateDying =
+{
+    batDyingAnimation,
+    StateIdDying  // Will not loop, due to the ActionRemove.
+};
+
+const std::map<DecorateStateId, DecorateState> batStates =
+{
+    std::make_pair(StateIdWalk, batStateWalk),
+    std::make_pair(StateIdAttack, batStateAttack),
+    std::make_pair(StateIdDying, batStateDying)
+};
+
+const DecorateActor decorateBat =
+{
+    actorIdMonsterBat,   // Id
+    25, // spawnOnAllDifficulties;
+    38, // spawnOnNormalAndHard;
+    43,  // spawnOnHard; Actually, should include 20 and 24 as well.
+    1,  // initialHealth;
+    24 * pixelRadius,    // size;
+    Always,  // radarVisibility;
+    EgaDarkGray,   // radarColor;
+    batStates,
+    StateIdWalk,   // initialState;
+    4,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// MAGE
+//
+
+const DecorateAnimation mageWalkAnimation =
+{
+    { MAGE1PIC, 20, ActionChaseLikeMage },
+    { MAGE2PIC, 20, ActionChaseLikeMage }
+};
+
+const DecorateState mageStateWalk =
+{
+    mageWalkAnimation,
+    StateIdWalk // Loop
+};
+
+const DecorateAnimation mageAttackAnimation =
+{
+    { MAGEATTACKPIC, 20, ActionNone },
+    { MAGEATTACKPIC, 30, ActionAttack },
+    { MAGE1PIC, 100, ActionNone }
+};
+
+const DecorateState mageStateAttack =
+{
+    mageAttackAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation magePainAnimation =
+{
+    { MAGEOUCHPIC, 10, ActionNone }
+};
+
+const DecorateState mageStatePain =
+{
+    magePainAnimation,
+    StateIdWalk
+};
+
+const DecorateAnimation mageDyingAnimation =
+{
+    { MAGEDIE1PIC, 20, ActionNone }
+};
+
+const DecorateState mageStateDying =
+{
+    mageDyingAnimation,
+    StateIdDead
+};
+
+const DecorateAnimation mageDeadAnimation =
+{
+    { MAGEDIE2PIC, 20, ActionNone }
+};
+
+const DecorateState mageStateDead =
+{
+    mageDeadAnimation,
+    StateIdDead // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> mageStates =
+{
+    std::make_pair(StateIdWalk, mageStateWalk),
+    std::make_pair(StateIdAttack, mageStateAttack),
+    std::make_pair(StateIdPain, mageStatePain),
+    std::make_pair(StateIdDying, mageStateDying),
+    std::make_pair(StateIdDead, mageStateDead)
+};
+
+const DecorateActor decorateMage =
+{
+    actorIdMonsterMage,   // Id
+    27, // spawnOnAllDifficulties;
+    40, // spawnOnNormalAndHard;
+    45,  // spawnOnHard
+    5,  // initialHealth;
+    32 * pixelRadius,    // size;
+    WithAllGems,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    mageStates,
+    StateIdWalk,   // initialState;
+    0,  // meleeDamage;
+    SHOOTMONSTERSND, // hitSound;
+    2048,    // speed;
+    0, // actionParameter
+    actorIdProjectileMageShot // ProjectileId
+};
+
+//
+// BOUNCE
+//
+
+const DecorateAnimation bounceWalkAnimation =
+{
+    { BIGPSHOT1PIC, 8, ActionBounce },
+    { BIGPSHOT2PIC, 8, ActionBounce }
+};
+
+const DecorateState bounceStateWalk =
+{
+    bounceWalkAnimation,
+    StateIdWalk   // Loop
+};
+
+const DecorateAnimation bounceAttackAnimation =
+{
+    { BIGPSHOT1PIC , 1, ActionAttack }
+};
+
+const DecorateState bounceStateAttack =
+{
+    bounceAttackAnimation,
+    StateIdWalk
+};
+
+const std::map<DecorateStateId, DecorateState> bounceStates =
+{
+    std::make_pair(StateIdWalk, bounceStateWalk),
+    std::make_pair(StateIdAttack, bounceStateAttack)
+};
+
+const DecorateActor decorateBounce =
+{
+    actorIdMonsterBounce,   // Id
+    29, // spawnOnAllDifficulties;
+    29, // spawnOnNormalAndHard;
+    29,  // spawnOnHard;
+    10,  // initialHealth;
+    24 * pixelRadius,    // size;
+    Flickering,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    bounceStates,
+    StateIdWalk,   // initialState;
+    10,  // damage;
+    SHOOTMONSTERSND, // hitSound;
+    4096,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
 };

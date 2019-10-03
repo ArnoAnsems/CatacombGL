@@ -25,6 +25,7 @@
 #include "AudioRepositoryCatacomb3D.h"
 
 const uint16_t actorIdProjectilePlayerShot = 70;
+const uint16_t actorIdProjectilePlayerBigShot = 71;
 const uint16_t actorIdProjectileMageShot = 72;
 
 //
@@ -74,6 +75,60 @@ const DecorateActor decoratePlayerShot =
     playerShotStates,
     StateIdProjectileFly,   // initialState;
     1,  // damage;
+    0, // hitSound;
+    10000,    // speed;
+    0, // actionParameter
+    0 // ProjectileId
+};
+
+//
+// PLAYER BIG SHOT
+// Fired by the nuke / X-terminator
+//
+
+const DecorateAnimation playerBigShotFlyAnimation =
+{
+    { BIGPSHOT1PIC , 8, ActionPlayerProjectile },
+    { BIGPSHOT2PIC , 8, ActionPlayerProjectile }
+};
+
+const DecorateState playerBigShotStateFly =
+{
+    playerBigShotFlyAnimation,
+    StateIdProjectileFly   // Loop
+};
+
+const DecorateAnimation playerBigShotDyingAnimation =
+{
+    { BIGPSHOT2PIC , 8, ActionNone },
+    { 0 , 8, ActionRemove },
+};
+
+const DecorateState playerBigShotStateDying =
+{
+    playerBigShotDyingAnimation,
+    StateIdDying   // Loop
+};
+
+const std::map<DecorateStateId, DecorateState> playerBigShotStates =
+{
+    std::make_pair(StateIdProjectileFly, playerBigShotStateFly),
+    std::make_pair(StateIdDying, playerBigShotStateDying)
+};
+
+const DecorateActor decoratePlayerBigShot =
+{
+    actorIdProjectilePlayerBigShot,   // Id
+    0, // spawnOnAllDifficulties;
+    0, // spawnOnNormalAndHard;
+    0,  // spawnOnHard;
+    1,  // initialHealth;
+    24 * pixelRadius,    // size;
+    Flickering,  // radarVisibility;
+    EgaBrightWhite,   // radarColor;
+    playerBigShotStates,
+    StateIdProjectileFly,   // initialState;
+    3,  // damage;
     0, // hitSound;
     10000,    // speed;
     0, // actionParameter

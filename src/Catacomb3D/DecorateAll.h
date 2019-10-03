@@ -23,6 +23,10 @@ const std::map<uint16_t, const DecorateActor> decorateCatacomb3DAll =
 {
     std::make_pair(actorIdExplodingWall, decorateExplodingWall),
     std::make_pair(actorIdWarpToLevel, decorateWarpToLevel),
+    std::make_pair(actorIdWarpPortal1, decorateWarpPortal1),
+    std::make_pair(actorIdWarpPortal2, decorateWarpPortal2),
+    std::make_pair(actorIdWarpPortal3, decorateWarpPortal3),
+    std::make_pair(actorIdWarpPortal4, decorateWarpPortal4),
     std::make_pair(actorIdPlayer, decoratePlayer),
     std::make_pair(actorIdBonusExplosion, decorateExplosion),
     std::make_pair(actorIdBonusBolt, decorateBolt),
@@ -44,8 +48,12 @@ const std::map<uint16_t, const DecorateActor> decorateCatacomb3DAll =
     std::make_pair(actorIdMonsterOrc, decorateOrc),
     std::make_pair(actorIdMonsterTroll, decorateTroll),
     std::make_pair(actorIdMonsterDemon, decorateDemon),
+    std::make_pair(actorIdMonsterBounce, decorateBounce),
+    std::make_pair(actorIdMonsterBat, decorateBat),
+    std::make_pair(actorIdMonsterMage, decorateMage),
     std::make_pair(actorIdMonsterNemesis, decorateNemesis),
     std::make_pair(actorIdProjectilePlayerShot, decoratePlayerShot),
+    std::make_pair(actorIdProjectilePlayerBigShot, decoratePlayerBigShot),
     std::make_pair(actorIdProjectileMageShot, decorateMageShot),
 };
 
