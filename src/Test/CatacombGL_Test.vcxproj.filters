@@ -48,6 +48,9 @@
     <ClCompile Include="ViewPorts_Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameCatacomb3D_Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FramesCounter_Test.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ViewPorts_Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCatacomb3D_Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
