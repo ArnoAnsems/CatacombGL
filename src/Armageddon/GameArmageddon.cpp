@@ -20,6 +20,7 @@
 #include "AudioRepositoryArmageddon.h"
 #include "DecorateAll.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\ExtraMenu.h"
 
 static const std::string ArmageddonName = "Catacomb Armageddon v1.02";
 
@@ -542,6 +543,12 @@ IIntroView* GameArmageddon::GetIntroView()
 
     return m_introView;
 }
+
+IMenu* GameArmageddon::CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames)
+{
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), savedGames);
+}
+
 
 void GameArmageddon::DrawHelpPage()
 {

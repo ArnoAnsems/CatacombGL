@@ -20,6 +20,7 @@
 #include "AudioRepositoryApocalypse.h"
 #include "DecorateAll.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\ExtraMenu.h"
 
 static const std::string ApocalypseName = "Catacomb Apocalypse v1.01";
 
@@ -404,6 +405,11 @@ IIntroView* GameApocalypse::GetIntroView()
     }
 
     return m_introView;
+}
+
+IMenu* GameApocalypse::CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames)
+{
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), savedGames);
 }
 
 void GameApocalypse::DrawHelpPage()

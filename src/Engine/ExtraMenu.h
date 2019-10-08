@@ -27,29 +27,21 @@
 #include "ConfigurationSettings.h"
 #include "IRenderer.h"
 #include "EgaGraph.h"
+#include "IMenu.h"
 
-enum MenuCommand
-{
-    MenuCommandNone,
-    MenuCommandStartNewGame,
-    MenuCommandExitGame,
-    MenuCommandSaveGame,
-    MenuCommandLoadGame
-};
-
-class ExtraMenu
+class ExtraMenu: public IMenu
 {
 public:
     ExtraMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames);
-    bool IsActive() const;
-    void SetActive(bool active);
-    MenuCommand ProcessInput(const PlayerInput& playerInput);
-    void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic);
-    void SetSaveGameEnabled(const bool enabled);
-    const std::string& GetNewSaveGameName() const;
-    void OpenRestoreGameMenu();
-    void OpenSaveGameMenu();
-    void OpenSoundMenu();
+    bool IsActive() const override;
+    void SetActive(bool active) override;
+    MenuCommand ProcessInput(const PlayerInput& playerInput) override;
+    void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic) override;
+    void SetSaveGameEnabled(const bool enabled) override;
+    const std::string& GetNewSaveGameName() const override;
+    void OpenRestoreGameMenu() override;
+    void OpenSaveGameMenu() override;
+    void OpenSoundMenu() override;
 
 private:
     void MenuDown();

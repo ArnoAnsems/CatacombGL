@@ -20,6 +20,7 @@
 #include "AudioRepositoryCatacomb3D.h"
 #include "DecorateAll.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\ExtraMenu.h"
 
 static const std::string Catacomb3DName = "Catacomb 3-D v1.22";
 
@@ -337,6 +338,11 @@ IIntroView* GameCatacomb3D::GetIntroView()
     }
 
     return m_introView;
+}
+
+IMenu* GameCatacomb3D::CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames)
+{
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), savedGames);
 }
 
 void GameCatacomb3D::DrawHelpPage()

@@ -44,6 +44,7 @@ public:
     AudioPlayer* GetAudioPlayer() override;
 
     IIntroView* GetIntroView() override;
+    IMenu* CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames) override;
     void DrawHelpPage() override;
     bool ProcessInputOnHelpPage(PlayerInput& playerInput) override;
     const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;

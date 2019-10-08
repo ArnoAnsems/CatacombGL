@@ -68,7 +68,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_keyToTake(KeyId::NoKey),
     m_playerInput(keyboardInput),
     m_savedGames(),
-    m_extraMenu(configurationSettings, *(m_game.GetAudioPlayer()), m_savedGames),
+    m_menu(game.CreateMenu(configurationSettings, m_savedGames)),
     m_configurationSettings(configurationSettings),
     m_scrollsArePresent(AreScrollsPresent())
 {
@@ -403,10 +403,10 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
 #endif
 
-    if (m_extraMenu.IsActive())
+    if (m_menu->IsActive())
     {
         DrawTiledWindow(renderer,2,1,36,13);
-        m_extraMenu.Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic());
+        m_menu->Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic());
     }
     
     renderer.Unprepare2DRendering();
@@ -448,7 +448,7 @@ void EngineCore::DrawTiledWindow(IRenderer& renderer, const uint16_t x, const ui
 
 void EngineCore::EnterKeyReleased()
 {
-    if (!m_extraMenu.IsActive())
+    if (!m_menu->IsActive())
     {
         if (m_readingScroll != 255)
         {
@@ -519,10 +519,10 @@ bool EngineCore::Think()
         SD_SetSoundMode(sdm_AdLib);
     }
 
-    if (m_extraMenu.IsActive())
+    if (m_menu->IsActive())
     {
-        m_extraMenu.SetSaveGameEnabled((m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog) && !m_level->GetPlayerActor()->IsDead());
-        const MenuCommand command = m_extraMenu.ProcessInput(m_playerInput);
+        m_menu->SetSaveGameEnabled((m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog) && !m_level->GetPlayerActor()->IsDead());
+        const MenuCommand command = m_menu->ProcessInput(m_playerInput);
         if (command == MenuCommandStartNewGame)
         {
             StartNewGame();
@@ -535,7 +535,7 @@ bool EngineCore::Think()
         }
         else if (command == MenuCommandSaveGame)
         {
-            const std::string& saveGameName = m_extraMenu.GetNewSaveGameName();
+            const std::string& saveGameName = m_menu->GetNewSaveGameName();
             if (StoreGameToFile(saveGameName))
             {
                 bool existingSaveOverwritten = false;
@@ -554,13 +554,13 @@ bool EngineCore::Think()
         }
         else if (command == MenuCommandLoadGame)
         {
-            const std::string& saveGameName = m_extraMenu.GetNewSaveGameName();
+            const std::string& saveGameName = m_menu->GetNewSaveGameName();
             LoadGameFromFile(saveGameName);
             return false;
         }
     }
 
-    if (m_state == InGame && !m_extraMenu.IsActive())
+    if (m_state == InGame && !m_menu->IsActive())
     {
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
         {
@@ -597,7 +597,7 @@ bool EngineCore::Think()
         }
     }
 
-    if (m_state == WarpCheatDialog && !m_extraMenu.IsActive())
+    if (m_state == WarpCheatDialog && !m_menu->IsActive())
     {
         for (int i = SDLK_0; i <= SDLK_9; i++)
         {
@@ -621,7 +621,7 @@ bool EngineCore::Think()
         }
     }
 
-    if (!m_playerInput.HasFocus() && m_state == InGame && !m_extraMenu.IsActive())
+    if (!m_playerInput.HasFocus() && m_state == InGame && !m_menu->IsActive())
     {
         ToggleMenu();
         m_playerInput.ClearAll();
@@ -632,7 +632,7 @@ bool EngineCore::Think()
     {
         EnterKeyReleased();
     }
-    if (!m_extraMenu.IsActive())
+    if (!m_menu->IsActive())
     {
         for (uint8_t i = 0x31; i < 0x39; i++)
         {
@@ -679,17 +679,17 @@ bool EngineCore::Think()
         }
         if (m_playerInput.IsKeyPressed(SDLK_F2))
         {
-            m_extraMenu.OpenSoundMenu();
+            m_menu->OpenSoundMenu();
             m_gameTimer.Pause();
         }
         if (m_playerInput.IsKeyPressed(SDLK_F3))
         {
-            m_extraMenu.OpenSaveGameMenu();
+            m_menu->OpenSaveGameMenu();
             m_gameTimer.Pause();
         }
         if (m_playerInput.IsKeyPressed(SDLK_F4))
         {
-            m_extraMenu.OpenRestoreGameMenu();
+            m_menu->OpenRestoreGameMenu();
             m_gameTimer.Pause();
         }
     }
@@ -710,15 +710,15 @@ bool EngineCore::Think()
         m_state = Help;
 
         // Close menu
-        if (m_extraMenu.IsActive())
+        if (m_menu->IsActive())
         {
-            m_extraMenu.SetActive(false);
+            m_menu->SetActive(false);
         }
     }
-    else if (m_state == Victory && m_victoryState == VictoryStateDone && m_playerInput.IsAnyKeyPressed() && !m_extraMenu.IsActive())
+    else if (m_state == Victory && m_victoryState == VictoryStateDone && m_playerInput.IsAnyKeyPressed() && !m_menu->IsActive())
     {
         // Open the menu when any key is pressed in the victory screen.
-        m_extraMenu.SetActive(true);
+        m_menu->SetActive(true);
     }
 
     // Status message
@@ -2567,7 +2567,7 @@ void EngineCore::WaitForAnyKeyPressed()
 
 bool EngineCore::RequiresMouseCapture() const
 {
-    return (!m_extraMenu.IsActive() &&
+    return (!m_menu->IsActive() &&
            (m_state == EnteringLevel ||
             m_state == InGame ||
             m_state == WarpCheatDialog ||
@@ -2610,9 +2610,9 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
 
 void EngineCore::ToggleMenu()
 {
-    if (m_extraMenu.IsActive())
+    if (m_menu->IsActive())
     {
-        m_extraMenu.SetActive(false);
+        m_menu->SetActive(false);
         if (m_state == InGame)
         {
             m_gameTimer.Resume();
@@ -2621,7 +2621,7 @@ void EngineCore::ToggleMenu()
     }
     else
     {
-        m_extraMenu.SetActive(true);
+        m_menu->SetActive(true);
         if (m_state == InGame)
         {
             m_gameTimer.Pause();
@@ -2770,7 +2770,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
 
         m_playerActions.ResetForNewLevel();
         m_warpToLevel = m_level->GetLevelIndex();
-        m_extraMenu.SetActive(false);
+        m_menu->SetActive(false);
         m_state = InGame;
 
         const uint32_t currentTimestampOfPlayer = m_gameTimer.GetMillisecondsForPlayer();

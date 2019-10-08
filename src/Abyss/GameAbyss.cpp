@@ -17,6 +17,7 @@
 #include "GameMapsAbyss.h"
 #include "IntroViewAbyss.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\ExtraMenu.h"
 
 // Decorate
 #include "DecorateAll.h"
@@ -617,6 +618,11 @@ IIntroView* GameAbyss::GetIntroView()
     }
 
     return m_introView;
+}
+
+IMenu* GameAbyss::CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames)
+{
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), savedGames);
 }
 
 void GameAbyss::DrawHelpPage()

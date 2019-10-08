@@ -166,7 +166,7 @@ private:
     uint32_t m_timeStampToEnterGame;
     uint32_t m_timeStampLastMouseMoveForward;
     uint32_t m_timeStampLastMouseMoveBackward;
-    ExtraMenu m_extraMenu;
+    IMenu* m_menu;
     GameTimer m_gameTimer;
     const ISystem& m_system;
     std::vector<std::string> m_savedGames;

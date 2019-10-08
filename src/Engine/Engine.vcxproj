@@ -203,6 +203,7 @@
     <ClInclude Include="EngineCore.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Huffman.h" />
+    <ClInclude Include="IMenu.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="ISystem.h" />
     <ClInclude Include="IIntroView.h" />
