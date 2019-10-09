@@ -343,7 +343,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.RenderTextCentered("Free items!", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 52);
     }
 
-    if (m_level != NULL && m_level->GetPlayerActor()->IsDead() && m_playerInventory.GetPotions() > 0)
+    if (m_level != NULL && m_level->GetPlayerActor()->IsDead() && m_playerInventory.GetPotions() > 0 && m_game.GetId() != 5)
     {
         DrawCenteredTiledWindow(renderer, 35, 3);
         renderer.RenderTextCentered("You should use your Cure Potions wisely", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);

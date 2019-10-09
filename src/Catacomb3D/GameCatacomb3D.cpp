@@ -444,6 +444,16 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     {
         m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetWidth(), (uint16_t)(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetHeight() * (health / 100.0f)));
     }
+    if (health < 1)
+    {
+        // Dead
+        if (wideScreenMargin > 0)
+        {
+            m_renderer.Render2DBar(0 - wideScreenMargin, 0, wideScreenMargin, 144, EgaDarkGray);
+            m_renderer.Render2DBar(320 - sideBarWidth, 0, wideScreenMargin, 144, EgaDarkGray);
+        }
+        m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(DEADPIC), 0, 0);
+    }
 
     m_renderer.RenderTextCentered(std::to_string(levelIndex + 1).c_str(), m_egaGraph->GetFont(3), EgaBrightYellow, 12, 148);
 

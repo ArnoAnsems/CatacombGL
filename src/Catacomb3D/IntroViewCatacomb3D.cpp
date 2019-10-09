@@ -32,6 +32,25 @@ IntroViewCatacomb3D::~IntroViewCatacomb3D()
 void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
 {
     m_renderer.Render2DPicture(m_egaGraph->GetPicture(TITLEPIC), 0, 0);
+    const uint8_t pictureIndex = (timeStamp / 5000) % 3;
+    switch (pictureIndex)
+    {
+    case 0:
+    {
+        m_renderer.Render2DPicture(m_egaGraph->GetPicture(TITLEPIC), 0, 0);
+        break;
+    }
+    case 1:
+    {
+        m_renderer.Render2DPicture(m_egaGraph->GetPicture(CREDITSPIC), 0, 0);
+        break;
+    }
+    case 2:
+    {
+        m_renderer.Render2DPicture(m_egaGraph->GetPicture(HIGHSCORESPIC), 0, 0);
+        break;
+    }
+    }
 }
 
 void IntroViewCatacomb3D::DrawRequestDifficultyLevel()
