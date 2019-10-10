@@ -405,7 +405,10 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_menu->IsActive())
     {
-        DrawTiledWindow(renderer,2,1,36,13);
+        if (m_game.GetId() != 5)
+        {
+            DrawTiledWindow(renderer, 2, 1, 36, 13);
+        }
         m_menu->Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic());
     }
     

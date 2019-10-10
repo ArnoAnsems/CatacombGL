@@ -48,12 +48,18 @@
     <ClInclude Include="DecorateMonsters.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Catacomb3DMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewCatacomb3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameCatacomb3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Catacomb3DMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

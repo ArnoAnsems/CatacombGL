@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioRepositoryCatacomb3D.h" />
+    <ClInclude Include="Catacomb3DMenu.h" />
     <ClInclude Include="DecorateAll.h" />
     <ClInclude Include="DecorateBonus.h" />
     <ClInclude Include="DecorateMisc.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="IntroViewCatacomb3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Catacomb3DMenu.cpp" />
     <ClCompile Include="GameCatacomb3D.cpp" />
     <ClCompile Include="IntroViewCatacomb3D.cpp" />
   </ItemGroup>
