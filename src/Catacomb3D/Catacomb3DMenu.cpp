@@ -606,7 +606,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
     renderer.Render2DPicture(egaGraph->GetPicture(CP_MAINMENUPIC), 80, 48);
     renderer.Render2DPicture(egaGraph->GetTilesSize8(92), 112, 62);
-    //renderer.RenderTextLeftAligned("NEW GAME", egaGraph->GetFont(3), EgaBrightRed, 100, 70);
+    renderer.RenderTextLeftAligned("NEW GAME", egaGraph->GetFont(4), EgaBrightRed, 120, 62);
 
     if (m_askForOverwrite)
     {  

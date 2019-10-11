@@ -128,8 +128,13 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
         m_tilesSize8Masked[i] = NULL;
     }
 
-    // Initialize font
-    m_font = NULL;
+    // Initialize fonts
+    const uint16_t numFonts = m_staticData.indexOfFirstPicture - 3;
+    m_fonts = new Font*[numFonts];
+    for (uint16_t i = 0; i < numFonts; i++)
+    {
+        m_fonts[i] = NULL;
+    }
 
     // Initialize location names
     const uint16_t numberOfWorldLocationNames = m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1;
@@ -182,10 +187,15 @@ EgaGraph::~EgaGraph()
     }
     delete[] m_worldLocationNames;
 
-    if (m_font != NULL)
+    const uint16_t numFonts = m_staticData.indexOfFirstPicture - 3;
+    for (uint16_t i = 0; i < numFonts; i++)
     {
-        delete m_font;
+        if (m_fonts[i] != NULL)
+        {
+            delete m_fonts[i];
+        }
     }
+    delete[] m_fonts;
 
     if (m_tilesSize8 != NULL)
     {
@@ -341,14 +351,16 @@ Picture* EgaGraph::GetTilesSize8Masked(const uint16_t index)
 
 Font* EgaGraph::GetFont(const uint16_t index)
 {
-    if (index != 3)
+    const uint16_t numFonts = m_staticData.indexOfFirstPicture - 3;
+    if (index < 3 || index >= m_staticData.indexOfFirstPicture)
     {
         Logging::Instance().FatalError("No font found at index " + std::to_string(index) + " in " + m_staticData.filename);
     }
 
-    if (m_font != NULL)
+    const uint16_t indexInFontArray = index - 3;
+    if (m_fonts[indexInFontArray] != NULL)
     {
-        return m_font;
+        return m_fonts[indexInFontArray];
     }
 
     uint8_t* compressedFont = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index)];
@@ -398,10 +410,10 @@ Font* EgaGraph::GetFont(const uint16_t index)
     DefaultFont::AddWindows1252Characters(fontPicture, width);
 
     unsigned int textureId = m_renderer.LoadFontIntoTexture(fontPicture);
-    m_font = new Font(width, textureId);
+    m_fonts[indexInFontArray] = new Font(width, textureId);
     delete fontChunk;
 
-    return m_font;
+    return m_fonts[indexInFontArray];
 }
 
 LevelLocationNames* EgaGraph::GetWorldLocationNames(const uint16_t index)

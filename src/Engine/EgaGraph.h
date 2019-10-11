@@ -82,7 +82,7 @@ private:
     Picture** m_tilesSize8Masked;
     LevelLocationNames** m_worldLocationNames;
     Huffman* m_huffman;
-    Font* m_font;
+    Font** m_fonts;
     IRenderer& m_renderer;
 };
 
