@@ -435,13 +435,14 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     {
         const uint8_t charIndex = text[chari];
         uint16_t charWidth =  font->GetCharacterWidth(charIndex);
-        float textureHeight = 1.0f / 256.0f;
+        uint16_t charHeight = font->GetCharacterHeight();
+        float textureHeight = 1.0f / 256.0f * (charHeight / 10.0f);
         float textureWidth = (float)(charWidth) / 16.0f;
         float textureOffsetX = 0.0f;
         float textureOffsetY = float(charIndex) / 256.0f;
         
-        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, 10);
-        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, 10);
+        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, charHeight);
         glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(combinedWidth + charWidth, 0);
         glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(combinedWidth, 0);
         combinedWidth += charWidth;

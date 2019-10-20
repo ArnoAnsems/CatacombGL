@@ -16,8 +16,9 @@
 #include "Font.h"
 #include <cstring>
 
-Font::Font(const uint8_t width[256], const unsigned int textureId) :
-    m_textureId(textureId)
+Font::Font(const uint16_t height, const uint8_t width[256], const unsigned int textureId) :
+    m_textureId(textureId),
+    m_height(height)
 {
     std::memcpy(&m_width[0], &width[0], sizeof(width[0]) * 256);
 }
@@ -35,4 +36,9 @@ unsigned int Font::GetTextureId() const
 uint16_t Font::GetCharacterWidth(const uint16_t charIndex) const
 {
     return m_width[charIndex];
+}
+
+uint16_t Font::GetCharacterHeight() const
+{
+    return m_height;
 }

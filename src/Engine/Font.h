@@ -25,14 +25,16 @@
 class Font
 {
 public:
-    Font(const uint8_t width[256], const unsigned int textureId);
+    Font(const uint16_t height, const uint8_t width[256], const unsigned int textureId);
     ~Font();
 
     unsigned int GetTextureId() const;
     uint16_t GetCharacterWidth(const uint16_t charIndex) const;
+    uint16_t GetCharacterHeight() const;
 
 private:
     static const uint16_t NumChar = 256;
+    uint16_t m_height;
     uint8_t m_width[256];
     unsigned int m_textureId;
 };

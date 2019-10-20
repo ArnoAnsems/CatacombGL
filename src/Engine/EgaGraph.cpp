@@ -370,7 +370,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
 
     const uint16_t NumChar = 256;
 
-    uint16_t lineHeight = *(uint16_t*)&fontChunk->GetChunk()[0];
+    const uint16_t lineHeight = *(uint16_t*)&fontChunk->GetChunk()[0];
     uint16_t characterOffset[NumChar];
     for (uint16_t i = 0; i < NumChar; i++)
     {
@@ -410,7 +410,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
     DefaultFont::AddWindows1252Characters(fontPicture, width);
 
     unsigned int textureId = m_renderer.LoadFontIntoTexture(fontPicture);
-    m_fonts[indexInFontArray] = new Font(width, textureId);
+    m_fonts[indexInFontArray] = new Font(lineHeight, width, textureId);
     delete fontChunk;
 
     return m_fonts[indexInFontArray];
