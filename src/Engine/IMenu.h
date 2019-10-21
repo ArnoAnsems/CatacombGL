@@ -41,7 +41,7 @@ public:
     virtual bool IsActive() const = NULL;
     virtual void SetActive(bool active) = NULL;
     virtual MenuCommand ProcessInput(const PlayerInput& playerInput) = NULL;
-    virtual void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic) = NULL;
+    virtual void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp) = NULL;
     virtual void SetSaveGameEnabled(const bool enabled) = NULL;
     virtual const std::string& GetNewSaveGameName() const = NULL;
     virtual void OpenRestoreGameMenu() = NULL;

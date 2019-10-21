@@ -409,7 +409,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             DrawTiledWindow(renderer, 2, 1, 36, 13);
         }
-        m_menu->Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic());
+        m_menu->Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic(), m_gameTimer.GetActualTime());
     }
     
     renderer.Unprepare2DRendering();

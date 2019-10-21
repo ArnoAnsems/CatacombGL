@@ -22,6 +22,7 @@ const uint8_t subMenuControls = 2;
 const uint8_t subMenuSound = 3;
 const uint8_t subMenuRestoreGame = 4;
 const uint8_t subMenuSaveGame = 5;
+const uint8_t subMenuNewGame = 6;
 
 const uint16_t browseMenuSound = 0;
 
@@ -141,7 +142,7 @@ void Catacomb3DMenu::MenuDown()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuMain)
         {
-            if (m_menuItemSelected == 6)
+            if (m_menuItemSelected == 7)
             {
                 m_menuItemSelected = 0;
             }
@@ -150,6 +151,17 @@ void Catacomb3DMenu::MenuDown()
                 m_menuItemSelected++;
             }
             if (m_menuItemSelected == 2 && !m_saveGameEnabled)
+            {
+                m_menuItemSelected++;
+            }
+        }
+        else if (m_subMenuSelected == subMenuNewGame)
+        {
+            if (m_menuItemSelected == 2)
+            {
+                m_menuItemSelected = 0;
+            }
+            else
             {
                 m_menuItemSelected++;
             }
@@ -236,13 +248,24 @@ void Catacomb3DMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 6;
+                m_menuItemSelected = 7;
             }
             else
             {
                 m_menuItemSelected--;
             }
             if (m_menuItemSelected == 2 && !m_saveGameEnabled)
+            {
+                m_menuItemSelected--;
+            }
+        }
+        else if (m_subMenuSelected == subMenuNewGame)
+        {
+            if (m_menuItemSelected == 0)
+            {
+                m_menuItemSelected = 2;
+            }
+            else
             {
                 m_menuItemSelected--;
             }
@@ -406,8 +429,8 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         if (m_menuItemSelected == 0)
         {
             // New game
-            command = MenuCommandStartNewGame;
-            m_menuActive = false;
+            m_subMenuSelected = subMenuNewGame;
+            m_menuItemSelected = 0;
         }
         else if (m_menuItemSelected == 1)
         {
@@ -438,10 +461,15 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             m_menuItemSelected = 0;
             m_menuItemOffset = 0;
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == 7)
         {
             command = MenuCommandExitGame;
         }
+    }
+    else if (m_subMenuSelected == subMenuNewGame)
+    {
+        command = MenuCommandStartNewGame;
+        m_menuActive = false;
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
@@ -599,14 +627,9 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     return command;
 }
 
-void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic)
+void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)
 {
     renderer.Render2DPicture(egaGraph->GetPicture(CP_MENUSCREENPIC), 0, 0);
-    renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-    renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-    renderer.Render2DPicture(egaGraph->GetPicture(CP_MAINMENUPIC), 80, 48);
-    renderer.Render2DPicture(egaGraph->GetTilesSize8(92), 112, 62);
-    renderer.RenderTextLeftAligned("NEW GAME", egaGraph->GetFont(4), EgaBrightRed, 120, 62);
 
     if (m_askForOverwrite)
     {  
@@ -618,19 +641,49 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTextCentered("Y / N", egaGraph->GetFont(3), EgaBrightYellow, 160, 82);
         return;
     }
+
+    const bool flashIcon = ((timeStamp / 1000) % 2 == 0);
     if (m_subMenuSelected == subMenuMain)
     {
-        const uint16_t xOffset = 140;
-        renderer.RenderTextCentered("Main menu", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),110,4+(m_menuItemSelected * 10));
-        renderer.RenderTextLeftAligned("New game", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite,xOffset,30);
-        renderer.RenderTextLeftAligned("Restore game", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
-        const egaColor saveGameColor = (!m_saveGameEnabled) ? EgaDarkGray : (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite;
-        renderer.RenderTextLeftAligned("Save game", egaGraph->GetFont(3), saveGameColor,xOffset,50);
-        renderer.RenderTextLeftAligned("Video", egaGraph->GetFont(3), (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset,60);
-        renderer.RenderTextLeftAligned("Sound", egaGraph->GetFont(3), (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset,70);
-        renderer.RenderTextLeftAligned("Controls", egaGraph->GetFont(3), (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset,80);
-        renderer.RenderTextLeftAligned("Quit", egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset,90);          
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_MAINMENUPIC), 80, 48);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 0) && flashIcon) ? 93 : 92), 112, 62);
+        renderer.RenderTextLeftAligned("NEW GAME", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 120, 63);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 1) && flashIcon) ? 93 : 92), 112, 70);
+        renderer.RenderTextLeftAligned("LOAD GAME", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 120, 71);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 2) && flashIcon) ? 93 : 92), 112, 78);
+        renderer.RenderTextLeftAligned("SAVE GAME", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 120, 79);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 3) && flashIcon) ? 93 : 92), 112, 86);
+        renderer.RenderTextLeftAligned("CONFIGURE", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 120, 87);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 93 : 92), 112, 94);
+        renderer.RenderTextLeftAligned("RETURN TO DEMO", egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 120, 95);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 5) && flashIcon) ? 93 : 92), 112, 102);
+        renderer.RenderTextLeftAligned("END GAME", egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 120, 103);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 6) && flashIcon) ? 93 : 92), 112, 110);
+        renderer.RenderTextLeftAligned("SKULL 'N' BONES", egaGraph->GetFont(4), (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 120, 111);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 7) && flashIcon) ? 93 : 92), 112, 118);
+        renderer.RenderTextLeftAligned("QUIT", egaGraph->GetFont(4), (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 120, 119);
+
+        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
+        renderer.RenderTextCentered("Esc to quit", egaGraph->GetFont(4), EgaRed, 154, 144);
+    }
+    else if (m_subMenuSelected == subMenuNewGame)
+    {
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_NEWGAMEMENUPIC), 80, 48);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 0) && flashIcon) ? 93 : 92), 88, 62);
+        renderer.RenderTextLeftAligned("BEGIN EASY GAME", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 1) && flashIcon) ? 93 : 92), 88, 70);
+        renderer.RenderTextLeftAligned("BEGIN NORMAL GAME", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 2) && flashIcon) ? 93 : 92), 88, 78);
+        renderer.RenderTextLeftAligned("BEGIN HARD GAME", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
+
+        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
+        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuVideo)
     {

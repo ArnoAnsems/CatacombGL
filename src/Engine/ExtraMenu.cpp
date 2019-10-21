@@ -599,7 +599,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     return command;
 }
 
-void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic)
+void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)
 {
     if (m_askForOverwrite)
     {  

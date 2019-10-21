@@ -35,7 +35,7 @@ public:
     bool IsActive() const override;
     void SetActive(bool active) override;
     MenuCommand ProcessInput(const PlayerInput& playerInput) override;
-    void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic) override;
+    void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp) override;
     void SetSaveGameEnabled(const bool enabled) override;
     const std::string& GetNewSaveGameName() const override;
     void OpenRestoreGameMenu() override;
