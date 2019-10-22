@@ -122,6 +122,7 @@ private:
     void BackspacePressed();
     bool IsActionActive(const ControlAction action) const;
     bool IsActionJustPressed(const ControlAction action) const;
+    void StartNewGameWithDifficultySelection();
     void StartNewGame();
     void UnloadLevel();
     bool StoreGameToFileWithFullPath(const std::string filename) const;

@@ -468,7 +468,10 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuNewGame)
     {
-        command = MenuCommandStartNewGame;
+        command =
+            (m_menuItemSelected == 0) ? MenuCommandStartNewGameEasy :
+            (m_menuItemSelected == 1) ? MenuCommandStartNewGameNormal :
+            MenuCommandStartNewGameHard;
         m_menuActive = false;
     }
     else if (m_subMenuSelected == subMenuVideo)

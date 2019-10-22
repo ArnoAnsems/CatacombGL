@@ -29,6 +29,9 @@ enum MenuCommand
 {
     MenuCommandNone,
     MenuCommandStartNewGame,
+    MenuCommandStartNewGameEasy,
+    MenuCommandStartNewGameNormal,
+    MenuCommandStartNewGameHard,
     MenuCommandExitGame,
     MenuCommandSaveGame,
     MenuCommandLoadGame

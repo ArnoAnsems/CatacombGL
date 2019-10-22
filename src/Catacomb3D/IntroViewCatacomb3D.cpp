@@ -55,20 +55,20 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
 
 void IntroViewCatacomb3D::DrawRequestDifficultyLevel()
 {
-    m_renderer.RenderTextLeftAligned("Select N or W [placeholder]", DefaultFont::Get(m_renderer), EgaBrightWhite, 10, 10);
+    // Not applicable
 }
 
 void IntroViewCatacomb3D::DrawNoviceSelected()
 {
-    m_renderer.RenderTextLeftAligned("Novice selected [placeholder]", DefaultFont::Get(m_renderer), EgaBrightWhite, 10, 10);
+    // Not applicable
 }
 
 void IntroViewCatacomb3D::DrawWarriorSelected()
 {
-    m_renderer.RenderTextLeftAligned("Warrior selected [placeholder]", DefaultFont::Get(m_renderer), EgaBrightWhite, 10, 10);
+    // Not applicable
 }
 
 void IntroViewCatacomb3D::DrawStandBeforeGate()
 {
-    m_renderer.RenderTextLeftAligned("About to enter the game... [placeholder]", DefaultFont::Get(m_renderer), EgaBrightWhite, 10, 10);
+    // Not applicable
 }

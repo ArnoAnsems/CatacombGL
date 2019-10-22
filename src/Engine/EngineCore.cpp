@@ -528,6 +528,21 @@ bool EngineCore::Think()
         const MenuCommand command = m_menu->ProcessInput(m_playerInput);
         if (command == MenuCommandStartNewGame)
         {
+            StartNewGameWithDifficultySelection();
+        }
+        else if (command == MenuCommandStartNewGameEasy)
+        {
+            m_difficultyLevel = Easy;
+            StartNewGame();
+        }
+        else if (command == MenuCommandStartNewGameNormal)
+        {
+            m_difficultyLevel = Normal;
+            StartNewGame();
+        }
+        else if (command == MenuCommandStartNewGameHard)
+        {
+            m_difficultyLevel = Hard;
             StartNewGame();
         }
         else if (command == MenuCommandExitGame)
@@ -2674,11 +2689,20 @@ bool EngineCore::IsActionJustPressed(const ControlAction action) const
     return isJustPressed;
 }
 
-void EngineCore::StartNewGame()
+void EngineCore::StartNewGameWithDifficultySelection()
 {
     m_state = RequestDifficultyLevel;
     m_playerInventory.ResetForNewGame();
     UnloadLevel();
+}
+
+void EngineCore::StartNewGame()
+{
+    m_state = EnteringLevel;
+    m_playerInventory.ResetForNewGame();
+    UnloadLevel();
+    m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
+    m_warpToLevel = 0;
 }
 
 void EngineCore::UnloadLevel()
