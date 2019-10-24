@@ -70,7 +70,6 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
         {
             m_askForOverwrite = false;
             command = MenuCommandSaveGame;
-            m_menuItemSelected = 0;
         }
         else if (keyCode != SDLK_UNKNOWN)
         {
@@ -210,17 +209,20 @@ void ExtraMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuSaveGame)
         {
-            if (m_menuItemSelected == m_savedGames.size() + 1)
+            if (!m_askForOverwrite && !m_waitingForNewSaveGameName)  // Do not change the save game slot while typing
             {
-                m_menuItemSelected = 0;
-                m_menuItemOffset = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 7)
+                if (m_menuItemSelected == m_savedGames.size() + 1)
                 {
-                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
+                    m_menuItemSelected = 0;
+                    m_menuItemOffset = 0;
+                }
+                else
+                {
+                    m_menuItemSelected++;
+                    if (m_menuItemSelected - m_menuItemOffset > 7)
+                    {
+                        m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
+                    }
                 }
             }
         }
@@ -303,17 +305,20 @@ void ExtraMenu::MenuUp()
         }
         else if (m_subMenuSelected == subMenuSaveGame)
         {
-            if (m_menuItemSelected == 0)
+            if (!m_askForOverwrite && !m_waitingForNewSaveGameName)  // Do not change the save game slot while typing
             {
-                m_menuItemSelected = (uint8_t)m_savedGames.size() + 1;
-                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-            }
-            else
-            {
-                m_menuItemSelected--;
-                if (m_menuItemSelected < m_menuItemOffset)
+                if (m_menuItemSelected == 0)
                 {
-                    m_menuItemOffset = m_menuItemSelected;
+                    m_menuItemSelected = (uint8_t)m_savedGames.size() + 1;
+                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
+                }
+                else
+                {
+                    m_menuItemSelected--;
+                    if (m_menuItemSelected < m_menuItemOffset)
+                    {
+                        m_menuItemOffset = m_menuItemSelected;
+                    }
                 }
             }
         }
@@ -568,7 +573,6 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 1)
         {
-            
             if (!m_waitingForNewSaveGameName)
             {
                 m_waitingForNewSaveGameName = true;
@@ -579,6 +583,10 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 if (IsNewSaveGameNameAlreadyInUse())
                 {
                     m_askForOverwrite = true;
+                }
+                else if (m_newSaveGameName.size() == 0)
+                {
+                    // Not a valid name, do not store
                 }
                 else
                 {

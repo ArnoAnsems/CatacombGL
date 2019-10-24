@@ -566,6 +566,7 @@ bool EngineCore::Think()
                 if (!existingSaveOverwritten)
                 {
                     m_savedGames.push_back(saveGameName);
+                    m_playerInput.ClearJustPressed();
                     return false;
                 }
             }
@@ -574,6 +575,7 @@ bool EngineCore::Think()
         {
             const std::string& saveGameName = m_menu->GetNewSaveGameName();
             LoadGameFromFile(saveGameName);
+            m_playerInput.ClearJustPressed();
             return false;
         }
     }

@@ -50,6 +50,7 @@ private:
     MenuCommand EnterKeyPressed();
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
+    static void DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotPosition, const bool bright);
 
     bool m_menuActive;
     uint8_t m_menuItemSelected;
