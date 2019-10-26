@@ -110,7 +110,8 @@ private:
     void SelectDifficultyLevelNovice();
     void SelectDifficultyLevelWarrior();
 
-    void ToggleMenu();
+    void OpenMenu();
+    void CloseMenu();
 
     void EnterKeyReleased();
     void ReadScroll(const uint8_t scrollIndex);

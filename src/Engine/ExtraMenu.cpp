@@ -63,9 +63,10 @@ void ExtraMenu::SetActive(bool active)
 MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
 {
     MenuCommand command = MenuCommandNone;
+
+    const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
     if (m_askForOverwrite)
     {
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
         if (keyCode == SDLK_y)
         {
             m_askForOverwrite = false;
@@ -79,7 +80,6 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     if (m_waitingForKeyToBind)
     {
         // Check which key is pressed
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
         if (keyCode != SDLK_UNKNOWN && m_configurationSettings.GetControlsMap().AssignActionToKey((ControlAction)(m_menuItemSelected), keyCode))
         {
             m_waitingForKeyToBind = false;
@@ -97,7 +97,6 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     {
         const uint16_t maxSaveGameNameLength = 20;
         // Check which key is pressed
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
         if (KeyIsSuitableForSaveGameName(keyCode) && m_newSaveGameName.length() < maxSaveGameNameLength)
         {
             m_newSaveGameName += std::string(SDL_GetKeyName(keyCode));
@@ -128,6 +127,10 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     else if (playerInput.IsKeyJustPressed(SDLK_RIGHT))
     {
         MenuRight();
+    }
+    else if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        command = MenuCommandCloseMenu;
     }
 
     return command;

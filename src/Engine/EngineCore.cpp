@@ -578,6 +578,12 @@ bool EngineCore::Think()
             m_playerInput.ClearJustPressed();
             return false;
         }
+        else if (command == MenuCommandCloseMenu)
+        {
+            CloseMenu();
+            m_playerInput.ClearJustPressed();
+            return false;
+        }
     }
 
     if (m_state == InGame && !m_menu->IsActive())
@@ -643,7 +649,7 @@ bool EngineCore::Think()
 
     if (!m_playerInput.HasFocus() && m_state == InGame && !m_menu->IsActive())
     {
-        ToggleMenu();
+        OpenMenu();
         m_playerInput.ClearAll();
     }
 
@@ -714,9 +720,9 @@ bool EngineCore::Think()
         }
     }
 
-    if (m_state != Help && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
+    if (m_state != Help && !m_menu->IsActive() && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
     {
-        ToggleMenu();
+        OpenMenu();
     }
     else if (m_state == Help)
     {
@@ -2628,26 +2634,24 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
         );
 }
 
-void EngineCore::ToggleMenu()
+void EngineCore::OpenMenu()
 {
-    if (m_menu->IsActive())
+    m_menu->SetActive(true);
+    if (m_state == InGame)
     {
-        m_menu->SetActive(false);
-        if (m_state == InGame)
-        {
-            m_gameTimer.Resume();
-        }
-        m_game.PlaySoundWarpUpOrDown(false);
+        m_gameTimer.Pause();
     }
-    else
+    m_game.PlaySoundWarpUpOrDown(true);
+}
+
+void EngineCore::CloseMenu()
+{
+    m_menu->SetActive(false);
+    if (m_state == InGame)
     {
-        m_menu->SetActive(true);
-        if (m_state == InGame)
-        {
-            m_gameTimer.Pause();
-        }
-        m_game.PlaySoundWarpUpOrDown(true);
+        m_gameTimer.Resume();
     }
+    m_game.PlaySoundWarpUpOrDown(false);
 }
 
 bool EngineCore::IsActionActive(const ControlAction action) const

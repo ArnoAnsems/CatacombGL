@@ -23,6 +23,8 @@ const uint8_t subMenuSound = 3;
 const uint8_t subMenuRestoreGame = 4;
 const uint8_t subMenuSaveGame = 5;
 const uint8_t subMenuNewGame = 6;
+const uint8_t subMenuConfigure = 7;
+const uint8_t subMenuMusic = 8;
 
 const uint16_t browseMenuSound = 0;
 
@@ -113,7 +115,6 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     {
         command = EnterKeyPressed();
     }
-
     else if (playerInput.IsKeyJustPressed(SDLK_UP))
     {
         MenuUp();
@@ -129,6 +130,27 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     else if (playerInput.IsKeyJustPressed(SDLK_RIGHT))
     {
         MenuRight();
+    }
+    else if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        m_menuItemSelected = 0;
+        m_menuItemOffset = 0;
+
+        if (m_subMenuSelected == subMenuMain)
+        {
+            command = MenuCommandCloseMenu;
+        }
+        else if (m_subMenuSelected == subMenuSound ||
+                 m_subMenuSelected == subMenuMusic || 
+                 m_subMenuSelected == subMenuVideo || 
+                 m_subMenuSelected == subMenuControls)
+        {
+            m_subMenuSelected = subMenuConfigure;
+        }
+        else
+        {
+            m_subMenuSelected = subMenuMain;
+        }
     }
 
     return command;
@@ -153,6 +175,17 @@ void Catacomb3DMenu::MenuDown()
         else if (m_subMenuSelected == subMenuNewGame)
         {
             if (m_menuItemSelected == 2)
+            {
+                m_menuItemSelected = 0;
+            }
+            else
+            {
+                m_menuItemSelected++;
+            }
+        }
+        else if (m_subMenuSelected == subMenuConfigure)
+        {
+            if (m_menuItemSelected == 3)
             {
                 m_menuItemSelected = 0;
             }
@@ -201,7 +234,7 @@ void Catacomb3DMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuRestoreGame)
         {
-            if (m_menuItemSelected == m_savedGames.size())
+            if (m_menuItemSelected == m_savedGames.size() - 1)
             {
                 m_menuItemSelected = 0;
                 m_menuItemOffset = 0;
@@ -209,9 +242,9 @@ void Catacomb3DMenu::MenuDown()
             else
             {
                 m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 7)
+                if (m_menuItemSelected - m_menuItemOffset > 5)
                 {
-                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
+                    m_menuItemOffset = (m_menuItemSelected > 5) ? m_menuItemSelected - 5 : 0;
                 }
             }
         }
@@ -264,6 +297,17 @@ void Catacomb3DMenu::MenuUp()
                 m_menuItemSelected--;
             }
         }
+        else if (m_subMenuSelected == subMenuConfigure)
+        {
+            if (m_menuItemSelected == 0)
+            {
+                m_menuItemSelected = 3;
+            }
+            else
+            {
+                m_menuItemSelected--;
+            }
+        }
         else if (m_subMenuSelected == subMenuVideo)
         {
             if (m_menuItemSelected == 0)
@@ -306,8 +350,8 @@ void Catacomb3DMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = (uint8_t)m_savedGames.size();
-                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
+                m_menuItemSelected = (uint8_t)m_savedGames.size() - 1;
+                m_menuItemOffset = (m_menuItemSelected > 5) ? m_menuItemSelected - 5 : 0;
             }
             else
             {
@@ -429,7 +473,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             m_subMenuSelected = subMenuNewGame;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 1)
+        else if (m_menuItemSelected == 1 && m_savedGames.size() > 0)
         {
             m_subMenuSelected = subMenuRestoreGame;
             m_menuItemSelected = 0;
@@ -441,22 +485,21 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 3)
         {
-            // Video
-            m_subMenuSelected = subMenuVideo;
+            // Configure
+            m_subMenuSelected = subMenuConfigure;
             m_menuItemSelected = 0;
         }
         else if (m_menuItemSelected == 4)
         {
-            // Sound
-            m_subMenuSelected = subMenuSound;
-            m_menuItemSelected = 0;
+            // Return to demo
         }
         else if (m_menuItemSelected == 5)
         {
-            // Controls
-            m_subMenuSelected = subMenuControls;
-            m_menuItemSelected = 0;
-            m_menuItemOffset = 0;
+            // End game
+        }
+        else if (m_menuItemSelected == 6)
+        {
+            // Skull 'n' Bones
         }
         else if (m_menuItemSelected == 7)
         {
@@ -576,16 +619,8 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
-        if (m_menuItemSelected == 0)
-        {
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 1;
-        }
-        else
-        {
-            m_newSaveGameName = m_savedGames.at(m_menuItemSelected - 1);
-            command = MenuCommandLoadGame;
-        }
+        m_newSaveGameName = m_savedGames.at(m_menuItemSelected);
+        command = MenuCommandLoadGame;
     }
     else if (m_subMenuSelected == subMenuSaveGame)
     {
@@ -619,6 +654,33 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         {
             m_askForOverwrite = true;
             m_newSaveGameName = m_savedGames.at(m_menuItemSelected - 1);
+        }
+    }
+    else if (m_subMenuSelected == subMenuConfigure)
+    {
+        if (m_menuItemSelected == 0)
+        {
+            // Sound
+            m_subMenuSelected = subMenuSound;
+            m_menuItemSelected = 0;
+        }
+        else if (m_menuItemSelected == 1)
+        {
+            // Music
+            m_subMenuSelected = subMenuMusic;
+            m_menuItemSelected = 0;
+        }
+        else if (m_menuItemSelected == 2)
+        {
+            // Video
+            m_subMenuSelected = subMenuVideo;
+            m_menuItemSelected = 0;
+        }
+        else if (m_menuItemSelected == 3)
+        {
+            // Controls
+            m_subMenuSelected = subMenuControls;
+            m_menuItemSelected = 0;
         }
     }
 
@@ -658,7 +720,14 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DPicture(egaGraph->GetPicture(CP_MAINMENUPIC), 80, 48);
         renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 0) && flashIcon) ? 93 : 92), 112, 62);
         renderer.RenderTextLeftAligned("NEW GAME", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 120, 63);
-        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 1) && flashIcon) ? 93 : 92), 112, 70);
+        if (m_savedGames.size() > 0)
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 1) && flashIcon) ? 93 : 92), 112, 70);
+        }
+        else
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 1) && flashIcon) ? 97 : 96), 112, 70);
+        }
         renderer.RenderTextLeftAligned("LOAD GAME", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 120, 71);
         if (m_saveGameEnabled)
         {
@@ -696,6 +765,24 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTextLeftAligned("BEGIN NORMAL GAME", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
         renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 2) && flashIcon) ? 93 : 92), 88, 78);
         renderer.RenderTextLeftAligned("BEGIN HARD GAME", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
+
+        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
+        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+    }
+    else if (m_subMenuSelected == subMenuConfigure)
+    {
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_CONFIGMENUPIC), 80, 48);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 0) && flashIcon) ? 93 : 92), 88, 62);
+        renderer.RenderTextLeftAligned("SOUND", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 1) && flashIcon) ? 93 : 92), 88, 70);
+        renderer.RenderTextLeftAligned("MUSIC", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 2) && flashIcon) ? 93 : 92), 88, 78);
+        renderer.RenderTextLeftAligned("VIDEO", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 3) && flashIcon) ? 93 : 92), 88, 86);
+        renderer.RenderTextLeftAligned("CONTROLS", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 96, 87);
 
         renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
         renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
@@ -806,25 +893,26 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
-        const uint16_t xOffset = 60;
-        const uint16_t xOffset2 = 150;
-        renderer.RenderTextCentered("Restore game", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
+        const uint16_t maxSlotsVisible = 6;
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_LOADMENUPIC), 80, 48);
 
-        if (m_menuItemOffset == 0)
+        uint8_t index = 0;
+        for (auto savedGameName : m_savedGames)
         {
-            renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        }
-        uint8_t index = 1;
-        for (auto savedGameName: m_savedGames)
-        {
-            if (index >= m_menuItemOffset && index <= m_menuItemOffset + 7)
+            if (index >= m_menuItemOffset && index < m_menuItemOffset + maxSlotsVisible)
             {
-                renderer.RenderTextLeftAligned(savedGameName.c_str(), egaGraph->GetFont(3), (m_menuItemSelected == index) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((index - m_menuItemOffset) * 10));
+                renderer.RenderTextLeftAligned(savedGameName.c_str(), egaGraph->GetFont(4), (m_menuItemSelected == index) ? EgaBrightRed : EgaRed, 82, 64 + ((index - m_menuItemOffset) * 11));
+                const bool bright = (index == m_menuItemSelected && flashIcon);
+                DrawSavedGameSlot(renderer, index - m_menuItemOffset, bright);
             }
             index++;
         }
 
+        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+        renderer.RenderTextLeftAligned("Enter accepts", egaGraph->GetFont(4), EgaRed, 163, 135);
+        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuSaveGame)
     {

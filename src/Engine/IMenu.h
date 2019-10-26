@@ -34,7 +34,8 @@ enum MenuCommand
     MenuCommandStartNewGameHard,
     MenuCommandExitGame,
     MenuCommandSaveGame,
-    MenuCommandLoadGame
+    MenuCommandLoadGame,
+    MenuCommandCloseMenu
 };
 
 class IMenu
