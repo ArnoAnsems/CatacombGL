@@ -142,7 +142,8 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         auto soundModePair = keyValuePairs.find("soundmode");
         if (soundModePair != keyValuePairs.end())
         {
-            m_soundMode = (soundModePair->second.compare("Off") == 0) ? 0 : 1;
+            m_soundMode = (soundModePair->second.compare("Off") == 0) ? 0 :
+                          (soundModePair->second.compare("PCSpeaker") == 0) ? 1 : 2;
         }
 
         auto mouseLookPair = keyValuePairs.find("mlook");
@@ -226,7 +227,7 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         std::string fovValue = std::to_string(m_fov);
         file << "fov=" << fovValue << "\n";
         file << "# Sound settings\n";
-        const std::string modeValue = (m_soundMode == 0) ? "Off" : "Adlib";
+        const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";
         file << "soundmode=" << modeValue << "\n";
         file << "# Controls settings\n";
         const std::string mlookValue = (m_mouseLook) ? "Enabled" : "Disabled";

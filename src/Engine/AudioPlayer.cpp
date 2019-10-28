@@ -30,10 +30,21 @@ AudioPlayer::~AudioPlayer()
 
 void AudioPlayer::Play(const uint16_t index)
 {
-    AdlibSound* sound = m_audioRepository->GetAdlibSound(index);
-    if (sound != NULL)
+    if (SD_GetSoundMode() == sdm_AdLib)
     {
-        SDL_ALPlaySound(sound);
+        AdlibSound* sound = m_audioRepository->GetAdlibSound(index);
+        if (sound != NULL)
+        {
+            SDL_ALPlaySound(sound);
+        }
+    }
+    else if (SD_GetSoundMode() == sdm_PC)
+    {
+        PCSound* sound = m_audioRepository->GetPCSound(index);
+        if (sound != NULL)
+        {
+            SDL_PCPlaySound(sound);
+        }
     }
 }
 

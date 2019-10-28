@@ -106,11 +106,7 @@ SDL_SetIntsPerSec(uint16_t ints)
 //	SDL_PCPlaySound() - Plays the specified sound on the PC speaker
 //
 ///////////////////////////////////////////////////////////////////////////
-#ifdef	_MUSE_
 void
-#else
-static void
-#endif
 SDL_PCPlaySound(PCSound *sound)
 {
 	BE_ST_LockAudioRecursively();

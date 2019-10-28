@@ -223,9 +223,9 @@ void Catacomb3DMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuSound)
         {
-            if (m_menuItemSelected == 0)
+            if (m_menuItemSelected < 2)
             {
-                m_menuItemSelected = 1;
+                m_menuItemSelected++;
             }
             else
             {
@@ -337,13 +337,13 @@ void Catacomb3DMenu::MenuUp()
         }
         else if (m_subMenuSelected == subMenuSound)
         {
-            if (m_menuItemSelected == 0)
+            if (m_menuItemSelected > 0)
             {
-                m_menuItemSelected = 1;
+                m_menuItemSelected--;
             }
             else
             {
-                m_menuItemSelected = 0;
+                m_menuItemSelected = 2;
             }
         }
         else if (m_subMenuSelected == subMenuRestoreGame)
@@ -600,22 +600,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuSound)
     {
-        if (m_menuItemSelected == 0)
-        {
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 4;
-        }
-        else if (m_menuItemSelected == 1)
-        {
-            if (m_configurationSettings.GetSoundMode() == 0)
-            {
-                m_configurationSettings.SetSoundMode(1);
-            }
-            else
-            {
-                m_configurationSettings.SetSoundMode(0);
-            }
-        }
+        m_configurationSettings.SetSoundMode(m_menuItemSelected);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
@@ -882,14 +867,30 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuSound)
     {
-        const uint16_t xOffset = 60;
-        const uint16_t xOffset2 = 200;
-        renderer.RenderTextCentered("Sound", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
-        renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        renderer.RenderTextLeftAligned("Sound Mode", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
-        const char* soundModeStr = (m_configurationSettings.GetSoundMode() == 0) ? "Off" : "Adlib";
-        renderer.RenderTextLeftAligned(soundModeStr, egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset2,40);
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_SOUNDMENUPIC), 80, 48);
+
+        const uint8_t soundMode = m_configurationSettings.GetSoundMode();
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(
+            ((m_menuItemSelected == 0) && flashIcon && soundMode == 0) ? 93 :
+            (soundMode == 0) ? 92 :
+            (m_menuItemSelected == 0 && flashIcon)  ? 95 : 94), 88, 62);
+        renderer.RenderTextLeftAligned("NO SOUND EFFECTS", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(
+            ((m_menuItemSelected == 1) && flashIcon && soundMode == 1) ? 93 :
+            (soundMode == 1) ? 92 :
+            (m_menuItemSelected == 1 && flashIcon) ? 95 : 94), 88, 70);
+        renderer.RenderTextLeftAligned("PC SPEAKER", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(
+            ((m_menuItemSelected == 2) && flashIcon && soundMode == 2) ? 93 :
+            (soundMode == 2) ? 92 :
+            (m_menuItemSelected == 2 && flashIcon) ? 95 : 94), 88, 78);
+        renderer.RenderTextLeftAligned("ADLIB/SOUNDBLASTER", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
+
+        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
+        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {

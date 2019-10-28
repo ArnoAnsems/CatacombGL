@@ -517,7 +517,11 @@ bool EngineCore::Think()
     {
         SD_SetSoundMode(sdm_Off);
     }
-    if (m_configurationSettings.GetSoundMode() == 1 && soundMode != sdm_AdLib)
+    if (m_configurationSettings.GetSoundMode() == 1 && soundMode != sdm_PC)
+    {
+        SD_SetSoundMode(sdm_PC);
+    }
+    if (m_configurationSettings.GetSoundMode() == 2 && soundMode != sdm_AdLib)
     {
         SD_SetSoundMode(sdm_AdLib);
     }

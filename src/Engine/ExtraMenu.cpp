@@ -548,6 +548,10 @@ MenuCommand ExtraMenu::EnterKeyPressed()
             {
                 m_configurationSettings.SetSoundMode(1);
             }
+            else if (m_configurationSettings.GetSoundMode() == 1)
+            {
+                m_configurationSettings.SetSoundMode(2);
+            }
             else
             {
                 m_configurationSettings.SetSoundMode(0);
@@ -736,7 +740,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
         renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
         renderer.RenderTextLeftAligned("Sound Mode", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
-        const char* soundModeStr = (m_configurationSettings.GetSoundMode() == 0) ? "Off" : "Adlib";
+        const char* soundModeStr = (m_configurationSettings.GetSoundMode() == 0) ? "Off" : (m_configurationSettings.GetSoundMode() == 1) ? "PC Speaker" : "Adlib";
         renderer.RenderTextLeftAligned(soundModeStr, egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset2,40);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
