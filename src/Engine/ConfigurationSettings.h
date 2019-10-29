@@ -93,6 +93,9 @@ public:
     uint8_t GetSoundMode() const;
     void SetSoundMode(const uint8_t mode);
 
+    bool GetMusicOn() const;
+    void SetMusicOn(const bool on);
+
     uint8_t GetMouseSensitivity() const;
     void SetMouseSensitivity(const uint8_t sensitivity);
 
@@ -115,6 +118,7 @@ private:
     bool m_vsync;
     ControlsMap m_controlsMap;
     uint8_t m_soundMode;
+    bool m_musicOn;
     uint8_t m_mouseSensitivity;
     bool m_mouseLook;
     uint8_t m_turnSpeed;

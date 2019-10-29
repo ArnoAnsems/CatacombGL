@@ -146,6 +146,12 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                           (soundModePair->second.compare("PCSpeaker") == 0) ? 1 : 2;
         }
 
+        auto musicPair = keyValuePairs.find("music");
+        if (musicPair != keyValuePairs.end())
+        {
+            m_musicOn = (musicPair->second.compare("Adlib") == 0);
+        }
+
         auto mouseLookPair = keyValuePairs.find("mlook");
         if (mouseLookPair != keyValuePairs.end())
         {
@@ -229,6 +235,8 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "# Sound settings\n";
         const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";
         file << "soundmode=" << modeValue << "\n";
+        const std::string musicValue = (m_musicOn) ? "Adlib" : "Off";
+        file << "music=" << musicValue << "\n";
         file << "# Controls settings\n";
         const std::string mlookValue = (m_mouseLook) ? "Enabled" : "Disabled";
         file << "mlook=" << mlookValue << "\n"; 
@@ -398,6 +406,16 @@ uint8_t ConfigurationSettings::GetSoundMode() const
 void ConfigurationSettings::SetSoundMode(const uint8_t mode)
 {
     m_soundMode = mode;
+}
+
+bool ConfigurationSettings::GetMusicOn() const
+{
+    return m_musicOn;
+}
+
+void ConfigurationSettings::SetMusicOn(const bool on)
+{
+    m_musicOn = on;
 }
 
 uint8_t ConfigurationSettings::GetMouseSensitivity() const

@@ -232,6 +232,17 @@ void Catacomb3DMenu::MenuDown()
                 m_menuItemSelected = 0;
             }
         }
+        else if (m_subMenuSelected == subMenuMusic)
+        {
+            if (m_menuItemSelected == 1)
+            {
+                m_menuItemSelected = 0;
+            }
+            else
+            {
+                m_menuItemSelected = 1;
+            }
+        }
         else if (m_subMenuSelected == subMenuRestoreGame)
         {
             if (m_menuItemSelected == m_savedGames.size() - 1)
@@ -344,6 +355,17 @@ void Catacomb3DMenu::MenuUp()
             else
             {
                 m_menuItemSelected = 2;
+            }
+        }
+        else if (m_subMenuSelected == subMenuMusic)
+        {
+            if (m_menuItemSelected == 1)
+            {
+                m_menuItemSelected = 0;
+            }
+            else
+            {
+                m_menuItemSelected = 1;
             }
         }
         else if (m_subMenuSelected == subMenuRestoreGame)
@@ -601,6 +623,10 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     else if (m_subMenuSelected == subMenuSound)
     {
         m_configurationSettings.SetSoundMode(m_menuItemSelected);
+    }
+    else if (m_subMenuSelected == subMenuMusic)
+    {
+        m_configurationSettings.SetMusicOn(m_menuItemSelected != 0);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
@@ -891,6 +917,28 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
         renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
         renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+    }
+    else if (m_subMenuSelected == subMenuMusic)
+    {
+    renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+    renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+    renderer.Render2DPicture(egaGraph->GetPicture(CP_MUSICMENUPIC), 80, 48);
+
+    const bool musicOn = m_configurationSettings.GetMusicOn();
+    renderer.Render2DPicture(egaGraph->GetTilesSize8(
+        ((m_menuItemSelected == 0) && flashIcon && !musicOn) ? 93 :
+        (!musicOn) ? 92 :
+        (m_menuItemSelected == 0 && flashIcon) ? 95 : 94), 88, 62);
+    renderer.RenderTextLeftAligned("NO MUSIC", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+    renderer.Render2DPicture(egaGraph->GetTilesSize8(
+        ((m_menuItemSelected == 1) && flashIcon && musicOn) ? 93 :
+        (musicOn) ? 92 :
+        (m_menuItemSelected == 1 && flashIcon) ? 95 : 94), 88, 70);
+    renderer.RenderTextLeftAligned("ADLIB/SOUNDBLASTER", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+
+    renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+    renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
+    renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
