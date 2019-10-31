@@ -23,6 +23,8 @@ public:
     ~AudioPlayer();
 
     void Play(const uint16_t index);
+    void StartMusic(const uint16_t index);
+    void StopMusic();
     bool IsPlaying();
 
 private:

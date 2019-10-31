@@ -517,13 +517,23 @@ bool EngineCore::Think()
     {
         SD_SetSoundMode(sdm_Off);
     }
-    if (m_configurationSettings.GetSoundMode() == 1 && soundMode != sdm_PC)
+    else if (m_configurationSettings.GetSoundMode() == 1 && soundMode != sdm_PC)
     {
         SD_SetSoundMode(sdm_PC);
     }
-    if (m_configurationSettings.GetSoundMode() == 2 && soundMode != sdm_AdLib)
+    else if (m_configurationSettings.GetSoundMode() == 2 && soundMode != sdm_AdLib)
     {
         SD_SetSoundMode(sdm_AdLib);
+    }
+
+    const SMMode musicMode = SD_GetMusicMode();
+    if (m_configurationSettings.GetMusicOn() && musicMode == smm_Off)
+    {
+        SD_SetMusicMode(smm_AdLib);
+    }
+    else if (!m_configurationSettings.GetMusicOn() && musicMode == smm_AdLib)
+    {
+        SD_SetMusicMode(smm_Off);
     }
 
     if (m_menu->IsActive())
@@ -579,12 +589,20 @@ bool EngineCore::Think()
         {
             const std::string& saveGameName = m_menu->GetNewSaveGameName();
             LoadGameFromFile(saveGameName);
+            if (m_game.GetId() == 5 && m_configurationSettings.GetMusicOn())
+            {
+                m_game.GetAudioPlayer()->StartMusic(0);
+            }
             m_playerInput.ClearJustPressed();
             return false;
         }
         else if (command == MenuCommandCloseMenu)
         {
             CloseMenu();
+            if (m_game.GetId() == 5 && m_state == InGame && m_configurationSettings.GetMusicOn())
+            {
+                m_game.GetAudioPlayer()->StartMusic(0);
+            }
             m_playerInput.ClearJustPressed();
             return false;
         }
@@ -654,6 +672,7 @@ bool EngineCore::Think()
     if (!m_playerInput.HasFocus() && m_state == InGame && !m_menu->IsActive())
     {
         OpenMenu();
+        m_game.GetAudioPlayer()->StopMusic();
         m_playerInput.ClearAll();
     }
 
@@ -727,6 +746,7 @@ bool EngineCore::Think()
     if (m_state != Help && !m_menu->IsActive() && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
     {
         OpenMenu();
+        m_game.GetAudioPlayer()->StopMusic();
     }
     else if (m_state == Help)
     {
@@ -767,6 +787,10 @@ bool EngineCore::Think()
         if (m_timeStampToEnterGame < m_gameTimer.GetActualTime())
         {
             m_state = InGame;
+            if (m_game.GetId() == 5 && m_configurationSettings.GetMusicOn())
+            {
+                m_game.GetAudioPlayer()->StartMusic(0);
+            }
         }
     }
 

@@ -110,8 +110,8 @@ typedef	struct
 
 
 extern	SDMode		SoundMode;
-
-//NOT DECLARED HERE - USE SD_GetTimeCount AND/OR SD_SetTimeCount
+extern	SMMode		MusicMode;
+//NOT DECLARED HERE - USE WRAPPERS LIKE SD_GetTimeCount
 //extern	id0_longword_t	TimeCount;					// Global time in ticks
 #ifdef REFKEEN_VER_CATADVENTURES
 extern 	SDMode		oldsoundmode;
@@ -122,10 +122,15 @@ extern	void	SD_Startup(void),
 				SD_Shutdown(void),
 				SD_Default(bool gotit,SDMode sd,SMMode sm),
 				SD_WaitSoundDone(void),
+				SD_StartMusic(FileChunk* music),
+				SD_MusicOn(void),
+				SD_MusicOff(void),
 				SD_SetUserHook(void (*hook)(void));
-extern	bool SD_SetSoundMode(SDMode mode);
-extern	SDMode SD_GetSoundMode();
-extern	bool SD_SoundPlaying(void);
+extern bool    SD_SetSoundMode(SDMode mode);
+extern SDMode  SD_GetSoundMode();
+extern bool    SD_SetMusicMode(SMMode mode);
+extern SMMode  SD_GetMusicMode();
+extern bool    SD_SoundPlaying(void);
 
 extern	void	SDL_PCPlaySound(PCSound* sound),
 				SDL_PCStopSound(void),
@@ -133,16 +138,4 @@ extern	void	SDL_PCPlaySound(PCSound* sound),
 				SDL_ALStopSound(void),
                 SD_StopSound(void);
 
-/*
-// Replacements for direct accesses to TimeCount variable
-inline uint32_t SD_GetTimeCount(void)
-{
-	return BE_ST_GetTimeCount();
-}
-
-inline void SD_SetTimeCount(uint32_t newcount)
-{
-	BE_ST_SetTimeCount(newcount);
-}
-*/
 #endif

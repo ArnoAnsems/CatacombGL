@@ -39,6 +39,7 @@ public:
 
     PCSound* GetPCSound(const uint16_t index);
     AdlibSound* GetAdlibSound(const uint16_t index);
+    FileChunk* GetMusicTrack(const uint16_t index);
 
 private:
     uint32_t GetChunkSize(const uint16_t index);
@@ -48,6 +49,7 @@ private:
     FileChunk* m_rawData;
     PCSound** m_pcSounds;
     AdlibSound** m_adlibSounds;
+    FileChunk** m_musicTracks;
     Huffman* m_huffman;
 };
 

@@ -29,9 +29,11 @@
 
 //	Global variables
 	bool		SoundSourcePresent,SoundBlasterPresent,AdLibPresent;
+    bool        NeedsMusic;
 	SDMode		SoundMode;
-	// NEVER accessed directly now - done from backend via functions
-	//id0_longword_t	TimeCount;
+	SMMode		MusicMode;
+	// NEVER accessed directly now - Done via wrapper functions
+
 	uint16_t		HackCount;
 	PCSound		**pcSoundTable;
     AdlibSound ** AdlibSoundTable;
@@ -65,8 +67,10 @@ static	uint8_t			carriers[9] =  { 3, 4, 5,11,12,13,19,20,21},
 						modifiers[9] = { 0, 1, 2, 8, 9,10,16,17,18};
 
 //	Sequencer variables
-
+static	bool			sqActive;
 static	uint16_t			alFXReg;
+static	uint16_t			*sqHack, *sqHackPtr,sqHackLen,sqHackSeqLen;
+static	uint32_t			sqHackTime;
 
 //	Internal routines
 
@@ -305,6 +309,35 @@ SDL_ALSoundService(void)
 		}
 	}
 }
+static void
+SDL_ALService(void)
+{
+	uint8_t 	a,v;
+	uint16_t	w;
+
+	if (!sqActive)
+		return;
+
+	// REFKEEN - Looks like this the comparison is unsigned in original EXE
+	while (sqHackLen && ((uint32_t)sqHackTime <= alTimeCount))
+	{
+		w = *sqHackPtr++;
+		sqHackTime = alTimeCount + *sqHackPtr++;
+		// REFKEEN - This is the case on Little and Big Endian altogether
+		a = *((uint8_t *)&w);
+		v = *((uint8_t *)&w + 1);
+
+		alOut(a,v);
+		sqHackLen -= 4;
+	}
+	alTimeCount++;
+	if (!sqHackLen)
+	{
+		sqHackPtr = (uint16_t*)sqHack;
+		sqHackLen = sqHackSeqLen;
+		alTimeCount = sqHackTime = 0;
+	}
+}
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -411,11 +444,35 @@ SDL_DetectAdLib(void)
 static void
 SDL_t0Service(void)
 {
-static	int16_t	count = 1;
+    static	int16_t	count = 1;
 
 	HackCount++;
 
+	if (MusicMode == smm_AdLib)
 	{
+		SDL_ALService();
+		if (!(++count & 7))
+		{
+			//LocalTime++;
+			//TimeCount++;
+			if (SoundUserHook)
+				SoundUserHook();
+		}
+		if (!(count & 3))
+		{
+			switch (SoundMode)
+			{
+			case sdm_PC:
+				SDL_PCService();
+				break;
+			case sdm_AdLib:
+				SDL_ALSoundService();
+				break;
+			}
+		}
+	}
+	else
+    {
 		if (!(++count & 1))
 		{
 			if (SoundUserHook)
@@ -461,7 +518,7 @@ SDL_ShutDevice(void)
 static void
 SDL_CleanDevice(void)
 {
-	if ((SoundMode == sdm_AdLib))
+	if ((SoundMode == sdm_AdLib) || (MusicMode == smm_AdLib))
 		SDL_CleanAL();
 }
 
@@ -485,7 +542,11 @@ SDL_StartDevice(void)
 static void
 SDL_SetTimerSpeed(void)
 {
-	int16_t	rate = TickBase * 2;
+    int16_t rate;
+	if (MusicMode == smm_AdLib)
+		rate = TickBase * 8;
+	else
+	    rate = TickBase * 2;
 	SDL_SetIntsPerSec(rate);
 }
 
@@ -513,12 +574,58 @@ SD_SetSoundMode(SDMode mode)
 	return true;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
+//	SD_SetMusicMode() - sets the device to use for background music
+//
+///////////////////////////////////////////////////////////////////////////
+bool
+SD_SetMusicMode(SMMode mode)
+{
+	bool result;
+
+	switch (mode)
+	{
+	case smm_Off:
+		NeedsMusic = false;
+		result = true;
+		break;
+	case smm_AdLib:
+		if (AdLibPresent)
+		{
+			NeedsMusic = true;
+			result = true;
+		}
+		// (REFKEEN) Originally result was not set here to false, or anything, at all - undefined behaviors...
+		else
+		{
+			result = false;
+		}
+		break;
+	default:
+		result = false;
+		break;
+	}
+
+	if (result)
+		MusicMode = mode;
+
+	SDL_SetTimerSpeed();
+
+	return(result);
+}
+
 SDMode
 SD_GetSoundMode()
 {
     return SoundMode;
 }
 
+SMMode
+SD_GetMusicMode()
+{
+    return MusicMode;
+}
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -547,6 +654,7 @@ SD_Startup(void)
 	/*LocalTime = TimeCount =*/ alTimeCount = 0;
 
 	SD_SetSoundMode(sdm_Off);
+    SD_SetMusicMode(smm_Off);
 
     AdLibPresent = SDL_DetectAdLib();
 
@@ -587,6 +695,23 @@ SD_Default(bool gotit,SDMode sd,SMMode sm)
 	}
 	if (sd != SoundMode)
 		SD_SetSoundMode(sd);
+	if (gotsm)	// Make sure requested music hardware is available
+	{
+		switch (sm)
+		{
+		case sdm_AdLib:
+			gotsm = AdLibPresent;
+			break;
+		}
+	}
+	if (!gotsm)
+	{
+		if (AdLibPresent)
+			sm = smm_AdLib;
+	}
+
+	if (sm != MusicMode)
+		SD_SetMusicMode(sm);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -603,6 +728,7 @@ SD_Shutdown(void)
 
     BE_ST_StopAudioAndTimerInt();
 
+    SD_MusicOff();
 	SDL_ShutDevice();
 	SDL_CleanDevice();
 
@@ -692,6 +818,65 @@ SD_WaitSoundDone(void)
 }
 
 
+///////////////////////////////////////////////////////////////////////////
+//
+//	SD_MusicOn() - turns on the sequencer
+//
+///////////////////////////////////////////////////////////////////////////
+void
+SD_MusicOn(void)
+{
+	sqActive = true;
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+//	SD_MusicOff() - turns off the sequencer and any playing notes
+//
+///////////////////////////////////////////////////////////////////////////
+void
+SD_MusicOff(void)
+{
+	uint16_t	i;
+
+
+	switch (MusicMode)
+	{
+	case smm_AdLib:
+		alFXReg = 0;
+		alOut(alEffects,0);
+		for (i = 0;i < sqMaxTracks;i++)
+			alOut(alFreqH + i + 1,0);
+		break;
+	}
+	sqActive = false;
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+//	SD_StartMusic() - starts playing the music pointed to
+//
+///////////////////////////////////////////////////////////////////////////
+void
+SD_StartMusic(FileChunk* music)
+{
+	SD_MusicOff();
+	BE_ST_LockAudioRecursively();
+//asm	pushf
+//asm	cli
+
+	if (MusicMode == smm_AdLib)
+	{
+        sqHackPtr = sqHack = (uint16_t*)music->GetChunk();
+        sqHackSeqLen = sqHackLen = (uint16_t)music->GetSize();
+		sqHackTime = 0;
+		alTimeCount = 0;
+		SD_MusicOn();
+	}
+
+	BE_ST_UnlockAudioRecursively();
+//asm	popf
+}
 // Replacements for direct accesses to TimeCount variable
 // (should be instantiated here even if inline, as of C99)
 //id0_longword_t SD_GetTimeCount(void);

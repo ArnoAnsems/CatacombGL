@@ -56,10 +56,12 @@ AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, co
     // Initialize PC and Adlib sounds
     m_pcSounds = new PCSound*[staticData.lastSound];
     m_adlibSounds = new AdlibSound*[staticData.lastSound];
+    m_musicTracks = new FileChunk*[staticData.lastSound];
     for (uint16_t i = 0; i < staticData.lastSound; i++)
     {
         m_pcSounds[i] = NULL;
         m_adlibSounds[i] = NULL;
+        m_musicTracks[i] = NULL;
     }
 }
 
@@ -75,9 +77,14 @@ AudioRepository::~AudioRepository()
         {
             delete m_adlibSounds[i];
         }
+        if (m_musicTracks[i] != NULL)
+        {
+            delete m_musicTracks[i];
+        }
     }
     delete[] m_pcSounds;
     delete[] m_adlibSounds;
+    delete[] m_musicTracks;
 
     if (m_huffman != NULL)
     {
@@ -127,6 +134,28 @@ AdlibSound* AudioRepository::GetAdlibSound(const uint16_t index)
     }
 
     return m_adlibSounds[index]; 
+}
+
+FileChunk* AudioRepository::GetMusicTrack(const uint16_t index)
+{
+    if (index >= m_staticData.lastSound)
+    {
+        return NULL;
+    }
+
+    if (m_musicTracks[index] == NULL)
+    {
+        uint8_t* compressedSound = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index + (m_staticData.lastSound * 3))];
+        uint32_t compressedSize = GetChunkSize(index + (m_staticData.lastSound * 3)) - sizeof(uint32_t);
+        uint32_t uncompressedSize = *(uint32_t*)compressedSound;
+        FileChunk* soundChunk = m_huffman->Decompress(&compressedSound[sizeof(uint32_t)], compressedSize, uncompressedSize);
+        const uint16_t musicTrackLength = *(uint16_t*)soundChunk->GetChunk();
+        m_musicTracks[index] = new FileChunk(musicTrackLength);
+        memcpy(m_musicTracks[index]->GetChunk(), soundChunk->GetChunk() + sizeof(uint16_t), musicTrackLength);
+        delete soundChunk;
+    }
+
+    return m_musicTracks[index];
 }
 
 uint32_t AudioRepository::GetChunkSize(const uint16_t index)

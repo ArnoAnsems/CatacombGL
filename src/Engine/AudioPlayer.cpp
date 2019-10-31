@@ -48,6 +48,20 @@ void AudioPlayer::Play(const uint16_t index)
     }
 }
 
+void AudioPlayer::StartMusic(const uint16_t index)
+{
+    FileChunk* musicTrack = m_audioRepository->GetMusicTrack(index);
+    if (musicTrack != NULL)
+    {
+        SD_StartMusic(musicTrack);
+    }
+}
+
+void AudioPlayer::StopMusic()
+{
+    SD_MusicOff();
+}
+
 bool AudioPlayer::IsPlaying()
 {
     return SD_SoundPlaying();
