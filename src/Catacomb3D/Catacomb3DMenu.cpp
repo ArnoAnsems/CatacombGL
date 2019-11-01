@@ -196,7 +196,7 @@ void Catacomb3DMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 7)
+            if (m_menuItemSelected == 6)
             {
                 m_menuItemSelected = 0;
             }
@@ -323,7 +323,7 @@ void Catacomb3DMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 7;
+                m_menuItemSelected = 6;
             }
             else
             {
@@ -413,7 +413,7 @@ void Catacomb3DMenu::MenuLeft()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 3)
+            if (m_menuItemSelected == 2)
             {
                 if (m_configurationSettings.GetFov() > 25)
                 {
@@ -452,7 +452,7 @@ void Catacomb3DMenu::MenuRight()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 3)
+            if (m_menuItemSelected == 2)
             {
                 if (m_configurationSettings.GetFov() < 45)
                 {
@@ -540,11 +540,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     {
         if (m_menuItemSelected == 0)
         {
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 3;
-        }
-        else if (m_menuItemSelected == 1)
-        {
             if (m_configurationSettings.GetScreenMode() == Windowed)
             {
                 m_configurationSettings.SetScreenMode(Fullscreen);
@@ -558,7 +553,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                 m_configurationSettings.SetScreenMode(Windowed);
             }
         }
-        else if (m_menuItemSelected == 2)
+        else if (m_menuItemSelected == 1)
         {
             if (m_configurationSettings.GetAspectRatio() == 1)
             {
@@ -569,7 +564,18 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                 m_configurationSettings.SetAspectRatio(1);
             }
         }
-        else if (m_menuItemSelected == 4)
+        else if (m_menuItemSelected == 2)
+        {
+            if (m_configurationSettings.GetFov() == 45)
+            {
+                m_configurationSettings.SetFov(25);
+            }
+            else
+            {
+                m_configurationSettings.SetFov(m_configurationSettings.GetFov() + 1);
+            }
+        }
+        else if (m_menuItemSelected == 3)
         {
             if (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest)
             {
@@ -580,15 +586,15 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                     m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
             }
         }
-        else if (m_menuItemSelected == 5)
+        else if (m_menuItemSelected == 4)
         {
             m_configurationSettings.SetDepthShading(!m_configurationSettings.GetDepthShading());
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == 5)
         {
             m_configurationSettings.SetShowFps(!m_configurationSettings.GetShowFps());
         }
-        else if (m_menuItemSelected == 7)
+        else if (m_menuItemSelected == 6)
         {
             m_configurationSettings.SetVSync(!m_configurationSettings.GetVSync());
         }
@@ -801,37 +807,68 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        const uint16_t xOffset = 60;
-        const uint16_t xOffset2 = 200;
-        renderer.RenderTextCentered("Video", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
-        renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        renderer.RenderTextLeftAligned("Screen Mode", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset, 40);
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        
+        // The header for the Video Menu is composed out of letters from other menu headers, as it did not exist
+        // in the original game.
+        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_SAVEMENUPIC), 80, 48, 16, 0, 8, 12); // V
+        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_MAINMENUPIC), 88, 48, 19, 0, 3, 12); // I
+        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_LOADMENUPIC), 91, 48, 24, 0, 7, 12); // D
+        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_SAVEMENUPIC), 98, 48, 24, 0, 7, 12); // E
+        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_LOADMENUPIC), 105, 48, 10, 0, 7, 12); // O
+        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_MAINMENUPIC), 112, 48, 30, 0, 34, 12); // MENU
+
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 0) && flashIcon) ? 93 : 92), 76, 62);
+        renderer.RenderTextLeftAligned("Screen Mode", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, 63);
         const char* screenModeStr =
             (m_configurationSettings.GetScreenMode() == Windowed) ? "Windowed" :
             (m_configurationSettings.GetScreenMode() == Fullscreen) ? "Fullscreen" :
             "Borderless";
-        renderer.RenderTextLeftAligned(screenModeStr, egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 40);
-        renderer.RenderTextLeftAligned("Aspect ratio", egaGraph->GetFont(3), (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite,xOffset,50);
+        renderer.RenderTextLeftAligned(screenModeStr, egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaLightGray : EgaDarkGray, 180, 63);
+
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 1) && flashIcon) ? 93 : 92), 76, 70);
+        renderer.RenderTextLeftAligned("Aspect ratio", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, 70);
         const char* aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description.c_str();
-        renderer.RenderTextLeftAligned(aspectRatioStr, egaGraph->GetFont(3), (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite,xOffset2,50);
-        renderer.RenderTextLeftAligned("Field Of View (Y)", egaGraph->GetFont(3), (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset,60);
+        renderer.RenderTextLeftAligned(aspectRatioStr, egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 160, 71);
+
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 2) && flashIcon) ? 93 : 92), 76, 78);
+        renderer.RenderTextLeftAligned("Field Of View (Y)", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, 79);
         char fovStr[40];
         sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
-        renderer.RenderTextLeftAligned(fovStr, egaGraph->GetFont(3), (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset2,60);
-        renderer.RenderTextLeftAligned("Texture filtering", egaGraph->GetFont(3), (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset,70);
+        renderer.RenderTextLeftAligned(fovStr, egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaLightGray : EgaDarkGray, 180, 79);
+
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 3) && flashIcon) ? 93 : 92), 76, 86);
+        renderer.RenderTextLeftAligned("Texture filtering", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, 87);
         const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
-        renderer.RenderTextLeftAligned(textureFilterStr, egaGraph->GetFont(3), (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset2,70);
-        renderer.RenderTextLeftAligned("Depth shading", egaGraph->GetFont(3), (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset,80);
+        renderer.RenderTextLeftAligned(textureFilterStr, egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaLightGray : EgaDarkGray, 180, 87);
+
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 93 : 92), 76, 94);
+        renderer.RenderTextLeftAligned("Depth shading", egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, 95);
         const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
-        renderer.RenderTextLeftAligned(depthShadingStr, egaGraph->GetFont(3), (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset2,80);
-        renderer.RenderTextLeftAligned("Show frame rate", egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset,90);
+        renderer.RenderTextLeftAligned(depthShadingStr, egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaLightGray : EgaDarkGray, 180, 95);
+
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 5) && flashIcon) ? 93 : 92), 76, 102);
+        renderer.RenderTextLeftAligned("Show frame rate", egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 84, 103);
         const char* showFpsStr = (m_configurationSettings.GetShowFps()) ? "Enabled" : "Disabled";
-        renderer.RenderTextLeftAligned(showFpsStr, egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset2,90);
+        renderer.RenderTextLeftAligned(showFpsStr, egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaLightGray : EgaDarkGray, 180, 103);
+
         const bool vsyncNotSupported = !renderer.IsVSyncSupported();
-        renderer.RenderTextLeftAligned("VSync", egaGraph->GetFont(3), (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == 7) ? EgaBrightCyan : EgaBrightWhite, xOffset, 100);
+        if (vsyncNotSupported)
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 6) && flashIcon) ? 97 : 96), 76, 110);
+        }
+        else
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 6) && flashIcon) ? 93 : 92), 76, 110);
+        }
+        renderer.RenderTextLeftAligned("VSync", egaGraph->GetFont(4), (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, 111);
         const char* vsyncStr = (vsyncNotSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
-        renderer.RenderTextLeftAligned(vsyncStr, egaGraph->GetFont(3), (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == 7) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 100);
+        renderer.RenderTextLeftAligned(vsyncStr, egaGraph->GetFont(4), (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, vsyncNotSupported ? 160 : 180, 111);
+
+        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
+        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuControls)
     {
