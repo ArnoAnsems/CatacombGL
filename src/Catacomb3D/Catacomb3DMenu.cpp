@@ -83,14 +83,14 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     {
         // Check which key is pressed
         const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (keyCode != SDLK_UNKNOWN && m_configurationSettings.GetControlsMap().AssignActionToKey((ControlAction)(m_menuItemSelected), keyCode))
+        if (keyCode != SDLK_UNKNOWN && m_configurationSettings.GetControlsMap().AssignActionToKey((ControlAction)(m_menuItemSelected + 1), keyCode))
         {
             m_waitingForKeyToBind = false;
         }
         else
         {
             const uint8_t buttonCode = playerInput.GetFirstMouseButtonPressed();
-            if (buttonCode != 0 && m_configurationSettings.GetControlsMap().AssignActionToMouseButton((ControlAction)(m_menuItemSelected), buttonCode))
+            if (buttonCode != 0 && m_configurationSettings.GetControlsMap().AssignActionToMouseButton((ControlAction)(m_menuItemSelected + 1), buttonCode))
             {
                 m_waitingForKeyToBind = false;
             }
@@ -207,7 +207,7 @@ void Catacomb3DMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuControls)
         {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
+            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
             {
                 m_menuItemSelected = 0;
                 m_menuItemOffset = 0;
@@ -334,7 +334,7 @@ void Catacomb3DMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3;
+                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2;
                 m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
             }
             else
@@ -427,14 +427,14 @@ void Catacomb3DMenu::MenuLeft()
         }
         else if (m_subMenuSelected == subMenuControls)
         {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
                 if (m_configurationSettings.GetMouseSensitivity() > 1)
                 {
                     m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() - 1);
                 }
             }
-            else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
                 if (m_configurationSettings.GetTurnSpeed() > 100)
                 {
@@ -466,14 +466,14 @@ void Catacomb3DMenu::MenuRight()
         }
         else if (m_subMenuSelected == subMenuControls)
         {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
                 if (m_configurationSettings.GetMouseSensitivity() < 15)
                 {
                     m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() + 1);
                 }
             }
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
                 if (m_configurationSettings.GetTurnSpeed() < 250)
                 {
@@ -601,23 +601,41 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuControls)
     {
-        if (m_menuItemSelected == 0)
+        if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
         {
-            // Go back to main menu
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 5;
+            // Mouse sensitivity
+            if (m_configurationSettings.GetMouseSensitivity() < 15)
+            {
+                m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() + 1);
+            }
+            else
+            {
+                m_configurationSettings.SetMouseSensitivity(1);
+            }
         }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
+        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+        {
+            // Turn speed
+            if (m_configurationSettings.GetTurnSpeed() < 250)
+            {
+                m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() + 10);
+            }
+            else
+            {
+                m_configurationSettings.SetTurnSpeed(100);
+            }
+        }
+        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() - 1)
         {
             // Mouse look
             m_configurationSettings.SetMouseLook(!m_configurationSettings.GetMouseLook());
         }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
+        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
         {
             // Always run
             m_configurationSettings.SetAlwaysRun(!m_configurationSettings.GetAlwaysRun());
         }
-        else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+        else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size() - 1)
         {
             // Any of the control options
             if (!m_waitingForKeyToBind)
@@ -872,61 +890,65 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuControls)
     {
-        const uint16_t xOffset = 50;
-        const uint16_t xOffset2 = 145;
-        const uint8_t maxRowsVisible = 8;
-            
-        renderer.RenderTextCentered("Controls", egaGraph->GetFont(3), EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),20,4+((m_menuItemSelected - m_menuItemOffset) * 10));
-        uint16_t index = 0;
-        while (index < 8)
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_KEYBUTTONPIC), 80, 48);
+
+        uint16_t index = 1;
+        while (index < 9)
         {
-            if (index + m_menuItemOffset == 0)
+            if (index + m_menuItemOffset < (uint16_t)m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
-                renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-            }
-            else if (index + m_menuItemOffset < (uint16_t)m_configurationSettings.GetControlsMap().GetActionLabels().size())
-            {
+                renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon) ? 93 : 92), 76, 62 + ((index - 1) * 8));
                 const std::string& actionLabel = m_configurationSettings.GetControlsMap().GetActionLabels().at((ControlAction)(index + m_menuItemOffset));
-                const uint16_t yOffset = 30 + (index * 10);
-                renderer.RenderTextLeftAligned(actionLabel.c_str(), egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,yOffset);
-                if (m_waitingForKeyToBind && m_menuItemSelected == index + m_menuItemOffset)
+                const uint16_t yOffset = 63 + ((index - 1) * 8);
+                renderer.RenderTextLeftAligned(actionLabel.c_str(), egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, yOffset);
+                if (m_waitingForKeyToBind && m_menuItemSelected == index + m_menuItemOffset - 1)
                 {
-                    renderer.RenderTextLeftAligned("< Press key to bind >", egaGraph->GetFont(3), EgaBrightCyan,xOffset2,yOffset);
+                    renderer.RenderTextLeftAligned("< Press key to bind >", egaGraph->GetFont(4), EgaLightGray, 160, yOffset);
                 }
                 else
                 {
-                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,yOffset);
+                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, yOffset);
                 }
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
-                renderer.RenderTextLeftAligned("Mouse Look", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
+                renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon) ? 93 : 92), 76, 62 + ((index - 1) * 8));
+                renderer.RenderTextLeftAligned("Mouse Look", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 const char* mouseLookStr = (m_configurationSettings.GetMouseLook()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(mouseLookStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
+                renderer.RenderTextLeftAligned(mouseLookStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
-                renderer.RenderTextLeftAligned("Mouse Sensitiv.", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
+                renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon) ? 93 : 92), 76, 62 + ((index - 1) * 8));
+                renderer.RenderTextLeftAligned("Mouse Sens.", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 char mouseSensitivityStr[5];
                 sprintf_s(mouseSensitivityStr, 5, "%d", m_configurationSettings.GetMouseSensitivity());
-                renderer.RenderTextLeftAligned(mouseSensitivityStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
+                renderer.RenderTextLeftAligned(mouseSensitivityStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
             {
-                renderer.RenderTextLeftAligned("Turn Speed", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon) ? 93 : 92), 76, 62 + ((index - 1) * 8));
+                renderer.RenderTextLeftAligned("Turn Speed", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 char turnSpeedStr[5];
                 sprintf_s(turnSpeedStr, 5, "%d", m_configurationSettings.GetTurnSpeed());
-                renderer.RenderTextLeftAligned(turnSpeedStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderer.RenderTextLeftAligned(turnSpeedStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
             {
-                renderer.RenderTextLeftAligned("Always Run", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon) ? 93 : 92), 76, 62 + ((index - 1) * 8));
+                renderer.RenderTextLeftAligned("Always Run", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 const char* alwaysRunStr = (m_configurationSettings.GetAlwaysRun()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(alwaysRunStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderer.RenderTextLeftAligned(alwaysRunStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             index++;
         }
+
+
+        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
+        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
+        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuSound)
     {
