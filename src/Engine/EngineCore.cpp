@@ -461,7 +461,14 @@ void EngineCore::EnterKeyReleased()
 
         if (m_state == Introduction)
         {
-            m_state = RequestDifficultyLevel;
+            if (m_game.GetId() == 5)
+            {
+                OpenMenu();
+            }
+            else
+            {
+                m_state = RequestDifficultyLevel;
+            }
         }
         else if (m_state == ShowDifficultyLevel)
         {
@@ -1248,7 +1255,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             {
                 if (!m_godModeIsOn)
                 {
-                    const uint8_t damage = (m_difficultyLevel == Easy) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
+                    const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
                     m_level->GetPlayerActor()->Damage(damage);
                     m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                 }
@@ -1558,7 +1565,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             if (!m_godModeIsOn)
             {
                 const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
-                const uint8_t damage = (m_difficultyLevel == Easy) ? baseDamage / 2 : baseDamage;
+                const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? baseDamage / 2 : baseDamage;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
             }
@@ -1637,9 +1644,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                 }
                                 else
                                 {
-                                    // In the original game, the hit points of all monsters were divided by four when playing in easy mode, see function EasyHitPoints in C4_ACT1.C.
+                                    // In the original Catacomb Adventure series, the hit points of all monsters were divided by four when playing in easy mode, see function EasyHitPoints in C4_ACT1.C.
                                     // To prevent the Actor class from having to look up the difficulty mode, the damage inflicted by the players' fireball is simply multiplied by 4 here.
-                                    const uint8_t damage = (m_difficultyLevel == Easy) ? actor->GetDecorateActor().damage * 4 : actor->GetDecorateActor().damage;
+                                    const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? actor->GetDecorateActor().damage * 4 : actor->GetDecorateActor().damage;
                                     otherActor->Damage(damage);
                                     m_game.GetAudioPlayer()->Play(otherActor->GetDecorateActor().hitSound);
 
@@ -1696,7 +1703,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     if (!m_godModeIsOn)
                     {
                         const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
-                        const uint8_t damage = (m_difficultyLevel == Easy && baseDamage > 1) ? baseDamage / 2 : baseDamage;
+                        const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5 && baseDamage > 1) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
                         m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                     }

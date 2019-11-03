@@ -25,6 +25,7 @@ const uint8_t subMenuSaveGame = 5;
 const uint8_t subMenuNewGame = 6;
 const uint8_t subMenuConfigure = 7;
 const uint8_t subMenuMusic = 8;
+const uint8_t subMenuSkullNBones = 9;
 
 const uint16_t browseMenuSound = 0;
 
@@ -522,6 +523,8 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         else if (m_menuItemSelected == 6)
         {
             // Skull 'n' Bones
+            m_subMenuSelected = subMenuSkullNBones;
+            m_menuItemSelected = 0;
         }
         else if (m_menuItemSelected == 7)
         {
@@ -1064,6 +1067,12 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTextLeftAligned(instructionText, egaGraph->GetFont(4), EgaRed, 78, 135);
         renderer.RenderTextLeftAligned("Enter accepts", egaGraph->GetFont(4), EgaRed, 163, 135);
         renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+    }
+    else if (m_subMenuSelected == subMenuSkullNBones)
+    {
+        renderer.Render2DBar(77, 60, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 143, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_PADDLEWARPIC), 130, 48);
     }
 }
 
