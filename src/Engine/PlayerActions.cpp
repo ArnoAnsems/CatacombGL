@@ -59,6 +59,7 @@ void PlayerActions::ResetForNewLevel()
     m_lastNukeTimeStamp = 0;
     m_lastBoltTimeStamp = 0;
     m_boltsLeft = 0;
+    m_shotPower = 56;
 }
 
 uint16_t PlayerActions::GetHandHeight() const
@@ -208,4 +209,9 @@ const char* PlayerActions::GetStatusMessage() const
     {
         return "Viewing";
     }
+}
+
+uint16_t PlayerActions::GetShotPower() const
+{
+    return m_shotPower;
 }

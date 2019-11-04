@@ -43,6 +43,8 @@ public:
     bool GetActionActive(const ControlAction action) const;
     void SetActionActive(const ControlAction action, const bool active);
 
+    uint16_t GetShotPower() const;
+
 private:
     uint16_t m_handHeight;
     uint16_t m_shotFiredHandHeight;
@@ -54,6 +56,7 @@ private:
     uint32_t m_lastBoltTimeStamp;
 
     int16_t m_boltsLeft;
+    uint16_t m_shotPower;
 
     bool m_controlActionActive[MaxControlAction];
 };

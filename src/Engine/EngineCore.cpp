@@ -233,7 +233,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
         const uint8_t levelIndex = (m_level != 0) ? m_level->GetLevelIndex() : 0;
-        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio), playerAngle, levelIndex);
+        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio), playerAngle, levelIndex, m_playerActions.GetShotPower());
 
         if (m_state != Victory)
         {
@@ -930,7 +930,8 @@ bool EngineCore::Think()
 
                 if (m_playerActions.UpdateContinueBolt(m_timeStampOfPlayerCurrentFrame))
                 {
-                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId);
+                    const uint16_t projectileId = (m_game.GetId() == 5) ? m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1 : m_level->GetPlayerActor()->GetDecorateActor().projectileId;
+                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
                     if (decorateProjectilePair != m_game.GetDecorateActors().end())
                     {
                         Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decorateProjectilePair->second);
