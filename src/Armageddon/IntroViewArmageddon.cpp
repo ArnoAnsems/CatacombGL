@@ -73,83 +73,32 @@ IntroViewArmageddon::IntroViewArmageddon(IRenderer& renderer, const std::string&
 
 IntroViewArmageddon::~IntroViewArmageddon()
 {
-    if (m_shapeEntering != NULL)
-    {
-        delete m_shapeEntering;
-        m_shapeEntering = NULL;
-    }
-
-    if (m_shapePresents != NULL)
-    {
-        delete m_shapePresents;
-        m_shapePresents = NULL;
-    }
-
-    if (m_shapeSoftdisk != NULL)
-    {
-        delete m_shapeSoftdisk;
-        m_shapeSoftdisk = NULL;
-    }
-
-    if (m_shapeTitle != NULL)
-    {
-        delete m_shapeTitle;
-        m_shapeTitle = NULL;
-    }
-
-    if (m_shapeCreditsProgramming != NULL)
-    {
-        delete m_shapeCreditsProgramming;
-        m_shapeCreditsProgramming = NULL;
-    }
-
-    if (m_shapeCreditsArt != NULL)
-    {
-        delete m_shapeCreditsArt;
-        m_shapeCreditsArt = NULL;
-    }
-
-    if (m_shapeCreditsQA != NULL)
-    {
-        delete m_shapeCreditsQA;
-        m_shapeCreditsQA = NULL;
-    }
-
-    if (m_shapeCreditsDesign != NULL)
-    {
-        delete m_shapeCreditsDesign;
-        m_shapeCreditsDesign = NULL;
-    }
-
-    if (m_shapeSelectDifficulty != NULL)
-    {
-        delete m_shapeSelectDifficulty;
-        m_shapeSelectDifficulty = NULL;
-    }
-
-    if (m_shapeConfirmDifficulty != NULL)
-    {
-        delete m_shapeConfirmDifficulty;
-        m_shapeConfirmDifficulty = NULL;
-    }
-
-    if (m_shapeNovice != NULL)
-    {
-        delete m_shapeNovice;
-        m_shapeNovice = NULL;
-    }
-
-    if (m_shapeWarrior != NULL)
-    {
-        delete m_shapeWarrior;
-        m_shapeWarrior = NULL;
-    }
-
-    if (m_shapeStandBeforeGate != NULL)
-    {
-        delete m_shapeStandBeforeGate;
-        m_shapeStandBeforeGate = NULL;
-    }
+    delete m_shapeEntering;
+    m_shapeEntering = nullptr;
+    delete m_shapePresents;
+    m_shapePresents = nullptr;
+    delete m_shapeSoftdisk;
+    m_shapeSoftdisk = nullptr;
+    delete m_shapeTitle;
+    m_shapeTitle = nullptr;
+    delete m_shapeCreditsProgramming;
+    m_shapeCreditsProgramming = nullptr;
+    delete m_shapeCreditsArt;
+    m_shapeCreditsArt = nullptr;
+    delete m_shapeCreditsQA;
+    m_shapeCreditsQA = nullptr;
+    delete m_shapeCreditsDesign;
+    m_shapeCreditsDesign = nullptr;
+    delete m_shapeSelectDifficulty;
+    m_shapeSelectDifficulty = nullptr;
+    delete m_shapeConfirmDifficulty;
+    m_shapeConfirmDifficulty = nullptr;
+    delete m_shapeNovice;
+    m_shapeNovice = nullptr;
+    delete m_shapeWarrior;
+    m_shapeWarrior = nullptr;
+    delete m_shapeStandBeforeGate;
+    m_shapeStandBeforeGate = nullptr;
 }
 
 void IntroViewArmageddon::DrawIntroduction(const uint32_t timeStamp)

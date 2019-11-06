@@ -442,7 +442,7 @@ const DecorateAnimation batDyingAnimation =
 {
     { BATDIE1PIC, 18, ActionNone },
     { BATDIE2PIC, 18, ActionNone },
-    { NULL, 18, ActionRemove }
+    { 0, 18, ActionRemove }
 };
 
 const DecorateState batStateDying =

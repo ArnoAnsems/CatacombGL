@@ -65,7 +65,7 @@ void Radar::AddActors(const Actor** actors, const uint16_t numberOfActors)
         }
 
         const Actor* actor = actors[i];
-        if (actor == NULL)
+        if (actor == nullptr)
         {
             continue;
         }

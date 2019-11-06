@@ -51,12 +51,12 @@
 
 bool	active = true;		// Window Active Flag
 
-SDL_Window* SDLwindow = NULL;
-SDL_GLContext glcontext = NULL;
+SDL_Window* SDLwindow = nullptr;
+SDL_GLContext glcontext = nullptr;
 ScreenMode m_screenMode = Windowed;
 
-EngineCore* engineCore = NULL;
-IGame* game = NULL;
+EngineCore* engineCore = nullptr;
+IGame* game = nullptr;
 RendererOpenGLWin32* m_renderer;
 PlayerInput playerInput;
 SystemWin32 systemWin32;
@@ -145,7 +145,7 @@ void CreateGLWindow(int width, int height, int bits)
     );
 
     // Check that the window was successfully created
-    if (SDLwindow == NULL)
+    if (SDLwindow == nullptr)
     {
         // In the case that the window could not be made...
         Logging::Instance().FatalError("SDL_CreateWindow failed: " + std::string(SDL_GetError()));
@@ -154,7 +154,7 @@ void CreateGLWindow(int width, int height, int bits)
     SDL_ShowWindow(SDLwindow);
 
     glcontext = SDL_GL_CreateContext(SDLwindow);
-    if (glcontext == NULL)
+    if (glcontext == nullptr)
     {
         Logging::Instance().FatalError("SDL_GL_CreateContext failed: " + std::string(SDL_GetError()));
     }
@@ -245,9 +245,9 @@ void GetSubFolders(const std::string selectedFolder, std::vector<std::string>& s
         std::string ffsearchFolder = selectedFolder + '*';
         WIN32_FIND_DATA findData;
         memset(&findData,0, sizeof(findData));
-        HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, NULL, 0);
+        HANDLE searchHandle = FindFirstFileEx(ffsearchFolder.c_str(), FindExInfoBasic, &findData, FindExSearchLimitToDirectories, nullptr, 0);
 
-        if (searchHandle != NULL)
+        if (searchHandle != nullptr)
         {
             if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
             {
@@ -290,7 +290,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					int			nCmdShow)			// Window Show State
 {
     /* initialize random seed: */
-    srand ((unsigned int)time(NULL));
+    srand ((unsigned int)time(nullptr));
 
     const std::string filenamePath = systemWin32.GetConfigurationFilePath();
 
@@ -738,15 +738,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         m_configurationSettings.StoreToFile(configFilename);
     }
 	
-    if (engineCore != NULL)
-    {
-        delete engineCore;
-    }
-    
-    if (game != NULL)
-    {
-        delete game;
-    }
+    delete engineCore;
+    delete game;
 
     SDL_Quit();
 

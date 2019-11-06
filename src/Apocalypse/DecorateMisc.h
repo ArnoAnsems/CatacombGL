@@ -494,7 +494,7 @@ const DecorateActor decorateOldFirePot =
 // This object is not really hidden, but acts as a marker to indicate that the player can pass through the wall at this location.
 const DecorateAnimation fakeWallHiddenAnimation =
 {
-    { NULL, 10, ActionFakeWall }
+    { 0, 10, ActionFakeWall }
 };
 
 const DecorateState fakeWallStateHidden =

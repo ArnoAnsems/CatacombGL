@@ -84,7 +84,7 @@ const RendererOpenGLWin32::rgbColor egaToRgbMap[EgaRange] =
     { 255, 255, 255 }     // Bright white
 };
 
-IRenderer::rgbColor RendererOpenGLWin32::EgaToRgb(const egaColor ega)
+constexpr IRenderer::rgbColor RendererOpenGLWin32::EgaToRgb(const egaColor ega)
 {
     if (ega < EgaRange)
     {
@@ -115,7 +115,7 @@ GLuint LoadDefaultTexture()
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
 
-    GLfloat* textureImage = NULL;
+    GLfloat* textureImage = nullptr;
     textureImage = new GLfloat[32 * 8 * 3];
     for (int i = 0; i < 32 * 8; i++)
     {
@@ -381,7 +381,7 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture)
 
 void RendererOpenGLWin32::RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
 {
-    if (text == NULL || font == NULL)
+    if (text == nullptr || font == nullptr)
     {
         // Nothing to render
         return;
@@ -401,7 +401,7 @@ void RendererOpenGLWin32::RenderTextCentered(const char* text, const Font* font,
 
 void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
 {
-    if (text == NULL || font == NULL)
+    if (text == nullptr || font == nullptr)
     {
         // Nothing to render
         return;
@@ -454,7 +454,7 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
 
 void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength)
 {
-    if (text == NULL || font == NULL || strlen(text) == 0)
+    if (text == nullptr || font == nullptr || strlen(text) == 0)
     {
         // Nothing to render
         return;
@@ -637,7 +637,7 @@ void RendererOpenGLWin32::Unprepare2DRendering()
 
 void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY)
 {
-    if (picture == NULL)
+    if (picture == nullptr)
     {
         // Nothing to render
         return;
@@ -674,7 +674,7 @@ void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t
 
 void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight)
 {
-    if (picture == NULL)
+    if (picture == nullptr)
     {
         // Nothing to render
         return;
@@ -827,7 +827,7 @@ void RendererOpenGLWin32::UnprepareWalls()
 
 void RendererOpenGLWin32::Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation)
 {
-    if (picture == NULL)
+    if (picture == nullptr)
     {
         // Nothing to render
         return;

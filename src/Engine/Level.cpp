@@ -31,12 +31,12 @@ Level::Level(
     m_wallsInfo (wallsInfo),
     m_lightningStartTimestamp(0),
     m_levelIndex(mapIndex),
-    m_visibilityMap(NULL),
-    m_playerActor(NULL),
-    m_blockingActors(NULL),
-    m_nonBlockingActors(NULL),
-    m_wallXVisible(NULL),
-    m_wallYVisible(NULL)
+    m_visibilityMap(nullptr),
+    m_playerActor(nullptr),
+    m_blockingActors(nullptr),
+    m_nonBlockingActors(nullptr),
+    m_wallXVisible(nullptr),
+    m_wallYVisible(nullptr)
 {
     const uint16_t mapSize = m_levelWidth * m_levelHeight;
     m_plane0 = new uint16_t[mapSize];
@@ -52,13 +52,13 @@ Level::Level(
     m_blockingActors = new Actor*[mapSize];
     for ( uint16_t i = 0; i < mapSize; i++)
     {
-        m_blockingActors[i] = NULL;
+        m_blockingActors[i] = nullptr;
     }
 
     m_nonBlockingActors = new Actor*[100];
     for ( uint16_t i = 0; i < 100; i++)
     {
-        m_nonBlockingActors[i] = NULL;
+        m_nonBlockingActors[i] = nullptr;
     }
 
     m_wallXVisible = new bool[m_levelWidth * m_levelHeight];
@@ -112,40 +112,34 @@ Level::~Level()
     delete[] m_plane2;
 
     delete[] m_visibilityMap;
-    m_visibilityMap = NULL;
+    m_visibilityMap = nullptr;
 
     delete[] m_wallXVisible;
     delete[] m_wallYVisible;
 
     delete m_playerActor;
 
-    if (m_blockingActors != NULL)
+    if (m_blockingActors != nullptr)
     {
         for ( uint16_t i = 0; i < m_levelWidth * m_levelHeight; i++)
         {
-            if (m_blockingActors[i] != NULL)
-            {
-                delete m_blockingActors[i];
-                m_blockingActors[i] = NULL;
-            }
+            delete m_blockingActors[i];
+            m_blockingActors[i] = nullptr;
         }
 
         delete[] m_blockingActors;
-        m_blockingActors = NULL;
+        m_blockingActors = nullptr;
     }
 
-    if (m_nonBlockingActors != NULL)
+    if (m_nonBlockingActors != nullptr)
     {
         for ( uint16_t i = 0; i < 100; i++)
         {
-            if (m_nonBlockingActors[i] != NULL)
-            {
-                delete m_nonBlockingActors[i];
-                m_nonBlockingActors[i] = NULL;
-            }
+            delete m_nonBlockingActors[i];
+            m_nonBlockingActors[i] = nullptr;
         }
         delete[] m_nonBlockingActors;
-        m_nonBlockingActors = NULL;
+        m_nonBlockingActors = nullptr;
     }
 }
 
@@ -161,7 +155,7 @@ void Level::StoreToFile(std::ofstream& file) const
     uint16_t numberOfBlockingActors = 0;
     for (uint16_t i = 0; i < m_levelWidth * m_levelHeight; i++)
     {
-        if (m_blockingActors[i] != NULL)
+        if (m_blockingActors[i] != nullptr)
         {
             numberOfBlockingActors++;
         }
@@ -169,7 +163,7 @@ void Level::StoreToFile(std::ofstream& file) const
     file.write((const char*)&numberOfBlockingActors, sizeof(numberOfBlockingActors));
     for (uint16_t i = 0; i < m_levelWidth * m_levelHeight; i++)
     {
-        if (m_blockingActors[i] != NULL)
+        if (m_blockingActors[i] != nullptr)
         {
             m_blockingActors[i]->StoreToFile(file);
         }
@@ -177,7 +171,7 @@ void Level::StoreToFile(std::ofstream& file) const
     uint16_t numberOfNonBlockingActors = 0;
     for (uint16_t i = 0; i < 100; i++)
     {
-        if (m_nonBlockingActors[i] != NULL)
+        if (m_nonBlockingActors[i] != nullptr)
         {
             numberOfNonBlockingActors++;
         }
@@ -185,7 +179,7 @@ void Level::StoreToFile(std::ofstream& file) const
     file.write((const char*)&numberOfNonBlockingActors, sizeof(numberOfNonBlockingActors));
     for (uint16_t i = 0; i < 100; i++)
     {
-        if (m_nonBlockingActors[i] != NULL)
+        if (m_nonBlockingActors[i] != nullptr)
         {
             m_nonBlockingActors[i]->StoreToFile(file);
         }
@@ -1056,7 +1050,7 @@ void Level::AddNonBlockingActor(Actor* projectile)
     const bool isProjectile = (projectile->GetDecorateActor().initialState == StateIdProjectileFly);
     const uint8_t maxActorIndex = isBonusItem ? 100 : isProjectile ? 85 : 95;
     
-    while (m_nonBlockingActors[i] != NULL && i < maxActorIndex)
+    while (m_nonBlockingActors[i] != nullptr && i < maxActorIndex)
     {
         i++;
     }
@@ -1073,7 +1067,7 @@ bool Level::Walk(Actor* const actor)
     switch (actor->GetDirection())
     {
     case north:
-        if ((GetBlockingActor(tileX, tileY - 1) != NULL) || IsSolidWall(tileX, tileY - 1))
+        if ((GetBlockingActor(tileX, tileY - 1) != nullptr) || IsSolidWall(tileX, tileY - 1))
         {
             return false;
         }
@@ -1081,7 +1075,7 @@ bool Level::Walk(Actor* const actor)
         return true;
 
     case northeast:
-        if ((GetBlockingActor(tileX + 1, tileY - 1) != NULL) || IsSolidWall(tileX + 1, tileY - 1))
+        if ((GetBlockingActor(tileX + 1, tileY - 1) != nullptr) || IsSolidWall(tileX + 1, tileY - 1))
         {
             return false;
         }
@@ -1089,7 +1083,7 @@ bool Level::Walk(Actor* const actor)
         return true;
 
     case east:
-        if ((GetBlockingActor(tileX + 1, tileY) != NULL) || IsSolidWall(tileX + 1, tileY))
+        if ((GetBlockingActor(tileX + 1, tileY) != nullptr) || IsSolidWall(tileX + 1, tileY))
         {
             return false;
         }
@@ -1097,7 +1091,7 @@ bool Level::Walk(Actor* const actor)
         return true;
 
     case southeast:
-        if ((GetBlockingActor(tileX + 1, tileY + 1) != NULL) || IsSolidWall(tileX + 1, tileY + 1))
+        if ((GetBlockingActor(tileX + 1, tileY + 1) != nullptr) || IsSolidWall(tileX + 1, tileY + 1))
         {
             return false;
         }
@@ -1105,7 +1099,7 @@ bool Level::Walk(Actor* const actor)
         return true;
 
     case south:
-        if ((GetBlockingActor(tileX, tileY + 1) != NULL) || IsSolidWall(tileX, tileY + 1))
+        if ((GetBlockingActor(tileX, tileY + 1) != nullptr) || IsSolidWall(tileX, tileY + 1))
         {
             return false;
         }
@@ -1113,7 +1107,7 @@ bool Level::Walk(Actor* const actor)
         return true;
 
     case southwest:
-        if ((GetBlockingActor(tileX - 1, tileY + 1) != NULL) || IsSolidWall(tileX - 1, tileY + 1))
+        if ((GetBlockingActor(tileX - 1, tileY + 1) != nullptr) || IsSolidWall(tileX - 1, tileY + 1))
         {
             return false;
         }
@@ -1121,7 +1115,7 @@ bool Level::Walk(Actor* const actor)
         return true;
 
     case west:
-        if ((GetBlockingActor(tileX - 1, tileY) != NULL) || IsSolidWall(tileX - 1, tileY))
+        if ((GetBlockingActor(tileX - 1, tileY) != nullptr) || IsSolidWall(tileX - 1, tileY))
         {
             return false;
         }
@@ -1129,7 +1123,7 @@ bool Level::Walk(Actor* const actor)
         return true;
 
     case northwest:
-        if ((GetBlockingActor(tileX - 1, tileY - 1) != NULL) || IsSolidWall(tileX - 1, tileY - 1))
+        if ((GetBlockingActor(tileX - 1, tileY - 1) != nullptr) || IsSolidWall(tileX - 1, tileY - 1))
         {
             return false;
         }
@@ -1453,7 +1447,7 @@ void Level::ExplodeWall(const uint16_t x, const uint16_t y, const uint32_t times
         Logging::Instance().FatalError("ExplodeWall(" + std::to_string(x) + "," + std::to_string(y) + ") is outside of bounds (" + std::to_string(m_levelWidth) + "," + std::to_string(m_levelHeight) + ")");
     }
 
-    if (m_blockingActors[(y * m_levelWidth) + x] == NULL)
+    if (m_blockingActors[(y * m_levelWidth) + x] == nullptr)
     {
         m_blockingActors[(y * m_levelWidth) + x] = new Actor(x, y, timestamp, explodingWallActor);
         m_blockingActors[(y * m_levelWidth) + x]->SetActive(true);
@@ -1624,10 +1618,10 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
         {
             // Actors
             Actor* actor = GetBlockingActor(x, y);
-            if (actor != NULL)
+            if (actor != nullptr)
             {
                 Picture* actorPicture = egaGraph->GetPicture(actor->GetPictureIndex());
-                if (actorPicture != NULL)
+                if (actorPicture != nullptr)
                 {
                     IRenderer::SpriteOrientation orientation = IRenderer::SpriteOrientation::RotatedTowardsPlayer;
 
@@ -1638,8 +1632,8 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
                         {
                             actor->SetTemp1(IsSolidWall(x - 1, y) && !IsExplosiveWall(x - 1, y) && !IsDoor(x - 1, y) ||
                                 IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y) && !IsDoor(x + 1, y) ||
-                                (GetBlockingActor(x - 1, y) != NULL && GetBlockingActor(x - 1, y)->GetState() == StateIdArch) ||
-                                (GetBlockingActor(x + 1, y) != NULL && GetBlockingActor(x + 1, y)->GetState() == StateIdArch)
+                                (GetBlockingActor(x - 1, y) != nullptr && GetBlockingActor(x - 1, y)->GetState() == StateIdArch) ||
+                                (GetBlockingActor(x + 1, y) != nullptr && GetBlockingActor(x + 1, y)->GetState() == StateIdArch)
                                 ? IRenderer::SpriteOrientation::AlongXAxis : IRenderer::SpriteOrientation::AlongYAxis);
                             storedOrientation = actor->GetTemp1();
                         }
@@ -1659,10 +1653,10 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
     {
         // Projectiles
         Actor* projectile = GetNonBlockingActor(i);
-        if (projectile != NULL)
+        if (projectile != nullptr)
         {
             Picture* actorPicture = egaGraph->GetPicture(projectile->GetPictureIndex());
-            if (actorPicture != NULL)
+            if (actorPicture != nullptr)
             {
                 if (IsActorVisibleForPlayer(projectile))
                 {
@@ -1682,7 +1676,7 @@ void Level::RemoveActor(Actor* actor)
         if (m_nonBlockingActors[i] == actor)
         {
             delete m_nonBlockingActors[i];
-            m_nonBlockingActors[i] = NULL;
+            m_nonBlockingActors[i] = nullptr;
         }
     }
 
@@ -1691,7 +1685,7 @@ void Level::RemoveActor(Actor* actor)
         if (m_blockingActors[i] == actor)
         {
             delete m_blockingActors[i];
-            m_blockingActors[i] = NULL;
+            m_blockingActors[i] = nullptr;
         }
     }
 }

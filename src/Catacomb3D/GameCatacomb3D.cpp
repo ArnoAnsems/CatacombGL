@@ -28,36 +28,21 @@ GameCatacomb3D::GameCatacomb3D(const std::string gamePath, IRenderer& renderer) 
     m_gameId(5),
     m_gamePath(gamePath),
     m_renderer(renderer),
-    m_introView(NULL)
+    m_introView(nullptr)
 {
-    m_gameMaps = NULL;
-    m_egaGraph = NULL;
-    m_audioRepository = NULL;
-    m_audioPlayer = NULL;
+    m_gameMaps = nullptr;
+    m_egaGraph = nullptr;
+    m_audioRepository = nullptr;
+    m_audioPlayer = nullptr;
 }
 
 GameCatacomb3D::~GameCatacomb3D()
 {
-    if (m_gameMaps != NULL)
-    {
-        delete m_gameMaps;
-    }
-    if (m_egaGraph != NULL)
-    {
-        delete m_egaGraph;
-    }
-    if (m_audioRepository != NULL)
-    {
-        delete m_audioRepository;
-    }
-    if (m_audioPlayer != NULL)
-    {
-        delete m_audioPlayer;
-    }
-    if (m_introView != NULL)
-    {
-        delete m_introView;
-    }
+    delete m_gameMaps;
+    delete m_egaGraph;
+    delete m_audioRepository;
+    delete m_audioPlayer;
+    delete m_introView;
 }
 
 void GameCatacomb3D::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
@@ -292,7 +277,7 @@ const DecorateActor& GameCatacomb3D::GetPlayerActor()
 
 GameMaps* GameCatacomb3D::GetGameMaps()
 {
-    if (m_gameMaps == NULL)
+    if (m_gameMaps == nullptr)
     {
         m_gameMaps = new GameMaps(gameMapsCatacomb3D, m_gamePath);
     }
@@ -302,7 +287,7 @@ GameMaps* GameCatacomb3D::GetGameMaps()
 
 EgaGraph* GameCatacomb3D::GetEgaGraph()
 {
-    if (m_egaGraph == NULL)
+    if (m_egaGraph == nullptr)
     {
         m_egaGraph = new EgaGraph(egaGraphCatacomb3D, m_gamePath, m_renderer);
     }
@@ -312,7 +297,7 @@ EgaGraph* GameCatacomb3D::GetEgaGraph()
 
 AudioRepository* GameCatacomb3D::GetAudioRepository()
 {
-    if (m_audioRepository == NULL)
+    if (m_audioRepository == nullptr)
     {
         m_audioRepository = new AudioRepository(audioRepositoryCatacomb3D, m_gamePath);
     }
@@ -322,7 +307,7 @@ AudioRepository* GameCatacomb3D::GetAudioRepository()
 
 AudioPlayer* GameCatacomb3D::GetAudioPlayer()
 {
-    if (m_audioPlayer == NULL)
+    if (m_audioPlayer == nullptr)
     {
         m_audioPlayer = new AudioPlayer(GetAudioRepository());
     }
@@ -332,7 +317,7 @@ AudioPlayer* GameCatacomb3D::GetAudioPlayer()
 
 IIntroView* GameCatacomb3D::GetIntroView()
 {
-    if (m_introView == NULL)
+    if (m_introView == nullptr)
     {
         m_introView = new IntroViewCatacomb3D(m_renderer, GetEgaGraph(), m_gamePath);
     }

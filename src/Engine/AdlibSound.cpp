@@ -20,7 +20,7 @@
 AdlibSound::AdlibSound() :
     m_length(0),
     m_priority(0),
-    m_data(NULL)
+    m_data(nullptr)
 {
     for (uint8_t j = 0; j < 16; j++)
     {
@@ -31,7 +31,7 @@ AdlibSound::AdlibSound() :
 AdlibSound::AdlibSound(const FileChunk* decompressedChunk) :
     m_length(0),
     m_priority(0),
-    m_data(NULL)
+    m_data(nullptr)
 {
     const uint32_t headerSize = sizeof(m_length) + sizeof(m_priority) + sizeof(m_instruments) + sizeof(m_octave);
     if (decompressedChunk->GetSize() > headerSize)
@@ -54,10 +54,7 @@ AdlibSound::AdlibSound(const FileChunk* decompressedChunk) :
 
 AdlibSound::~AdlibSound()
 {
-    if (m_data != NULL)
-    {
-        delete[] m_data;
-    }
+    delete[] m_data;
 }
 
 uint32_t AdlibSound::GetLength() const

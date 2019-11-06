@@ -17,8 +17,8 @@
 
 PictureTable::PictureTable(FileChunk* decompressedChunk) :
     m_count(0),
-    m_width(NULL),
-    m_height(NULL)
+    m_width(nullptr),
+    m_height(nullptr)
 {
     m_count = (uint16_t)decompressedChunk->GetSize() / 4;
 
@@ -37,14 +37,8 @@ PictureTable::PictureTable(FileChunk* decompressedChunk) :
 
 PictureTable::~PictureTable()
 {
-    if (m_width != NULL)
-    {
-        delete[] m_width;
-    }
-    if (m_height != NULL)
-    {
-        delete[] m_height;
-    }
+    delete[] m_width;
+    delete[] m_height;
 }
 
 uint16_t PictureTable::GetWidth(const uint16_t index)

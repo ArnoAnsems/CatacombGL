@@ -29,16 +29,13 @@ Shape::Shape(IRenderer& renderer) :
 {
     m_offsetX = 0;
     m_offsetY = 0;
-    m_picture = NULL;
+    m_picture = nullptr;
 }
 
 Shape::~Shape()
 {
-    if (m_picture != NULL)
-    {
-        delete m_picture;
-        m_picture = NULL;
-    }
+    delete m_picture;
+    m_picture = nullptr;
 }
 
 struct CMP1Header
@@ -50,10 +47,10 @@ struct CMP1Header
 
 FileChunk* ext_BLoad(const char *SourceFile)
 {
-    FILE* handle = NULL;
+    FILE* handle = nullptr;
 
-    FileChunk* SrcPtr = NULL;
-    FileChunk* DstPtr = NULL;
+    FileChunk* SrcPtr = nullptr;
+    FileChunk* DstPtr = nullptr;
     uint8_t Buffer[4];
     struct CMP1Header CompHeader;
 
@@ -64,9 +61,9 @@ FileChunk* ext_BLoad(const char *SourceFile)
     //
 
     fopen_s(&handle, SourceFile, "rb");
-    if (handle == NULL)
+    if (handle == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
 
     fread(Buffer, 1, 4, handle);
@@ -74,7 +71,7 @@ FileChunk* ext_BLoad(const char *SourceFile)
     if (strncmp((char *)Buffer,"CMP1",4) != 0)
     {
         fclose(handle);
-        return NULL;
+        return nullptr;
     }
 
     //
@@ -85,7 +82,7 @@ FileChunk* ext_BLoad(const char *SourceFile)
     if (CompHeader.CompType != 2)   // 2 == LZH
     {
         fclose(handle);
-        return NULL;
+        return nullptr;
     }
 
     fread((void*)&CompHeader.OrginalLen, sizeof(CompHeader.OrginalLen), 1, handle);
@@ -118,7 +115,7 @@ bool Shape::LoadFromFile(const char* filename)
     (*(ptr+3) == *(Name+3)) \
     )
 
-    uint8_t* data = NULL;
+    uint8_t* data = nullptr;
     int32_t dataSize = 0;
     uint16_t bytesPerRow = 0;
     uint16_t width = 0;
@@ -209,14 +206,14 @@ EXIT_FUNC:;
     if (IFFfile)
     {
         delete IFFfile;
-        IFFfile = NULL;
+        IFFfile = nullptr;
     }
 
     FileChunk* chunk = new FileChunk(bytesPerRow * numberOfPlanes * height);
 
 	const bool NotWordAligned = bytesPerRow & 1;
 
-    if (data == NULL)
+    if (data == nullptr)
     {
         Logging::Instance().AddLogMessage("Failed to read shape " + std::string(filename) + ": body not found");
     }

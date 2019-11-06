@@ -73,7 +73,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_pictures = new Picture*[m_pictureTable->GetCount()];
     for (uint16_t i = 0; i < m_pictureTable->GetCount(); i++)
     {
-        m_pictures[i] = NULL;
+        m_pictures[i] = nullptr;
     }
 
     // Initialize masked picture table
@@ -93,7 +93,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_maskedPictures = new Picture*[m_maskedPictureTable->GetCount()];
     for (uint16_t i = 0; i < m_maskedPictureTable->GetCount(); i++)
     {
-        m_maskedPictures[i] = NULL;
+        m_maskedPictures[i] = nullptr;
     }
 
     // Initialize sprites table
@@ -113,19 +113,19 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_sprites = new Picture*[m_spriteTable->GetCount()];
     for (uint16_t i = 0; i < m_spriteTable->GetCount(); i++)
     {
-        m_sprites[i] = NULL;
+        m_sprites[i] = nullptr;
     }
 
     // Initialize tiles
     m_tilesSize8 = new Picture*[numTilesSize8];
     for (uint16_t i = 0; i < numTilesSize8; i++)
     {
-        m_tilesSize8[i] = NULL;
+        m_tilesSize8[i] = nullptr;
     }
     m_tilesSize8Masked = new Picture*[numTilesSize8Masked];
     for (uint16_t i = 0; i < numTilesSize8Masked; i++)
     {
-        m_tilesSize8Masked[i] = NULL;
+        m_tilesSize8Masked[i] = nullptr;
     }
 
     // Initialize fonts
@@ -133,7 +133,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_fonts = new Font*[numFonts];
     for (uint16_t i = 0; i < numFonts; i++)
     {
-        m_fonts[i] = NULL;
+        m_fonts[i] = nullptr;
     }
 
     // Initialize location names
@@ -141,7 +141,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_worldLocationNames = new LevelLocationNames*[numberOfWorldLocationNames];
     for (uint16_t i = 0; i < numberOfWorldLocationNames; i++)
     {
-        m_worldLocationNames[i] = NULL;
+        m_worldLocationNames[i] = nullptr;
     }
 }
 
@@ -149,30 +149,24 @@ EgaGraph::~EgaGraph()
 {
     for (uint16_t i = 0; i < m_pictureTable->GetCount(); i++)
     {
-        if (m_pictures[i] != NULL)
-        {
-            delete m_pictures[i];
-        }
+        delete m_pictures[i];
+        m_pictures[i] = nullptr;
     }
     delete[] m_pictures;
     delete m_pictureTable;
 
     for (uint16_t i = 0; i < m_maskedPictureTable->GetCount(); i++)
     {
-        if (m_maskedPictures[i] != NULL)
-        {
-            delete m_maskedPictures[i];
-        }
+        delete m_maskedPictures[i];
+        m_maskedPictures[i] = nullptr;
     }
     delete[] m_maskedPictures;
     delete m_maskedPictureTable;
 
     for (uint16_t i = 0; i < m_spriteTable->GetCount(); i++)
     {
-        if (m_sprites[i] != NULL)
-        {
-            delete m_sprites[i];
-        }
+        delete m_sprites[i];
+        m_sprites[i] = nullptr;
     }
     delete[] m_sprites;
     delete m_spriteTable;
@@ -180,43 +174,36 @@ EgaGraph::~EgaGraph()
     const uint16_t numberOfWorldLocationNames = m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1;
     for (uint16_t i = 0; i < numberOfWorldLocationNames; i++)
     {
-        if (m_worldLocationNames[i] != NULL)
-        {
-            delete m_worldLocationNames[i];
-        }
+        delete m_worldLocationNames[i];
+        m_worldLocationNames[i] = nullptr;
     }
     delete[] m_worldLocationNames;
 
     const uint16_t numFonts = m_staticData.indexOfFirstPicture - 3;
     for (uint16_t i = 0; i < numFonts; i++)
     {
-        if (m_fonts[i] != NULL)
-        {
-            delete m_fonts[i];
-        }
+        delete m_fonts[i];
+        m_fonts[i] = nullptr;
+
     }
     delete[] m_fonts;
 
-    if (m_tilesSize8 != NULL)
+    if (m_tilesSize8 != nullptr)
     {
         for (uint16_t i = 0; i < numTilesSize8; i++)
         {
-            if (m_tilesSize8[i] != NULL)
-            {
-                delete m_tilesSize8[i];
-            }
+            delete m_tilesSize8[i];
+            m_tilesSize8[i] = nullptr;
         }
         delete[] m_tilesSize8;
     }
 
-    if (m_tilesSize8Masked != NULL)
+    if (m_tilesSize8Masked != nullptr)
     {
         for (uint16_t i = 0; i < numTilesSize8Masked; i++)
         {
-            if (m_tilesSize8Masked[i] != NULL)
-            {
-                delete m_tilesSize8Masked[i];
-            }
+            delete m_tilesSize8Masked[i];
+            m_tilesSize8Masked[i] = nullptr;
         }
         delete m_tilesSize8Masked;
     }
@@ -230,10 +217,10 @@ Picture* EgaGraph::GetPicture(const uint16_t index)
     const uint16_t pictureIndex = index - m_staticData.indexOfFirstPicture;
     if (pictureIndex >= m_pictureTable->GetCount())
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_pictures[pictureIndex] == NULL)
+    if (m_pictures[pictureIndex] == nullptr)
     {
         const bool transparent = ((index > m_staticData.indexOfFirstScaledPicture) && (index < m_staticData.indexOfFirstWallPicture));
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index)];
@@ -253,10 +240,10 @@ Picture* EgaGraph::GetMaskedPicture(const uint16_t index)
     const uint16_t pictureIndex = index - m_staticData.indexOfFirstMaskedPicture;
     if (pictureIndex >= m_maskedPictureTable->GetCount())
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_maskedPictures[pictureIndex] == NULL)
+    if (m_maskedPictures[pictureIndex] == nullptr)
     {
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index)];
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
@@ -277,10 +264,10 @@ Picture* EgaGraph::GetSprite(const uint16_t index)
     const uint16_t pictureIndex = index - m_staticData.indexOfFirstSprite;
     if (pictureIndex >= m_spriteTable->GetCount())
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_sprites[pictureIndex] == NULL)
+    if (m_sprites[pictureIndex] == nullptr)
     {
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index)];
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
@@ -298,10 +285,10 @@ Picture* EgaGraph::GetTilesSize8(const uint16_t index)
 {
     if (index >= numTilesSize8)
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_tilesSize8[index] == NULL)
+    if (m_tilesSize8[index] == nullptr)
     {
         const uint16_t pictureIndex = m_staticData.indexOfTileSize8;
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
@@ -326,10 +313,10 @@ Picture* EgaGraph::GetTilesSize8Masked(const uint16_t index)
 {
     if (index >= numTilesSize8Masked)
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_tilesSize8Masked[index] == NULL)
+    if (m_tilesSize8Masked[index] == nullptr)
     {
         const uint16_t pictureIndex = m_staticData.indexOfTileSize8Masked;
         uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
@@ -358,7 +345,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
     }
 
     const uint16_t indexInFontArray = index - 3;
-    if (m_fonts[indexInFontArray] != NULL)
+    if (m_fonts[indexInFontArray] != nullptr)
     {
         return m_fonts[indexInFontArray];
     }
@@ -418,7 +405,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
 
 LevelLocationNames* EgaGraph::GetWorldLocationNames(const uint16_t index)
 {
-    if (m_worldLocationNames[index] == NULL)
+    if (m_worldLocationNames[index] == nullptr)
     {
         uint8_t* compressedLocationNames = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index + m_staticData.indexOfFirstWorldLocationNames)];
         uint32_t compressedSize = GetChunkSize(m_staticData.indexOfFirstWorldLocationNames + index) - sizeof(uint32_t);

@@ -30,42 +30,24 @@ GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_zombie_base_delay (0),
-    m_introView (NULL),
+    m_introView (nullptr),
     m_helpPageIndex(0)
 {
-    m_gameMaps = NULL;
-    m_egaGraph = NULL;
-    m_audioRepository = NULL;
-    m_audioPlayer = NULL;
-    m_helpPages = NULL;
+    m_gameMaps = nullptr;
+    m_egaGraph = nullptr;
+    m_audioRepository = nullptr;
+    m_audioPlayer = nullptr;
+    m_helpPages = nullptr;
 }
 
 GameAbyss::~GameAbyss()
 {
-    if (m_gameMaps != NULL)
-    {
-        delete m_gameMaps;
-    }
-    if (m_egaGraph != NULL)
-    {
-        delete m_egaGraph;
-    }
-    if (m_audioRepository != NULL)
-    {
-        delete m_audioRepository;
-    }
-    if (m_audioPlayer != NULL)
-    {
-        delete m_audioPlayer;
-    }
-    if (m_introView != NULL)
-    {
-        delete m_introView;
-    }
-    if (m_helpPages != NULL)
-    {
-        delete m_helpPages;
-    }
+    delete m_gameMaps;
+    delete m_egaGraph;
+    delete m_audioRepository;
+    delete m_audioPlayer;
+    delete m_introView;
+    delete m_helpPages;
 }
 
 void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
@@ -571,7 +553,7 @@ void GameAbyss::DrawFinal()
 
 GameMaps* GameAbyss::GetGameMaps()
 {
-    if (m_gameMaps == NULL)
+    if (m_gameMaps == nullptr)
     {
         m_gameMaps = new GameMaps(gameMapsAbyss, m_gamePath);
     }
@@ -581,7 +563,7 @@ GameMaps* GameAbyss::GetGameMaps()
 
 EgaGraph* GameAbyss::GetEgaGraph()
 {
-    if (m_egaGraph == NULL)
+    if (m_egaGraph == nullptr)
     {
         const egaGraphStaticData& staticData = (m_gameId == 1) ? egaGraphAbyss : egaGraphAbyssV124;
         m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer);
@@ -592,7 +574,7 @@ EgaGraph* GameAbyss::GetEgaGraph()
 
 AudioRepository* GameAbyss::GetAudioRepository()
 {
-    if (m_audioRepository == NULL)
+    if (m_audioRepository == nullptr)
     {
         m_audioRepository = new AudioRepository(audioRepositoryAbyss, m_gamePath);
     }
@@ -602,7 +584,7 @@ AudioRepository* GameAbyss::GetAudioRepository()
 
 AudioPlayer* GameAbyss::GetAudioPlayer()
 {
-    if (m_audioPlayer == NULL)
+    if (m_audioPlayer == nullptr)
     {
         m_audioPlayer = new AudioPlayer(GetAudioRepository());
     }
@@ -612,7 +594,7 @@ AudioPlayer* GameAbyss::GetAudioPlayer()
 
 IIntroView* GameAbyss::GetIntroView()
 {
-    if (m_introView == NULL)
+    if (m_introView == nullptr)
     {
         m_introView = new IntroViewAbyss(m_renderer, m_gamePath);
     }
@@ -674,7 +656,7 @@ bool GameAbyss::ProcessInputOnHelpPage(PlayerInput& playerInput)
 
 HelpPages* GameAbyss::GetHelpPages()
 {
-    if (m_helpPages == NULL)
+    if (m_helpPages == nullptr)
     {
         std::ifstream file;
         const std::string fullPath = m_gamePath + "HELP.TXT";

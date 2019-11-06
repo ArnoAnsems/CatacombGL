@@ -20,7 +20,7 @@
 PCSound::PCSound(const FileChunk* decompressedChunk) :
     m_length(0),
     m_priority(0),
-    m_inverseFrequency(NULL)
+    m_inverseFrequency(nullptr)
 {
     const uint32_t headerSize = sizeof(m_length) + sizeof(m_priority);
     if (decompressedChunk->GetSize() > headerSize)
@@ -38,10 +38,7 @@ PCSound::PCSound(const FileChunk* decompressedChunk) :
 
 PCSound::~PCSound()
 {
-    if (m_inverseFrequency != NULL)
-    {
-        delete[] m_inverseFrequency;
-    }
+    delete[] m_inverseFrequency;
 }
 
 uint32_t PCSound::GetLength() const
@@ -56,7 +53,7 @@ uint16_t PCSound::GetPriority() const
 
 uint8_t PCSound::GetInverseFrequency(const uint32_t index) const
 {
-    return (m_inverseFrequency != NULL && index < m_length) ? m_inverseFrequency[index] : 0;
+    return (m_inverseFrequency != nullptr && index < m_length) ? m_inverseFrequency[index] : 0;
 }
 
 uint8_t* PCSound::GetData()

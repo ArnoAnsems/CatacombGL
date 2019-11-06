@@ -28,37 +28,22 @@ GameApocalypse::GameApocalypse(const std::string gamePath, IRenderer& renderer) 
     m_gameId(4),
     m_gamePath(gamePath),
     m_renderer(renderer),
-    m_introView(NULL),
+    m_introView(nullptr),
     m_zombie_base_delay(0)
 {
-    m_gameMaps = NULL;
-    m_egaGraph = NULL;
-    m_audioRepository = NULL;
-    m_audioPlayer = NULL;
+    m_gameMaps = nullptr;
+    m_egaGraph = nullptr;
+    m_audioRepository = nullptr;
+    m_audioPlayer = nullptr;
 }
 
 GameApocalypse::~GameApocalypse()
 {
-    if (m_gameMaps != NULL)
-    {
-        delete m_gameMaps;
-    }
-    if (m_egaGraph != NULL)
-    {
-        delete m_egaGraph;
-    }
-    if (m_audioRepository != NULL)
-    {
-        delete m_audioRepository;
-    }
-    if (m_audioPlayer != NULL)
-    {
-        delete m_audioPlayer;
-    }
-    if (m_introView != NULL)
-    {
-        delete m_introView;
-    }
+    delete m_gameMaps;
+    delete m_egaGraph;
+    delete m_audioRepository;
+    delete m_audioPlayer;
+    delete m_introView;
 }
 
 void GameApocalypse::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
@@ -359,7 +344,7 @@ const DecorateActor& GameApocalypse::GetPlayerActor()
 
 GameMaps* GameApocalypse::GetGameMaps()
 {
-    if (m_gameMaps == NULL)
+    if (m_gameMaps == nullptr)
     {
         m_gameMaps = new GameMaps(gameMapsApocalypse, m_gamePath);
     }
@@ -369,7 +354,7 @@ GameMaps* GameApocalypse::GetGameMaps()
 
 EgaGraph* GameApocalypse::GetEgaGraph()
 {
-    if (m_egaGraph == NULL)
+    if (m_egaGraph == nullptr)
     {
         m_egaGraph = new EgaGraph(egaGraphApocalypse, m_gamePath, m_renderer);
     }
@@ -379,7 +364,7 @@ EgaGraph* GameApocalypse::GetEgaGraph()
 
 AudioRepository* GameApocalypse::GetAudioRepository()
 {
-    if (m_audioRepository == NULL)
+    if (m_audioRepository == nullptr)
     {
         m_audioRepository = new AudioRepository(audioRepositoryApocalypse, m_gamePath);
     }
@@ -389,7 +374,7 @@ AudioRepository* GameApocalypse::GetAudioRepository()
 
 AudioPlayer* GameApocalypse::GetAudioPlayer()
 {
-    if (m_audioPlayer == NULL)
+    if (m_audioPlayer == nullptr)
     {
         m_audioPlayer = new AudioPlayer(GetAudioRepository());
     }
@@ -399,7 +384,7 @@ AudioPlayer* GameApocalypse::GetAudioPlayer()
 
 IIntroView* GameApocalypse::GetIntroView()
 {
-    if (m_introView == NULL)
+    if (m_introView == nullptr)
     {
         m_introView = new IntroViewApocalypse(m_renderer, m_gamePath);
     }

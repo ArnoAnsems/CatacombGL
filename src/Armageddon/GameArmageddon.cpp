@@ -28,37 +28,22 @@ GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) 
     m_gameId (3),
     m_gamePath (gamePath),
     m_renderer (renderer),
-    m_introView (NULL),
+    m_introView (nullptr),
     m_zombie_base_delay(0)
 {
-    m_gameMaps = NULL;
-    m_egaGraph = NULL;
-    m_audioRepository = NULL;
-    m_audioPlayer = NULL;
+    m_gameMaps = nullptr;
+    m_egaGraph = nullptr;
+    m_audioRepository = nullptr;
+    m_audioPlayer = nullptr;
 }
 
 GameArmageddon::~GameArmageddon()
 {
-    if (m_gameMaps != NULL)
-    {
-        delete m_gameMaps;
-    }
-    if (m_egaGraph != NULL)
-    {
-        delete m_egaGraph;
-    }
-    if (m_audioRepository != NULL)
-    {
-        delete m_audioRepository;
-    }
-    if (m_audioPlayer != NULL)
-    {
-        delete m_audioPlayer;
-    }
-    if (m_introView != NULL)
-    {
-        delete m_introView;
-    }
+    delete m_gameMaps;
+    delete m_egaGraph;
+    delete m_audioRepository;
+    delete m_audioPlayer;
+    delete m_introView;
 }
 
 void GameArmageddon::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
@@ -496,7 +481,7 @@ const DecorateActor& GameArmageddon::GetPlayerActor()
 
 GameMaps* GameArmageddon::GetGameMaps()
 {
-    if (m_gameMaps == NULL)
+    if (m_gameMaps == nullptr)
     {
         m_gameMaps = new GameMaps(gameMapsArmageddon, m_gamePath);
     }
@@ -506,7 +491,7 @@ GameMaps* GameArmageddon::GetGameMaps()
 
 EgaGraph* GameArmageddon::GetEgaGraph()
 {
-    if (m_egaGraph == NULL)
+    if (m_egaGraph == nullptr)
     {
         m_egaGraph = new EgaGraph(egaGraphArmageddon, m_gamePath, m_renderer);
     }
@@ -516,7 +501,7 @@ EgaGraph* GameArmageddon::GetEgaGraph()
 
 AudioRepository* GameArmageddon::GetAudioRepository()
 {
-    if (m_audioRepository == NULL)
+    if (m_audioRepository == nullptr)
     {
         m_audioRepository = new AudioRepository(audioRepositoryArmageddon, m_gamePath);
     }
@@ -526,7 +511,7 @@ AudioRepository* GameArmageddon::GetAudioRepository()
 
 AudioPlayer* GameArmageddon::GetAudioPlayer()
 {
-    if (m_audioPlayer == NULL)
+    if (m_audioPlayer == nullptr)
     {
         m_audioPlayer = new AudioPlayer(GetAudioRepository());
     }
@@ -536,7 +521,7 @@ AudioPlayer* GameArmageddon::GetAudioPlayer()
 
 IIntroView* GameArmageddon::GetIntroView()
 {
-    if (m_introView == NULL)
+    if (m_introView == nullptr)
     {
         m_introView = new IntroViewArmageddon(m_renderer, m_gamePath);
     }

@@ -24,10 +24,8 @@ FileChunk::FileChunk(const uint32_t size)
 
 FileChunk::~FileChunk()
 {
-    if (m_chunk != NULL)
-    {
-        delete[] m_chunk;
-    }
+    delete[] m_chunk;
+    m_chunk = nullptr;
 }
 
 uint32_t FileChunk::GetSize() const

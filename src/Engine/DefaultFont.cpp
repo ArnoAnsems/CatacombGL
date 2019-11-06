@@ -3075,7 +3075,7 @@ const uint8_t defaultFontWidth[256] =
 
 const Font* DefaultFont::Get(IRenderer& renderer)
 {
-    if (defaultFont == NULL)
+    if (defaultFont == nullptr)
     {
         const unsigned int fontTextureId = renderer.LoadFontIntoTexture(defaultFontData);
         defaultFont = new Font(10, defaultFontWidth, fontTextureId);

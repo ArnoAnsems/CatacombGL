@@ -33,7 +33,7 @@ void AudioPlayer::Play(const uint16_t index)
     if (SD_GetSoundMode() == sdm_AdLib)
     {
         AdlibSound* sound = m_audioRepository->GetAdlibSound(index);
-        if (sound != NULL)
+        if (sound != nullptr)
         {
             SDL_ALPlaySound(sound);
         }
@@ -41,7 +41,7 @@ void AudioPlayer::Play(const uint16_t index)
     else if (SD_GetSoundMode() == sdm_PC)
     {
         PCSound* sound = m_audioRepository->GetPCSound(index);
-        if (sound != NULL)
+        if (sound != nullptr)
         {
             SDL_PCPlaySound(sound);
         }
@@ -51,7 +51,7 @@ void AudioPlayer::Play(const uint16_t index)
 void AudioPlayer::StartMusic(const uint16_t index)
 {
     FileChunk* musicTrack = m_audioRepository->GetMusicTrack(index);
-    if (musicTrack != NULL)
+    if (musicTrack != nullptr)
     {
         SD_StartMusic(musicTrack);
     }

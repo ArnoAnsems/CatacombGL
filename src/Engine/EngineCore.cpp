@@ -43,7 +43,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_gameTimer(),
     m_game(game),
     m_system(system),
-    m_level(NULL),
+    m_level(nullptr),
     m_readingScroll(255),
     m_takingChest(false),
     m_warpToLevel(0),
@@ -53,7 +53,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_timeStampOfWorldPreviousFrame(0),
     m_state(Introduction),
     m_difficultyLevel(Easy),
-    m_statusMessage(NULL),
+    m_statusMessage(nullptr),
     m_timeStampEndOfStatusMessage(0),
     m_warpCheatTextField(""),
     m_godModeIsOn(false),
@@ -102,7 +102,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 {
     // The playerActor will be unloaded and reloaded in the next map. The health of the playerActor
     // must be preserved when transfering to the next map.
-    const int16_t health = (m_level == NULL) ? 100 : m_level->GetPlayerActor()->GetHealth();
+    const int16_t health = (m_level == nullptr) ? 100 : m_level->GetPlayerActor()->GetHealth();
     UnloadLevel();
 
     m_level = m_game.GetGameMaps()->GetLevelFromStart(mapIndex);
@@ -131,7 +131,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 
 void EngineCore::DrawScene(IRenderer& renderer)
 {
-    if (m_level == NULL)
+    if (m_level == nullptr)
     {
         renderer.SetPlayerAngle(0.0f);
         renderer.SetPlayerPosition(0.0f, 0.0f);
@@ -249,7 +249,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
             {
                 char freezeMessage[100];
                 sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeInSec);
-                const char* statusMessage = (m_statusMessage != NULL) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
+                const char* statusMessage = (m_statusMessage != nullptr) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
                 renderer.RenderTextCentered(statusMessage, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, 156, 189);
 
                 // Radar
@@ -343,7 +343,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.RenderTextCentered("Free items!", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 52);
     }
 
-    if (m_level != NULL && m_level->GetPlayerActor()->IsDead() && m_playerInventory.GetPotions() > 0 && m_game.GetId() != 5)
+    if (m_level != nullptr && m_level->GetPlayerActor()->IsDead() && m_playerInventory.GetPotions() > 0 && m_game.GetId() != 5)
     {
         DrawCenteredTiledWindow(renderer, 35, 3);
         renderer.RenderTextCentered("You should use your Cure Potions wisely", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);
@@ -781,7 +781,7 @@ bool EngineCore::Think()
     // Status message
     if (m_timeStampOfPlayerCurrentFrame > m_timeStampEndOfStatusMessage)
     {
-        m_statusMessage = NULL;
+        m_statusMessage = nullptr;
 
         if (m_state == ExitGame)
         {
@@ -803,7 +803,7 @@ bool EngineCore::Think()
 
     if (m_state == InGame || m_state == EnteringLevel)
     {
-        if (m_level == NULL)
+        if (m_level == nullptr)
         {
             LoadLevel(m_warpToLevel);
         }
@@ -1077,7 +1077,7 @@ void EngineCore::ThinkActors()
     const uint16_t mapSize = m_level->GetLevelWidth() * m_level->GetLevelHeight();
     for ( uint16_t i = 0; i < mapSize; i++)
     {
-        if (m_level->GetBlockingActors()[i] != NULL)
+        if (m_level->GetBlockingActors()[i] != nullptr)
         {
             if (!m_level->GetBlockingActors()[i]->IsActive() && m_level->IsTileVisibleForPlayer(i % m_level->GetLevelWidth(), i / m_level->GetLevelWidth()))
             {
@@ -1087,8 +1087,8 @@ void EngineCore::ThinkActors()
             {
                 PerformActionOnActor(m_level->GetBlockingActors()[i]);
 
-                // Another check on NULL is necessary, as the actor could have been deleted by performing ActionRemove.
-                if (m_level->GetBlockingActors()[i] != NULL)
+                // Another check on nullptr is necessary, as the actor could have been deleted by performing ActionRemove.
+                if (m_level->GetBlockingActors()[i] != nullptr)
                 {
                     m_level->GetBlockingActors()[i]->Think(m_timeStampOfWorldCurrentFrame);
                 }
@@ -1268,7 +1268,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             const int16_t angleInt = m_level->AngleNearPlayer(actor);
             if (angleInt != -1)
             {
-                Actor* projectile = NULL;
+                Actor* projectile = nullptr;
                 if (actor->GetDecorateActor().projectileId != 0)
                 {
                     const auto iterator = m_game.GetDecorateActors().find(actor->GetDecorateActor().projectileId);
@@ -1630,7 +1630,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     }
 
                     Actor* otherActor = m_level->GetBlockingActor(x, y);
-                    if (otherActor != NULL)
+                    if (otherActor != nullptr)
                     {
                         if (action == ActionPlayerProjectile)
                         {
@@ -1661,7 +1661,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                         if (deadAction != ActionBurningTree)
                                         {
                                             m_level->AddNonBlockingActor(otherActor);
-                                            m_level->SetBlockingActor(x, y, NULL);
+                                            m_level->SetBlockingActor(x, y, nullptr);
                                         }
                                     }
                                     else
@@ -1860,12 +1860,12 @@ void EngineCore::ThinkNonBlockingActors()
 {
     for ( uint16_t i = 0; i < 100; i++)
     {
-        if (m_level->GetNonBlockingActors()[i] != NULL)
+        if (m_level->GetNonBlockingActors()[i] != nullptr)
         {
             PerformActionOnActor(m_level->GetNonBlockingActors()[i]);
 
-            // Another check on NULL is necessary, as the actor could have been deleted by performing ActionRemove.
-            if (m_level->GetNonBlockingActors()[i] != NULL)
+            // Another check on nullptr is necessary, as the actor could have been deleted by performing ActionRemove.
+            if (m_level->GetNonBlockingActors()[i] != nullptr)
             {
                 m_level->GetNonBlockingActors()[i]->Think(m_timeStampOfWorldCurrentFrame);
             }
@@ -2033,7 +2033,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
     }
 
     Actor* actor = m_level->GetBlockingActor(tileX, tileY);
-    if (actor != NULL)
+    if (actor != nullptr)
     {
         if (actor->WouldCollideWithActor(playerX, playerY, m_level->GetPlayerActor()->GetDecorateActor().size))
         {
@@ -2170,7 +2170,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
             break;
         }
         
-        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = NULL;	// pick up marker from goal
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = nullptr;	// pick up marker from goal
         if (actor->GetDirection() == nodir)
             actor->SetDirection(north);
 
@@ -2212,7 +2212,7 @@ void EngineCore::RunAway(Actor* actor)
             break;
         }
 
-        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = NULL;	// pick up marker from goal
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = nullptr;	// pick up marker from goal
         if (actor->GetDirection() == nodir)
             actor->SetDirection(north);
 
@@ -2254,7 +2254,7 @@ void EngineCore::Bounce(Actor* actor)
             break;
         }
 
-        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = NULL;	// pick up marker from goal
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = nullptr;	// pick up marker from goal
 
         // Instantly set the actor on its target
         move -= actor->GetDistanceToTarget();
@@ -2305,7 +2305,7 @@ void EngineCore::ChaseLikeRunningEye(Actor* actor)
             break;
         }
 
-        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = NULL;	// pick up marker from goal
+        m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = nullptr;	// pick up marker from goal
         if (actor->GetDirection() == nodir)
             actor->SetDirection(north);
 
@@ -2474,7 +2474,7 @@ void EngineCore::WarpInsideLevel(const Actor* sourceWarp)
         for (uint16_t x = 0; x < m_level->GetLevelWidth(); x++)
         {
             Actor* actor = m_level->GetBlockingActor(x, y);
-            if (actor != NULL && actor != sourceWarp && actor->GetDecorateActor().spawnOnAllDifficulties == sourceWarp->GetDecorateActor().spawnOnAllDifficulties)
+            if (actor != nullptr && actor != sourceWarp && actor->GetDecorateActor().spawnOnAllDifficulties == sourceWarp->GetDecorateActor().spawnOnAllDifficulties)
             {
                 m_level->GetPlayerActor()->SetX(actor->GetX());
                 m_level->GetPlayerActor()->SetY(actor->GetY());
@@ -2541,7 +2541,7 @@ void EngineCore::PlayerUsesPotion()
 
 void EngineCore::ShowGodModeCheatDialog()
 {
-    if (m_state == InGame && m_level != NULL && m_level->GetPlayerActor()->GetHealth() > 0)
+    if (m_state == InGame && m_level != nullptr && m_level->GetPlayerActor()->GetHealth() > 0)
     {
         m_state = GodModeCheatDialog;
         m_godModeIsOn = !m_godModeIsOn;
@@ -2551,7 +2551,7 @@ void EngineCore::ShowGodModeCheatDialog()
 
 void EngineCore::ShowWarpCheatDialog()
 {
-    if (m_state == InGame && m_level != NULL && m_level->GetPlayerActor()->GetHealth() > 0)
+    if (m_state == InGame && m_level != nullptr && m_level->GetPlayerActor()->GetHealth() > 0)
     {
         m_state = WarpCheatDialog;
         m_gameTimer.Pause();
@@ -2560,7 +2560,7 @@ void EngineCore::ShowWarpCheatDialog()
 
 void EngineCore::ShowFreeItemsCheatDialog()
 {
-    if (m_state == InGame && m_level != NULL && m_level->GetPlayerActor()->GetHealth() > 0)
+    if (m_state == InGame && m_level != nullptr && m_level->GetPlayerActor()->GetHealth() > 0)
     {
         m_state = FreeItemsCheatDialog;
         for (uint8_t i = 0; i < 4; i++)
@@ -2749,18 +2749,15 @@ void EngineCore::StartNewGame()
 
 void EngineCore::UnloadLevel()
 {
-    if (m_level != NULL)
-    {
-        delete m_level;
-        m_level = NULL;
-    }
+    delete m_level;
+    m_level = nullptr;
 }
 
 bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
 {
     bool result = false;
 
-    if (m_level == NULL)
+    if (m_level == nullptr)
     {
         return false;
     }

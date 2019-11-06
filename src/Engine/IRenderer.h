@@ -53,46 +53,46 @@ public:
     };
 
     virtual ~IRenderer() {};
-    virtual void Setup() = NULL;
-    virtual void SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight) = NULL;
-    virtual void SetPlayerAngle(const float angle) = NULL;
-    virtual void SetPlayerPosition(const float posX, const float posY) = NULL;
-    virtual void SetTextureFilter(const TextureFilterSetting textureFilter) = NULL;
-    virtual void SetVSync(const bool enabled) = NULL;
-    virtual bool IsVSyncSupported() = NULL;
-    virtual unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) = NULL;
-    virtual unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) = NULL;
-    virtual unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) = NULL;
-    virtual unsigned int LoadFontIntoTexture(const bool* fontPicture) = NULL;
+    virtual void Setup() = 0;
+    virtual void SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight) = 0;
+    virtual void SetPlayerAngle(const float angle) = 0;
+    virtual void SetPlayerPosition(const float posX, const float posY) = 0;
+    virtual void SetTextureFilter(const TextureFilterSetting textureFilter) = 0;
+    virtual void SetVSync(const bool enabled) = 0;
+    virtual bool IsVSyncSupported() = 0;
+    virtual unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) = 0;
+    virtual unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) = 0;
+    virtual unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) = 0;
+    virtual unsigned int LoadFontIntoTexture(const bool* fontPicture) = 0;
 
-    virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
-    virtual void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength) = NULL;
-    virtual uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
-    virtual void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
-    virtual void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = NULL;
+    virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
+    virtual void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength) = 0;
+    virtual uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
+    virtual void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
+    virtual void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
 
-    virtual void Prepare2DRendering(const bool helpWindow) = NULL;
-    virtual void Unprepare2DRendering() = NULL;
-    virtual void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) = NULL;
-    virtual void Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) = NULL;
-    virtual void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) = NULL;
-    virtual void RenderRadarBlip(const float x, const float y, const egaColor colorIndex) = NULL;
+    virtual void Prepare2DRendering(const bool helpWindow) = 0;
+    virtual void Unprepare2DRendering() = 0;
+    virtual void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) = 0;
+    virtual void Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) = 0;
+    virtual void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) = 0;
+    virtual void RenderRadarBlip(const float x, const float y, const egaColor colorIndex) = 0;
 
-    virtual void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) = NULL;
-    virtual uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) = NULL;
+    virtual void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) = 0;
+    virtual uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) = 0;
 
-    virtual void PrepareWalls() = NULL;
-    virtual void UnprepareWalls() = NULL;
-    virtual void Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation) = NULL;
-    virtual void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = NULL;
+    virtual void PrepareWalls() = 0;
+    virtual void UnprepareWalls() = 0;
+    virtual void Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation) = 0;
+    virtual void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
 
-    virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = NULL;
-    virtual void RenderAllSprites() = NULL;
-    virtual void PrepareFloorAndCeiling() = NULL;
-    virtual void UnprepareFloorAndCeiling() = NULL;
-    virtual void RenderFloor(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) = NULL;
-    virtual void RenderCeiling(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) = NULL;
+    virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
+    virtual void RenderAllSprites() = 0;
+    virtual void PrepareFloorAndCeiling() = 0;
+    virtual void UnprepareFloorAndCeiling() = 0;
+    virtual void RenderFloor(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) = 0;
+    virtual void RenderCeiling(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) = 0;
 
-    virtual void PrepareVisibilityMap() = NULL;
-    virtual void UnprepareVisibilityMap() = NULL;
+    virtual void PrepareVisibilityMap() = 0;
+    virtual void UnprepareVisibilityMap() = 0;
 };

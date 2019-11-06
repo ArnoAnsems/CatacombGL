@@ -83,7 +83,7 @@ private:
         SpriteOrientation orientation;
     } spriteToRender;
 
-    static rgbColor EgaToRgb(const egaColor ega);
+    static constexpr rgbColor EgaToRgb(const egaColor ega);
 
     void quickSort(uint16_t p,uint16_t q);
     uint16_t partition(uint16_t p,uint16_t q);

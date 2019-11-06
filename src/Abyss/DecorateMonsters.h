@@ -832,7 +832,7 @@ const DecorateAnimation batDyingAnimation =
 {
     { BATDIE1PIC, 18, ActionNone },
     { BATDIE2PIC, 18, ActionNone },
-    { NULL, 18, ActionRemove }
+    { 0, 18, ActionRemove }
 };
 
 const DecorateState batStateDying =
@@ -1001,7 +1001,7 @@ const DecorateAnimation eyeDyingAnimation =
 {
     { EYE_DEATH1PIC, 22, ActionNone },
     { EYE_DEATH2PIC, 22, ActionNone },
-    { NULL, 22, ActionRemove }
+    { 0, 22, ActionRemove }
 };
 
 const DecorateState eyeStateDying =

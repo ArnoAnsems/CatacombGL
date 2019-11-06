@@ -59,9 +59,9 @@ AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, co
     m_musicTracks = new FileChunk*[staticData.lastSound];
     for (uint16_t i = 0; i < staticData.lastSound; i++)
     {
-        m_pcSounds[i] = NULL;
-        m_adlibSounds[i] = NULL;
-        m_musicTracks[i] = NULL;
+        m_pcSounds[i] = nullptr;
+        m_adlibSounds[i] = nullptr;
+        m_musicTracks[i] = nullptr;
     }
 }
 
@@ -69,41 +69,29 @@ AudioRepository::~AudioRepository()
 {
     for (uint16_t i = 0; i < m_staticData.lastSound; i++)
     {
-        if (m_pcSounds[i] != NULL)
-        {
-            delete m_pcSounds[i];
-        }
-        if (m_adlibSounds[i] != NULL)
-        {
-            delete m_adlibSounds[i];
-        }
-        if (m_musicTracks[i] != NULL)
-        {
-            delete m_musicTracks[i];
-        }
+        delete m_pcSounds[i];
+        m_pcSounds[i] = nullptr;
+        delete m_adlibSounds[i];
+        m_adlibSounds[i] = nullptr;
+        delete m_musicTracks[i];
+        m_musicTracks[i] = nullptr;
     }
     delete[] m_pcSounds;
     delete[] m_adlibSounds;
     delete[] m_musicTracks;
 
-    if (m_huffman != NULL)
-    {
-        delete m_huffman;
-    }
-    if (m_rawData != NULL)
-    {
-        delete m_rawData;
-    }
+    delete m_huffman;
+    delete m_rawData;
 }
 
 PCSound* AudioRepository::GetPCSound(const uint16_t index)
 {
     if (index >= m_staticData.lastSound)
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_pcSounds[index] == NULL)
+    if (m_pcSounds[index] == nullptr)
     {
         uint8_t* compressedSound = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index)];
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
@@ -120,10 +108,10 @@ AdlibSound* AudioRepository::GetAdlibSound(const uint16_t index)
 {
     if (index >= m_staticData.lastSound)
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_adlibSounds[index] == NULL)
+    if (m_adlibSounds[index] == nullptr)
     {
         uint8_t* compressedSound = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index + m_staticData.lastSound)];
         uint32_t compressedSize = GetChunkSize(index + m_staticData.lastSound) - sizeof(uint32_t);
@@ -140,10 +128,10 @@ FileChunk* AudioRepository::GetMusicTrack(const uint16_t index)
 {
     if (index >= m_staticData.lastSound)
     {
-        return NULL;
+        return nullptr;
     }
 
-    if (m_musicTracks[index] == NULL)
+    if (m_musicTracks[index] == nullptr)
     {
         uint8_t* compressedSound = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index + (m_staticData.lastSound * 3))];
         uint32_t compressedSize = GetChunkSize(index + (m_staticData.lastSound * 3)) - sizeof(uint32_t);

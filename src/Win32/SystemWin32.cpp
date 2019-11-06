@@ -37,7 +37,7 @@ const std::string& SystemWin32::GetConfigurationFilePath() const
 std::string SystemWin32::FindConfigurationFilePath() const
 {
     PWSTR appDataPathWideStr;
-    SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, NULL, &appDataPathWideStr);
+    SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, nullptr, &appDataPathWideStr);
     char appDataPath[256];
     size_t returnValue;
     wcstombs_s(&returnValue, appDataPath, 256, appDataPathWideStr, 255);
@@ -71,7 +71,7 @@ void SystemWin32::GetSavedGameNamesFromFolder(const std::string& path, std::vect
 
 bool SystemWin32::CreatePath(const std::string& path) const
 {
-    return CreateDirectory(path.c_str(), NULL) != 0 || GetLastError() == ERROR_ALREADY_EXISTS;
+    return CreateDirectory(path.c_str(), nullptr) != 0 || GetLastError() == ERROR_ALREADY_EXISTS;
 }
 
 std::string SystemWin32::GetOSVersion() const

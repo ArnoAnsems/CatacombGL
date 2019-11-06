@@ -19,11 +19,11 @@
 #include <iostream>
 #include "..\..\ThirdParty\SDL\include\SDL_messagebox.h"
 
-static Logging* m_instance = NULL;
+static Logging* m_instance = nullptr;
 
 Logging& Logging::Instance()
 {
-    if (m_instance == NULL)
+    if (m_instance == nullptr)
     {
         m_instance = new Logging();
     }
@@ -78,6 +78,6 @@ void Logging::FatalError(const std::string& message)
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
         "CatacombGL",
         message.c_str(),
-        NULL);
+        nullptr);
     exit(1);
 }

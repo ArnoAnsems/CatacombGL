@@ -73,71 +73,38 @@ IntroViewAbyss::IntroViewAbyss(IRenderer& renderer, const std::string& path) :
 
 IntroViewAbyss::~IntroViewAbyss()
 {
-    if (m_shapeEntering != NULL)
-    {
-        delete m_shapeEntering;
-        m_shapeEntering = NULL;
-    }
+    delete m_shapeEntering;
+    m_shapeEntering = nullptr;
 
-    if (m_shapePresents != NULL)
-    {
-        delete m_shapePresents;
-        m_shapePresents = NULL;
-    }
+    delete m_shapePresents;
+    m_shapePresents = nullptr;
 
-    if (m_shapeSoftdisk != NULL)
-    {
-        delete m_shapeSoftdisk;
-        m_shapeSoftdisk = NULL;
-    }
+    delete m_shapeSoftdisk;
+    m_shapeSoftdisk = nullptr;
 
-    if (m_shapeTitle != NULL)
-    {
-        delete m_shapeTitle;
-        m_shapeTitle = NULL;
-    }
+    delete m_shapeTitle;
+    m_shapeTitle = nullptr;
 
-    if (m_shapeCredits != NULL)
-    {
-        delete m_shapeCredits;
-        m_shapeCredits = NULL;
-    }
+    delete m_shapeCredits;
+    m_shapeCredits = nullptr;
 
-    if (m_shapeTrilogy != NULL)
-    {
-        delete m_shapeTrilogy;
-        m_shapeTrilogy = NULL;
-    }
+    delete m_shapeTrilogy;
+    m_shapeTrilogy = nullptr;
 
-    if (m_shapeSelectDifficulty != NULL)
-    {
-        delete m_shapeSelectDifficulty;
-        m_shapeSelectDifficulty = NULL;
-    }
+    delete m_shapeSelectDifficulty;
+    m_shapeSelectDifficulty = nullptr;
 
-    if (m_shapeConfirmDifficulty != NULL)
-    {
-        delete m_shapeConfirmDifficulty;
-        m_shapeConfirmDifficulty = NULL;
-    }
+    delete m_shapeConfirmDifficulty;
+    m_shapeConfirmDifficulty = nullptr;
 
-    if (m_shapeNovice != NULL)
-    {
-        delete m_shapeNovice;
-        m_shapeNovice = NULL;
-    }
+    delete m_shapeNovice;
+    m_shapeNovice = nullptr;
 
-    if (m_shapeWarrior != NULL)
-    {
-        delete m_shapeWarrior;
-        m_shapeWarrior = NULL;
-    }
+    delete m_shapeWarrior;
+    m_shapeWarrior = nullptr;
 
-    if (m_shapeStandBeforeGate != NULL)
-    {
-        delete m_shapeStandBeforeGate;
-        m_shapeStandBeforeGate = NULL;
-    }
+    delete m_shapeStandBeforeGate;
+    m_shapeStandBeforeGate = nullptr;
 }
 
 void IntroViewAbyss::DrawIntroduction(const uint32_t timeStamp)

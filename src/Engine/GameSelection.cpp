@@ -55,7 +55,7 @@ void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t w
     // Inner area
     m_renderer.Render2DBar(x + (2 * shadowVert) + borderVert, y + (2 * shadowHor) + borderHor, width - (4 * shadowVert) - (2 * borderVert), height - (4 * shadowHor) - (2 * borderHor), EgaDarkGray);
 
-    if (title != NULL)
+    if (title != nullptr)
     {
         m_renderer.Render2DBar(x + (2 * shadowVert) + borderVert, y + (2 * shadowHor) + borderHor, width - (4 * shadowVert) - (2 * borderVert), 11, EgaLightGray);
         m_renderer.RenderTextCentered(title, DefaultFont::Get(m_renderer), EgaBlack, x + (width / 2), y + (2 * shadowHor) + borderHor + 1);

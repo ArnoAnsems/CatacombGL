@@ -24,7 +24,7 @@
 #include "Font.h"
 #include "IRenderer.h"
 
-static Font* defaultFont = NULL;
+static Font* defaultFont = nullptr;
 
 class DefaultFont
 {
