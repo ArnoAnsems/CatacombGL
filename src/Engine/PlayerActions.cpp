@@ -27,7 +27,8 @@ PlayerActions::PlayerActions() :
     m_nukeFired(false),
     m_lastNukeTimeStamp(0),
     m_lastBoltTimeStamp(0),
-    m_boltsLeft(0)
+    m_boltsLeft(0),
+    m_shotPower(0)
 {
     for (uint8_t i = 0; i < MaxControlAction; i++)
     {
@@ -59,7 +60,7 @@ void PlayerActions::ResetForNewLevel()
     m_lastNukeTimeStamp = 0;
     m_lastBoltTimeStamp = 0;
     m_boltsLeft = 0;
-    m_shotPower = 56;
+    m_shotPower = 0;
 }
 
 uint16_t PlayerActions::GetHandHeight() const
@@ -86,6 +87,60 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp)
     }
 
     const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 60) / 1000) / 2;
+    if (deltaTicks < 60)
+    {
+        m_handHeight = m_shotFiredHandHeight + deltaTicks * 4;
+        if (m_handHeight > 72)
+        {
+            m_handHeight = 72;
+        }
+    }
+    else
+    {
+        if (m_handHeight > 0)
+        {
+            if ((deltaTicks - 60) * 2 >= 72)
+            {
+                m_handHeight = 0;
+            }
+            else
+            {
+                m_handHeight = 72 - ((deltaTicks - 60) * 2);
+            }
+        }
+    }
+
+    return fireShot;
+}
+
+bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp)
+{
+    bool fireShot = false;
+    if (m_controlActionActive[Shoot])
+    {
+        if (m_shotFired == false)
+        {
+            m_shotFired = true;
+            m_shotFiredHandHeight = m_handHeight;
+            m_shotFiredTimeStamp = timeStamp;
+        }
+    }
+
+    const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 60) / 1000) / 2;
+    if (m_shotFired)
+    {
+        m_shotPower = (deltaTicks > 56) ? 56 : deltaTicks;
+        if (!m_controlActionActive[Shoot])
+        {
+            fireShot = true;
+            m_shotFired = false;
+        }
+    }
+    else
+    {
+        m_shotPower = 0;
+    }
+
     if (deltaTicks < 60)
     {
         m_handHeight = m_shotFiredHandHeight + deltaTicks * 4;

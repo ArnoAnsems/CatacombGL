@@ -31,6 +31,7 @@ public:
 
     uint16_t GetHandHeight() const;
     bool UpdateShoot(const uint32_t timeStamp);
+    bool UpdateShootWithCharge(const uint32_t timeStamp);
     bool IsReadyToShootBolt(const uint32_t timeStamp);
     void ShootBolt(const uint32_t timeStamp);
     bool UpdateContinueBolt(const uint32_t timeStamp);

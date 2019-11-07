@@ -179,8 +179,12 @@ void EngineCore::DrawScene(IRenderer& renderer)
         else
         {
             const uint16_t statusbarHeight = (m_game.GetId() == 5) ? 144 : 120;
-            renderer.Render2DPicture(m_game.GetEgaGraph()->GetMaskedPicture(m_game.GetEgaGraph()->GetHandPictureIndex()), 120, statusbarHeight - m_playerActions.GetHandHeight()/*50*/);
-                    
+            uint16_t pictureIndex = m_game.GetEgaGraph()->GetHandPictureIndex();
+            if (m_game.GetId() == 5 && m_playerActions.GetShotPower() > 0 && m_gameTimer.GetTicksForPlayer() % 2 == 0)
+            {
+                pictureIndex++;
+            }
+            renderer.Render2DPicture(m_game.GetEgaGraph()->GetMaskedPicture(pictureIndex), 120, statusbarHeight - m_playerActions.GetHandHeight());
 #ifdef DRAWTILEINFO
             char tileStr[40];
             sprintf_s(tileStr, 40, "tile: %d", m_level->GetFloorTile((uint16_t)GetPlayerState()->GetX(), (uint16_t)GetPlayerState()->GetY()));
@@ -902,9 +906,23 @@ bool EngineCore::Think()
 
             if (m_timeStampOfPlayerCurrentFrame > m_timeStampOfPlayerPreviousFrame)
             {
-                if (m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame))
+                bool shoot = false;
+                if (m_game.GetId() != 5)
                 {
-                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId);
+                    shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame);
+                }
+                else
+                {
+                    shoot = m_playerActions.UpdateShootWithCharge(m_timeStampOfPlayerCurrentFrame);
+                }
+                if (shoot)
+                {
+                    uint16_t projectileId = m_level->GetPlayerActor()->GetDecorateActor().projectileId;
+                    if (m_playerActions.GetShotPower() == 56)
+                    {
+                        projectileId++;
+                    }
+                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
                     if (decorateProjectilePair != m_game.GetDecorateActors().end())
                     {
                         Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfPlayerCurrentFrame, decorateProjectilePair->second);
