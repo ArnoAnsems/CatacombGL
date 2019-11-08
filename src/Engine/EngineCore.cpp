@@ -21,9 +21,9 @@
 #include <fstream>
 
 const uint8_t versionMajor = 0;
-const uint8_t versionMinor = 3;
+const uint8_t versionMinor = 4;
 const uint8_t versionLevel = 0;
-const std::string versionPhase = "Alpha";
+const std::string versionPhase = "Beta";
 
 const uint8_t VictoryStatePlayGetBolt = 0;
 const uint8_t VictoryStatePlayingGetBolt = 1;
@@ -180,7 +180,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             const uint16_t statusbarHeight = (m_game.GetId() == 5) ? 144 : 120;
             uint16_t pictureIndex = m_game.GetEgaGraph()->GetHandPictureIndex();
-            if (m_game.GetId() == 5 && m_playerActions.GetShotPower() > 0 && m_gameTimer.GetTicksForPlayer() % 2 == 0)
+            if (m_game.GetId() == 5 && m_playerActions.GetShotPower() > 0 && m_gameTimer.GetTicksForPlayer() % 16 < 8)
             {
                 pictureIndex++;
             }
@@ -920,7 +920,13 @@ bool EngineCore::Think()
                     uint16_t projectileId = m_level->GetPlayerActor()->GetDecorateActor().projectileId;
                     if (m_playerActions.GetShotPower() == 56)
                     {
+                        // Big shot
                         projectileId++;
+                        m_game.PlaySoundBoom();
+                    }
+                    else
+                    {
+                        m_game.PlaySoundShoot();
                     }
                     const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
                     if (decorateProjectilePair != m_game.GetDecorateActors().end())
@@ -931,7 +937,7 @@ bool EngineCore::Think()
                         m_level->AddNonBlockingActor(projectile);
                     }
 
-                    m_game.PlaySoundShoot();
+                    
                 }
                 if (m_playerActions.IsReadyToShootBolt(m_timeStampOfPlayerCurrentFrame))
                 {

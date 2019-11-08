@@ -654,7 +654,7 @@ void GameCatacomb3D::PlaySoundShootWall()
 
 void GameCatacomb3D::PlaySoundBoom()
 {
-    
+    m_audioPlayer->Play(BIGSHOOTSND);
 }
 
 void GameCatacomb3D::PlaySoundSmallMonster()
