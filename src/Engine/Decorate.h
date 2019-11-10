@@ -30,7 +30,7 @@ const float pixelRadius = 1.0f / 128.0f;
 typedef enum {ActionNone, ActionChase, ActionChaseLikeMage, ActionChaseLikeWetMan, ActionChaseLikeRunningEye, ActionChaseLikeInvisDude, ActionRunAway, ActionBounce, ActionHide, ActionHideUnderWater, ActionStatue, ActionHangingSkeleton, ActionAttack,
               ActionRemove, ActionPlayerProjectile, ActionMonsterProjectile, ActionDropItem, ActionSpawnSkeleton, ActionForceField, ActionExplodeSound, ActionSmallMonsterSound, ActionLargeMonsterSound, ActionPortalSound, ActionBurningTree, ActionFlash, ActionHarmlessBunny,
               ActionWaitForPickup, ActionWaitForPickupDestructable, ActionFreezeTime, ActionGiveChest, ActionGiveBolt, ActionGiveNuke, ActionGivePotion,
-              ActionGiveKey, ActionGiveGem, ActionGiveScroll,
+              ActionGiveKey, ActionGiveGem, ActionGiveScroll, ActionGivePoints, ActionGivePointsForChest,
               ActionItemDestroyed, ActionExplosionDelay,
               ActionExplodeWall1,  ActionExplodeWall2,  ActionExplodeWall3, ActionExplodeWall4, ActionWarpToOtherLevel, ActionWarpInsideLevel, ActionFakeWall, ActionVictory} actorAction;
 typedef enum {Always, Never, Flickering, WithBlueGem, WithRedGem, WithYellowGem, WithGreenGem, WithPurpleGem, WithAllGems} actorRadarVisibility;
@@ -84,6 +84,6 @@ struct DecorateActor
     uint8_t damage;
     uint16_t hitSound;
     uint16_t speed;
-    uint16_t actionParameter;
+    uint32_t actionParameter;
     uint16_t projectileId;
 };

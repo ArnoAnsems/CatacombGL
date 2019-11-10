@@ -237,7 +237,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
         const uint8_t levelIndex = (m_level != 0) ? m_level->GetLevelIndex() : 0;
-        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio), playerAngle, levelIndex, m_playerActions.GetShotPower());
+        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio), playerAngle, levelIndex, m_playerActions.GetShotPower(), m_score.GetPoints());
 
         if (m_state != Victory)
         {
@@ -1470,6 +1470,19 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         actor->SetActionPerformed(true);
         break;
     }
+    case ActionGivePoints:
+    {
+        m_score.AddPoints((int32_t)actor->GetDecorateActor().actionParameter);
+        actor->SetActionPerformed(true);
+        break;
+    }
+    case ActionGivePointsForChest:
+    {
+        m_score.AddPoints((int32_t)(m_level->GetLevelIndex() + 1) * 100);
+        m_game.PlaySoundGetPoints();
+        actor->SetActionPerformed(true);
+        break;
+    }
     case ActionGiveScroll:
     {
         m_playerInventory.GiveScroll((uint8_t)actor->GetDecorateActor().actionParameter);
@@ -2677,6 +2690,8 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
             action == ActionGiveKey ||
             action == ActionGiveGem ||
             action == ActionGiveScroll ||
+            action == ActionGivePoints ||
+            action == ActionGivePointsForChest ||
             action == ActionExplodeWall1 ||
             action == ActionExplodeWall2 ||
             action == ActionExplodeWall3 ||

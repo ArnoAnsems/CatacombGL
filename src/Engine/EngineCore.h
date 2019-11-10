@@ -33,8 +33,7 @@
 #include "GameTimer.h"
 #include "ISystem.h"
 #include "Logging.h"
-
-#include "../Armageddon/GameArmageddon.h"
+#include "Score.h"
 
 class EngineCore
 {
@@ -173,4 +172,5 @@ private:
     const ISystem& m_system;
     std::vector<std::string> m_savedGames;
     const bool m_scrollsArePresent;
+    Score m_score;
 };

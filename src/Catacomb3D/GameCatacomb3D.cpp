@@ -410,7 +410,7 @@ void GameCatacomb3D::DrawStatusBarWideScreenMargin(const int16_t offsetX, const 
     }
 }
 
-void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex, const uint16_t shotPower)
+void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex, const uint16_t shotPower, const long points)
 {
     const uint16_t sideBarWidth = GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC)->GetWidth();
     m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 0, 144, 0, 0, 320 - sideBarWidth, 56);
@@ -490,7 +490,16 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     }
 
     // Score
-    m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(NUMBERCHARS), 248, 185);
+    {
+        const std::string scoreStr = std::to_string(points);
+        const size_t length = scoreStr.length();
+        uint16_t x = 256 - (8 * (uint16_t)length);
+        for (uint16_t i = 0; i < length; i++)
+        {
+            m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(NUMBERCHARS + scoreStr.at(i) - '0'), x, 185);
+            x += 8;
+        }
+    }
     
     DrawStatusBarWideScreenMargin(0 - wideScreenMargin, wideScreenMargin);
     DrawStatusBarWideScreenMargin(320 - sideBarWidth - 2, wideScreenMargin);

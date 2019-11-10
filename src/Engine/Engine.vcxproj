@@ -169,6 +169,7 @@
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="Radar.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="SpriteTable.cpp" />
     <ClCompile Include="LevelLocationNames.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="Radar.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="SpriteTable.h" />
     <ClInclude Include="LevelLocationNames.h" />

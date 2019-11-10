@@ -77,7 +77,7 @@ const DecorateState orcStatePain =
 
 const DecorateAnimation orcDyingAnimation =
 {
-    { ORCDIE1PIC, 8, ActionNone },
+    { ORCDIE1PIC, 8, ActionGivePoints },
     { ORCDIE1PIC, 8, ActionNone }
 };
 
@@ -122,7 +122,7 @@ const DecorateActor decorateOrc =
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     1536,    // speed;
-    0, // actionParameter
+    100, // actionParameter - # points added when killed
     0 // ProjectileId
 };
 
@@ -170,7 +170,7 @@ const DecorateState trollStatePain =
 
 const DecorateAnimation trollDyingAnimation =
 {
-    { TROLLDIE1PIC, 8, ActionNone },
+    { TROLLDIE1PIC, 8, ActionGivePoints },
     { TROLLDIE2PIC, 8, ActionNone }
 };
 
@@ -215,7 +215,7 @@ const DecorateActor decorateTroll =
     8,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2500,    // speed;
-    0, // actionParameter
+    400, // actionParameter - # points added when killed
     0 // ProjectileId
 };
 
@@ -264,7 +264,7 @@ const DecorateState demonStatePain =
 
 const DecorateAnimation demonDyingAnimation =
 {
-    { DEMONDIE1PIC, 20, ActionNone },
+    { DEMONDIE1PIC, 20, ActionGivePoints },
     { DEMONDIE2PIC, 20, ActionNone },
     { DEMONDIE3PIC, 10, ActionNone }
 };
@@ -310,7 +310,7 @@ const DecorateActor decorateDemon =
     15,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
-    0, // actionParameter
+    1000, // actionParameter - # points added when killed
     0 // ProjectileId
 };
 
@@ -356,7 +356,7 @@ const DecorateState nemesisStatePain =
 
 const DecorateAnimation nemesisDyingAnimation =
 {
-    { GRELDIE1PIC, 20, ActionNone },
+    { GRELDIE1PIC, 20, ActionGivePoints },
     { GRELDIE2PIC, 20, ActionNone },
     { GRELDIE3PIC, 20, ActionNone },
     { GRELDIE4PIC, 20, ActionNone },
@@ -404,7 +404,7 @@ const DecorateActor decorateNemesis =
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
-    0, // actionParameter
+    10000, // actionParameter - # points added when killed
     actorIdProjectileMageShot // ProjectileId
 };
 
@@ -440,7 +440,7 @@ const DecorateState batStateAttack =
 
 const DecorateAnimation batDyingAnimation =
 {
-    { BATDIE1PIC, 18, ActionNone },
+    { BATDIE1PIC, 18, ActionGivePoints },
     { BATDIE2PIC, 18, ActionNone },
     { 0, 18, ActionRemove }
 };
@@ -473,7 +473,7 @@ const DecorateActor decorateBat =
     4,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2000,    // speed;
-    0, // actionParameter
+    100, // actionParameter - # points added when killed
     0 // ProjectileId
 };
 
@@ -519,7 +519,7 @@ const DecorateState mageStatePain =
 
 const DecorateAnimation mageDyingAnimation =
 {
-    { MAGEDIE1PIC, 20, ActionNone }
+    { MAGEDIE1PIC, 20, ActionGivePoints }
 };
 
 const DecorateState mageStateDying =
@@ -563,7 +563,7 @@ const DecorateActor decorateMage =
     0,  // meleeDamage;
     SHOOTMONSTERSND, // hitSound;
     2048,    // speed;
-    0, // actionParameter
+    600, // actionParameter - # points added when killed
     actorIdProjectileMageShot // ProjectileId
 };
 

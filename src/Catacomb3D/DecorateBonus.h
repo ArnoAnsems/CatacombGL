@@ -270,7 +270,7 @@ const DecorateState chestWaitForPickup =
 
 const DecorateAnimation chestPickupAnimation =
 {
-    { 0, 6, ActionGiveChest },
+    { 0, 6, ActionGivePointsForChest },
     { 0, 6, ActionRemove }
 };
 
@@ -679,6 +679,7 @@ const DecorateState grelminarWaitForPickup =
 
 const DecorateAnimation grelminarPickupAnimation =
 {
+    { NEMESISPIC, 1, ActionGivePoints },
     { NEMESISPIC, 60, ActionVictory }
 };
 
@@ -709,6 +710,6 @@ const DecorateActor decorateGrelminar =
     0,  // meleeDamage;
     0, // hitSound;
     0,    // speed;
-    0, // actionParameter
+    100000, // actionParameter - # points added when picked up
     0 // ProjectileId
 };
