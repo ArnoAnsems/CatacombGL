@@ -621,6 +621,11 @@ bool EngineCore::Think()
 
     if (m_state == InGame && !m_menu->IsActive())
     {
+        if (m_score.Update(m_timeStampOfPlayerCurrentFrame))
+        {
+            m_game.PlaySoundGetPoints();
+        }
+
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
         {
 	        m_playerActions.SetActionActive((ControlAction)i, IsActionActive((ControlAction)i));
@@ -2775,6 +2780,7 @@ void EngineCore::StartNewGameWithDifficultySelection()
     m_state = RequestDifficultyLevel;
     m_playerInventory.ResetForNewGame();
     UnloadLevel();
+    m_score.Reset();
 }
 
 void EngineCore::StartNewGame()
@@ -2784,6 +2790,7 @@ void EngineCore::StartNewGame()
     UnloadLevel();
     m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
     m_warpToLevel = 0;
+    m_score.Reset();
 }
 
 void EngineCore::UnloadLevel()

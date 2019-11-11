@@ -16,7 +16,9 @@
 #include "Score.h"
 
 Score::Score() :
-    m_points(0)
+    m_points(0),
+    m_pointsToAdd(0),
+    m_pointsAddedTimestamp(0)
 {
 
 }
@@ -33,5 +35,29 @@ const long Score::GetPoints() const
 
 void Score::AddPoints(const int32_t points)
 {
-    m_points += points;
+    m_pointsToAdd += points;
+}
+
+bool Score::Update(const uint32_t timestamp)
+{
+    if (m_pointsToAdd > 0 && timestamp - m_pointsAddedTimestamp > 100)
+    {
+        const int32_t addedPoints =
+            (m_pointsToAdd > 1000) ? 1000 :
+            (m_pointsToAdd > 100) ? 100 :
+            (m_pointsToAdd < 20) ? m_pointsToAdd : 20;
+        m_points += addedPoints;
+        m_pointsToAdd -= addedPoints;
+        m_pointsAddedTimestamp = timestamp;
+        return true;
+    }
+
+    return false;
+}
+
+void Score::Reset()
+{
+    m_points = 0;
+    m_pointsToAdd = 0;
+    m_pointsAddedTimestamp = 0;
 }

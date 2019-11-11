@@ -30,8 +30,12 @@ public:
 
     const long GetPoints() const;
     void AddPoints(const int32_t points);
+    bool Update(const uint32_t timestamp);
+    void Reset();
 
 private:
     long m_points;
+    int32_t m_pointsToAdd;
+    uint32_t m_pointsAddedTimestamp;
 };
 
