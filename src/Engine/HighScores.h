@@ -14,29 +14,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 //
-// IntroViewCatacomb3D
+// Score
 //
-// Introduction screens for the Catacomb 3-D
+// Keeps track of the high score list for Catacomb 3D
 //
 #pragma once
 
-#include "..\Engine\IIntroView.h"
-#include "..\Engine\EgaGraph.h"
-#include "..\Engine\HighScores.h"
 #include <string>
+#include <vector>
 
-class IntroViewCatacomb3D : public IIntroView
+class HighScores
 {
 public:
-    IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path);
-    ~IntroViewCatacomb3D();
-    void DrawIntroduction(const uint32_t timeStamp);
-    void DrawRequestDifficultyLevel();
-    void DrawNoviceSelected();
-    void DrawWarriorSelected();
-    void DrawStandBeforeGate();
+    struct HighScore
+    {
+        std::string name;
+        long score;
+        uint16_t level;
+    };
+
+    HighScores();
+    ~HighScores();
+
+    const std::vector<HighScore>& Get() const;
 
 private:
-    EgaGraph* m_egaGraph;
-    std::unique_ptr<HighScores> m_highScores;
+    std::vector<HighScore> m_highscores;
 };

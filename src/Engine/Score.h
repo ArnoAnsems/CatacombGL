@@ -29,6 +29,7 @@ public:
     ~Score();
 
     const long GetPoints() const;
+    void SetPoints(const long points);
     void AddPoints(const int32_t points);
     bool Update(const uint32_t timestamp);
     void Reset();

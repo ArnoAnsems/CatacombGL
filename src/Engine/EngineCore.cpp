@@ -2823,6 +2823,9 @@ bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
         m_playerInventory.StoreToFile(file);
         m_level->StoreToFile(file);
         m_gameTimer.StoreToFile(file);
+        // The amount of points scored by the player gets stored since version 0.4.0
+        const long points = m_score.GetPoints();
+        file.write((const char*)&points, sizeof(points));
         file.close();
         result = true;
     }
@@ -2878,6 +2881,13 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         m_level = m_game.GetGameMaps()->GetLevelFromSavedGame(file);
         m_level->LoadActorsFromFile(file, m_game.GetDecorateActors());
         m_gameTimer.LoadFromFile(file);
+        if (versionMajorRead > 0 || versionMinorRead >= 4)
+        {
+            // The amount of points scored by the player gets stored since version 0.4.0
+            long points = 0;
+            file.read((char*)&points, sizeof(long));
+            m_score.SetPoints(points);
+        }
         file.close();
 
         m_playerActions.ResetForNewLevel();

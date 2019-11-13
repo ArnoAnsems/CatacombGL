@@ -159,6 +159,7 @@
     <ClCompile Include="GameSelection.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HelpPages.cpp" />
+    <ClCompile Include="HighScores.cpp" />
     <ClCompile Include="Huffman.cpp" />
     <ClCompile Include="IIntroView.cpp" />
     <ClCompile Include="Logging.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="FramesCounter.h" />
     <ClInclude Include="GameSelection.h" />
     <ClInclude Include="HelpPages.h" />
+    <ClInclude Include="HighScores.h" />
     <ClInclude Include="IGame.h" />
     <ClInclude Include="GameDetection.h" />
     <ClInclude Include="GameMaps.h" />

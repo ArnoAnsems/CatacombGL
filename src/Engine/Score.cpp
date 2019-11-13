@@ -33,6 +33,13 @@ const long Score::GetPoints() const
     return m_points;
 }
 
+void Score::SetPoints(const long points)
+{
+    m_points = points;
+    m_pointsToAdd = 0;
+    m_pointsAddedTimestamp = 0;
+}
+
 void Score::AddPoints(const int32_t points)
 {
     m_pointsToAdd += points;

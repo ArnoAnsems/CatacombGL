@@ -19,7 +19,8 @@
 
 IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path) :
     IIntroView(renderer),
-    m_egaGraph(egagraph)
+    m_egaGraph(egagraph),
+    m_highScores(std::make_unique<HighScores>())
 {
 
 }
@@ -48,6 +49,14 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
     case 2:
     {
         m_renderer.Render2DPicture(m_egaGraph->GetPicture(HIGHSCORESPIC), 0, 0);
+        uint16_t y = 68;
+        for (const auto highScore : m_highScores->Get())
+        {
+            m_renderer.RenderTextLeftAligned(highScore.name.c_str(), m_egaGraph->GetFont(3), EgaBlue, 60, y);
+            m_renderer.RenderTextLeftAligned(std::to_string(highScore.level).c_str(), m_egaGraph->GetFont(3), EgaBlue, 200, y);
+            m_renderer.RenderTextLeftAligned(std::to_string(highScore.score).c_str(), m_egaGraph->GetFont(3), EgaBlue, 272, y);
+            y += 16;
+        }
         break;
     }
     }

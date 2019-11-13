@@ -13,30 +13,31 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-//
-// IntroViewCatacomb3D
-//
-// Introduction screens for the Catacomb 3-D
-//
-#pragma once
+#include "HighScores.h"
 
-#include "..\Engine\IIntroView.h"
-#include "..\Engine\EgaGraph.h"
-#include "..\Engine\HighScores.h"
-#include <string>
-
-class IntroViewCatacomb3D : public IIntroView
+static const std::vector<HighScores::HighScore> defaultHighScores =
 {
-public:
-    IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path);
-    ~IntroViewCatacomb3D();
-    void DrawIntroduction(const uint32_t timeStamp);
-    void DrawRequestDifficultyLevel();
-    void DrawNoviceSelected();
-    void DrawWarriorSelected();
-    void DrawStandBeforeGate();
-
-private:
-    EgaGraph* m_egaGraph;
-    std::unique_ptr<HighScores> m_highScores;
+    { "Sir Lancelot",500,0 },
+    { "",0,0 },
+    { "",0,0 },
+    { "",0,0 },
+    { "",0,0 },
+    { "",0,0 },
+    { "",0,0 }
 };
+
+HighScores::HighScores() :
+    m_highscores(defaultHighScores)
+{
+
+}
+
+HighScores::~HighScores()
+{
+
+}
+
+const std::vector<HighScores::HighScore>& HighScores::Get() const
+{
+    return m_highscores;
+}
