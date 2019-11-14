@@ -37,6 +37,8 @@ public:
     void DrawStandBeforeGate();
 
 private:
+    static void ApplyEqualSpacingToNumbers(std::string& str);
+
     EgaGraph* m_egaGraph;
     std::unique_ptr<HighScores> m_highScores;
 };

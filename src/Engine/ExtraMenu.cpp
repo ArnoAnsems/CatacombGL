@@ -15,6 +15,7 @@
 
 #include "ExtraMenu.h"
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
+#include "DefaultFont.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -700,7 +701,8 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
                 }
                 else
                 {
-                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,yOffset);
+                    // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
+                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), DefaultFont::Get(renderer), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,yOffset);
                 }
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size())

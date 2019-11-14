@@ -35,7 +35,7 @@ public:
     const DecorateActor& GetExplosionActor() override;
     const DecorateActor& GetExplodingWallActor() override;
     const DecorateActor& GetPlayerActor() override;
-    void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex, const uint16_t shotPower, const long points) override;
+    void DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex, const uint16_t shotPower, const uint32_t points) override;
     void DrawScroll(const uint8_t scrollIndex) override;
     void DrawFinal() override;
     GameMaps* GetGameMaps() override;

@@ -410,7 +410,7 @@ void GameCatacomb3D::DrawStatusBarWideScreenMargin(const int16_t offsetX, const 
     }
 }
 
-void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex, const uint16_t shotPower, const long points)
+void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex, const uint16_t shotPower, const uint32_t points)
 {
     const uint16_t sideBarWidth = GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC)->GetWidth();
     m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 0, 144, 0, 0, 320 - sideBarWidth, 56);

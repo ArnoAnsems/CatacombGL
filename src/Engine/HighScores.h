@@ -29,7 +29,7 @@ public:
     struct HighScore
     {
         std::string name;
-        long score;
+        uint32_t score;
         uint16_t level;
     };
 
@@ -37,6 +37,7 @@ public:
     ~HighScores();
 
     const std::vector<HighScore>& Get() const;
+    bool LoadFromFile(const std::string& path);
 
 private:
     std::vector<HighScore> m_highscores;

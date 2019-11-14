@@ -3083,15 +3083,3 @@ const Font* DefaultFont::Get(IRenderer& renderer)
 
     return defaultFont;
 }
-
-void DefaultFont::AddWindows1252Characters(bool* fontData, uint8_t* fontWidth)
-{
-    for (uint16_t c = 128; c < 256; c++)
-    {
-        for (uint16_t i = 0; i < 16 * 10; i++)
-        {
-            fontData[(c * 16 * 10) + i] = defaultFontData[(c * 16 * 10) + i];
-        }
-        fontWidth[c] = defaultFontWidth[c];
-    }
-}

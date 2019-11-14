@@ -30,5 +30,4 @@ class DefaultFont
 {
 public:
     static const Font* Get(IRenderer& renderer);
-    static void AddWindows1252Characters(bool* fontData, uint8_t* fontWidth);
 };

@@ -28,15 +28,15 @@ public:
     Score();
     ~Score();
 
-    const long GetPoints() const;
-    void SetPoints(const long points);
-    void AddPoints(const int32_t points);
+    const uint32_t GetPoints() const;
+    void SetPoints(const uint32_t points);
+    void AddPoints(const uint32_t points);
     bool Update(const uint32_t timestamp);
     void Reset();
 
 private:
-    long m_points;
-    int32_t m_pointsToAdd;
+    uint32_t m_points;
+    uint32_t m_pointsToAdd;
     uint32_t m_pointsAddedTimestamp;
 };
 

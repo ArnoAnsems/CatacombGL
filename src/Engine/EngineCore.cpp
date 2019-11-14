@@ -2824,7 +2824,7 @@ bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
         m_level->StoreToFile(file);
         m_gameTimer.StoreToFile(file);
         // The amount of points scored by the player gets stored since version 0.4.0
-        const long points = m_score.GetPoints();
+        const uint32_t points = m_score.GetPoints();
         file.write((const char*)&points, sizeof(points));
         file.close();
         result = true;

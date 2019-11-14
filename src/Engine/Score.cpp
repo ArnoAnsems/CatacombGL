@@ -28,19 +28,19 @@ Score::~Score()
 
 }
 
-const long Score::GetPoints() const
+const uint32_t Score::GetPoints() const
 {
     return m_points;
 }
 
-void Score::SetPoints(const long points)
+void Score::SetPoints(const uint32_t points)
 {
     m_points = points;
     m_pointsToAdd = 0;
     m_pointsAddedTimestamp = 0;
 }
 
-void Score::AddPoints(const int32_t points)
+void Score::AddPoints(const uint32_t points)
 {
     m_pointsToAdd += points;
 }

@@ -394,8 +394,6 @@ Font* EgaGraph::GetFont(const uint16_t index)
         }
     }
 
-    DefaultFont::AddWindows1252Characters(fontPicture, width);
-
     unsigned int textureId = m_renderer.LoadFontIntoTexture(fontPicture);
     m_fonts[indexInFontArray] = new Font(lineHeight, width, textureId);
     delete fontChunk;
