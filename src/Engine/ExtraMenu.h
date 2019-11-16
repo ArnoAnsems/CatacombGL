@@ -42,6 +42,7 @@ public:
     void OpenRestoreGameMenu() override;
     void OpenSaveGameMenu() override;
     void OpenSoundMenu() override;
+    void CheckHighScore(const uint16_t level, const uint32_t score) override;
 
 private:
     void MenuDown();

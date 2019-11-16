@@ -763,6 +763,10 @@ bool EngineCore::Think()
     {
         OpenMenu();
         m_game.GetAudioPlayer()->StopMusic();
+        if (m_level != NULL && m_level->GetPlayerActor()->IsDead())
+        {
+            m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
+        }
     }
     else if (m_state == Help)
     {
@@ -785,6 +789,7 @@ bool EngineCore::Think()
     {
         // Open the menu when any key is pressed in the victory screen.
         m_menu->SetActive(true);
+        m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
     }
 
     // Status message

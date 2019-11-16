@@ -860,3 +860,8 @@ bool ExtraMenu::IsNewSaveGameNameAlreadyInUse() const
 
     return isInUse;
 }
+
+void ExtraMenu::CheckHighScore(const uint16_t level, const uint32_t score)
+{
+    // Not applicable
+}

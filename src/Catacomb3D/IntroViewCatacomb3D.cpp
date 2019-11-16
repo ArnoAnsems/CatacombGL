@@ -17,12 +17,12 @@
 #include "..\Engine\DefaultFont.h"
 #include "EgaGraphCatacomb3D.h"
 
-IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path) :
+IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path, HighScores& highScores) :
     IIntroView(renderer),
     m_egaGraph(egagraph),
-    m_highScores(std::make_unique<HighScores>())
+    m_highScores(highScores)
 {
-    m_highScores->LoadFromFile(path);
+
 }
 
 IntroViewCatacomb3D::~IntroViewCatacomb3D()
@@ -59,7 +59,7 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
     {
         m_renderer.Render2DPicture(m_egaGraph->GetPicture(HIGHSCORESPIC), 0, 0);
         uint16_t y = 68;
-        for (const auto highScore : m_highScores->Get())
+        for (const auto highScore : m_highScores.Get())
         {
             m_renderer.RenderTextLeftAligned(highScore.name.c_str(), m_egaGraph->GetFont(3), EgaBlue, 60, y);
             std::string levelStr = std::to_string(highScore.level);

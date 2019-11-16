@@ -23,6 +23,7 @@
 #include "..\Engine\IGame.h"
 #include "..\Engine\IRenderer.h"
 #include "..\Engine\Logging.h"
+#include "..\Engine\HighScores.h"
 #include <map>
 
 class GameCatacomb3D : public IGame
@@ -91,5 +92,6 @@ private:
     const uint8_t m_gameId;
     const std::string m_gamePath;
     IRenderer& m_renderer;
+    std::unique_ptr<HighScores> m_highScores;
 };
 

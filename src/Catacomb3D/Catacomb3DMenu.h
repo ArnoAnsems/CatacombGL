@@ -27,11 +27,12 @@
 #include "..\Engine\IRenderer.h"
 #include "EgaGraphCatacomb3D.h"
 #include "..\Engine\IMenu.h"
+#include "..\Engine\HighScores.h"
 
 class Catacomb3DMenu: public IMenu
 {
 public:
-    Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames);
+    Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames, HighScores& highScores);
     bool IsActive() const override;
     void SetActive(bool active) override;
     MenuCommand ProcessInput(const PlayerInput& playerInput) override;
@@ -41,6 +42,7 @@ public:
     void OpenRestoreGameMenu() override;
     void OpenSaveGameMenu() override;
     void OpenSoundMenu() override;
+    void CheckHighScore(const uint16_t level, const uint32_t score) override;
 
 private:
     void MenuDown();
@@ -51,6 +53,7 @@ private:
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
     static void DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotPosition, const bool bright);
+    static void ApplyEqualSpacingToNumbers(std::string& str);
 
     bool m_menuActive;
     uint8_t m_menuItemSelected;
@@ -65,4 +68,5 @@ private:
     std::vector<std::string>& m_savedGames;
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
+    HighScores& m_highScores;
 };

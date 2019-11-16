@@ -26,10 +26,11 @@ const uint8_t subMenuNewGame = 6;
 const uint8_t subMenuConfigure = 7;
 const uint8_t subMenuMusic = 8;
 const uint8_t subMenuSkullNBones = 9;
+const uint8_t subMenuHighScores = 10;
 
 const uint16_t browseMenuSound = 0;
 
-Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames) :
+Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames, HighScores& highScores) :
     m_menuActive (false),
     m_menuItemSelected (0),
     m_subMenuSelected (0),
@@ -41,7 +42,8 @@ Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, Aud
     m_savedGames (savedGames),
     m_newSaveGameName (""),
     m_waitingForNewSaveGameName (false),
-    m_askForOverwrite (false)
+    m_askForOverwrite (false),
+    m_highScores(highScores)
 {
 
 }
@@ -723,6 +725,11 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             m_menuItemSelected = 0;
         }
     }
+    else if (m_subMenuSelected == subMenuHighScores)
+    {
+        m_subMenuSelected = subMenuMain;
+        m_menuItemSelected = 0;
+    }
 
     return command;
 }
@@ -737,8 +744,36 @@ void Catacomb3DMenu::DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotP
     renderer.Render2DBar(227, offsetYInPixels + 1, 1, 8, color);
 }
 
+void Catacomb3DMenu::ApplyEqualSpacingToNumbers(std::string& str)
+{
+    const uint16_t offsetInFontOfEqualSpacedNumbers = 129;
+    for (uint16_t i = 0; i < str.length(); i++)
+    {
+        str.at(i) += (offsetInFontOfEqualSpacedNumbers - '0');
+    }
+}
+
 void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)
 {
+    if (m_subMenuSelected == subMenuHighScores)
+    {
+        renderer.Render2DPicture(egaGraph->GetPicture(HIGHSCORESPIC), 0, 0);
+        uint16_t y = 68;
+        for (const auto highScore : m_highScores.Get())
+        {
+            renderer.RenderTextLeftAligned(highScore.name.c_str(), egaGraph->GetFont(3), EgaBlue, 60, y);
+            std::string levelStr = std::to_string(highScore.level);
+            ApplyEqualSpacingToNumbers(levelStr);
+            renderer.RenderTextLeftAligned(levelStr.c_str(), egaGraph->GetFont(3), EgaBlue, 192 - (8 * (uint16_t)levelStr.length()), y);
+            std::string scoreStr = std::to_string(highScore.score);
+            ApplyEqualSpacingToNumbers(scoreStr);
+            renderer.RenderTextLeftAligned(scoreStr.c_str(), egaGraph->GetFont(3), EgaBlue, 264 - (8 * (uint16_t)scoreStr.length()), y);
+            y += 16;
+        }
+
+        return;
+    }
+
     renderer.Render2DPicture(egaGraph->GetPicture(CP_MENUSCREENPIC), 0, 0);
 
     if (m_askForOverwrite)
@@ -1133,4 +1168,9 @@ bool Catacomb3DMenu::IsNewSaveGameNameAlreadyInUse() const
     }
 
     return isInUse;
+}
+
+void Catacomb3DMenu::CheckHighScore(const uint16_t level, const uint32_t score)
+{
+    m_subMenuSelected = subMenuHighScores;
 }

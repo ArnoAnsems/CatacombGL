@@ -28,7 +28,7 @@
 class IntroViewCatacomb3D : public IIntroView
 {
 public:
-    IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path);
+    IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path, HighScores& highScores);
     ~IntroViewCatacomb3D();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();
@@ -40,5 +40,5 @@ private:
     static void ApplyEqualSpacingToNumbers(std::string& str);
 
     EgaGraph* m_egaGraph;
-    std::unique_ptr<HighScores> m_highScores;
+    HighScores& m_highScores;
 };

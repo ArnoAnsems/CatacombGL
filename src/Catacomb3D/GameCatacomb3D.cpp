@@ -28,12 +28,14 @@ GameCatacomb3D::GameCatacomb3D(const std::string gamePath, IRenderer& renderer) 
     m_gameId(5),
     m_gamePath(gamePath),
     m_renderer(renderer),
-    m_introView(nullptr)
+    m_introView(nullptr),
+    m_highScores(std::make_unique<HighScores>())
 {
     m_gameMaps = nullptr;
     m_egaGraph = nullptr;
     m_audioRepository = nullptr;
     m_audioPlayer = nullptr;
+    m_highScores->LoadFromFile(m_gamePath);
 }
 
 GameCatacomb3D::~GameCatacomb3D()
@@ -319,7 +321,7 @@ IIntroView* GameCatacomb3D::GetIntroView()
 {
     if (m_introView == nullptr)
     {
-        m_introView = new IntroViewCatacomb3D(m_renderer, GetEgaGraph(), m_gamePath);
+        m_introView = new IntroViewCatacomb3D(m_renderer, GetEgaGraph(), m_gamePath, *m_highScores);
     }
 
     return m_introView;
@@ -327,7 +329,7 @@ IIntroView* GameCatacomb3D::GetIntroView()
 
 IMenu* GameCatacomb3D::CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames)
 {
-    return new Catacomb3DMenu(configurationSettings, *GetAudioPlayer(), savedGames);
+    return new Catacomb3DMenu(configurationSettings, *GetAudioPlayer(), savedGames, *m_highScores);
 }
 
 void GameCatacomb3D::DrawHelpPage()
