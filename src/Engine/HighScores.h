@@ -38,7 +38,9 @@ public:
 
     const std::vector<HighScore>& Get() const;
     bool LoadFromFile(const std::string& path);
+    bool StoreToFile(const std::string& path);
 
 private:
     std::vector<HighScore> m_highscores;
+    char m_remainingConfigData[26];
 };
