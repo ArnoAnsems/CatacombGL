@@ -42,5 +42,5 @@ public:
 
 private:
     std::vector<HighScore> m_highscores;
-    char m_remainingConfigData[26];
+    char m_remainingConfigData[20];
 };

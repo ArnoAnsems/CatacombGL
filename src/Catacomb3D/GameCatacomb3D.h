@@ -29,7 +29,7 @@
 class GameCatacomb3D : public IGame
 {
 public:
-    GameCatacomb3D(const std::string gamePath, IRenderer& renderer);
+    GameCatacomb3D(const std::string gamePath, const std::string configPath, IRenderer& renderer);
     ~GameCatacomb3D();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -91,6 +91,7 @@ private:
     IIntroView* m_introView;
     const uint8_t m_gameId;
     const std::string m_gamePath;
+    const std::string m_configPath;
     IRenderer& m_renderer;
     std::unique_ptr<HighScores> m_highScores;
 };

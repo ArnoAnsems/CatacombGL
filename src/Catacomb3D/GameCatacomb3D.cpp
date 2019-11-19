@@ -24,9 +24,10 @@
 
 static const std::string Catacomb3DName = "Catacomb 3-D v1.22";
 
-GameCatacomb3D::GameCatacomb3D(const std::string gamePath, IRenderer& renderer) :
+GameCatacomb3D::GameCatacomb3D(const std::string gamePath, const std::string configPath, IRenderer& renderer) :
     m_gameId(5),
     m_gamePath(gamePath),
+    m_configPath(configPath),
     m_renderer(renderer),
     m_introView(nullptr),
     m_highScores(std::make_unique<HighScores>())
@@ -40,6 +41,7 @@ GameCatacomb3D::GameCatacomb3D(const std::string gamePath, IRenderer& renderer) 
 
 GameCatacomb3D::~GameCatacomb3D()
 {
+    m_highScores->StoreToFile(m_configPath);
     delete m_gameMaps;
     delete m_egaGraph;
     delete m_audioRepository;

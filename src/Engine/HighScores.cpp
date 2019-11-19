@@ -105,7 +105,7 @@ bool HighScores::LoadFromFile(const std::string& path)
             m_highscores.at(i).score = score;
             m_highscores.at(i).level = level;
         }
-        file.read((char*)m_remainingConfigData, 26);
+        file.read((char*)m_remainingConfigData, 20);
         file.close();
     }
     else
@@ -128,7 +128,6 @@ bool HighScores::StoreToFile(const std::string& path)
     {
         const char signature[] = "C3D";
         const uint16_t version = 1;
-        const char headerString[11] = "CATACOMBGL";
         file.write(signature, 4);
         file.write((const char*)&version, sizeof(version));
         for (uint8_t i = 0; i < 7; i++)
@@ -145,7 +144,7 @@ bool HighScores::StoreToFile(const std::string& path)
             uint16_t level = m_highscores.at(i).level;
             file.write((const char*)&level, sizeof(level));
         }
-        file.write(m_remainingConfigData, 26);
+        file.write(m_remainingConfigData, 20);
         file.close();
     }
     else

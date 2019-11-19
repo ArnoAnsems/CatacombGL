@@ -635,7 +635,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         {
             if (report.gameId == GameIdCatacomb3Dv122)
             {
-                game = new GameCatacomb3D(report.folder, *m_renderer);
+                game = new GameCatacomb3D(report.folder, systemWin32.GetConfigurationFilePath(), *m_renderer);
             }
             else if (report.gameId == GameIdCatacombArmageddonv102)
             {
