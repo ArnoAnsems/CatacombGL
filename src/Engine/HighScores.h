@@ -39,8 +39,11 @@ public:
     const std::vector<HighScore>& Get() const;
     bool LoadFromFile(const std::string& path);
     bool StoreToFile(const std::string& path);
+    bool TryToAddNewScore(const uint32_t newScore, const uint16_t newLevel);
+    void AddCharactersToNameOfNewScore(const std::string& characters);
 
 private:
     std::vector<HighScore> m_highscores;
     char m_remainingConfigData[20];
+    uint8_t m_newScorePosition;
 };

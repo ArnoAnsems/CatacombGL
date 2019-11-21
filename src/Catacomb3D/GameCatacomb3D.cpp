@@ -36,7 +36,13 @@ GameCatacomb3D::GameCatacomb3D(const std::string gamePath, const std::string con
     m_egaGraph = nullptr;
     m_audioRepository = nullptr;
     m_audioPlayer = nullptr;
-    m_highScores->LoadFromFile(m_gamePath);
+
+    if (!m_highScores->LoadFromFile(m_configPath))
+    {
+        // The high scores could not be loaded from the config folder.
+        // Try to obtain the high scores from the orginal game data.
+        m_highScores->LoadFromFile(m_gamePath);
+    }
 }
 
 GameCatacomb3D::~GameCatacomb3D()

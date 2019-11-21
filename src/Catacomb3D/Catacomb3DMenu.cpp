@@ -156,6 +156,16 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         }
     }
 
+    if (m_subMenuSelected == subMenuHighScores)
+    {
+        // Check if a name for a new high score is entered
+        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+        if (KeyIsSuitableForSaveGameName(keyCode))
+        {
+            m_highScores.AddCharactersToNameOfNewScore(std::string(SDL_GetKeyName(keyCode)));
+        }
+    }
+
     return command;
 }
 
@@ -1173,4 +1183,5 @@ bool Catacomb3DMenu::IsNewSaveGameNameAlreadyInUse() const
 void Catacomb3DMenu::CheckHighScore(const uint16_t level, const uint32_t score)
 {
     m_subMenuSelected = subMenuHighScores;
+    m_highScores.TryToAddNewScore(score, level);
 }

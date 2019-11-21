@@ -31,7 +31,7 @@ static const std::vector<HighScores::HighScore> defaultHighScores =
 HighScores::HighScores() :
     m_highscores(defaultHighScores)
 {
-
+    m_newScorePosition = (uint8_t)m_highscores.size();
 }
 
 HighScores::~HighScores()
@@ -153,4 +153,49 @@ bool HighScores::StoreToFile(const std::string& path)
     }
 
     return true;
+}
+
+bool HighScores::TryToAddNewScore(const uint32_t newScore, const uint16_t newLevel)
+{
+    uint8_t newPositionInList = 0;
+    bool foundPosition = false;
+
+    while (newPositionInList < m_highscores.size() && !foundPosition)
+    {
+        foundPosition = (newScore > m_highscores.at(newPositionInList).score);
+        if (!foundPosition)
+        {
+            newPositionInList++;
+        }
+    }
+
+    if (foundPosition)
+    {
+        // All scores below the new position must be shifted one down
+        for (int8_t pos = (int8_t)m_highscores.size() - 1; pos > newPositionInList; pos--)
+        {
+            m_highscores.at(pos).score = m_highscores.at(pos - 1).score;
+            m_highscores.at(pos).level = m_highscores.at(pos - 1).level;
+            m_highscores.at(pos).name = m_highscores.at(pos - 1).name;
+        }
+
+        // Insert the new score
+        m_highscores.at(newPositionInList).score = newScore;
+        m_highscores.at(newPositionInList).level = newLevel;
+        m_highscores.at(newPositionInList).name = "";
+    }
+
+    m_newScorePosition = newPositionInList;
+    return foundPosition;
+}
+
+void HighScores::AddCharactersToNameOfNewScore(const std::string& characters)
+{
+    if (m_newScorePosition < m_highscores.size())
+    {
+        if (m_highscores.at(m_newScorePosition).name.length() + characters.length() < 58)
+        {
+            m_highscores.at(m_newScorePosition).name += characters;
+        }
+    }
 }
