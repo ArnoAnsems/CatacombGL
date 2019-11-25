@@ -46,3 +46,4 @@ bin/
 *.idb
 *.tmp
 src/Catacomb3D/Catacomb3D.vcxproj.user
+*.C3D

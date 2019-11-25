@@ -21,6 +21,7 @@
 #pragma once
 
 #include "Decorate.h"
+#include <fstream>
 
 typedef enum {north,east,south,west,northeast,southeast,southwest,northwest,nodir} actorDirection;
 

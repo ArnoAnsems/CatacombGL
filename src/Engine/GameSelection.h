@@ -16,6 +16,7 @@
 
 #include "IRenderer.h"
 #include <vector>
+#include <string>
 
 enum GameDetectionState
 {
