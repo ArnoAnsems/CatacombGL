@@ -35,8 +35,9 @@ static bool g_sdlEmulatedOPLChipReady;
 static uint32_t g_sdlSamplesPartNum = 0;
 // Simple callback: Scale is samples*PC_PIT_RATE
 // Resampling callback (with OPL emulation): Scale is samples*PC_PIT_RATE*OPL_SAMPLE_RATE
-static uint64_t g_sdlScaledSamplesPerPartsTimesPITRate;
-static uint64_t g_sdlScaledSampleOffsetInSound, g_sdlScaledSamplesInCurrentPart;
+static uint64_t g_sdlScaledSamplesPerPartsTimesPITRate = 0;
+static uint64_t g_sdlScaledSampleOffsetInSound = 0;
+static uint64_t g_sdlScaledSamplesInCurrentPart = 0;
 
 static void(*g_sdlTimerIntFuncPtr)(void) = 0;
 

@@ -149,16 +149,19 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
 
-    if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
+    if (!m_menu->IsActive() || m_game.GetId() != 5)
     {
-        m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
-         
-        m_level->DrawWalls(renderer, m_game.GetEgaGraph(), m_gameTimer.GetTicksForWorld());
+        if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
+        {
+            m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
+
+            m_level->DrawWalls(renderer, m_game.GetEgaGraph(), m_gameTimer.GetTicksForWorld());
 
 #ifdef DRAWVISIBILITYMAP
-        m_level->DrawVisibilityMap(renderer);
+            m_level->DrawVisibilityMap(renderer);
 #endif
-        m_level->DrawActors(renderer, m_game.GetEgaGraph());
+            m_level->DrawActors(renderer, m_game.GetEgaGraph());
+        }
     }
 
     renderer.Prepare2DRendering(m_state == Help);
@@ -232,7 +235,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
     }
 
-    if (m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == Victory || m_state == VerifyGateExit || m_state == ExitGame)
+    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.GetId() != 5)) || (m_state == Victory && m_game.GetId() != 5))
     {
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
@@ -575,6 +578,12 @@ bool EngineCore::Think()
             m_state = ExitGame;
             DisplayStatusMessage("FARE THEE WELL!", 2000);
             m_gameTimer.Resume();
+        }
+        else if (command == MenuCommandEndGame)
+        {
+            UnloadLevel();
+            m_state = Introduction;
+            m_gameTimer.Reset();
         }
         else if (command == MenuCommandSaveGame)
         {
