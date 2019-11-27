@@ -182,7 +182,7 @@ bool HighScores::TryToAddNewScore(const uint32_t newScore, const uint16_t newLev
         // Insert the new score
         m_highscores.at(newPositionInList).score = newScore;
         m_highscores.at(newPositionInList).level = newLevel;
-        m_highscores.at(newPositionInList).name = "";
+        m_highscores.at(newPositionInList).name = "|";
     }
 
     m_newScorePosition = newPositionInList;
@@ -193,9 +193,24 @@ void HighScores::AddCharactersToNameOfNewScore(const std::string& characters)
 {
     if (m_newScorePosition < m_highscores.size())
     {
-        if (m_highscores.at(m_newScorePosition).name.length() + characters.length() < 58)
+        const size_t currentLength = m_highscores.at(m_newScorePosition).name.length();
+        if (currentLength + characters.length() < 58)
         {
+            m_highscores.at(m_newScorePosition).name.erase(currentLength - 1);
             m_highscores.at(m_newScorePosition).name += characters;
+            m_highscores.at(m_newScorePosition).name += "|";
+        }
+    }
+}
+
+void HighScores::RemoveACharacterFromNameOfNewScore()
+{
+    if (m_newScorePosition < m_highscores.size())
+    {
+        const size_t currentLength = m_highscores.at(m_newScorePosition).name.length();
+        if (currentLength > 0)
+        {
+            m_highscores.at(m_newScorePosition).name.erase(currentLength - 1);
         }
     }
 }

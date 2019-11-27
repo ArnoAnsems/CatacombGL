@@ -41,6 +41,7 @@ public:
     bool StoreToFile(const std::string& path);
     bool TryToAddNewScore(const uint32_t newScore, const uint16_t newLevel);
     void AddCharactersToNameOfNewScore(const std::string& characters);
+    void RemoveACharacterFromNameOfNewScore();
 
 private:
     std::vector<HighScore> m_highscores;

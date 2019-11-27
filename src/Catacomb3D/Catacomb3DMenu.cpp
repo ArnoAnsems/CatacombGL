@@ -164,6 +164,10 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         {
             m_highScores.AddCharactersToNameOfNewScore(std::string(SDL_GetKeyName(keyCode)));
         }
+        else if (keyCode == SDLK_BACKSPACE)
+        {
+            m_highScores.RemoveACharacterFromNameOfNewScore();
+        }
     }
 
     return command;
@@ -524,9 +528,11 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             m_subMenuSelected = subMenuConfigure;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 4)
+        else if (m_menuItemSelected == 4 && !m_saveGameEnabled)
         {
             // Return to demo
+            m_menuItemSelected = 0;
+            command = MenuCommandCloseMenu;
         }
         else if (m_menuItemSelected == 5)
         {
@@ -551,7 +557,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             MenuCommandStartNewGameHard;
         m_subMenuSelected = subMenuMain;
         m_menuItemSelected = 0;
-        m_menuActive = false;
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
@@ -737,6 +742,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuHighScores)
     {
+        m_highScores.RemoveACharacterFromNameOfNewScore();
         m_subMenuSelected = subMenuMain;
         m_menuItemSelected = 0;
         command = MenuCommandEndGame;
@@ -827,9 +833,23 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTextLeftAligned("SAVE GAME", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 120, 79);
         renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 3) && flashIcon) ? 93 : 92), 112, 86);
         renderer.RenderTextLeftAligned("CONFIGURE", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 120, 87);
-        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 93 : 92), 112, 94);
+        if (!m_saveGameEnabled)
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 93 : 92), 112, 94);
+        }
+        else
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 97 : 96), 112, 94);
+        }
         renderer.RenderTextLeftAligned("RETURN TO DEMO", egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 120, 95);
-        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 5) && flashIcon) ? 93 : 92), 112, 102);
+        if (m_saveGameEnabled)
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 5) && flashIcon) ? 93 : 92), 112, 102);
+        }
+        else
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 5) && flashIcon) ? 97 : 96), 112, 102);
+        }
         renderer.RenderTextLeftAligned("END GAME", egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 120, 103);
         renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 6) && flashIcon) ? 93 : 92), 112, 110);
         renderer.RenderTextLeftAligned("SKULL 'N' BONES", egaGraph->GetFont(4), (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 120, 111);
@@ -1184,5 +1204,5 @@ bool Catacomb3DMenu::IsNewSaveGameNameAlreadyInUse() const
 void Catacomb3DMenu::CheckHighScore(const uint16_t level, const uint32_t score)
 {
     m_subMenuSelected = subMenuHighScores;
-    m_highScores.TryToAddNewScore(score, level);
+    m_highScores.TryToAddNewScore(score, level + 1);
 }
