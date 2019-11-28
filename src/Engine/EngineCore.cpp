@@ -562,16 +562,19 @@ bool EngineCore::Think()
         {
             m_difficultyLevel = Easy;
             StartNewGame();
+            CloseMenu();
         }
         else if (command == MenuCommandStartNewGameNormal)
         {
             m_difficultyLevel = Normal;
             StartNewGame();
+            CloseMenu();
         }
         else if (command == MenuCommandStartNewGameHard)
         {
             m_difficultyLevel = Hard;
             StartNewGame();
+            CloseMenu();
         }
         else if (command == MenuCommandExitGame)
         {

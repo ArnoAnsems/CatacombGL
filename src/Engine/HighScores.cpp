@@ -182,7 +182,7 @@ bool HighScores::TryToAddNewScore(const uint32_t newScore, const uint16_t newLev
         // Insert the new score
         m_highscores.at(newPositionInList).score = newScore;
         m_highscores.at(newPositionInList).level = newLevel;
-        m_highscores.at(newPositionInList).name = "|";
+        m_highscores.at(newPositionInList).name = "";
     }
 
     m_newScorePosition = newPositionInList;
@@ -196,9 +196,7 @@ void HighScores::AddCharactersToNameOfNewScore(const std::string& characters)
         const size_t currentLength = m_highscores.at(m_newScorePosition).name.length();
         if (currentLength + characters.length() < 58)
         {
-            m_highscores.at(m_newScorePosition).name.erase(currentLength - 1);
             m_highscores.at(m_newScorePosition).name += characters;
-            m_highscores.at(m_newScorePosition).name += "|";
         }
     }
 }
@@ -212,5 +210,43 @@ void HighScores::RemoveACharacterFromNameOfNewScore()
         {
             m_highscores.at(m_newScorePosition).name.erase(currentLength - 1);
         }
+    }
+}
+
+void HighScores::FinishNameOfNewScore()
+{
+    m_newScorePosition = m_highscores.size();
+}
+
+void HighScores::ApplyEqualSpacingToNumbers(std::string& str)
+{
+    const uint16_t offsetInFontOfEqualSpacedNumbers = 129;
+    for (uint16_t i = 0; i < str.length(); i++)
+    {
+        str.at(i) += (offsetInFontOfEqualSpacedNumbers - '0');
+    }
+}
+
+void HighScores::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp, const uint16_t backgroundPic) const
+{
+    renderer.Render2DPicture(egaGraph.GetPicture(backgroundPic), 0, 0);
+    uint16_t y = 68;
+    for (uint16_t pos = 0; pos < m_highscores.size(); pos++)
+    {
+        const auto highScore = m_highscores.at(pos);
+        std::string name = highScore.name;
+        const bool drawCursor = (pos == m_newScorePosition) && ((timeStamp / 1000) % 2 == 0);
+        if (drawCursor)
+        {
+            name += "|";
+        }
+        renderer.RenderTextLeftAligned(name.c_str(), egaGraph.GetFont(3), EgaBlue, 60, y);
+        std::string levelStr = std::to_string(highScore.level);
+        ApplyEqualSpacingToNumbers(levelStr);
+        renderer.RenderTextLeftAligned(levelStr.c_str(), egaGraph.GetFont(3), EgaBlue, 192 - (8 * (uint16_t)levelStr.length()), y);
+        std::string scoreStr = std::to_string(highScore.score);
+        ApplyEqualSpacingToNumbers(scoreStr);
+        renderer.RenderTextLeftAligned(scoreStr.c_str(), egaGraph.GetFont(3), EgaBlue, 264 - (8 * (uint16_t)scoreStr.length()), y);
+        y += 16;
     }
 }

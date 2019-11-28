@@ -22,6 +22,8 @@
 
 #include <string>
 #include <vector>
+#include "..\Engine\IRenderer.h"
+#include "..\Engine\EgaGraph.h"
 
 class HighScores
 {
@@ -42,8 +44,12 @@ public:
     bool TryToAddNewScore(const uint32_t newScore, const uint16_t newLevel);
     void AddCharactersToNameOfNewScore(const std::string& characters);
     void RemoveACharacterFromNameOfNewScore();
+    void FinishNameOfNewScore();
+    void Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp, const uint16_t backgroundPic) const;
 
 private:
+    static void ApplyEqualSpacingToNumbers(std::string& str);
+
     std::vector<HighScore> m_highscores;
     char m_remainingConfigData[20];
     uint8_t m_newScorePosition;

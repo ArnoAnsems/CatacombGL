@@ -43,6 +43,8 @@ Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, Aud
     m_newSaveGameName (""),
     m_waitingForNewSaveGameName (false),
     m_askForOverwrite (false),
+    m_askForEndGame (false),
+    m_askForQuit (false),
     m_highScores(highScores)
 {
 
@@ -111,6 +113,34 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         else if (keyCode == SDLK_BACKSPACE && !m_newSaveGameName.empty())
         {
             m_newSaveGameName.pop_back();
+        }
+    }
+    else if (m_askForQuit)
+    {
+        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+        if (keyCode == SDLK_y)
+        {
+            m_askForQuit = false;
+            return MenuCommandExitGame;
+        }
+        else if (keyCode != SDLK_UNKNOWN)
+        {
+            m_askForQuit = false;
+            return MenuCommandNone;
+        }
+    }
+    else if (m_askForEndGame)
+    {
+        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+        if (keyCode == SDLK_y)
+        {
+            m_askForEndGame = false;
+            return MenuCommandEndGame;
+        }
+        else if (keyCode != SDLK_UNKNOWN)
+        {
+            m_askForEndGame = false;
+            return MenuCommandNone;
         }
     }
 
@@ -528,15 +558,16 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             m_subMenuSelected = subMenuConfigure;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 4 && !m_saveGameEnabled)
+        else if (m_menuItemSelected == 4)
         {
-            // Return to demo
+            // Return to demo or game
             m_menuItemSelected = 0;
             command = MenuCommandCloseMenu;
         }
-        else if (m_menuItemSelected == 5)
+        else if (m_menuItemSelected == 5 && m_saveGameEnabled)
         {
             // End game
+            m_askForEndGame = true;
         }
         else if (m_menuItemSelected == 6)
         {
@@ -546,7 +577,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 7)
         {
-            command = MenuCommandExitGame;
+            m_askForQuit = true;
         }
     }
     else if (m_subMenuSelected == subMenuNewGame)
@@ -742,9 +773,9 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuHighScores)
     {
-        m_highScores.RemoveACharacterFromNameOfNewScore();
         m_subMenuSelected = subMenuMain;
         m_menuItemSelected = 0;
+        m_highScores.FinishNameOfNewScore();
         command = MenuCommandEndGame;
     }
 
@@ -761,33 +792,28 @@ void Catacomb3DMenu::DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotP
     renderer.Render2DBar(227, offsetYInPixels + 1, 1, 8, color);
 }
 
-void Catacomb3DMenu::ApplyEqualSpacingToNumbers(std::string& str)
+void Catacomb3DMenu::DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3)
 {
-    const uint16_t offsetInFontOfEqualSpacedNumbers = 129;
-    for (uint16_t i = 0; i < str.length(); i++)
-    {
-        str.at(i) += (offsetInFontOfEqualSpacedNumbers - '0');
-    }
+    const int offsetX = 154 - (width / 2);
+    renderer.Render2DPicture(egaGraph.GetMaskedPicture(CP_MENUMASKPICM), 74, 48);
+    renderer.Render2DBar(offsetX + 1, 81, width - 2, 36, EgaBlack);
+    renderer.Render2DBar(offsetX, 80, width, 1, EgaRed);
+    renderer.Render2DBar(offsetX, 117, width, 1, EgaRed);
+    renderer.Render2DBar(offsetX, 81, 1, 36, EgaRed);
+    renderer.Render2DBar(offsetX + width - 1, 81, 1, 36, EgaRed);
+
+    renderer.RenderTextCentered(message1.c_str(), egaGraph.GetFont(4), EgaBrightRed, 154, 89);
+
+    renderer.Render2DBar(offsetX + 4, 102, width - 8, 1, EgaRed);
+    renderer.RenderTextCentered(message2.c_str(), egaGraph.GetFont(4), EgaRed, 154, 104);
+    renderer.RenderTextCentered(message3.c_str(), egaGraph.GetFont(4), EgaRed, 154, 111);
 }
 
 void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)
 {
     if (m_subMenuSelected == subMenuHighScores)
     {
-        renderer.Render2DPicture(egaGraph->GetPicture(HIGHSCORESPIC), 0, 0);
-        uint16_t y = 68;
-        for (const auto highScore : m_highScores.Get())
-        {
-            renderer.RenderTextLeftAligned(highScore.name.c_str(), egaGraph->GetFont(3), EgaBlue, 60, y);
-            std::string levelStr = std::to_string(highScore.level);
-            ApplyEqualSpacingToNumbers(levelStr);
-            renderer.RenderTextLeftAligned(levelStr.c_str(), egaGraph->GetFont(3), EgaBlue, 192 - (8 * (uint16_t)levelStr.length()), y);
-            std::string scoreStr = std::to_string(highScore.score);
-            ApplyEqualSpacingToNumbers(scoreStr);
-            renderer.RenderTextLeftAligned(scoreStr.c_str(), egaGraph->GetFont(3), EgaBlue, 264 - (8 * (uint16_t)scoreStr.length()), y);
-            y += 16;
-        }
-
+        m_highScores.Draw(renderer, *egaGraph, timeStamp, HIGHSCORESPIC);
         return;
     }
 
@@ -807,6 +833,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     const bool flashIcon = ((timeStamp / 1000) % 2 == 0);
     if (m_subMenuSelected == subMenuMain)
     {
+
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_MAINMENUPIC), 80, 48);
@@ -829,19 +856,13 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         {
             renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 2) && flashIcon) ? 97 : 96), 112, 78);
         }
-        
+
         renderer.RenderTextLeftAligned("SAVE GAME", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 120, 79);
         renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 3) && flashIcon) ? 93 : 92), 112, 86);
         renderer.RenderTextLeftAligned("CONFIGURE", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 120, 87);
-        if (!m_saveGameEnabled)
-        {
-            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 93 : 92), 112, 94);
-        }
-        else
-        {
-            renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 97 : 96), 112, 94);
-        }
-        renderer.RenderTextLeftAligned("RETURN TO DEMO", egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 120, 95);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 4) && flashIcon) ? 93 : 92), 112, 94);
+        const char* returnOptionText = (m_saveGameEnabled) ? "RETURN TO GAME" : "RETURN TO DEMO";
+        renderer.RenderTextLeftAligned(returnOptionText, egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 120, 95);
         if (m_saveGameEnabled)
         {
             renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 5) && flashIcon) ? 93 : 92), 112, 102);
@@ -858,7 +879,17 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
 
         renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
         renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to quit", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderer.RenderTextCentered("Esc to close", egaGraph->GetFont(4), EgaRed, 154, 144);
+
+        if (m_askForQuit)
+        {
+            DrawConfirmationDialog(renderer, *egaGraph, 90, "REALLY QUIT?", "PRESS Y TO QUIT", "ESC TO BACK OUT");
+        }
+
+        if (m_askForEndGame)
+        {
+            DrawConfirmationDialog(renderer, *egaGraph, 142, "REALLY END CURRENT GAME?", "PRESS Y TO END IT", "ESC TO BACK OUT");
+        }
     }
     else if (m_subMenuSelected == subMenuNewGame)
     {

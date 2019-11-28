@@ -53,7 +53,7 @@ private:
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
     static void DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotPosition, const bool bright);
-    static void ApplyEqualSpacingToNumbers(std::string& str);
+    static void DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3);
 
     bool m_menuActive;
     uint8_t m_menuItemSelected;
@@ -68,5 +68,7 @@ private:
     std::vector<std::string>& m_savedGames;
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
+    bool m_askForEndGame;
+    bool m_askForQuit;
     HighScores& m_highScores;
 };

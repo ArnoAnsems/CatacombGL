@@ -30,15 +30,6 @@ IntroViewCatacomb3D::~IntroViewCatacomb3D()
 
 }
 
-void IntroViewCatacomb3D::ApplyEqualSpacingToNumbers(std::string& str)
-{
-    const uint16_t offsetInFontOfEqualSpacedNumbers = 129;
-    for (uint16_t i = 0; i < str.length(); i++)
-    {
-        str.at(i) += (offsetInFontOfEqualSpacedNumbers - '0');
-    }
-}
-
 void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
 {
     m_renderer.Render2DPicture(m_egaGraph->GetPicture(TITLEPIC), 0, 0);
@@ -57,19 +48,7 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
     }
     case 2:
     {
-        m_renderer.Render2DPicture(m_egaGraph->GetPicture(HIGHSCORESPIC), 0, 0);
-        uint16_t y = 68;
-        for (const auto highScore : m_highScores.Get())
-        {
-            m_renderer.RenderTextLeftAligned(highScore.name.c_str(), m_egaGraph->GetFont(3), EgaBlue, 60, y);
-            std::string levelStr = std::to_string(highScore.level);
-            ApplyEqualSpacingToNumbers(levelStr);
-            m_renderer.RenderTextLeftAligned(levelStr.c_str(), m_egaGraph->GetFont(3), EgaBlue, 192 - (8 * (uint16_t)levelStr.length()), y);
-            std::string scoreStr = std::to_string(highScore.score);
-            ApplyEqualSpacingToNumbers(scoreStr);
-            m_renderer.RenderTextLeftAligned(scoreStr.c_str(), m_egaGraph->GetFont(3), EgaBlue, 264 - (8 * (uint16_t)scoreStr.length()), y);
-            y += 16;
-        }
+        m_highScores.Draw(m_renderer, *m_egaGraph, timeStamp, HIGHSCORESPIC);
         break;
     }
     }
