@@ -135,7 +135,24 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         if (keyCode == SDLK_y)
         {
             m_askForEndGame = false;
-            return MenuCommandEndGame;
+            if (m_subMenuSelected == subMenuNewGame)
+            {
+                command =
+                    (m_menuItemSelected == 0) ? MenuCommandStartNewGameEasy :
+                    (m_menuItemSelected == 1) ? MenuCommandStartNewGameNormal :
+                    MenuCommandStartNewGameHard;
+                m_subMenuSelected = subMenuMain;
+                m_menuItemSelected = 0;
+                return command;
+            }
+            else if (m_subMenuSelected == subMenuRestoreGame)
+            {
+                return MenuCommandLoadGame;
+            }
+            else
+            {
+                return MenuCommandEndGame;
+            }
         }
         else if (keyCode != SDLK_UNKNOWN)
         {
@@ -582,12 +599,19 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuNewGame)
     {
-        command =
-            (m_menuItemSelected == 0) ? MenuCommandStartNewGameEasy :
-            (m_menuItemSelected == 1) ? MenuCommandStartNewGameNormal :
-            MenuCommandStartNewGameHard;
-        m_subMenuSelected = subMenuMain;
-        m_menuItemSelected = 0;
+        if (m_saveGameEnabled)
+        {
+            m_askForEndGame = true;
+        }
+        else
+        {
+            command =
+                (m_menuItemSelected == 0) ? MenuCommandStartNewGameEasy :
+                (m_menuItemSelected == 1) ? MenuCommandStartNewGameNormal :
+                MenuCommandStartNewGameHard;
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = 0;
+        }
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
@@ -708,7 +732,14 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
         m_newSaveGameName = m_savedGames.at(m_menuItemSelected);
-        command = MenuCommandLoadGame;
+        if (m_saveGameEnabled)
+        {
+            m_askForEndGame = true;
+        }
+        else
+        {
+            command = MenuCommandLoadGame;
+        }
     }
     else if (m_subMenuSelected == subMenuSaveGame)
     {
@@ -906,6 +937,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
         renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
         renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+
+        if (m_askForEndGame)
+        {
+            DrawConfirmationDialog(renderer, *egaGraph, 142, "YOU'RE IN A GAME", "PRESS Y FOR NEW GAME", "ESC TO BACK OUT");
+        }
     }
     else if (m_subMenuSelected == subMenuConfigure)
     {
@@ -1123,6 +1159,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
         renderer.RenderTextLeftAligned("Enter accepts", egaGraph->GetFont(4), EgaRed, 163, 135);
         renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+
+        if (m_askForEndGame)
+        {
+            DrawConfirmationDialog(renderer, *egaGraph, 142, "YOU'RE IN A GAME", "PRESS Y TO LOAD GAME", "ESC TO BACK OUT");
+        }
     }
     else if (m_subMenuSelected == subMenuSaveGame)
     {
