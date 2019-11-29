@@ -29,7 +29,8 @@ static const std::vector<HighScores::HighScore> defaultHighScores =
 };
 
 HighScores::HighScores() :
-    m_highscores(defaultHighScores)
+    m_highscores(defaultHighScores),
+    m_remainingConfigData()
 {
     m_newScorePosition = (uint8_t)m_highscores.size();
 }

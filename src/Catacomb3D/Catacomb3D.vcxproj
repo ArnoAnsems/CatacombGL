@@ -148,11 +148,13 @@
     <ClInclude Include="EgaGraphCatacomb3D.h" />
     <ClInclude Include="GameMapsCatacomb3D.h" />
     <ClInclude Include="IntroViewCatacomb3D.h" />
+    <ClInclude Include="SkullNBones.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Catacomb3DMenu.cpp" />
     <ClCompile Include="GameCatacomb3D.cpp" />
     <ClCompile Include="IntroViewCatacomb3D.cpp" />
+    <ClCompile Include="SkullNBones.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

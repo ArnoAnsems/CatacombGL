@@ -28,6 +28,7 @@
 #include "EgaGraphCatacomb3D.h"
 #include "..\Engine\IMenu.h"
 #include "..\Engine\HighScores.h"
+#include "SkullNBones.h"
 
 class Catacomb3DMenu: public IMenu
 {
@@ -71,4 +72,5 @@ private:
     bool m_askForEndGame;
     bool m_askForQuit;
     HighScores& m_highScores;
+    SkullNBones m_skullNBones;
 };

@@ -45,7 +45,8 @@ Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, Aud
     m_askForOverwrite (false),
     m_askForEndGame (false),
     m_askForQuit (false),
-    m_highScores(highScores)
+    m_highScores(highScores),
+    m_skullNBones()
 {
 
 }
@@ -1210,9 +1211,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuSkullNBones)
     {
-        renderer.Render2DBar(77, 60, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 143, 154, 1, EgaBrightRed);
-        renderer.Render2DPicture(egaGraph->GetPicture(CP_PADDLEWARPIC), 130, 48);
+        m_skullNBones.Draw(renderer, *egaGraph);
     }
 }
 
