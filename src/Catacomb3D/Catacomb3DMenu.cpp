@@ -161,6 +161,11 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             return MenuCommandNone;
         }
     }
+    else if (m_subMenuSelected == subMenuSkullNBones && !playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        m_skullNBones.ProcessInput(playerInput);
+        return MenuCommandNone;
+    }
 
     if (playerInput.IsKeyJustPressed(SDLK_RETURN))
     {
@@ -1211,7 +1216,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuSkullNBones)
     {
-        m_skullNBones.Draw(renderer, *egaGraph);
+        m_skullNBones.Draw(renderer, *egaGraph, timeStamp);
     }
 }
 

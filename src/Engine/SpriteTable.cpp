@@ -26,6 +26,7 @@ SpriteTable::SpriteTable(FileChunk* decompressedChunk)
     m_clippingTop = new uint16_t[m_count];
     m_clippingRight = new uint16_t[m_count];
     m_clippingBottom = new uint16_t[m_count];
+
     uint8_t* chunk = decompressedChunk->GetChunk();
     for (uint16_t i = 0; i < m_count; i++)
     {
@@ -37,6 +38,15 @@ SpriteTable::SpriteTable(FileChunk* decompressedChunk)
         m_clippingTop[i] = *(uint16_t*)&chunk[(i * 16) + 10];
         m_clippingRight[i] = *(uint16_t*)&chunk[(i * 16) + 12];
         m_clippingBottom[i] = *(uint16_t*)&chunk[(i * 16) + 14];
+    }
+
+    if (m_count == 3)
+    {
+        // HACK: the width and height of some Catacomb 3D sprites could not be read correctly.  :(
+        m_width[1] = 8;
+        m_height[1] = 5;
+        m_width[2] = 8;
+        m_height[2] = 5;
     }
 }
 

@@ -20,16 +20,26 @@
 
 #include "..\Engine\IRenderer.h"
 #include "..\Engine\EgaGraph.h"
+#include "..\Engine\PlayerInput.h"
 
 class SkullNBones
 {
 public:
     SkullNBones();
-    void Draw(IRenderer& renderer, EgaGraph& egaGraph) const;
+    void ProcessInput(const PlayerInput& playerInput);
+    void Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp);
 
 private:
     void DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const;
+    void UpdateFrame(const uint32_t deltaTime);
 
     uint16_t m_playerScore;
     uint16_t m_computerScore;
+
+    float m_playerX;
+    float m_computerX;
+    uint32_t m_timeStampOfCurrentFrame;
+    uint32_t m_timeStampOfPreviousFrame;
+    bool m_playerMovesLeft;
+    bool m_playerMovesRight;
 };
