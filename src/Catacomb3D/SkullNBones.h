@@ -32,12 +32,17 @@ public:
 private:
     void DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const;
     void UpdateFrame(const uint32_t deltaTime);
+    void ResetForNextSkull();
 
     uint16_t m_playerScore;
     uint16_t m_computerScore;
 
     float m_playerX;
     float m_computerX;
+    float m_skullX;
+    float m_skullY;
+    float m_skullDeltaX;
+    float m_skullDeltaY;
     uint32_t m_timeStampOfCurrentFrame;
     uint32_t m_timeStampOfPreviousFrame;
     bool m_playerMovesLeft;
