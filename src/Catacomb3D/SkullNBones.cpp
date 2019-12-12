@@ -28,12 +28,14 @@ SkullNBones::SkullNBones() :
     m_computerX(148.0f),
     m_skullX(0.0f),
     m_skullY(0.0f),
-    m_skullDeltaX(0.0f),
-    m_skullDeltaY(0.0f),
+    m_skullDeltaX(0),
+    m_skullDeltaY(0),
     m_timeStampOfCurrentFrame(0),
     m_timeStampOfPreviousFrame(0),
+    m_timeStampOfComputer(0),
     m_playerMovesLeft(false),
-    m_playerMovesRight(false)
+    m_playerMovesRight(false),
+    m_speedup(10)
 {
     ResetForNextSkull();
 }
@@ -58,11 +60,7 @@ void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t t
 {
     m_timeStampOfPreviousFrame = m_timeStampOfCurrentFrame;
     m_timeStampOfCurrentFrame = timeStamp;
-
-    if (m_timeStampOfCurrentFrame > m_timeStampOfPreviousFrame)
-    {
-        UpdateFrame(m_timeStampOfCurrentFrame - m_timeStampOfPreviousFrame);
-    }
+    UpdateFrame();
 
     renderer.Render2DBar(77, 60, 154, 1, EgaBrightRed);
     renderer.Render2DBar(77, 143, 154, 1, EgaBrightRed);
@@ -74,11 +72,29 @@ void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t t
     renderer.Render2DPicture(egaGraph.GetSprite(BALLSPR), (uint16_t)m_skullX, (uint16_t)m_skullY);
 }
 
-void SkullNBones::UpdateFrame(const uint32_t deltaTime)
+void SkullNBones::UpdateFrame()
 {
+    if (m_timeStampOfCurrentFrame <= m_timeStampOfPreviousFrame)
+    {
+        return;
+    }
+    const uint32_t deltaTime = m_timeStampOfCurrentFrame - m_timeStampOfPreviousFrame;
     if (deltaTime > 100)
     {
         return;
+    }
+
+    if (m_timeStampOfComputer + 25 < m_timeStampOfCurrentFrame)
+    {
+        if (((uint32_t)m_computerX + 6 < (uint32_t)m_skullX) && ((uint32_t)m_computerX < 219))
+        {
+            m_computerX += 1.0f;
+        }
+        else if (((uint32_t)m_computerX + 6 > (uint32_t)m_skullX) && ((uint32_t)m_computerX > 77))
+        {
+            m_computerX -= 1.0f;
+        }
+        m_timeStampOfComputer = m_timeStampOfCurrentFrame;
     }
 
     constexpr float distanceInPixelsPerTic = 2.0f;
@@ -100,7 +116,7 @@ void SkullNBones::UpdateFrame(const uint32_t deltaTime)
             m_playerX = 219.0f;
         }
     }
-    const float skullDistanceInFrame = distanceInFrame / 2;
+    const float skullDistanceInFrame = distanceInFrame / 8;
     float skullDistanceX = m_skullDeltaX * skullDistanceInFrame;
     float skullDistanceY = m_skullDeltaY * skullDistanceInFrame;
     if (m_skullX + skullDistanceX < SkullMinX || m_skullX + skullDistanceX > SkullMaxX)
@@ -117,14 +133,45 @@ void SkullNBones::UpdateFrame(const uint32_t deltaTime)
 
     m_skullX += skullDistanceX;
     m_skullY += skullDistanceY;
+
+    if
+        (
+        (m_skullDeltaY < 0)
+            && ((m_skullY >= 66) && (m_skullY < 66 + 3))
+            && (((int32_t)m_skullX >= ((int32_t)m_computerX - 5)) && ((int32_t)m_skullX < ((int32_t)m_computerX + 11)))
+            )
+    {
+        m_skullDeltaY = -m_skullDeltaY;
+        m_skullDeltaX = ((int32_t)(m_skullX + 5 - m_computerX) >> 1) - 4;
+        //if (!m_skullDeltaX)
+        //    m_skullDeltaX--;
+        //SD_PlaySound(COMPPADDLESND);
+    }
+    else if
+        (
+        (m_skullDeltaY > 0)
+            && ((m_skullY >= (135 - 3)) && (m_skullY < 135))
+            && (((int32_t)m_skullX >= ((int32_t)m_playerX - 5)) && ((int32_t)m_skullX < ((int32_t)m_playerX + 11)))
+            )
+    {
+        if (((m_skullDeltaY >> 2) < 3) && !(--m_speedup))
+        {
+            m_skullDeltaY++;
+            m_speedup = 10;
+        }
+        m_skullDeltaY = -m_skullDeltaY;
+        m_skullDeltaX = ((int32_t)(m_skullX + 5 - m_playerX) >> 1) - 4;
+        //SD_PlaySound(KEENPADDLESND);
+
+
+    }
 }
 
 void SkullNBones::ResetForNextSkull()
 {
-    m_playerX = 148.0f;
-    m_computerX = 148.0f;
     m_skullX = SkullMinX + ((SkullMaxX - SkullMinX) / 2);
     m_skullY = SkullMinY + ((SkullMaxY - SkullMinY) / 2);
-    m_skullDeltaX = (1 - (rand() % 3)) * 0.5f;
-    m_skullDeltaY = 0.5f;
+    m_skullDeltaX = (1 - (rand() % 3)) << 1;
+    m_skullDeltaY = 2;
+    m_speedup = 10;
 }

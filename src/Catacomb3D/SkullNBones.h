@@ -31,7 +31,7 @@ public:
 
 private:
     void DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const;
-    void UpdateFrame(const uint32_t deltaTime);
+    void UpdateFrame();
     void ResetForNextSkull();
 
     uint16_t m_playerScore;
@@ -41,10 +41,12 @@ private:
     float m_computerX;
     float m_skullX;
     float m_skullY;
-    float m_skullDeltaX;
-    float m_skullDeltaY;
+    int32_t m_skullDeltaX;
+    int32_t m_skullDeltaY;
     uint32_t m_timeStampOfCurrentFrame;
     uint32_t m_timeStampOfPreviousFrame;
+    uint32_t m_timeStampOfComputer;
     bool m_playerMovesLeft;
     bool m_playerMovesRight;
+    int16_t m_speedup;
 };
