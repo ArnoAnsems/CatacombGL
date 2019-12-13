@@ -21,19 +21,22 @@
 #include "..\Engine\IRenderer.h"
 #include "..\Engine\EgaGraph.h"
 #include "..\Engine\PlayerInput.h"
+#include "..\Engine\AudioPlayer.h"
 
 class SkullNBones
 {
 public:
-    SkullNBones();
+    SkullNBones(AudioPlayer& audioPlayer);
     void ProcessInput(const PlayerInput& playerInput);
     void Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp);
+    void Reset();
 
 private:
     void DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const;
     void UpdateFrame();
     void ResetForNextSkull();
 
+    AudioPlayer& m_audioPlayer;
     uint16_t m_playerScore;
     uint16_t m_computerScore;
 
@@ -46,7 +49,10 @@ private:
     uint32_t m_timeStampOfCurrentFrame;
     uint32_t m_timeStampOfPreviousFrame;
     uint32_t m_timeStampOfComputer;
+    uint32_t m_timeStampSkullGone;
+    bool m_skullIsGone;
     bool m_playerMovesLeft;
     bool m_playerMovesRight;
     int16_t m_speedup;
+    bool m_lastScore;
 };

@@ -46,7 +46,7 @@ Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, Aud
     m_askForEndGame (false),
     m_askForQuit (false),
     m_highScores(highScores),
-    m_skullNBones()
+    m_skullNBones(audioPlayer)
 {
 
 }
@@ -597,6 +597,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             // Skull 'n' Bones
             m_subMenuSelected = subMenuSkullNBones;
             m_menuItemSelected = 0;
+            m_skullNBones.Reset();
         }
         else if (m_menuItemSelected == 7)
         {

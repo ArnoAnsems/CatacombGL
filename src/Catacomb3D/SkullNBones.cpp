@@ -15,13 +15,15 @@
 
 #include "SkullNBones.h"
 #include "EgaGraphCatacomb3D.h"
+#include "AudioRepositoryCatacomb3D.h"
 
 const float SkullMinX = 76.0f;
 const float SkullMaxX = 228.0f;
 const float SkullMinY = 62.0f;
 const float SkullMaxY = 137.0f;
 
-SkullNBones::SkullNBones() :
+SkullNBones::SkullNBones(AudioPlayer& audioPlayer) :
+    m_audioPlayer(audioPlayer),
     m_playerScore(0),
     m_computerScore(0),
     m_playerX(148.0f),
@@ -33,9 +35,12 @@ SkullNBones::SkullNBones() :
     m_timeStampOfCurrentFrame(0),
     m_timeStampOfPreviousFrame(0),
     m_timeStampOfComputer(0),
+    m_timeStampSkullGone(0),
+    m_skullIsGone(true),
     m_playerMovesLeft(false),
     m_playerMovesRight(false),
-    m_speedup(10)
+    m_speedup(10),
+    m_lastScore(false)
 {
     ResetForNextSkull();
 }
@@ -58,6 +63,12 @@ void SkullNBones::DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const
 
 void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp)
 {
+    if (m_timeStampOfPreviousFrame == 0)
+    {
+        // First Draw action, wait 1 sec for the skull appears
+        m_timeStampSkullGone = timeStamp + 1000;
+    }
+
     m_timeStampOfPreviousFrame = m_timeStampOfCurrentFrame;
     m_timeStampOfCurrentFrame = timeStamp;
     UpdateFrame();
@@ -69,7 +80,11 @@ void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t t
 
     renderer.Render2DPicture(egaGraph.GetSprite(PADDLESPR), (uint16_t)m_computerX, 66);
     renderer.Render2DPicture(egaGraph.GetSprite(PADDLESPR), (uint16_t)m_playerX, 135);
-    renderer.Render2DPicture(egaGraph.GetSprite(BALLSPR), (uint16_t)m_skullX, (uint16_t)m_skullY);
+
+    if (!m_skullIsGone)
+    {
+        renderer.Render2DPicture(egaGraph.GetSprite(BALLSPR), (uint16_t)m_skullX, (uint16_t)m_skullY);
+    }
 }
 
 void SkullNBones::UpdateFrame()
@@ -84,7 +99,13 @@ void SkullNBones::UpdateFrame()
         return;
     }
 
-    if (m_timeStampOfComputer + 25 < m_timeStampOfCurrentFrame)
+    if (m_skullIsGone && m_timeStampSkullGone <= m_timeStampOfCurrentFrame)
+    {
+        m_skullIsGone = false;
+        ResetForNextSkull();
+    }
+
+    if (!m_skullIsGone && m_timeStampOfComputer + 25 < m_timeStampOfCurrentFrame)
     {
         if (((uint32_t)m_computerX + 6 < (uint32_t)m_skullX) && ((uint32_t)m_computerX < 219))
         {
@@ -116,54 +137,70 @@ void SkullNBones::UpdateFrame()
             m_playerX = 219.0f;
         }
     }
-    const float skullDistanceInFrame = distanceInFrame / 8;
-    float skullDistanceX = m_skullDeltaX * skullDistanceInFrame;
-    float skullDistanceY = m_skullDeltaY * skullDistanceInFrame;
-    if (m_skullX + skullDistanceX < SkullMinX || m_skullX + skullDistanceX > SkullMaxX)
-    {
-        m_skullDeltaX = -m_skullDeltaX;
-        skullDistanceX = -skullDistanceX;
-    }
 
-    if (m_skullY + skullDistanceY < SkullMinY || m_skullY + skullDistanceY > SkullMaxY)
+    if (!m_skullIsGone)
     {
-        m_skullDeltaY = -m_skullDeltaY;
-        skullDistanceY = -skullDistanceY;
-    }
-
-    m_skullX += skullDistanceX;
-    m_skullY += skullDistanceY;
-
-    if
-        (
-        (m_skullDeltaY < 0)
-            && ((m_skullY >= 66) && (m_skullY < 66 + 3))
-            && (((int32_t)m_skullX >= ((int32_t)m_computerX - 5)) && ((int32_t)m_skullX < ((int32_t)m_computerX + 11)))
-            )
-    {
-        m_skullDeltaY = -m_skullDeltaY;
-        m_skullDeltaX = ((int32_t)(m_skullX + 5 - m_computerX) >> 1) - 4;
-        //if (!m_skullDeltaX)
-        //    m_skullDeltaX--;
-        //SD_PlaySound(COMPPADDLESND);
-    }
-    else if
-        (
-        (m_skullDeltaY > 0)
-            && ((m_skullY >= (135 - 3)) && (m_skullY < 135))
-            && (((int32_t)m_skullX >= ((int32_t)m_playerX - 5)) && ((int32_t)m_skullX < ((int32_t)m_playerX + 11)))
-            )
-    {
-        if (((m_skullDeltaY >> 2) < 3) && !(--m_speedup))
+        const float skullDistanceInFrame = distanceInFrame / 8;
+        float skullDistanceX = m_skullDeltaX * skullDistanceInFrame;
+        float skullDistanceY = m_skullDeltaY * skullDistanceInFrame;
+        if (m_skullX + skullDistanceX < SkullMinX || m_skullX + skullDistanceX > SkullMaxX)
         {
-            m_skullDeltaY++;
-            m_speedup = 10;
+            m_skullDeltaX = -m_skullDeltaX;
+            skullDistanceX = -skullDistanceX;
+            m_audioPlayer.Play(BALLBOUNCESND);
         }
-        m_skullDeltaY = -m_skullDeltaY;
-        m_skullDeltaX = ((int32_t)(m_skullX + 5 - m_playerX) >> 1) - 4;
-        //SD_PlaySound(KEENPADDLESND);
 
+        if (m_skullY + skullDistanceY < SkullMinY)
+        {
+            m_timeStampSkullGone = m_timeStampOfCurrentFrame + 1000;
+            m_skullIsGone = true;
+            m_playerScore++;
+            m_lastScore = true;
+            m_audioPlayer.Play(KEENSCOREDSND);
+        }
+        else if (m_skullY + skullDistanceY > SkullMaxY)
+        {
+            m_timeStampSkullGone = m_timeStampOfCurrentFrame + 1000;
+            m_skullIsGone = true;
+            m_computerScore++;
+            m_lastScore = false;
+            m_audioPlayer.Play(COMPSCOREDSND);
+        }
 
+        m_skullX += skullDistanceX;
+        m_skullY += skullDistanceY;
+
+        if
+            (
+            (m_skullDeltaY < 0)
+                && ((m_skullY >= 66) && (m_skullY < 66 + 3))
+                && (((int32_t)m_skullX >= ((int32_t)m_computerX - 5)) && ((int32_t)m_skullX < ((int32_t)m_computerX + 11)))
+                )
+        {
+            m_skullDeltaY = -m_skullDeltaY;
+            m_skullDeltaX = ((int32_t)(m_skullX + 5 - m_computerX) >> 1) - 4;
+            if (!m_skullDeltaX)
+            {
+                m_skullDeltaX--;
+            }
+            m_audioPlayer.Play(COMPPADDLESND);
+        }
+        else if
+            (
+            (m_skullDeltaY > 0)
+                && ((m_skullY >= (135 - 3)) && (m_skullY < 135))
+                && (((int32_t)m_skullX >= ((int32_t)m_playerX - 5)) && ((int32_t)m_skullX < ((int32_t)m_playerX + 11)))
+                )
+        {
+            if (((m_skullDeltaY >> 2) < 3) && !(--m_speedup))
+            {
+                m_skullDeltaY++;
+                m_speedup = 10;
+            }
+            m_skullDeltaY = -m_skullDeltaY;
+            m_skullDeltaX = ((int32_t)(m_skullX + 5 - m_playerX) >> 1) - 4;
+            m_audioPlayer.Play(KEENPADDLESND);
+        }
     }
 }
 
@@ -172,6 +209,19 @@ void SkullNBones::ResetForNextSkull()
     m_skullX = SkullMinX + ((SkullMaxX - SkullMinX) / 2);
     m_skullY = SkullMinY + ((SkullMaxY - SkullMinY) / 2);
     m_skullDeltaX = (1 - (rand() % 3)) << 1;
-    m_skullDeltaY = 2;
+    m_skullDeltaY = m_lastScore ? -2 : 2;
     m_speedup = 10;
+}
+
+void SkullNBones::Reset()
+{
+    m_timeStampOfCurrentFrame = 0;
+    m_timeStampOfPreviousFrame = 0;
+    m_timeStampSkullGone = 0;
+    m_skullIsGone = true;
+    m_playerScore = 0;
+    m_computerScore = 0;
+    m_playerX = 148.0f;
+    m_computerX = 148.0f;
+    ResetForNextSkull();
 }
