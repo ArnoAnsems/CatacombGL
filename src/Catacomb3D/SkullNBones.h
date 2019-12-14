@@ -27,7 +27,7 @@ class SkullNBones
 {
 public:
     SkullNBones(AudioPlayer& audioPlayer);
-    void ProcessInput(const PlayerInput& playerInput);
+    bool ProcessInput(const PlayerInput& playerInput);
     void Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp);
     void Reset();
 

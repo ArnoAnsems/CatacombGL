@@ -163,7 +163,13 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     }
     else if (m_subMenuSelected == subMenuSkullNBones && !playerInput.IsKeyJustPressed(SDLK_ESCAPE))
     {
-        m_skullNBones.ProcessInput(playerInput);
+        if (m_skullNBones.ProcessInput(playerInput))
+        {
+            // Game over
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = 0;
+            m_menuItemOffset = 0;
+        }
         return MenuCommandNone;
     }
 

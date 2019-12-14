@@ -21,6 +21,7 @@ const float SkullMinX = 76.0f;
 const float SkullMaxX = 228.0f;
 const float SkullMinY = 62.0f;
 const float SkullMaxY = 137.0f;
+const uint16_t WinningScore = 21;
 
 SkullNBones::SkullNBones(AudioPlayer& audioPlayer) :
     m_audioPlayer(audioPlayer),
@@ -45,10 +46,22 @@ SkullNBones::SkullNBones(AudioPlayer& audioPlayer) :
     ResetForNextSkull();
 }
 
-void SkullNBones::ProcessInput(const PlayerInput& playerInput)
+bool SkullNBones::ProcessInput(const PlayerInput& playerInput)
 {
-    m_playerMovesLeft = playerInput.IsKeyPressed(SDLK_LEFT);
-    m_playerMovesRight = playerInput.IsKeyPressed(SDLK_RIGHT);
+    if (m_playerScore == WinningScore || m_computerScore == WinningScore)
+    {
+        if (playerInput.IsAnyKeyPressed())
+        {
+            return true;
+        }
+    }
+    else
+    {
+        m_playerMovesLeft = playerInput.IsKeyPressed(SDLK_LEFT);
+        m_playerMovesRight = playerInput.IsKeyPressed(SDLK_RIGHT);
+    }
+
+    return false;
 }
 
 void SkullNBones::DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const
@@ -85,6 +98,24 @@ void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t t
     {
         renderer.Render2DPicture(egaGraph.GetSprite(BALLSPR), (uint16_t)m_skullX, (uint16_t)m_skullY);
     }
+
+    if (m_playerScore == WinningScore || m_computerScore == WinningScore)
+    {
+        const int width = 120;
+        const int offsetX = 154 - (width / 2);
+        renderer.Render2DPicture(egaGraph.GetMaskedPicture(CP_MENUMASKPICM), 74, 48);
+        renderer.Render2DBar(offsetX + 1, 81, width - 2, 36, EgaBlack);
+        renderer.Render2DBar(offsetX, 80, width, 1, EgaRed);
+        renderer.Render2DBar(offsetX, 117, width, 1, EgaRed);
+        renderer.Render2DBar(offsetX, 81, 1, 36, EgaRed);
+        renderer.Render2DBar(offsetX + width - 1, 81, 1, 36, EgaRed);
+
+        const char* message = (m_playerScore == WinningScore) ? "You won!" : "You lost!";
+        renderer.RenderTextCentered(message, egaGraph.GetFont(4), EgaBrightRed, 154, 89);
+
+        renderer.Render2DBar(offsetX + 4, 102, width - 8, 1, EgaRed);
+        renderer.RenderTextCentered("Press any key", egaGraph.GetFont(4), EgaRed, 154, 104);
+    }
 }
 
 void SkullNBones::UpdateFrame()
@@ -99,13 +130,18 @@ void SkullNBones::UpdateFrame()
         return;
     }
 
+    if (m_playerScore == WinningScore || m_computerScore == WinningScore)
+    {
+        return;
+    }
+
     if (m_skullIsGone && m_timeStampSkullGone <= m_timeStampOfCurrentFrame)
     {
         m_skullIsGone = false;
         ResetForNextSkull();
     }
 
-    if (!m_skullIsGone && m_timeStampOfComputer + 25 < m_timeStampOfCurrentFrame)
+    if (!m_skullIsGone && m_timeStampOfComputer + 21 < m_timeStampOfCurrentFrame)
     {
         if (((uint32_t)m_computerX + 6 < (uint32_t)m_skullX) && ((uint32_t)m_computerX < 219))
         {
