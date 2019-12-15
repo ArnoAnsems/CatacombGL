@@ -350,26 +350,32 @@ unsigned int RendererOpenGLWin32::LoadTilesSize8IntoTexture(const FileChunk* dec
     return textureId;
 }
 
-unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture)
+unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture, const uint16_t lineHeight)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     const uint32_t bytesPerOutputPixel = 4;
     const uint32_t width = 16;
-    const uint32_t height = 256 * 10;
-    const uint32_t numberOfPixelsInFont = width * height;
-    GLubyte* textureImage = new GLubyte[numberOfPixelsInFont * bytesPerOutputPixel];
+    const uint32_t height = 256 * 16;
+    const uint32_t numberOfPixelsInTexture = width * height;
+    GLubyte* textureImage = new GLubyte[numberOfPixelsInTexture * bytesPerOutputPixel];
     
     uint32_t outputPixelOffset = 0;
-    for (uint32_t i = 0; i < numberOfPixelsInFont; i++)
+    for (uint32_t i = 0; i < 256; i++)
     {
-        const bool fontBit = fontPicture[i];
-        textureImage[outputPixelOffset] = 255;
-        textureImage[outputPixelOffset + 1] = 255;
-        textureImage[outputPixelOffset + 2] =  255;
-        textureImage[outputPixelOffset + 3] = fontBit ? 255 : 0;
-        outputPixelOffset += bytesPerOutputPixel;
+        for (uint32_t h = 0; h < 16; h++)
+        {
+            for (uint32_t w = 0; w < 16; w++)
+            {
+                const bool fontBit = (h < lineHeight) ? fontPicture[(16 * lineHeight * i) + (16 * h) + w] : false;
+                textureImage[outputPixelOffset] = 255;
+                textureImage[outputPixelOffset + 1] = 255;
+                textureImage[outputPixelOffset + 2] = 255;
+                textureImage[outputPixelOffset + 3] = fontBit ? 255 : 0;
+                outputPixelOffset += bytesPerOutputPixel;
+            }
+        }
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
@@ -436,7 +442,7 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
         const uint8_t charIndex = text[chari];
         uint16_t charWidth =  font->GetCharacterWidth(charIndex);
         uint16_t charHeight = font->GetCharacterHeight();
-        float textureHeight = 1.0f / 256.0f * (charHeight / 10.0f);
+        float textureHeight = 1.0f / 256.0f * (charHeight / 16.0f);
         float textureWidth = (float)(charWidth) / 16.0f;
         float textureOffsetX = 0.0f;
         float textureOffsetY = float(charIndex) / 256.0f;
@@ -529,14 +535,15 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     {
         const uint8_t charIndex = truncatedText[chari];
         uint16_t charWidth = font->GetCharacterWidth(charIndex);
-        float textureHeight = 1.0f / 256.0f;
+        uint16_t charHeight = font->GetCharacterHeight();
+        float textureHeight = 1.0f / 256.0f * (charHeight / 16.0f);
         float textureWidth = (float)(charWidth) / 16.0f;
         float textureOffsetX = 0.0f;
         float textureOffsetY = float(charIndex) / 256.0f;
 
 
-        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, 10);
-        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, 10);
+        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, charHeight);
         glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(combinedWidth + charWidth, 0);
         glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(combinedWidth, 0);
         combinedWidth += charWidth;

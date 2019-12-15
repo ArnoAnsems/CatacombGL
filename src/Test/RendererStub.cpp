@@ -67,7 +67,7 @@ unsigned int RendererStub::LoadTilesSize8IntoTexture(const FileChunk* /*decompre
     return 0;
 }
 
-unsigned int RendererStub::LoadFontIntoTexture(const bool* /*fontPicture*/)
+unsigned int RendererStub::LoadFontIntoTexture(const bool* /*fontPicture*/, const uint16_t /*lineHeight*/)
 {
     return 0u;
 }

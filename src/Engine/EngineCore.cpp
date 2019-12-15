@@ -787,7 +787,7 @@ bool EngineCore::Think()
             m_state = InGame;
         }
     }
-    else if (m_state == InGame && m_playerInput.IsKeyJustPressed(SDLK_F1))
+    else if (m_state == InGame && m_game.GetId() != 5 && m_playerInput.IsKeyJustPressed(SDLK_F1))
     {
         m_state = Help;
 
