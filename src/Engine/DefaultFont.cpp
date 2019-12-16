@@ -21,7 +21,7 @@
 
 const bool X = true;
 const bool o = false;
-const bool defaultFontData[256 * 10 * 16] =
+const bool defaultFontDataHeight10[256 * 10 * 16] =
 {
     // character 0
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
@@ -2841,7 +2841,7 @@ const bool defaultFontData[256 * 10 * 16] =
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o
 };
 
-const uint8_t defaultFontWidth[256] =
+const uint8_t defaultFontWidthHeight10[256] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3073,13 +3073,2331 @@ const uint8_t defaultFontWidth[256] =
     7 // ˇ
 };
 
-const Font* DefaultFont::Get(IRenderer& renderer)
+const bool defaultFontDataHeight7[256 * 7 * 16] =
 {
-    if (defaultFont == nullptr)
+    // character 0 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 1 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 2 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 3 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 4 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 5 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 6 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 7 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 8 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 9 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 10 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 11 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 12 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 13 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 14 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 15 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 16 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 17 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 18 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 19 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 20 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 21 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 22 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 23 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 24 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 25 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 26 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 27 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 28 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 29 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 30 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 31 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 32 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 33 (!)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 34 (")
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 35 (#)
+    o,X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,X,X,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,X,X,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 36 ($)
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 37 (%)
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 38 (&)
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 39 (')
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 40 (()
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 41 ())
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 42 (*)
+    o,X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,X,X,X,o,o,o,o,o,o,o,o,
+    o,o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 43 (+)
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 44 (,)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 45 (-)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 46 (.)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 47 (/)
+    o,o,o,o,o,X,X,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 48 (0)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 49 (1)
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 50 (2)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 51 (3)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 52 (4)
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 53 (5)
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 54 (6)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 55 (7)
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 56 (8)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 57 (9)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 58 (:)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 59 (;)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 60 (<)
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 61 (=)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 62 (>)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 63 (?)
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 64 (@)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,o,o,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,X,o,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 65 (A)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 66 (B)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 67 (C)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 68 (D)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 69 (E)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 70 (F)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 71 (G)
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 72 (H)
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 73 (I)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 74 (J)
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 75 (K)
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 76 (L)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 77 (M)
+    X,X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 78 (N)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 79 (O)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 80 (P)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 81 (Q)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 82 (R)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 83 (S)
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 84 (T)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 85 (U)
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 86 (V)
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 87 (W)
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 88 (X)
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 89 (Y)
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 90 (Z)
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 91 ([)
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 92 (\)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 93 (])
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 94 (^)
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 95 (_)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,X,X,X,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 96 (`)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 97 (a)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 98 (b)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 99 (c)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 100 (d)
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 101 (e)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 102 (f)
+    o,o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 103 (g)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 104 (h)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 105 (i)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 106 (j)
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 107 (k)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 108 (l)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 109 (m)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 110 (n)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 111 (o)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 112 (p)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 113 (q)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 114 (r)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 115 (s)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 116 (t)
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 117 (u)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 118 (v)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 119 (w)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,X,X,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,X,X,X,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 120 (x)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 121 (y)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 122 (z)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 123 ({)
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 124 (|)
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 125 (})
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 126 (~)
+    o,X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,X,o,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 127 ()
+    o,o,o,X,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 128 (Ä)
+    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 129 (Å)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,X,X,X,X,X,X,X,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 130 (Ç)
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,o,o,X,X,X,o,o,o,o,o,o,o,o,o,o,
+    X,X,o,o,X,X,o,o,o,o,o,o,o,o,o,o,
+    o,X,X,X,X,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 131 (É)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 132 (Ñ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 133 (Ö)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 134 (Ü)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 135 (á)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 136 (à)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 137 (â)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 138 (ä)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 139 (ã)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 140 (å)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 141 (ç)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 142 (é)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 143 (è)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 144 (ê)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 145 (ë)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 146 (í)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 147 (ì)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 148 (î)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 149 (ï)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 150 (ñ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 151 (ó)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 152 (ò)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 153 (ô)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 154 (ö)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 155 (õ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 156 (ú)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 157 (ù)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 158 (û)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 159 (ü)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 160 (†)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 161 (°)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 162 (¢)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 163 (£)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 164 (§)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 165 (•)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 166 (¶)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 167 (ß)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 168 (®)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 169 (©)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 170 (™)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 171 (´)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 172 (¨)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 173 (≠)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 174 (Æ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 175 (Ø)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 176 (∞)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 177 (±)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 178 (≤)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 179 (≥)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 180 (¥)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 181 (µ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 182 (∂)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 183 (∑)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 184 (∏)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 185 (π)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 186 (∫)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 187 (ª)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 188 (º)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 189 (Ω)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 190 (æ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 191 (ø)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 192 (¿)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 193 (¡)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 194 (¬)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 195 (√)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 196 (ƒ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 197 (≈)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 198 (∆)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 199 («)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 200 (»)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 201 (…)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 202 ( )
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 203 (À)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 204 (Ã)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 205 (Õ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 206 (Œ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 207 (œ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 208 (–)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 209 (—)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 210 (“)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 211 (”)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 212 (‘)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 213 (’)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 214 (÷)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 215 (◊)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 216 (ÿ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 217 (Ÿ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 218 (⁄)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 219 (€)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 220 (‹)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 221 (›)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 222 (ﬁ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 223 (ﬂ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 224 (‡)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 225 (·)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 226 (‚)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 227 („)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 228 (‰)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 229 (Â)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 230 (Ê)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 231 (Á)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 232 (Ë)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 233 (È)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 234 (Í)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 235 (Î)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 236 (Ï)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 237 (Ì)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 238 (Ó)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 239 (Ô)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 240 ()
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 241 (Ò)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 242 (Ú)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 243 (Û)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 244 (Ù)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 245 (ı)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 246 (ˆ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 247 (˜)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 248 (¯)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 249 (˘)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 250 (˙)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 251 (˚)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 252 (¸)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 253 (˝)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 254 (˛)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    // character 255 (ˇ)
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+    o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
+};
+
+const uint8_t defaultFontWidthHeight7[256] =
+{
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    5,
+    3, // !
+    6, // "
+    8, // #
+    7, // $
+    7, // %
+    6, // &
+    4, // '
+    5, // (
+    5, // )
+    9, // *
+    7, // +
+    5, // ,
+    7, // -
+    3, // .
+    8, // /
+    6, // 0
+    6, // 1
+    6, // 2
+    6, // 3
+    6, // 4
+    6, // 5
+    6, // 6
+    6, // 7
+    6, // 8
+    6, // 9
+    3, // :
+    4, // ;
+    5, // <
+    6, // =
+    5, // >
+    5, // ?
+    5, // @
+    6, // A
+    6, // B
+    5, // C
+    6, // D
+    5, // E
+    5, // F
+    6, // G
+    6, // H
+    3, // I
+    6, // J
+    6, // K
+    5, // L
+    9, // M
+    6, // N
+    6, // O
+    6, // P
+    6, // Q
+    6, // R
+    5, // S
+    5, // T
+    6, // U
+    6, // V
+    9, // W
+    6, // X
+    7, // Y
+    6, // Z
+    5, // [
+    7, // backslash
+    5, // ]
+    7, // ^
+    9, // _
+    4, // `
+    6, // a
+    6, // b
+    5, // c
+    6, // d
+    6, // e
+    6, // f
+    6, // g
+    7, // h
+    3, // i
+    4, // j
+    6, // k
+    3, // l
+    9, // m
+    6, // n
+    6, // o
+    5, // p
+    6, // q
+    5, // r
+    5, // s
+    5, // t
+    6, // u
+    6, // v
+    9, // w
+    6, // x
+    6, // y
+    6, // z
+    5, // {
+    3, // |
+    5, // }
+    6, // ~
+    7, // 
+    2, // Ä
+    10, // Å
+    7, // Ç
+    0, // É
+    0, // Ñ
+    0, // Ö
+    0, // Ü
+    0, // á
+    0, // à
+    0, // â
+    0, // ä
+    0, // ã
+    0, // å
+    0, // ç
+    0, // é
+    0, // è
+    0, // ê
+    0, // ë
+    0, // í
+    0, // ì
+    0, // î
+    0, // ï
+    0, // ñ
+    0, // ó
+    0, // ò
+    0, // ô
+    0, // ö
+    0, // õ
+    0, // ú
+    0, // ù
+    0, // û
+    0, // ü
+    0, // †
+    0, // °
+    0, // ¢
+    0, // £
+    0, // §
+    0, // •
+    0, // ¶
+    0, // ß
+    0, // ®
+    0, // ©
+    0, // ™
+    0, // ´
+    0, // ¨
+    0, // ≠
+    0, // Æ
+    0, // Ø
+    0, // ∞
+    0, // ±
+    0, // ≤
+    0, // ≥
+    0, // ¥
+    0, // µ
+    0, // ∂
+    0, // ∑
+    0, // ∏
+    0, // π
+    0, // ∫
+    0, // ª
+    0, // º
+    0, // Ω
+    0, // æ
+    0, // ø
+    0, // ¿
+    0, // ¡
+    0, // ¬
+    0, // √
+    0, // ƒ
+    0, // ≈
+    0, // ∆
+    0, // «
+    0, // »
+    0, // …
+    0, //  
+    0, // À
+    0, // Ã
+    0, // Õ
+    0, // Œ
+    0, // œ
+    0, // –
+    0, // —
+    0, // “
+    0, // ”
+    0, // ‘
+    0, // ’
+    0, // ÷
+    0, // ◊
+    0, // ÿ
+    0, // Ÿ
+    0, // ⁄
+    0, // €
+    0, // ‹
+    0, // ›
+    0, // ﬁ
+    0, // ﬂ
+    0, // ‡
+    0, // ·
+    0, // ‚
+    0, // „
+    0, // ‰
+    0, // Â
+    0, // Ê
+    0, // Á
+    0, // Ë
+    0, // È
+    0, // Í
+    0, // Î
+    0, // Ï
+    0, // Ì
+    0, // Ó
+    0, // Ô
+    0, // 
+    0, // Ò
+    0, // Ú
+    0, // Û
+    0, // Ù
+    0, // ı
+    0, // ˆ
+    0, // ˜
+    0, // ¯
+    0, // ˘
+    0, // ˙
+    0, // ˚
+    0, // ¸
+    0, // ˝
+    0, // ˛
+    0 // ˇ
+};
+
+const Font* DefaultFont::Get(IRenderer& renderer, const uint16_t lineHeight)
+{
+    if (lineHeight == 10 && defaultFontHeight10 == nullptr)
     {
-        const unsigned int fontTextureId = renderer.LoadFontIntoTexture(defaultFontData, 10);
-        defaultFont = new Font(10, defaultFontWidth, fontTextureId);
+        const unsigned int fontTextureId = renderer.LoadFontIntoTexture(defaultFontDataHeight10, 10);
+        defaultFontHeight10 = new Font(10, defaultFontWidthHeight10, fontTextureId);
     }
 
-    return defaultFont;
+    if (lineHeight == 7 && defaultFontHeight7 == nullptr)
+    {
+        const unsigned int fontTextureId = renderer.LoadFontIntoTexture(defaultFontDataHeight7, 7);
+        defaultFontHeight7 = new Font(7, defaultFontWidthHeight7, fontTextureId);
+    }
+
+    return (lineHeight == 7) ? defaultFontHeight7 : defaultFontHeight10;
 }

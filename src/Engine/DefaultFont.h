@@ -24,10 +24,11 @@
 #include "Font.h"
 #include "IRenderer.h"
 
-static Font* defaultFont = nullptr;
+static Font* defaultFontHeight7 = nullptr;
+static Font* defaultFontHeight10 = nullptr;
 
 class DefaultFont
 {
 public:
-    static const Font* Get(IRenderer& renderer);
+    static const Font* Get(IRenderer& renderer, const uint16_t lineHeight);
 };

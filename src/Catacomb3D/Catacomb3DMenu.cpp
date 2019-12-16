@@ -15,6 +15,7 @@
 
 #include "Catacomb3DMenu.h"
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
+#include "..\Engine\DefaultFont.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -1060,7 +1061,8 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
                 }
                 else
                 {
-                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, yOffset);
+                    // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
+                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), DefaultFont::Get(renderer, 7), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, yOffset);
                 }
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size())

@@ -48,7 +48,7 @@ void Console::Draw(IRenderer& renderer)
 
     renderer.Prepare2DRendering(true);
     renderer.Render2DBar(0, 0, 640, (numberOfLinesShown * 10) + 20, EgaDarkGray);
-    const Font* defaultFont = DefaultFont::Get(renderer);
+    const Font* defaultFont = DefaultFont::Get(renderer, 10);
     const uint32_t numberOfLogMessages = (uint32_t)Logging::Instance().GetAllLogMessages().size();
     const uint32_t firstMessage = (numberOfLogMessages > numberOfLinesShown) ? numberOfLogMessages - numberOfLinesShown : 0;
     const int16_t offset = (numberOfLogMessages > numberOfLinesShown) ? 0 - firstMessage : numberOfLinesShown - numberOfLogMessages;

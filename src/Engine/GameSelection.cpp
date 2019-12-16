@@ -58,13 +58,13 @@ void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t w
     if (title != nullptr)
     {
         m_renderer.Render2DBar(x + (2 * shadowVert) + borderVert, y + (2 * shadowHor) + borderHor, width - (4 * shadowVert) - (2 * borderVert), 11, EgaLightGray);
-        m_renderer.RenderTextCentered(title, DefaultFont::Get(m_renderer), EgaBlack, x + (width / 2), y + (2 * shadowHor) + borderHor + 1);
+        m_renderer.RenderTextCentered(title, DefaultFont::Get(m_renderer, 10), EgaBlack, x + (width / 2), y + (2 * shadowHor) + borderHor + 1);
     }
 }
 
 void GameSelection::Draw(const GameSelectionPresentation& presentation)
 {
-    const Font* defaultFont = DefaultFont::Get(m_renderer);
+    const Font* defaultFont = DefaultFont::Get(m_renderer, 10);
     const ViewPorts::ViewPortRect3D dummy3DViewArea = { 0, 320, 0, 200 };
     m_renderer.Prepare3DRendering(false, 1.0f, 25, dummy3DViewArea);
     m_renderer.Prepare2DRendering(true);
