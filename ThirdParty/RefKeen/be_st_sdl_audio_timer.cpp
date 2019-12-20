@@ -522,9 +522,15 @@ static void BEL_ST_Simple_EmuCallBack(void *unused, Uint8 *stream, int len)
             for (uint32_t i = 0; i < targetALSamples; ++i)
                 currSamplePtr[i] = (currSamplePtr[i] + g_sdlALOutSamples[i]) / 2;
             // Move pending AL data
-            if (targetALSamples < g_sdlALOutSamplesEnd)
+            if (targetALSamples >= g_sdlALOutSamplesEnd)
+            {
+                g_sdlALOutSamplesEnd = 0;
+            }
+            else if (targetALSamples < g_sdlALOutSamplesEnd)
+            {
                 memmove(g_sdlALOutSamples, &g_sdlALOutSamples[targetALSamples], sizeof(BE_ST_SndSample_T) * (g_sdlALOutSamplesEnd - targetALSamples));
-            g_sdlALOutSamplesEnd -= targetALSamples;
+                g_sdlALOutSamplesEnd -= targetALSamples;
+            }
         }
         // We're done for now
         currSamplePtr += currNumOfSamples;
@@ -597,7 +603,7 @@ static void BEL_ST_Resampling_EmuCallBack(void *unused, Uint8 *stream, int len)
                 if (g_sdlPCSpeakerOn)
                     PCSpeakerUpdateOne(&g_sdlMiscOutSamples[g_sdlMiscOutSamplesEnd], targetPCSamples - g_sdlMiscOutSamplesEnd);
                 else
-                    memset(&g_sdlMiscOutSamples[g_sdlMiscOutSamplesEnd], 0, sizeof(BE_ST_SndSample_T)*(targetPCSamples - g_sdlMiscOutSamplesEnd));
+                    memset(&g_sdlMiscOutSamples[g_sdlMiscOutSamplesEnd], 0, sizeof(BE_ST_SndSample_T) * (targetPCSamples - g_sdlMiscOutSamplesEnd));
 
                 g_sdlMiscOutSamplesEnd = targetPCSamples;
             }
@@ -634,22 +640,28 @@ static void BEL_ST_Resampling_EmuCallBack(void *unused, Uint8 *stream, int len)
         // Try to resample the AL data we have (as much as possible)
         uint32_t maxSamplesToOutput = BE_Cross_TypedMin32(len / sizeof(BE_ST_SndSample_T), g_sdlMiscOutSamplesEnd); // Not taking plain (len / sizeof(BE_ST_SndSample_T)), just to make it safer
 
-        uint32_t samples_consumed, samples_produced;
+        uint32_t samples_consumed = 0;
+        uint32_t samples_produced = 0;
         BEL_ST_DoResample(&samples_consumed, &samples_produced, g_sdlALOutSamples, currSamplePtr, g_sdlALOutSamplesEnd, maxSamplesToOutput);
 
-        len -= sizeof(BE_ST_SndSample_T)*samples_produced;
+        len -= sizeof(BE_ST_SndSample_T) * samples_produced;
         // Mix PC Speaker output
         for (uint32_t i = 0; i < BE_Cross_TypedMin32(samples_produced, g_sdlMiscOutSamplesEnd); ++i)
             currSamplePtr[i] = (currSamplePtr[i] + g_sdlMiscOutSamples[i]) / 2;
 
         currSamplePtr += samples_produced;
 
-        if ((samples_consumed > 0) && (samples_consumed < g_sdlALOutSamplesEnd))
-            memmove(g_sdlALOutSamples, &g_sdlALOutSamples[samples_consumed], sizeof(BE_ST_SndSample_T)*(g_sdlALOutSamplesEnd - samples_consumed));
-        g_sdlALOutSamplesEnd -= samples_consumed;
+        if (samples_consumed >= g_sdlALOutSamplesEnd)
+        {
+            g_sdlALOutSamplesEnd = 0;
+        }
+        else if ((samples_consumed > 0) && (samples_consumed < g_sdlALOutSamplesEnd))
+        {
+            memmove(g_sdlALOutSamples, &g_sdlALOutSamples[samples_consumed], sizeof(BE_ST_SndSample_T) * (g_sdlALOutSamplesEnd - samples_consumed));
+            g_sdlALOutSamplesEnd -= samples_consumed;
+        }
 
-        /*** Note: Casting to unsigned for suppression of warnings again ***/
-        if ((unsigned)samples_produced >= g_sdlMiscOutSamplesEnd)
+        if (samples_produced >= g_sdlMiscOutSamplesEnd)
             g_sdlMiscOutSamplesEnd = 0;
         else if ((samples_produced > 0) && (samples_produced < g_sdlMiscOutSamplesEnd))
         {
