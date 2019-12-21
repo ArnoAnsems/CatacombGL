@@ -46,6 +46,7 @@ public:
 
 private:
     static uint32_t GetCurrentTime();
+    static constexpr uint32_t GetStandardFreezePeriod();
 
     int64_t m_startTimeForPlayer;
     uint32_t m_pauseTime;

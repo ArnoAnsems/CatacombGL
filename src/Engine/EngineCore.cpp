@@ -244,18 +244,17 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
         if (m_state != Victory)
         {
-            const int32_t remainingFreezeTime = m_gameTimer.GetRemainingFreezeTime();
-            const int32_t remainingFreezeTimeInSec = remainingFreezeTime / 1000;
-            if (remainingFreezeTimeInSec != m_lastFreezeTimeTick)
-            {
-                m_lastFreezeTimeTick = remainingFreezeTimeInSec;
-                m_game.PlaySoundFreezeTimeTick(m_lastFreezeTimeTick);
-            }
-
             if (m_game.GetId() != 5)  // Status message and radar not in Catacomb 3-D
             {
+                const int32_t remainingFreezeTime = m_gameTimer.GetRemainingFreezeTime();
+                const int32_t remainingFreezeTimeTicks = (remainingFreezeTime * 70) / 30000;
+                if (remainingFreezeTimeTicks != m_lastFreezeTimeTick)
+                {
+                    m_lastFreezeTimeTick = remainingFreezeTimeTicks;
+                    m_game.PlaySoundFreezeTimeTick(m_lastFreezeTimeTick);
+                }
                 char freezeMessage[100];
-                sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeInSec);
+                sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeTicks);
                 const char* statusMessage = (m_statusMessage != nullptr) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
                 renderer.RenderTextCentered(statusMessage, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, 156, 189);
 
@@ -1013,7 +1012,7 @@ bool EngineCore::Think()
                 const float degreesPerTic = (m_playerActions.GetActionActive(QuickTurn)) ? 3.0f : 1.0f;
                 const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
                 const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-                const float deltaTimeInTics = (truncatedDeltaTimeInMs * 60.0f) / 1000.0f;
+                const float deltaTimeInTics = (truncatedDeltaTimeInMs * 70.0f) / 1000.0f;
                 const float turnSpeedFactor = m_configurationSettings.GetTurnSpeed() / 100.0f;
                 if (m_playerActions.GetActionActive(TurnLeft))
                 {
@@ -1026,7 +1025,7 @@ bool EngineCore::Think()
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
                 }
                 const float playerSpeed = 5120.0f / 65536.0f;
-                const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 60.0f;
+                const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
                 const bool isRunning = m_configurationSettings.GetAlwaysRun() != m_playerActions.GetActionActive(Run);
                 const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
                 if (m_playerActions.GetActionActive(MoveForward) && m_playerActions.GetActionActive(StrafeLeft))
@@ -1218,7 +1217,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         if (actor->GetTimeToNextAction() == 0)
         {
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 60));
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 70));
             actor->SetSolid(action == ActionStatue);
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
@@ -1441,7 +1440,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         const bool isBonusItem = (actor->GetDecorateActor().initialState == StateIdWaitForPickup);
         if (isBonusItem)
         {
-            DisplayStatusMessage("Item destroyed", 80 * 17);
+            DisplayStatusMessage("Item destroyed", 80 * 14);
         }
         m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
         actor->SetActionPerformed(true);
@@ -1607,7 +1606,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         if (actor->GetTimeToNextAction() == 0)
         {
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 60));
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 70));
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
         {
@@ -1862,7 +1861,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         if (actor->GetTimeToNextAction() == 0)
         {
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 60));
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 70));
             actor->SetSolid(false);
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())

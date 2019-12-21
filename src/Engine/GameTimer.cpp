@@ -48,7 +48,7 @@ uint32_t GameTimer::GetMilliSecondsForWorld()
     const uint32_t deltaMilliSeconds = GetMillisecondsForPlayer();
     if (m_freezeStartTime != 0)
     {
-        if (m_freezeStartTime + 50000 > deltaMilliSeconds)
+        if (m_freezeStartTime + GetStandardFreezePeriod() > deltaMilliSeconds)
         {
             return (uint32_t)(m_freezeStartTime - m_totalFrozenTime);
         }
@@ -121,7 +121,7 @@ uint32_t GameTimer::GetRemainingFreezeTime()
         return 0;
     }
 
-    int64_t delta = m_freezeStartTime + 50000 - GetMillisecondsForPlayer();
+    int64_t delta = m_freezeStartTime + GetStandardFreezePeriod() - GetMillisecondsForPlayer();
     if (delta < 0)
     {
         return 0;
@@ -158,4 +158,9 @@ bool GameTimer::LoadFromFile(std::ifstream& file)
     m_paused = false;
 
     return true;
+}
+
+constexpr uint32_t GameTimer::GetStandardFreezePeriod()
+{
+    return ((3000 * 1000) / 70);
 }

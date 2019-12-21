@@ -71,7 +71,7 @@ public:
     void PlaySoundUseBolt() override;
     void PlaySoundUseNuke() override;
     void PlaySoundFreezeTime() override;
-    void PlaySoundFreezeTimeTick(const int32_t seconds) override;
+    void PlaySoundFreezeTimeTick(const int32_t freezeTicks) override;
     void PlaySoundWalk(const bool walk1) override;
     void PlaySoundBossDeath() override;
     void PlaySoundShoot() override;

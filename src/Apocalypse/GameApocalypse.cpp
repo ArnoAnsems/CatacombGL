@@ -649,13 +649,13 @@ void GameApocalypse::PlaySoundFreezeTime()
     m_audioPlayer->Play(FREEZETIMESND);
 }
 
-void GameApocalypse::PlaySoundFreezeTimeTick(const int32_t seconds)
+void GameApocalypse::PlaySoundFreezeTimeTick(const int32_t freezeTicks)
 {
-    if (seconds == 0)
+    if (freezeTicks == 0)
     {
         m_audioPlayer->Play(TIMERETURNSND);
     }
-    else if (seconds < 20)
+    else if (freezeTicks < 20 && freezeTicks % 2 == 0)
     {
         m_audioPlayer->Play(TICKSND);
     }

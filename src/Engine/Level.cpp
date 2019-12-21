@@ -352,7 +352,7 @@ const egaColor Level::GetSkyColor(const uint32_t timeStamp)
         {
             // Time to show the lightning
             const egaColor sky_lightning[]={EgaBlue,EgaBrightBlue,EgaBrightWhite,EgaDarkGray,EgaBlack};
-            const uint32_t lightningFrameDuration = 17; //ms (60 Hz)
+            const uint32_t lightningFrameDuration = 14; //ms (70 Hz)
             const int8_t lightningNoFrames = sizeof(sky_lightning) / sizeof(egaColor);
             const uint32_t lightningDuration = lightningFrameDuration * lightningNoFrames;
             const uint32_t timeSinceStartLightning = timeStamp - m_lightningStartTimestamp;

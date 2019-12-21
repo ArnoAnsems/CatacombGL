@@ -646,7 +646,7 @@ void GameCatacomb3D::PlaySoundFreezeTime()
     // No freezetime in Catacomb 3-D
 }
 
-void GameCatacomb3D::PlaySoundFreezeTimeTick(const int32_t seconds)
+void GameCatacomb3D::PlaySoundFreezeTimeTick(const int32_t freezeTicks)
 {
     // No freezetime in Catacomb 3-D
 }

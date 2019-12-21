@@ -85,7 +85,7 @@ public:
     virtual void PlaySoundUseBolt() = 0;
     virtual void PlaySoundUseNuke() = 0;
     virtual void PlaySoundFreezeTime() = 0;
-    virtual void PlaySoundFreezeTimeTick(const int32_t seconds) = 0;
+    virtual void PlaySoundFreezeTimeTick(const int32_t freezeTicks) = 0;
     virtual void PlaySoundWalk(const bool walk1) = 0;
     virtual void PlaySoundBossDeath() = 0;
     virtual void PlaySoundShoot() = 0;

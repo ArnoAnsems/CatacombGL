@@ -155,7 +155,7 @@ void SkullNBones::UpdateFrame()
     }
 
     constexpr float distanceInPixelsPerTic = 2.0f;
-    constexpr float distanceInPixelsPerMilliSec = distanceInPixelsPerTic * 60.0f / 1000.0f;
+    constexpr float distanceInPixelsPerMilliSec = distanceInPixelsPerTic * 70.0f / 1000.0f;
     const float distanceInFrame = deltaTime * distanceInPixelsPerMilliSec;
     if (m_playerMovesLeft && !m_playerMovesRight)
     {

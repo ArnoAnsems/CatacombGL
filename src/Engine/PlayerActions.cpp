@@ -86,7 +86,7 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp)
         m_shotFired = false;
     }
 
-    const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 60) / 1000) / 2;
+    const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
     if (deltaTicks < 60)
     {
         m_handHeight = m_shotFiredHandHeight + deltaTicks * 4;
@@ -128,7 +128,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp)
 
     if (m_shotFired)
     {
-        const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 60) / 1000) / 2;
+        const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
         m_shotPower = (deltaTicks > 56) ? 56 : deltaTicks;
 
         m_handHeight = m_shotFiredHandHeight + deltaTicks * 4;
@@ -149,7 +149,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp)
     {
         m_shotPower = 0;
 
-        const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 60) / 1000) / 2;
+        const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
         if (m_handHeight > 0)
         {
             if (deltaTicks * 2 >= m_shotFiredHandHeight)
