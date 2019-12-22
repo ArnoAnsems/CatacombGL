@@ -752,6 +752,15 @@ bool EngineCore::Think()
             {
                 FreezeTimeCheat();
             }
+            if (m_playerInput.IsKeyPressed(SDLK_e)) // E = Exit level (Catacomb 3D)
+            {
+                if (m_game.GetId() == 5 &&
+                    m_state == InGame &&
+                    m_level->GetLevelIndex() + 1 < m_game.GetGameMaps()->GetNumberOfLevels())
+                {
+                    m_warpToLevel = m_level->GetLevelIndex() + 1;
+                }
+            }
         }
         if (m_playerInput.IsKeyPressed(SDLK_F2))
         {
@@ -776,6 +785,7 @@ bool EngineCore::Think()
         m_game.GetAudioPlayer()->StopMusic();
         if (m_level != NULL && m_level->GetPlayerActor()->IsDead())
         {
+            m_score.UpdateAll();
             m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
         }
     }
@@ -799,6 +809,7 @@ bool EngineCore::Think()
     else if (m_state == Victory && m_victoryState == VictoryStateDone && m_playerInput.IsAnyKeyPressed() && !m_menu->IsActive())
     {
         // Open the menu when any key is pressed in the victory screen.
+        m_score.UpdateAll();
         m_menu->SetActive(true);
         m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
     }

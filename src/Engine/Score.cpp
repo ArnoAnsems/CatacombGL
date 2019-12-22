@@ -62,6 +62,12 @@ bool Score::Update(const uint32_t timestamp)
     return false;
 }
 
+void Score::UpdateAll()
+{
+    m_points += m_pointsToAdd;
+    m_pointsToAdd = 0;
+}
+
 void Score::Reset()
 {
     m_points = 0;

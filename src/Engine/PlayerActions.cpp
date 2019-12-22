@@ -131,7 +131,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp)
         const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
         m_shotPower = (deltaTicks > 56) ? 56 : deltaTicks;
 
-        m_handHeight = m_shotFiredHandHeight + deltaTicks * 4;
+        m_handHeight = m_shotFiredHandHeight + (deltaTicks + 2) * 6;
         if (m_handHeight > 72)
         {
             m_handHeight = 72;

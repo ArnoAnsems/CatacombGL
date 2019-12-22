@@ -149,6 +149,8 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             }
             else if (m_subMenuSelected == subMenuRestoreGame)
             {
+                m_subMenuSelected = subMenuMain;
+                m_menuItemSelected = 0;
                 return MenuCommandLoadGame;
             }
             else
@@ -752,6 +754,8 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else
         {
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = 0;
             command = MenuCommandLoadGame;
         }
     }

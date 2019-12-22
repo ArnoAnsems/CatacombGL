@@ -32,6 +32,8 @@ public:
     void SetPoints(const uint32_t points);
     void AddPoints(const uint32_t points);
     bool Update(const uint32_t timestamp);
+    void UpdateAll();
+
     void Reset();
 
 private:
