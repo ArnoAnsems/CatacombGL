@@ -159,7 +159,7 @@ const DecorateState trollStateAttack =
 
 const DecorateAnimation trollPainAnimation =
 {
-    { TROLLOUCHPIC, 8, ActionChase }
+    { TROLLOUCHPIC, 8, ActionNone }
 };
 
 const DecorateState trollStatePain =

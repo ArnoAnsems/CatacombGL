@@ -205,7 +205,7 @@ EgaGraph::~EgaGraph()
             delete m_tilesSize8Masked[i];
             m_tilesSize8Masked[i] = nullptr;
         }
-        delete m_tilesSize8Masked;
+        delete[] m_tilesSize8Masked;
     }
 
     delete m_rawData;
