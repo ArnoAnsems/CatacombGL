@@ -756,7 +756,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         {
             m_subMenuSelected = subMenuMain;
             m_menuItemSelected = 0;
-            command = MenuCommandLoadGame;
+            return MenuCommandLoadGame;
         }
     }
     else if (m_subMenuSelected == subMenuSaveGame)
