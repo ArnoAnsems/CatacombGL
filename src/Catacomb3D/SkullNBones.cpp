@@ -141,7 +141,7 @@ void SkullNBones::UpdateFrame()
         ResetForNextSkull();
     }
 
-    if (!m_skullIsGone && m_timeStampOfComputer + 21 < m_timeStampOfCurrentFrame)
+    if (!m_skullIsGone && m_timeStampOfComputer + 14 < m_timeStampOfCurrentFrame)
     {
         if (((uint32_t)m_computerX + 6 < (uint32_t)m_skullX) && ((uint32_t)m_computerX < 219))
         {

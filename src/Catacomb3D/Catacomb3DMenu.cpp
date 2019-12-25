@@ -180,6 +180,19 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     {
         command = EnterKeyPressed();
     }
+    else if (m_subMenuSelected == subMenuHighScores)
+    {
+        // Check if a name for a new high score is entered
+        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+        if (KeyIsSuitableForSaveGameName(keyCode))
+        {
+            m_highScores.AddCharactersToNameOfNewScore(std::string(SDL_GetKeyName(keyCode)));
+        }
+        else if (keyCode == SDLK_BACKSPACE)
+        {
+            m_highScores.RemoveACharacterFromNameOfNewScore();
+        }
+    }
     else if (playerInput.IsKeyJustPressed(SDLK_UP))
     {
         MenuUp();
@@ -215,20 +228,6 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         else
         {
             m_subMenuSelected = subMenuMain;
-        }
-    }
-
-    if (m_subMenuSelected == subMenuHighScores)
-    {
-        // Check if a name for a new high score is entered
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (KeyIsSuitableForSaveGameName(keyCode))
-        {
-            m_highScores.AddCharactersToNameOfNewScore(std::string(SDL_GetKeyName(keyCode)));
-        }
-        else if (keyCode == SDLK_BACKSPACE)
-        {
-            m_highScores.RemoveACharacterFromNameOfNewScore();
         }
     }
 

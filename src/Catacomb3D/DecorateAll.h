@@ -45,6 +45,7 @@ const std::map<uint16_t, const DecorateActor> decorateCatacomb3DAll =
     std::make_pair(actorIdBonusKeyYellow, decorateKeyYellow),
     std::make_pair(actorIdBonusKeyGreen, decorateKeyGreen),
     std::make_pair(actorIdBonusKeyBlue, decorateKeyBlue),
+    std::make_pair(actorIdGrelminar, decorateGrelminar),
     std::make_pair(actorIdMonsterOrc, decorateOrc),
     std::make_pair(actorIdMonsterTroll, decorateTroll),
     std::make_pair(actorIdMonsterDemon, decorateDemon),
