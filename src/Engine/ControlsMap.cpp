@@ -56,7 +56,7 @@ ControlsMap::~ControlsMap()
 bool ControlsMap::AssignActionToKey(const ControlAction action, const SDL_Keycode keyCode)
 {
     const std::vector<SDL_Keycode>& notAllowedKeys = GetNotAllowedKeys();
-    for (int i = 0; i < notAllowedKeys.size(); i++)
+    for (size_t i = 0; i < notAllowedKeys.size(); i++)
     {
         if (notAllowedKeys.at(i) == keyCode)
         {

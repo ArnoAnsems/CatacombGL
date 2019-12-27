@@ -299,7 +299,7 @@ void BE_ST_PrepareForManualAudioCallbackCall(void)
     // Using g_sdlAudioSpec.req as the rate, we (generally) lose precision in the following division,
     // so we use g_sdlManualAudioCallbackCallDelayedSamples to accumulate lost samples.
     uint64_t dividend = ((uint64_t)g_sdlAudioSpec.freq)*(currTicks - g_sdlManualAudioCallbackCallLastTicks) + g_sdlManualAudioCallbackCallDelayedSamples;
-    uint32_t samplesPassed = dividend / 1000;
+    uint32_t samplesPassed = static_cast<uint32_t>(dividend / 1000);
     g_sdlManualAudioCallbackCallDelayedSamples = dividend % 1000;
 
     uint32_t samplesToProcess = samplesPassed;
@@ -475,7 +475,6 @@ static inline void BEL_ST_DoResample(uint32_t *outConsumed, uint32_t *outProduce
 static void BEL_ST_Simple_EmuCallBack(void *unused, Uint8 *stream, int len)
 {
     BE_ST_SndSample_T *currSamplePtr = (BE_ST_SndSample_T *)stream;
-    uint32_t currNumOfSamples;
 #if SDL_VERSION_ATLEAST(1,3,0)
     memset(stream, 0, len);
 #endif
@@ -495,7 +494,7 @@ static void BEL_ST_Simple_EmuCallBack(void *unused, Uint8 *stream, int len)
             }
         }
         // Now generate sound
-        currNumOfSamples = BE_Cross_TypedMin32(len / sizeof(BE_ST_SndSample_T), g_sdlScaledSamplesInCurrentPart - g_sdlScaledSampleOffsetInSound);
+        uint32_t currNumOfSamples = BE_Cross_TypedMin32(len / sizeof(BE_ST_SndSample_T), static_cast<uint32_t>(g_sdlScaledSamplesInCurrentPart - g_sdlScaledSampleOffsetInSound));
         // PC Speaker
         if (g_sdlPCSpeakerOn)
             PCSpeakerUpdateOne(currSamplePtr, currNumOfSamples);
@@ -592,7 +591,7 @@ static void BEL_ST_Resampling_EmuCallBack(void *unused, Uint8 *stream, int len)
             /*** FIXME - Scaling back to the original rates may be a bit inaccurate (due to divisions) ***/
 
             // PC Speaker
-            uint32_t targetPCSamples = processedScaledInputSamples / OPL_SAMPLE_RATE;
+            uint32_t targetPCSamples = static_cast<uint32_t>(processedScaledInputSamples / OPL_SAMPLE_RATE);
             if (targetPCSamples > g_sdlMiscOutNumOfSamples)
             {
                 //BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "BEL_ST_Resampling_EmuCallBack PC overflow, want %u, have %u\n", targetPCSamples, g_sdlMiscOutNumOfSamples);
@@ -613,7 +612,7 @@ static void BEL_ST_Resampling_EmuCallBack(void *unused, Uint8 *stream, int len)
             // for filling the stream buffer, so generate some silence.
             //
             // Make sure we don't overthrow the AL buffer, though.
-            uint32_t targetALSamples = processedScaledInputSamples / g_sdlAudioSpec.freq;
+            uint32_t targetALSamples = static_cast<uint32_t>(processedScaledInputSamples / g_sdlAudioSpec.freq);
             if (targetALSamples > g_sdlALOutNumOfSamples)
             {
                 //BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "BEL_ST_Resampling_EmuCallBack AL overflow, want %u, have %u\n", targetALSamples, g_sdlALOutNumOfSamples);
@@ -725,7 +724,7 @@ static void BEL_ST_Simple_DigiCallBack(void *unused, Uint8 *stream, int len)
 
     // A little bit of cheating since we don't actually call any timer handler here
     g_sdlScaledSampleOffsetInSound += (uint64_t)len * PC_PIT_RATE;
-    BE_ST_SET_TIMER_INT_COUNTER_ADD(g_sdlScaledSampleOffsetInSound / g_sdlScaledSamplesPerPartsTimesPITRate);
+    BE_ST_SET_TIMER_INT_COUNTER_ADD(static_cast<int>(g_sdlScaledSampleOffsetInSound / g_sdlScaledSamplesPerPartsTimesPITRate));
     g_sdlScaledSampleOffsetInSound %= g_sdlScaledSamplesPerPartsTimesPITRate;
 
     if ((uint32_t)len >= g_sdlSoundEffectSamplesLeft)
@@ -759,7 +758,7 @@ static void BEL_ST_Resampling_DigiCallBack(void *unused, Uint8 *stream, int len)
 
     // A little bit of cheating since we don't actually call any timer handler here
     g_sdlScaledSampleOffsetInSound += (len / sizeof(BE_ST_SndSample_T)) * PC_PIT_RATE;
-    BE_ST_SET_TIMER_INT_COUNTER_ADD(g_sdlScaledSampleOffsetInSound / g_sdlScaledSamplesPerPartsTimesPITRate);
+    BE_ST_SET_TIMER_INT_COUNTER_ADD(static_cast<int>(g_sdlScaledSampleOffsetInSound / g_sdlScaledSamplesPerPartsTimesPITRate));
     g_sdlScaledSampleOffsetInSound %= g_sdlScaledSamplesPerPartsTimesPITRate;
 
     while (len > 0)

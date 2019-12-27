@@ -216,7 +216,7 @@ void HighScores::RemoveACharacterFromNameOfNewScore()
 
 void HighScores::FinishNameOfNewScore()
 {
-    m_newScorePosition = m_highscores.size();
+    m_newScorePosition = static_cast<uint8_t>(m_highscores.size());
 }
 
 void HighScores::ApplyEqualSpacingToNumbers(std::string& str)
