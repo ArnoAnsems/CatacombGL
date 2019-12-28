@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Catacomb3DMenu.h"
+#include "AudioRepositoryCatacomb3D.h"
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 #include "..\Engine\DefaultFont.h"
 
@@ -29,7 +30,7 @@ const uint8_t subMenuMusic = 8;
 const uint8_t subMenuSkullNBones = 9;
 const uint8_t subMenuHighScores = 10;
 
-const uint16_t browseMenuSound = 0;
+const uint16_t browseMenuSound = BALLBOUNCESND;
 
 Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames, HighScores& highScores) :
     m_menuActive (false),
