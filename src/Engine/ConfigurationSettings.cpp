@@ -27,7 +27,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_depthShading(true),
     m_showFps(false),
     m_vsync(true),
-    m_soundMode(1),
+    m_soundMode(2),
     m_mouseSensitivity(10),
     m_mouseLook(true),
     m_turnSpeed(100),

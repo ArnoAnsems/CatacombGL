@@ -76,13 +76,33 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 bool GetCatacombsPackGOGPath(std::string& path)
 {
     CHAR gog_catacombs_path[256];
+    memset(gog_catacombs_path, 0, 256);
     DWORD dwType = 0;
     DWORD dwSize = sizeof(gog_catacombs_path);
+    // Check GOG Catacombs Pack - Legacy path
     LSTATUS status = SHGetValueA(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\GOG.com\\GOGCATACOMBSPACK", "PATH", &dwType, gog_catacombs_path, &dwSize);
-    const bool isGogCatacombsPathFound = ((status == ERROR_SUCCESS) && (dwType == REG_SZ));
+    bool isGogCatacombsPathFound = ((status == ERROR_SUCCESS) && (dwType == REG_SZ));
     if (isGogCatacombsPathFound)
     {
         path.assign(std::string(gog_catacombs_path));
+    }
+    else
+    {
+        // Check GOG Catacombs Pack - Product ID 1207659189
+        status = SHGetValueA(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\GOG.com\\GAMES\\1207659189", "PATH", &dwType, gog_catacombs_path, &dwSize);
+        isGogCatacombsPathFound = ((status == ERROR_SUCCESS) && (dwType == REG_SZ));
+        if (isGogCatacombsPathFound)
+        {
+            path.assign(std::string(gog_catacombs_path));
+        }
+    }
+
+    if (path.length() > 0)
+    {
+        if (path.at(path.length() - 1) != '\\')
+        {
+            path.append("\\");
+        }
     }
     return isGogCatacombsPathFound;
 }

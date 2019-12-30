@@ -578,7 +578,10 @@ bool EngineCore::Think()
         else if (command == MenuCommandExitGame)
         {
             m_state = ExitGame;
-            DisplayStatusMessage("FARE THEE WELL!", 2000);
+            if (m_game.GetId() != 5)
+            {
+                DisplayStatusMessage("FARE THEE WELL!", 2000);
+            }
             m_gameTimer.Resume();
         }
         else if (command == MenuCommandEndGame)
@@ -2748,7 +2751,10 @@ void EngineCore::OpenMenu()
     {
         m_gameTimer.Pause();
     }
-    m_game.PlaySoundWarpUpOrDown(true);
+    if (m_game.GetId() != 5)
+    {
+        m_game.PlaySoundWarpUpOrDown(true);
+    }
 }
 
 void EngineCore::CloseMenu()
@@ -2758,7 +2764,10 @@ void EngineCore::CloseMenu()
     {
         m_gameTimer.Resume();
     }
-    m_game.PlaySoundWarpUpOrDown(false);
+    if (m_game.GetId() != 5)
+    {
+        m_game.PlaySoundWarpUpOrDown(false);
+    }
 }
 
 bool EngineCore::IsActionActive(const ControlAction action) const

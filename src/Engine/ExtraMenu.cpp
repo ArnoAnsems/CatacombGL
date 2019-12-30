@@ -107,12 +107,6 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
             m_newSaveGameName.pop_back();
         }
     }
-
-    if (playerInput.IsKeyJustPressed(SDLK_RETURN))
-    {
-        command = EnterKeyPressed();
-    }
-
     else if (playerInput.IsKeyJustPressed(SDLK_UP))
     {
         MenuUp();
@@ -129,9 +123,15 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     {
         MenuRight();
     }
-    else if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    
+    if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
     {
         command = MenuCommandCloseMenu;
+    }
+    
+    if (playerInput.IsKeyJustPressed(SDLK_RETURN))
+    {
+        command = EnterKeyPressed();
     }
 
     return command;

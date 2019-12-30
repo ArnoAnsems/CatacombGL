@@ -176,11 +176,6 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         }
         return MenuCommandNone;
     }
-
-    if (playerInput.IsKeyJustPressed(SDLK_RETURN))
-    {
-        command = EnterKeyPressed();
-    }
     else if (m_subMenuSelected == subMenuHighScores)
     {
         // Check if a name for a new high score is entered
@@ -210,7 +205,8 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     {
         MenuRight();
     }
-    else if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    
+    if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
     {
         m_menuItemSelected = 0;
         m_menuItemOffset = 0;
@@ -230,6 +226,11 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         {
             m_subMenuSelected = subMenuMain;
         }
+    }
+
+    if (playerInput.IsKeyJustPressed(SDLK_RETURN))
+    {
+        command = EnterKeyPressed();
     }
 
     return command;
