@@ -34,7 +34,6 @@
 	SMMode		MusicMode;
 	// NEVER accessed directly now - Done via wrapper functions
 
-	uint16_t		HackCount;
 	PCSound		**pcSoundTable;
     AdlibSound ** AdlibSoundTable;
 	//id0_word_t		*SoundTable;	// Really * seg *SoundTable, but that don't work
@@ -444,9 +443,7 @@ SDL_DetectAdLib(void)
 static void
 SDL_t0Service(void)
 {
-    static	int16_t	count = 1;
-
-	HackCount++;
+    static	int32_t	count = 1;
 
 	if (MusicMode == smm_AdLib)
 	{
