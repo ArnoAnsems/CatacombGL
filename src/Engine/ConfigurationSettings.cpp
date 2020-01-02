@@ -28,6 +28,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_showFps(false),
     m_vsync(true),
     m_soundMode(2),
+    m_musicOn(true),
     m_mouseSensitivity(10),
     m_mouseLook(true),
     m_turnSpeed(100),

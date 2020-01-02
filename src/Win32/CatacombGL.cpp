@@ -705,6 +705,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         }
 		else								// Not Time To Quit, Update Screen
 		{
+            SDL_SetRelativeMouseMode(engineCore->RequiresMouseCapture() ? SDL_TRUE : SDL_FALSE);
             UpdatePlayerInput();
             m_console->ProcessInput(playerInput);
             if (m_screenMode != engineCore->GetScreenMode())
@@ -712,7 +713,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
                 m_screenMode = engineCore->GetScreenMode();
                 SetScreenMode(m_screenMode);
             }
-            SDL_SetRelativeMouseMode(engineCore->RequiresMouseCapture() ? SDL_TRUE : SDL_FALSE);
+            
             engineCore->DrawScene(*m_renderer);
             m_console->Draw(*m_renderer);
             SDL_GL_SwapWindow(SDLwindow);

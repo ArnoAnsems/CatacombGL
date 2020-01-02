@@ -1,24 +1,22 @@
 # Introduction
-CatacombGL is a Windows source port of the DOS games The Catacomb Abyss, The Catacomb Armageddon and The Catacomb Apocalypse. This trilogy is also known as the Catacomb Adventure Series. These games were originally developed in 1992 by Softdisk Publishing. They are first person shooters with a fantasy theme. The original games visualized their 3D graphics in 16 colors and a 320x200 pixels view window. The main goal of the CatacombGL source port is to utilize OpenGL to improve the visual presentation of the Catacomb 3D games. This source port is currently a work-in-progress and as such in the alpha development phase. However, with the current version it is possible to play through all three games entirely, as all levels, monsters and bonus items are present and functional. 
+CatacombGL is a Windows source port of Catacomb 3D and the Catacomb Adventure series. These games were originally developed for MS-DOS. Catacomb 3D: The Descent was developed by Id Software in 1991. The Catacomb Adventure series was developed by Softdisk Publishing in 1992-1993 and consists of The Catacomb Abyss, The Catacomb Armageddon and The Catacomb Apocalypse. The original games visualized their 3D graphics in 16 colors and a 320x200 pixels view window. The main goal of the CatacombGL source port is to utilize OpenGL to improve the visual presentation of the Catacomb 3D games.
 
 Main features: 
 * Runs native on Windows 7/8/10. 
 * Hardware accelerated 3D rendering via OpenGL, supporting widescreen resolutions, a customizable field of view and an uncapped frame rate. 
-* Player, projectile and monster movement with floating point precision. 
-* Supports The Catacomb Abyss version 1.13 (shareware) and version 1.24 (as included in the Catacombs Pack from gog.com). 
-* Supports The Catacomb Armageddon version 1.02 (as included in the Catacombs Pack from gog.com).
-* Supports The Catacomb Apocalypse version 1.01 (as included in the Catacombs Pack from gog.com).
-* WASD and mouselook.
+* Player, projectile and monster movement with floating point precision.
+* Configurable mouse and keyboard controls.
+* Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
+* Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.3.0: 
+Current limitations as of version 0.4.0: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
-* Only Adlib sound card emulation; no PC speaker emulation. 
 * No "demo" functionality (preview slideshow of Catacomb Armageddon and Apocalypse in shareware version). 
 * No fade-in effect when entering a level. 
 
 # How to install
-CatacombGL does not run standalone, but requires the original game data (levels, pictures, sounds, etc) to be present on the system. The Catacomb Abyss game data can be obtained legitimately and free-of-charge by downloading the 1.13 shareware version. Various websites offer the shareware version for download, see for example https://archive.org/details/TheCatacombAbyss. Alternatively, the game data can also be obtained by buying the Catacombs Pack from gog.com, see https://www.gog.com/game/catacombs_pack. The differences between the shareware and commercial versions are purely cosmetic. The Catacombs Pack is required in order to run The Catacomb Armageddon or The Catacomb Apocalypse.
+CatacombGL does not run standalone, but requires the original game data (levels, pictures, sounds, etc) to be present on the system. The Catacomb Abyss game data can be obtained legitimately and free-of-charge by downloading the 1.13 shareware version. Various websites offer the shareware version for download, see for example https://archive.org/details/TheCatacombAbyss. Alternatively, the game data can also be obtained by buying the Catacombs Pack from gog.com, see https://www.gog.com/game/catacombs_pack. The differences between the shareware and commercial versions are purely cosmetic. The Catacombs Pack is required in order to run Catacomb 3D (The Descent), The Catacomb Armageddon or The Catacomb Apocalypse.
 The CatacombGL.exe can be run from any location. When started, a selection screen with an overview of all the supported games is shown. In case the Catacombs Pack was installed via the GOG installer, the game data will be auto-detected. Otherwise, it is possible to manually browse to the folder which contains either the Catacombs Pack or the shareware version.
 
 # Controls
@@ -29,9 +27,15 @@ The keyboard and mouse controls for moving, shooting, etc. can be customized via
 * Backspace - cheat codes in Armageddon and Apocalypse
 * Tilde (~) - show log
 
+# Additional notes
+* The original Catacomb 3D allowed the player to reconfigure movement and action keys, but CatacombGL ignores those settings. Instead, CatacombGL has its own keyboard/mouse configuration, which is shared across all four games.
+* High scores achieved in Catacomb 3D are not stored in the GOG folder, to avoid file access issues. Instead, CatacombGL stores the high scores in \%appdata%\CatacombGL\CONFIG.C3D.
+* To aid in navigating through narrow corridors, CatacombGL allows the player to slide along walls in Catacomb 3D. 
+
 # License
 CatacombGL is licensed under the GNU GPLv3 license. See gpl3.txt for details. 
-CatacombGL would not have been possible without reusing code that was generously made available by various other projects, namely: 
+CatacombGL would not have been possible without reusing code that was generously made available by various other projects, namely:
+* Catacomb 3D, developed by Id Software. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/Catacomb3D). 
 * The Catacomb Abyss, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombAbyss). 
 * The Catacomb Armageddon, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombArmageddon). 
 * The Catacomb Apocalypse, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombApocalypse). 
@@ -42,14 +46,32 @@ CatacombGL would not have been possible without reusing code that was generously
 
 # Tools
 The following software tools have proven to be very helpful in the development of CatacombGL.
-* Microsoft Visual Studio 2017 (https://visualstudio.microsoft.com/downloads/)
+* Microsoft Visual Studio 2019 (https://visualstudio.microsoft.com/downloads/)
 * Wolf3D Data Compiler, by Adam Biser (http://winwolf3d.dugtrio17.com).
 * Dr. Memory, Memory Debugger for Windows, Linux, and Mac (https://drmemory.org/)
 
 # Credits
-CatacombGL is developed by Arno Ansems. Special thanks goes to Roland Ansems for playtesting every level and reporting various bugs.
+CatacombGL is developed by Arno Ansems.
+Special thanks goes to:
+* Id Software and Softdisk Publishing for developing the Catacomb 3D games.
+* Flatrock Software for releasing the source code of the Catacomb 3D games.
+* GOG.com and catacomb.games for providing a platform to obtain the Catacomb 3D games.
+* Roland Ansems for playtesting every level and reporting various bugs.
+* NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
 
 # History
+* Version 0.4.0 (2020-01-02) New in this release:
+  * Support for Catacomb 3D: The Descent! All levels and monsters are present. Requires the Catacombs Pack.
+  * Added PC Speaker emulation, which was realized by integrating the sound code of the Reflection Keen source code.
+  * Fix: crash on some systems due to accidently creating the OpenGL context twice. Reported by Technopeasant.
+  * Fix: changed the tic rate from 60 to 70 Hz. The DEF.H source file in Abyss seems to suggest a tic rate of 60 Hz (see MAXFREEZETIME), but in reality all games run at 70 tics per second.
+  * Fix: look for the GOG Catacombs Pack at the new registry location (\GOG.com\GAMES\1207659189).
+  * Fix: the time freeze effect now counts down from 100.
+  * Fix: there were small rendering glitches in the frame that surrounds the menu.
+  * Fix: do not allow cheat codes when the player is dead.
+  * Fix: while a name is entered for a new saved game slot, do not allow to switch to another slot.
+  * Fix: it is no longer allowed to save a game under an empty name.
+
 * Version 0.3.0 (2019-08-23) New in this release:
   * Support for the Catacomb Apocalypse! All levels and monsters are present. Requires the Catacombs Pack.
   * Lowered the minimum mouse sensitivity, to allow for slower mouse movement. Suggested by DoomN00b.
@@ -87,7 +109,3 @@ CatacombGL is developed by Arno Ansems. Special thanks goes to Roland Ansems for
   * Fix: in the restore game or save game menu, scrolling did not work properly when the list of saved games did not fill up the whole page.
   
 * Version 0.1.0 (2018-09-10) Initial release. This source port is currently a work-in-progress and as such in the alpha development phase. Some functionality has yet to be implemented and existing functionality was only tested on a very limited set of test systems. However, with the current version it is possible to play through the entire game, as all levels, monsters and bonus items are present and functional.
-
-# Roadmap
-The following releases are planned:
-* Version 0.4.0: support for Catacomb 3-D: The Descent.
