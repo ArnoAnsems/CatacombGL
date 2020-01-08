@@ -214,9 +214,11 @@ void UpdatePlayerInput()
     const uint32_t mouseState = SDL_GetRelativeMouseState(&x, &y);
     playerInput.SetMouseXPos(x);
     playerInput.SetMouseYPos(y);
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseState & SDL_BUTTON(SDL_BUTTON_LEFT));
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE));
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT));
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseState & SDL_BUTTON_LMASK);
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseState & SDL_BUTTON_MMASK);
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseState & SDL_BUTTON_RMASK);
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_X1, mouseState & SDL_BUTTON_X1MASK);
+    playerInput.SetMouseButtonPressed(SDL_BUTTON_X2, mouseState & SDL_BUTTON_X2MASK);
     playerInput.SetHasFocus(SDL_GetMouseFocus() == SDLwindow);
 }
 

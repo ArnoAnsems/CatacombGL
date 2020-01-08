@@ -166,8 +166,8 @@ std::string ControlsMap::GetMouseButtonName(const uint8_t buttonCode)
     return (buttonCode == SDL_BUTTON_LEFT) ? "Left Mouse" :
            (buttonCode == SDL_BUTTON_MIDDLE) ? "Middle Mouse" :
            (buttonCode == SDL_BUTTON_RIGHT) ? "Right Mouse" :
-           (buttonCode == SDL_BUTTON_X1) ? "X1" :
-           (buttonCode == SDL_BUTTON_X2) ? "X2" :
+           (buttonCode == SDL_BUTTON_X1) ? "X1 Mouse" :
+           (buttonCode == SDL_BUTTON_X2) ? "X2 Mouse" :
            "";
 }
 

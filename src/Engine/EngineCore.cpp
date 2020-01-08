@@ -181,22 +181,28 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
         else
         {
-            const uint16_t statusbarHeight = (m_game.GetId() == 5) ? 144 : 120;
-            uint16_t pictureIndex = m_game.GetEgaGraph()->GetHandPictureIndex();
-            if (m_game.GetId() == 5 && m_playerActions.GetShotPower() > 0 && m_gameTimer.GetTicksForPlayer() % 16 < 8)
+            if (m_playerActions.GetHandHeight() > 0)
             {
-                pictureIndex++;
+                const uint16_t statusbarOffset = (m_game.GetId() == 5) ? 144 : 120;
+                uint16_t pictureIndex = m_game.GetEgaGraph()->GetHandPictureIndex();
+                // When shot power is building up in Catacomb 3D, check if the hand with the fire effect needs to be shown.
+                if (m_game.GetId() == 5 && m_playerActions.GetShotPower() > 0 && m_gameTimer.GetTicksForPlayer() % 16 < 8)
+                {
+                    pictureIndex++;
+                }
+                const Picture* handPicture = m_game.GetEgaGraph()->GetMaskedPicture(pictureIndex);
+                // Draw only the segment of the hand graphic that is visible above the statusbar.
+                renderer.Render2DPictureSegment(handPicture, 120, statusbarOffset - m_playerActions.GetHandHeight(), 0, 0, handPicture->GetWidth(), m_playerActions.GetHandHeight());
             }
-            renderer.Render2DPicture(m_game.GetEgaGraph()->GetMaskedPicture(pictureIndex), 120, statusbarHeight - m_playerActions.GetHandHeight());
 #ifdef DRAWTILEINFO
             char tileStr[40];
-            sprintf_s(tileStr, 40, "tile: %d", m_level->GetFloorTile((uint16_t)GetPlayerState()->GetX(), (uint16_t)GetPlayerState()->GetY()));
+            sprintf_s(tileStr, 40, "tile: %d", m_level->GetFloorTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,2);
-            sprintf_s(tileStr, 40, "wall: %d", m_level->GetWallTile((uint16_t)GetPlayerState()->GetX(), (uint16_t)GetPlayerState()->GetY()));
+            sprintf_s(tileStr, 40, "wall: %d", m_level->GetWallTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,12);
-            sprintf_s(tileStr, 40, "X: %d Y: %d Angle: %d", (uint16_t)GetPlayerState()->GetX(), (uint16_t)GetPlayerState()->GetY(), (uint16_t)GetPlayerState()->GetAngle());
+            sprintf_s(tileStr, 40, "X: %d Y: %d Angle: %d", (uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY(), (uint16_t)m_level->GetPlayerActor()->GetAngle());
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,22);
-            sprintf_s(tileStr, 40, "MouseX: %d", m_playerControls.GetMouseXPos());
+            sprintf_s(tileStr, 40, "MouseX: %d", m_playerInput.GetMouseXPos());
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,32);
 #endif
         }
@@ -205,7 +211,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             char fpsStr[10];
             sprintf_s(fpsStr, 10, "%d", m_framesCounter.GetFramesPerSecond());
-            renderer.RenderTextLeftAligned(fpsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,280,2);
+            renderer.RenderTextLeftAligned(fpsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,220,2);
         }
     }
     std::string locationMessage("");
@@ -1076,8 +1082,8 @@ bool EngineCore::Think()
                 }
                 if (m_playerInput.GetMouseXPos() != 0)
                 {
-                    const float mouseMovement = m_playerInput.GetMouseXPos() * (m_configurationSettings.GetMouseSensitivity() / 10.0f);
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + (mouseMovement * tics * (abs(mouseMovement / 30.0f))));
+                    const float mouseMovement = m_playerInput.GetMouseXPos() * (m_configurationSettings.GetMouseSensitivity() / 50.0f);
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
                     m_playerInput.SetMouseXPos(0);
                 }
 

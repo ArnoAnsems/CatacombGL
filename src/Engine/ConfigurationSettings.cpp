@@ -163,7 +163,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         if (mouseSensitivityPair != keyValuePairs.end())
         {
             int32_t sensitivity = std::stoi(mouseSensitivityPair->second);
-            m_mouseSensitivity = (sensitivity < 1) ? 1 : (sensitivity > 15) ? 15: sensitivity;
+            m_mouseSensitivity = (sensitivity < 1) ? 1 : (sensitivity > 20) ? 20: sensitivity;
         }
 
         auto turnSpeedPair = keyValuePairs.find("turnSpeed");
@@ -189,7 +189,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             }
         }
 
-        for (uint8_t i = 1; i < 4; i++)
+        for (uint8_t i = 1; i < 6; i++)
         {
             const std::string buttonName = ControlsMap::GetMouseButtonName(i);
             const auto buttonPair = keyValuePairs.find(buttonName);
