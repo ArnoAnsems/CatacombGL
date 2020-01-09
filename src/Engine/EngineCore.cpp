@@ -948,9 +948,10 @@ bool EngineCore::Think()
             if (m_timeStampOfPlayerCurrentFrame > m_timeStampOfPlayerPreviousFrame)
             {
                 bool shoot = false;
-                if (m_game.GetId() != 5)
+                const bool autoFire = m_configurationSettings.GetAutoFire();
+                if (m_game.GetId() != 5 || autoFire)
                 {
-                    shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame);
+                    shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire);
                 }
                 else
                 {

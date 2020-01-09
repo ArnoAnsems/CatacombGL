@@ -108,6 +108,9 @@ public:
     bool GetAlwaysRun() const;
     void SetAlwaysRun(const bool alwaysRun);
 
+    bool GetAutoFire() const;
+    void SetAutoFire(const bool autoFire);
+
 private:
     ScreenMode m_screenMode;
     uint8_t m_aspectRatio;
@@ -123,6 +126,7 @@ private:
     bool m_mouseLook;
     uint8_t m_turnSpeed;
     bool m_alwaysRun;
+    bool m_autoFire;
 
     std::string m_pathAbyssv113;
     std::string m_pathAbyssv124;

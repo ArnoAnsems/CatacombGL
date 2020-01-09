@@ -33,6 +33,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_mouseLook(true),
     m_turnSpeed(100),
     m_alwaysRun(false),
+    m_autoFire(false),
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
@@ -179,6 +180,12 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_alwaysRun = (alwaysRunPair->second.compare("Enabled") == 0);
         }
 
+        auto autoFirePair = keyValuePairs.find("autoFire");
+        if (autoFirePair != keyValuePairs.end())
+        {
+            m_autoFire = (autoFirePair->second.compare("Enabled") == 0);
+        }
+
         for (auto keyPair : keyValuePairs)
         {
             SDL_Keycode keyCode = SDL_GetKeyFromName(keyPair.first.c_str());
@@ -247,6 +254,8 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "turnSpeed=" << turnSpeedValue << "\n";
         const std::string alwaysRunValue = (m_alwaysRun) ? "Enabled" : "Disabled";
         file << "alwaysRun=" << alwaysRunValue << "\n";
+        const std::string autoFireValue = (m_autoFire) ? "Enabled" : "Disabled";
+        file << "autoFire=" << autoFireValue << "\n";
         file << "# Key bindings\n";
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
 	    {
@@ -457,4 +466,14 @@ bool ConfigurationSettings::GetAlwaysRun() const
 void ConfigurationSettings::SetAlwaysRun(const bool alwaysRun)
 {
     m_alwaysRun = alwaysRun;
+}
+
+bool ConfigurationSettings::GetAutoFire() const
+{
+    return m_autoFire;
+}
+
+void ConfigurationSettings::SetAutoFire(const bool autoFire)
+{
+    m_autoFire = autoFire;
 }

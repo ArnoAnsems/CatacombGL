@@ -68,9 +68,10 @@ uint16_t PlayerActions::GetHandHeight() const
     return m_handHeight;
 }
 
-bool PlayerActions::UpdateShoot(const uint32_t timeStamp)
+bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire)
 {
     bool fireShot = false;
+    m_shotPower = 0;
     if (m_controlActionActive[Shoot])
     {
         if (m_shotFired == false)
@@ -79,6 +80,13 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp)
             m_shotFired = true;
             m_shotFiredHandHeight = m_handHeight;
             m_shotFiredTimeStamp = timeStamp;
+        }
+        else if (autoFire)
+        {
+            if (m_shotFiredTimeStamp + 250 < timeStamp)
+            {
+                m_shotFired = false;
+            }
         }
     }
     else
