@@ -949,18 +949,18 @@ bool EngineCore::Think()
             {
                 bool shoot = false;
                 const bool autoFire = m_configurationSettings.GetAutoFire();
-                if (m_game.GetId() != 5 || autoFire)
+                if (m_game.GetId() != 5)
                 {
                     shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire);
                 }
                 else
                 {
-                    shoot = m_playerActions.UpdateShootWithCharge(m_timeStampOfPlayerCurrentFrame);
+                    shoot = m_playerActions.UpdateShootWithCharge(m_timeStampOfPlayerCurrentFrame, autoFire);
                 }
                 if (shoot)
                 {
                     uint16_t projectileId = m_level->GetPlayerActor()->GetDecorateActor().projectileId;
-                    if (m_playerActions.GetShotPower() == 56)
+                    if (m_playerActions.GetShotPower() == 56 && !m_playerActions.GetActionActive(Shoot))
                     {
                         // Big shot
                         projectileId++;

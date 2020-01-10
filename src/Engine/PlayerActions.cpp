@@ -27,6 +27,7 @@ PlayerActions::PlayerActions() :
     m_nukeFired(false),
     m_lastNukeTimeStamp(0),
     m_lastBoltTimeStamp(0),
+    m_autoFireTimeStamp(0),
     m_boltsLeft(0),
     m_shotPower(0)
 {
@@ -59,6 +60,7 @@ void PlayerActions::ResetForNewLevel()
     m_nukeFired = false;
     m_lastNukeTimeStamp = 0;
     m_lastBoltTimeStamp = 0;
+    m_autoFireTimeStamp = 0;
     m_boltsLeft = 0;
     m_shotPower = 0;
 }
@@ -121,7 +123,7 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire)
     return fireShot;
 }
 
-bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp)
+bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool autoFire)
 {
     bool fireShot = false;
     if (m_controlActionActive[Shoot])
@@ -147,7 +149,10 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp)
 
         if (!m_controlActionActive[Shoot])
         {
-            fireShot = true;
+            if (!autoFire || m_shotPower == 56 || m_shotFiredTimeStamp + 250 < timeStamp)
+            {
+                fireShot = true;
+            }
             m_shotFired = false;
             m_shotFiredTimeStamp = timeStamp;
             m_shotFiredHandHeight = m_handHeight;
@@ -168,6 +173,15 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp)
             {
                 m_handHeight = m_shotFiredHandHeight - (deltaTicks * 2);
             }
+        }
+    }
+
+    if (autoFire)
+    {
+        if (m_shotFired && m_autoFireTimeStamp + 250 < timeStamp)
+        {
+            fireShot = true;
+            m_autoFireTimeStamp = timeStamp;
         }
     }
 

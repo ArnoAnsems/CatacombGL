@@ -31,7 +31,7 @@ public:
 
     uint16_t GetHandHeight() const;
     bool UpdateShoot(const uint32_t timeStamp, const bool autoFire);
-    bool UpdateShootWithCharge(const uint32_t timeStamp);
+    bool UpdateShootWithCharge(const uint32_t timeStamp, const bool autoFire);
     bool IsReadyToShootBolt(const uint32_t timeStamp);
     void ShootBolt(const uint32_t timeStamp);
     bool UpdateContinueBolt(const uint32_t timeStamp);
@@ -55,6 +55,7 @@ private:
     bool m_nukeFired;
     uint32_t m_lastNukeTimeStamp;
     uint32_t m_lastBoltTimeStamp;
+    uint32_t m_autoFireTimeStamp;
 
     int16_t m_boltsLeft;
     uint16_t m_shotPower;
