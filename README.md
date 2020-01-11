@@ -9,7 +9,7 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.4.0: 
+Current limitations as of version 0.4.1: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 * No "demo" functionality (preview slideshow of Catacomb Armageddon and Apocalypse in shareware version). 
@@ -60,6 +60,12 @@ Special thanks goes to:
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
 
 # History
+* Version 0.4.1 (2020-01-11) New in this release:
+  * Added option for auto fire. Thanks to Master O for the suggestion. When auto fire is enabled, keeping the fire button pressed will automatically fire four projectiles per second. This is not part of the original gameplay and therefore disabled by default. But it might help in reducing stress on the finger by preventing excessive clicking.
+  * Fix: mouse sensitivity issues, as the mouse speed was affected by frame rate and way too sensitive at quick turns. Reported by @pagb666 and Jello.
+  * Fix: mouse buttons X1 and X2 can now be assigned to actions. Thanks to Jello for reporting the issue and playtesting the fix.
+  * Fix: part of the hand graphic in Catacomb 3D could be visible underneath the statusbar in windowed mode.
+
 * Version 0.4.0 (2020-01-02) New in this release:
   * Support for Catacomb 3D: The Descent! All levels and monsters are present. Requires the Catacombs Pack.
   * Added PC Speaker emulation, which was realized by integrating the sound code of the Reflection Keen source code.
