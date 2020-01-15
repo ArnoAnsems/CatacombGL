@@ -916,24 +916,35 @@ bool EngineCore::Think()
         {
             if (m_keyToTake != NoKey)
             {
-                if (m_startTakeKey != 0)
+                if (m_game.GetId() == 5)
                 {
-                    if (m_startTakeKey + 2000 < m_gameTimer.GetActualTime())
-                    {
-                        _sprintf_p(m_messageInPopup, 256, "");
-                        m_playerInventory.TakeKey(m_keyToTake);
-                        m_gameTimer.Resume();
-                        m_startTakeKey = 0;
-                        m_keyToTake = NoKey;
-                    }
+                    // In Catacomb 3D there is no popup. Use the key immediately.
+                    m_playerInventory.TakeKey(m_keyToTake);
+                    m_startTakeKey = 0;
+                    m_keyToTake = NoKey;
+                    m_game.PlaySoundUseKey();
                 }
                 else
                 {
-                    m_startTakeKey = m_gameTimer.GetActualTime();
-                    m_gameTimer.Pause();
-                    _sprintf_p(m_messageInPopup, 256, "You use a %s key", GetKeyName((KeyId)m_keyToTake));
-                    m_game.PlaySoundUseKey();
-                }   
+                    if (m_startTakeKey != 0)
+                    {
+                        if (m_startTakeKey + 2000 < m_gameTimer.GetActualTime())
+                        {
+                            _sprintf_p(m_messageInPopup, 256, "");
+                            m_playerInventory.TakeKey(m_keyToTake);
+                            m_gameTimer.Resume();
+                            m_startTakeKey = 0;
+                            m_keyToTake = NoKey;
+                        }
+                    }
+                    else
+                    {
+                        m_startTakeKey = m_gameTimer.GetActualTime();
+                        m_gameTimer.Pause();
+                        _sprintf_p(m_messageInPopup, 256, "You use a %s key", GetKeyName((KeyId)m_keyToTake));
+                        m_game.PlaySoundUseKey();
+                    }
+                }
             }
 
             if (_strcmpi(m_messageInPopup, "") != 0)
@@ -2028,10 +2039,13 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
         const KeyId requiredKey = m_level->GetRequiredKeyForDoor(tileX, tileY);
         if (requiredKey != NoKey && m_playerInventory.GetKeys(requiredKey) == 0)
         {
-            m_gameTimer.Pause();
-            _sprintf_p(m_messageInPopup, 256, "You need a %s key", GetKeyName(requiredKey));
-            WaitForAnyKeyPressed();
-            m_game.PlaySoundHitGate();
+            if (m_game.GetId() != 5)
+            {
+                m_gameTimer.Pause();
+                _sprintf_p(m_messageInPopup, 256, "You need a %s key", GetKeyName(requiredKey));
+                WaitForAnyKeyPressed();
+                m_game.PlaySoundHitGate();
+            }
         }
         else
         {
@@ -2041,10 +2055,13 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
             }
             if (m_level->IsBlockedDoor(tileX, tileY))
             {
-                m_gameTimer.Pause();
-                _sprintf_p(m_messageInPopup, 256, "The door is blocked");
-                WaitForAnyKeyPressed();
-                m_game.PlaySoundHitGate();
+                if (m_game.GetId() != 5)
+                {
+                    m_gameTimer.Pause();
+                    _sprintf_p(m_messageInPopup, 256, "The door is blocked");
+                    WaitForAnyKeyPressed();
+                    m_game.PlaySoundHitGate();
+                }
             }
             else if (m_level->IsRemovableDoor(tileX, tileY) ||
                      m_game.GetId() == 5) // All doors in the Catacomb 3-D can be removed

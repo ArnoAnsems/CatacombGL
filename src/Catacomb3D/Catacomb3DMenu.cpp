@@ -30,8 +30,6 @@ const uint8_t subMenuMusic = 8;
 const uint8_t subMenuSkullNBones = 9;
 const uint8_t subMenuHighScores = 10;
 
-const uint16_t browseMenuSound = BALLBOUNCESND;
-
 Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames, HighScores& highScores) :
     m_menuActive (false),
     m_menuItemSelected (0),
@@ -240,7 +238,6 @@ void Catacomb3DMenu::MenuDown()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuMain)
         {
             if (m_menuItemSelected == 7)
@@ -365,7 +362,6 @@ void Catacomb3DMenu::MenuUp()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuMain)
         {
             if (m_menuItemSelected == 0)
@@ -490,7 +486,6 @@ void Catacomb3DMenu::MenuLeft()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
             if (m_menuItemSelected == 2)
@@ -529,7 +524,6 @@ void Catacomb3DMenu::MenuRight()
 {
     if (m_menuActive)
     {
-        m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
             if (m_menuItemSelected == 2)
