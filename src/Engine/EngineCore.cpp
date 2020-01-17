@@ -2771,7 +2771,7 @@ bool EngineCore::IsOneTimeAction(const actorAction action)
 void EngineCore::OpenMenu()
 {
     m_menu->SetActive(true);
-    if (m_state == InGame)
+    if (m_state == InGame || m_state == EnteringLevel)
     {
         m_gameTimer.Pause();
     }
