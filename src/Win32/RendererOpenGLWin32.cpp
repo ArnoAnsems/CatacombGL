@@ -20,9 +20,9 @@
 #include "..\Engine\Logging.h"
 #include "..\Engine\ViewPorts.h"
 
-const float FloorZ = 2.0f;
+const float FloorZ = 2.2f;
 const float CeilingZ = 1.0f;
-const float PlayerZ = 1.5f;
+const float PlayerZ = 1.6f;
 const uint8_t MaxSpritesToRender = 100;
 
 #define GL_CLAMP_TO_EDGE 0x812F
