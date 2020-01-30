@@ -150,6 +150,7 @@
     <ClCompile Include="DefaultFont.cpp" />
     <ClCompile Include="EgaGraph.cpp" />
     <ClCompile Include="ExtraMenu.cpp" />
+    <ClCompile Include="FadeEffect.cpp" />
     <ClCompile Include="FileChunk.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FramesCounter.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="EgaColor.h" />
     <ClInclude Include="EgaGraph.h" />
     <ClInclude Include="ExtraMenu.h" />
+    <ClInclude Include="FadeEffect.h" />
     <ClInclude Include="FileChunk.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FramesCounter.h" />

@@ -153,6 +153,9 @@
     <ClCompile Include="HighScores.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FadeEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h">
@@ -291,6 +294,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HighScores.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
