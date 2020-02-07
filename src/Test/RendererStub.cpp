@@ -173,3 +173,18 @@ void RendererStub::PrepareVisibilityMap()
 void RendererStub::UnprepareVisibilityMap()
 {
 }
+
+Picture* RendererStub::GetScreenCapture()
+{
+    return nullptr;
+}
+
+void RendererStub::RemovePixelFromScreenCapture(const int16_t /*x*/, const int16_t /*y*/)
+{
+
+}
+
+void RendererStub::RenderScreenCapture(Picture* /*screenCapture*/)
+{
+
+}

@@ -23,6 +23,7 @@
 #include "..\Engine\IIntroView.h"
 #include "..\Engine\EgaGraph.h"
 #include "..\Engine\HighScores.h"
+#include "..\Engine\FadeEffect.h"
 #include <string>
 
 class IntroViewCatacomb3D : public IIntroView
@@ -39,4 +40,5 @@ public:
 private:
     EgaGraph* m_egaGraph;
     HighScores& m_highScores;
+    FadeEffect m_fadeEffect;
 };

@@ -64,5 +64,9 @@ public:
 
     void PrepareVisibilityMap() override;
     void UnprepareVisibilityMap() override;
+
+    Picture* GetScreenCapture() override;
+    void RemovePixelFromScreenCapture(const int16_t x, const int16_t y) override;
+    void RenderScreenCapture(Picture* screenCapture) override;
 };
 

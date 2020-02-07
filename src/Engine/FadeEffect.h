@@ -19,16 +19,19 @@
 class FadeEffect
 {
 public:
-    FadeEffect(const IRenderer& renderer);
+    FadeEffect(IRenderer& renderer);
     ~FadeEffect();
 
     void SetOverlay(const uint32_t timeStamp);
     void DrawOverlay(const uint32_t timeStamp);
+    bool OverlayActive(const uint32_t timeStamp) const;
 
 private:
-    const IRenderer& m_renderer;
+    IRenderer& m_renderer;
     uint8_t* m_rawImage;
     Picture* m_picture;
+    uint32_t m_timeStamp;
+    uint32_t m_pixelsRemoved;
 };
 
 

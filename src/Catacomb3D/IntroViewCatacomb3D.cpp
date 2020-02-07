@@ -20,7 +20,8 @@
 IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path, HighScores& highScores) :
     IIntroView(renderer),
     m_egaGraph(egagraph),
-    m_highScores(highScores)
+    m_highScores(highScores),
+    m_fadeEffect(renderer)
 {
 
 }
@@ -51,6 +52,19 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
         m_highScores.Draw(m_renderer, *m_egaGraph, timeStamp, HIGHSCORESPIC);
         break;
     }
+    }
+
+    if ((timeStamp % 5000) > 4900)
+    {
+        if (!m_fadeEffect.OverlayActive(timeStamp))
+        {
+            m_fadeEffect.SetOverlay(timeStamp);
+        }
+    }
+
+    if ((timeStamp % 5000) < 1000)
+    {
+        m_fadeEffect.DrawOverlay(timeStamp);
     }
 }
 

@@ -769,9 +769,10 @@ void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const floa
 
     glViewport(rect.left, rect.bottom, rect.width, rect.height);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
-    
     glClearDepth(1.0f);                         // Depth Buffer Setup
+    glClearStencil(0);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 
     glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 
@@ -1091,4 +1092,127 @@ void RendererOpenGLWin32::PrepareVisibilityMap()
 void RendererOpenGLWin32::UnprepareVisibilityMap()
 {
     glEnable(GL_DEPTH_TEST);
+}
+
+Picture* RendererOpenGLWin32::GetScreenCapture()
+{
+    uint8_t* rawPixelData;
+    rawPixelData = new uint8_t[m_windowWidth * m_windowHeight * 4];
+    glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
+
+    // Flip pixels upside down
+    const uint16_t halfHeight = (m_windowHeight / 2);
+    for (uint16_t y = 0; y < halfHeight; y++)
+    {
+        for (uint16_t x = 0; x < m_windowWidth * 4; x++)
+        {
+            const uint8_t tempPixel = rawPixelData[(y * m_windowWidth * 4) + x];
+            rawPixelData[(y * m_windowWidth * 4) + x] = rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 4) + x];
+            rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 4) + x] = tempPixel;
+        }
+    }
+
+    GLuint textureId;
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_windowWidth, m_windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
+
+    delete[] rawPixelData;
+
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    return new Picture(textureId, m_windowWidth, m_windowHeight);
+}
+
+void RendererOpenGLWin32::RemovePixelFromScreenCapture(const int16_t x, const int16_t y)
+{
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glDepthMask(GL_FALSE);
+    glEnable(GL_STENCIL_TEST);
+
+    //Place a 1 where rendered
+    glStencilFunc(GL_ALWAYS, 1, 1);
+
+    //Replace where rendered
+    glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(GLfloat(x), GLfloat(y), 0.0f);
+
+    glBegin(GL_QUADS);
+    glVertex2i(0, 1);
+    glVertex2i(1, 1);
+    glVertex2i(1, 0);
+    glVertex2i(0, 0);
+    glEnd();
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDisable(GL_STENCIL_TEST);
+}
+
+void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
+{
+    if (screenCapture == nullptr)
+    {
+        return;
+    }
+
+    glDepthMask(GL_TRUE);
+    glEnable(GL_STENCIL_TEST);
+
+    glStencilFunc(GL_NOTEQUAL, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    glPushMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluOrtho2D(0, m_windowWidth, m_windowHeight, 0);
+
+        // Set the MODELVIEW matrix to the requested offset
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Select the texture from the picture
+    glBindTexture(GL_TEXTURE_2D, screenCapture->GetTextureId());
+    if (glGetError() == GL_INVALID_VALUE)
+    {
+        Logging::Instance().FatalError("Picture has invalid texture name (" + std::to_string(screenCapture->GetTextureId()) + ")");
+    }
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_FALSE);
+
+    // Do not wrap the texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
+
+    // Draw the texture as a quad
+    const GLint width = (uint16_t)screenCapture->GetWidth();
+    const GLint height = (uint16_t)screenCapture->GetHeight();
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 1); glVertex2i(0, height);
+    glTexCoord2i(1, 1); glVertex2i(width, height);
+    glTexCoord2i(1, 0); glVertex2i(width, 0);
+    glTexCoord2i(0, 0); glVertex2i(0, 0);
+    glEnd();
+
+    //Render2DPicture(screenCapture, 0, 0);
+    glPopMatrix();
+
+    glDisable(GL_STENCIL_TEST);
+
+    // Restore regular 2D resolution
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+
+    gluOrtho2D(rect.left, rect.right, rect.bottom, rect.top);
 }

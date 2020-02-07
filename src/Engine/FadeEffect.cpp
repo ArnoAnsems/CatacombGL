@@ -15,10 +15,12 @@
 
 #include "FadeEffect.h"
 
-FadeEffect::FadeEffect(const IRenderer& renderer) :
+FadeEffect::FadeEffect(IRenderer& renderer) :
     m_renderer(renderer),
     m_rawImage(nullptr),
-    m_picture(nullptr)
+    m_picture(nullptr),
+    m_timeStamp(0),
+    m_pixelsRemoved(0)
 {
 
 }
@@ -31,10 +33,32 @@ FadeEffect::~FadeEffect()
 
 void FadeEffect::SetOverlay(const uint32_t timeStamp)
 {
-
+    delete m_picture;
+    m_picture = m_renderer.GetScreenCapture();
+    m_timeStamp = timeStamp;
+    m_pixelsRemoved = 0;
 }
 
 void FadeEffect::DrawOverlay(const uint32_t timeStamp)
 {
 
+    const uint32_t timePassed = (timeStamp - m_timeStamp);
+    if (timePassed <= 1000)
+    {
+        uint32_t pixelsToRemove = (timePassed * 64000) / 1000;
+        for (uint32_t p = m_pixelsRemoved; p < pixelsToRemove; p++)
+        {
+            const uint32_t x = p % 320;
+            const uint32_t y = p / 320;
+            m_renderer.RemovePixelFromScreenCapture(x, y);
+        }
+        m_pixelsRemoved = pixelsToRemove;
+    }
+
+    m_renderer.RenderScreenCapture(m_picture);
+}
+
+bool FadeEffect::OverlayActive(const uint32_t timeStamp) const
+{
+    return timeStamp < m_timeStamp + 1000;
 }

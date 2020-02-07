@@ -95,4 +95,8 @@ public:
 
     virtual void PrepareVisibilityMap() = 0;
     virtual void UnprepareVisibilityMap() = 0;
+
+    virtual Picture* GetScreenCapture() = 0;
+    virtual void RemovePixelFromScreenCapture(const int16_t x, const int16_t y) = 0;
+    virtual void RenderScreenCapture(Picture* screenCapture) = 0;
 };
