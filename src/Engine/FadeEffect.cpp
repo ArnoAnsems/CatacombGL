@@ -41,18 +41,17 @@ void FadeEffect::SetOverlay(const uint32_t timeStamp)
 
 void FadeEffect::DrawOverlay(const uint32_t timeStamp)
 {
-
     const uint32_t timePassed = (timeStamp - m_timeStamp);
     if (timePassed <= 1000)
     {
         uint32_t pixelsToRemove = (timePassed * 64000) / 1000;
+        std::vector < std::pair<int16_t, int16_t>> coordinates;
         for (uint32_t p = m_pixelsRemoved; p < pixelsToRemove; p++)
         {
-            const uint32_t x = p % 320;
-            const uint32_t y = p / 320;
-            m_renderer.RemovePixelFromScreenCapture(x, y);
+            coordinates.push_back(std::make_pair(p % 320, p / 320));
         }
         m_pixelsRemoved = pixelsToRemove;
+        m_renderer.RemovePixelsFromScreenCapture(coordinates);
     }
 
     m_renderer.RenderScreenCapture(m_picture);

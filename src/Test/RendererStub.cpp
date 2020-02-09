@@ -179,7 +179,7 @@ Picture* RendererStub::GetScreenCapture()
     return nullptr;
 }
 
-void RendererStub::RemovePixelFromScreenCapture(const int16_t /*x*/, const int16_t /*y*/)
+void RendererStub::RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& /*coordinates*/)
 {
 
 }

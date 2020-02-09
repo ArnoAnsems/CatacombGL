@@ -1125,7 +1125,7 @@ Picture* RendererOpenGLWin32::GetScreenCapture()
     return new Picture(textureId, m_windowWidth, m_windowHeight);
 }
 
-void RendererOpenGLWin32::RemovePixelFromScreenCapture(const int16_t x, const int16_t y)
+void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates)
 {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -1140,13 +1140,17 @@ void RendererOpenGLWin32::RemovePixelFromScreenCapture(const int16_t x, const in
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(GLfloat(x), GLfloat(y), 0.0f);
 
     glBegin(GL_QUADS);
-    glVertex2i(0, 1);
-    glVertex2i(1, 1);
-    glVertex2i(1, 0);
-    glVertex2i(0, 0);
+    for (auto coordinate : coordinates)
+    {
+        const int16_t x = coordinate.first;
+        const int16_t y = coordinate.second;
+        glVertex2i(x, y + 1);
+        glVertex2i(x + 1, y + 1);
+        glVertex2i(x + 1, y);
+        glVertex2i(x, y);
+    }
     glEnd();
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -1160,21 +1164,10 @@ void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
         return;
     }
 
-    glDepthMask(GL_TRUE);
     glEnable(GL_STENCIL_TEST);
 
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-    glPushMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    gluOrtho2D(0, m_windowWidth, m_windowHeight, 0);
-
-        // Set the MODELVIEW matrix to the requested offset
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 
     // Select the texture from the picture
     glBindTexture(GL_TEXTURE_2D, screenCapture->GetTextureId());
@@ -1183,10 +1176,6 @@ void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
         Logging::Instance().FatalError("Picture has invalid texture name (" + std::to_string(screenCapture->GetTextureId()) + ")");
     }
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDepthMask(GL_FALSE);
-
     // Do not wrap the texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -1194,25 +1183,13 @@ void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
 
     // Draw the texture as a quad
-    const GLint width = (uint16_t)screenCapture->GetWidth();
-    const GLint height = (uint16_t)screenCapture->GetHeight();
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 1); glVertex2i(0, height);
-    glTexCoord2i(1, 1); glVertex2i(width, height);
-    glTexCoord2i(1, 0); glVertex2i(width, 0);
-    glTexCoord2i(0, 0); glVertex2i(0, 0);
+    ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+    glTexCoord2i(0, 1); glVertex2i(rect.left, rect.bottom);
+    glTexCoord2i(1, 1); glVertex2i(rect.right, rect.bottom);
+    glTexCoord2i(1, 0); glVertex2i(rect.right, rect.top);
+    glTexCoord2i(0, 0); glVertex2i(rect.left, rect.top);
     glEnd();
 
-    //Render2DPicture(screenCapture, 0, 0);
-    glPopMatrix();
-
     glDisable(GL_STENCIL_TEST);
-
-    // Restore regular 2D resolution
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
-
-    gluOrtho2D(rect.left, rect.right, rect.bottom, rect.top);
 }

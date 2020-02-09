@@ -26,6 +26,8 @@
 #include "FileChunk.h"
 #include "EgaColor.h"
 #include "ViewPorts.h"
+#include <vector>
+#include <map>
 
 class Font;
 
@@ -97,6 +99,6 @@ public:
     virtual void UnprepareVisibilityMap() = 0;
 
     virtual Picture* GetScreenCapture() = 0;
-    virtual void RemovePixelFromScreenCapture(const int16_t x, const int16_t y) = 0;
+    virtual void RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates) = 0;
     virtual void RenderScreenCapture(Picture* screenCapture) = 0;
 };

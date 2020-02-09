@@ -66,7 +66,7 @@ public:
     void UnprepareVisibilityMap() override;
 
     Picture* GetScreenCapture() override;
-    void RemovePixelFromScreenCapture(const int16_t x, const int16_t y) override;
+    void RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates) override;
     void RenderScreenCapture(Picture* screenCapture) override;
 };
 
