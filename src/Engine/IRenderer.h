@@ -98,7 +98,7 @@ public:
     virtual void PrepareVisibilityMap() = 0;
     virtual void UnprepareVisibilityMap() = 0;
 
-    virtual Picture* GetScreenCapture() = 0;
+    virtual Picture* GetScreenCapture(const unsigned int textureId) = 0;
     virtual void RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates) = 0;
     virtual void RenderScreenCapture(Picture* screenCapture) = 0;
 };

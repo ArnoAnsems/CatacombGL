@@ -73,7 +73,7 @@ public:
     void PrepareVisibilityMap() override;
     void UnprepareVisibilityMap() override;
 
-    Picture* GetScreenCapture() override;
+    Picture* GetScreenCapture(const unsigned int textureId) override;
     void RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates) override;
     void RenderScreenCapture(Picture* screenCapture) override;
 

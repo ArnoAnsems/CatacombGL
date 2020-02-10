@@ -33,8 +33,9 @@ FadeEffect::~FadeEffect()
 
 void FadeEffect::SetOverlay(const uint32_t timeStamp)
 {
+    const unsigned int textureId = (m_picture != nullptr) ? m_picture->GetTextureId() : 0;
     delete m_picture;
-    m_picture = m_renderer.GetScreenCapture();
+    m_picture = m_renderer.GetScreenCapture(textureId);
     m_timeStamp = timeStamp;
     m_pixelsRemoved = 0;
 }

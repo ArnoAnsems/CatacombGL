@@ -174,7 +174,7 @@ void RendererStub::UnprepareVisibilityMap()
 {
 }
 
-Picture* RendererStub::GetScreenCapture()
+Picture* RendererStub::GetScreenCapture(const unsigned int /*textureId*/)
 {
     return nullptr;
 }

@@ -1094,7 +1094,7 @@ void RendererOpenGLWin32::UnprepareVisibilityMap()
     glEnable(GL_DEPTH_TEST);
 }
 
-Picture* RendererOpenGLWin32::GetScreenCapture()
+Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 {
     uint8_t* rawPixelData;
     rawPixelData = new uint8_t[m_windowWidth * m_windowHeight * 4];
@@ -1112,9 +1112,17 @@ Picture* RendererOpenGLWin32::GetScreenCapture()
         }
     }
 
-    GLuint textureId;
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
+    GLuint newTextureId;
+    if (textureId == 0)
+    {
+        glGenTextures(1, &newTextureId);
+    }
+    else
+    {
+        newTextureId = textureId;
+    }
+
+    glBindTexture(GL_TEXTURE_2D, newTextureId);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_windowWidth, m_windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
 
@@ -1122,7 +1130,7 @@ Picture* RendererOpenGLWin32::GetScreenCapture()
 
     glClear(GL_STENCIL_BUFFER_BIT);
 
-    return new Picture(textureId, m_windowWidth, m_windowHeight);
+    return new Picture(newTextureId, m_windowWidth, m_windowHeight);
 }
 
 void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates)
