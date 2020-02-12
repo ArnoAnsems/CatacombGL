@@ -22,16 +22,15 @@ public:
     FadeEffect(IRenderer& renderer);
     ~FadeEffect();
 
-    void SetOverlay(const uint32_t timeStamp);
-    void DrawOverlay(const uint32_t timeStamp);
-    bool OverlayActive(const uint32_t timeStamp) const;
+    void SetOverlay();
+    void DrawOverlay(const uint32_t milliSec);
+    bool OverlayActive() const;
 
 private:
     IRenderer& m_renderer;
-    uint8_t* m_rawImage;
     Picture* m_picture;
-    uint32_t m_timeStamp;
     uint32_t m_pixelsRemoved;
+    int32_t  m_rndval;
 };
 
 

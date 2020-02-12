@@ -17,39 +17,62 @@
 
 FadeEffect::FadeEffect(IRenderer& renderer) :
     m_renderer(renderer),
-    m_rawImage(nullptr),
     m_picture(nullptr),
-    m_timeStamp(0),
-    m_pixelsRemoved(0)
+    m_pixelsRemoved(0),
+    m_rndval(0)
 {
 
 }
 
 FadeEffect::~FadeEffect()
 {
-    delete m_rawImage;
     delete m_picture;
 }
 
-void FadeEffect::SetOverlay(const uint32_t timeStamp)
+void FadeEffect::SetOverlay()
 {
     const unsigned int textureId = (m_picture != nullptr) ? m_picture->GetTextureId() : 0;
     delete m_picture;
     m_picture = m_renderer.GetScreenCapture(textureId);
-    m_timeStamp = timeStamp;
     m_pixelsRemoved = 0;
+    m_rndval = 0;
 }
 
-void FadeEffect::DrawOverlay(const uint32_t timeStamp)
+void FadeEffect::DrawOverlay(const uint32_t milliSec)
 {
-    const uint32_t timePassed = (timeStamp - m_timeStamp);
-    if (timePassed <= 1000)
+    if (milliSec <= 1000)
     {
-        uint32_t pixelsToRemove = (timePassed * 64000) / 1000;
+        // FizzleFade effect implementation based on Wolf4SDL source code, file ID_VH.CPP.
+        const uint32_t rndmask = 0x00012000;
+        const unsigned int rndbits_y = 8;
+
+        uint32_t pixelsToRemove = (milliSec * 64000) / 1000;
         std::vector < std::pair<int16_t, int16_t>> coordinates;
         for (uint32_t p = m_pixelsRemoved; p < pixelsToRemove; p++)
         {
-            coordinates.push_back(std::make_pair(p % 320, p / 320));
+            //
+            // seperate random value into x/y pair
+            //
+            int32_t x = m_rndval >> rndbits_y;
+            int32_t y = m_rndval & ((1 << rndbits_y) - 1);
+
+            //
+            // advance to next random element
+            //
+
+            m_rndval = (m_rndval >> 1) ^ (m_rndval & 1 ? 0 : rndmask);
+
+            if (x >= 320 || y >= 200)
+            {
+                if (m_rndval == 0)     // entire sequence has been completed
+                    break;
+                p--;
+                continue;
+            }
+            coordinates.push_back(std::make_pair(x, y));
+
+            if (m_rndval == 0)		// entire sequence has been completed
+                break;
         }
         m_pixelsRemoved = pixelsToRemove;
         m_renderer.RemovePixelsFromScreenCapture(coordinates);
@@ -58,7 +81,7 @@ void FadeEffect::DrawOverlay(const uint32_t timeStamp)
     m_renderer.RenderScreenCapture(m_picture);
 }
 
-bool FadeEffect::OverlayActive(const uint32_t timeStamp) const
+bool FadeEffect::OverlayActive() const
 {
-    return timeStamp < m_timeStamp + 1000;
+    return (m_pixelsRemoved > 0);
 }

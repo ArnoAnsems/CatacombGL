@@ -54,17 +54,18 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
     }
     }
 
-    if ((timeStamp % 5000) > 4900)
+    if ((timeStamp % 5000) > 4000)
     {
-        if (!m_fadeEffect.OverlayActive(timeStamp))
+        if (m_fadeEffect.OverlayActive())
         {
-            m_fadeEffect.SetOverlay(timeStamp);
+            m_fadeEffect.SetOverlay();
         }
     }
 
     if ((timeStamp % 5000) < 1000)
     {
-        m_fadeEffect.DrawOverlay(timeStamp);
+        const uint32_t milliSec = timeStamp % 5000;
+        m_fadeEffect.DrawOverlay(milliSec);
     }
 }
 
