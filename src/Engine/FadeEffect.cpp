@@ -40,39 +40,41 @@ void FadeEffect::SetOverlay()
 
 void FadeEffect::DrawOverlay(const uint32_t milliSec)
 {
-    if (milliSec <= 1000)
+    const uint32_t totalDurationInMilliSec = 1000;
+    if (milliSec <= totalDurationInMilliSec)
     {
         // FizzleFade effect implementation based on Wolf4SDL source code, file ID_VH.CPP.
         const uint32_t rndmask = 0x00012000;
-        const unsigned int rndbits_y = 8;
+        const uint32_t rndbits_y = 8;
+        const uint32_t screenWidth = 320;
+        const uint32_t screenHeight = 200;
 
-        uint32_t pixelsToRemove = (milliSec * 64000) / 1000;
+        const uint32_t pixelsToRemove = (milliSec * screenWidth * screenHeight) / totalDurationInMilliSec;
         std::vector < std::pair<int16_t, int16_t>> coordinates;
         for (uint32_t p = m_pixelsRemoved; p < pixelsToRemove; p++)
         {
-            //
-            // seperate random value into x/y pair
-            //
-            int32_t x = m_rndval >> rndbits_y;
-            int32_t y = m_rndval & ((1 << rndbits_y) - 1);
+            // Seperate random value into x/y pair
+            const int32_t x = m_rndval >> rndbits_y;
+            const int32_t y = m_rndval & ((1 << rndbits_y) - 1);
 
-            //
-            // advance to next random element
-            //
-
+            // Advance to next random element
             m_rndval = (m_rndval >> 1) ^ (m_rndval & 1 ? 0 : rndmask);
 
-            if (x >= 320 || y >= 200)
+            if (x >= screenWidth || y >= screenHeight)
             {
                 if (m_rndval == 0)     // entire sequence has been completed
+                {
                     break;
+                }
                 p--;
                 continue;
             }
             coordinates.push_back(std::make_pair(x, y));
 
             if (m_rndval == 0)		// entire sequence has been completed
+            {
                 break;
+            }
         }
         m_pixelsRemoved = pixelsToRemove;
         m_renderer.RemovePixelsFromScreenCapture(coordinates);

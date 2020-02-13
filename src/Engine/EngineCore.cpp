@@ -206,13 +206,6 @@ void EngineCore::DrawScene(IRenderer& renderer)
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,32);
 #endif
         }
-
-        if (m_configurationSettings.GetShowFps())
-        {
-            char fpsStr[10];
-            sprintf_s(fpsStr, 10, "%d", m_framesCounter.GetFramesPerSecond());
-            renderer.RenderTextLeftAligned(fpsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,220,2);
-        }
     }
     std::string locationMessage("");
     if (m_state == InGame || m_state == Victory || m_state == VerifyGateExit)
@@ -422,6 +415,13 @@ void EngineCore::DrawScene(IRenderer& renderer)
             DrawTiledWindow(renderer, 2, 1, 36, 13);
         }
         m_menu->Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic(), m_gameTimer.GetActualTime());
+    }
+
+    if (m_configurationSettings.GetShowFps())
+    {
+        char fpsStr[10];
+        sprintf_s(fpsStr, 10, "%d", m_framesCounter.GetFramesPerSecond());
+        renderer.RenderTextLeftAligned(fpsStr, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, 220, 2);
     }
     
     renderer.Unprepare2DRendering();
