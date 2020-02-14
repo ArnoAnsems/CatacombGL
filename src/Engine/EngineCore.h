@@ -34,6 +34,7 @@
 #include "ISystem.h"
 #include "Logging.h"
 #include "Score.h"
+#include "FadeEffect.h"
 
 class EngineCore
 {
@@ -167,10 +168,13 @@ private:
     uint32_t m_timeStampToEnterGame;
     uint32_t m_timeStampLastMouseMoveForward;
     uint32_t m_timeStampLastMouseMoveBackward;
+    uint32_t m_timeStampFadeEffect;
     IMenu* m_menu;
     GameTimer m_gameTimer;
     const ISystem& m_system;
     std::vector<std::string> m_savedGames;
     const bool m_scrollsArePresent;
     Score m_score;
+    FadeEffect m_fadeEffect;
+    bool m_setOverlayOnNextDraw;
 };

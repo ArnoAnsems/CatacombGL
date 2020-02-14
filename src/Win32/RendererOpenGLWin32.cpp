@@ -1149,19 +1149,31 @@ void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::p
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+    const int16_t xMin = rect.left;
+    const int16_t xMax = rect.right;
+
     glBegin(GL_QUADS);
     for (auto coordinate : coordinates)
     {
-        const int16_t x = coordinate.first;
+        int16_t xFirst = coordinate.first;
+        while (xFirst >= xMin + 320)
+        {
+            xFirst -= 320;
+        }
         const int16_t y = coordinate.second;
-        glVertex2i(x, y + 1);
-        glVertex2i(x + 1, y + 1);
-        glVertex2i(x + 1, y);
-        glVertex2i(x, y);
+        for (int16_t x = xFirst; x < xMax; x += 320)
+        {
+            glVertex2i(x, y + 1);
+            glVertex2i(x + 1, y + 1);
+            glVertex2i(x + 1, y);
+            glVertex2i(x, y);
+        }
     }
     glEnd();
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDepthMask(GL_TRUE);
     glDisable(GL_STENCIL_TEST);
 }
 

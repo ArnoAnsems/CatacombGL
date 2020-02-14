@@ -19,15 +19,13 @@
 class FadeEffect
 {
 public:
-    FadeEffect(IRenderer& renderer);
+    FadeEffect();
     ~FadeEffect();
 
-    void SetOverlay();
-    void DrawOverlay(const uint32_t milliSec);
+    void SetOverlay(IRenderer& renderer);
+    void DrawOverlay(IRenderer& renderer, const uint32_t milliSec);
     bool OverlayActive() const;
 
-private:
-    IRenderer& m_renderer;
     Picture* m_picture;
     uint32_t m_pixelsRemoved;
     int32_t  m_rndval;

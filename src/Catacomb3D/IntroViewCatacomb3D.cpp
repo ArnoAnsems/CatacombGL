@@ -21,7 +21,7 @@ IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph
     IIntroView(renderer),
     m_egaGraph(egagraph),
     m_highScores(highScores),
-    m_fadeEffect(renderer)
+    m_fadeEffect()
 {
 
 }
@@ -58,14 +58,14 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
     {
         if (m_fadeEffect.OverlayActive())
         {
-            m_fadeEffect.SetOverlay();
+            m_fadeEffect.SetOverlay(m_renderer);
         }
     }
 
     if ((timeStamp % 5000) < 1000)
     {
         const uint32_t milliSec = timeStamp % 5000;
-        m_fadeEffect.DrawOverlay(milliSec);
+        m_fadeEffect.DrawOverlay(m_renderer, milliSec);
     }
 }
 

@@ -65,12 +65,14 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_timeStampToEnterGame(0),
     m_timeStampLastMouseMoveForward(0),
     m_timeStampLastMouseMoveBackward(0),
+    m_timeStampFadeEffect(0),
     m_keyToTake(KeyId::NoKey),
     m_playerInput(keyboardInput),
     m_savedGames(),
     m_menu(game.CreateMenu(configurationSettings, m_savedGames)),
     m_configurationSettings(configurationSettings),
-    m_scrollsArePresent(AreScrollsPresent())
+    m_scrollsArePresent(AreScrollsPresent()),
+    m_setOverlayOnNextDraw(false)
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -146,6 +148,13 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     m_framesCounter.AddFrame(m_gameTimer.GetActualTime());
     renderer.SetTextureFilter(m_configurationSettings.GetTextureFilter());
+
+    if (m_setOverlayOnNextDraw)
+    {
+        m_fadeEffect.SetOverlay(renderer);
+        m_timeStampFadeEffect = m_gameTimer.GetActualTime();
+        m_setOverlayOnNextDraw = false;
+    }
 
     renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
 
@@ -283,10 +292,10 @@ void EngineCore::DrawScene(IRenderer& renderer)
     
     if ( m_state == EnteringLevel)
     {
+        const uint16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
         if (m_game.GetId() == 5)
         {
             // Catacomb 3-D
-            const uint16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
             renderer.Render2DBar(0 - margin, 0, 264 + (2 * margin), 144, EgaBrightBlue);
             renderer.Render2DPicture(m_game.GetEgaGraph()->GetPicture(159), 57, 52);
             renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 132, 76);
@@ -294,7 +303,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         else
         {
             // Catacomb Adventure series
-            renderer.Render2DBar(0, 0, 320, 120, EgaBlack);
+            renderer.Render2DBar(0 - margin, 0, 320 + (2 * margin), 120, EgaBlack);
             uint16_t width = (uint16_t)strlen(m_level->GetLevelName());
             if (width == 0)
             {
@@ -315,7 +324,6 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 58);
             }
         }
-
     }
 
     if (m_state == InGame)
@@ -407,6 +415,12 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
     }
 #endif
+
+    if ((m_state == InGame || m_state == EnteringLevel)
+        && m_timeStampFadeEffect + 1000 > m_gameTimer.GetActualTime())
+    {
+        m_fadeEffect.DrawOverlay(renderer, m_gameTimer.GetActualTime() - m_timeStampFadeEffect);
+    }
 
     if (m_menu->IsActive())
     {
@@ -839,6 +853,7 @@ bool EngineCore::Think()
         if (m_timeStampToEnterGame < m_gameTimer.GetActualTime())
         {
             m_state = InGame;
+            m_setOverlayOnNextDraw = true;
             if (m_game.GetId() == 5 && m_configurationSettings.GetMusicOn())
             {
                 m_game.GetAudioPlayer()->StartMusic(0);
@@ -1141,6 +1156,11 @@ bool EngineCore::Think()
             m_playerActions.ResetForNewLevel();
             m_state = EnteringLevel;
             m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
+            if (m_game.GetId() == 5)
+            {
+                m_setOverlayOnNextDraw = true;
+                m_timeStampToEnterGame += 1000;
+            }
         }
     }
 
@@ -2586,6 +2606,7 @@ void EngineCore::WarpInsideLevel(const Actor* sourceWarp)
             }
         }
     }
+    m_setOverlayOnNextDraw = true;
 }
 
 void EngineCore::DisplayStatusMessage(const char* message, const uint16_t delayInMS)

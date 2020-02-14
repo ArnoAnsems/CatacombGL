@@ -15,10 +15,9 @@
 
 #include "FadeEffect.h"
 
-FadeEffect::FadeEffect(IRenderer& renderer) :
-    m_renderer(renderer),
+FadeEffect::FadeEffect() :
     m_picture(nullptr),
-    m_pixelsRemoved(0),
+    m_pixelsRemoved(64000),
     m_rndval(0)
 {
 
@@ -29,16 +28,16 @@ FadeEffect::~FadeEffect()
     delete m_picture;
 }
 
-void FadeEffect::SetOverlay()
+void FadeEffect::SetOverlay(IRenderer& renderer)
 {
     const unsigned int textureId = (m_picture != nullptr) ? m_picture->GetTextureId() : 0;
     delete m_picture;
-    m_picture = m_renderer.GetScreenCapture(textureId);
+    m_picture = renderer.GetScreenCapture(textureId);
     m_pixelsRemoved = 0;
     m_rndval = 0;
 }
 
-void FadeEffect::DrawOverlay(const uint32_t milliSec)
+void FadeEffect::DrawOverlay(IRenderer& renderer, const uint32_t milliSec)
 {
     const uint32_t totalDurationInMilliSec = 1000;
     if (milliSec <= totalDurationInMilliSec)
@@ -77,10 +76,10 @@ void FadeEffect::DrawOverlay(const uint32_t milliSec)
             }
         }
         m_pixelsRemoved = pixelsToRemove;
-        m_renderer.RemovePixelsFromScreenCapture(coordinates);
+        renderer.RemovePixelsFromScreenCapture(coordinates);
     }
 
-    m_renderer.RenderScreenCapture(m_picture);
+    renderer.RenderScreenCapture(m_picture);
 }
 
 bool FadeEffect::OverlayActive() const
