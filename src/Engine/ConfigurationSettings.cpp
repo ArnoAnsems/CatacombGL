@@ -23,7 +23,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_screenMode(Windowed),
     m_aspectRatio(0),
     m_fov(25),
-    m_textureFilter(IRenderer::Linear),
+    m_textureFilter(IRenderer::Nearest),
     m_depthShading(true),
     m_showFps(false),
     m_vsync(true),

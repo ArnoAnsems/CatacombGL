@@ -154,6 +154,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_fadeEffect.SetOverlay(renderer);
         m_timeStampFadeEffect = m_gameTimer.GetActualTime();
         m_setOverlayOnNextDraw = false;
+        m_gameTimer.Pause();
     }
 
     renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
@@ -416,10 +417,17 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
 #endif
 
-    if ((m_state == InGame || m_state == EnteringLevel)
-        && m_timeStampFadeEffect + 1000 > m_gameTimer.GetActualTime())
+    if (m_state == InGame || m_state == EnteringLevel)
     {
-        m_fadeEffect.DrawOverlay(renderer, m_gameTimer.GetActualTime() - m_timeStampFadeEffect);
+        if (m_timeStampFadeEffect + 1000 > m_gameTimer.GetActualTime())
+        {
+            m_fadeEffect.DrawOverlay(renderer, m_gameTimer.GetActualTime() - m_timeStampFadeEffect);
+        }
+        else if (m_timeStampFadeEffect != 0 && !m_menu->IsActive() && (_strcmpi(m_messageInPopup, "") == 0) && m_readingScroll == 255)
+        {
+            m_timeStampFadeEffect = 0;
+            m_gameTimer.Resume();
+        }
     }
 
     if (m_menu->IsActive())
@@ -1160,6 +1168,7 @@ bool EngineCore::Think()
             {
                 m_setOverlayOnNextDraw = true;
                 m_timeStampToEnterGame += 1000;
+                m_audioPlayer->StopMusic();
             }
         }
     }
@@ -2983,6 +2992,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         m_timeStampOfPlayerCurrentFrame = currentTimestampOfPlayer;
         m_timeStampOfWorldPreviousFrame = m_timeStampOfWorldCurrentFrame;
         m_timeStampOfWorldCurrentFrame = currentTimestampOfWorld;
+        m_timeStampFadeEffect = 0;
     }
     else
     {
