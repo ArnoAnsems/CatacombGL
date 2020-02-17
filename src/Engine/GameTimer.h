@@ -37,6 +37,7 @@ public:
 
     void Reset();
     void Pause();
+    bool IsPaused() const;
     void Resume();
     void FreezeTime();
     uint32_t GetRemainingFreezeTime();

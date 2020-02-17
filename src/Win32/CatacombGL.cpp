@@ -154,7 +154,7 @@ void CreateGLWindow(int width, int height, int bits)
         Logging::Instance().AddLogMessage("WARNING: call to SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK) failed: " + std::string(SDL_GetError()));
     }
 
-    if (SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1) != 0);
+    if (SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1) != 0)
     {
         Logging::Instance().AddLogMessage("WARNING: call to SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,1) failed: " + std::string(SDL_GetError()));
     }

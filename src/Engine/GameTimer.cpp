@@ -88,6 +88,11 @@ void GameTimer::Pause()
     m_pauseTime = (uint32_t)(GetCurrentTime() - m_startTimeForPlayer);
 }
 
+bool GameTimer::IsPaused() const
+{
+    return m_paused;
+}
+
 void GameTimer::Resume()
 {
     if (m_paused)

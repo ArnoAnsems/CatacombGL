@@ -423,7 +423,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             m_fadeEffect.DrawOverlay(renderer, m_gameTimer.GetActualTime() - m_timeStampFadeEffect);
         }
-        else if (m_timeStampFadeEffect != 0 && !m_menu->IsActive() && (_strcmpi(m_messageInPopup, "") == 0) && m_readingScroll == 255)
+        else if (m_timeStampFadeEffect != 0 && !m_menu->IsActive() && (_strcmpi(m_messageInPopup, "") == 0) && m_readingScroll == 255 && m_level != nullptr && !m_level->GetPlayerActor()->IsDead())
         {
             m_timeStampFadeEffect = 0;
             m_gameTimer.Resume();
@@ -1148,7 +1148,15 @@ bool EngineCore::Think()
         // Check for player dead
         if (m_state == InGame && m_level->GetPlayerActor()->IsDead())
         {
-            m_gameTimer.Pause();
+            if (!m_gameTimer.IsPaused())
+            {
+                m_gameTimer.Pause();
+
+                if (m_game.GetId() == 5)
+                {
+                    m_setOverlayOnNextDraw = true;
+                }
+            }
         }
 
         // Update radar
