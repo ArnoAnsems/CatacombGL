@@ -1096,8 +1096,7 @@ void RendererOpenGLWin32::UnprepareVisibilityMap()
 
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 {
-    uint8_t* rawPixelData;
-    rawPixelData = new uint8_t[m_windowWidth * m_windowHeight * 4];
+    uint8_t* rawPixelData = new uint8_t[m_windowWidth * m_windowHeight * 4];
     glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
 
     // Flip pixels upside down
@@ -1136,7 +1135,6 @@ Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates)
 {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-    glClear(GL_DEPTH_BUFFER_BIT);
     glDepthMask(GL_FALSE);
     glEnable(GL_STENCIL_TEST);
 
@@ -1146,12 +1144,13 @@ void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::p
     //Replace where rendered
     glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
 
+    // Set the origin to the default
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
-    const int16_t xMin = rect.left;
-    const int16_t xMax = rect.right;
+    const int16_t xMin = (int16_t)floor(rect.left);
+    const int16_t xMax = (int16_t)ceil(rect.right);
 
     glBegin(GL_QUADS);
     for (auto coordinate : coordinates)
@@ -1205,10 +1204,10 @@ void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
     // Draw the texture as a quad
     glBegin(GL_QUADS);
     ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
-    glTexCoord2i(0, 1); glVertex2i(rect.left, rect.bottom);
-    glTexCoord2i(1, 1); glVertex2i(rect.right, rect.bottom);
-    glTexCoord2i(1, 0); glVertex2i(rect.right, rect.top);
-    glTexCoord2i(0, 0); glVertex2i(rect.left, rect.top);
+    glTexCoord2i(0, 1); glVertex2d(rect.left, rect.bottom);
+    glTexCoord2i(1, 1); glVertex2d(rect.right, rect.bottom);
+    glTexCoord2i(1, 0); glVertex2d(rect.right, rect.top);
+    glTexCoord2i(0, 0); glVertex2d(rect.left, rect.top);
     glEnd();
 
     glDisable(GL_STENCIL_TEST);
