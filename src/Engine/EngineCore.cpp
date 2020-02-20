@@ -863,7 +863,7 @@ bool EngineCore::Think()
         {
             m_state = InGame;
             m_setOverlayOnNextDraw = true;
-            if (m_game.GetId() == 5 && m_configurationSettings.GetMusicOn())
+            if (m_game.GetId() == 5 && m_configurationSettings.GetMusicOn() && !m_menu->IsActive())
             {
                 m_game.GetAudioPlayer()->StartMusic(0);
             }

@@ -9,11 +9,10 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.4.1: 
+Current limitations as of version 0.4.2: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
-* No "demo" functionality (preview slideshow of Catacomb Armageddon and Apocalypse in shareware version). 
-* No fade-in effect when entering a level. 
+* No "demo" functionality (preview slideshow of Catacomb Armageddon and Apocalypse in shareware version).
 
 # How to install
 CatacombGL does not run standalone, but requires the original game data (levels, pictures, sounds, etc) to be present on the system. The Catacomb Abyss game data can be obtained legitimately and free-of-charge by downloading the 1.13 shareware version. Various websites offer the shareware version for download, see for example https://archive.org/details/TheCatacombAbyss. Alternatively, the game data can also be obtained by buying the Catacombs Pack from gog.com, see https://www.gog.com/game/catacombs_pack. The differences between the shareware and commercial versions are purely cosmetic. The Catacombs Pack is required in order to run Catacomb 3D (The Descent), The Catacomb Armageddon or The Catacomb Apocalypse.
@@ -60,6 +59,16 @@ Special thanks goes to:
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
 
 # History
+* Version 0.4.2 (2020-02-20) New in this release:
+  * Added the "fizzle fade" effect when entering a level or travelling through a magic gate. Based on code from Wolf4SDL.
+  * Fix: corrected the aspect ratio of the 3D view to match with the original 4:3 monitors.
+  * Fix: do not play a sound while browsing the menu in Catacomb 3D. Reported by Dinoaur.
+  * Fix: moved the hand in Catacomb 3D to the center. Reported by Dinoaur.
+  * Fix: do not show popup messages about keys when interacting with doors in Catacomb 3D. Reported by Dinoaur.
+  * Fix: do not play music during the transition to a new level. Reported by Dinoaur.
+  * Fix: pause the game when opening the menu during level transition. Reported by @pagb666.
+  * Fix: display framerate in the introduction screens.
+
 * Version 0.4.1 (2020-01-11) New in this release:
   * Added option for auto fire. Thanks to Master O for the suggestion. When auto fire is enabled, keeping the fire button pressed will automatically fire four projectiles per second. This is not part of the original gameplay and therefore disabled by default. But it might help in reducing stress on the finger by preventing excessive clicking.
   * Fix: mouse sensitivity issues, as the mouse speed was affected by frame rate and way too sensitive at quick turns. Reported by @pagb666 and Jello.
