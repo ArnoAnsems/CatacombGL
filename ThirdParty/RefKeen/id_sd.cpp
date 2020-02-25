@@ -16,37 +16,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-
 #include "id_sd.h"
 #include "be_st.h"
 
 #define	SDL_SoundFinished()	{SoundNumber = SoundPriority = 0;}
 
-// Macros for AdLib stuff
-#define	selreg(n)	outportb(0x388,n)
-#define	writereg(n)	outportb(0x389,n)
-#define	readstat()	inportb(0x388)
-
 //	Global variables
-	bool		SoundSourcePresent,SoundBlasterPresent,AdLibPresent;
-    bool        NeedsMusic;
-	SDMode		SoundMode;
-	SMMode		MusicMode;
-	// NEVER accessed directly now - Done via wrapper functions
+bool		SoundSourcePresent,SoundBlasterPresent,AdLibPresent;
+bool        NeedsMusic;
+SDMode		SoundMode;
+SMMode		MusicMode;
 
-	PCSound		**pcSoundTable;
-    AdlibSound ** AdlibSoundTable;
-	//id0_word_t		*SoundTable;	// Really * seg *SoundTable, but that don't work
-	bool		ssIsTandy;
-	uint16_t		ssPort = 2;
+PCSound		**pcSoundTable;
+AdlibSound ** AdlibSoundTable;
 
 //	Internal variables
 static	bool			SD_Started;
 static	void			(*SoundUserHook)(void);
 static	uint16_t			SoundNumber,SoundPriority;
-//static	void interrupt	(*t0OldService)(void);
-//static	id0_word_t			t0CountTable[] = {8,8,8,8,40,40};
-//static	id0_long_t			LocalTime;
 
 //	PC Sound variables
 static	uint8_t			pcLastSample, *pcSound;
@@ -62,8 +49,8 @@ static	uint32_t		alTimeCount;
 static	AdlibSound*		alZeroInst = new AdlibSound();
 
 // This table maps channel numbers to carrier and modulator op cells
-static	uint8_t			carriers[9] =  { 3, 4, 5,11,12,13,19,20,21},
-						modifiers[9] = { 0, 1, 2, 8, 9,10,16,17,18};
+static const uint8_t carriers[9] = { 3, 4, 5,11,12,13,19,20,21 };
+static const uint8_t modifiers[9] = { 0, 1, 2, 8, 9,10,16,17,18 };
 
 //	Sequencer variables
 static	bool			sqActive;
@@ -78,7 +65,6 @@ static	uint32_t			sqHackTime;
 //	SDL_SetTimer0() - Sets system timer 0 to the specified speed
 //
 ///////////////////////////////////////////////////////////////////////////
-//#pragma	argsused
 static void
 SDL_SetTimer0(uint16_t speed)
 {
@@ -97,8 +83,6 @@ SDL_SetIntsPerSec(uint16_t ints)
 {
 	SDL_SetTimer0(1192030 / ints);
 }
-
-
 
 //
 //	PC Sound code
@@ -259,8 +243,6 @@ SDL_ALPlaySound(AdlibSound *sound)
 	SDL_ALStopSound();
 
 	BE_ST_LockAudioRecursively();
-//asm	pushf
-//asm	cli
 
 	alLengthLeft = sound->GetLength();
 	alSound = sound->GetData();
@@ -347,8 +329,6 @@ static void
 SDL_ShutAL(void)
 {
 	BE_ST_LockAudioRecursively();
-//asm	pushf
-//asm	cli
 
 	alOut(alEffects,0);
 	alOut(alFreqH + 0,0);
@@ -356,7 +336,6 @@ SDL_ShutAL(void)
 	alSound = 0;
 
 	BE_ST_UnlockAudioRecursively();
-//asm	popf
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -408,21 +387,15 @@ SDL_DetectAdLib(void)
 
 	alOut(4,0x60);	// Reset T1 & T2
 	alOut(4,0x80);	// Reset IRQ
-	//status1 = readstat();
 	alOut(2,0xff);	// Set timer 1
 	alOut(4,0x21);	// Start timer 1
 
 	// We ALWAYS return true here, but maybe it's good
 	// to send some commands to the emulated OPL chip
 
-	// TODO (REFKEEN): Anyway to handle this delay (if at all)?
-	//SDL_Delay(TimerDelay100);
-
-	//status2 = readstat();
 	alOut(4,0x60);
 	alOut(4,0x80);
 
-	//if (((status1 & 0xe0) == 0x00) && ((status2 & 0xe0) == 0xc0))
 	{
 		for (uint8_t i = 1;i <= 0xf5;i++)	// Zero all the registers
 			alOut(i,0);
@@ -450,8 +423,6 @@ SDL_t0Service(void)
 		SDL_ALService();
 		if (!(++count & 7))
 		{
-			//LocalTime++;
-			//TimeCount++;
 			if (SoundUserHook)
 				SoundUserHook();
 		}
@@ -637,18 +608,10 @@ SD_Startup(void)
 	if (SD_Started)
 		return;
 
-	ssIsTandy = false;
-
 	SoundUserHook = 0;
 
-	//t0OldService = getvect(8);	// Get old timer 0 ISR
-
-	/*** (REFKEEN) UNUSED ***/
-	//SDL_InitDelay();			// SDL_InitDelay() uses t0OldService
-
     BE_ST_StartAudioAndTimerInt(&SDL_t0Service);
-	//setvect(8,SDL_t0Service);	// Set to my timer 0 ISR
-	/*LocalTime = TimeCount =*/ alTimeCount = 0;
+	alTimeCount = 0;
 
 	SD_SetSoundMode(sdm_Off);
     SD_SetMusicMode(smm_Off);
@@ -859,8 +822,6 @@ SD_StartMusic(FileChunk* music)
 {
 	SD_MusicOff();
 	BE_ST_LockAudioRecursively();
-//asm	pushf
-//asm	cli
 
 	if (MusicMode == smm_AdLib)
 	{
@@ -872,9 +833,4 @@ SD_StartMusic(FileChunk* music)
 	}
 
 	BE_ST_UnlockAudioRecursively();
-//asm	popf
 }
-// Replacements for direct accesses to TimeCount variable
-// (should be instantiated here even if inline, as of C99)
-//id0_longword_t SD_GetTimeCount(void);
-//void SD_SetTimeCount(id0_longword_t newcount);

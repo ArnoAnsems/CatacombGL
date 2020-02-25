@@ -33,39 +33,50 @@ IntroViewCatacomb3D::~IntroViewCatacomb3D()
 
 void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
 {
-    m_renderer.Render2DPicture(m_egaGraph->GetPicture(TITLEPIC), 0, 0);
-    const uint8_t pictureIndex = (timeStamp / 5000) % 3;
-    switch (pictureIndex)
+    if (timeStamp < 100)
     {
-    case 0:
-    {
-        m_renderer.Render2DPicture(m_egaGraph->GetPicture(TITLEPIC), 0, 0);
-        break;
-    }
-    case 1:
-    {
-        m_renderer.Render2DPicture(m_egaGraph->GetPicture(CREDITSPIC), 0, 0);
-        break;
-    }
-    case 2:
-    {
-        m_highScores.Draw(m_renderer, *m_egaGraph, timeStamp, HIGHSCORESPIC);
-        break;
-    }
-    }
-
-    if ((timeStamp % 5000) > 4000)
-    {
+        // Start from a black screen
+        m_renderer.Render2DBar(0, 0, 320, 200, EgaBlack);
         if (m_fadeEffect.OverlayActive())
         {
             m_fadeEffect.SetOverlay(m_renderer);
         }
     }
-
-    if ((timeStamp % 5000) < 1000)
+    else
     {
-        const uint32_t milliSec = timeStamp % 5000;
-        m_fadeEffect.DrawOverlay(m_renderer, milliSec);
+        const uint8_t pictureIndex = (timeStamp / 5000) % 3;
+        switch (pictureIndex)
+        {
+        case 0:
+        {
+            m_renderer.Render2DPicture(m_egaGraph->GetPicture(TITLEPIC), 0, 0);
+            break;
+        }
+        case 1:
+        {
+            m_renderer.Render2DPicture(m_egaGraph->GetPicture(CREDITSPIC), 0, 0);
+            break;
+        }
+        case 2:
+        {
+            m_highScores.Draw(m_renderer, *m_egaGraph, timeStamp, HIGHSCORESPIC);
+            break;
+        }
+        }
+
+        if ((timeStamp % 5000) > 4000)
+        {
+            if (m_fadeEffect.OverlayActive())
+            {
+                m_fadeEffect.SetOverlay(m_renderer);
+            }
+        }
+
+        if ((timeStamp % 5000) < 1000)
+        {
+            const uint32_t milliSec = timeStamp % 5000;
+            m_fadeEffect.DrawOverlay(m_renderer, milliSec);
+        }
     }
 }
 
