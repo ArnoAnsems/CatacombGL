@@ -2271,7 +2271,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
             if (actor->GetDecorateActor().damage > 0)
             {
                 // Melee attack
-                const bool performRandomAttack = (rand() % (5000 / truncatedDeltaTimeInMs) == 0);
+                const bool performRandomAttack = ((m_game.GetId() != 5) && (rand() % (5000 / truncatedDeltaTimeInMs) == 0));
                 const bool playerInRange = actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f);
                 if (playerInRange || performRandomAttack)
                 {
