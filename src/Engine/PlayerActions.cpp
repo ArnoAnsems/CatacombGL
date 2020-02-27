@@ -93,29 +93,44 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire)
     }
     else
     {
-        m_shotFired = false;
+        if (m_shotFired)
+        {
+            m_shotFiredTimeStamp = timeStamp;
+            m_shotFired = false;
+        }
     }
 
     const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
     if (deltaTicks < 60)
     {
-        m_handHeight = m_shotFiredHandHeight + deltaTicks * 4;
-        if (m_handHeight > 72)
+        // Fire button was pressed less than a second ago
+        if (m_shotFired)
         {
-            m_handHeight = 72;
+            // Fire button is still in a pressed state. Keep raising hand.
+            m_handHeight = m_shotFiredHandHeight + (deltaTicks + 2) * 6;
+            if (m_handHeight > 72)
+            {
+                m_handHeight = 72;
+            }
+        }
+        else
+        {
+            // Fire button is released. Keep hand height as-is.
+            m_shotFiredHandHeight = m_handHeight;
         }
     }
     else
     {
+        // Fire button was released more than a second ago and is no longer in a pressed state. Lower hand.
         if (m_handHeight > 0)
         {
-            if ((deltaTicks - 60) * 2 >= 72)
+            if ((deltaTicks - 60) * 2 >= m_shotFiredHandHeight)
             {
                 m_handHeight = 0;
             }
             else
             {
-                m_handHeight = 72 - ((deltaTicks - 60) * 2);
+                m_handHeight = m_shotFiredHandHeight - ((deltaTicks - 60) * 2);
             }
         }
     }
@@ -165,13 +180,17 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
         const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
         if (m_handHeight > 0)
         {
-            if (deltaTicks * 2 >= m_shotFiredHandHeight)
+            if (deltaTicks < 60)
+            {
+                // Fire button was pressed less than a second ago. Keep hand height as-is.
+            }
+            else if ((deltaTicks - 60) * 2 >= m_shotFiredHandHeight)
             {
                 m_handHeight = 0;
             }
             else
             {
-                m_handHeight = m_shotFiredHandHeight - (deltaTicks * 2);
+                m_handHeight = m_shotFiredHandHeight - ((deltaTicks - 60) * 2);
             }
         }
     }
