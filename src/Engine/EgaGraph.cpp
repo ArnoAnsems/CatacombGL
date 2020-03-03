@@ -227,8 +227,12 @@ Picture* EgaGraph::GetPicture(const uint16_t index)
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedPicture;
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(pictureChunk, m_pictureTable->GetWidth(pictureIndex), m_pictureTable->GetHeight(pictureIndex), transparent);
-        m_pictures[pictureIndex] = new Picture(textureId, m_pictureTable->GetWidth(pictureIndex), m_pictureTable->GetHeight(pictureIndex));
+        const uint16_t imageWidth = m_pictureTable->GetWidth(pictureIndex);
+        const uint16_t imageHeight = m_pictureTable->GetHeight(pictureIndex);
+        const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
+        const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(imageHeight);
+        const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(pictureChunk, imageWidth, imageHeight, textureWidth, textureHeight, transparent);
+        m_pictures[pictureIndex] = new Picture(textureId, imageWidth, imageHeight, textureWidth, textureHeight);
         delete pictureChunk;
     }
 
@@ -249,10 +253,12 @@ Picture* EgaGraph::GetMaskedPicture(const uint16_t index)
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedPicture;
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        const uint16_t width = m_maskedPictureTable->GetWidth(pictureIndex);
-        const uint16_t height = m_maskedPictureTable->GetHeight(pictureIndex);
-        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, width, height);
-        m_maskedPictures[pictureIndex] = new Picture(textureId, width, height);
+        const uint16_t imageWidth = m_maskedPictureTable->GetWidth(pictureIndex);
+        const uint16_t imageHeight = m_maskedPictureTable->GetHeight(pictureIndex);
+        const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
+        const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(imageHeight);
+        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, imageWidth, imageHeight, textureWidth, textureHeight);
+        m_maskedPictures[pictureIndex] = new Picture(textureId, imageWidth, imageHeight, textureWidth, textureHeight);
         delete pictureChunk;
     }
 
@@ -273,8 +279,12 @@ Picture* EgaGraph::GetSprite(const uint16_t index)
         uint32_t compressedSize = GetChunkSize(index) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedPicture;
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, m_spriteTable->GetWidth(pictureIndex), m_spriteTable->GetHeight(pictureIndex));
-        m_sprites[pictureIndex] = new Picture(textureId, m_spriteTable->GetWidth(pictureIndex), m_spriteTable->GetHeight(pictureIndex));
+        const uint16_t imageWidth = m_spriteTable->GetWidth(pictureIndex);
+        const uint16_t imageHeight = m_spriteTable->GetHeight(pictureIndex);
+        const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
+        const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(imageHeight);
+        const unsigned int textureId = m_renderer.LoadMaskedFileChunkIntoTexture(pictureChunk, imageWidth, imageHeight, textureWidth, textureHeight);
+        m_sprites[pictureIndex] = new Picture(textureId, imageWidth, imageHeight, textureWidth, textureHeight);
         delete pictureChunk;
     }
 
@@ -300,7 +310,7 @@ Picture* EgaGraph::GetTilesSize8(const uint16_t index)
         for (uint16_t i = 0; i < numTilesSize8; i++)
         {
             const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, i, false);
-            m_tilesSize8[i] = new Picture(textureId, 8, 8);
+            m_tilesSize8[i] = new Picture(textureId, 8, 8, 8, 8);
         }
 
         delete pictureChunk;
@@ -328,7 +338,7 @@ Picture* EgaGraph::GetTilesSize8Masked(const uint16_t index)
         for (uint16_t i = 0; i < numTilesSize8Masked; i++)
         {
             const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, i, true);
-            m_tilesSize8Masked[i] = new Picture(textureId, 8, 8);
+            m_tilesSize8Masked[i] = new Picture(textureId, 8, 8, 8, 8);
         }
         delete pictureChunk;
     }

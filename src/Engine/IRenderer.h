@@ -62,8 +62,19 @@ public:
     virtual void SetTextureFilter(const TextureFilterSetting textureFilter) = 0;
     virtual void SetVSync(const bool enabled) = 0;
     virtual bool IsVSyncSupported() = 0;
-    virtual unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) = 0;
-    virtual unsigned int LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) = 0;
+    virtual unsigned int LoadFileChunkIntoTexture(
+        const FileChunk* decompressedChunk,
+        const uint16_t imageWidth,
+        const uint16_t imageHeight,
+        const uint16_t textureWidth,
+        const uint16_t textureHeight,
+        const bool transparent) = 0;
+    virtual unsigned int LoadMaskedFileChunkIntoTexture(
+        const FileChunk* decompressedChunk,
+        const uint16_t imageWidth,
+        const uint16_t imageHeight,
+        const uint16_t textureWidth,
+        const uint16_t textureHeight) = 0;
     virtual unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) = 0;
     virtual unsigned int LoadFontIntoTexture(const bool* fontPicture, const uint16_t lineHeight) = 0;
 

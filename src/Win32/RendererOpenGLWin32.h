@@ -37,8 +37,19 @@ public:
     void SetTextureFilter(const TextureFilterSetting textureFilter) override;
     void SetVSync(const bool enabled) override;
     bool IsVSyncSupported() override;
-    unsigned int LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent) override;
-    unsigned int  LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height) override;
+    unsigned int LoadFileChunkIntoTexture(
+        const FileChunk* decompressedChunk,
+        const uint16_t imageWidth,
+        const uint16_t imageHeight,
+        const uint16_t textureWidth,
+        const uint16_t textureHeight,
+        const bool transparent) override;
+    unsigned int  LoadMaskedFileChunkIntoTexture(
+        const FileChunk* decompressedChunk,
+        const uint16_t imageWidth,
+        const uint16_t imageHeight,
+        const uint16_t textureWidth,
+        const uint16_t textureHeight) override;
     unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) override;
     unsigned int LoadFontIntoTexture(const bool* fontPicture, const uint16_t lineHeight) override;
 

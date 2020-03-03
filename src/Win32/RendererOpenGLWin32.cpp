@@ -152,7 +152,13 @@ void RendererOpenGLWin32::SetPlayerPosition(const float posX, const float posY)
     m_playerPosY = posY;
 }
 
-unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height, const bool transparent)
+unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(
+    const FileChunk* decompressedChunk,
+    const uint16_t imageWidth,
+    const uint16_t imageHeight,
+    const uint16_t textureWidth,
+    const uint16_t textureHeight,
+    const bool transparent)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
@@ -162,11 +168,11 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* deco
     const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
     const uint32_t numberOfEgaPixelsPerByte = 8;
     const uint32_t numberOfPixels = planeSize * numberOfEgaPixelsPerByte;
-    const uint32_t textureImageSize = numberOfPixels * bytesPerOutputPixel;
+    const uint32_t textureImageSize = textureWidth * textureHeight * bytesPerOutputPixel;
 
-    if (textureImageSize < width * height * bytesPerOutputPixel)
+    if (textureImageSize < imageWidth * imageHeight * bytesPerOutputPixel)
     {
-        Logging::Instance().FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
+        Logging::Instance().FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain image of dimensions (" + std::to_string(imageWidth) + " x " + std::to_string(imageHeight) + std::to_string(bytesPerOutputPixel) + ")");
     }
 
     GLubyte* textureImage = new GLubyte[textureImageSize];
@@ -189,25 +195,33 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(const FileChunk* deco
             const bool transparentPixel = transparent && (colorIndex == 5);
             const rgbColor outputColor = EgaToRgb(transparentPixel ? EgaBlack : colorIndex);
 
-            const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
-            textureImage[outputPixelOffset] = outputColor.red;
-            textureImage[outputPixelOffset + 1] = outputColor.green;
-            textureImage[outputPixelOffset + 2] = outputColor.blue;
+            const uint32_t outputImagePixelOffset = ((i * 8) + 7 - j);
+            const uint32_t outputImagePixelX = outputImagePixelOffset % imageWidth;
+            const uint32_t outputImagePixelY = outputImagePixelOffset / imageWidth;
+            const uint32_t outputTextureOffset = ((outputImagePixelY * textureWidth) + outputImagePixelX) * bytesPerOutputPixel;
+            textureImage[outputTextureOffset] = outputColor.red;
+            textureImage[outputTextureOffset + 1] = outputColor.green;
+            textureImage[outputTextureOffset + 2] = outputColor.blue;
             if (transparent)
             {
-                textureImage[outputPixelOffset + 3] = transparentPixel ? 0 : 255;
+                textureImage[outputTextureOffset + 3] = transparentPixel ? 0 : 255;
             }
         }
     }
     const int16_t format = transparent ? GL_RGBA : GL_RGB;
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, textureWidth, textureHeight, 0, format, GL_UNSIGNED_BYTE, textureImage);
 
     delete[] textureImage;
 
     return textureId;
 }
 
-unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk* decompressedChunk, const uint16_t width, const uint16_t height)
+unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(
+    const FileChunk* decompressedChunk,
+    const uint16_t imageWidth,
+    const uint16_t imageHeight,
+    const uint16_t textureWidth,
+    const uint16_t textureHeight)
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
@@ -217,11 +231,11 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk
     const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
     const uint32_t numberOfEgaPixelsPerByte = 8;
     const uint32_t numberOfPixels = planeSize * numberOfEgaPixelsPerByte;
-    const uint32_t textureImageSize = numberOfPixels * bytesPerOutputPixel;
+    const uint32_t textureImageSize = textureWidth * textureHeight * bytesPerOutputPixel;
     
-    if (textureImageSize < width * height * bytesPerOutputPixel)
+    if (textureImageSize < imageWidth * imageHeight * bytesPerOutputPixel)
     {
-        Logging::Instance().FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain masked image of dimensions (" + std::to_string(width) + " x " + std::to_string(width) + " x " + std::to_string(bytesPerOutputPixel) + ")");
+        Logging::Instance().FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain masked image of dimensions (" + std::to_string(imageWidth) + " x " + std::to_string(imageHeight) + std::to_string(bytesPerOutputPixel) + ")");
     }
 
     GLubyte* textureImage = new GLubyte[textureImageSize];
@@ -243,14 +257,17 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(const FileChunk
                            (greenplane ? EgaGreen : EgaBlack) +
                            (blueplane ? EgaBlue : EgaBlack));
             const rgbColor outputColor = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
-            const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
-            textureImage[outputPixelOffset] = outputColor.red;
-            textureImage[outputPixelOffset + 1] = outputColor.green;
-            textureImage[outputPixelOffset + 2] = outputColor.blue;
-            textureImage[outputPixelOffset + 3] = transparencyplane ? 0 : 255;
+            const uint32_t outputImagePixelOffset = ((i * 8) + 7 - j);
+            const uint32_t outputImagePixelX = outputImagePixelOffset % imageWidth;
+            const uint32_t outputImagePixelY = outputImagePixelOffset / imageWidth;
+            const uint32_t outputTextureOffset = ((outputImagePixelY * textureWidth) + outputImagePixelX) * bytesPerOutputPixel;
+            textureImage[outputTextureOffset] = outputColor.red;
+            textureImage[outputTextureOffset + 1] = outputColor.green;
+            textureImage[outputTextureOffset + 2] = outputColor.blue;
+            textureImage[outputTextureOffset + 3] = transparencyplane ? 0 : 255;
         }
     }
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
 
     delete[] textureImage;
 
@@ -669,13 +686,15 @@ void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
 
     // Draw the texture as a quad
-    const GLint width = (uint16_t)picture->GetWidth();
-    const GLint height = (uint16_t)picture->GetHeight();
+    const GLint width = (uint16_t)picture->GetImageWidth();
+    const GLint height = (uint16_t)picture->GetImageHeight();
+    const float relativeImageWidth = (float)picture->GetImageWidth() / (float)picture->GetTextureWidth();
+    const float relativeImageHeight = (float)picture->GetImageHeight() / (float)picture->GetTextureHeight();
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 1); glVertex2i(0, height);
-    glTexCoord2i(1, 1); glVertex2i(width, height);
-    glTexCoord2i(1, 0); glVertex2i(width, 0);
-    glTexCoord2i(0, 0); glVertex2i(0, 0);
+    glTexCoord2f(0, relativeImageHeight); glVertex2i(0, height);
+    glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(width, height);
+    glTexCoord2f(relativeImageWidth, 0); glVertex2i(width, 0);
+    glTexCoord2f(0, 0); glVertex2i(0, 0);
     glEnd();
 }
 
@@ -706,13 +725,13 @@ void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const i
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
 
     // Draw the texture as a quad
-    const GLfloat width = (GLfloat)picture->GetWidth();
-    const GLfloat height = (GLfloat)picture->GetHeight();
+    const float textureWidth = (float)picture->GetTextureWidth();
+    const float textureHeight = (float)picture->GetTextureHeight();
     glBegin(GL_QUADS);
-    glTexCoord2f(segmentOffsetX / width, (segmentOffsetY + segmentHeight) / height); glVertex2i(0, segmentHeight);
-    glTexCoord2f((segmentOffsetX + segmentWidth) / width, (segmentOffsetY + segmentHeight) / height); glVertex2i(segmentWidth, segmentHeight);
-    glTexCoord2f((segmentOffsetX + segmentWidth) / width, segmentOffsetY / height); glVertex2i(segmentWidth, 0);
-    glTexCoord2f(segmentOffsetX / width, segmentOffsetY / height); glVertex2i(0, 0);
+    glTexCoord2f(segmentOffsetX / textureWidth, (segmentOffsetY + segmentHeight) / textureHeight); glVertex2i(0, segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / textureWidth, (segmentOffsetY + segmentHeight) / textureHeight); glVertex2i(segmentWidth, segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / textureWidth, segmentOffsetY / textureHeight); glVertex2i(segmentWidth, 0);
+    glTexCoord2f(segmentOffsetX / textureWidth, segmentOffsetY / textureHeight); glVertex2i(0, 0);
     glEnd();
 }
 
@@ -889,8 +908,8 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
     {
         glRotatef(0.0f, 0.0f, 0.0f, 1.0f);
     }
-    const GLfloat halfWidth = (float)(picture->GetWidth()) / 128.0f;
-    const GLfloat topZ = CeilingZ + ((float)(picture->GetHeight()) / 64.0f) * (FloorZ - CeilingZ);
+    const GLfloat halfWidth = (float)(picture->GetImageWidth()) / 128.0f;
+    const GLfloat topZ = CeilingZ + ((float)(picture->GetImageHeight()) / 64.0f) * (FloorZ - CeilingZ);
 
     // Select the texture from the picture
     glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
@@ -910,11 +929,13 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
     const float zOffset = (orientation == RotatedTowardsPlayer) ? 0.0625f : 0.0f;
 
     // Draw the texture as a quad
+    const float relativeImageWidth = (float)picture->GetImageWidth() / (float)picture->GetTextureWidth();
+    const float relativeImageHeight = (float)picture->GetImageHeight() / (float)picture->GetTextureHeight();
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0); glVertex3f(-halfWidth, 0.0f, CeilingZ + zOffset);
-    glTexCoord2i(1, 0); glVertex3f(halfWidth, 0.0f, CeilingZ + zOffset);
-    glTexCoord2i(1, 1); glVertex3f(halfWidth, 0.0f, topZ + zOffset);
-    glTexCoord2i(0, 1); glVertex3f(-halfWidth, 0.0f, topZ + zOffset);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-halfWidth, 0.0f, CeilingZ + zOffset);
+    glTexCoord2f(relativeImageWidth, 0.0f); glVertex3f(halfWidth, 0.0f, CeilingZ + zOffset);
+    glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex3f(halfWidth, 0.0f, topZ + zOffset);
+    glTexCoord2f(0.0f, relativeImageHeight); glVertex3f(-halfWidth, 0.0f, topZ + zOffset);
     glEnd();
 }
 
@@ -1096,20 +1117,24 @@ void RendererOpenGLWin32::UnprepareVisibilityMap()
 
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 {
-    uint8_t* rawPixelData = new uint8_t[m_windowWidth * m_windowHeight * 4];
+    uint8_t* rawPixelData = new uint8_t[(uint32_t)m_windowWidth * (uint32_t)m_windowHeight * 4];
     glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
 
+    const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(m_windowWidth);
+    const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(m_windowHeight);
+
+    uint8_t* texturePixelData = new uint8_t[(uint32_t)textureWidth * (uint32_t)textureHeight * 4];
+
     // Flip pixels upside down
-    const uint16_t halfHeight = (m_windowHeight / 2);
-    for (uint16_t y = 0; y < halfHeight; y++)
+    for (uint16_t y = 0; y < m_windowHeight; y++)
     {
         for (uint16_t x = 0; x < m_windowWidth * 4; x++)
         {
-            const uint8_t tempPixel = rawPixelData[(y * m_windowWidth * 4) + x];
-            rawPixelData[(y * m_windowWidth * 4) + x] = rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 4) + x];
-            rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 4) + x] = tempPixel;
+            texturePixelData[(y * textureWidth * 4) + x] = rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 4) + x];
         }
     }
+
+    delete[] rawPixelData;
 
     GLuint newTextureId;
     if (textureId == 0)
@@ -1123,13 +1148,13 @@ Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 
     glBindTexture(GL_TEXTURE_2D, newTextureId);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_windowWidth, m_windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texturePixelData);
 
-    delete[] rawPixelData;
+    delete[] texturePixelData;
 
     glClear(GL_STENCIL_BUFFER_BIT);
 
-    return new Picture(newTextureId, m_windowWidth, m_windowHeight);
+    return new Picture(newTextureId, m_windowWidth, m_windowHeight, textureWidth, textureHeight);
 }
 
 void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates)
@@ -1204,10 +1229,12 @@ void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
     // Draw the texture as a quad
     glBegin(GL_QUADS);
     ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
-    glTexCoord2i(0, 1); glVertex2d(rect.left, rect.bottom);
-    glTexCoord2i(1, 1); glVertex2d(rect.right, rect.bottom);
-    glTexCoord2i(1, 0); glVertex2d(rect.right, rect.top);
-    glTexCoord2i(0, 0); glVertex2d(rect.left, rect.top);
+    const float relativeImageWidth = (float)screenCapture->GetImageWidth() / (float)screenCapture->GetTextureWidth();
+    const float relativeImageHeight = (float)screenCapture->GetImageHeight() / (float)screenCapture->GetTextureHeight();
+    glTexCoord2f(0, relativeImageHeight); glVertex2d(rect.left, rect.bottom);
+    glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2d(rect.right, rect.bottom);
+    glTexCoord2f(relativeImageWidth, 0); glVertex2d(rect.right, rect.top);
+    glTexCoord2f(0, 0); glVertex2d(rect.left, rect.top);
     glEnd();
 
     glDisable(GL_STENCIL_TEST);

@@ -25,16 +25,21 @@
 class Picture
 {
 public:
-    Picture(const unsigned int textureId, const uint16_t width, const uint16_t height);
+    Picture(const unsigned int textureId, const uint16_t imageWidth, const uint16_t imageHeight, const uint16_t textureWidth, const uint16_t textureHeight);
     ~Picture();
 
     unsigned int GetTextureId() const;
-    uint16_t GetWidth() const;
-    uint16_t GetHeight() const;
+    uint16_t GetImageWidth() const;
+    uint16_t GetImageHeight() const;
+    uint16_t GetTextureWidth() const;
+    uint16_t GetTextureHeight() const;
+    static uint16_t GetNearestPowerOfTwo(const uint16_t size);
 
 private:
-    uint16_t m_width;
-    uint16_t m_height;
+    uint16_t m_imageWidth;
+    uint16_t m_imageHeight;
+    uint16_t m_textureWidth;
+    uint16_t m_textureHeight;
     unsigned int m_textureId;
 };
 

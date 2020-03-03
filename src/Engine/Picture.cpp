@@ -15,11 +15,13 @@
 
 #include "Picture.h"
 
-Picture::Picture(const unsigned int textureId, const uint16_t width, const uint16_t height)
+Picture::Picture(const unsigned int textureId, const uint16_t imageWidth, const uint16_t imageHeight, const uint16_t textureWidth, const uint16_t textureHeight) :
+    m_textureId(textureId),
+    m_imageWidth(imageWidth),
+    m_imageHeight(imageHeight),
+    m_textureWidth(textureWidth),
+    m_textureHeight(textureHeight)
 {
-    m_width = width;
-    m_height = height;
-    m_textureId = textureId;
 }
 
 Picture::~Picture()
@@ -32,12 +34,36 @@ unsigned int Picture::GetTextureId() const
     return m_textureId;
 }
 
-uint16_t Picture::GetWidth() const
+uint16_t Picture::GetImageWidth() const
 {
-    return m_width;
+    return m_imageWidth;
 }
 
-uint16_t Picture::GetHeight() const
+uint16_t Picture::GetImageHeight() const
 {
-    return m_height;
+    return m_imageHeight;
+}
+
+uint16_t Picture::GetTextureWidth() const
+{
+    return m_textureWidth;
+}
+
+uint16_t Picture::GetTextureHeight() const
+{
+    return m_textureHeight;
+}
+
+uint16_t Picture::GetNearestPowerOfTwo(const uint16_t size)
+{
+    // Although non-power-of-two textures are supported since OpenGL 2.0, there might be some older
+    // graphics cards that do not support it. For this reason, the texture width and height are always
+    // a power of two.
+    uint16_t powerOfTwo = 1;
+    while (powerOfTwo < size)
+    {
+        powerOfTwo *= 2;
+    }
+
+    return powerOfTwo;
 }

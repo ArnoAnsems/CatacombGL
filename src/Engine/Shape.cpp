@@ -284,10 +284,13 @@ EXIT_FUNC:;
 
     delete[] data;
 
-    const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(chunk, bytesPerRow * numberOfPlanes * 2, height, false);
+    const uint16_t imageWidth = bytesPerRow * numberOfPlanes * 2;
+    const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
+    const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(height);
+    const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(chunk, imageWidth, height, textureWidth, textureHeight, false);
     delete chunk;
 
-    m_picture = new Picture(textureId, width, height);
+    m_picture = new Picture(textureId, imageWidth, height, textureWidth, textureHeight);
 
     return true;
 }

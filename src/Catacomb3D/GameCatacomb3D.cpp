@@ -422,13 +422,13 @@ void GameCatacomb3D::DrawStatusBarWideScreenMargin(const int16_t offsetX, const 
 
 void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float playerAngle, const uint8_t levelIndex, const uint16_t shotPower, const uint32_t points)
 {
-    const uint16_t sideBarWidth = GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC)->GetWidth();
+    const uint16_t sideBarWidth = GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC)->GetImageWidth();
     m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 0, 144, 0, 0, 320 - sideBarWidth, 56);
     m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::STATUSPIC), 320 + wideScreenMargin - sideBarWidth - 2, 144, 320 - sideBarWidth - 2, 0, sideBarWidth + 2, 56);
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SIDEBARSPIC), 320 + wideScreenMargin - sideBarWidth, 0);
     if (shotPower > 0)
     {
-        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SHOTPOWERPIC), 320 + wideScreenMargin - sideBarWidth + 8, 136 - shotPower, 0, 56 - shotPower, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SHOTPOWERPIC)->GetWidth(), shotPower);
+        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SHOTPOWERPIC), 320 + wideScreenMargin - sideBarWidth + 8, 136 - shotPower, 0, 56 - shotPower, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::SHOTPOWERPIC)->GetImageWidth(), shotPower);
     }
 
     const uint16_t compasPictureIndex = COMPAS1PIC + ((uint16_t)((playerAngle + 11.25f) / 22.5f) % 16);
@@ -437,11 +437,11 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     // Health status
     if (health < 100)
     {
-        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::NOBODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::NOBODYPIC)->GetWidth(), GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetHeight());
+        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::NOBODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::NOBODYPIC)->GetImageWidth(), GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetImageHeight());
     }
     if (health > 0)
     {
-        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetWidth(), (uint16_t)(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetHeight() * (health / 100.0f)));
+        m_renderer.Render2DPictureSegment(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC), 320 + wideScreenMargin - sideBarWidth + 8, 8, 0, 0, GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetImageWidth(), (uint16_t)(GetEgaGraph()->GetPicture(egaGraphicsCatacomb3D::BODYPIC)->GetImageHeight() * (health / 100.0f)));
     }
     if (health < 1)
     {

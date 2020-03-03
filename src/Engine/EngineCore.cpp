@@ -203,7 +203,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 const Picture* handPicture = m_game.GetEgaGraph()->GetMaskedPicture(pictureIndex);
                 const int16_t offsetX = (m_game.GetId() == 5) ? 92 : 120;
                 // Draw only the segment of the hand graphic that is visible above the statusbar.
-                renderer.Render2DPictureSegment(handPicture, offsetX, statusbarOffset - m_playerActions.GetHandHeight(), 0, 0, handPicture->GetWidth(), m_playerActions.GetHandHeight());
+                renderer.Render2DPictureSegment(handPicture, offsetX, statusbarOffset - m_playerActions.GetHandHeight(), 0, 0, handPicture->GetImageWidth(), m_playerActions.GetHandHeight());
             }
 #ifdef DRAWTILEINFO
             char tileStr[40];
