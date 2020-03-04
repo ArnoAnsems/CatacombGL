@@ -41,6 +41,12 @@ public:
         uint8_t blue;
     } rgbColor;
 
+    typedef struct
+    {
+        uint16_t x;
+        uint16_t y;
+    } tileCoordinate;
+
     enum TextureFilterSetting
     {
         Nearest,
@@ -101,10 +107,7 @@ public:
 
     virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
     virtual void RenderAllSprites() = 0;
-    virtual void PrepareFloorAndCeiling() = 0;
-    virtual void UnprepareFloorAndCeiling() = 0;
-    virtual void RenderFloor(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) = 0;
-    virtual void RenderCeiling(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) = 0;
+    virtual void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) = 0;
 
     virtual void PrepareVisibilityMap() = 0;
     virtual void UnprepareVisibilityMap() = 0;

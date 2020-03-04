@@ -76,10 +76,7 @@ public:
 
     void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
     void RenderAllSprites();
-    void PrepareFloorAndCeiling() override;
-    void UnprepareFloorAndCeiling() override;
-    void RenderFloor(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) override;
-    void RenderCeiling(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex) override;
+    void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) override;
 
     void PrepareVisibilityMap() override;
     void UnprepareVisibilityMap() override;

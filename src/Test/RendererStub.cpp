@@ -155,19 +155,7 @@ void RendererStub::RenderAllSprites()
 {
 }
 
-void RendererStub::PrepareFloorAndCeiling()
-{
-}
-
-void RendererStub::UnprepareFloorAndCeiling()
-{
-}
-
-void RendererStub::RenderFloor(const uint16_t /*tileX*/, const uint16_t /*tileY*/, const egaColor /*colorIndex*/)
-{
-}
-
-void RendererStub::RenderCeiling(const uint16_t /*tileX*/, const uint16_t /*tileY*/, const egaColor /*colorIndex*/)
+void RendererStub::RenderFloorAndCeiling(const std::vector<tileCoordinate>& /*tileCoordinates*/, const egaColor /*floorColor*/, const egaColor /*ceilingColor*/)
 {
 }
 

@@ -1476,8 +1476,8 @@ bool Level::IsWaterLevel() const
 
 void Level::DrawVisibilityMap(IRenderer& renderer)
 {
-    renderer.PrepareVisibilityMap();
-
+    
+    std::vector<IRenderer::tileCoordinate> tiles;
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
@@ -1485,28 +1485,30 @@ void Level::DrawVisibilityMap(IRenderer& renderer)
             const uint16_t wall = GetWallTile(x, y);
             if (IsTileVisibleForPlayer(x, y))
             {
-                renderer.RenderFloor(x, y, EgaBrightWhite);
+                tiles.push_back(IRenderer::tileCoordinate{ x, y });
             }
         }
     }
+
+    renderer.PrepareVisibilityMap();
+    renderer.RenderFloorAndCeiling(tiles, EgaBrightWhite, EgaBrightWhite);
     renderer.UnprepareVisibilityMap();
 }
 
 void Level::DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp)
 {
-    renderer.PrepareFloorAndCeiling();
+    std::vector<IRenderer::tileCoordinate> tiles;
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
         {
             if (IsTileVisibleForPlayer(x, y))
             {
-                renderer.RenderFloor(x, y, GetGroundColor());
-                renderer.RenderCeiling(x, y, GetSkyColor(timeStamp));
+                tiles.push_back(IRenderer::tileCoordinate{ x, y });
             }
         }
     }
-    renderer.UnprepareFloorAndCeiling();
+    renderer.RenderFloorAndCeiling(tiles, GetGroundColor(), GetSkyColor(timeStamp));
 }
 
 void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks)

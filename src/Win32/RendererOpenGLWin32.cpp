@@ -1022,64 +1022,60 @@ void RendererOpenGLWin32::swap(uint16_t p,uint16_t q)
     m_spritesToRender[q].orientation = dummy.orientation;
 }
 
-void RendererOpenGLWin32::PrepareFloorAndCeiling()
+void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor)
 {
-}
+    glBindTexture(GL_TEXTURE_2D, m_singleColorTexture[floorColor]);
+    if (glGetError() == GL_INVALID_VALUE)
+    {
+        Logging::Instance().FatalError("Picture of type floor texture has invalid texture name (" + std::to_string(m_singleColorTexture[floorColor]) + ")");
+    }
 
-void RendererOpenGLWin32::UnprepareFloorAndCeiling()
-{
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
+
+    glNormal3f(0.0f, 0.0f, -1.0f);
+
+    glBegin(GL_QUADS);
+    for (tileCoordinate tile : tileCoordinates)
+    {
+        const uint16_t tileX = tile.x;
+        const uint16_t tileY = tile.y;
+        glTexCoord2i(0, 0); glVertex3f((float)tileX, (float)tileY, FloorZ);             // Top Left
+        glTexCoord2i(1, 0); glVertex3f((float)tileX, (float)(tileY + 1), FloorZ);       // Top Right
+        glTexCoord2i(1, 1); glVertex3f((float)(tileX + 1), (float)(tileY + 1), FloorZ); // Bottom Right
+        glTexCoord2i(0, 1); glVertex3f((float)(tileX + 1), (float)tileY, FloorZ);       // Bottom Left
+    }
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, m_singleColorTexture[ceilingColor]);
+    if (glGetError() == GL_INVALID_VALUE)
+    {
+        Logging::Instance().FatalError("Picture of type ceiling texture has invalid texture name (" + std::to_string(m_singleColorTexture[ceilingColor]) + ")");
+    }
+
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
+
+    glNormal3f( 0.0f, 0.0f, -1.0f);
+
+    glBegin(GL_QUADS);
+    for(tileCoordinate tile : tileCoordinates)
+    {
+        const uint16_t tileX = tile.x;
+        const uint16_t tileY = tile.y;
+        glTexCoord2i(0, 0); glVertex3f((float)tileX, (float)tileY, CeilingZ);             // Top Left
+        glTexCoord2i(1, 0); glVertex3f((float)tileX, (float)(tileY + 1), CeilingZ);       // Top Right
+        glTexCoord2i(1, 1); glVertex3f((float)(tileX + 1), (float)(tileY + 1), CeilingZ); // Bottom Right
+        glTexCoord2i(0, 1); glVertex3f((float)(tileX + 1), (float)tileY, CeilingZ);       // Bottom Left
+    }
+    glEnd();
+
     glClear(GL_DEPTH_BUFFER_BIT);
     glClearDepth(1.0f);                         // Depth Buffer Setup
-}
-
-void RendererOpenGLWin32::RenderFloor(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex)
-{
-    glBindTexture(GL_TEXTURE_2D, m_singleColorTexture[colorIndex]);
-    if (glGetError() == GL_INVALID_VALUE)
-    {
-        Logging::Instance().FatalError("Picture of type floor texture has invalid texture name (" + std::to_string(m_singleColorTexture[colorIndex]) + ")");
-    }
-
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
-    
-    glNormal3f( 0.0f, 0.0f, -1.0f);
-    
-    glBegin(GL_QUADS);
-
-    glTexCoord2i(0, 0); glVertex3f((float)tileX, (float)tileY, FloorZ);					// Top Left
-    glTexCoord2i(1, 0); glVertex3f((float)tileX, (float)(tileY + 1), FloorZ);					// Top Right
-    glTexCoord2i(1, 1); glVertex3f((float)(tileX + 1), (float)(tileY + 1), FloorZ);					// Bottom Right
-    glTexCoord2i(0, 1); glVertex3f((float)(tileX + 1), (float)tileY, FloorZ);					// Bottom Left
-
-    glEnd();
-}
-
-void RendererOpenGLWin32::RenderCeiling(const uint16_t tileX, const uint16_t tileY, const egaColor colorIndex)
-{
-    glBindTexture(GL_TEXTURE_2D, m_singleColorTexture[colorIndex]);
-    if (glGetError() == GL_INVALID_VALUE)
-    {
-        Logging::Instance().FatalError("Picture of type ceiling texture has invalid texture name (" + std::to_string(m_singleColorTexture[colorIndex]) + ")");
-    }
-
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
-
-    glNormal3f( 0.0f, 0.0f, -1.0f);
-
-    glBegin(GL_QUADS);
-
-    glTexCoord2i(0, 0); glVertex3f((float)tileX, (float)tileY, CeilingZ);					// Top Left
-    glTexCoord2i(1, 0); glVertex3f((float)tileX, (float)(tileY + 1), CeilingZ);					// Top Right
-    glTexCoord2i(1, 1); glVertex3f((float)(tileX + 1), (float)(tileY + 1), CeilingZ);					// Bottom Right
-    glTexCoord2i(0, 1); glVertex3f((float)(tileX + 1), (float)tileY, CeilingZ);					// Bottom Left
-
-    glEnd();
 }
 
 void RendererOpenGLWin32::SetTextureFilter(const TextureFilterSetting textureFilter)
