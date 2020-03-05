@@ -139,7 +139,7 @@ void RendererStub::UnprepareWalls()
 {
 }
 
-void RendererStub::Render3DWall(const Picture* /*picture*/, const int16_t /*tileX*/, const int16_t /*tileY*/, const int16_t /*orientation*/)
+void RendererStub::Render3DWall(const unsigned int /*textureId*/, const wallCoordinate& /*coordinate*/)
 {
 }
 

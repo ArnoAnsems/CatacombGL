@@ -96,45 +96,6 @@ constexpr IRenderer::rgbColor RendererOpenGLWin32::EgaToRgb(const egaColor ega)
     }
 }
 
-/*
-const unsigned char defaultTexture[32 * 8] =
-{
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 4, 6, 4, 6, 6, 4, 6, 6, 6, 6, 4, 4, 4, 6, 4, 4, 4, 6, 4, 6, 4, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6,
-    6, 4, 4, 4, 6, 4, 6, 4, 6, 6, 6, 6, 4, 6, 6, 4, 6, 6, 6, 4, 6, 4, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6,
-    6, 4, 4, 4, 6, 4, 6, 4, 6, 6, 6, 6, 4, 6, 6, 4, 4, 4, 6, 6, 4, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6,
-    6, 4, 6, 4, 6, 4, 6, 4, 6, 6, 6, 6, 4, 6, 6, 4, 6, 6, 6, 4, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 4, 6, 4, 6, 6, 4, 6, 6, 6, 6, 6, 4, 6, 6, 4, 4, 4, 6, 4, 6, 4, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
-};
-
-GLuint LoadDefaultTexture()
-{
-    GLuint textureId;
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-
-    GLfloat* textureImage = nullptr;
-    textureImage = new GLfloat[32 * 8 * 3];
-    for (int i = 0; i < 32 * 8; i++)
-    {
-        const rgbColor color = EgaToRgb(defaultTexture[i]);
-        textureImage[i * 3] = color.red;
-        textureImage[i * 3 + 1] = color.green;
-        textureImage[i * 3 + 2] = color.blue;
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, 32, 8, 0, GL_RGB, GL_FLOAT, textureImage);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-
-    delete[] textureImage;
-
-    return textureId;
-}
-*/
-
 void RendererOpenGLWin32::SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight)
 {
     m_windowWidth = windowWidth;
@@ -852,25 +813,13 @@ void RendererOpenGLWin32::UnprepareWalls()
     glDisable(GL_CULL_FACE);
 }
 
-void RendererOpenGLWin32::Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation)
+void RendererOpenGLWin32::Render3DWall(const unsigned int textureId, const wallCoordinate& coordinate)
 {
-    if (picture == nullptr)
-    {
-        // Nothing to render
-        return;
-    }
-
-    glMatrixMode(GL_MODELVIEW);						// Select The Projection Matrix
-    glLoadIdentity();
-    glTranslatef(tileX + 0.5f, tileY + 0.5f, 0);
-    glRotatef(orientation, 0.0f, 0.0f, 1.0f);
-    glTranslatef(0.0f, -0.5f, 0.0f);
-
     // Select the texture from the picture
-    glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
+    glBindTexture(GL_TEXTURE_2D, textureId);
     if (glGetError() == GL_INVALID_VALUE)
     {
-        Logging::Instance().FatalError("Picture of type wall texture has invalid texture name (" + std::to_string(picture->GetTextureId()) + ")");
+        Logging::Instance().FatalError("Picture of type wall texture has invalid texture name (" + std::to_string(textureId) + ")");
     }
 
     // Only wrap the texture in horizontal direction
@@ -883,10 +832,10 @@ void RendererOpenGLWin32::Render3DWall(const Picture* picture, const int16_t til
 
     // Draw the texture as a quad
     glBegin(GL_QUADS);
-    glTexCoord2i(1, 1); glVertex3f(-0.5f, 0.0f, FloorZ);
-    glTexCoord2i(0, 1); glVertex3f(0.5f, 0.0f, FloorZ);
-    glTexCoord2i(0, 0); glVertex3f(0.5f, 0.0f, CeilingZ);
-    glTexCoord2i(1, 0); glVertex3f(-0.5f, 0.0f, CeilingZ);
+    glTexCoord2i(1, 1); glVertex3f((float)coordinate.x1, (float)coordinate.y1, FloorZ);
+    glTexCoord2i(0, 1); glVertex3f((float)coordinate.x2, (float)coordinate.y2, FloorZ);
+    glTexCoord2i(0, 0); glVertex3f((float)coordinate.x2, (float)coordinate.y2, CeilingZ);
+    glTexCoord2i(1, 0); glVertex3f((float)coordinate.x1, (float)coordinate.y1, CeilingZ);
     glEnd();
 }
 

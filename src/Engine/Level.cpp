@@ -1525,8 +1525,11 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                 const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, ticks);
                 if (northWall != 1)
                 {
-                    Picture* northPicture = egaGraph->GetPicture(northWall);
-                    renderer.Render3DWall(northPicture, x, y - 1, 180);
+                    const Picture* northPicture = egaGraph->GetPicture(northWall);
+                    if (northPicture != nullptr)
+                    {
+                        renderer.Render3DWall(northPicture->GetTextureId(), IRenderer::wallCoordinate{ x + 1u, y, x, y });
+                    }
                 }
             }
 
@@ -1536,8 +1539,11 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                 const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, ticks);
                 if (eastWall != 1)
                 {
-                    Picture* eastPicture = egaGraph->GetPicture(eastWall);
-                    renderer.Render3DWall(eastPicture, x + 1, y, 270);
+                    const Picture* eastPicture = egaGraph->GetPicture(eastWall);
+                    if (eastPicture != nullptr)
+                    {
+                        renderer.Render3DWall(eastPicture->GetTextureId(), IRenderer::wallCoordinate{ x + 1u, y + 1u, x + 1u, y });
+                    }
                 }
             }
 
@@ -1548,8 +1554,11 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                 const uint16_t southWall = GetDarkWallPictureIndex(southwallIndex, ticks);
                 if (southWall != 1)
                 {
-                    Picture* southPicture = egaGraph->GetPicture(southWall);
-                    renderer.Render3DWall(southPicture, x, y + 1, 0);
+                    const Picture* southPicture = egaGraph->GetPicture(southWall);
+                    if (southPicture != nullptr)
+                    {
+                        renderer.Render3DWall(southPicture->GetTextureId(), IRenderer::wallCoordinate{ x, y + 1u, x + 1u, y + 1u });
+                    }
                 }
             }
 
@@ -1559,8 +1568,11 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                 const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, ticks);
                 if (westWall != 1)
                 {
-                    Picture* westPicture = egaGraph->GetPicture(westWall);
-                    renderer.Render3DWall(westPicture, x - 1, y, 90);
+                    const Picture* westPicture = egaGraph->GetPicture(westWall);
+                    if (westPicture != nullptr)
+                    {
+                        renderer.Render3DWall(westPicture->GetTextureId(), IRenderer::wallCoordinate{ x, y, x, y + 1u });
+                    }
                 }
             }
         }

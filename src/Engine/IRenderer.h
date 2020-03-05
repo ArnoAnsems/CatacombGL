@@ -47,6 +47,14 @@ public:
         uint16_t y;
     } tileCoordinate;
 
+    typedef struct
+    {
+        uint16_t x1;
+        uint16_t y1;
+        uint16_t x2;
+        uint16_t y2;
+    } wallCoordinate;
+
     enum TextureFilterSetting
     {
         Nearest,
@@ -102,7 +110,7 @@ public:
 
     virtual void PrepareWalls() = 0;
     virtual void UnprepareWalls() = 0;
-    virtual void Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation) = 0;
+    virtual void Render3DWall(const unsigned int textureId, const wallCoordinate& coordinate) = 0;
     virtual void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
 
     virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;

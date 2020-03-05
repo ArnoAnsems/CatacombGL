@@ -63,7 +63,7 @@ public:
 
     void PrepareWalls() override;
     void UnprepareWalls() override;
-    void Render3DWall(const Picture* picture, const int16_t tileX, const int16_t tileY, const int16_t orientation) override;
+    void Render3DWall(const unsigned int textureId, const wallCoordinate& coordinate) override;
     void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
 
     void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
