@@ -131,15 +131,7 @@ uint16_t RendererStub::GetAdditionalMarginDueToWideScreen(const float /*aspectRa
     return 0;
 }
 
-void RendererStub::PrepareWalls()
-{
-}
-
-void RendererStub::UnprepareWalls()
-{
-}
-
-void RendererStub::Render3DWall(const unsigned int /*textureId*/, const wallCoordinate& /*coordinate*/)
+void RendererStub::Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& /*textureToWallsMap*/)
 {
 }
 

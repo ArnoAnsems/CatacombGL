@@ -61,9 +61,7 @@ public:
     void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) override;
     uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) override;
 
-    void PrepareWalls() override;
-    void UnprepareWalls() override;
-    void Render3DWall(const unsigned int textureId, const wallCoordinate& coordinate) override;
+    void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) override;
     void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
 
     void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;

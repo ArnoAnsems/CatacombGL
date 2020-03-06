@@ -760,6 +760,8 @@ void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const floa
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspective 
 
+    glCullFace(GL_FRONT);
+
     glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
     glLoadIdentity();									// Reset The Projection Matrix
 
@@ -802,41 +804,41 @@ uint16_t RendererOpenGLWin32::GetAdditionalMarginDueToWideScreen(const float asp
     }
 }
 
-void RendererOpenGLWin32::PrepareWalls()
+void RendererOpenGLWin32::Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap)
 {
-    glCullFace(GL_FRONT);
     glEnable(GL_CULL_FACE);
-}
 
-void RendererOpenGLWin32::UnprepareWalls()
-{
-    glDisable(GL_CULL_FACE);
-}
-
-void RendererOpenGLWin32::Render3DWall(const unsigned int textureId, const wallCoordinate& coordinate)
-{
-    // Select the texture from the picture
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    if (glGetError() == GL_INVALID_VALUE)
+    for (const std::pair<unsigned int, std::vector<wallCoordinate>>& textureToWalls : textureToWallsMap)
     {
-        Logging::Instance().FatalError("Picture of type wall texture has invalid texture name (" + std::to_string(textureId) + ")");
+        const unsigned int textureId = textureToWalls.first;
+        // Select the texture from the picture
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        if (glGetError() == GL_INVALID_VALUE)
+        {
+            Logging::Instance().FatalError("Picture of type wall texture has invalid texture name (" + std::to_string(textureId) + ")");
+        }
+
+        // Only wrap the texture in horizontal direction
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
+
+        glNormal3f(0.0f, 0.0f, -1.0f);
+
+        // Draw the texture as a quad
+        glBegin(GL_QUADS);
+        for (const wallCoordinate& coordinate : textureToWalls.second)
+        {
+            glTexCoord2i(1, 1); glVertex3f((float)coordinate.x1, (float)coordinate.y1, FloorZ);
+            glTexCoord2i(0, 1); glVertex3f((float)coordinate.x2, (float)coordinate.y2, FloorZ);
+            glTexCoord2i(0, 0); glVertex3f((float)coordinate.x2, (float)coordinate.y2, CeilingZ);
+            glTexCoord2i(1, 0); glVertex3f((float)coordinate.x1, (float)coordinate.y1, CeilingZ);
+        }
+        glEnd();
     }
 
-    // Only wrap the texture in horizontal direction
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
-
-    glNormal3f( 0.0f, 0.0f, -1.0f);
-
-    // Draw the texture as a quad
-    glBegin(GL_QUADS);
-    glTexCoord2i(1, 1); glVertex3f((float)coordinate.x1, (float)coordinate.y1, FloorZ);
-    glTexCoord2i(0, 1); glVertex3f((float)coordinate.x2, (float)coordinate.y2, FloorZ);
-    glTexCoord2i(0, 0); glVertex3f((float)coordinate.x2, (float)coordinate.y2, CeilingZ);
-    glTexCoord2i(1, 0); glVertex3f((float)coordinate.x1, (float)coordinate.y1, CeilingZ);
-    glEnd();
+    glDisable(GL_CULL_FACE);
 }
 
 void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation)

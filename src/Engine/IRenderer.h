@@ -108,9 +108,7 @@ public:
     virtual void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) = 0;
     virtual uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) = 0;
 
-    virtual void PrepareWalls() = 0;
-    virtual void UnprepareWalls() = 0;
-    virtual void Render3DWall(const unsigned int textureId, const wallCoordinate& coordinate) = 0;
+    virtual void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) = 0;
     virtual void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
 
     virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
