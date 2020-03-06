@@ -989,14 +989,14 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
     glNormal3f(0.0f, 0.0f, -1.0f);
 
     glBegin(GL_QUADS);
-    for (tileCoordinate tile : tileCoordinates)
+    for (const tileCoordinate& tile : tileCoordinates)
     {
-        const uint16_t tileX = tile.x;
-        const uint16_t tileY = tile.y;
-        glTexCoord2i(0, 0); glVertex3f((float)tileX, (float)tileY, FloorZ);             // Top Left
-        glTexCoord2i(1, 0); glVertex3f((float)tileX, (float)(tileY + 1), FloorZ);       // Top Right
-        glTexCoord2i(1, 1); glVertex3f((float)(tileX + 1), (float)(tileY + 1), FloorZ); // Bottom Right
-        glTexCoord2i(0, 1); glVertex3f((float)(tileX + 1), (float)tileY, FloorZ);       // Bottom Left
+        const float tileX = (float)tile.x;
+        const float tileY = (float)tile.y;
+        glTexCoord2i(0, 0); glVertex3f(tileX, tileY, FloorZ);               // Top Left
+        glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, FloorZ);        // Top Right
+        glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, FloorZ); // Bottom Right
+        glTexCoord2i(0, 1); glVertex3f(tileX + 1.0f, tileY, FloorZ);        // Bottom Left
     }
     glEnd();
 
@@ -1014,14 +1014,14 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
     glNormal3f( 0.0f, 0.0f, -1.0f);
 
     glBegin(GL_QUADS);
-    for(tileCoordinate tile : tileCoordinates)
+    for(const tileCoordinate& tile : tileCoordinates)
     {
-        const uint16_t tileX = tile.x;
-        const uint16_t tileY = tile.y;
-        glTexCoord2i(0, 0); glVertex3f((float)tileX, (float)tileY, CeilingZ);             // Top Left
-        glTexCoord2i(1, 0); glVertex3f((float)tileX, (float)(tileY + 1), CeilingZ);       // Top Right
-        glTexCoord2i(1, 1); glVertex3f((float)(tileX + 1), (float)(tileY + 1), CeilingZ); // Bottom Right
-        glTexCoord2i(0, 1); glVertex3f((float)(tileX + 1), (float)tileY, CeilingZ);       // Bottom Left
+        const float tileX = (float)tile.x;
+        const float tileY = (float)tile.y;
+        glTexCoord2i(0, 0); glVertex3f(tileX, tileY, CeilingZ);               // Top Left
+        glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, CeilingZ);        // Top Right
+        glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, CeilingZ); // Bottom Right
+        glTexCoord2i(0, 1); glVertex3f(tileX + 1.0f, tileY, CeilingZ);        // Bottom Left
     }
     glEnd();
 
@@ -1125,7 +1125,7 @@ void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::p
     const int16_t xMax = (int16_t)ceil(rect.right);
 
     glBegin(GL_QUADS);
-    for (auto coordinate : coordinates)
+    for (auto& coordinate : coordinates)
     {
         int16_t xFirst = coordinate.first;
         while (xFirst >= xMin + 320)

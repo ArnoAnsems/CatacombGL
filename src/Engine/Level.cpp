@@ -1515,9 +1515,9 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
 {
     std::map<unsigned int, std::vector<IRenderer::wallCoordinate>> textureToWallsMap;
 
-    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    for (uint16_t y = 1; y < m_levelHeight; y++)
     {
-        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        for (uint16_t x = 1; x < m_levelWidth; x++)
         {
             if (m_wallYVisible[(y * m_levelWidth) + x])
             {
@@ -1537,32 +1537,7 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                         textureToWallsMap.at(textureId).push_back(wall);
                     }
                 }
-            }
-
-            if (m_wallXVisible[(y * m_levelWidth) + x + 1])
-            {
-                const uint16_t eastwallIndex = GetWallTile(x + 1, y);
-                const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, ticks);
-                if (eastWall != 1)
-                {
-                    const Picture* eastPicture = egaGraph->GetPicture(eastWall);
-                    if (eastPicture != nullptr)
-                    {
-                        const unsigned int textureId = eastPicture->GetTextureId();
-                        IRenderer::wallCoordinate wall = IRenderer::wallCoordinate{ x + 1u, y + 1u, x + 1u, y };
-                        if (textureToWallsMap.find(textureId) == textureToWallsMap.end())
-                        {
-                            textureToWallsMap.insert(std::make_pair(textureId, std::vector<IRenderer::wallCoordinate>()));
-                        }
-                        textureToWallsMap.at(textureId).push_back(wall);
-                    }
-                }
-            }
-
-
-            if (m_wallYVisible[((y + 1) * m_levelWidth) + x])
-            {
-                const uint16_t southwallIndex = GetWallTile(x, y + 1);
+                const uint16_t southwallIndex = GetWallTile(x, y);
                 const uint16_t southWall = GetDarkWallPictureIndex(southwallIndex, ticks);
                 if (southWall != 1)
                 {
@@ -1570,7 +1545,7 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                     if (southPicture != nullptr)
                     {
                         const unsigned int textureId = southPicture->GetTextureId();
-                        IRenderer::wallCoordinate wall = IRenderer::wallCoordinate{ x, y + 1u, x + 1u, y + 1u };
+                        IRenderer::wallCoordinate wall = IRenderer::wallCoordinate{ x, y, x + 1u, y };
                         if (textureToWallsMap.find(textureId) == textureToWallsMap.end())
                         {
                             textureToWallsMap.insert(std::make_pair(textureId, std::vector<IRenderer::wallCoordinate>()));
@@ -1582,6 +1557,22 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
 
             if (m_wallXVisible[(y * m_levelWidth) + x])
             {
+                const uint16_t eastwallIndex = GetWallTile(x, y);
+                const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, ticks);
+                if (eastWall != 1)
+                {
+                    const Picture* eastPicture = egaGraph->GetPicture(eastWall);
+                    if (eastPicture != nullptr)
+                    {
+                        const unsigned int textureId = eastPicture->GetTextureId();
+                        IRenderer::wallCoordinate wall = IRenderer::wallCoordinate{ x, y + 1u, x, y };
+                        if (textureToWallsMap.find(textureId) == textureToWallsMap.end())
+                        {
+                            textureToWallsMap.insert(std::make_pair(textureId, std::vector<IRenderer::wallCoordinate>()));
+                        }
+                        textureToWallsMap.at(textureId).push_back(wall);
+                    }
+                }
                 const uint16_t westwallIndex = GetWallTile(x - 1, y);
                 const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, ticks);
                 if (westWall != 1)
