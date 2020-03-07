@@ -256,6 +256,8 @@ unsigned int RendererOpenGLWin32::generateSingleColorTexture(const egaColor colo
     }
     const int16_t format = GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     delete[] textureImage;
 
@@ -333,6 +335,9 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture, c
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
+    // Do not wrap the texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     const uint32_t bytesPerOutputPixel = 4;
     const uint32_t width = 16;
     const uint32_t height = 256 * 16;
@@ -391,11 +396,6 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
         return;
     }
 
-    // Set the MODELVIEW matrix to the requested offset
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(GLfloat(offsetX), GLfloat(offsetY), 0.0f);
-
     // Select the texture from the picture
     glBindTexture(GL_TEXTURE_2D, font->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
@@ -403,9 +403,6 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
         Logging::Instance().FatalError("Font has invalid texture name (" + std::to_string(font->GetTextureId()) + ")");
     }
 
-    // Do not wrap the texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
 
@@ -423,12 +420,12 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
         float textureHeight = 1.0f / 256.0f * (charHeight / 16.0f);
         float textureWidth = (float)(charWidth) / 16.0f;
         float textureOffsetX = 0.0f;
-        float textureOffsetY = float(charIndex) / 256.0f;
+        float textureOffsetY = (float)(charIndex) / 256.0f;
         
-        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, charHeight);
-        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, charHeight);
-        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(combinedWidth + charWidth, 0);
-        glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(combinedWidth, 0);
+        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth, offsetY + charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth + charWidth, offsetY + charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(offsetX + combinedWidth + charWidth, offsetY);
+        glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(offsetX + combinedWidth, offsetY);
         combinedWidth += charWidth;
     }
     glEnd();
@@ -444,11 +441,6 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
         return;
     }
 
-    // Set the MODELVIEW matrix to the requested offset
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(GLfloat(offsetX), GLfloat(offsetY), 0.0f);
-
     // Select the texture from the picture
     glBindTexture(GL_TEXTURE_2D, font->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
@@ -456,9 +448,6 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
         Logging::Instance().FatalError("Font has invalid texture name (" + std::to_string(font->GetTextureId()) + ")");
     }
 
-    // Do not wrap the texture
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
 
@@ -517,13 +506,12 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
         float textureHeight = 1.0f / 256.0f * (charHeight / 16.0f);
         float textureWidth = (float)(charWidth) / 16.0f;
         float textureOffsetX = 0.0f;
-        float textureOffsetY = float(charIndex) / 256.0f;
+        float textureOffsetY = (float)(charIndex) / 256.0f;
 
-
-        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(combinedWidth, charHeight);
-        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(combinedWidth + charWidth, charHeight);
-        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(combinedWidth + charWidth, 0);
-        glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(combinedWidth, 0);
+        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth, offsetY + charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth + charWidth, offsetY + charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(offsetX + combinedWidth + charWidth, offsetY);
+        glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(offsetX + combinedWidth, offsetY);
         combinedWidth += charWidth;
     }
     glEnd();
@@ -628,11 +616,6 @@ void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t
         return;
     }
 
-    // Set the MODELVIEW matrix to the requested offset
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(GLfloat(offsetX), GLfloat(offsetY), 0.0f);
-
     // Select the texture from the picture
     glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
     if (glGetError() == GL_INVALID_VALUE)
@@ -652,10 +635,10 @@ void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t
     const float relativeImageWidth = (float)picture->GetImageWidth() / (float)picture->GetTextureWidth();
     const float relativeImageHeight = (float)picture->GetImageHeight() / (float)picture->GetTextureHeight();
     glBegin(GL_QUADS);
-    glTexCoord2f(0, relativeImageHeight); glVertex2i(0, height);
-    glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(width, height);
-    glTexCoord2f(relativeImageWidth, 0); glVertex2i(width, 0);
-    glTexCoord2f(0, 0); glVertex2i(0, 0);
+    glTexCoord2f(0, relativeImageHeight); glVertex2i(offsetX, offsetY + height);
+    glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(offsetX + width, offsetY + height);
+    glTexCoord2f(relativeImageWidth, 0); glVertex2i(offsetX + width, offsetY);
+    glTexCoord2f(0, 0); glVertex2i(offsetX, offsetY);
     glEnd();
 }
 
@@ -666,11 +649,6 @@ void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const i
         // Nothing to render
         return;
     }
-
-    // Set the MODELVIEW matrix to the requested offset
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(GLfloat(offsetX), GLfloat(offsetY), 0.0f);
 
     // Select the texture from the picture
     glBindTexture(GL_TEXTURE_2D, picture->GetTextureId());
@@ -689,10 +667,10 @@ void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const i
     const float textureWidth = (float)picture->GetTextureWidth();
     const float textureHeight = (float)picture->GetTextureHeight();
     glBegin(GL_QUADS);
-    glTexCoord2f(segmentOffsetX / textureWidth, (segmentOffsetY + segmentHeight) / textureHeight); glVertex2i(0, segmentHeight);
-    glTexCoord2f((segmentOffsetX + segmentWidth) / textureWidth, (segmentOffsetY + segmentHeight) / textureHeight); glVertex2i(segmentWidth, segmentHeight);
-    glTexCoord2f((segmentOffsetX + segmentWidth) / textureWidth, segmentOffsetY / textureHeight); glVertex2i(segmentWidth, 0);
-    glTexCoord2f(segmentOffsetX / textureWidth, segmentOffsetY / textureHeight); glVertex2i(0, 0);
+    glTexCoord2f(segmentOffsetX / textureWidth, (segmentOffsetY + segmentHeight) / textureHeight); glVertex2i(offsetX, offsetY + segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / textureWidth, (segmentOffsetY + segmentHeight) / textureHeight); glVertex2i(offsetX + segmentWidth, offsetY + segmentHeight);
+    glTexCoord2f((segmentOffsetX + segmentWidth) / textureWidth, segmentOffsetY / textureHeight); glVertex2i(offsetX + segmentWidth, offsetY);
+    glTexCoord2f(segmentOffsetX / textureWidth, segmentOffsetY / textureHeight); glVertex2i(offsetX, offsetY);
     glEnd();
 }
 
@@ -701,16 +679,13 @@ void RendererOpenGLWin32::Render2DBar(const int16_t x, const int16_t y, const ui
     glDisable(GL_TEXTURE_2D);
 
     const rgbColor color = EgaToRgb(colorIndex);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(GLfloat(x), GLfloat(y), 0.0f);
 
     glBegin(GL_QUADS);
     glColor3f((float)(color.red) / 256.0f, (float)(color.green) / 256.0f, (float)(color.blue) / 256.0f);
-    glTexCoord2i(0, 1); glVertex2i(0, height);
-    glTexCoord2i(1, 1); glVertex2i(width, height);
-    glTexCoord2i(1, 0); glVertex2i(width, 0);
-    glTexCoord2i(0, 0); glVertex2i(0, 0);
+    glTexCoord2i(0, 1); glVertex2i(x, y + height);
+    glTexCoord2i(1, 1); glVertex2i(x + width, y + height);
+    glTexCoord2i(1, 0); glVertex2i(x + width, y);
+    glTexCoord2i(0, 0); glVertex2i(x, y);
     glEnd();
 
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -723,19 +698,16 @@ void RendererOpenGLWin32::RenderRadarBlip(const float x, const float y, const eg
     glDisable(GL_TEXTURE_2D);
 
     const rgbColor color = EgaToRgb(colorIndex);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(x, y, 0.0f);
 
-    const uint16_t height = 1;
-    const uint16_t width = 1;
+    const float height = 1.0f;
+    const float width = 1.0f;
 
     glBegin(GL_QUADS);
     glColor3f((float)(color.red) / 256.0f, (float)(color.green) / 256.0f, (float)(color.blue) / 256.0f);
-    glTexCoord2i(0, 1); glVertex2i(0, height);
-    glTexCoord2i(1, 1); glVertex2i(width, height);
-    glTexCoord2i(1, 0); glVertex2i(width, 0);
-    glTexCoord2i(0, 0); glVertex2i(0, 0);
+    glTexCoord2i(0, 1); glVertex2f(x, y + height);
+    glTexCoord2i(1, 1); glVertex2f(x + width, y + height);
+    glTexCoord2i(1, 0); glVertex2f(x + width, y);
+    glTexCoord2i(0, 0); glVertex2f(x, y);
     glEnd();
 
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -847,18 +819,13 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
     glLoadIdentity();
     
     glTranslatef(offsetX, offsetY, 0.0f);
-    if (orientation == RotatedTowardsPlayer)
-    {
-        glRotatef(m_playerAngle, 0.0f, 0.0f, 1.0f);
-    }
-    else if (orientation == AlongYAxis)
-    {
-        glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-    }
-    else
-    {
-        glRotatef(0.0f, 0.0f, 0.0f, 1.0f);
-    }
+    const float angle =
+        (orientation == RotatedTowardsPlayer) ? m_playerAngle :
+        (orientation == AlongYAxis) ? 90.0f :
+        0.0f;
+
+    glRotatef(angle, 0.0f, 0.0f, 1.0f);
+
     const GLfloat halfWidth = (float)(picture->GetImageWidth()) / 128.0f;
     const GLfloat topZ = CeilingZ + ((float)(picture->GetImageHeight()) / 64.0f) * (FloorZ - CeilingZ);
 
@@ -877,6 +844,7 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
 
     glNormal3f( 0.0f, 0.0f, -1.0f);
 
+    // Sprites that face the player are a bit sunken into the floor
     const float zOffset = (orientation == RotatedTowardsPlayer) ? 0.0625f : 0.0f;
 
     // Draw the texture as a quad
@@ -910,6 +878,7 @@ void RendererOpenGLWin32::RenderAllSprites()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthMask(GL_FALSE);
+    glPushMatrix();
 
     quickSort(0, m_numberOfSprites);
 
@@ -918,6 +887,7 @@ void RendererOpenGLWin32::RenderAllSprites()
         Render3DSprite(m_spritesToRender[i].picture, m_spritesToRender[i].offsetX, m_spritesToRender[i].offsetY, m_spritesToRender[i].orientation);
     }
 
+    glPopMatrix();
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 
@@ -981,12 +951,13 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
         Logging::Instance().FatalError("Picture of type floor texture has invalid texture name (" + std::to_string(m_singleColorTexture[floorColor]) + ")");
     }
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
 
     glNormal3f(0.0f, 0.0f, -1.0f);
+
+    // Do not write into the depth buffer. This allows sprites to appear a bit sunken into the floor.
+    glDepthMask(GL_FALSE);
 
     glBegin(GL_QUADS);
     for (const tileCoordinate& tile : tileCoordinates)
@@ -1006,8 +977,6 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
         Logging::Instance().FatalError("Picture of type ceiling texture has invalid texture name (" + std::to_string(m_singleColorTexture[ceilingColor]) + ")");
     }
 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
 
@@ -1025,8 +994,7 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
     }
     glEnd();
 
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glClearDepth(1.0f);                         // Depth Buffer Setup
+    glDepthMask(GL_TRUE);
 }
 
 void RendererOpenGLWin32::SetTextureFilter(const TextureFilterSetting textureFilter)
@@ -1051,9 +1019,6 @@ bool RendererOpenGLWin32::IsVSyncSupported()
 
 void RendererOpenGLWin32::PrepareVisibilityMap()
 {
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
     glDisable(GL_DEPTH_TEST);
 }
 
@@ -1064,20 +1029,20 @@ void RendererOpenGLWin32::UnprepareVisibilityMap()
 
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 {
-    uint8_t* rawPixelData = new uint8_t[(uint32_t)m_windowWidth * (uint32_t)m_windowHeight * 4];
-    glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
+    uint8_t* rawPixelData = new uint8_t[(unsigned int)m_windowWidth * (unsigned int)m_windowHeight * 3u];
+    glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGB, GL_UNSIGNED_BYTE, rawPixelData);
 
     const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(m_windowWidth);
     const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(m_windowHeight);
 
-    uint8_t* texturePixelData = new uint8_t[(uint32_t)textureWidth * (uint32_t)textureHeight * 4];
+    uint8_t* texturePixelData = new uint8_t[(unsigned int)textureWidth * (unsigned int)textureHeight * 3u];
 
     // Flip pixels upside down
     for (uint16_t y = 0; y < m_windowHeight; y++)
     {
-        for (uint16_t x = 0; x < m_windowWidth * 4; x++)
+        for (uint16_t x = 0; x < m_windowWidth * 3; x++)
         {
-            texturePixelData[(y * textureWidth * 4) + x] = rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 4) + x];
+            texturePixelData[(y * textureWidth * 3) + x] = rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 3) + x];
         }
     }
 
@@ -1095,9 +1060,13 @@ Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 
     glBindTexture(GL_TEXTURE_2D, newTextureId);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texturePixelData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texturePixelData);
 
     delete[] texturePixelData;
+
+    // Do not wrap the texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -1115,10 +1084,6 @@ void RendererOpenGLWin32::RemovePixelsFromScreenCapture(const std::vector<std::p
 
     //Replace where rendered
     glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
-
-    // Set the origin to the default
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 
     ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
     const int16_t xMin = (int16_t)floor(rect.left);
@@ -1167,9 +1132,6 @@ void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
         Logging::Instance().FatalError("Picture has invalid texture name (" + std::to_string(screenCapture->GetTextureId()) + ")");
     }
 
-    // Do not wrap the texture
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
 
