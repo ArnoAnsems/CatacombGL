@@ -56,7 +56,7 @@ void RendererOpenGLWin32::Setup()
 {
     for (egaColor color = EgaBlack; color < EgaRange; color = egaColor(color + 1))
     {
-        m_singleColorTexture[color] = generateSingleColorTexture(color);
+        m_singleColorTexture[color] = GenerateSingleColorTexture(color);
     }
 
     m_isVSyncSupported = (SDL_GL_SetSwapInterval(0) == 0);
@@ -235,14 +235,14 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(
     return textureId;
 }
 
-unsigned int RendererOpenGLWin32::generateSingleColorTexture(const egaColor color) const
+unsigned int RendererOpenGLWin32::GenerateSingleColorTexture(const egaColor color) const
 {
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     const uint32_t bytesPerOutputPixel = 3;
-    const uint32_t width = 64;
-    const uint32_t height = 64;
+    const uint32_t width = 8;
+    const uint32_t height = 8;
     GLubyte* textureImage = new GLubyte[width * height * bytesPerOutputPixel];
 
     const rgbColor outputColor = EgaToRgb(color);
@@ -258,6 +258,10 @@ unsigned int RendererOpenGLWin32::generateSingleColorTexture(const egaColor colo
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Filter setting (GL_NEAREST or GL_LINEAR) does not matter for a single color texture.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
     delete[] textureImage;
 
@@ -676,43 +680,18 @@ void RendererOpenGLWin32::Render2DPictureSegment(const Picture* picture, const i
 
 void RendererOpenGLWin32::Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex)
 {
-    glDisable(GL_TEXTURE_2D);
-
-    const rgbColor color = EgaToRgb(colorIndex);
+    glBindTexture(GL_TEXTURE_2D, m_singleColorTexture[colorIndex]);
+    if (glGetError() == GL_INVALID_VALUE)
+    {
+        Logging::Instance().FatalError("Picture has invalid texture name (" + std::to_string(m_singleColorTexture[colorIndex]) + ")");
+    }
 
     glBegin(GL_QUADS);
-    glColor3f((float)(color.red) / 256.0f, (float)(color.green) / 256.0f, (float)(color.blue) / 256.0f);
     glTexCoord2i(0, 1); glVertex2i(x, y + height);
     glTexCoord2i(1, 1); glVertex2i(x + width, y + height);
     glTexCoord2i(1, 0); glVertex2i(x + width, y);
     glTexCoord2i(0, 0); glVertex2i(x, y);
     glEnd();
-
-    glColor3f(1.0f, 1.0f, 1.0f);
-
-    glEnable(GL_TEXTURE_2D);
-}
-
-void RendererOpenGLWin32::RenderRadarBlip(const float x, const float y, const egaColor colorIndex)
-{
-    glDisable(GL_TEXTURE_2D);
-
-    const rgbColor color = EgaToRgb(colorIndex);
-
-    const float height = 1.0f;
-    const float width = 1.0f;
-
-    glBegin(GL_QUADS);
-    glColor3f((float)(color.red) / 256.0f, (float)(color.green) / 256.0f, (float)(color.blue) / 256.0f);
-    glTexCoord2i(0, 1); glVertex2f(x, y + height);
-    glTexCoord2i(1, 1); glVertex2f(x + width, y + height);
-    glTexCoord2i(1, 0); glVertex2f(x + width, y);
-    glTexCoord2i(0, 0); glVertex2f(x, y);
-    glEnd();
-
-    glColor3f(1.0f, 1.0f, 1.0f);
-
-    glEnable(GL_TEXTURE_2D);
 }
 
 void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea)
@@ -746,6 +725,8 @@ void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const floa
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    glNormal3f(0.0f, 0.0f, -1.0f);
 
     if (depthShading)
     {
@@ -796,8 +777,6 @@ void RendererOpenGLWin32::Render3DWalls(const std::map<unsigned int, std::vector
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
 
-        glNormal3f(0.0f, 0.0f, -1.0f);
-
         // Draw the texture as a quad
         glBegin(GL_QUADS);
         for (const wallCoordinate& coordinate : textureToWalls.second)
@@ -841,8 +820,6 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
-
-    glNormal3f( 0.0f, 0.0f, -1.0f);
 
     // Sprites that face the player are a bit sunken into the floor
     const float zOffset = (orientation == RotatedTowardsPlayer) ? 0.0625f : 0.0f;
@@ -951,11 +928,6 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
         Logging::Instance().FatalError("Picture of type floor texture has invalid texture name (" + std::to_string(m_singleColorTexture[floorColor]) + ")");
     }
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
-
-    glNormal3f(0.0f, 0.0f, -1.0f);
-
     // Do not write into the depth buffer. This allows sprites to appear a bit sunken into the floor.
     glDepthMask(GL_FALSE);
 
@@ -976,11 +948,6 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
     {
         Logging::Instance().FatalError("Picture of type ceiling texture has invalid texture name (" + std::to_string(m_singleColorTexture[ceilingColor]) + ")");
     }
-
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_textureFilter);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_textureFilter);
-
-    glNormal3f( 0.0f, 0.0f, -1.0f);
 
     glBegin(GL_QUADS);
     for(const tileCoordinate& tile : tileCoordinates)

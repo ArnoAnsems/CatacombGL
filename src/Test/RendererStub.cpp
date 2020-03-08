@@ -118,10 +118,6 @@ void RendererStub::Render2DBar(const int16_t /*x*/, const int16_t /*y*/, const u
 {
 }
 
-void RendererStub::RenderRadarBlip(const float /*x*/, const float /*y*/, const egaColor /*colorIndex*/)
-{
-}
-
 void RendererStub::Prepare3DRendering(const bool /*depthShading*/, const float /*aspectRatio*/, uint16_t /*fov*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/)
 {
 }
