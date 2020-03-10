@@ -34,6 +34,8 @@ public:
     virtual void DrawNoviceSelected() = 0;
     virtual void DrawWarriorSelected() = 0;
     virtual void DrawStandBeforeGate() = 0;
+    virtual void DrawCatalog() = 0;
+    virtual bool IsCatalogAvailable() = 0;
 
 protected:
     IRenderer& m_renderer;

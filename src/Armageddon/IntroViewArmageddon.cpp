@@ -175,3 +175,13 @@ void IntroViewArmageddon::DrawStandBeforeGate()
 {
     m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
 }
+
+void IntroViewArmageddon::DrawCatalog()
+{
+    // No catalog in Catacomb Armageddon
+}
+
+bool IntroViewArmageddon::IsCatalogAvailable()
+{
+    return false;
+}

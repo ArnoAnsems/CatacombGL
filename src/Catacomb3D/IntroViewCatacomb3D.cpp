@@ -99,3 +99,13 @@ void IntroViewCatacomb3D::DrawStandBeforeGate()
 {
     // Not applicable
 }
+
+void IntroViewCatacomb3D::DrawCatalog()
+{
+    // No catalog in Catacomb 3D
+}
+
+bool IntroViewCatacomb3D::IsCatalogAvailable()
+{
+    return false;
+}

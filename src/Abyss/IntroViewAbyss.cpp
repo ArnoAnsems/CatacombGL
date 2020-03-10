@@ -171,3 +171,13 @@ void IntroViewAbyss::DrawStandBeforeGate()
 {
     m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
 }
+
+void IntroViewAbyss::DrawCatalog()
+{
+    m_renderer.Render2DBar(20, 20, 30, 40, EgaGreen);
+}
+
+bool IntroViewAbyss::IsCatalogAvailable()
+{
+    return true;
+}

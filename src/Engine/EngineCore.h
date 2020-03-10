@@ -72,7 +72,8 @@ private:
         Victory,
         VerifyGateExit,
         ExitGame,
-        Help
+        Help,
+        Catalog
     };
 
     void LoadLevel(const uint8_t mapIndex);

@@ -175,3 +175,13 @@ void IntroViewApocalypse::DrawStandBeforeGate()
 {
     m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
 }
+
+void IntroViewApocalypse::DrawCatalog()
+{
+    // No catalog in Catacomb Apocalypse
+}
+
+bool IntroViewApocalypse::IsCatalogAvailable()
+{
+    return false;
+}

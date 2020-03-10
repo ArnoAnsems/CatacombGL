@@ -389,6 +389,10 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         m_game.GetIntroView()->DrawStandBeforeGate();
     }
+    if (m_state == Catalog)
+    {
+        m_game.GetIntroView()->DrawCatalog();
+    }
 
 #ifdef DRAWTIME
     char ticsStr[40];
@@ -514,6 +518,10 @@ void EngineCore::EnterKeyReleased()
             m_state = EnteringLevel;
             m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
             m_warpToLevel = 0;
+        }
+        else if (m_state == Catalog)
+        {
+            m_state = Introduction;
         }
         else if (m_state == WarpCheatDialog)
         {
@@ -725,6 +733,14 @@ bool EngineCore::Think()
         if (m_playerInput.IsKeyJustPressed(SDLK_BACKSPACE))
         {
             BackspacePressed();
+        }
+    }
+
+    if (m_state == Introduction && !m_menu->IsActive())
+    {
+        if (m_playerInput.IsKeyJustPressed(SDLK_F10) && m_game.GetIntroView()->IsCatalogAvailable())
+        {
+            m_state = Catalog;
         }
     }
 
