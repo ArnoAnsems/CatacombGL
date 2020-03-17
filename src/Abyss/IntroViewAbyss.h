@@ -49,5 +49,7 @@ private:
     Shape* m_shapeNovice;
     Shape* m_shapeWarrior;
     Shape* m_shapeStandBeforeGate;
+
+    Shape* m_catalog;
 };
 
