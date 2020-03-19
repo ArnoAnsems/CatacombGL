@@ -15,6 +15,8 @@
 
 #include "RendererStub.h"
 
+static const std::string defaultString("");
+
 RendererStub::RendererStub()
 {
 }
@@ -168,4 +170,29 @@ void RendererStub::RemovePixelsFromScreenCapture(const std::vector<std::pair<int
 void RendererStub::RenderScreenCapture(Picture* /*screenCapture*/)
 {
 
+}
+
+uint16_t RendererStub::GetWindowWidth() const
+{
+    return 1;
+}
+
+uint16_t RendererStub::GetWindowHeight() const
+{
+    return 1;
+}
+
+const std::string& RendererStub::GetGraphicsApiVersion() const
+{
+    return defaultString;
+}
+
+const std::string& RendererStub::GetGraphicsAdapterVendor() const
+{
+    return defaultString;
+}
+
+const std::string& RendererStub::GetGraphicsAdapterModel() const
+{
+    return defaultString;
 }

@@ -82,6 +82,12 @@ public:
     void RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates) override;
     void RenderScreenCapture(Picture* screenCapture) override;
 
+    uint16_t GetWindowWidth() const override;
+    uint16_t GetWindowHeight() const override;
+    const std::string& GetGraphicsApiVersion() const override;
+    const std::string& GetGraphicsAdapterVendor() const override;
+    const std::string& GetGraphicsAdapterModel() const override;
+
 private:
     typedef struct
     {
@@ -110,5 +116,9 @@ private:
     GLint m_textureFilter;
     int32_t m_currentSwapInterval;
     bool m_isVSyncSupported;
+
+    std::string m_graphicsApiVersion;
+    std::string m_graphicsAdapterVendor;
+    std::string m_graphicsAdapterModel;
 };
 

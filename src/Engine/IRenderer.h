@@ -28,6 +28,7 @@
 #include "ViewPorts.h"
 #include <vector>
 #include <map>
+#include <string>
 
 class Font;
 
@@ -120,4 +121,10 @@ public:
     virtual Picture* GetScreenCapture(const unsigned int textureId) = 0;
     virtual void RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates) = 0;
     virtual void RenderScreenCapture(Picture* screenCapture) = 0;
+
+    virtual uint16_t GetWindowWidth() const = 0;
+    virtual uint16_t GetWindowHeight() const = 0;
+    virtual const std::string& GetGraphicsApiVersion() const = 0;
+    virtual const std::string& GetGraphicsAdapterVendor() const = 0;
+    virtual const std::string& GetGraphicsAdapterModel() const = 0;
 };

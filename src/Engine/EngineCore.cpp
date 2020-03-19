@@ -17,6 +17,7 @@
 #include "EngineCore.h"
 #include "..\..\ThirdParty\RefKeen\id_sd.h"
 #include "LevelLocationNames.h"
+#include "DefaultFont.h"
 #include <math.h>
 #include <fstream>
 
@@ -446,9 +447,13 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_configurationSettings.GetShowFps())
     {
-        char fpsStr[10];
-        sprintf_s(fpsStr, 10, "%d", m_framesCounter.GetFramesPerSecond());
-        renderer.RenderTextLeftAligned(fpsStr, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, 220, 2);
+        const std::string fpsStr = std::to_string(m_framesCounter.GetFramesPerSecond()) + " FPS";
+        renderer.RenderTextLeftAligned(fpsStr.c_str(), DefaultFont::Get(renderer, 10), EgaBrightYellow, 4, 2);
+        const std::string windowDimensionsStr = std::to_string(renderer.GetWindowWidth()) + " x " + std::to_string(renderer.GetWindowHeight());
+        renderer.RenderTextLeftAligned(windowDimensionsStr.c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 14);
+        renderer.RenderTextLeftAligned(renderer.GetGraphicsApiVersion().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 22);
+        renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterVendor().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 30);
+        renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterModel().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 38);
     }
     
     renderer.Unprepare2DRendering();

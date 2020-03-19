@@ -73,5 +73,11 @@ public:
     Picture* GetScreenCapture(const unsigned int textureId) override;
     void RemovePixelsFromScreenCapture(const std::vector<std::pair<int16_t, int16_t>>& coordinates) override;
     void RenderScreenCapture(Picture* screenCapture) override;
+
+    uint16_t GetWindowWidth() const override;
+    uint16_t GetWindowHeight() const override;
+    const std::string& GetGraphicsApiVersion() const override;
+    const std::string& GetGraphicsAdapterVendor() const override;
+    const std::string& GetGraphicsAdapterModel() const override;
 };
 

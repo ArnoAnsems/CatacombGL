@@ -62,6 +62,15 @@ void RendererOpenGLWin32::Setup()
     m_isVSyncSupported = (SDL_GL_SetSwapInterval(0) == 0);
     const std::string vSyncLogMessage = m_isVSyncSupported ? "VSync is supported" : "VSync is NOT supported";
     Logging::Instance().AddLogMessage(vSyncLogMessage);
+
+    const char* glVersion = (const char*)glGetString(GL_VERSION);
+    m_graphicsApiVersion = "OpenGL " + std::string(glVersion);
+
+    const char* glVendor = (const char*)glGetString(GL_VENDOR);
+    m_graphicsAdapterVendor = std::string(glVendor);
+
+    const char* glRenderer = (const char*)glGetString(GL_RENDERER);
+    m_graphicsAdapterModel = std::string(glRenderer);
 }
 
 const RendererOpenGLWin32::rgbColor egaToRgbMap[EgaRange] =
@@ -1114,4 +1123,29 @@ void RendererOpenGLWin32::RenderScreenCapture(Picture* screenCapture)
     glEnd();
 
     glDisable(GL_STENCIL_TEST);
+}
+
+uint16_t RendererOpenGLWin32::GetWindowWidth() const
+{
+    return m_windowWidth;
+}
+
+uint16_t RendererOpenGLWin32::GetWindowHeight() const
+{
+    return m_windowHeight;
+}
+
+const std::string& RendererOpenGLWin32::GetGraphicsApiVersion() const
+{
+    return m_graphicsApiVersion;
+}
+
+const std::string& RendererOpenGLWin32::GetGraphicsAdapterVendor() const
+{
+    return m_graphicsAdapterVendor;
+}
+
+const std::string& RendererOpenGLWin32::GetGraphicsAdapterModel() const
+{
+    return m_graphicsAdapterModel;
 }
