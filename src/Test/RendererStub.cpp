@@ -79,24 +79,24 @@ unsigned int RendererStub::LoadFontIntoTexture(const bool* /*fontPicture*/, cons
     return 0u;
 }
 
-void RendererStub::RenderTextLeftAligned(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
+void RendererStub::RenderTextLeftAligned(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
 {
 }
 
-void RendererStub::RenderTextLeftAlignedTruncated(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/, const uint16_t /*maxLength*/)
+void RendererStub::RenderTextLeftAlignedTruncated(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/, const uint16_t /*maxLength*/)
 {
 }
 
-uint8_t RendererStub::RenderTextLeftAlignedMultiLine(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
+uint8_t RendererStub::RenderTextLeftAlignedMultiLine(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
 {
     return 1;
 }
 
-void RendererStub::RenderTextCentered(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
+void RendererStub::RenderTextCentered(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
 {
 }
 
-void RendererStub::RenderNumber(const uint16_t /*value*/, const Font* /*font*/, const uint8_t /*maxDigits*/, const egaColor /*colorIndex*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
+void RendererStub::RenderNumber(const uint16_t /*value*/, const Font* /*font*/, const uint8_t /*maxDigits*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
 {
 }
 

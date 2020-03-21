@@ -680,7 +680,12 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 5)
         {
-            m_configurationSettings.SetShowFps(!m_configurationSettings.GetShowFps());
+            const ShowFpsMode previousShowFpsMode = m_configurationSettings.GetShowFps();
+            const ShowFpsMode nextShowFpsMode =
+                (previousShowFpsMode == Off) ? Minimal :
+                (previousShowFpsMode == Minimal) ? Extended :
+                Off;
+            m_configurationSettings.SetShowFps(nextShowFpsMode);
         }
         else if (m_menuItemSelected == 6)
         {
@@ -1024,7 +1029,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
 
         renderer.Render2DPicture(egaGraph->GetTilesSize8(((m_menuItemSelected == 5) && flashIcon) ? 93 : 92), 76, 102);
         renderer.RenderTextLeftAligned("Show frame rate", egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 84, 103);
-        const char* showFpsStr = (m_configurationSettings.GetShowFps()) ? "Enabled" : "Disabled";
+        const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
+        const char* showFpsStr =
+            (showFpsMode == Minimal) ? "Minimal" :
+            (showFpsMode == Extended) ? "Extended" :
+            "Off";
         renderer.RenderTextLeftAligned(showFpsStr, egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaLightGray : EgaDarkGray, 180, 103);
 
         const bool vsyncNotSupported = !renderer.IsVSyncSupported();

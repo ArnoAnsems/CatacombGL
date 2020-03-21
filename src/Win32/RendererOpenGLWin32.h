@@ -53,11 +53,11 @@ public:
     unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) override;
     unsigned int LoadFontIntoTexture(const bool* fontPicture, const uint16_t lineHeight) override;
 
-    void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
-    void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength) override;
-    uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
-    void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
-    void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) override;
+    void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
+    void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY, const uint16_t maxLength) override;
+    uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
+    void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
+    void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
 
     void Prepare2DRendering(const bool helpWindow) override;
     void Unprepare2DRendering() override;

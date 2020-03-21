@@ -502,7 +502,12 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 6)
         {
-            m_configurationSettings.SetShowFps(!m_configurationSettings.GetShowFps());
+            const ShowFpsMode previousShowFpsMode = m_configurationSettings.GetShowFps();
+            const ShowFpsMode nextShowFpsMode =
+                (previousShowFpsMode == Off) ? Minimal :
+                (previousShowFpsMode == Minimal) ? Extended :
+                Off;
+            m_configurationSettings.SetShowFps(nextShowFpsMode);
         }
         else if (m_menuItemSelected == 7)
         {
@@ -673,7 +678,11 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
         renderer.RenderTextLeftAligned(depthShadingStr, egaGraph->GetFont(3), (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset2,80);
         renderer.RenderTextLeftAligned("Show frame rate", egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset,90);
-        const char* showFpsStr = (m_configurationSettings.GetShowFps()) ? "Enabled" : "Disabled";
+        const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
+        const char* showFpsStr =
+            (showFpsMode == Minimal) ? "Minimal" :
+            (showFpsMode == Extended) ? "Extended" :
+            "Off";
         renderer.RenderTextLeftAligned(showFpsStr, egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset2,90);
         const bool vsyncNotSupported = !renderer.IsVSyncSupported();
         renderer.RenderTextLeftAligned("VSync", egaGraph->GetFont(3), (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == 7) ? EgaBrightCyan : EgaBrightWhite, xOffset, 100);

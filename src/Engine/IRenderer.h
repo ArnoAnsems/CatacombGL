@@ -93,11 +93,11 @@ public:
     virtual unsigned int LoadTilesSize8IntoTexture(const FileChunk* decompressedChunk, const uint16_t index, const bool masked) = 0;
     virtual unsigned int LoadFontIntoTexture(const bool* fontPicture, const uint16_t lineHeight) = 0;
 
-    virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
-    virtual void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength) = 0;
-    virtual uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
-    virtual void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
-    virtual void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY) = 0;
+    virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
+    virtual void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY, const uint16_t maxLength) = 0;
+    virtual uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
+    virtual void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
+    virtual void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
 
     virtual void Prepare2DRendering(const bool helpWindow) = 0;
     virtual void Unprepare2DRendering() = 0;

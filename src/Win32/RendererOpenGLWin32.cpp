@@ -381,7 +381,7 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture, c
     return textureId;
 }
 
-void RendererOpenGLWin32::RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
+void RendererOpenGLWin32::RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY)
 {
     if (text == nullptr || font == nullptr)
     {
@@ -401,7 +401,7 @@ void RendererOpenGLWin32::RenderTextCentered(const char* text, const Font* font,
     RenderTextLeftAligned(text, font, colorIndex, leftAlignedOffsetX, offsetY);
 }
 
-void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
+void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY)
 {
     if (text == nullptr || font == nullptr)
     {
@@ -446,7 +446,7 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     glColor3f(1.0f, 1.0f, 1.0f);
 }
 
-void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY, const uint16_t maxLength)
+void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY, const uint16_t maxLength)
 {
     if (text == nullptr || font == nullptr || strlen(text) == 0)
     {
@@ -532,7 +532,7 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     glColor3f(1.0f, 1.0f, 1.0f);
 }
 
-uint8_t RendererOpenGLWin32::RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
+uint8_t RendererOpenGLWin32::RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY)
 {
     uint8_t numberOfLines = 0;
 
@@ -578,7 +578,7 @@ uint8_t RendererOpenGLWin32::RenderTextLeftAlignedMultiLine(const char* text, co
     return numberOfLines;
 }
 
-void RendererOpenGLWin32::RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const uint16_t offsetX, const uint16_t offsetY)
+void RendererOpenGLWin32::RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY)
 {
     char str[10];
 

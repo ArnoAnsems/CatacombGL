@@ -445,15 +445,22 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_menu->Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic(), m_gameTimer.GetActualTime());
     }
 
-    if (m_configurationSettings.GetShowFps())
+    const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
+    if (showFpsMode != ShowFpsMode::Off)
     {
-        const std::string fpsStr = std::to_string(m_framesCounter.GetFramesPerSecond()) + " FPS";
-        renderer.RenderTextLeftAligned(fpsStr.c_str(), DefaultFont::Get(renderer, 10), EgaBrightYellow, 4, 2);
-        const std::string windowDimensionsStr = std::to_string(renderer.GetWindowWidth()) + " x " + std::to_string(renderer.GetWindowHeight());
-        renderer.RenderTextLeftAligned(windowDimensionsStr.c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 14);
-        renderer.RenderTextLeftAligned(renderer.GetGraphicsApiVersion().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 22);
-        renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterVendor().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 30);
-        renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterModel().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, 4, 38);
+        const int16_t offsetX = 6 - renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
+        const std::string fpsStr =
+            (showFpsMode == ShowFpsMode::Minimal) ? std::to_string(m_framesCounter.GetFramesPerSecond()) :
+            std::to_string(m_framesCounter.GetFramesPerSecond()) + " FPS";
+        renderer.RenderTextLeftAligned(fpsStr.c_str(), DefaultFont::Get(renderer, 10), EgaBrightYellow, offsetX, 2);
+        if (showFpsMode == ShowFpsMode::Extended)
+        {
+            const std::string windowDimensionsStr = std::to_string(renderer.GetWindowWidth()) + " x " + std::to_string(renderer.GetWindowHeight());
+            renderer.RenderTextLeftAligned(windowDimensionsStr.c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 14);
+            renderer.RenderTextLeftAligned(renderer.GetGraphicsApiVersion().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 22);
+            renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterVendor().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 30);
+            renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterModel().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 38);
+        }
     }
     
     renderer.Unprepare2DRendering();
@@ -741,6 +748,8 @@ bool EngineCore::Think()
         }
     }
 
+    /*
+    TODO: Catalog disabled for now
     if (m_state == Introduction && !m_menu->IsActive())
     {
         if (m_playerInput.IsKeyJustPressed(SDLK_F10) && m_game.GetIntroView()->IsCatalogAvailable())
@@ -748,6 +757,7 @@ bool EngineCore::Think()
             m_state = Catalog;
         }
     }
+    */
 
     if (!m_playerInput.HasFocus() && m_state == InGame && !m_menu->IsActive())
     {

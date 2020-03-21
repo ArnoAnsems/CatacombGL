@@ -170,12 +170,6 @@ void CreateGLWindow(int width, int height, int bits)
         Logging::Instance().FatalError("SDL_GL_CreateContext failed: " + std::string(SDL_GetError()));
     }
 
-    const char* glRenderer = (const char*)glGetString(GL_RENDERER);
-    Logging::Instance().AddLogMessage("Running on graphics adapter model " + std::string(glRenderer));
-
-    const char* glVersion = (const char*)glGetString(GL_VERSION);
-    Logging::Instance().AddLogMessage("Running on OpenGL " + std::string(glVersion));
-
     m_renderer = new RendererOpenGLWin32();
     m_renderer->Setup();
     m_renderer->SetVSync(m_configurationSettings.GetVSync());
@@ -183,6 +177,9 @@ void CreateGLWindow(int width, int height, int bits)
     SetScreenMode(m_configurationSettings.GetScreenMode());
     
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
+
+    Logging::Instance().AddLogMessage("Running on graphics adapter model " + m_renderer->GetGraphicsAdapterModel());
+    Logging::Instance().AddLogMessage("Running on " + m_renderer->GetGraphicsApiVersion());
 
     BE_ST_InitAudio();
 

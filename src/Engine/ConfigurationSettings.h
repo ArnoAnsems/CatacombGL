@@ -43,6 +43,13 @@ enum ScreenMode
     BorderlessWindowed
 };
 
+enum ShowFpsMode
+{
+    Off,
+    Minimal,
+    Extended
+};
+
 class ConfigurationSettings
 {
 public:
@@ -81,8 +88,8 @@ public:
     bool GetDepthShading() const;
     void SetDepthShading(const bool enabled);
 
-    bool GetShowFps() const;
-    void SetShowFps(const bool enabled);
+    ShowFpsMode GetShowFps() const;
+    void SetShowFps(const ShowFpsMode showFpsMode);
 
     bool GetVSync() const;
     void SetVSync(const bool enabled);
@@ -117,7 +124,7 @@ private:
     uint8_t m_fov;
     IRenderer::TextureFilterSetting m_textureFilter;
     bool m_depthShading;
-    bool m_showFps;
+    ShowFpsMode m_showFps;
     bool m_vsync;
     ControlsMap m_controlsMap;
     uint8_t m_soundMode;

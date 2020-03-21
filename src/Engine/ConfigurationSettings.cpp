@@ -25,7 +25,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_fov(25),
     m_textureFilter(IRenderer::Nearest),
     m_depthShading(true),
-    m_showFps(false),
+    m_showFps(Off),
     m_vsync(true),
     m_soundMode(2),
     m_musicOn(true),
@@ -113,7 +113,10 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         auto showfpsPair = keyValuePairs.find("showfps");
         if (showfpsPair != keyValuePairs.end())
         {
-            m_showFps = (showfpsPair->second.compare("true") == 0);
+            m_showFps = 
+                (showfpsPair->second.compare("true") == 0 || showfpsPair->second.compare("minimal") == 0) ? Minimal :
+                (showfpsPair->second.compare("extended") == 0) ? Extended :
+                Off;
         }
 
         auto vsyncPair = keyValuePairs.find("vsync");
@@ -232,7 +235,10 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "aspectratio=" << aspectRatioValue << "\n";
         const std::string depthShadingValue = m_depthShading ? "true" : "false";
         file << "depthshading=" << depthShadingValue << "\n";
-        const std::string showfpsValue = m_showFps ? "true" : "false";
+        const std::string showfpsValue =
+            (m_showFps == Minimal) ? "minimal" :
+            (m_showFps == Extended) ? "extended" :
+            "off";
         file << "showfps=" << showfpsValue << "\n";
         const std::string vsyncValue = m_vsync ? "true" : "false";
         file << "vsync=" << vsyncValue << "\n";
@@ -378,14 +384,14 @@ void ConfigurationSettings::SetDepthShading(const bool enabled)
     m_depthShading = enabled;
 }
 
-bool ConfigurationSettings::GetShowFps() const
+ShowFpsMode ConfigurationSettings::GetShowFps() const
 {
     return m_showFps;
 }
 
-void ConfigurationSettings::SetShowFps(const bool enabled)
+void ConfigurationSettings::SetShowFps(const ShowFpsMode showFpsMode)
 {
-    m_showFps = enabled;
+    m_showFps = showFpsMode;
 }
 
 bool ConfigurationSettings::GetVSync() const
