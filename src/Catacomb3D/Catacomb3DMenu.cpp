@@ -46,7 +46,8 @@ Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, Aud
     m_askForEndGame (false),
     m_askForQuit (false),
     m_highScores(highScores),
-    m_skullNBones(audioPlayer)
+    m_skullNBones(audioPlayer),
+    m_menuActivatedTimestamp(0u)
 {
 
 }
@@ -863,8 +864,77 @@ void Catacomb3DMenu::DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGr
     renderer.RenderTextCentered(message3.c_str(), egaGraph.GetFont(4), EgaRed, 154, 111);
 }
 
+// Based on US_CenterWindow in ID_US.C of the Catacomb Abyss source code.
+void Catacomb3DMenu::DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height)
+{
+    DrawTiledWindow(renderer, egaGraph, (40 - width) / 2, (25 - height) / 2, width, height);
+}
+
+// Based on US_DrawWindow in ID_US.C of the Catacomb Abyss source code.
+void Catacomb3DMenu::DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height)
+{
+    const uint16_t sx = (x - 1) * 8;
+    const uint16_t sy = (y - 1) * 8;
+    const uint16_t sw = (width + 1) * 8;
+    const uint16_t sh = (height + 1) * 8;
+
+    renderer.Render2DBar(x * 8, y * 8, width * 8, height * 8, EgaBrightWhite);
+
+    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(0), sx, sy);
+    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(6), sx, sy + sh);
+
+    for (uint16_t i = sx + 8; i <= sx + sw - 8; i += 8)
+    {
+        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(1), i, sy);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(7), i, sy + sh);
+    }
+    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(2), sx + sw, sy);
+    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(8), sx + sw, sy + sh);
+
+    for (uint16_t i = sy + 8; i <= sy + sh - 8; i += 8)
+    {
+        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(3), sx, i);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(5), sx + sw, i);
+    }
+}
+
 void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)
 {
+    if (m_menuActivatedTimestamp == 0)
+    {
+        m_menuActivatedTimestamp = timeStamp;
+    }
+
+    const uint32_t loadingDuration = 500;
+    if (timeStamp < m_menuActivatedTimestamp + loadingDuration)
+    {
+        DrawCenteredTiledWindow(renderer, egaGraph, 20, 8);
+        renderer.RenderTextCentered("Loading", egaGraph->GetFont(3), EgaBlack, 160, 65);
+        renderer.RenderTextCentered("Control Panel", egaGraph->GetFont(3), EgaBrightRed, 160, 75);
+
+        // Based on CAL_DialogDraw in ID_CA.C
+        const uint16_t thx = 88;
+        const uint16_t thy = 96;
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(0), thx, thy);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(3), thx, thy+8);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(6), thx, thy+16);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(2), thx + 17 * 8, thy);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(5), thx + 17 * 8, thy+8);
+        renderer.Render2DPicture(egaGraph->GetTilesSize8(8), thx + 17 * 8, thy+16);
+        
+        for (uint16_t x = thx + 8; x < thx + 17 * 8; x += 8)
+        {
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(1), x, thy);
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(4), x, thy+8);
+            renderer.Render2DPicture(egaGraph->GetTilesSize8(7), x, thy+16);
+        }
+
+        const uint16_t progress = ((timeStamp - m_menuActivatedTimestamp) * 136) / loadingDuration;
+        renderer.Render2DBar(thx + 4, thy + 5, progress, 14, EgaBrightYellow);
+
+        return;
+    }
+
     if (m_subMenuSelected == subMenuHighScores)
     {
         m_highScores.Draw(renderer, *egaGraph, timeStamp, HIGHSCORESPIC);

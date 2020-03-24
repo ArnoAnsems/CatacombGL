@@ -164,7 +164,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
 
         if (!m_controlActionActive[Shoot])
         {
-            if (!autoFire || m_shotPower == 56 || m_shotFiredTimeStamp + 250 < timeStamp)
+            if (!autoFire || m_shotPower == 56)
             {
                 fireShot = true;
             }

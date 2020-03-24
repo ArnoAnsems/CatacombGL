@@ -55,6 +55,8 @@ private:
     bool IsNewSaveGameNameAlreadyInUse() const;
     static void DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotPosition, const bool bright);
     static void DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3);
+    void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
+    void DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
 
     bool m_menuActive;
     uint8_t m_menuItemSelected;
@@ -73,4 +75,5 @@ private:
     bool m_askForQuit;
     HighScores& m_highScores;
     SkullNBones m_skullNBones;
+    uint32_t m_menuActivatedTimestamp;
 };
