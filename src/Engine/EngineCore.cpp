@@ -91,6 +91,8 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
 EngineCore::~EngineCore()
 {
     UnloadLevel();
+
+    delete m_menu;
 }
 
 const std::string EngineCore::GetVersionInfo()

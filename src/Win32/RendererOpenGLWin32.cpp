@@ -1005,20 +1005,22 @@ void RendererOpenGLWin32::UnprepareVisibilityMap()
 
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 {
-    uint8_t* rawPixelData = new uint8_t[(unsigned int)m_windowWidth * (unsigned int)m_windowHeight * 3u];
-    glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGB, GL_UNSIGNED_BYTE, rawPixelData);
+    // Pixels are read as GL_RGBA. Although the alpha channel is stricly speaking not necessary,
+    // some graphics adapters do not handle glReadPixels with GL_RGB correctly.
+    uint8_t* rawPixelData = new uint8_t[(unsigned int)m_windowWidth * (unsigned int)m_windowHeight * 4u];
+    glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
 
     const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(m_windowWidth);
     const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(m_windowHeight);
 
-    uint8_t* texturePixelData = new uint8_t[(unsigned int)textureWidth * (unsigned int)textureHeight * 3u];
+    uint8_t* texturePixelData = new uint8_t[(unsigned int)textureWidth * (unsigned int)textureHeight * 4u];
 
     // Flip pixels upside down
     for (uint16_t y = 0; y < m_windowHeight; y++)
     {
-        for (uint16_t x = 0; x < m_windowWidth * 3; x++)
+        for (uint16_t x = 0; x < m_windowWidth * 4; x++)
         {
-            texturePixelData[(y * textureWidth * 3) + x] = rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 3) + x];
+            texturePixelData[(y * textureWidth * 4) + x] = rawPixelData[((m_windowHeight - 1 - y) * m_windowWidth * 4) + x];
         }
     }
 
@@ -1036,7 +1038,7 @@ Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 
     glBindTexture(GL_TEXTURE_2D, newTextureId);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texturePixelData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texturePixelData);
 
     delete[] texturePixelData;
 

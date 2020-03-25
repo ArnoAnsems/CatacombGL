@@ -9,7 +9,7 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.4.2: 
+Current limitations as of version 0.4.3: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 * No "demo" functionality (preview slideshow of Catacomb Armageddon and Apocalypse in shareware version).
@@ -57,6 +57,16 @@ Special thanks goes to:
 * GOG.com and catacomb.games for providing a platform to obtain the Catacomb 3D games.
 * Roland Ansems for playtesting every level and reporting various bugs.
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
+
+# History
+* Version 0.4.3 (2020-03-25) New in this release:
+  * Improved the performance of the OpenGL renderer.
+  * Added an "Extended" mode for the "Show frame rate" setting. When set, additional information such as the name of the graphics card is displayed.
+  * Added a "Loading Control Panel" animation to Catacomb 3D. Suggested by Dinoaur.
+  * Fix: support for OpenGL 2.x hardware. Suggested by InDOOMnesia.
+  * Fix: melee enemies in Catacomb 3D will no longer attempt to attack from too far away. Reported by Dinoaur.
+  * Fix: added the fizzle fade effect when opening the title screen in Catacomb 3D. Reported by Dinoaur.
+  * Fix: prevent the wizard's hand from bopping while shooting magick missiles repeatedly. Reported by Dinoaur.
 
 # History
 * Version 0.4.2 (2020-02-20) New in this release:
