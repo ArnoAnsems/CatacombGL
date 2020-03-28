@@ -20,7 +20,6 @@
 
 // Windows specific includes
 #include <windows.h>
-#include <gl\gl.h>
 #include <Shlwapi.h>
 #include <time.h>
 #include "RendererOpenGLWin32.h"

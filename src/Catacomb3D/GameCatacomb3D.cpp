@@ -342,36 +342,7 @@ IMenu* GameCatacomb3D::CreateMenu(ConfigurationSettings& configurationSettings, 
 
 void GameCatacomb3D::DrawHelpPage()
 {
-    m_renderer.Render2DBar(0, 0, 640, 200, EgaLightGray);
-    const Font* font = GetEgaGraph()->GetFont(3);
-    m_renderer.RenderTextLeftAligned("                    SUMMARY OF GAME CONTROLS", font, EgaBlue, 128, 19);
-    m_renderer.RenderTextLeftAligned("         ACTION", font, EgaRed, 128, 37);
-    m_renderer.RenderTextLeftAligned("Arrow keys, joystick, or mouse", font, EgaRed, 128, 55);
-    m_renderer.RenderTextLeftAligned("TAB or V while turning", font, EgaRed, 128, 64);
-    m_renderer.RenderTextLeftAligned("ALT or Button 2 while turning", font, EgaRed, 128, 73);
-    m_renderer.RenderTextLeftAligned("CTRL or Button 1", font, EgaRed, 128, 82);
-    m_renderer.RenderTextLeftAligned("Z", font, EgaRed, 128, 91);
-    m_renderer.RenderTextLeftAligned("X or Enter", font, EgaRed, 128, 100);
-    m_renderer.RenderTextLeftAligned("F1", font, EgaRed, 128, 109);
-    m_renderer.RenderTextLeftAligned("F2", font, EgaRed, 128, 118);
-    m_renderer.RenderTextLeftAligned("F3", font, EgaRed, 128, 127);
-    m_renderer.RenderTextLeftAligned("F4", font, EgaRed, 128, 136);
-    m_renderer.RenderTextLeftAligned("F5", font, EgaRed, 128, 145);
-    m_renderer.RenderTextLeftAligned("ESC", font, EgaRed, 128, 154);
-
-    m_renderer.RenderTextLeftAligned("   REACTION", font, EgaDarkGray, 400, 37);
-    m_renderer.RenderTextLeftAligned("Move and turn", font, EgaDarkGray, 400, 55);
-    m_renderer.RenderTextLeftAligned("Turn quickly (Quick Turn)", font, EgaDarkGray, 400, 64);
-    m_renderer.RenderTextLeftAligned("Move sideways", font, EgaDarkGray, 400, 73);
-    m_renderer.RenderTextLeftAligned("Shoot a Missile", font, EgaDarkGray, 400, 82);
-    m_renderer.RenderTextLeftAligned("Shoot a Zapper", font, EgaDarkGray, 400, 91);
-    m_renderer.RenderTextLeftAligned("Shoot an Xterminator", font, EgaDarkGray, 400, 100);
-    m_renderer.RenderTextLeftAligned("Help (this screen)", font, EgaDarkGray, 400, 109);
-    m_renderer.RenderTextLeftAligned("Sound control", font, EgaDarkGray, 400, 118);
-    m_renderer.RenderTextLeftAligned("Save game position", font, EgaDarkGray, 400, 127);
-    m_renderer.RenderTextLeftAligned("Restore a saved game", font, EgaDarkGray, 400, 136);
-    m_renderer.RenderTextLeftAligned("Joystick control", font, EgaDarkGray, 400, 145);
-    m_renderer.RenderTextLeftAligned("System options", font, EgaDarkGray, 400, 154);
+    // No help page in the Catacomb 3-D
 }
 
 bool GameCatacomb3D::ProcessInputOnHelpPage(PlayerInput& playerInput)
