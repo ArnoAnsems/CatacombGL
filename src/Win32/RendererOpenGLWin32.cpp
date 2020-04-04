@@ -133,7 +133,7 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    const uint32_t bytesPerOutputPixel = transparent ? 4 : 3;
+    const uint32_t bytesPerOutputPixel = 4;
     const uint32_t numberOfPlanes = 4;
     const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
     const uint32_t numberOfEgaPixelsPerByte = 8;
@@ -172,14 +172,17 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(
             textureImage[outputTextureOffset] = outputColor.red;
             textureImage[outputTextureOffset + 1] = outputColor.green;
             textureImage[outputTextureOffset + 2] = outputColor.blue;
-            if (transparent)
-            {
-                textureImage[outputTextureOffset + 3] = transparentPixel ? 0 : 255;
-            }
+            textureImage[outputTextureOffset + 3] = transparentPixel ? 0 : 255;
         }
     }
-    const int16_t format = transparent ? GL_RGBA : GL_RGB;
+    const int16_t format = GL_RGBA;
     glTexImage2D(GL_TEXTURE_2D, 0, format, textureWidth, textureHeight, 0, format, GL_UNSIGNED_BYTE, textureImage);
+
+    const GLenum glError = glGetError();
+    if (glError != GL_NO_ERROR)
+    {
+        Logging::Instance().FatalError("Error loading file chunk into texture (id=" + std::to_string(textureId) + ";width=" + std::to_string(textureWidth) + ";height=" + std::to_string(textureHeight) + "): glTexImage2D returned " + ErrorCodeToString(glError));
+    }
 
     delete[] textureImage;
 
@@ -239,9 +242,30 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
 
+    const GLenum glError = glGetError();
+    if (glError != GL_NO_ERROR)
+    {
+        Logging::Instance().FatalError("Error loading masked file chunk into texture (id=" + std::to_string(textureId) + ";width=" + std::to_string(textureWidth) + ";height=" + std::to_string(textureHeight) + "): glTexImage2D returned " + ErrorCodeToString(glError));
+    }
+
     delete[] textureImage;
 
     return textureId;
+}
+
+const std::string RendererOpenGLWin32::ErrorCodeToString(const GLenum errorCode)
+{
+    const std::string str =
+        (errorCode == GL_NO_ERROR) ? "GL_NO_ERROR" :
+        (errorCode == GL_INVALID_ENUM) ? "GL_INVALID_ENUM" :
+        (errorCode == GL_INVALID_VALUE) ? "GL_INVALID_VALUE" :
+        (errorCode == GL_INVALID_OPERATION) ? "GL_INVALID_OPERATION" :
+        (errorCode == GL_STACK_OVERFLOW) ? "GL_STACK_OVERFLOW" :
+        (errorCode == GL_STACK_UNDERFLOW) ? "GL_STACK_UNDERFLOW" :
+        (errorCode == GL_OUT_OF_MEMORY) ? "GL_OUT_OF_MEMORY" :
+        "unknown error";
+
+    return str;
 }
 
 unsigned int RendererOpenGLWin32::GenerateSingleColorTexture(const egaColor color) const
@@ -249,7 +273,7 @@ unsigned int RendererOpenGLWin32::GenerateSingleColorTexture(const egaColor colo
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    const uint32_t bytesPerOutputPixel = 3;
+    const uint32_t bytesPerOutputPixel = 4;
     const uint32_t width = 8;
     const uint32_t height = 8;
     GLubyte* textureImage = new GLubyte[width * height * bytesPerOutputPixel];
@@ -261,12 +285,20 @@ unsigned int RendererOpenGLWin32::GenerateSingleColorTexture(const egaColor colo
         textureImage[outputPixelOffset] = outputColor.red;
         textureImage[outputPixelOffset + 1] = outputColor.green;
         textureImage[outputPixelOffset + 2] = outputColor.blue;
+        textureImage[outputPixelOffset + 3] = 255;
         outputPixelOffset += bytesPerOutputPixel;
     }
-    const int16_t format = GL_RGB;
+    const int16_t format = GL_RGBA;
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureImage);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    const GLenum glError = glGetError();
+    if (glError != GL_NO_ERROR)
+    {
+        Logging::Instance().FatalError("Error generating single colored texture(id=" + std::to_string(textureId) + "): glTexImage2D returned " + ErrorCodeToString(glError));
+    }
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     // Filter setting (GL_NEAREST or GL_LINEAR) does not matter for a single color texture.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -338,6 +370,12 @@ unsigned int RendererOpenGLWin32::LoadTilesSize8IntoTexture(const FileChunk* dec
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
 
+    const GLenum glError = glGetError();
+    if (glError != GL_NO_ERROR)
+    {
+        Logging::Instance().FatalError("Error loading tile into texture(id=" + std::to_string(textureId) + "): glTexImage2D returned " + ErrorCodeToString(glError));
+    }
+
     delete[] textureImage;
 
     return textureId;
@@ -375,6 +413,12 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture, c
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
+
+    const GLenum glError = glGetError();
+    if (glError != GL_NO_ERROR)
+    {
+        Logging::Instance().FatalError("Error loading font into texture (id=" + std::to_string(textureId) + ";width=" + std::to_string(width) + ";height=" + std::to_string(height) + "): glTexImage2D returned " + ErrorCodeToString(glError));
+    }
 
     delete[] textureImage;
 
@@ -781,7 +825,7 @@ void RendererOpenGLWin32::Render3DWalls(const std::map<unsigned int, std::vector
         }
 
         // Only wrap the texture in horizontal direction
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureFilter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureFilter);
@@ -1039,6 +1083,12 @@ Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
     glBindTexture(GL_TEXTURE_2D, newTextureId);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texturePixelData);
+
+    const GLenum glError = glGetError();
+    if (glError != GL_NO_ERROR)
+    {
+        Logging::Instance().FatalError("Error loading screen capture into texture (id=" + std::to_string(textureId) + ";width=" + std::to_string(textureWidth) + ";height=" + std::to_string(textureHeight) + "): glTexImage2D returned " + ErrorCodeToString(glError));
+    }
 
     delete[] texturePixelData;
 

@@ -302,6 +302,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     srand ((unsigned int)time(nullptr));
 
     const std::string filenamePath = systemWin32.GetConfigurationFilePath();
+    systemWin32.CreatePath(filenamePath);
 
     const std::string logFilename = filenamePath + "CatacombGL_log.txt";
     Logging::Instance().SetLogFile(logFilename);
@@ -743,10 +744,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     BE_ST_ShutdownAudio();
 
     // Store configuration
-    if (systemWin32.CreatePath(filenamePath))
-    {
-        m_configurationSettings.StoreToFile(configFilename);
-    }
+    m_configurationSettings.StoreToFile(configFilename);
 	
     delete engineCore;
     delete game;

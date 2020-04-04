@@ -104,6 +104,7 @@ private:
     uint16_t partition(uint16_t p,uint16_t q);
     void swap(uint16_t p,uint16_t q);
     unsigned int GenerateSingleColorTexture(const egaColor color) const;
+    static const std::string ErrorCodeToString(const GLenum errorCode);
 
     uint16_t m_windowWidth;
     uint16_t m_windowHeight;
