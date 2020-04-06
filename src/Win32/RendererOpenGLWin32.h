@@ -99,6 +99,8 @@ private:
     } spriteToRender;
 
     static constexpr rgbColor EgaToRgb(const egaColor ega);
+    void LoadPixelDataIntoTexture(uint32_t width, uint32_t height, uint8_t* pixelData, unsigned int textureId) const;
+    void BindTexture(unsigned int textureId) const;
 
     void quickSort(uint16_t p,uint16_t q);
     uint16_t partition(uint16_t p,uint16_t q);
