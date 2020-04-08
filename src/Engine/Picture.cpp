@@ -56,9 +56,7 @@ uint16_t Picture::GetTextureHeight() const
 
 uint16_t Picture::GetNearestPowerOfTwo(const uint16_t size)
 {
-    // Although non-power-of-two textures are supported since OpenGL 2.0, there might be some older
-    // graphics cards that do not support it. For this reason, the texture width and height are always
-    // a power of two.
+    // In order to support OpenGL 1.4, the texture width and height need to be a power of two.
     uint16_t powerOfTwo = 1;
     while (powerOfTwo < size)
     {
