@@ -102,6 +102,16 @@ void TextureAtlas::StoreImage(const uint16_t imageIndex, const uint8_t* const pi
     }
 }
 
+uint16_t TextureAtlas::GetImageWidth() const
+{
+    return m_imageWidth;
+}
+
+uint16_t TextureAtlas::GetImageHeight() const
+{
+    return m_imageHeight;
+}
+
 float TextureAtlas::GetImageRelativeOffsetX(const uint16_t imageIndex) const
 {
     const uint16_t offsetInPixelsX = CalculateOffsetInPixelsX(imageIndex);

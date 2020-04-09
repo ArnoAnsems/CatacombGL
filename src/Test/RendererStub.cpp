@@ -120,6 +120,10 @@ void RendererStub::Render2DBar(const int16_t /*x*/, const int16_t /*y*/, const u
 {
 }
 
+void RendererStub::RenderImagesFromTextureAtlas(const unsigned int /*textureId*/, const std::vector<imageOnTextureAtlas>& /*images*/, const TextureAtlas& /*textureAtlas*/)
+{
+}
+
 void RendererStub::Prepare3DRendering(const bool /*depthShading*/, const float /*aspectRatio*/, uint16_t /*fov*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/)
 {
 }

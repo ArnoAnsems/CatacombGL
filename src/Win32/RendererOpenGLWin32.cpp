@@ -710,6 +710,31 @@ void RendererOpenGLWin32::Render2DBar(const int16_t x, const int16_t y, const ui
     glEnd();
 }
 
+void RendererOpenGLWin32::RenderImagesFromTextureAtlas(const unsigned int textureId, const std::vector<imageOnTextureAtlas>& images, const TextureAtlas& textureAtlas)
+{
+    const int16_t imageWidth = (int16_t)textureAtlas.GetImageWidth();
+    const int16_t imageHeight = (int16_t)textureAtlas.GetImageWidth();
+    const float imageRelWidth = textureAtlas.GetImageRelativeWidth();
+    const float imageRelHeight = textureAtlas.GetImageRelativeHeight();
+
+    BindTexture(textureId);
+
+    glBegin(GL_QUADS);
+    for (const imageOnTextureAtlas& image : images)
+    {
+        const int16_t offsetX = image.offsetX;
+        const int16_t offsetY = image.offsetY;
+        const float imageRelOffsetX = textureAtlas.GetImageRelativeOffsetX(image.imageIndex);
+        const float imageRelOffsetY = textureAtlas.GetImageRelativeOffsetY(image.imageIndex);
+
+        glTexCoord2f(imageRelOffsetX + imageRelWidth, imageRelOffsetY + imageRelHeight); glVertex2i(offsetX + imageWidth, offsetY + imageHeight);
+        glTexCoord2f(imageRelOffsetX, imageRelOffsetY + imageRelHeight); glVertex2i(offsetX, offsetY + imageHeight);
+        glTexCoord2f(imageRelOffsetX, imageRelOffsetY); glVertex2i(offsetX, offsetY);
+        glTexCoord2f(imageRelOffsetX + imageRelWidth, imageRelOffsetY); glVertex2i(offsetX + imageWidth, offsetY);
+    }
+    glEnd();
+}
+
 void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea)
 {
     ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);

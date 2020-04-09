@@ -16,7 +16,8 @@
 //
 // TextureAtlas
 //
-// Combines multiple images of the same size into a single texture
+// Combines multiple images of the same size into a single texture. This can help the performance,
+// since switching between textures is expensive in OpenGL.
 //
 #pragma once
 
@@ -25,6 +26,8 @@
 class TextureAtlas
 {
 public:
+    // Spacing between individual images is needed to prevent an image from 'leaking' into its
+    // neighbouring image due to linear filtering.
     TextureAtlas(
         const uint16_t imageWidth,
         const uint16_t imageHeight,
@@ -35,6 +38,9 @@ public:
     ~TextureAtlas();
 
     void StoreImage(const uint16_t imageIndex, const uint8_t* const pixelData);
+
+    uint16_t GetImageWidth() const;
+    uint16_t GetImageHeight() const;
 
     float GetImageRelativeOffsetX(const uint16_t imageIndex) const;
     float GetImageRelativeOffsetY(const uint16_t imageIndex) const;
