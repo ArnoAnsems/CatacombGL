@@ -28,13 +28,14 @@ TextureAtlas_Test::~TextureAtlas_Test()
 
 TEST(TextureAtlas_Test, GetImageRelativeOffsets)
 {
+    const unsigned int textureId = 0;
     const uint16_t imageWidth = 16;
     const uint16_t imageHeight = 10;
     const uint16_t numberOfColumns = 5;
     const uint16_t numberOfRows = 3;
     const uint16_t imageSpacingX = 3;
     const uint16_t imageSpacingY = 1;
-    TextureAtlas atlas(imageWidth, imageHeight, numberOfColumns, numberOfRows, imageSpacingX, imageSpacingY);
+    TextureAtlas atlas(textureId, imageWidth, imageHeight, numberOfColumns, numberOfRows, imageSpacingX, imageSpacingY);
 
     EXPECT_EQ(atlas.GetTextureWidth(), 128);
     EXPECT_EQ(atlas.GetTextureHeight(), 32);
@@ -52,6 +53,7 @@ TEST(TextureAtlas_Test, GetImageRelativeOffsets)
 
 TEST(TextureAtlas_Test, StoreImage)
 {
+    const unsigned int textureId = 0;
     const uint16_t imageWidth = 2;
     const uint16_t imageHeight = 2;
     const uint16_t numberOfColumns = 2;
@@ -76,7 +78,7 @@ TEST(TextureAtlas_Test, StoreImage)
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    TextureAtlas atlas(imageWidth, imageHeight, numberOfColumns, numberOfRows, imageSpacingX, imageSpacingY);
+    TextureAtlas atlas(textureId, imageWidth, imageHeight, numberOfColumns, numberOfRows, imageSpacingX, imageSpacingY);
     ASSERT_EQ(atlas.GetTextureWidth() * atlas.GetTextureHeight() * 4, 256);
 
     atlas.StoreImage(0, imagePixelData);

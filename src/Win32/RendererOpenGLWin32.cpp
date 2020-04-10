@@ -710,14 +710,14 @@ void RendererOpenGLWin32::Render2DBar(const int16_t x, const int16_t y, const ui
     glEnd();
 }
 
-void RendererOpenGLWin32::RenderImagesFromTextureAtlas(const unsigned int textureId, const std::vector<imageOnTextureAtlas>& images, const TextureAtlas& textureAtlas)
+void RendererOpenGLWin32::RenderImagesFromTextureAtlas(const std::vector<imageOnTextureAtlas>& images, const TextureAtlas& textureAtlas)
 {
     const int16_t imageWidth = (int16_t)textureAtlas.GetImageWidth();
     const int16_t imageHeight = (int16_t)textureAtlas.GetImageWidth();
     const float imageRelWidth = textureAtlas.GetImageRelativeWidth();
     const float imageRelHeight = textureAtlas.GetImageRelativeHeight();
 
-    BindTexture(textureId);
+    BindTexture(textureAtlas.GetTextureId());
 
     glBegin(GL_QUADS);
     for (const imageOnTextureAtlas& image : images)
@@ -733,6 +733,82 @@ void RendererOpenGLWin32::RenderImagesFromTextureAtlas(const unsigned int textur
         glTexCoord2f(imageRelOffsetX + imageRelWidth, imageRelOffsetY); glVertex2i(offsetX + imageWidth, offsetY);
     }
     glEnd();
+}
+
+TextureAtlas* RendererOpenGLWin32::CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked)
+{
+    const uint16_t numberOfColumns = (masked) ? 3 : 8;
+    const uint16_t numberOfRows = (masked) ? 4 : 13;
+    GLuint textureId;
+    glGenTextures(1, &textureId);
+    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 8, 8, numberOfColumns, numberOfRows, 1, 1);
+    const uint32_t bytesPerOutputPixel = 4;
+    const uint32_t inputSizeOfTileInBytes = masked ? 40 : 32;
+    const uint32_t numberOfPixelsInTile = 64; // 8 x 8
+    uint8_t* textureImage = new uint8_t[numberOfPixelsInTile * bytesPerOutputPixel];
+    const uint32_t planeSize = 8;
+    unsigned char* chunk = decompressedChunk->GetChunk();
+
+    for (uint32_t tile = 0; tile < numberOfColumns * numberOfRows; tile++)
+    {
+        const uint32_t tileChunkOffset = tile * inputSizeOfTileInBytes;
+        for (uint32_t i = 0; i < planeSize; i++)
+        {
+            for (uint32_t j = 0; j < 8; j++)
+            {
+                if (masked)
+                {
+                    const unsigned char bitValue = (1 << j);
+                    const bool transparencyplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                    const bool blueplane = ((chunk[tileChunkOffset + i + planeSize] & bitValue) > 0);
+                    const bool greenplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                    const bool redplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                    const bool intensityplane = ((chunk[tileChunkOffset + i + (4 * planeSize)] & bitValue) > 0);
+                    const egaColor colorIndex =
+                        (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                        (redplane ? EgaRed : EgaBlack) +
+                            (greenplane ? EgaGreen : EgaBlack) +
+                            (blueplane ? EgaBlue : EgaBlack));
+                    const rgbColor outputColor = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
+                    const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                    textureImage[outputPixelOffset] = outputColor.red;
+                    textureImage[outputPixelOffset + 1] = outputColor.green;
+                    textureImage[outputPixelOffset + 2] = outputColor.blue;
+                    textureImage[outputPixelOffset + 3] = transparencyplane ? 0 : 255;
+                }
+                else
+                {
+                    const unsigned char bitValue = (1 << j);
+                    const bool blueplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                    const bool greenplane = ((chunk[tileChunkOffset + i + (1 * planeSize)] & bitValue) > 0);
+                    const bool redplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                    const bool intensityplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                    const egaColor colorIndex =
+                        (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                        (redplane ? EgaRed : EgaBlack) +
+                            (greenplane ? EgaGreen : EgaBlack) +
+                            (blueplane ? EgaBlue : EgaBlack));
+                    const rgbColor outputColor = EgaToRgb(colorIndex);
+                    const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                    textureImage[outputPixelOffset] = outputColor.red;
+                    textureImage[outputPixelOffset + 1] = outputColor.green;
+                    textureImage[outputPixelOffset + 2] = outputColor.blue;
+                    textureImage[outputPixelOffset + 3] = 255;
+                }
+            }
+        }
+        textureAtlas->StoreImage(tile, textureImage);
+    }
+
+    delete[] textureImage;
+
+    LoadPixelDataIntoTexture(
+        textureAtlas->GetTextureWidth(),
+        textureAtlas->GetTextureHeight(),
+        textureAtlas->GetTexturePixelData(),
+        textureAtlas->GetTextureId());
+
+    return textureAtlas;
 }
 
 void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea)

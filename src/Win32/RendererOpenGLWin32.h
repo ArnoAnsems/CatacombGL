@@ -64,7 +64,8 @@ public:
     void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) override;
     void Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) override;
     void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) override;
-    void RenderImagesFromTextureAtlas(const unsigned int textureId, const std::vector<imageOnTextureAtlas>& images, const TextureAtlas& textureAtlas) override;
+    void RenderImagesFromTextureAtlas(const std::vector<imageOnTextureAtlas>& images, const TextureAtlas& textureAtlas) override;
+    TextureAtlas* CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked) override;
 
     void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) override;
     uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) override;

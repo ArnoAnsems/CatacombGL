@@ -122,11 +122,6 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     {
         m_tilesSize8[i] = nullptr;
     }
-    m_tilesSize8Masked = new Picture*[numTilesSize8Masked];
-    for (uint16_t i = 0; i < numTilesSize8Masked; i++)
-    {
-        m_tilesSize8Masked[i] = nullptr;
-    }
 
     // Initialize fonts
     const uint16_t numFonts = m_staticData.indexOfFirstPicture - 3;
@@ -143,6 +138,22 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     {
         m_worldLocationNames[i] = nullptr;
     }
+
+    const uint16_t pictureIndexTileSize8 = m_staticData.indexOfTileSize8;
+    uint8_t* compressedPictureTileSize8 = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndexTileSize8)];
+    uint32_t compressedSizeTileSize8 = GetChunkSize(pictureIndexTileSize8);
+    uint32_t uncompressedSizeTileSize8 = 32 * numTilesSize8;
+    FileChunk* pictureChunkTileSize8 = m_huffman->Decompress(compressedPictureTileSize8, compressedSizeTileSize8, uncompressedSizeTileSize8);
+    m_tilesSize8TextureAtlas = m_renderer.CreateTextureAtlasForTilesSize8(pictureChunkTileSize8, false);
+    delete pictureChunkTileSize8;
+
+    const uint16_t pictureIndexTileSize8Masked = m_staticData.indexOfTileSize8Masked;
+    uint8_t* compressedPictureTileSize8Masked = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndexTileSize8Masked)];
+    uint32_t compressedSizeTileSize8Masked = GetChunkSize(pictureIndexTileSize8Masked);
+    uint32_t uncompressedSizeTileSize8Masked = 40 * numTilesSize8Masked;
+    FileChunk* pictureChunkTileSize8Masked = m_huffman->Decompress(compressedPictureTileSize8Masked, compressedSizeTileSize8Masked, uncompressedSizeTileSize8Masked);
+    m_tilesSize8MaskedTextureAtlas = m_renderer.CreateTextureAtlasForTilesSize8(pictureChunkTileSize8Masked, true);
+    delete pictureChunkTileSize8Masked;
 }
 
 EgaGraph::~EgaGraph()
@@ -198,18 +209,11 @@ EgaGraph::~EgaGraph()
         delete[] m_tilesSize8;
     }
 
-    if (m_tilesSize8Masked != nullptr)
-    {
-        for (uint16_t i = 0; i < numTilesSize8Masked; i++)
-        {
-            delete m_tilesSize8Masked[i];
-            m_tilesSize8Masked[i] = nullptr;
-        }
-        delete[] m_tilesSize8Masked;
-    }
-
     delete m_rawData;
     delete m_huffman;
+
+    delete m_tilesSize8TextureAtlas;
+    delete m_tilesSize8MaskedTextureAtlas;
 }
 
 Picture* EgaGraph::GetPicture(const uint16_t index)
@@ -317,33 +321,6 @@ Picture* EgaGraph::GetTilesSize8(const uint16_t index)
     }
 
     return m_tilesSize8[index];
-}
-
-Picture* EgaGraph::GetTilesSize8Masked(const uint16_t index)
-{
-    if (index >= numTilesSize8Masked)
-    {
-        return nullptr;
-    }
-
-    if (m_tilesSize8Masked[index] == nullptr)
-    {
-        const uint16_t pictureIndex = m_staticData.indexOfTileSize8Masked;
-        uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
-        uint32_t compressedSize = GetChunkSize(pictureIndex);
-        uint32_t uncompressedSize = 40 * numTilesSize8Masked;
-        FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
-
-        // Just load all the tiles at once, such that the pictureChunk only needs to be decompressed once.
-        for (uint16_t i = 0; i < numTilesSize8Masked; i++)
-        {
-            const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, i, true);
-            m_tilesSize8Masked[i] = new Picture(textureId, 8, 8, 8, 8);
-        }
-        delete pictureChunk;
-    }
-
-    return m_tilesSize8Masked[index];
 }
 
 Font* EgaGraph::GetFont(const uint16_t index)
@@ -457,4 +434,14 @@ uint32_t EgaGraph::GetChunkSize(const uint16_t index)
 uint16_t EgaGraph::GetHandPictureIndex() const
 {
     return m_staticData.indexOfHandPicture;
+}
+
+const TextureAtlas* const EgaGraph::GetTilesSize8() const
+{
+    return m_tilesSize8TextureAtlas;
+}
+
+const TextureAtlas* const EgaGraph::GetTilesSize8Masked() const
+{
+    return m_tilesSize8MaskedTextureAtlas;
 }

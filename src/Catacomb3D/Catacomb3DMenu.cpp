@@ -873,29 +873,31 @@ void Catacomb3DMenu::DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* cons
 // Based on US_DrawWindow in ID_US.C of the Catacomb Abyss source code.
 void Catacomb3DMenu::DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height)
 {
-    const uint16_t sx = (x - 1) * 8;
-    const uint16_t sy = (y - 1) * 8;
-    const uint16_t sw = (width + 1) * 8;
-    const uint16_t sh = (height + 1) * 8;
+    const int16_t sx = (x - 1) * 8;
+    const int16_t sy = (y - 1) * 8;
+    const int16_t sw = (width + 1) * 8;
+    const int16_t sh = (height + 1) * 8;
 
     renderer.Render2DBar(x * 8, y * 8, width * 8, height * 8, EgaBrightWhite);
 
-    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(0), sx, sy);
-    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(6), sx, sy + sh);
+    std::vector<IRenderer::imageOnTextureAtlas> images;
+    images.push_back({ sx, sy, 0 });
+    images.push_back({ sx, sy + sh, 6 });
 
-    for (uint16_t i = sx + 8; i <= sx + sw - 8; i += 8)
+    for (int16_t i = sx + 8; i <= sx + sw - 8; i += 8)
     {
-        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(1), i, sy);
-        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(7), i, sy + sh);
+        images.push_back({ i, sy, 1 });
+        images.push_back({ i, sy + sh, 7 });
     }
-    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(2), sx + sw, sy);
-    renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(8), sx + sw, sy + sh);
+    images.push_back({ sx + sw, sy, 2 });
+    images.push_back({ sx + sw, sy + sh, 8 });
 
-    for (uint16_t i = sy + 8; i <= sy + sh - 8; i += 8)
+    for (int16_t i = sy + 8; i <= sy + sh - 8; i += 8)
     {
-        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(3), sx, i);
-        renderer.Render2DPicture(egaGraph->GetTilesSize8Masked(5), sx + sw, i);
+        images.push_back({ sx, i, 3 });
+        images.push_back({ sx + sw, i, 5 });
     }
+    renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8Masked());
 }
 
 void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)

@@ -29,6 +29,7 @@ public:
     // Spacing between individual images is needed to prevent an image from 'leaking' into its
     // neighbouring image due to linear filtering.
     TextureAtlas(
+        const unsigned int textureId,
         const uint16_t imageWidth,
         const uint16_t imageHeight,
         const uint16_t numberOfColumns,
@@ -37,6 +38,7 @@ public:
         const uint16_t imageSpacingY);
     ~TextureAtlas();
 
+    unsigned int GetTextureId() const;
     void StoreImage(const uint16_t imageIndex, const uint8_t* const pixelData);
 
     uint16_t GetImageWidth() const;
@@ -58,6 +60,7 @@ private:
     uint16_t CalculateOffsetInPixelsX(const uint16_t imageIndex) const;
     uint16_t CalculateOffsetInPixelsY(const uint16_t imageIndex) const;
 
+    const unsigned int m_textureId;
     const uint16_t m_imageWidth;
     const uint16_t m_imageHeight;
     const uint16_t m_numberOfColumns;

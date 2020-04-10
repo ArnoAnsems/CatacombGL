@@ -16,12 +16,14 @@
 #include "TextureAtlas.h"
 
 TextureAtlas::TextureAtlas(
+    const unsigned int textureId,
     const uint16_t imageWidth,
     const uint16_t imageHeight,
     const uint16_t numberOfColumns,
     const uint16_t numberOfRows,
     const uint16_t imageSpacingX,
     const uint16_t imageSpacingY) :
+    m_textureId(textureId),
     m_imageWidth(imageWidth),
     m_imageHeight(imageHeight),
     m_numberOfColumns(numberOfColumns),
@@ -47,6 +49,11 @@ TextureAtlas::TextureAtlas(
 TextureAtlas::~TextureAtlas()
 {
     delete m_texturePixelData;
+}
+
+unsigned int TextureAtlas::GetTextureId() const
+{
+    return m_textureId;
 }
 
 uint16_t TextureAtlas::GetNearestPowerOfTwo(const uint16_t size)
