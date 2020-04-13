@@ -69,11 +69,6 @@ unsigned int RendererStub::LoadMaskedFileChunkIntoTexture(
     return 0u;
 }
 
-unsigned int RendererStub::LoadTilesSize8IntoTexture(const FileChunk* /*decompressedChunk*/, const uint16_t /*index*/, const bool /*masked*/)
-{
-    return 0;
-}
-
 unsigned int RendererStub::LoadFontIntoTexture(const bool* /*fontPicture*/, const uint16_t /*lineHeight*/)
 {
     return 0u;

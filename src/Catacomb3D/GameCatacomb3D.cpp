@@ -427,60 +427,64 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
 
     m_renderer.RenderTextCentered(std::to_string(levelIndex + 1).c_str(), m_egaGraph->GetFont(3), EgaBrightYellow, 12, 148);
 
-    const uint8_t maxItemsToShow = 9;
-    const uint8_t BOLTCHAR = 10;
-    const uint8_t NUKECHAR = 11;
-    const uint8_t POTIONCHAR = 12;
-    const uint8_t KEYCHARS = 13;
-    const uint8_t SCROLLCHARS = 17;
-    const uint8_t NUMBERCHARS = 25;
+    const uint16_t maxItemsToShow = 9;
+    const uint16_t BOLTCHAR = 10;
+    const uint16_t NUKECHAR = 11;
+    const uint16_t POTIONCHAR = 12;
+    const uint16_t KEYCHARS = 13;
+    const uint16_t SCROLLCHARS = 17;
+    const uint16_t NUMBERCHARS = 25;
 
-    const uint8_t numBoltsToShow = (playerInventory.GetBolts() < maxItemsToShow) ? playerInventory.GetBolts() : maxItemsToShow;
-    for (uint8_t i = 0; i < numBoltsToShow; i++)
+    std::vector<IRenderer::imageOnTextureAtlas> images;
+
+    const int8_t numBoltsToShow = (playerInventory.GetBolts() < maxItemsToShow) ? playerInventory.GetBolts() : maxItemsToShow;
+    for (int8_t i = 0; i < numBoltsToShow; i++)
     {
-        m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(BOLTCHAR), 56 + (i * 8), 165);
+        images.push_back({ 56 + (i * 8), 165, BOLTCHAR });
     }
-    const uint8_t numNukesToShow = (playerInventory.GetNukes() < maxItemsToShow) ? playerInventory.GetNukes() : maxItemsToShow;
-    for (uint8_t i = 0; i < numNukesToShow; i++)
+    const int8_t numNukesToShow = (playerInventory.GetNukes() < maxItemsToShow) ? playerInventory.GetNukes() : maxItemsToShow;
+    for (int8_t i = 0; i < numNukesToShow; i++)
     {
-        m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(NUKECHAR), 56 + (i * 8), 175);
+        images.push_back({ 56 + (i * 8), 175, NUKECHAR });
     }
-    const uint8_t numPotionsToShow = (playerInventory.GetPotions() < maxItemsToShow) ? playerInventory.GetPotions() : maxItemsToShow;
-    for (uint8_t i = 0; i < numPotionsToShow; i++)
+    const int8_t numPotionsToShow = (playerInventory.GetPotions() < maxItemsToShow) ? playerInventory.GetPotions() : maxItemsToShow;
+    for (int8_t i = 0; i < numPotionsToShow; i++)
     {
-        m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(POTIONCHAR), 56 + (i * 8), 185);
+        images.push_back({ 56 + (i * 8), 185, POTIONCHAR });
     }
 
-    uint8_t x = 24;
-    for (uint8_t i = 0; i < 4; i++)
+    int8_t x = 24;
+    for (int8_t i = 0; i < 4; i++)
     {
-        const uint8_t numKeysToShow = playerInventory.GetKeys(i) > 2 ? 2 : playerInventory.GetKeys(i);
-        for (uint8_t j = 0; j < numKeysToShow; j++)
+        const int8_t numKeysToShow = playerInventory.GetKeys(i) > 2 ? 2 : playerInventory.GetKeys(i);
+        for (int8_t j = 0; j < numKeysToShow; j++)
         {
-            m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(KEYCHARS + i), (x * 8), 165);
+            images.push_back({ (x * 8), 165, (uint16_t)(KEYCHARS + i) });
             x++;
         }
     }
 
-    for (uint8_t i = 0; i < 8; i++)
+    for (int8_t i = 0; i < 8; i++)
     {
         if (playerInventory.GetScroll(i))
         {
-            m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(SCROLLCHARS + i), 192 + (i * 8), 175);
+            images.push_back({ 192 + (i * 8), 175, (uint16_t)(SCROLLCHARS + i) });
         }
     }
 
     // Score
     {
         const std::string scoreStr = std::to_string(points);
-        const size_t length = scoreStr.length();
-        uint16_t x = 256 - (8 * (uint16_t)length);
-        for (uint16_t i = 0; i < length; i++)
+        const int16_t length = (int16_t)scoreStr.length();
+        int16_t x = 256 - (8 * (int16_t)length);
+        for (int16_t i = 0; i < length; i++)
         {
-            m_renderer.Render2DPicture(GetEgaGraph()->GetTilesSize8(NUMBERCHARS + scoreStr.at(i) - '0'), x, 185);
+            images.push_back({ x, 185, (uint16_t)(NUMBERCHARS + scoreStr.at(i) - '0' )});
             x += 8;
         }
     }
+
+    m_renderer.RenderImagesFromTextureAtlas(images, *GetEgaGraph()->GetTilesSize8());
     
     DrawStatusBarWideScreenMargin(0 - wideScreenMargin, wideScreenMargin);
     DrawStatusBarWideScreenMargin(320 - sideBarWidth - 2, wideScreenMargin);

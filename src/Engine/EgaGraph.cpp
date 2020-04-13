@@ -116,13 +116,6 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
         m_sprites[i] = nullptr;
     }
 
-    // Initialize tiles
-    m_tilesSize8 = new Picture*[numTilesSize8];
-    for (uint16_t i = 0; i < numTilesSize8; i++)
-    {
-        m_tilesSize8[i] = nullptr;
-    }
-
     // Initialize fonts
     const uint16_t numFonts = m_staticData.indexOfFirstPicture - 3;
     m_fonts = new Font*[numFonts];
@@ -198,16 +191,6 @@ EgaGraph::~EgaGraph()
 
     }
     delete[] m_fonts;
-
-    if (m_tilesSize8 != nullptr)
-    {
-        for (uint16_t i = 0; i < numTilesSize8; i++)
-        {
-            delete m_tilesSize8[i];
-            m_tilesSize8[i] = nullptr;
-        }
-        delete[] m_tilesSize8;
-    }
 
     delete m_rawData;
     delete m_huffman;
@@ -293,34 +276,6 @@ Picture* EgaGraph::GetSprite(const uint16_t index)
     }
 
     return m_sprites[pictureIndex]; 
-}
-
-Picture* EgaGraph::GetTilesSize8(const uint16_t index)
-{
-    if (index >= numTilesSize8)
-    {
-        return nullptr;
-    }
-
-    if (m_tilesSize8[index] == nullptr)
-    {
-        const uint16_t pictureIndex = m_staticData.indexOfTileSize8;
-        uint8_t* compressedPicture = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndex)];
-        uint32_t compressedSize = GetChunkSize(pictureIndex);
-        uint32_t uncompressedSize = 32 * numTilesSize8;
-        FileChunk* pictureChunk = m_huffman->Decompress(compressedPicture, compressedSize, uncompressedSize);
-
-        // Just load all the tiles at once, such that the pictureChunk only needs to be decompressed once.
-        for (uint16_t i = 0; i < numTilesSize8; i++)
-        {
-            const unsigned int textureId = m_renderer.LoadTilesSize8IntoTexture(pictureChunk, i, false);
-            m_tilesSize8[i] = new Picture(textureId, 8, 8, 8, 8);
-        }
-
-        delete pictureChunk;
-    }
-
-    return m_tilesSize8[index];
 }
 
 Font* EgaGraph::GetFont(const uint16_t index)

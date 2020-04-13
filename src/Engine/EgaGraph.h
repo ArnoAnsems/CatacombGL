@@ -59,7 +59,6 @@ public:
     Picture* GetPicture(const uint16_t index);
     Picture* GetMaskedPicture(const uint16_t index);
     Picture* GetSprite(const uint16_t index);
-    Picture* GetTilesSize8(const uint16_t index);
     Font* GetFont(const uint16_t index);
     LevelLocationNames* GetWorldLocationNames(const uint16_t index);
     uint16_t GetNumberOfWorldLocationNames() const;
@@ -80,7 +79,6 @@ private:
     Picture** m_pictures;
     Picture** m_maskedPictures;
     Picture** m_sprites;
-    Picture** m_tilesSize8;
     LevelLocationNames** m_worldLocationNames;
     Huffman* m_huffman;
     Font** m_fonts;
