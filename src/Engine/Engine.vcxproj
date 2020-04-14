@@ -177,6 +177,7 @@
     <ClCompile Include="LevelLocationNames.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="TextureAtlas.cpp" />
+    <ClCompile Include="TilesSize8Utility.cpp" />
     <ClCompile Include="ViewPorts.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +228,7 @@
     <ClInclude Include="LevelLocationNames.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="TextureAtlas.h" />
+    <ClInclude Include="TilesSize8Utility.h" />
     <ClInclude Include="ViewPorts.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

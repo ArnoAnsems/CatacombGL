@@ -17,6 +17,7 @@
 #include "AudioRepositoryCatacomb3D.h"
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 #include "..\Engine\DefaultFont.h"
+#include "..\Engine\TilesSize8Utility.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -870,33 +871,12 @@ void Catacomb3DMenu::DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* cons
     DrawTiledWindow(renderer, egaGraph, (40 - width) / 2, (25 - height) / 2, width, height);
 }
 
-// Based on US_DrawWindow in ID_US.C of the Catacomb Abyss source code.
 void Catacomb3DMenu::DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height)
 {
-    const int16_t sx = (x - 1) * 8;
-    const int16_t sy = (y - 1) * 8;
-    const int16_t sw = (width + 1) * 8;
-    const int16_t sh = (height + 1) * 8;
-
     renderer.Render2DBar(x * 8, y * 8, width * 8, height * 8, EgaBrightWhite);
 
     std::vector<IRenderer::imageOnTextureAtlas> images;
-    images.push_back({ sx, sy, 0 });
-    images.push_back({ sx, sy + sh, 6 });
-
-    for (int16_t i = sx + 8; i <= sx + sw - 8; i += 8)
-    {
-        images.push_back({ i, sy, 1 });
-        images.push_back({ i, sy + sh, 7 });
-    }
-    images.push_back({ sx + sw, sy, 2 });
-    images.push_back({ sx + sw, sy + sh, 8 });
-
-    for (int16_t i = sy + 8; i <= sy + sh - 8; i += 8)
-    {
-        images.push_back({ sx, i, 3 });
-        images.push_back({ sx + sw, i, 5 });
-    }
+    TilesSize8Utility::DrawWindow(images, x, y, width, height);
     renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8Masked());
 }
 
