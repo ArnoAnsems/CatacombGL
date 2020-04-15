@@ -27,6 +27,23 @@ public:
         const int16_t y,
         const uint16_t width,
         const uint16_t height);
+    static void DrawDialog(
+        std::vector<IRenderer::imageOnTextureAtlas>& outputImages,
+        const int16_t x,
+        const int16_t y,
+        const uint16_t length);
+    static void DrawListBullet(
+        std::vector<IRenderer::imageOnTextureAtlas>& outputImages,
+        const int16_t x,
+        const int16_t y,
+        const bool enable,
+        const bool flash);
+    static void DrawRadioButton(
+        std::vector<IRenderer::imageOnTextureAtlas>& outputImages,
+        const int16_t x,
+        const int16_t y,
+        const bool selected,
+        const bool flash);
 
 private:
 
