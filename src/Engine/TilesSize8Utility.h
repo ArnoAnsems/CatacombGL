@@ -45,6 +45,28 @@ public:
         const bool selected,
         const bool flash);
 
+    static const uint16_t TileIdWindowTopLeft = 0u;
+    static const uint16_t TileIdWindowTop = 1u;
+    static const uint16_t TileIdWindowTopRight = 2u;
+    static const uint16_t TileIdWindowLeft = 3u;
+    static const uint16_t TileIdWindowCenter = 4u;
+    static const uint16_t TileIdWindowRight = 5u;
+    static const uint16_t TileIdWindowBottomLeft = 6u;
+    static const uint16_t TileIdWindowBottom = 7u;
+    static const uint16_t TileIdWindowBottomRight = 8u;
+    static const uint16_t TileIdBolt = 10u;
+    static const uint16_t TileIdNuke = 11u;
+    static const uint16_t TileIdPotion = 12u;
+    static const uint16_t TileIdFirstKey = 13u;
+    static const uint16_t TileIdFirstScroll = 17u;
+    static const uint16_t TileIdFirstNumber = 25u;
+    static const uint16_t TileIdListBulletEnabled = 92u;
+    static const uint16_t TileIdListBulletEnabledFlashing = 93u;
+    static const uint16_t TileIdListRadioButtonNotSelected = 94u;
+    static const uint16_t TileIdListRadioButtonNotSelectedFlashing = 95u;
+    static const uint16_t TileIdListBulletDisabled = 96u;
+    static const uint16_t TileIdListBulletDisabledFlashing = 97u;
+
 private:
 
 };

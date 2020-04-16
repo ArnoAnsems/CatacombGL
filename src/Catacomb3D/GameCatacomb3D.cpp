@@ -20,6 +20,7 @@
 #include "AudioRepositoryCatacomb3D.h"
 #include "DecorateAll.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\TilesSize8Utility.h"
 #include "Catacomb3DMenu.h"
 
 static const std::string Catacomb3DName = "Catacomb 3-D v1.22";
@@ -428,29 +429,23 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     m_renderer.RenderTextCentered(std::to_string(levelIndex + 1).c_str(), m_egaGraph->GetFont(3), EgaBrightYellow, 12, 148);
 
     const uint16_t maxItemsToShow = 9;
-    const uint16_t BOLTCHAR = 10;
-    const uint16_t NUKECHAR = 11;
-    const uint16_t POTIONCHAR = 12;
-    const uint16_t KEYCHARS = 13;
-    const uint16_t SCROLLCHARS = 17;
-    const uint16_t NUMBERCHARS = 25;
 
     std::vector<IRenderer::imageOnTextureAtlas> images;
 
     const int8_t numBoltsToShow = (playerInventory.GetBolts() < maxItemsToShow) ? playerInventory.GetBolts() : maxItemsToShow;
     for (int8_t i = 0; i < numBoltsToShow; i++)
     {
-        images.push_back({ 56 + (i * 8), 165, BOLTCHAR });
+        images.push_back({ 56 + (i * 8), 165, TilesSize8Utility::TileIdBolt });
     }
     const int8_t numNukesToShow = (playerInventory.GetNukes() < maxItemsToShow) ? playerInventory.GetNukes() : maxItemsToShow;
     for (int8_t i = 0; i < numNukesToShow; i++)
     {
-        images.push_back({ 56 + (i * 8), 175, NUKECHAR });
+        images.push_back({ 56 + (i * 8), 175, TilesSize8Utility::TileIdNuke });
     }
     const int8_t numPotionsToShow = (playerInventory.GetPotions() < maxItemsToShow) ? playerInventory.GetPotions() : maxItemsToShow;
     for (int8_t i = 0; i < numPotionsToShow; i++)
     {
-        images.push_back({ 56 + (i * 8), 185, POTIONCHAR });
+        images.push_back({ 56 + (i * 8), 185, TilesSize8Utility::TileIdPotion });
     }
 
     int8_t x = 24;
@@ -459,7 +454,7 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
         const int8_t numKeysToShow = playerInventory.GetKeys(i) > 2 ? 2 : playerInventory.GetKeys(i);
         for (int8_t j = 0; j < numKeysToShow; j++)
         {
-            images.push_back({ (x * 8), 165, (uint16_t)(KEYCHARS + i) });
+            images.push_back({ (x * 8), 165, (uint16_t)(TilesSize8Utility::TileIdFirstKey + i) });
             x++;
         }
     }
@@ -468,7 +463,7 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     {
         if (playerInventory.GetScroll(i))
         {
-            images.push_back({ 192 + (i * 8), 175, (uint16_t)(SCROLLCHARS + i) });
+            images.push_back({ 192 + (i * 8), 175, (uint16_t)(TilesSize8Utility::TileIdFirstScroll + i) });
         }
     }
 
@@ -479,7 +474,7 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
         int16_t x = 256 - (8 * (int16_t)length);
         for (int16_t i = 0; i < length; i++)
         {
-            images.push_back({ x, 185, (uint16_t)(NUMBERCHARS + scoreStr.at(i) - '0' )});
+            images.push_back({ x, 185, (uint16_t)(TilesSize8Utility::TileIdFirstNumber + scoreStr.at(i) - '0' )});
             x += 8;
         }
     }

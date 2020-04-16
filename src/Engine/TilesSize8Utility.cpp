@@ -28,21 +28,21 @@ void TilesSize8Utility::DrawWindow(
     const int16_t sw = (width + 1) * 8;
     const int16_t sh = (height + 1) * 8;
 
-    outputImages.push_back({ sx, sy, 0 });
-    outputImages.push_back({ sx, sy + sh, 6 });
+    outputImages.push_back({ sx, sy, TileIdWindowTopLeft });
+    outputImages.push_back({ sx, sy + sh, TileIdWindowBottomLeft });
 
     for (int16_t i = sx + 8; i <= sx + sw - 8; i += 8)
     {
-        outputImages.push_back({ i, sy, 1 });
-        outputImages.push_back({ i, sy + sh, 7 });
+        outputImages.push_back({ i, sy, TileIdWindowTop });
+        outputImages.push_back({ i, sy + sh, TileIdWindowBottom });
     }
-    outputImages.push_back({ sx + sw, sy, 2 });
-    outputImages.push_back({ sx + sw, sy + sh, 8 });
+    outputImages.push_back({ sx + sw, sy, TileIdWindowTopRight });
+    outputImages.push_back({ sx + sw, sy + sh, TileIdWindowBottomRight });
 
     for (int16_t i = sy + 8; i <= sy + sh - 8; i += 8)
     {
-        outputImages.push_back({ sx, i, 3 });
-        outputImages.push_back({ sx + sw, i, 5 });
+        outputImages.push_back({ sx, i, TileIdWindowLeft });
+        outputImages.push_back({ sx + sw, i, TileIdWindowRight });
     }
 }
 
@@ -53,18 +53,18 @@ void TilesSize8Utility::DrawDialog(
     const uint16_t length)
 {
     // Based on CAL_DialogDraw in ID_CA.C
-    outputImages.push_back({ x, y, 0 });
-    outputImages.push_back({ x, y + 8, 3 });
-    outputImages.push_back({ x, y + 16, 6 });
-    outputImages.push_back({ x + (length - 1) * 8, y, 2 });
-    outputImages.push_back({ x + (length - 1) * 8, y + 8, 5 });
-    outputImages.push_back({ x + (length - 1) * 8, y + 16, 8 });
+    outputImages.push_back({ x, y, TileIdWindowTopLeft });
+    outputImages.push_back({ x, y + 8, TileIdWindowLeft });
+    outputImages.push_back({ x, y + 16, TileIdWindowBottomLeft });
+    outputImages.push_back({ x + (length - 1) * 8, y, TileIdWindowTopRight });
+    outputImages.push_back({ x + (length - 1) * 8, y + 8, TileIdWindowRight });
+    outputImages.push_back({ x + (length - 1) * 8, y + 16, TileIdWindowBottomRight });
 
     for (int16_t x2 = x + 8; x2 < x + (length - 1) * 8; x2 += 8)
     {
-        outputImages.push_back({ x2, y, 1 });
-        outputImages.push_back({ x2, y + 8, 4 });
-        outputImages.push_back({ x2, y + 16, 7 });
+        outputImages.push_back({ x2, y, TileIdWindowTop });
+        outputImages.push_back({ x2, y + 8, TileIdWindowCenter });
+        outputImages.push_back({ x2, y + 16, TileIdWindowBottom });
     }
 }
 
@@ -76,10 +76,10 @@ void TilesSize8Utility::DrawListBullet(
     const bool flash)
 {
     const uint16_t imageId =
-        (enable && flash) ? 93u :
-        (enable && !flash) ? 92u :
-        (!enable && flash) ? 97u :
-        96u;
+        (enable && flash) ? TileIdListBulletEnabledFlashing :
+        (enable && !flash) ? TileIdListBulletEnabled :
+        (!enable && flash) ? TileIdListBulletDisabledFlashing :
+        TileIdListBulletDisabled;
     outputImages.push_back({ x, y, imageId });
 }
 
@@ -91,9 +91,9 @@ void TilesSize8Utility::DrawRadioButton(
     const bool flash)
 {
     const uint16_t imageId =
-        (selected && flash) ? 93u :
-        (selected && !flash) ? 92u :
-        (!selected && flash) ? 95u :
-        94u;
+        (selected && flash) ? TileIdListBulletEnabledFlashing :
+        (selected && !flash) ? TileIdListBulletEnabled :
+        (!selected && flash) ? TileIdListRadioButtonNotSelectedFlashing :
+        TileIdListRadioButtonNotSelected;
     outputImages.push_back({ x, y, imageId });
 }
