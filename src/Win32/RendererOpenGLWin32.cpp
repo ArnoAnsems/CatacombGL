@@ -324,21 +324,22 @@ unsigned int RendererOpenGLWin32::GenerateSingleColorTexture(const egaColor colo
     return textureId;
 }
 
-unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture, const uint16_t lineHeight)
+TextureAtlas* RendererOpenGLWin32::CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight)
 {
+    GLuint textureId;
+    glGenTextures(1, &textureId);
+
+    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, lineHeight, 16, 16, 0, 16 - lineHeight);
     const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t width = 16 * 16;
-    const uint32_t height = 16 * 16;
-    const uint32_t numberOfPixelsInTexture = width * height;
+    const uint32_t width = 16;
+    const uint32_t numberOfPixelsInTexture = width * lineHeight;
     GLubyte* textureImage = new GLubyte[numberOfPixelsInTexture * bytesPerOutputPixel];
     
     for (uint32_t i = 0; i < 256; i++)
     {
-        const uint32_t outputOriginX = (i % 16) * 16;
-        const uint32_t outputOriginY = (i / 16) * 16;
-        for (uint32_t h = 0; h < 16; h++)
+        for (uint32_t h = 0; h < lineHeight; h++)
         {
-            uint32_t outputPixelOffset = ((((outputOriginY + h) * 256) + outputOriginX) * bytesPerOutputPixel);
+            uint32_t outputPixelOffset = (h * 16) * bytesPerOutputPixel;
             for (uint32_t w = 0; w < 16; w++)
             {
                 const bool fontBit = (h < lineHeight) ? fontPicture[(16 * lineHeight * i) + (16 * h) + w] : false;
@@ -349,15 +350,18 @@ unsigned int RendererOpenGLWin32::LoadFontIntoTexture(const bool* fontPicture, c
                 outputPixelOffset += bytesPerOutputPixel;
             }
         }
+        textureAtlas->StoreImage(i, textureImage);
     }
-
-    GLuint textureId;
-    glGenTextures(1, &textureId);
-    LoadPixelDataIntoTexture(width, height, textureImage, textureId);
 
     delete[] textureImage;
 
-    return textureId;
+    LoadPixelDataIntoTexture(
+        textureAtlas->GetTextureWidth(),
+        textureAtlas->GetTextureHeight(),
+        textureAtlas->GetTexturePixelData(),
+        textureAtlas->GetTextureId());
+
+    return textureAtlas;
 }
 
 void RendererOpenGLWin32::RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY)
@@ -389,7 +393,8 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     }
 
     // Select the texture from the picture
-    BindTexture(font->GetTextureId());
+    const TextureAtlas* const textureAtlas = font->GetTextureAtlas();
+    BindTexture(textureAtlas->GetTextureId());
 
     rgbColor color = EgaToRgb(colorIndex);
 
@@ -400,12 +405,12 @@ void RendererOpenGLWin32::RenderTextLeftAligned(const char* text, const Font* fo
     for (uint16_t chari = 0; chari < strlen(text); chari++)
     {
         const uint8_t charIndex = text[chari];
-        uint16_t charWidth =  font->GetCharacterWidth(charIndex);
-        uint16_t charHeight = font->GetCharacterHeight();
-        float textureHeight = 1.0f / 16.0f * (charHeight / 16.0f);
-        float textureWidth = (float)(charWidth) / 256.0f;
-        float textureOffsetX = (float)(charIndex % 16) / 16.0f;
-        float textureOffsetY = (float)(charIndex / 16) / 16.0f;
+        const uint16_t charWidth =  font->GetCharacterWidth(charIndex);
+        const uint16_t charHeight = textureAtlas->GetImageHeight();
+        const float textureHeight = textureAtlas->GetImageRelativeHeight();
+        const float textureWidth = textureAtlas->GetImageRelativeWidth() * ((float)charWidth / (float)textureAtlas->GetImageWidth());
+        const float textureOffsetX = textureAtlas->GetImageRelativeOffsetX(charIndex);
+        const float textureOffsetY = textureAtlas->GetImageRelativeOffsetY(charIndex);
         
         glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth, offsetY + charHeight);
         glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth + charWidth, offsetY + charHeight);
@@ -427,7 +432,8 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     }
 
     // Select the texture from the picture
-    BindTexture(font->GetTextureId());
+    const TextureAtlas* const textureAtlas = font->GetTextureAtlas();
+    BindTexture(textureAtlas->GetTextureId());
 
     rgbColor color = EgaToRgb(colorIndex);
 
@@ -478,13 +484,13 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     glColor3f((float)(color.red) / 256.0f, (float)(color.green) / 256.0f, (float)(color.blue) / 256.0f);
     for (uint16_t chari = 0; chari < strlen(truncatedText); chari++)
     {
-        const uint8_t charIndex = truncatedText[chari];
-        uint16_t charWidth = font->GetCharacterWidth(charIndex);
-        uint16_t charHeight = font->GetCharacterHeight();
-        float textureHeight = 1.0f / 16.0f * (charHeight / 16.0f);
-        float textureWidth = (float)(charWidth) / 256.0f;
-        float textureOffsetX = (float)(charIndex % 16) / 16.0f;
-        float textureOffsetY = (float)(charIndex / 16) / 16.0f;
+        const uint8_t charIndex = text[chari];
+        const uint16_t charWidth = font->GetCharacterWidth(charIndex);
+        const uint16_t charHeight = textureAtlas->GetImageHeight();
+        const float textureHeight = textureAtlas->GetImageRelativeHeight();
+        const float textureWidth = textureAtlas->GetImageRelativeWidth() * ((float)charWidth / (float)textureAtlas->GetImageWidth());
+        const float textureOffsetX = textureAtlas->GetImageRelativeOffsetX(charIndex);
+        const float textureOffsetY = textureAtlas->GetImageRelativeOffsetY(charIndex);
 
         glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth, offsetY + charHeight);
         glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(offsetX + combinedWidth + charWidth, offsetY + charHeight);

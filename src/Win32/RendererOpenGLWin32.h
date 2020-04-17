@@ -50,7 +50,7 @@ public:
         const uint16_t imageHeight,
         const uint16_t textureWidth,
         const uint16_t textureHeight) override;
-    unsigned int LoadFontIntoTexture(const bool* fontPicture, const uint16_t lineHeight) override;
+    TextureAtlas* CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight) override;
 
     void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
     void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY, const uint16_t maxLength) override;

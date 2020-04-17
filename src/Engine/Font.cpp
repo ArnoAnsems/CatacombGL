@@ -16,29 +16,23 @@
 #include "Font.h"
 #include <cstring>
 
-Font::Font(const uint16_t height, const uint8_t width[256], const unsigned int textureId) :
-    m_textureId(textureId),
-    m_height(height)
+Font::Font(const uint8_t width[256], const TextureAtlas* const textureAtlas) :
+    m_textureAtlas(textureAtlas)
 {
     std::memcpy(&m_width[0], &width[0], sizeof(width[0]) * 256);
 }
 
 Font::~Font()
 {
-
+    delete m_textureAtlas;
 }
 
-unsigned int Font::GetTextureId() const
+const TextureAtlas* const Font::GetTextureAtlas() const
 {
-    return m_textureId;
+    return m_textureAtlas;
 }
 
 uint16_t Font::GetCharacterWidth(const uint16_t charIndex) const
 {
     return m_width[charIndex];
-}
-
-uint16_t Font::GetCharacterHeight() const
-{
-    return m_height;
 }

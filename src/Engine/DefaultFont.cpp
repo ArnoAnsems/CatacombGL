@@ -5362,14 +5362,14 @@ const Font* DefaultFont::Get(IRenderer& renderer, const uint16_t lineHeight)
 {
     if (lineHeight == 10 && defaultFontHeight10 == nullptr)
     {
-        const unsigned int fontTextureId = renderer.LoadFontIntoTexture(defaultFontDataHeight10, 10);
-        defaultFontHeight10 = new Font(10, defaultFontWidthHeight10, fontTextureId);
+        const TextureAtlas* const textureAtlas = renderer.CreateTextureAtlasForFont(defaultFontDataHeight10, 10);
+        defaultFontHeight10 = new Font(defaultFontWidthHeight10, textureAtlas);
     }
 
     if (lineHeight == 7 && defaultFontHeight7 == nullptr)
     {
-        const unsigned int fontTextureId = renderer.LoadFontIntoTexture(defaultFontDataHeight7, 7);
-        defaultFontHeight7 = new Font(7, defaultFontWidthHeight7, fontTextureId);
+        const TextureAtlas* const textureAtlas = renderer.CreateTextureAtlasForFont(defaultFontDataHeight7, 7);
+        defaultFontHeight7 = new Font(defaultFontWidthHeight7, textureAtlas);
     }
 
     return (lineHeight == 7) ? defaultFontHeight7 : defaultFontHeight10;

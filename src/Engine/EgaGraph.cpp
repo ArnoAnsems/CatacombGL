@@ -336,10 +336,11 @@ Font* EgaGraph::GetFont(const uint16_t index)
         }
     }
 
-    unsigned int textureId = m_renderer.LoadFontIntoTexture(fontPicture, lineHeight);
-    delete[] fontPicture;
-    m_fonts[indexInFontArray] = new Font(lineHeight, width, textureId);
     delete fontChunk;
+
+    const TextureAtlas* const textureAtlas = m_renderer.CreateTextureAtlasForFont(fontPicture, lineHeight);
+    delete[] fontPicture;
+    m_fonts[indexInFontArray] = new Font(width, textureAtlas);
 
     return m_fonts[indexInFontArray];
 }

@@ -69,9 +69,9 @@ unsigned int RendererStub::LoadMaskedFileChunkIntoTexture(
     return 0u;
 }
 
-unsigned int RendererStub::LoadFontIntoTexture(const bool* /*fontPicture*/, const uint16_t /*lineHeight*/)
+TextureAtlas* RendererStub::CreateTextureAtlasForFont(const bool* /*fontPicture*/, const uint16_t /*lineHeight*/)
 {
-    return 0u;
+    return nullptr;
 }
 
 void RendererStub::RenderTextLeftAligned(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
