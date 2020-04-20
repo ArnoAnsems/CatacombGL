@@ -82,17 +82,17 @@ void RendererStub::RenderTextLeftAlignedTruncated(const char* /*text*/, const Fo
 {
 }
 
-uint8_t RendererStub::RenderTextLeftAlignedMultiLine(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
-{
-    return 1;
-}
-
 void RendererStub::RenderTextCentered(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
 {
 }
 
 void RendererStub::RenderNumber(const uint16_t /*value*/, const Font* /*font*/, const uint8_t /*maxDigits*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
 {
+}
+
+void RendererStub::RenderText(const RenderableText& /*renderableText*/)
+{
+
 }
 
 void RendererStub::Prepare2DRendering(const bool /*helpWindow*/)
@@ -134,10 +134,6 @@ uint16_t RendererStub::GetAdditionalMarginDueToWideScreen(const float /*aspectRa
 }
 
 void RendererStub::Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& /*textureToWallsMap*/)
-{
-}
-
-void RendererStub::Render3DSprite(const Picture* /*picture*/, const float /*offsetX*/, const float /*offsetY*/, const SpriteOrientation /*orientation*/)
 {
 }
 

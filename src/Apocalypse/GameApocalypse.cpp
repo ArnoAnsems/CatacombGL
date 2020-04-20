@@ -400,35 +400,38 @@ IMenu* GameApocalypse::CreateMenu(ConfigurationSettings& configurationSettings, 
 void GameApocalypse::DrawHelpPage()
 {
     m_renderer.Render2DBar(0, 0, 640, 200, EgaLightGray);
-    const Font* font = GetEgaGraph()->GetFont(3);
-    m_renderer.RenderTextLeftAligned("                    SUMMARY OF GAME CONTROLS", font, EgaBlue, 128, 19);
-    m_renderer.RenderTextLeftAligned("         ACTION", font, EgaRed, 128, 37);
-    m_renderer.RenderTextLeftAligned("Arrow keys, joystick, or mouse", font, EgaRed, 128, 55);
-    m_renderer.RenderTextLeftAligned("TAB or V while turning", font, EgaRed, 128, 64);
-    m_renderer.RenderTextLeftAligned("ALT or Button 2 while turning", font, EgaRed, 128, 73);
-    m_renderer.RenderTextLeftAligned("CTRL or Button 1", font, EgaRed, 128, 82);
-    m_renderer.RenderTextLeftAligned("Z", font, EgaRed, 128, 91);
-    m_renderer.RenderTextLeftAligned("X or Enter", font, EgaRed, 128, 100);
-    m_renderer.RenderTextLeftAligned("F1", font, EgaRed, 128, 109);
-    m_renderer.RenderTextLeftAligned("F2", font, EgaRed, 128, 118);
-    m_renderer.RenderTextLeftAligned("F3", font, EgaRed, 128, 127);
-    m_renderer.RenderTextLeftAligned("F4", font, EgaRed, 128, 136);
-    m_renderer.RenderTextLeftAligned("F5", font, EgaRed, 128, 145);
-    m_renderer.RenderTextLeftAligned("ESC", font, EgaRed, 128, 154);
+    const Font& font = *GetEgaGraph()->GetFont(3);
+    RenderableText renderableText(font);
+    renderableText.LeftAligned("                    SUMMARY OF GAME CONTROLS", EgaBlue, 128, 19);
+    renderableText.LeftAligned("         ACTION", EgaRed, 128, 37);
+    renderableText.LeftAligned("Arrow keys, joystick, or mouse", EgaRed, 128, 55);
+    renderableText.LeftAligned("TAB or V while turning", EgaRed, 128, 64);
+    renderableText.LeftAligned("ALT or Button 2 while turning", EgaRed, 128, 73);
+    renderableText.LeftAligned("CTRL or Button 1", EgaRed, 128, 82);
+    renderableText.LeftAligned("Z", EgaRed, 128, 91);
+    renderableText.LeftAligned("X or Enter", EgaRed, 128, 100);
+    renderableText.LeftAligned("F1", EgaRed, 128, 109);
+    renderableText.LeftAligned("F2", EgaRed, 128, 118);
+    renderableText.LeftAligned("F3", EgaRed, 128, 127);
+    renderableText.LeftAligned("F4", EgaRed, 128, 136);
+    renderableText.LeftAligned("F5", EgaRed, 128, 145);
+    renderableText.LeftAligned("ESC", EgaRed, 128, 154);
 
-    m_renderer.RenderTextLeftAligned("   REACTION", font, EgaDarkGray, 400, 37);
-    m_renderer.RenderTextLeftAligned("Move and turn", font, EgaDarkGray, 400, 55);
-    m_renderer.RenderTextLeftAligned("Turn quickly (Quick Turn)", font, EgaDarkGray, 400, 64);
-    m_renderer.RenderTextLeftAligned("Move sideways", font, EgaDarkGray, 400, 73);
-    m_renderer.RenderTextLeftAligned("Shoot a Missile", font, EgaDarkGray, 400, 82);
-    m_renderer.RenderTextLeftAligned("Shoot a Zapper", font, EgaDarkGray, 400, 91);
-    m_renderer.RenderTextLeftAligned("Shoot an Xterminator", font, EgaDarkGray, 400, 100);
-    m_renderer.RenderTextLeftAligned("Help (this screen)", font, EgaDarkGray, 400, 109);
-    m_renderer.RenderTextLeftAligned("Sound control", font, EgaDarkGray, 400, 118);
-    m_renderer.RenderTextLeftAligned("Save game position", font, EgaDarkGray, 400, 127);
-    m_renderer.RenderTextLeftAligned("Restore a saved game", font, EgaDarkGray, 400, 136);
-    m_renderer.RenderTextLeftAligned("Joystick control", font, EgaDarkGray, 400, 145);
-    m_renderer.RenderTextLeftAligned("System options", font, EgaDarkGray, 400, 154);
+    renderableText.LeftAligned("   REACTION", EgaDarkGray, 400, 37);
+    renderableText.LeftAligned("Move and turn", EgaDarkGray, 400, 55);
+    renderableText.LeftAligned("Turn quickly (Quick Turn)", EgaDarkGray, 400, 64);
+    renderableText.LeftAligned("Move sideways", EgaDarkGray, 400, 73);
+    renderableText.LeftAligned("Shoot a Missile", EgaDarkGray, 400, 82);
+    renderableText.LeftAligned("Shoot a Zapper", EgaDarkGray, 400, 91);
+    renderableText.LeftAligned("Shoot an Xterminator", EgaDarkGray, 400, 100);
+    renderableText.LeftAligned("Help (this screen)", EgaDarkGray, 400, 109);
+    renderableText.LeftAligned("Sound control", EgaDarkGray, 400, 118);
+    renderableText.LeftAligned("Save game position", EgaDarkGray, 400, 127);
+    renderableText.LeftAligned("Restore a saved game", EgaDarkGray, 400, 136);
+    renderableText.LeftAligned("Joystick control", EgaDarkGray, 400, 145);
+    renderableText.LeftAligned("System options", EgaDarkGray, 400, 154);
+
+    m_renderer.RenderText(renderableText);
 }
 
 bool GameApocalypse::ProcessInputOnHelpPage(PlayerInput& playerInput)

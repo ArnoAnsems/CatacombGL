@@ -27,6 +27,7 @@
 #include "EgaColor.h"
 #include "ViewPorts.h"
 #include "TextureAtlas.h"
+#include "RenderableText.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -102,9 +103,9 @@ public:
 
     virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
     virtual void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY, const uint16_t maxLength) = 0;
-    virtual uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
     virtual void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
     virtual void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
+    virtual void RenderText(const RenderableText& renderableText) = 0;
 
     virtual void Prepare2DRendering(const bool helpWindow) = 0;
     virtual void Unprepare2DRendering() = 0;
@@ -118,7 +119,6 @@ public:
     virtual uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) = 0;
 
     virtual void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) = 0;
-    virtual void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
 
     virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
     virtual void RenderAllSprites() = 0;

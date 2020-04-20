@@ -503,52 +503,6 @@ void RendererOpenGLWin32::RenderTextLeftAlignedTruncated(const char* text, const
     glColor3f(1.0f, 1.0f, 1.0f);
 }
 
-uint8_t RendererOpenGLWin32::RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY)
-{
-    uint8_t numberOfLines = 0;
-
-    if (strlen(text) == 0)
-    {
-        numberOfLines = 1;
-    }
-    else
-    {
-        const uint16_t maxWidth = 600;
-        uint16_t chari = 0;
-        uint16_t startLine = 0;
-        char dest[200];
-        while (chari < strlen(text))
-        {
-            uint16_t posLastSpaceBeforeMaxWidth = 0;
-            uint16_t totalWidth = 0;
-            chari = startLine;
-            while (totalWidth < maxWidth && chari < strlen(text))
-            {
-                const uint8_t charIndex = text[chari];
-                if (charIndex == ' ')
-                {
-                    posLastSpaceBeforeMaxWidth = chari;
-                }
-                totalWidth += font->GetCharacterWidth(charIndex);
-                chari++;
-            }
-            if (chari == strlen(text) && totalWidth < maxWidth)
-            {
-                posLastSpaceBeforeMaxWidth = chari;
-            }
-
-            memset(dest, 0, 200);
-            strncpy_s(dest, text + startLine, posLastSpaceBeforeMaxWidth - startLine);
-            RenderTextLeftAligned(dest, font, colorIndex, offsetX, offsetY + (9 * numberOfLines));
-
-            startLine = posLastSpaceBeforeMaxWidth + 1;
-            numberOfLines++;
-        }
-    }
-
-    return numberOfLines;
-}
-
 void RendererOpenGLWin32::RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY)
 {
     char str[10];
@@ -559,6 +513,55 @@ void RendererOpenGLWin32::RenderNumber(const uint16_t value, const Font* font, c
     const uint16_t widthOfBlanks = widthOfBlank * (maxDigits - (uint16_t)strlen(str));
 
     RenderTextLeftAligned(str, font, colorIndex, offsetX + widthOfBlanks, offsetY);
+}
+
+void RendererOpenGLWin32::RenderText(const RenderableText& renderableText)
+{
+    const std::vector<RenderableText::renderableCharacter>& characters = renderableText.GetText();
+    const Font& font = renderableText.GetFont();
+    if (characters.empty())
+    {
+        // Nothing to render
+        return;
+    }
+
+    // Select the texture from the picture
+    const TextureAtlas* const textureAtlas = font.GetTextureAtlas();
+    BindTexture(textureAtlas->GetTextureId());
+
+    egaColor previousColor = EgaBlack;
+
+    // Draw the texture as a quad
+    glBegin(GL_QUADS);
+
+    for (uint16_t chari = 0; chari < characters.size(); chari++)
+    {
+        const egaColor currentColor = characters.at(chari).color;
+        if (chari == 0 || currentColor != previousColor)
+        {
+            const rgbColor colorInRGB = EgaToRgb(currentColor);
+            glColor3f((float)(colorInRGB.red) / 256.0f, (float)(colorInRGB.green) / 256.0f, (float)(colorInRGB.blue) / 256.0f);
+            previousColor = currentColor;
+        }
+
+        const uint8_t charIndex = (uint8_t)characters.at(chari).imageIndex;
+        const int16_t offsetX = characters.at(chari).offsetX;
+        const int16_t offsetY = characters.at(chari).offsetY;
+        const uint16_t charWidth = font.GetCharacterWidth(charIndex);
+        const uint16_t charHeight = textureAtlas->GetImageHeight();
+        const float textureHeight = textureAtlas->GetImageRelativeHeight();
+        const float textureWidth = textureAtlas->GetImageRelativeWidth() * ((float)charWidth / (float)textureAtlas->GetImageWidth());
+        const float textureOffsetX = textureAtlas->GetImageRelativeOffsetX(charIndex);
+        const float textureOffsetY = textureAtlas->GetImageRelativeOffsetY(charIndex);
+
+        glTexCoord2f(textureOffsetX, textureOffsetY + textureHeight); glVertex2i(offsetX, offsetY + charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY + textureHeight); glVertex2i(offsetX + charWidth, offsetY + charHeight);
+        glTexCoord2f(textureOffsetX + textureWidth, textureOffsetY); glVertex2i(offsetX + charWidth, offsetY);
+        glTexCoord2f(textureOffsetX, textureOffsetY); glVertex2i(offsetX, offsetY);
+    }
+    glEnd();
+
+    glColor3f(1.0f, 1.0f, 1.0f);
 }
 
 void RendererOpenGLWin32::Prepare2DRendering(const bool helpWindow)

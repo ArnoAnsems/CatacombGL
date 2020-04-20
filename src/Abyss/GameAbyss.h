@@ -85,10 +85,10 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
 
 private:
-    void DrawHealth(const int16_t health);
-    void DrawScrolls(const PlayerInventory& playerInventory);
-    void DrawKeys(const PlayerInventory& playerInventory);
-    void DrawBonus(const PlayerInventory& playerInventory);
+    void DrawHealth(RenderableText& renderableText, const int16_t health);
+    void DrawScrolls(RenderableText& renderableText, const PlayerInventory& playerInventory);
+    void DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory);
+    void DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory);
     void DrawGems(const PlayerInventory& playerInventory);
     HelpPages* GetHelpPages();
 

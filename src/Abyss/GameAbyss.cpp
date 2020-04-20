@@ -457,21 +457,23 @@ const DecorateActor& GameAbyss::GetPlayerActor()
 void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float /*playerAngle*/, const uint8_t /*levelIndex*/, const uint16_t /*shotPower*/, const uint32_t /*points*/)
 {
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsAbyss::STATUSPIC), 0, 120);
-    
-    DrawHealth(health);
-    DrawScrolls(playerInventory);
-    DrawKeys(playerInventory);
-    DrawBonus(playerInventory);
+    const Font& font = *GetEgaGraph()->GetFont(3);
+    RenderableText renderableText(font);
+    DrawHealth(renderableText, health);
+    DrawScrolls(renderableText, playerInventory);
+    DrawKeys(renderableText, playerInventory);
+    DrawBonus(renderableText, playerInventory);
     DrawGems(playerInventory);
 
-    m_renderer.RenderTextCentered(locationMessage.c_str(), GetEgaGraph()->GetFont(3), EgaBrightYellow, 160, 121); 
+    renderableText.Centered(locationMessage.c_str(), EgaBrightYellow, 160, 121);
+    m_renderer.RenderText(renderableText);
 }
 
-void GameAbyss::DrawHealth(const int16_t health)
+void GameAbyss::DrawHealth(RenderableText& renderableText, const int16_t health)
 {
     const uint16_t percentage = (uint16_t) health;
 
-    m_renderer.RenderNumber(percentage, GetEgaGraph()->GetFont(3), 3, EgaBrightYellow, 74, 176);
+    renderableText.Number(percentage, 3, EgaBrightYellow, 74, 176);
 
     uint16_t picnum;
     if (percentage > 75)
@@ -498,7 +500,7 @@ void GameAbyss::DrawHealth(const int16_t health)
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picnum), 64, 134);
 }
 
-void GameAbyss::DrawScrolls(const PlayerInventory& playerInventory)
+void GameAbyss::DrawScrolls(RenderableText& renderableText, const PlayerInventory& playerInventory)
 {
     for (uint8_t loop=0;loop<8;loop++)
     {
@@ -506,24 +508,24 @@ void GameAbyss::DrawScrolls(const PlayerInventory& playerInventory)
         {
             uint8_t y = 150 + ((loop > 3) * 10);
             uint8_t x = 209 + (loop % 4) * 8;
-            m_renderer.RenderNumber(loop + 1, GetEgaGraph()->GetFont(3), 1, EgaBlack, x, y);
+            renderableText.Number(loop + 1, 1, EgaBlack, x, y);
         }
     }
 }
 
-void GameAbyss::DrawKeys(const PlayerInventory& playerInventory)
+void GameAbyss::DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory)
 {
-    m_renderer.RenderNumber(playerInventory.GetKeys(RedKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 160, 149);
-    m_renderer.RenderNumber(playerInventory.GetKeys(YellowKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 184, 176);
-    m_renderer.RenderNumber(playerInventory.GetKeys(GreenKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 184, 149);
-    m_renderer.RenderNumber(playerInventory.GetKeys(BlueKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 160, 176);
+    renderableText.Number(playerInventory.GetKeys(RedKey), 2, EgaBrightYellow, 160, 149);
+    renderableText.Number(playerInventory.GetKeys(YellowKey), 2, EgaBrightYellow, 184, 176);
+    renderableText.Number(playerInventory.GetKeys(GreenKey), 2, EgaBrightYellow, 184, 149);
+    renderableText.Number(playerInventory.GetKeys(BlueKey), 2, EgaBrightYellow, 160, 176);
 }
 
-void GameAbyss::DrawBonus(const PlayerInventory& playerInventory)
+void GameAbyss::DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory)
 {
-    m_renderer.RenderNumber(playerInventory.GetBolts(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 137);
-    m_renderer.RenderNumber(playerInventory.GetNukes(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 155);
-    m_renderer.RenderNumber(playerInventory.GetPotions(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 134, 173);
+    renderableText.Number(playerInventory.GetBolts(), 2, EgaBrightYellow, 134, 137);
+    renderableText.Number(playerInventory.GetNukes(), 2, EgaBrightYellow, 134, 155);
+    renderableText.Number(playerInventory.GetPotions(), 2, EgaBrightYellow, 134, 173);
 }
 
 void GameAbyss::DrawGems(const PlayerInventory& playerInventory)
@@ -612,21 +614,24 @@ void GameAbyss::DrawHelpPage()
     HelpPages* helpPages = GetHelpPages();
 
     const HelpPage& helpPage = helpPages->GetPage(m_helpPageIndex);
+    const Font& font = *GetEgaGraph()->GetFont(3);
+    RenderableText renderableText(font);
     uint16_t yOffset = 8;
     for (uint16_t lineIndex = 0; lineIndex < helpPage.size(); lineIndex++)
     {
         const HelpLine& helpLine = helpPage.at(lineIndex);
         if (helpLine.centered)
         {
-            m_renderer.RenderTextCentered(helpLine.line.c_str(), GetEgaGraph()->GetFont(3), EgaDarkGray, 320, yOffset);
+            renderableText.Centered(helpLine.line, EgaDarkGray, 320, yOffset);
             yOffset += 9;
         }
         else
         {
-            const uint8_t numberOfLines = m_renderer.RenderTextLeftAlignedMultiLine(helpLine.line.c_str(), GetEgaGraph()->GetFont(3), EgaDarkGray, 16, yOffset);
+            const uint8_t numberOfLines = renderableText.LeftAlignedMultiLine(helpLine.line.c_str(), EgaDarkGray, 16, yOffset);
             yOffset += (numberOfLines * 9);
         }
     }
+    m_renderer.RenderText(renderableText);
 }
 
 bool GameAbyss::ProcessInputOnHelpPage(PlayerInput& playerInput)

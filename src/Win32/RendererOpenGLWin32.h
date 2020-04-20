@@ -54,9 +54,9 @@ public:
 
     void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
     void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY, const uint16_t maxLength) override;
-    uint8_t RenderTextLeftAlignedMultiLine(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
     void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
     void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) override;
+    void RenderText(const RenderableText& renderableText) override;
 
     void Prepare2DRendering(const bool helpWindow) override;
     void Unprepare2DRendering() override;
@@ -70,7 +70,6 @@ public:
     uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) override;
 
     void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) override;
-    void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
 
     void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
     void RenderAllSprites();
@@ -102,6 +101,8 @@ private:
     static constexpr rgbColor EgaToRgb(const egaColor ega);
     void LoadPixelDataIntoTexture(uint32_t width, uint32_t height, uint8_t* pixelData, unsigned int textureId) const;
     void BindTexture(unsigned int textureId) const;
+
+    void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation);
 
     void quickSort(uint16_t p,uint16_t q);
     uint16_t partition(uint16_t p,uint16_t q);
