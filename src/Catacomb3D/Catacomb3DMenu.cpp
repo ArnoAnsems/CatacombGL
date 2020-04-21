@@ -851,6 +851,7 @@ void Catacomb3DMenu::DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotP
 void Catacomb3DMenu::DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3)
 {
     const int offsetX = 154 - (width / 2);
+    RenderableText renderableText(*egaGraph.GetFont(4));
     renderer.Render2DPicture(egaGraph.GetMaskedPicture(CP_MENUMASKPICM), 74, 48);
     renderer.Render2DBar(offsetX + 1, 81, width - 2, 36, EgaBlack);
     renderer.Render2DBar(offsetX, 80, width, 1, EgaRed);
@@ -858,11 +859,12 @@ void Catacomb3DMenu::DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGr
     renderer.Render2DBar(offsetX, 81, 1, 36, EgaRed);
     renderer.Render2DBar(offsetX + width - 1, 81, 1, 36, EgaRed);
 
-    renderer.RenderTextCentered(message1.c_str(), egaGraph.GetFont(4), EgaBrightRed, 154, 89);
+    renderableText.Centered(message1, EgaBrightRed, 154, 89);
 
     renderer.Render2DBar(offsetX + 4, 102, width - 8, 1, EgaRed);
-    renderer.RenderTextCentered(message2.c_str(), egaGraph.GetFont(4), EgaRed, 154, 104);
-    renderer.RenderTextCentered(message3.c_str(), egaGraph.GetFont(4), EgaRed, 154, 111);
+    renderableText.Centered(message2, EgaRed, 154, 104);
+    renderableText.Centered(message3, EgaRed, 154, 111);
+    renderer.RenderText(renderableText);
 }
 
 // Based on US_CenterWindow in ID_US.C of the Catacomb Abyss source code.
@@ -891,8 +893,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     if (timeStamp < m_menuActivatedTimestamp + loadingDuration)
     {
         DrawCenteredTiledWindow(renderer, egaGraph, 20, 8);
-        renderer.RenderTextCentered("Loading", egaGraph->GetFont(3), EgaBlack, 160, 65);
-        renderer.RenderTextCentered("Control Panel", egaGraph->GetFont(3), EgaBrightRed, 160, 75);
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Loading", EgaBlack, 160, 65);
+        renderableText.Centered("Control Panel", EgaBrightRed, 160, 75);
+        renderer.RenderText(renderableText);
 
         const int16_t thx = 88;
         const int16_t thy = 96;
@@ -915,13 +919,15 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     renderer.Render2DPicture(egaGraph->GetPicture(CP_MENUSCREENPIC), 0, 0);
 
     if (m_askForOverwrite)
-    {  
-        renderer.RenderTextCentered("Warning!", egaGraph->GetFont(4), EgaRed, 160, 52);
-        renderer.RenderTextCentered("Existing stored game", egaGraph->GetFont(4), EgaRed, 160, 72);
-        renderer.RenderTextCentered(m_newSaveGameName.c_str(), egaGraph->GetFont(4), EgaBrightRed, 160, 82);
-        renderer.RenderTextCentered("will be overwritten!", egaGraph->GetFont(4), EgaRed, 160, 92);
-        renderer.RenderTextCentered("Are you sure?", egaGraph->GetFont(4), EgaRed, 160, 102);
-        renderer.RenderTextCentered("Y / N", egaGraph->GetFont(4), EgaRed, 160, 112);
+    {
+        RenderableText renderableText(*egaGraph->GetFont(4));
+        renderableText.Centered("Warning!", EgaRed, 160, 52);
+        renderableText.Centered("Existing stored game", EgaRed, 160, 72);
+        renderableText.Centered(m_newSaveGameName, EgaBrightRed, 160, 82);
+        renderableText.Centered("will be overwritten!", EgaRed, 160, 92);
+        renderableText.Centered("Are you sure?", EgaRed, 160, 102);
+        renderableText.Centered("Y / N", EgaRed, 160, 112);
+        renderer.RenderText(renderableText);
         return;
     }
 
@@ -929,32 +935,33 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     if (m_subMenuSelected == subMenuMain)
     {
         std::vector<IRenderer::imageOnTextureAtlas> images;
-
+        RenderableText renderableText(*egaGraph->GetFont(4));
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_MAINMENUPIC), 80, 48);
         TilesSize8Utility::DrawListBullet(images, 112, 62, true, (m_menuItemSelected == 0) && flashIcon);
-        renderer.RenderTextLeftAligned("NEW GAME", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 120, 63);
+        renderableText.LeftAligned("NEW GAME", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 120, 63);
         TilesSize8Utility::DrawListBullet(images, 112, 70, m_savedGames.size() > 0, (m_menuItemSelected == 1) && flashIcon);
-        renderer.RenderTextLeftAligned("LOAD GAME", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 120, 71);
+        renderableText.LeftAligned("LOAD GAME", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 120, 71);
         TilesSize8Utility::DrawListBullet(images, 112, 78, m_saveGameEnabled, (m_menuItemSelected == 2) && flashIcon);
-        renderer.RenderTextLeftAligned("SAVE GAME", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 120, 79);
+        renderableText.LeftAligned("SAVE GAME", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 120, 79);
         TilesSize8Utility::DrawListBullet(images, 112, 86, true, (m_menuItemSelected == 3) && flashIcon);
-        renderer.RenderTextLeftAligned("CONFIGURE", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 120, 87);
+        renderableText.LeftAligned("CONFIGURE", (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 120, 87);
         TilesSize8Utility::DrawListBullet(images, 112, 94, true, (m_menuItemSelected == 4) && flashIcon);
         const char* returnOptionText = (m_saveGameEnabled) ? "RETURN TO GAME" : "RETURN TO DEMO";
-        renderer.RenderTextLeftAligned(returnOptionText, egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 120, 95);
+        renderableText.LeftAligned(returnOptionText, (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 120, 95);
         TilesSize8Utility::DrawListBullet(images, 112, 102, m_saveGameEnabled, (m_menuItemSelected == 5) && flashIcon);
-        renderer.RenderTextLeftAligned("END GAME", egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 120, 103);
+        renderableText.LeftAligned("END GAME", (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 120, 103);
         TilesSize8Utility::DrawListBullet(images, 112, 110, true, (m_menuItemSelected == 6) && flashIcon);
-        renderer.RenderTextLeftAligned("SKULL 'N' BONES", egaGraph->GetFont(4), (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 120, 111);
+        renderableText.LeftAligned("SKULL 'N' BONES", (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 120, 111);
         TilesSize8Utility::DrawListBullet(images, 112, 118, true, (m_menuItemSelected == 7) && flashIcon);
-        renderer.RenderTextLeftAligned("QUIT", egaGraph->GetFont(4), (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 120, 119);
+        renderableText.LeftAligned("QUIT", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 120, 119);
 
-        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to close", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        renderableText.Centered("Esc to close", EgaRed, 154, 144);
         renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderer.RenderText(renderableText);
 
         if (m_askForQuit)
         {
@@ -969,21 +976,22 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     else if (m_subMenuSelected == subMenuNewGame)
     {
         std::vector<IRenderer::imageOnTextureAtlas> images;
-
+        RenderableText renderableText(*egaGraph->GetFont(4));
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_NEWGAMEMENUPIC), 80, 48);
         TilesSize8Utility::DrawListBullet(images, 88, 62, true, (m_menuItemSelected == 0) && flashIcon);
-        renderer.RenderTextLeftAligned("BEGIN EASY GAME", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+        renderableText.LeftAligned("BEGIN EASY GAME", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
         TilesSize8Utility::DrawListBullet(images, 88, 70, true, (m_menuItemSelected == 1) && flashIcon);
-        renderer.RenderTextLeftAligned("BEGIN NORMAL GAME", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+        renderableText.LeftAligned("BEGIN NORMAL GAME", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
         TilesSize8Utility::DrawListBullet(images, 88, 78, true, (m_menuItemSelected == 2) && flashIcon);
-        renderer.RenderTextLeftAligned("BEGIN HARD GAME", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
+        renderableText.LeftAligned("BEGIN HARD GAME", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
 
-        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
         renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderer.RenderText(renderableText);
 
         if (m_askForEndGame)
         {
@@ -993,23 +1001,24 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     else if (m_subMenuSelected == subMenuConfigure)
     {
         std::vector<IRenderer::imageOnTextureAtlas> images;
-
+        RenderableText renderableText(*egaGraph->GetFont(4));
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_CONFIGMENUPIC), 80, 48);
         TilesSize8Utility::DrawListBullet(images, 88, 62, true, (m_menuItemSelected == 0) && flashIcon);
-        renderer.RenderTextLeftAligned("SOUND", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+        renderableText.LeftAligned("SOUND", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
         TilesSize8Utility::DrawListBullet(images, 88, 70, true, (m_menuItemSelected == 1) && flashIcon);
-        renderer.RenderTextLeftAligned("MUSIC", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+        renderableText.LeftAligned("MUSIC", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
         TilesSize8Utility::DrawListBullet(images, 88, 78, true, (m_menuItemSelected == 2) && flashIcon);
-        renderer.RenderTextLeftAligned("VIDEO", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
+        renderableText.LeftAligned("VIDEO", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
         TilesSize8Utility::DrawListBullet(images, 88, 86, true, (m_menuItemSelected == 3) && flashIcon);
-        renderer.RenderTextLeftAligned("CONTROLS", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 96, 87);
+        renderableText.LeftAligned("CONTROLS", (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 96, 87);
 
-        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
         renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
@@ -1027,54 +1036,56 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_LOADMENUPIC), 105, 48, 10, 0, 7, 12); // O
         renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_MAINMENUPIC), 112, 48, 30, 0, 34, 12); // MENU
 
+        RenderableText renderableText(*egaGraph->GetFont(4));
         TilesSize8Utility::DrawListBullet(images, 76, 62, true, (m_menuItemSelected == 0) && flashIcon);
-        renderer.RenderTextLeftAligned("Screen Mode", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, 63);
+        renderableText.LeftAligned("Screen Mode", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, 63);
         const char* screenModeStr =
             (m_configurationSettings.GetScreenMode() == Windowed) ? "Windowed" :
             (m_configurationSettings.GetScreenMode() == Fullscreen) ? "Fullscreen" :
             "Borderless";
-        renderer.RenderTextLeftAligned(screenModeStr, egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaLightGray : EgaDarkGray, 180, 63);
+        renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == 0) ? EgaLightGray : EgaDarkGray, 180, 63);
 
         TilesSize8Utility::DrawListBullet(images, 76, 70, true, (m_menuItemSelected == 1) && flashIcon);
-        renderer.RenderTextLeftAligned("Aspect ratio", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, 70);
-        const char* aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description.c_str();
-        renderer.RenderTextLeftAligned(aspectRatioStr, egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 160, 71);
+        renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, 70);
+        const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
+        renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 160, 71);
 
         TilesSize8Utility::DrawListBullet(images, 76, 78, true, (m_menuItemSelected == 2) && flashIcon);
-        renderer.RenderTextLeftAligned("Field Of View (Y)", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, 79);
+        renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, 79);
         char fovStr[40];
         sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
-        renderer.RenderTextLeftAligned(fovStr, egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaLightGray : EgaDarkGray, 180, 79);
+        renderableText.LeftAligned(fovStr, (m_menuItemSelected == 2) ? EgaLightGray : EgaDarkGray, 180, 79);
 
         TilesSize8Utility::DrawListBullet(images, 76, 86, true, (m_menuItemSelected == 3) && flashIcon);
-        renderer.RenderTextLeftAligned("Texture filtering", egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, 87);
+        renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, 87);
         const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
-        renderer.RenderTextLeftAligned(textureFilterStr, egaGraph->GetFont(4), (m_menuItemSelected == 3) ? EgaLightGray : EgaDarkGray, 180, 87);
+        renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == 3) ? EgaLightGray : EgaDarkGray, 180, 87);
 
         TilesSize8Utility::DrawListBullet(images, 76, 94, true, (m_menuItemSelected == 4) && flashIcon);
-        renderer.RenderTextLeftAligned("Depth shading", egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, 95);
+        renderableText.LeftAligned("Depth shading", (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, 95);
         const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
-        renderer.RenderTextLeftAligned(depthShadingStr, egaGraph->GetFont(4), (m_menuItemSelected == 4) ? EgaLightGray : EgaDarkGray, 180, 95);
+        renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == 4) ? EgaLightGray : EgaDarkGray, 180, 95);
 
         TilesSize8Utility::DrawListBullet(images, 76, 102, true, (m_menuItemSelected == 5) && flashIcon);
-        renderer.RenderTextLeftAligned("Show frame rate", egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 84, 103);
+        renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 84, 103);
         const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
         const char* showFpsStr =
             (showFpsMode == Minimal) ? "Minimal" :
             (showFpsMode == Extended) ? "Extended" :
             "Off";
-        renderer.RenderTextLeftAligned(showFpsStr, egaGraph->GetFont(4), (m_menuItemSelected == 5) ? EgaLightGray : EgaDarkGray, 180, 103);
+        renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == 5) ? EgaLightGray : EgaDarkGray, 180, 103);
 
         const bool vsyncSupported = renderer.IsVSyncSupported();
         TilesSize8Utility::DrawListBullet(images, 76, 110, vsyncSupported, (m_menuItemSelected == 6) && flashIcon);
-        renderer.RenderTextLeftAligned("VSync", egaGraph->GetFont(4), (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, 111);
+        renderableText.LeftAligned("VSync", (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, 111);
         const char* vsyncStr = (!vsyncSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
-        renderer.RenderTextLeftAligned(vsyncStr, egaGraph->GetFont(4), (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, 111);
+        renderableText.LeftAligned(vsyncStr, (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, 111);
 
-        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
         renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuControls)
     {
@@ -1083,6 +1094,8 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_KEYBUTTONPIC), 80, 48);
+        RenderableText renderableText(*egaGraph->GetFont(4));
+        RenderableText renderableTextDefaultFont(*DefaultFont::Get(renderer, 7));
 
         uint16_t index = 1;
         while (index < 9)
@@ -1092,101 +1105,106 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
                 TilesSize8Utility::DrawListBullet(images, 76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
                 const std::string& actionLabel = m_configurationSettings.GetControlsMap().GetActionLabels().at((ControlAction)(index + m_menuItemOffset));
                 const uint16_t yOffset = 63 + ((index - 1) * 8);
-                renderer.RenderTextLeftAligned(actionLabel.c_str(), egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, yOffset);
+                renderableText.LeftAligned(actionLabel, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, yOffset);
                 if (m_waitingForKeyToBind && m_menuItemSelected == index + m_menuItemOffset - 1)
                 {
-                    renderer.RenderTextLeftAligned("< Press key to bind >", egaGraph->GetFont(4), EgaLightGray, 160, yOffset);
+                    renderableText.LeftAligned("< Press key to bind >", EgaLightGray, 160, yOffset);
                 }
                 else
                 {
                     // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), DefaultFont::Get(renderer, 7), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, yOffset);
+                    renderableTextDefaultFont.LeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, yOffset);
                 }
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
                 TilesSize8Utility::DrawListBullet(images, 76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
-                renderer.RenderTextLeftAligned("Mouse Look", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                renderableText.LeftAligned("Mouse Look", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 const char* mouseLookStr = (m_configurationSettings.GetMouseLook()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(mouseLookStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
+                renderableText.LeftAligned(mouseLookStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
                 TilesSize8Utility::DrawListBullet(images, 76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
-                renderer.RenderTextLeftAligned("Mouse Sens.", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                renderableText.LeftAligned("Mouse Sens.", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 char mouseSensitivityStr[5];
                 sprintf_s(mouseSensitivityStr, 5, "%d", m_configurationSettings.GetMouseSensitivity());
-                renderer.RenderTextLeftAligned(mouseSensitivityStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
+                renderableText.LeftAligned(mouseSensitivityStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
             {
                 TilesSize8Utility::DrawListBullet(images, 76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
-                renderer.RenderTextLeftAligned("Turn Speed", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                renderableText.LeftAligned("Turn Speed", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 char turnSpeedStr[5];
                 sprintf_s(turnSpeedStr, 5, "%d", m_configurationSettings.GetTurnSpeed());
-                renderer.RenderTextLeftAligned(turnSpeedStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
+                renderableText.LeftAligned(turnSpeedStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
             {
                 TilesSize8Utility::DrawListBullet(images, 76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
-                renderer.RenderTextLeftAligned("Always Run", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                renderableText.LeftAligned("Always Run", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 const char* alwaysRunStr = (m_configurationSettings.GetAlwaysRun()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(alwaysRunStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
+                renderableText.LeftAligned(alwaysRunStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
             {
                 TilesSize8Utility::DrawListBullet(images, 76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
-                renderer.RenderTextLeftAligned("Auto Fire", egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                renderableText.LeftAligned("Auto Fire", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 const char* autoFireStr = (m_configurationSettings.GetAutoFire()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(autoFireStr, egaGraph->GetFont(4), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
+                renderableText.LeftAligned(autoFireStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             index++;
         }
 
 
-        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
         renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderer.RenderText(renderableText);
+        renderer.RenderText(renderableTextDefaultFont);
     }
     else if (m_subMenuSelected == subMenuSound)
     {
         std::vector<IRenderer::imageOnTextureAtlas> images;
-
+        RenderableText renderableText(*egaGraph->GetFont(4));
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_SOUNDMENUPIC), 80, 48);
 
         const uint8_t soundMode = m_configurationSettings.GetSoundMode();
         TilesSize8Utility::DrawRadioButton(images, 88, 62, (soundMode == 0), (m_menuItemSelected == 0) && flashIcon);
-        renderer.RenderTextLeftAligned("NO SOUND EFFECTS", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+        renderableText.LeftAligned("NO SOUND EFFECTS", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
         TilesSize8Utility::DrawRadioButton(images, 88, 70, (soundMode == 1), (m_menuItemSelected == 1) && flashIcon);
-        renderer.RenderTextLeftAligned("PC SPEAKER", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+        renderableText.LeftAligned("PC SPEAKER", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
         TilesSize8Utility::DrawRadioButton(images, 88, 78, (soundMode == 2), (m_menuItemSelected == 2) && flashIcon);
-        renderer.RenderTextLeftAligned("ADLIB/SOUNDBLASTER", egaGraph->GetFont(4), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
+        renderableText.LeftAligned("ADLIB/SOUNDBLASTER", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
 
-        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
         renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuMusic)
     {
-    std::vector<IRenderer::imageOnTextureAtlas> images;
-    renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-    renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-    renderer.Render2DPicture(egaGraph->GetPicture(CP_MUSICMENUPIC), 80, 48);
+        std::vector<IRenderer::imageOnTextureAtlas> images;
+        RenderableText renderableText(*egaGraph->GetFont(4));
+        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
+        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_MUSICMENUPIC), 80, 48);
 
-    const bool musicOn = m_configurationSettings.GetMusicOn();
-    TilesSize8Utility::DrawRadioButton(images, 88, 62, !musicOn, (m_menuItemSelected == 0) && flashIcon);
-    renderer.RenderTextLeftAligned("NO MUSIC", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
-    TilesSize8Utility::DrawRadioButton(images, 88, 70, musicOn, (m_menuItemSelected == 1) && flashIcon);
-    renderer.RenderTextLeftAligned("ADLIB/SOUNDBLASTER", egaGraph->GetFont(4), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
+        const bool musicOn = m_configurationSettings.GetMusicOn();
+        TilesSize8Utility::DrawRadioButton(images, 88, 62, !musicOn, (m_menuItemSelected == 0) && flashIcon);
+        renderableText.LeftAligned("NO MUSIC", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
+        TilesSize8Utility::DrawRadioButton(images, 88, 70, musicOn, (m_menuItemSelected == 1) && flashIcon);
+        renderableText.LeftAligned("ADLIB/SOUNDBLASTER", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
 
-    renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-    renderer.RenderTextLeftAligned("Enter selects", egaGraph->GetFont(4), EgaRed, 163, 135);
-    renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
-    renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
+        renderer.RenderImagesFromTextureAtlas(images, *egaGraph->GetTilesSize8());
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
@@ -1194,22 +1212,23 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_LOADMENUPIC), 80, 48);
-
+        RenderableText renderableText(*egaGraph->GetFont(4));
         uint8_t index = 0;
         for (auto savedGameName : m_savedGames)
         {
             if (index >= m_menuItemOffset && index < m_menuItemOffset + maxSlotsVisible)
             {
-                renderer.RenderTextLeftAligned(savedGameName.c_str(), egaGraph->GetFont(4), (m_menuItemSelected == index) ? EgaBrightRed : EgaRed, 82, 64 + ((index - m_menuItemOffset) * 11));
+                renderableText.LeftAligned(savedGameName, (m_menuItemSelected == index) ? EgaBrightRed : EgaRed, 82, 64 + ((index - m_menuItemOffset) * 11));
                 const bool bright = (index == m_menuItemSelected && flashIcon);
                 DrawSavedGameSlot(renderer, index - m_menuItemOffset, bright);
             }
             index++;
         }
 
-        renderer.RenderTextLeftAligned("Arrows move", egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter accepts", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter accepts", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
+        renderer.RenderText(renderableText);
 
         if (m_askForEndGame)
         {
@@ -1222,17 +1241,17 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_SAVEMENUPIC), 80, 48);
-
+        RenderableText renderableText(*egaGraph->GetFont(4));
         if (m_menuItemOffset == 0)
         {
             if (!m_waitingForNewSaveGameName)
             {
-                renderer.RenderTextCentered("Empty", egaGraph->GetFont(4), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 154, 64);
+                renderableText.Centered("Empty", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 154, 64);
             }
             else
             {
                 const std::string saveGameName = m_newSaveGameName + "_";
-                renderer.RenderTextLeftAligned(saveGameName.c_str(), egaGraph->GetFont(4), EgaBrightRed, 82, 64);
+                renderableText.LeftAligned(saveGameName, EgaBrightRed, 82, 64);
             }
         }
 
@@ -1241,7 +1260,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         {
             if (index >= m_menuItemOffset && index < m_menuItemOffset + maxSlotsVisible)
             {
-                renderer.RenderTextLeftAligned(savedGameName.c_str(), egaGraph->GetFont(4), (m_menuItemSelected == index) ? EgaBrightRed : EgaRed, 82, 64 + ((index - m_menuItemOffset) * 11));
+                renderableText.LeftAligned(savedGameName, (m_menuItemSelected == index) ? EgaBrightRed : EgaRed, 82, 64 + ((index - m_menuItemOffset) * 11));
             }
             index++;
         }
@@ -1255,9 +1274,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         }
 
         const char* instructionText = m_waitingForNewSaveGameName ? "Type name" : "Arrows move";
-        renderer.RenderTextLeftAligned(instructionText, egaGraph->GetFont(4), EgaRed, 78, 135);
-        renderer.RenderTextLeftAligned("Enter accepts", egaGraph->GetFont(4), EgaRed, 163, 135);
-        renderer.RenderTextCentered("Esc to back out", egaGraph->GetFont(4), EgaRed, 154, 144);
+        renderableText.LeftAligned(instructionText, EgaRed, 78, 135);
+        renderableText.LeftAligned("Enter accepts", EgaRed, 163, 135);
+        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuSkullNBones)
     {

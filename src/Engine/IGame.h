@@ -100,8 +100,8 @@ public:
 
 
 protected:
-    GameMaps* m_gameMaps;
-    EgaGraph* m_egaGraph;
-    AudioRepository* m_audioRepository;
-    AudioPlayer* m_audioPlayer;
+    GameMaps* m_gameMaps = nullptr;
+    EgaGraph* m_egaGraph = nullptr;
+    AudioRepository* m_audioRepository = nullptr;
+    AudioPlayer* m_audioPlayer = nullptr;
 };

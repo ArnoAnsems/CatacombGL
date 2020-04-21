@@ -85,9 +85,9 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
 
 private:
-    void DrawHealth(const int16_t health);
-    void DrawKeys(const PlayerInventory& playerInventory);
-    void DrawBonus(const PlayerInventory& playerInventory);
+    void DrawHealth(RenderableText& renderableText, const int16_t health);
+    void DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory);
+    void DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory);
     void DrawGems(const PlayerInventory& playerInventory);
 
     IIntroView* m_introView;

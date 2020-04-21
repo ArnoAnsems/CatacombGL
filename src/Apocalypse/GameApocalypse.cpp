@@ -457,20 +457,22 @@ const uint8_t GameApocalypse::GetId() const
 void GameApocalypse::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float /*playerAngle*/, const uint8_t /*levelIndex*/, const uint16_t /*shotPower*/, const uint32_t /*points*/)
 {
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsApocalypse::STATUSPIC), 0, 120);
-
-    DrawHealth(health);
-    DrawKeys(playerInventory);
-    DrawBonus(playerInventory);
+    const Font& font = *GetEgaGraph()->GetFont(3);
+    RenderableText renderableText(font);
+    DrawHealth(renderableText, health);
+    DrawKeys(renderableText, playerInventory);
+    DrawBonus(renderableText, playerInventory);
     DrawGems(playerInventory);
 
-    m_renderer.RenderTextCentered(locationMessage.c_str(), GetEgaGraph()->GetFont(3), EgaBrightYellow, 160, 121);
+    renderableText.Centered(locationMessage, EgaBrightYellow, 160, 121);
+    m_renderer.RenderText(renderableText);
 }
 
-void GameApocalypse::DrawHealth(const int16_t health)
+void GameApocalypse::DrawHealth(RenderableText& renderableText, const int16_t health)
 {
     const uint16_t percentage = (uint16_t)health;
 
-    m_renderer.RenderNumber(percentage, GetEgaGraph()->GetFont(3), 3, EgaBrightYellow, 90, 176);
+    renderableText.Number(percentage, 3, EgaBrightYellow, 90, 176);
 
     uint16_t picnum;
     if (percentage > 75)
@@ -497,19 +499,19 @@ void GameApocalypse::DrawHealth(const int16_t health)
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picnum), 80, 134);
 }
 
-void GameApocalypse::DrawKeys(const PlayerInventory& playerInventory)
+void GameApocalypse::DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory)
 {
-    m_renderer.RenderNumber(playerInventory.GetKeys(RedKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 192, 149);
-    m_renderer.RenderNumber(playerInventory.GetKeys(YellowKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 216, 176);
-    m_renderer.RenderNumber(playerInventory.GetKeys(GreenKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 216, 149);
-    m_renderer.RenderNumber(playerInventory.GetKeys(BlueKey), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 192, 176);
+    renderableText.Number(playerInventory.GetKeys(RedKey), 2, EgaBrightYellow, 192, 149);
+    renderableText.Number(playerInventory.GetKeys(YellowKey), 2, EgaBrightYellow, 216, 176);
+    renderableText.Number(playerInventory.GetKeys(GreenKey), 2, EgaBrightYellow, 216, 149);
+    renderableText.Number(playerInventory.GetKeys(BlueKey), 2, EgaBrightYellow, 192, 176);
 }
 
-void GameApocalypse::DrawBonus(const PlayerInventory& playerInventory)
+void GameApocalypse::DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory)
 {
-    m_renderer.RenderNumber(playerInventory.GetBolts(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 158, 137);
-    m_renderer.RenderNumber(playerInventory.GetNukes(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 158, 155);
-    m_renderer.RenderNumber(playerInventory.GetPotions(), GetEgaGraph()->GetFont(3), 2, EgaBrightYellow, 158, 173);
+    renderableText.Number(playerInventory.GetBolts(), 2, EgaBrightYellow, 158, 137);
+    renderableText.Number(playerInventory.GetNukes(), 2, EgaBrightYellow, 158, 155);
+    renderableText.Number(playerInventory.GetPotions(), 2, EgaBrightYellow, 158, 173);
 }
 
 void GameApocalypse::DrawGems(const PlayerInventory& playerInventory)

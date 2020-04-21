@@ -64,14 +64,14 @@ bool SkullNBones::ProcessInput(const PlayerInput& playerInput)
     return false;
 }
 
-void SkullNBones::DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const
+void SkullNBones::DrawScore(RenderableText& renderableText) const
 {
-    renderer.RenderTextLeftAligned("YOU:", egaGraph.GetFont(4), EgaBrightRed, 80, 52);
+    renderableText.LeftAligned("YOU:", EgaBrightRed, 80, 52);
     const std::string playerScoreStr = std::to_string(m_playerScore);
-    renderer.RenderTextLeftAligned(playerScoreStr.c_str(), egaGraph.GetFont(4), EgaBrightRed, 102, 52);
-    renderer.RenderTextLeftAligned("COMP:", egaGraph.GetFont(4), EgaBrightRed, 182, 52);
+    renderableText.LeftAligned(playerScoreStr, EgaBrightRed, 102, 52);
+    renderableText.LeftAligned("COMP:", EgaBrightRed, 182, 52);
     const std::string computerScoreStr = std::to_string(m_computerScore);
-    renderer.RenderTextLeftAligned(computerScoreStr.c_str(), egaGraph.GetFont(4), EgaBrightRed, 218, 52);
+    renderableText.LeftAligned(computerScoreStr, EgaBrightRed, 218, 52);
 }
 
 void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp)
@@ -89,7 +89,8 @@ void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t t
     renderer.Render2DBar(77, 60, 154, 1, EgaBrightRed);
     renderer.Render2DBar(77, 143, 154, 1, EgaBrightRed);
     renderer.Render2DPicture(egaGraph.GetPicture(CP_PADDLEWARPIC), 130, 48);
-    DrawScore(renderer, egaGraph);
+    RenderableText renderableText(*egaGraph.GetFont(4));
+    DrawScore(renderableText);
 
     renderer.Render2DPicture(egaGraph.GetSprite(PADDLESPR), (uint16_t)m_computerX, 66);
     renderer.Render2DPicture(egaGraph.GetSprite(PADDLESPR), (uint16_t)m_playerX, 135);
@@ -111,11 +112,12 @@ void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t t
         renderer.Render2DBar(offsetX + width - 1, 81, 1, 36, EgaRed);
 
         const char* message = (m_playerScore == WinningScore) ? "You won!" : "You lost!";
-        renderer.RenderTextCentered(message, egaGraph.GetFont(4), EgaBrightRed, 154, 89);
+        renderableText.Centered(message, EgaBrightRed, 154, 89);
 
         renderer.Render2DBar(offsetX + 4, 102, width - 8, 1, EgaRed);
-        renderer.RenderTextCentered("Press any key", egaGraph.GetFont(4), EgaRed, 154, 104);
+        renderableText.Centered("Press any key", EgaRed, 154, 104);
     }
+    renderer.RenderText(renderableText);
 }
 
 void SkullNBones::UpdateFrame()

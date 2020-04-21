@@ -101,10 +101,6 @@ public:
         const uint16_t textureHeight) = 0;
     virtual TextureAtlas* CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight) = 0;
 
-    virtual void RenderTextLeftAligned(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
-    virtual void RenderTextLeftAlignedTruncated(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY, const uint16_t maxLength) = 0;
-    virtual void RenderTextCentered(const char* text, const Font* font, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
-    virtual void RenderNumber(const uint16_t value, const Font* font, const uint8_t maxDigits, const egaColor colorIndex, const int16_t offsetX, const int16_t offsetY) = 0;
     virtual void RenderText(const RenderableText& renderableText) = 0;
 
     virtual void Prepare2DRendering(const bool helpWindow) = 0;

@@ -426,7 +426,8 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
         m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(DEADPIC), 0, 0);
     }
 
-    m_renderer.RenderTextCentered(std::to_string(levelIndex + 1).c_str(), m_egaGraph->GetFont(3), EgaBrightYellow, 12, 148);
+    RenderableText renderableText(*m_egaGraph->GetFont(3));
+    renderableText.Centered(std::to_string(levelIndex + 1), EgaBrightYellow, 12, 148);
 
     const uint16_t maxItemsToShow = 9;
 
@@ -484,7 +485,8 @@ void GameCatacomb3D::DrawStatusBar(const int16_t health, const std::string& loca
     DrawStatusBarWideScreenMargin(0 - wideScreenMargin, wideScreenMargin);
     DrawStatusBarWideScreenMargin(320 - sideBarWidth - 2, wideScreenMargin);
 
-    m_renderer.RenderTextCentered(locationMessage.c_str(), GetEgaGraph()->GetFont(3), EgaBrightYellow, 144, 148);
+    renderableText.Centered(locationMessage, EgaBrightYellow, 144, 148);
+    m_renderer.RenderText(renderableText);
 }
 
 void GameCatacomb3D::DrawScroll(const uint8_t scrollIndex)

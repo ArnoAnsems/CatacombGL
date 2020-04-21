@@ -628,187 +628,200 @@ MenuCommand ExtraMenu::EnterKeyPressed()
 void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)
 {
     if (m_askForOverwrite)
-    {  
-        renderer.RenderTextCentered("Warning!", egaGraph->GetFont(3), EgaBrightYellow, 160, 12);
-        renderer.RenderTextCentered("Existing stored game", egaGraph->GetFont(3), EgaBrightYellow, 160, 32);
-        renderer.RenderTextCentered(m_newSaveGameName.c_str(), egaGraph->GetFont(3), EgaBrightYellow, 160, 42);
-        renderer.RenderTextCentered("will be overwritten!", egaGraph->GetFont(3), EgaBrightYellow, 160, 52);
-        renderer.RenderTextCentered("Are you sure?", egaGraph->GetFont(3), EgaBrightYellow, 160, 72);
-        renderer.RenderTextCentered("Y / N", egaGraph->GetFont(3), EgaBrightYellow, 160, 82);
+    {
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Warning!", EgaBrightYellow, 160, 12);
+        renderableText.Centered("Existing stored game", EgaBrightYellow, 160, 32);
+        renderableText.Centered(m_newSaveGameName, EgaBrightYellow, 160, 42);
+        renderableText.Centered("will be overwritten!", EgaBrightYellow, 160, 52);
+        renderableText.Centered("Are you sure?", EgaBrightYellow, 160, 72);
+        renderableText.Centered("Y / N", EgaBrightYellow, 160, 82);
+        renderer.RenderText(renderableText);
         return;
     }
     if (m_subMenuSelected == subMenuMain)
     {
         const uint16_t xOffset = 140;
-        renderer.RenderTextCentered("Main menu", egaGraph->GetFont(3), EgaBrightYellow,160,12);
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Main menu", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),110,4+(m_menuItemSelected * 10));
-        renderer.RenderTextLeftAligned("New game", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite,xOffset,30);
-        renderer.RenderTextLeftAligned("Restore game", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
+        renderableText.LeftAligned("New game", (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite,xOffset,30);
+        renderableText.LeftAligned("Restore game", (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
         const egaColor saveGameColor = (!m_saveGameEnabled) ? EgaDarkGray : (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite;
-        renderer.RenderTextLeftAligned("Save game", egaGraph->GetFont(3), saveGameColor,xOffset,50);
-        renderer.RenderTextLeftAligned("Video", egaGraph->GetFont(3), (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset,60);
-        renderer.RenderTextLeftAligned("Sound", egaGraph->GetFont(3), (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset,70);
-        renderer.RenderTextLeftAligned("Controls", egaGraph->GetFont(3), (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset,80);
-        renderer.RenderTextLeftAligned("Quit", egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset,90);          
+        renderableText.LeftAligned("Save game", saveGameColor,xOffset,50);
+        renderableText.LeftAligned("Video", (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset,60);
+        renderableText.LeftAligned("Sound", (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset,70);
+        renderableText.LeftAligned("Controls", (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset,80);
+        renderableText.LeftAligned("Quit", (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset,90);
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 200;
-        renderer.RenderTextCentered("Video", egaGraph->GetFont(3), EgaBrightYellow,160,12);
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Video", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
-        renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        renderer.RenderTextLeftAligned("Screen Mode", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset, 40);
+        renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
+        renderableText.LeftAligned("Screen Mode", (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset, 40);
         const char* screenModeStr =
             (m_configurationSettings.GetScreenMode() == Windowed) ? "Windowed" :
             (m_configurationSettings.GetScreenMode() == Fullscreen) ? "Fullscreen" :
             "Borderless";
-        renderer.RenderTextLeftAligned(screenModeStr, egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 40);
-        renderer.RenderTextLeftAligned("Aspect ratio", egaGraph->GetFont(3), (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite,xOffset,50);
-        const char* aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description.c_str();
-        renderer.RenderTextLeftAligned(aspectRatioStr, egaGraph->GetFont(3), (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite,xOffset2,50);
-        renderer.RenderTextLeftAligned("Field Of View (Y)", egaGraph->GetFont(3), (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset,60);
+        renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 40);
+        renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite,xOffset,50);
+        const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
+        renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == 2) ? EgaBrightCyan : EgaBrightWhite,xOffset2,50);
+        renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset,60);
         char fovStr[40];
         sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
-        renderer.RenderTextLeftAligned(fovStr, egaGraph->GetFont(3), (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset2,60);
-        renderer.RenderTextLeftAligned("Texture filtering", egaGraph->GetFont(3), (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset,70);
+        renderableText.LeftAligned(fovStr,  (m_menuItemSelected == 3) ? EgaBrightCyan : EgaBrightWhite,xOffset2,60);
+        renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset,70);
         const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
-        renderer.RenderTextLeftAligned(textureFilterStr, egaGraph->GetFont(3), (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset2,70);
-        renderer.RenderTextLeftAligned("Depth shading", egaGraph->GetFont(3), (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset,80);
+        renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == 4) ? EgaBrightCyan : EgaBrightWhite,xOffset2,70);
+        renderableText.LeftAligned("Depth shading", (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset,80);
         const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
-        renderer.RenderTextLeftAligned(depthShadingStr, egaGraph->GetFont(3), (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset2,80);
-        renderer.RenderTextLeftAligned("Show frame rate", egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset,90);
+        renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == 5) ? EgaBrightCyan : EgaBrightWhite,xOffset2,80);
+        renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset,90);
         const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
         const char* showFpsStr =
             (showFpsMode == Minimal) ? "Minimal" :
             (showFpsMode == Extended) ? "Extended" :
             "Off";
-        renderer.RenderTextLeftAligned(showFpsStr, egaGraph->GetFont(3), (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset2,90);
+        renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == 6) ? EgaBrightCyan : EgaBrightWhite,xOffset2,90);
         const bool vsyncNotSupported = !renderer.IsVSyncSupported();
-        renderer.RenderTextLeftAligned("VSync", egaGraph->GetFont(3), (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == 7) ? EgaBrightCyan : EgaBrightWhite, xOffset, 100);
+        renderableText.LeftAligned("VSync", (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == 7) ? EgaBrightCyan : EgaBrightWhite, xOffset, 100);
         const char* vsyncStr = (vsyncNotSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
-        renderer.RenderTextLeftAligned(vsyncStr, egaGraph->GetFont(3), (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == 7) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 100);
+        renderableText.LeftAligned(vsyncStr, (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == 7) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 100);
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuControls)
     {
         const uint16_t xOffset = 50;
         const uint16_t xOffset2 = 145;
         const uint8_t maxRowsVisible = 8;
-            
-        renderer.RenderTextCentered("Controls", egaGraph->GetFont(3), EgaBrightYellow,160,12);
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        RenderableText renderableTextDefaultFont(*DefaultFont::Get(renderer, 10));
+        renderableText.Centered("Controls", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),20,4+((m_menuItemSelected - m_menuItemOffset) * 10));
         uint16_t index = 0;
         while (index < 8)
         {
             if (index + m_menuItemOffset == 0)
             {
-                renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
+                renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
             }
             else if (index + m_menuItemOffset < (uint16_t)m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
                 const std::string& actionLabel = m_configurationSettings.GetControlsMap().GetActionLabels().at((ControlAction)(index + m_menuItemOffset));
                 const uint16_t yOffset = 30 + (index * 10);
-                renderer.RenderTextLeftAligned(actionLabel.c_str(), egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,yOffset);
+                renderableText.LeftAligned(actionLabel, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,yOffset);
                 if (m_waitingForKeyToBind && m_menuItemSelected == index + m_menuItemOffset)
                 {
-                    renderer.RenderTextLeftAligned("< Press key to bind >", egaGraph->GetFont(3), EgaBrightCyan,xOffset2,yOffset);
+                    renderableText.LeftAligned("< Press key to bind >", EgaBrightCyan,xOffset2,yOffset);
                 }
                 else
                 {
                     // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-                    renderer.RenderTextLeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)).c_str(), DefaultFont::Get(renderer, 10), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,yOffset);
+                    renderableTextDefaultFont.LeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,yOffset);
                 }
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
-                renderer.RenderTextLeftAligned("Mouse Look", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
+                renderableText.LeftAligned("Mouse Look", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
                 const char* mouseLookStr = (m_configurationSettings.GetMouseLook()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(mouseLookStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
+                renderableText.LeftAligned(mouseLookStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
-                renderer.RenderTextLeftAligned("Mouse Sensitiv.", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
+                renderableText.LeftAligned("Mouse Sensitiv.", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
                 char mouseSensitivityStr[5];
                 sprintf_s(mouseSensitivityStr, 5, "%d", m_configurationSettings.GetMouseSensitivity());
-                renderer.RenderTextLeftAligned(mouseSensitivityStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
+                renderableText.LeftAligned(mouseSensitivityStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
             {
-                renderer.RenderTextLeftAligned("Turn Speed", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned("Turn Speed", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 char turnSpeedStr[5];
                 sprintf_s(turnSpeedStr, 5, "%d", m_configurationSettings.GetTurnSpeed());
-                renderer.RenderTextLeftAligned(turnSpeedStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(turnSpeedStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
             {
-                renderer.RenderTextLeftAligned("Always Run", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned("Always Run", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* alwaysRunStr = (m_configurationSettings.GetAlwaysRun()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(alwaysRunStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(alwaysRunStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
             {
-                renderer.RenderTextLeftAligned("Auto Fire", egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned("Auto Fire", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* autoFireStr = (m_configurationSettings.GetAutoFire()) ? "Enabled" : "Disabled";
-                renderer.RenderTextLeftAligned(autoFireStr, egaGraph->GetFont(3), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(autoFireStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             index++;
         }
+        renderer.RenderText(renderableText);
+        renderer.RenderText(renderableTextDefaultFont);
     }
     else if (m_subMenuSelected == subMenuSound)
     {
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 200;
-        renderer.RenderTextCentered("Sound", egaGraph->GetFont(3), EgaBrightYellow,160,12);
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Sound", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
-        renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        renderer.RenderTextLeftAligned("Sound Mode", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
+        renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
+        renderableText.LeftAligned("Sound Mode", (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
         const char* soundModeStr = (m_configurationSettings.GetSoundMode() == 0) ? "Off" : (m_configurationSettings.GetSoundMode() == 1) ? "PC Speaker" : "Adlib";
-        renderer.RenderTextLeftAligned(soundModeStr, egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset2,40);
+        renderableText.LeftAligned(soundModeStr, (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset2,40);
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 150;
-        renderer.RenderTextCentered("Restore game", egaGraph->GetFont(3), EgaBrightYellow,160,12);
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Restore game", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
 
         if (m_menuItemOffset == 0)
         {
-            renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
+            renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
         }
         uint8_t index = 1;
         for (auto savedGameName: m_savedGames)
         {
             if (index >= m_menuItemOffset && index <= m_menuItemOffset + 7)
             {
-                renderer.RenderTextLeftAligned(savedGameName.c_str(), egaGraph->GetFont(3), (m_menuItemSelected == index) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((index - m_menuItemOffset) * 10));
+                renderableText.LeftAligned(savedGameName, (m_menuItemSelected == index) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((index - m_menuItemOffset) * 10));
             }
             index++;
         }
-
+        renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuSaveGame)
     {
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 150;
-        renderer.RenderTextCentered("Save game", egaGraph->GetFont(3), EgaBrightYellow, 160, 12);
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Save game", EgaBrightYellow, 160, 12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic), 30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
 
         if (m_menuItemOffset == 0)
         {
-            renderer.RenderTextLeftAligned("Back to main menu", egaGraph->GetFont(3), (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
+            renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
         }
 
         if (m_menuItemOffset < 2)
         {
             if (!m_waitingForNewSaveGameName)
             {
-                renderer.RenderTextLeftAligned("<< new saved game >>", egaGraph->GetFont(3), (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((1 - m_menuItemOffset) * 10));
+                renderableText.LeftAligned("<< new saved game >>", (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((1 - m_menuItemOffset) * 10));
             }
             else
             {
                 const std::string saveGameName = m_newSaveGameName + "_";
-                renderer.RenderTextLeftAligned(saveGameName.c_str(), egaGraph->GetFont(3), EgaBrightCyan, xOffset, 30 + ((1 - m_menuItemOffset) * 10));
+                renderableText.LeftAligned(saveGameName, EgaBrightCyan, xOffset, 30 + ((1 - m_menuItemOffset) * 10));
             }
         }
 
@@ -817,10 +830,11 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         {
             if (index >= m_menuItemOffset && index <= m_menuItemOffset + 7)
             {
-                renderer.RenderTextLeftAligned(savedGameName.c_str(), egaGraph->GetFont(3), (m_menuItemSelected == index) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((index - m_menuItemOffset) * 10));
+                renderableText.LeftAligned(savedGameName, (m_menuItemSelected == index) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((index - m_menuItemOffset) * 10));
             }
             index++;
         }
+        renderer.RenderText(renderableText);
     }
 }
 

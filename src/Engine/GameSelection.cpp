@@ -28,7 +28,7 @@ GameSelection::~GameSelection()
 
 }
 
-void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const char* title)
+void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const char* title, RenderableText& renderableText)
 {
     const uint8_t shadowHor = 1;
     const uint8_t shadowVert = 2;
@@ -58,25 +58,26 @@ void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t w
     if (title != nullptr)
     {
         m_renderer.Render2DBar(x + (2 * shadowVert) + borderVert, y + (2 * shadowHor) + borderHor, width - (4 * shadowVert) - (2 * borderVert), 11, EgaLightGray);
-        m_renderer.RenderTextCentered(title, DefaultFont::Get(m_renderer, 10), EgaBlack, x + (width / 2), y + (2 * shadowHor) + borderHor + 1);
+        renderableText.Centered(title, EgaBlack, x + (width / 2), y + (2 * shadowHor) + borderHor + 1);
     }
 }
 
 void GameSelection::Draw(const GameSelectionPresentation& presentation)
 {
-    const Font* defaultFont = DefaultFont::Get(m_renderer, 10);
+    const Font& defaultFont = *DefaultFont::Get(m_renderer, 10);
     const ViewPorts::ViewPortRect3D dummy3DViewArea = { 0, 320, 0, 200 };
+    RenderableText renderableText(defaultFont);
     m_renderer.Prepare3DRendering(false, 1.0f, 25, dummy3DViewArea);
     m_renderer.Prepare2DRendering(true);
-    DrawBox(2, 2, 636, 44, "Catacomb Games Library");
-    m_renderer.RenderTextLeftAligned("Launch a game by pressing the corresponding number [1-6] on the keyboard.", defaultFont, EgaBrightWhite, 18, 19);
-    m_renderer.RenderTextLeftAligned("In case a game is not found, use the ENTER and arrow keys to browse to the game data.", defaultFont, EgaBrightWhite, 18, 29);
-    DrawBox(2, 48, 316, 68, "Catacombs Pack (GOG)");
-    DrawBox(322, 48, 316, 68, "Shareware");
+    DrawBox(2, 2, 636, 44, "Catacomb Games Library", renderableText);
+    renderableText.LeftAligned("Launch a game by pressing the corresponding number [1-6] on the keyboard.", EgaBrightWhite, 18, 19);
+    renderableText.LeftAligned("In case a game is not found, use the ENTER and arrow keys to browse to the game data.", EgaBrightWhite, 18, 29);
+    DrawBox(2, 48, 316, 68, "Catacombs Pack (GOG)", renderableText);
+    DrawBox(322, 48, 316, 68, "Shareware", renderableText);
     for (uint8_t gameIndex = 0; gameIndex < presentation.gameListCatacombsPack.size(); gameIndex++)
     {
-        const char* gameName = presentation.gameListCatacombsPack.at(gameIndex).first.c_str();
-        m_renderer.RenderTextLeftAligned(gameName, defaultFont, EgaBrightWhite, 18, 68 + (10 * gameIndex));
+        const std::string& gameName = presentation.gameListCatacombsPack.at(gameIndex).first;
+        renderableText.LeftAligned(gameName, EgaBrightWhite, 18, 68 + (10 * gameIndex));
         const GameDetectionState detectionState = presentation.gameListCatacombsPack.at(gameIndex).second;
         const char* detectionStateStr =
             (detectionState == Detected) ? "Ready" :
@@ -86,12 +87,12 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
             (detectionState == Detected) ? EgaGreen :
             (detectionState == NotDetected) ? EgaRed :
             EgaLightGray;
-        m_renderer.RenderTextCentered(detectionStateStr, defaultFont, detectionStateColor, 274, 68 + (10 * gameIndex));
+        renderableText.Centered(detectionStateStr, detectionStateColor, 274, 68 + (10 * gameIndex));
     }
     for (uint8_t gameIndex = 0; gameIndex < presentation.gameListShareware.size(); gameIndex++)
     {
-        const char* gameName = presentation.gameListShareware.at(gameIndex).first.c_str();
-        m_renderer.RenderTextLeftAligned(gameName, defaultFont, EgaBrightWhite, 338, 68 + (10 * gameIndex));
+        const std::string& gameName = presentation.gameListShareware.at(gameIndex).first;
+        renderableText.LeftAligned(gameName, EgaBrightWhite, 338, 68 + (10 * gameIndex));
         const GameDetectionState detectionState = presentation.gameListShareware.at(gameIndex).second;
         const char* detectionStateStr =
             (detectionState == Detected) ? "Ready" :
@@ -101,18 +102,19 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
             (detectionState == Detected) ? EgaGreen :
             (detectionState == NotDetected) ? EgaRed :
             EgaLightGray;
-        m_renderer.RenderTextCentered(detectionStateStr, defaultFont, detectionStateColor, 594, 68 + (10 * gameIndex));
+        renderableText.Centered(detectionStateStr, detectionStateColor, 594, 68 + (10 * gameIndex));
     }
 
-    DrawBox(2, 118, 636, 80, "Browse");
-    m_renderer.RenderTextLeftAlignedTruncated(presentation.searchFolder.c_str(), defaultFont, EgaBrightYellow, 18, 138, 550);
+    DrawBox(2, 118, 636, 80, "Browse", renderableText);
+    renderableText.LeftAlignedTruncated(presentation.searchFolder, EgaBrightYellow, 18, 138, 550);
     const uint32_t maxSubFoldersVisible = 4;
     const uint32_t endOfSubFolders = ((uint32_t)presentation.subFolders.size() - presentation.subFolderOffset > maxSubFoldersVisible ? presentation.subFolderOffset + maxSubFoldersVisible : (uint32_t)presentation.subFolders.size());
     for (uint32_t subFolderIndex = presentation.subFolderOffset; subFolderIndex < endOfSubFolders; subFolderIndex++)
     {
-        const char* subFolderName = presentation.subFolders.at(subFolderIndex).c_str();
+        const std::string& subFolderName = presentation.subFolders.at(subFolderIndex);
         const egaColor subFolderColor = (subFolderIndex == presentation.selectedSubFolder) ? EgaBrightCyan : EgaBrightWhite;
-        m_renderer.RenderTextLeftAlignedTruncated(subFolderName, defaultFont, subFolderColor, 22, 148 + (10 * (subFolderIndex - presentation.subFolderOffset)), 550);
+        renderableText.LeftAlignedTruncated(subFolderName, subFolderColor, 22, 148 + (10 * (subFolderIndex - presentation.subFolderOffset)), 550);
     }
+    m_renderer.RenderText(renderableText);
     m_renderer.Unprepare2DRendering();
 }

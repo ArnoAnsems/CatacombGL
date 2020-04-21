@@ -232,6 +232,7 @@ void HighScores::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t ti
 {
     renderer.Render2DPicture(egaGraph.GetPicture(backgroundPic), 0, 0);
     uint16_t y = 68;
+    RenderableText renderableText(*egaGraph.GetFont(3));
     for (uint16_t pos = 0; pos < m_highscores.size(); pos++)
     {
         const auto highScore = m_highscores.at(pos);
@@ -241,13 +242,14 @@ void HighScores::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t ti
         {
             name += "|";
         }
-        renderer.RenderTextLeftAligned(name.c_str(), egaGraph.GetFont(3), EgaBlue, 60, y);
+        renderableText.LeftAligned(name, EgaBlue, 60, y);
         std::string levelStr = std::to_string(highScore.level);
         ApplyEqualSpacingToNumbers(levelStr);
-        renderer.RenderTextLeftAligned(levelStr.c_str(), egaGraph.GetFont(3), EgaBlue, 192 - (8 * (uint16_t)levelStr.length()), y);
+        renderableText.LeftAligned(levelStr, EgaBlue, 192 - (8 * (uint16_t)levelStr.length()), y);
         std::string scoreStr = std::to_string(highScore.score);
         ApplyEqualSpacingToNumbers(scoreStr);
-        renderer.RenderTextLeftAligned(scoreStr.c_str(), egaGraph.GetFont(3), EgaBlue, 264 - (8 * (uint16_t)scoreStr.length()), y);
+        renderableText.LeftAligned(scoreStr, EgaBlue, 264 - (8 * (uint16_t)scoreStr.length()), y);
         y += 16;
     }
+    renderer.RenderText(renderableText);
 }

@@ -465,7 +465,7 @@ void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationM
     DrawBonus(renderableText, playerInventory);
     DrawGems(playerInventory);
 
-    renderableText.Centered(locationMessage.c_str(), EgaBrightYellow, 160, 121);
+    renderableText.Centered(locationMessage, EgaBrightYellow, 160, 121);
     m_renderer.RenderText(renderableText);
 }
 
@@ -627,7 +627,7 @@ void GameAbyss::DrawHelpPage()
         }
         else
         {
-            const uint8_t numberOfLines = renderableText.LeftAlignedMultiLine(helpLine.line.c_str(), EgaDarkGray, 16, yOffset);
+            const uint8_t numberOfLines = renderableText.LeftAlignedMultiLine(helpLine.line, EgaDarkGray, 16, yOffset);
             yOffset += (numberOfLines * 9);
         }
     }

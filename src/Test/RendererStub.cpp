@@ -74,22 +74,6 @@ TextureAtlas* RendererStub::CreateTextureAtlasForFont(const bool* /*fontPicture*
     return nullptr;
 }
 
-void RendererStub::RenderTextLeftAligned(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
-{
-}
-
-void RendererStub::RenderTextLeftAlignedTruncated(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/, const uint16_t /*maxLength*/)
-{
-}
-
-void RendererStub::RenderTextCentered(const char* /*text*/, const Font* /*font*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
-{
-}
-
-void RendererStub::RenderNumber(const uint16_t /*value*/, const Font* /*font*/, const uint8_t /*maxDigits*/, const egaColor /*colorIndex*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
-{
-}
-
 void RendererStub::RenderText(const RenderableText& /*renderableText*/)
 {
 

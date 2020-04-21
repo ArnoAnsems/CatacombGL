@@ -32,7 +32,7 @@ public:
     void Reset();
 
 private:
-    void DrawScore(IRenderer& renderer, EgaGraph& egaGraph) const;
+    void DrawScore(RenderableText& renderableText) const;
     void UpdateFrame();
     void ResetForNextSkull();
 

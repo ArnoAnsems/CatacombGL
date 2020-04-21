@@ -270,7 +270,9 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 char freezeMessage[100];
                 sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeTicks);
                 const char* statusMessage = (m_statusMessage != nullptr) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
-                renderer.RenderTextCentered(statusMessage, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, 156, 189);
+                RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
+                renderableText.Centered(statusMessage, EgaBrightYellow, 156, 189);
+                renderer.RenderText(renderableText);
 
                 // Radar
                 if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == VerifyGateExit)
@@ -299,12 +301,13 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if ( m_state == EnteringLevel)
     {
         const uint16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
+        RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
         if (m_game.GetId() == 5)
         {
             // Catacomb 3-D
             renderer.Render2DBar(0 - margin, 0, 264 + (2 * margin), 144, EgaBrightBlue);
             renderer.Render2DPicture(m_game.GetEgaGraph()->GetPicture(159), 57, 52);
-            renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 132, 76);
+            renderableText.Centered(m_level->GetLevelName(), EgaDarkGray, 132, 76);
         }
         else
         {
@@ -317,7 +320,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 const char* enterAreaText = (m_game.GetId() == 3) ? "You enter a new area ..." : "A new challenge awaits you.";
                 width = (uint16_t)strlen(enterAreaText);
                 DrawCenteredTiledWindow(renderer, width, 3);
-                renderer.RenderTextCentered(enterAreaText, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);
+                renderableText.Centered(enterAreaText, EgaDarkGray, 160, 56);
             }
             else
             {
@@ -326,10 +329,11 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     width = 20;
                 }
                 DrawCenteredTiledWindow(renderer, width, 5);
-                renderer.RenderTextCentered("You have arrived at", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 49);
-                renderer.RenderTextCentered(m_level->GetLevelName(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 58);
+                renderableText.Centered("You have arrived at", EgaDarkGray, 160, 49);
+                renderableText.Centered(m_level->GetLevelName(), EgaDarkGray, 160, 58);
             }
         }
+        renderer.RenderText(renderableText);
     }
 
     if (m_state == InGame)
@@ -337,7 +341,9 @@ void EngineCore::DrawScene(IRenderer& renderer)
         if (_strcmpi(m_messageInPopup, "") != 0)
         {
             DrawCenteredTiledWindow(renderer, 20, 4);
-            renderer.RenderTextCentered(m_messageInPopup, m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 49);
+            RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
+            renderableText.Centered(m_messageInPopup, EgaDarkGray, 160, 49);
+            renderer.RenderText(renderableText);
         }
     }
 
@@ -346,26 +352,34 @@ void EngineCore::DrawScene(IRenderer& renderer)
         DrawCenteredTiledWindow(renderer, 26, 3);
         const uint8_t lastLevel = m_game.GetGameMaps()->GetNumberOfLevels() - 1;
         const std::string warpText = "Warp to which level(0-" + std::to_string(lastLevel) + "):" + m_warpCheatTextField;
-        renderer.RenderTextLeftAligned(warpText.c_str(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 70, 56);
+        RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
+        renderableText.LeftAligned(warpText, EgaDarkGray, 70, 56);
+        renderer.RenderText(renderableText);
     }
 
     if (m_state == GodModeCheatDialog)
     {
         DrawCenteredTiledWindow(renderer, 12, 2);
         const std::string godModeText = m_godModeIsOn ? "God mode ON" : "God mode OFF";
-        renderer.RenderTextCentered(godModeText.c_str(), m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 52);
+        RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
+        renderableText.Centered(godModeText, EgaDarkGray, 160, 52);
+        renderer.RenderText(renderableText);
     }
 
     if (m_state == FreeItemsCheatDialog)
     {
         DrawCenteredTiledWindow(renderer, 12, 2);
-        renderer.RenderTextCentered("Free items!", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 52);
+        RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
+        renderableText.Centered("Free items!", EgaDarkGray, 160, 52);
+        renderer.RenderText(renderableText);
     }
 
     if (m_level != nullptr && m_level->GetPlayerActor()->IsDead() && m_playerInventory.GetPotions() > 0 && m_game.GetId() != 5)
     {
         DrawCenteredTiledWindow(renderer, 35, 3);
-        renderer.RenderTextCentered("You should use your Cure Potions wisely", m_game.GetEgaGraph()->GetFont(3), EgaDarkGray, 160, 56);
+        RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
+        renderableText.Centered("You should use your Cure Potions wisely", EgaDarkGray, 160, 56);
+        renderer.RenderText(renderableText);
     }
 
     if (m_state == Victory && m_victoryState == VictoryStateDone)
@@ -455,14 +469,18 @@ void EngineCore::DrawScene(IRenderer& renderer)
         const std::string fpsStr =
             (showFpsMode == ShowFpsMode::Minimal) ? std::to_string(m_framesCounter.GetFramesPerSecond()) :
             std::to_string(m_framesCounter.GetFramesPerSecond()) + " FPS";
-        renderer.RenderTextLeftAligned(fpsStr.c_str(), DefaultFont::Get(renderer, 10), EgaBrightYellow, offsetX, 2);
+        RenderableText renderableTextFont10(*DefaultFont::Get(renderer, 10));
+        renderableTextFont10.LeftAligned(fpsStr, EgaBrightYellow, offsetX, 2);
+        renderer.RenderText(renderableTextFont10);
         if (showFpsMode == ShowFpsMode::Extended)
         {
             const std::string windowDimensionsStr = std::to_string(renderer.GetWindowWidth()) + " x " + std::to_string(renderer.GetWindowHeight());
-            renderer.RenderTextLeftAligned(windowDimensionsStr.c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 14);
-            renderer.RenderTextLeftAligned(renderer.GetGraphicsApiVersion().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 22);
-            renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterVendor().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 30);
-            renderer.RenderTextLeftAligned(renderer.GetGraphicsAdapterModel().c_str(), DefaultFont::Get(renderer, 7), EgaBrightYellow, offsetX, 38);
+            RenderableText renderableTextFont7(*DefaultFont::Get(renderer, 7));
+            renderableTextFont7.LeftAligned(windowDimensionsStr, EgaBrightYellow, offsetX, 14);
+            renderableTextFont7.LeftAligned(renderer.GetGraphicsApiVersion(), EgaBrightYellow, offsetX, 22);
+            renderableTextFont7.LeftAligned(renderer.GetGraphicsAdapterVendor(), EgaBrightYellow, offsetX, 30);
+            renderableTextFont7.LeftAligned(renderer.GetGraphicsAdapterModel(), EgaBrightYellow, offsetX, 38);
+            renderer.RenderText(renderableTextFont7);
         }
     }
     
