@@ -16,30 +16,50 @@
 // Supporting class for creating graphics out of the tiles with an 8 x 8 size.
 #pragma once
 
-#include "IRenderer.h"
+//
+// RenderableTiles
+//
+// Converts tiles into a format that can be processed by the renderer.
+//
 
-class TilesSize8Utility
+#include "TextureAtlas.h"
+#include <vector>
+
+class RenderableTiles
 {
 public:
-    static void DrawWindow(
-        std::vector<IRenderer::imageOnTextureAtlas>& outputImages,
+    typedef struct
+    {
+        int16_t offsetX;
+        int16_t offsetY;
+        uint16_t imageIndex;
+    } RenderableTile;
+
+    RenderableTiles(const TextureAtlas& textureAtlas);
+
+    const std::vector<RenderableTile>& GetTiles() const;
+    const TextureAtlas& GetTextureAtlas() const;
+
+    void Add(
+        const int16_t x,
+        const int16_t y,
+        const uint16_t tileId);
+
+    void DrawWindow(
         const int16_t x,
         const int16_t y,
         const uint16_t width,
         const uint16_t height);
-    static void DrawDialog(
-        std::vector<IRenderer::imageOnTextureAtlas>& outputImages,
+    void DrawDialog(
         const int16_t x,
         const int16_t y,
         const uint16_t length);
-    static void DrawListBullet(
-        std::vector<IRenderer::imageOnTextureAtlas>& outputImages,
+    void DrawListBullet(
         const int16_t x,
         const int16_t y,
         const bool enable,
         const bool flash);
-    static void DrawRadioButton(
-        std::vector<IRenderer::imageOnTextureAtlas>& outputImages,
+    void DrawRadioButton(
         const int16_t x,
         const int16_t y,
         const bool selected,
@@ -68,7 +88,8 @@ public:
     static const uint16_t TileIdListBulletDisabledFlashing = 97u;
 
 private:
-
+    std::vector<RenderableTile> m_tiles;
+    const TextureAtlas& m_textureAtlas;
 };
 
 

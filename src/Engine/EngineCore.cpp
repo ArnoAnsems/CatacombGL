@@ -18,7 +18,7 @@
 #include "..\..\ThirdParty\RefKeen\id_sd.h"
 #include "LevelLocationNames.h"
 #include "DefaultFont.h"
-#include "TilesSize8Utility.h"
+#include "RenderableTiles.h"
 #include <math.h>
 #include <fstream>
 
@@ -497,9 +497,9 @@ void EngineCore::DrawTiledWindow(IRenderer& renderer, const uint16_t x, const ui
 {
     renderer.Render2DBar(x * 8, y * 8, width * 8, height * 8, EgaLightGray);
 
-    std::vector<IRenderer::imageOnTextureAtlas> images;
-    TilesSize8Utility::DrawWindow(images, x, y, width, height);
-    renderer.RenderImagesFromTextureAtlas(images, *m_game.GetEgaGraph()->GetTilesSize8Masked());
+    RenderableTiles tiles(*m_game.GetEgaGraph()->GetTilesSize8Masked());
+    tiles.DrawWindow(x, y, width, height);
+    renderer.RenderTiles(tiles);
 }
 
 void EngineCore::EnterKeyReleased()

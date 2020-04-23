@@ -99,7 +99,7 @@ void RendererStub::Render2DBar(const int16_t /*x*/, const int16_t /*y*/, const u
 {
 }
 
-void RendererStub::RenderImagesFromTextureAtlas(const std::vector<imageOnTextureAtlas>& /*images*/, const TextureAtlas& /*textureAtlas*/)
+void RendererStub::RenderTiles(const RenderableTiles& /*renderableTiles*/)
 {
 }
 

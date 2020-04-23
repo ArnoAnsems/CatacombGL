@@ -502,8 +502,10 @@ void RendererOpenGLWin32::Render2DBar(const int16_t x, const int16_t y, const ui
     glEnd();
 }
 
-void RendererOpenGLWin32::RenderImagesFromTextureAtlas(const std::vector<imageOnTextureAtlas>& images, const TextureAtlas& textureAtlas)
+void RendererOpenGLWin32::RenderTiles(const RenderableTiles& renderableTiles)
 {
+    const TextureAtlas& textureAtlas = renderableTiles.GetTextureAtlas();
+    const std::vector<RenderableTiles::RenderableTile>& tiles = renderableTiles.GetTiles();
     const int16_t imageWidth = (int16_t)textureAtlas.GetImageWidth();
     const int16_t imageHeight = (int16_t)textureAtlas.GetImageWidth();
     const float imageRelWidth = textureAtlas.GetImageRelativeWidth();
@@ -512,12 +514,12 @@ void RendererOpenGLWin32::RenderImagesFromTextureAtlas(const std::vector<imageOn
     BindTexture(textureAtlas.GetTextureId());
 
     glBegin(GL_QUADS);
-    for (const imageOnTextureAtlas& image : images)
+    for (const RenderableTiles::RenderableTile& tile : tiles)
     {
-        const int16_t offsetX = image.offsetX;
-        const int16_t offsetY = image.offsetY;
-        const float imageRelOffsetX = textureAtlas.GetImageRelativeOffsetX(image.imageIndex);
-        const float imageRelOffsetY = textureAtlas.GetImageRelativeOffsetY(image.imageIndex);
+        const int16_t offsetX = tile.offsetX;
+        const int16_t offsetY = tile.offsetY;
+        const float imageRelOffsetX = textureAtlas.GetImageRelativeOffsetX(tile.imageIndex);
+        const float imageRelOffsetY = textureAtlas.GetImageRelativeOffsetY(tile.imageIndex);
 
         glTexCoord2f(imageRelOffsetX + imageRelWidth, imageRelOffsetY + imageRelHeight); glVertex2i(offsetX + imageWidth, offsetY + imageHeight);
         glTexCoord2f(imageRelOffsetX, imageRelOffsetY + imageRelHeight); glVertex2i(offsetX, offsetY + imageHeight);

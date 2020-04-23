@@ -33,9 +33,7 @@
 *.ipdb
 *.log
 *.tlog
-VS2015/.vs
-VS2017/.vs
-VS2017_llvm/.vs
+VS2019/.vs
 *.db
 *.opendb
 build/

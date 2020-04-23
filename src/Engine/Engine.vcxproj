@@ -178,7 +178,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="RenderableText.cpp" />
     <ClCompile Include="TextureAtlas.cpp" />
-    <ClCompile Include="TilesSize8Utility.cpp" />
+    <ClCompile Include="RenderableTiles.cpp" />
     <ClCompile Include="ViewPorts.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -230,7 +230,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="RenderableText.h" />
     <ClInclude Include="TextureAtlas.h" />
-    <ClInclude Include="TilesSize8Utility.h" />
+    <ClInclude Include="RenderableTiles.h" />
     <ClInclude Include="ViewPorts.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
