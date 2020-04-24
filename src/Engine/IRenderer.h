@@ -29,6 +29,7 @@
 #include "TextureAtlas.h"
 #include "RenderableText.h"
 #include "RenderableTiles.h"
+#include "RenderableSprites.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -110,8 +111,7 @@ public:
 
     virtual void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) = 0;
 
-    virtual void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) = 0;
-    virtual void RenderAllSprites() = 0;
+    virtual void RenderSprites(RenderableSprites& renderableSprites) = 0;
     virtual void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) = 0;
 
     virtual void PrepareVisibilityMap() = 0;

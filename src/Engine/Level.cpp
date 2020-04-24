@@ -16,6 +16,7 @@
 #include "Level.h"
 #include "PlayerInventory.h"
 #include "EgaGraph.h"
+#include "RenderableSprites.h"
 
 Level::Level(
     const uint8_t mapIndex,
@@ -1641,6 +1642,7 @@ uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_
 }
 void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
 {
+    RenderableSprites renderableSprites(m_playerActor->GetX(), m_playerActor->GetY());
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
@@ -1652,7 +1654,7 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
                 Picture* actorPicture = egaGraph->GetPicture(actor->GetPictureIndex());
                 if (actorPicture != nullptr)
                 {
-                    IRenderer::SpriteOrientation orientation = IRenderer::SpriteOrientation::RotatedTowardsPlayer;
+                    RenderableSprites::SpriteOrientation orientation = RenderableSprites::SpriteOrientation::RotatedTowardsPlayer;
 
                     if (actor->GetState() == StateIdArch)
                     {
@@ -1663,15 +1665,15 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
                                 IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y) && !IsDoor(x + 1, y) ||
                                 (GetBlockingActor(x - 1, y) != nullptr && GetBlockingActor(x - 1, y)->GetState() == StateIdArch) ||
                                 (GetBlockingActor(x + 1, y) != nullptr && GetBlockingActor(x + 1, y)->GetState() == StateIdArch)
-                                ? IRenderer::SpriteOrientation::AlongXAxis : IRenderer::SpriteOrientation::AlongYAxis);
+                                ? RenderableSprites::SpriteOrientation::AlongXAxis : RenderableSprites::SpriteOrientation::AlongYAxis);
                             storedOrientation = actor->GetTemp1();
                         }
-                        orientation = (IRenderer::SpriteOrientation)storedOrientation;
+                        orientation = (RenderableSprites::SpriteOrientation)storedOrientation;
                     }
 
                     if (IsActorVisibleForPlayer(actor))
                     {
-                        renderer.AddSprite(actorPicture, actor->GetX(), actor->GetY(), orientation);
+                        renderableSprites.AddSprite(actorPicture, actor->GetX(), actor->GetY(), orientation);
                     }
                 }
             }
@@ -1689,13 +1691,13 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
             {
                 if (IsActorVisibleForPlayer(projectile))
                 {
-                    renderer.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), IRenderer::SpriteOrientation::RotatedTowardsPlayer);
+                    renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::RotatedTowardsPlayer);
                 }
             }
         }
     }
 
-    renderer.RenderAllSprites();
+    renderer.RenderSprites(renderableSprites);
 }
 
 void Level::RemoveActor(Actor* actor)

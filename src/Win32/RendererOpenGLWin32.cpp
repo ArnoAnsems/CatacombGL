@@ -23,7 +23,6 @@
 const float FloorZ = 2.2f;
 const float CeilingZ = 1.0f;
 const float PlayerZ = 1.6f;
-const uint8_t MaxSpritesToRender = 100;
 
 #define GL_CLAMP_TO_EDGE 0x812F
 
@@ -34,8 +33,6 @@ RendererOpenGLWin32::RendererOpenGLWin32()
     m_playerPosX = 2.5f;
     m_playerPosY = 2.5f;
 
-    m_spritesToRender = new spriteToRender[MaxSpritesToRender];
-    m_numberOfSprites = 0;
     m_textureFilter = GL_LINEAR;
 
     memset(&m_singleColorTexture, 0, sizeof(m_singleColorTexture[0]) * EgaRange);
@@ -46,10 +43,6 @@ RendererOpenGLWin32::RendererOpenGLWin32()
 // Destructor
 RendererOpenGLWin32::~RendererOpenGLWin32()
 {
-    if (m_spritesToRender)
-    {
-        delete[] m_spritesToRender;
-    }
 }
 
 void RendererOpenGLWin32::Setup()
@@ -693,15 +686,15 @@ void RendererOpenGLWin32::Render3DWalls(const std::map<unsigned int, std::vector
     glDisable(GL_CULL_FACE);
 }
 
-void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation)
+void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const RenderableSprites::SpriteOrientation orientation)
 {
     glMatrixMode(GL_MODELVIEW);						// Select The Projection Matrix
     glLoadIdentity();
     
     glTranslatef(offsetX, offsetY, 0.0f);
     const float angle =
-        (orientation == RotatedTowardsPlayer) ? m_playerAngle :
-        (orientation == AlongYAxis) ? 90.0f :
+        (orientation == RenderableSprites::RotatedTowardsPlayer) ? m_playerAngle :
+        (orientation == RenderableSprites::AlongYAxis) ? 90.0f :
         0.0f;
 
     glRotatef(angle, 0.0f, 0.0f, 1.0f);
@@ -713,7 +706,7 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
     BindTexture(picture->GetTextureId());
 
     // Sprites that face the player are a bit sunken into the floor
-    const float zOffset = (orientation == RotatedTowardsPlayer) ? 0.0625f : 0.0f;
+    const float zOffset = (orientation == RenderableSprites::RotatedTowardsPlayer) ? 0.0625f : 0.0f;
 
     // Draw the texture as a quad
     const float relativeImageWidth = (float)picture->GetImageWidth() / (float)picture->GetTextureWidth();
@@ -726,89 +719,28 @@ void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float off
     glEnd();
 }
 
-void RendererOpenGLWin32::AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation)
+void RendererOpenGLWin32::RenderSprites(RenderableSprites& renderableSprites)
 {
-    if (m_numberOfSprites == MaxSpritesToRender)
+    const std::vector<RenderableSprites::RenderableSprite>& sprites = renderableSprites.GetSprites();
+    if (sprites.empty())
     {
+        // Nothing to render
         return;
     }
 
-    m_spritesToRender[m_numberOfSprites].picture = picture;
-    m_spritesToRender[m_numberOfSprites].offsetX = offsetX;
-    m_spritesToRender[m_numberOfSprites].offsetY = offsetY;
-    m_spritesToRender[m_numberOfSprites].squaredDistance = (int32_t)(((offsetX - m_playerPosX) * (offsetX - m_playerPosX)) + ((offsetY - m_playerPosY) * (offsetY - m_playerPosY)));
-    m_spritesToRender[m_numberOfSprites].orientation = orientation;
-    m_numberOfSprites++;
-}
-
-void RendererOpenGLWin32::RenderAllSprites()
-{
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthMask(GL_FALSE);
     glPushMatrix();
 
-    quickSort(0, m_numberOfSprites);
-
-    for (int16_t i = m_numberOfSprites - 1; i >= 0; i--)
+    for (int16_t i = sprites.size() - 1; i >= 0; i--)
     {
-        Render3DSprite(m_spritesToRender[i].picture, m_spritesToRender[i].offsetX, m_spritesToRender[i].offsetY, m_spritesToRender[i].orientation);
+        Render3DSprite(sprites.at(i).picture, sprites.at(i).offsetX, sprites.at(i).offsetY, sprites.at(i).orientation);
     }
 
     glPopMatrix();
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
-
-    m_numberOfSprites = 0;
-}
-
-void RendererOpenGLWin32::quickSort(uint16_t p,uint16_t q)
-{
-    if(p<q)
-    {
-        int r=partition(p,q);
-        quickSort(p,r);  
-        quickSort(r+1,q);
-    }
-}
-
-
-uint16_t RendererOpenGLWin32::partition(uint16_t p,uint16_t q)
-{
-    const int32_t x= m_spritesToRender[p].squaredDistance;
-    uint16_t i=p;
-
-    for(uint16_t j=p+1; j<q; j++)
-    {
-        if(m_spritesToRender[j].squaredDistance<=x)
-        {
-            i=i+1;
-            swap(i,j);
-        }
-    }
-
-    swap(i,p);
-    return i;
-}
-
-void RendererOpenGLWin32::swap(uint16_t p,uint16_t q)
-{
-    spriteToRender dummy;
-    dummy.picture = m_spritesToRender[p].picture;
-    dummy.offsetX = m_spritesToRender[p].offsetX;
-    dummy.offsetY = m_spritesToRender[p].offsetY;
-    dummy.squaredDistance = m_spritesToRender[p].squaredDistance;
-    dummy.orientation = m_spritesToRender[p].orientation;
-    m_spritesToRender[p].picture = m_spritesToRender[q].picture;
-    m_spritesToRender[p].offsetX = m_spritesToRender[q].offsetX;
-    m_spritesToRender[p].offsetY = m_spritesToRender[q].offsetY;
-    m_spritesToRender[p].squaredDistance = m_spritesToRender[q].squaredDistance;
-    m_spritesToRender[p].orientation = m_spritesToRender[q].orientation;
-    m_spritesToRender[q].picture = dummy.picture;
-    m_spritesToRender[q].offsetX = dummy.offsetX;
-    m_spritesToRender[q].offsetY = dummy.offsetY;
-    m_spritesToRender[q].squaredDistance = dummy.squaredDistance;
-    m_spritesToRender[q].orientation = dummy.orientation;
 }
 
 void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor)

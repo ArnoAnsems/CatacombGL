@@ -121,11 +121,7 @@ void RendererStub::Render3DWalls(const std::map<unsigned int, std::vector<wallCo
 {
 }
 
-void RendererStub::AddSprite(const Picture* /*picture*/, const float /*offsetX*/, const float /*offsetY*/, const SpriteOrientation /*orientation*/)
-{
-}
-
-void RendererStub::RenderAllSprites()
+void RendererStub::RenderSprites(RenderableSprites& /*renderableSprites*/)
 {
 }
 

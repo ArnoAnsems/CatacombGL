@@ -59,8 +59,7 @@ public:
 
     void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) override;
 
-    void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
-    void RenderAllSprites();
+    void RenderSprites(RenderableSprites& renderableSprites) override;
     void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) override;
 
     void PrepareVisibilityMap() override;

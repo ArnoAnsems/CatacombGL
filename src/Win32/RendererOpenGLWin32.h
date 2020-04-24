@@ -67,8 +67,7 @@ public:
 
     void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) override;
 
-    void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation) override;
-    void RenderAllSprites();
+    void RenderSprites(RenderableSprites& renderableSprites) override;
     void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) override;
 
     void PrepareVisibilityMap() override;
@@ -85,24 +84,12 @@ public:
     const std::string& GetGraphicsAdapterModel() const override;
 
 private:
-    typedef struct
-    {
-        const Picture* picture;
-        float offsetX;
-        float offsetY;
-        int32_t squaredDistance;
-        SpriteOrientation orientation;
-    } spriteToRender;
-
     static constexpr rgbColor EgaToRgb(const egaColor ega);
     void LoadPixelDataIntoTexture(uint32_t width, uint32_t height, uint8_t* pixelData, unsigned int textureId) const;
     void BindTexture(unsigned int textureId) const;
 
-    void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation);
+    void Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const RenderableSprites::SpriteOrientation orientation);
 
-    void quickSort(uint16_t p,uint16_t q);
-    uint16_t partition(uint16_t p,uint16_t q);
-    void swap(uint16_t p,uint16_t q);
     unsigned int GenerateSingleColorTexture(const egaColor color) const;
     static const std::string ErrorCodeToString(const GLenum errorCode);
 
@@ -110,8 +97,6 @@ private:
     uint16_t m_windowHeight;
     float m_playerAngle;
     float m_playerPosX, m_playerPosY;
-    spriteToRender* m_spritesToRender;
-    uint16_t m_numberOfSprites;
     unsigned int m_singleColorTexture[EgaRange];
 
     GLint m_textureFilter;

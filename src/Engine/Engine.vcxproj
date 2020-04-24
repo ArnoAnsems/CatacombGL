@@ -171,6 +171,7 @@
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="Radar.cpp" />
+    <ClCompile Include="RenderableSprites.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="SpriteTable.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="Radar.h" />
+    <ClInclude Include="RenderableSprites.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="SpriteTable.h" />
