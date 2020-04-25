@@ -1697,6 +1697,7 @@ void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
         }
     }
 
+    renderableSprites.SortSpritesBackToFront();
     renderer.RenderSprites(renderableSprites);
 }
 

@@ -115,6 +115,13 @@ void RendererOpenGLWin32::SetPlayerPosition(const float posX, const float posY)
     m_playerPosY = posY;
 }
 
+unsigned int RendererOpenGLWin32::GenerateTextureId() const
+{
+    GLuint textureId;
+    glGenTextures(1, &textureId);
+    return textureId;
+}
+
 void RendererOpenGLWin32::LoadPixelDataIntoTexture(uint32_t width, uint32_t height, uint8_t* pixelData, unsigned int textureId) const
 {
     glBindTexture(GL_TEXTURE_2D, textureId);
@@ -208,8 +215,7 @@ unsigned int RendererOpenGLWin32::LoadFileChunkIntoTexture(
         }
     }
 
-    GLuint textureId;
-    glGenTextures(1, &textureId);
+    const unsigned int textureId = GenerateTextureId();
     LoadPixelDataIntoTexture(textureWidth, textureHeight, textureImage, textureId);
 
     delete[] textureImage;
@@ -266,8 +272,7 @@ unsigned int RendererOpenGLWin32::LoadMaskedFileChunkIntoTexture(
         }
     }
 
-    GLuint textureId;
-    glGenTextures(1, &textureId);
+    const unsigned int textureId = GenerateTextureId();
     LoadPixelDataIntoTexture(textureWidth, textureHeight, textureImage, textureId);
 
     delete[] textureImage;
@@ -308,8 +313,7 @@ unsigned int RendererOpenGLWin32::GenerateSingleColorTexture(const egaColor colo
         outputPixelOffset += bytesPerOutputPixel;
     }
 
-    GLuint textureId;
-    glGenTextures(1, &textureId);
+    const unsigned int textureId = GenerateTextureId();
     LoadPixelDataIntoTexture(width, height, textureImage, textureId);
 
     delete[] textureImage;
@@ -319,8 +323,7 @@ unsigned int RendererOpenGLWin32::GenerateSingleColorTexture(const egaColor colo
 
 TextureAtlas* RendererOpenGLWin32::CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight)
 {
-    GLuint textureId;
-    glGenTextures(1, &textureId);
+    const unsigned int textureId = GenerateTextureId();
 
     TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, lineHeight, 16, 16, 0, 16 - lineHeight);
     const uint32_t bytesPerOutputPixel = 4;
@@ -526,8 +529,7 @@ TextureAtlas* RendererOpenGLWin32::CreateTextureAtlasForTilesSize8(const FileChu
 {
     const uint16_t numberOfColumns = (masked) ? 3 : 8;
     const uint16_t numberOfRows = (masked) ? 4 : 13;
-    GLuint textureId;
-    glGenTextures(1, &textureId);
+    const unsigned int textureId = GenerateTextureId();
     TextureAtlas* textureAtlas = new TextureAtlas(textureId, 8, 8, numberOfColumns, numberOfRows, 1, 1);
     const uint32_t bytesPerOutputPixel = 4;
     const uint32_t inputSizeOfTileInBytes = masked ? 40 : 32;
@@ -686,40 +688,7 @@ void RendererOpenGLWin32::Render3DWalls(const std::map<unsigned int, std::vector
     glDisable(GL_CULL_FACE);
 }
 
-void RendererOpenGLWin32::Render3DSprite(const Picture* picture, const float offsetX, const float offsetY, const RenderableSprites::SpriteOrientation orientation)
-{
-    glMatrixMode(GL_MODELVIEW);						// Select The Projection Matrix
-    glLoadIdentity();
-    
-    glTranslatef(offsetX, offsetY, 0.0f);
-    const float angle =
-        (orientation == RenderableSprites::RotatedTowardsPlayer) ? m_playerAngle :
-        (orientation == RenderableSprites::AlongYAxis) ? 90.0f :
-        0.0f;
-
-    glRotatef(angle, 0.0f, 0.0f, 1.0f);
-
-    const GLfloat halfWidth = (float)(picture->GetImageWidth()) / 128.0f;
-    const GLfloat topZ = CeilingZ + ((float)(picture->GetImageHeight()) / 64.0f) * (FloorZ - CeilingZ);
-
-    // Select the texture from the picture
-    BindTexture(picture->GetTextureId());
-
-    // Sprites that face the player are a bit sunken into the floor
-    const float zOffset = (orientation == RenderableSprites::RotatedTowardsPlayer) ? 0.0625f : 0.0f;
-
-    // Draw the texture as a quad
-    const float relativeImageWidth = (float)picture->GetImageWidth() / (float)picture->GetTextureWidth();
-    const float relativeImageHeight = (float)picture->GetImageHeight() / (float)picture->GetTextureHeight();
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-halfWidth, 0.0f, CeilingZ + zOffset);
-    glTexCoord2f(relativeImageWidth, 0.0f); glVertex3f(halfWidth, 0.0f, CeilingZ + zOffset);
-    glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex3f(halfWidth, 0.0f, topZ + zOffset);
-    glTexCoord2f(0.0f, relativeImageHeight); glVertex3f(-halfWidth, 0.0f, topZ + zOffset);
-    glEnd();
-}
-
-void RendererOpenGLWin32::RenderSprites(RenderableSprites& renderableSprites)
+void RendererOpenGLWin32::RenderSprites(const RenderableSprites& renderableSprites)
 {
     const std::vector<RenderableSprites::RenderableSprite>& sprites = renderableSprites.GetSprites();
     if (sprites.empty())
@@ -733,9 +702,48 @@ void RendererOpenGLWin32::RenderSprites(RenderableSprites& renderableSprites)
     glDepthMask(GL_FALSE);
     glPushMatrix();
 
-    for (int16_t i = sprites.size() - 1; i >= 0; i--)
+    unsigned int previousTextureId = 0;
+
+    for (size_t i = 0; i < sprites.size(); i++)
     {
-        Render3DSprite(sprites.at(i).picture, sprites.at(i).offsetX, sprites.at(i).offsetY, sprites.at(i).orientation);
+        const Picture* picture = sprites.at(i).picture;
+        const float offsetX = sprites.at(i).offsetX;
+        const float offsetY = sprites.at(i).offsetY;
+        const RenderableSprites::SpriteOrientation orientation = sprites.at(i).orientation;
+        glMatrixMode(GL_MODELVIEW);						// Select The Projection Matrix
+        glLoadIdentity();
+
+        glTranslatef(offsetX, offsetY, 0.0f);
+        const float angle =
+            (orientation == RenderableSprites::RotatedTowardsPlayer) ? m_playerAngle :
+            (orientation == RenderableSprites::AlongYAxis) ? 90.0f :
+            0.0f;
+
+        glRotatef(angle, 0.0f, 0.0f, 1.0f);
+
+        const GLfloat halfWidth = (float)(picture->GetImageWidth()) / 128.0f;
+        const GLfloat topZ = CeilingZ + ((float)(picture->GetImageHeight()) / 64.0f) * (FloorZ - CeilingZ);
+
+        // Select the texture from the picture
+        const unsigned int textureId = picture->GetTextureId();
+        if (textureId != previousTextureId || previousTextureId == 0)
+        {
+            BindTexture(textureId);
+            previousTextureId = textureId;
+        }
+
+        // Sprites that face the player are a bit sunken into the floor
+        const float zOffset = (orientation == RenderableSprites::RotatedTowardsPlayer) ? 0.0625f : 0.0f;
+
+        // Draw the texture as a quad
+        const float relativeImageWidth = (float)picture->GetImageWidth() / (float)picture->GetTextureWidth();
+        const float relativeImageHeight = (float)picture->GetImageHeight() / (float)picture->GetTextureHeight();
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-halfWidth, 0.0f, CeilingZ + zOffset);
+        glTexCoord2f(relativeImageWidth, 0.0f); glVertex3f(halfWidth, 0.0f, CeilingZ + zOffset);
+        glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex3f(halfWidth, 0.0f, topZ + zOffset);
+        glTexCoord2f(0.0f, relativeImageHeight); glVertex3f(-halfWidth, 0.0f, topZ + zOffset);
+        glEnd();
     }
 
     glPopMatrix();
@@ -835,7 +843,7 @@ Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
     GLuint newTextureId;
     if (textureId == 0)
     {
-        glGenTextures(1, &newTextureId);
+        newTextureId = GenerateTextureId();
     }
     else
     {

@@ -37,9 +37,13 @@ void RenderableSprites::AddSprite(const Picture* picture, const float offsetX, c
     m_sprites.push_back({ picture, offsetX, offsetY, squaredDistance, orientation });
 }
 
-const std::vector<RenderableSprites::RenderableSprite>& RenderableSprites::GetSprites()
+void RenderableSprites::SortSpritesBackToFront()
 {
     QuickSort(0, m_sprites.size());
+}
+
+const std::vector<RenderableSprites::RenderableSprite>& RenderableSprites::GetSprites() const
+{
     return m_sprites;
 }
 
@@ -61,7 +65,7 @@ uint16_t RenderableSprites::Partition(uint16_t p, uint16_t q)
 
     for (uint16_t j = p + 1; j < q; j++)
     {
-        if (m_sprites.at(j).squaredDistance <= x)
+        if (m_sprites.at(j).squaredDistance >= x)
         {
             i = i + 1;
             Swap(i, j);

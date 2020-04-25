@@ -45,8 +45,9 @@ public:
 
     RenderableSprites(const float playerPosX, const float playerPosY);
     void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation);
+    void SortSpritesBackToFront();
 
-    const std::vector<RenderableSprite>& GetSprites();
+    const std::vector<RenderableSprite>& GetSprites() const;
 
 private:
     void QuickSort(uint16_t p, uint16_t q);

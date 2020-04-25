@@ -121,7 +121,7 @@ void RendererStub::Render3DWalls(const std::map<unsigned int, std::vector<wallCo
 {
 }
 
-void RendererStub::RenderSprites(RenderableSprites& /*renderableSprites*/)
+void RendererStub::RenderSprites(const RenderableSprites& /*renderableSprites*/)
 {
 }
 
@@ -175,4 +175,13 @@ const std::string& RendererStub::GetGraphicsAdapterVendor() const
 const std::string& RendererStub::GetGraphicsAdapterModel() const
 {
     return defaultString;
+}
+
+void RendererStub::LoadPixelDataIntoTexture(uint32_t /*width*/, uint32_t /*height*/, uint8_t* /*pixelData*/, unsigned int /*textureId*/) const
+{
+}
+
+unsigned int RendererStub::GenerateTextureId() const
+{
+    return 0;
 }
