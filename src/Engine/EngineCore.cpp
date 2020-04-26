@@ -1103,12 +1103,12 @@ bool EngineCore::Think()
                 const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
                 const float deltaTimeInTics = (truncatedDeltaTimeInMs * 70.0f) / 1000.0f;
                 const float turnSpeedFactor = m_configurationSettings.GetTurnSpeed() / 100.0f;
-                if (m_playerActions.GetActionActive(TurnLeft))
+                if (m_playerActions.GetActionActive(TurnLeft) && !m_playerActions.GetActionActive(Strafe))
                 {
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
                 }
-                if (m_playerActions.GetActionActive(TurnRight))
+                if (m_playerActions.GetActionActive(TurnRight) && !m_playerActions.GetActionActive(Strafe))
                 {
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
@@ -1117,19 +1117,23 @@ bool EngineCore::Think()
                 const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
                 const bool isRunning = m_configurationSettings.GetAlwaysRun() != m_playerActions.GetActionActive(Run);
                 const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
-                if (m_playerActions.GetActionActive(MoveForward) && m_playerActions.GetActionActive(StrafeLeft))
+                const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
+                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft)));
+                const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
+                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight)));
+                if (m_playerActions.GetActionActive(MoveForward) && strafeLeft)
                 { 
                     Thrust(315, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveBackward) && m_playerActions.GetActionActive(StrafeLeft))
+                else if (m_playerActions.GetActionActive(MoveBackward) && strafeLeft)
                 {
                     Thrust(225, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveForward) && m_playerActions.GetActionActive(StrafeRight))
+                else if (m_playerActions.GetActionActive(MoveForward) && strafeRight)
                 {
                     Thrust(45, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveBackward) && m_playerActions.GetActionActive(StrafeRight))
+                else if (m_playerActions.GetActionActive(MoveBackward) && strafeRight)
                 {
                     Thrust(135, distance);
                 }
@@ -1141,11 +1145,11 @@ bool EngineCore::Think()
                 {
                     Thrust(180, distance);
                 }
-                else if (m_playerActions.GetActionActive(StrafeLeft))
+                else if (strafeLeft)
                 {
                     Thrust(270, distance);
                 }
-                else if (m_playerActions.GetActionActive(StrafeRight))
+                else if (strafeRight)
                 {
                     Thrust(90, distance);
                 }

@@ -30,6 +30,7 @@ ControlsMap::ControlsMap()
     AssignActionToKey(MoveBackward, SDLK_DOWN);
     AssignActionToKey(TurnLeft, SDLK_LEFT);
     AssignActionToKey(TurnRight, SDLK_RIGHT);
+    AssignActionToKey(Strafe, SDLK_RALT);
     AssignActionToKey(StrafeLeft, SDLK_a);
     AssignActionToKey(StrafeRight, SDLK_d);
     AssignActionToKey(MoveForward, SDLK_w);
