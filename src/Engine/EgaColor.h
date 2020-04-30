@@ -19,6 +19,15 @@
 //
 #pragma once
 
+#include <stdint.h>
+
+typedef struct
+{
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+} rgbColor;
+
 typedef enum
 {
     EgaBlack = 0,
@@ -39,3 +48,35 @@ typedef enum
     EgaBrightWhite = 15,
     EgaRange = 16
 } egaColor;
+
+const rgbColor egaToRgbMap[EgaRange] =
+{
+    { 0, 0, 0 },    // Black
+    { 0, 0, 170 },    // Blue
+    { 0, 170, 0},    // Green
+    { 0, 170, 170 },    // Cyan
+    { 170, 0, 0 },    // Red
+    { 170, 0, 170 },    // Magenta
+    { 170, 85, 0 },    // Brown
+    { 170, 170, 170 },    // Light gray
+    { 85, 85, 85 },    // Dark gray
+    { 85, 85, 255 },    // Bright blue
+    { 85, 255, 85 },    // Bright green
+    { 85, 255, 255 },    // Bright cyan
+    { 255, 85, 85 },    // Bright red
+    { 255, 85, 255 },    // Bright magenta
+    { 255, 255, 85 },    // Bright yellow
+    { 255, 255, 255 }     // Bright white
+};
+
+constexpr rgbColor EgaToRgb(const egaColor ega)
+{
+    if (ega < EgaRange)
+    {
+        return egaToRgbMap[ega];
+    }
+    else
+    {
+        return egaToRgbMap[egaColor::EgaBlack];
+    }
+}

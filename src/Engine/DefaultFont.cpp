@@ -5362,15 +5362,54 @@ const Font* DefaultFont::Get(IRenderer& renderer, const uint16_t lineHeight)
 {
     if (lineHeight == 10 && defaultFontHeight10 == nullptr)
     {
-        const TextureAtlas* const textureAtlas = renderer.CreateTextureAtlasForFont(defaultFontDataHeight10, 10);
+        const TextureAtlas* const textureAtlas = CreateTextureAtlasForFont(renderer, defaultFontDataHeight10, 10);
         defaultFontHeight10 = new Font(defaultFontWidthHeight10, textureAtlas);
     }
 
     if (lineHeight == 7 && defaultFontHeight7 == nullptr)
     {
-        const TextureAtlas* const textureAtlas = renderer.CreateTextureAtlasForFont(defaultFontDataHeight7, 7);
+        const TextureAtlas* const textureAtlas = CreateTextureAtlasForFont(renderer, defaultFontDataHeight7, 7);
         defaultFontHeight7 = new Font(defaultFontWidthHeight7, textureAtlas);
     }
 
     return (lineHeight == 7) ? defaultFontHeight7 : defaultFontHeight10;
+}
+
+TextureAtlas* DefaultFont::CreateTextureAtlasForFont(IRenderer& renderer, const bool* fontPicture, const uint16_t lineHeight)
+{
+    const unsigned int textureId = renderer.GenerateTextureId();
+
+    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, lineHeight, 16, 16, 0, 16 - lineHeight);
+    const uint32_t bytesPerOutputPixel = 4;
+    const uint32_t width = 16;
+    const uint32_t numberOfPixelsInTexture = width * lineHeight;
+    uint8_t* textureImage = new uint8_t[numberOfPixelsInTexture * bytesPerOutputPixel];
+
+    for (uint32_t i = 0; i < 256; i++)
+    {
+        for (uint32_t h = 0; h < lineHeight; h++)
+        {
+            uint32_t outputPixelOffset = (h * 16) * bytesPerOutputPixel;
+            for (uint32_t w = 0; w < 16; w++)
+            {
+                const bool fontBit = (h < lineHeight) ? fontPicture[(16 * lineHeight * i) + (16 * h) + w] : false;
+                textureImage[outputPixelOffset] = 255;
+                textureImage[outputPixelOffset + 1] = 255;
+                textureImage[outputPixelOffset + 2] = 255;
+                textureImage[outputPixelOffset + 3] = fontBit ? 255 : 0;
+                outputPixelOffset += bytesPerOutputPixel;
+            }
+        }
+        textureAtlas->StoreImage(i, textureImage);
+    }
+
+    delete[] textureImage;
+
+    renderer.LoadPixelDataIntoTexture(
+        textureAtlas->GetTextureWidth(),
+        textureAtlas->GetTextureHeight(),
+        textureAtlas->GetTexturePixelData(),
+        textureAtlas->GetTextureId());
+
+    return textureAtlas;
 }

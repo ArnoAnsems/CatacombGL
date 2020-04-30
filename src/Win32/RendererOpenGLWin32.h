@@ -37,20 +37,6 @@ public:
     void SetTextureFilter(const TextureFilterSetting textureFilter) override;
     void SetVSync(const bool enabled) override;
     bool IsVSyncSupported() override;
-    unsigned int LoadFileChunkIntoTexture(
-        const FileChunk* decompressedChunk,
-        const uint16_t imageWidth,
-        const uint16_t imageHeight,
-        const uint16_t textureWidth,
-        const uint16_t textureHeight,
-        const bool transparent) override;
-    unsigned int  LoadMaskedFileChunkIntoTexture(
-        const FileChunk* decompressedChunk,
-        const uint16_t imageWidth,
-        const uint16_t imageHeight,
-        const uint16_t textureWidth,
-        const uint16_t textureHeight) override;
-    TextureAtlas* CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight) override;
 
     void RenderText(const RenderableText& renderableText) override;
 
@@ -60,7 +46,6 @@ public:
     void Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) override;
     void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) override;
     void RenderTiles(const RenderableTiles& renderableTiles) override;
-    TextureAtlas* CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked) override;
 
     void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) override;
     uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) override;
@@ -87,8 +72,6 @@ public:
     void LoadPixelDataIntoTexture(uint32_t width, uint32_t height, uint8_t* pixelData, unsigned int textureId) const;
 
 private:
-    static constexpr rgbColor EgaToRgb(const egaColor ega);
-
     void BindTexture(unsigned int textureId) const;
 
     unsigned int GenerateSingleColorTexture(const egaColor color) const;

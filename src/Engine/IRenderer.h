@@ -23,10 +23,8 @@
 #pragma once
 
 #include "Picture.h"
-#include "FileChunk.h"
 #include "EgaColor.h"
 #include "ViewPorts.h"
-#include "TextureAtlas.h"
 #include "RenderableText.h"
 #include "RenderableTiles.h"
 #include "RenderableSprites.h"
@@ -37,13 +35,6 @@
 class IRenderer
 {
 public:
-    typedef struct
-    {
-        uint8_t red;
-        uint8_t green;
-        uint8_t blue;
-    } rgbColor;
-
     typedef struct
     {
         uint16_t x;
@@ -64,13 +55,6 @@ public:
         Linear
     };
 
-    enum SpriteOrientation
-    {
-        RotatedTowardsPlayer,
-        AlongXAxis,
-        AlongYAxis
-    };
-
     virtual ~IRenderer() {};
     virtual void Setup() = 0;
     virtual void SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight) = 0;
@@ -79,20 +63,6 @@ public:
     virtual void SetTextureFilter(const TextureFilterSetting textureFilter) = 0;
     virtual void SetVSync(const bool enabled) = 0;
     virtual bool IsVSyncSupported() = 0;
-    virtual unsigned int LoadFileChunkIntoTexture(
-        const FileChunk* decompressedChunk,
-        const uint16_t imageWidth,
-        const uint16_t imageHeight,
-        const uint16_t textureWidth,
-        const uint16_t textureHeight,
-        const bool transparent) = 0;
-    virtual unsigned int LoadMaskedFileChunkIntoTexture(
-        const FileChunk* decompressedChunk,
-        const uint16_t imageWidth,
-        const uint16_t imageHeight,
-        const uint16_t textureWidth,
-        const uint16_t textureHeight) = 0;
-    virtual TextureAtlas* CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight) = 0;
 
     virtual void RenderText(const RenderableText& renderableText) = 0;
 
@@ -102,7 +72,6 @@ public:
     virtual void Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) = 0;
     virtual void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) = 0;
     virtual void RenderTiles(const RenderableTiles& renderableTiles) = 0;
-    virtual TextureAtlas* CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked) = 0;
 
     virtual void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) = 0;
     virtual uint16_t GetAdditionalMarginDueToWideScreen(const float aspectRatio) = 0;

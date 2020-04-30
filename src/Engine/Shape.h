@@ -36,6 +36,14 @@ public:
     Picture* GetPicture() const;
 
 private:
+    unsigned int LoadFileChunkIntoTexture(
+        const FileChunk* decompressedChunk,
+        const uint16_t imageWidth,
+        const uint16_t imageHeight,
+        const uint16_t textureWidth,
+        const uint16_t textureHeight,
+        const bool transparent);
+
     uint16_t m_offsetX;
     uint16_t m_offsetY;
     Picture* m_picture;

@@ -287,7 +287,7 @@ EXIT_FUNC:;
     const uint16_t imageWidth = bytesPerRow * numberOfPlanes * 2;
     const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
     const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(height);
-    const unsigned int textureId = m_renderer.LoadFileChunkIntoTexture(chunk, imageWidth, height, textureWidth, textureHeight, false);
+    const unsigned int textureId = LoadFileChunkIntoTexture(chunk, imageWidth, height, textureWidth, textureHeight, false);
     delete chunk;
 
     m_picture = new Picture(textureId, imageWidth, height, textureWidth, textureHeight);
@@ -308,4 +308,70 @@ uint16_t Shape::GetOffsetY() const
 Picture* Shape::GetPicture() const
 {
     return m_picture;
+}
+
+unsigned int Shape::LoadFileChunkIntoTexture(
+    const FileChunk* decompressedChunk,
+    const uint16_t imageWidth,
+    const uint16_t imageHeight,
+    const uint16_t textureWidth,
+    const uint16_t textureHeight,
+    const bool transparent)
+{
+    const uint32_t bytesPerOutputPixel = 4;
+    const uint32_t numberOfPlanes = 4;
+    const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
+    const uint32_t numberOfEgaPixelsPerByte = 8;
+    const uint32_t numberOfPixels = planeSize * numberOfEgaPixelsPerByte;
+    const uint32_t textureImageSize = textureWidth * textureHeight * bytesPerOutputPixel;
+
+    if (textureImageSize < imageWidth * imageHeight * bytesPerOutputPixel)
+    {
+        Logging::Instance().FatalError("Texture image of size " + std::to_string(textureImageSize) + " is too small to contain image of dimensions (" + std::to_string(imageWidth) + " x " + std::to_string(imageHeight) + std::to_string(bytesPerOutputPixel) + ")");
+    }
+
+    uint8_t* textureImage = new uint8_t[textureImageSize];
+
+    // Clear the whole texture
+    for (uint32_t i = 0; i < textureImageSize; i++)
+    {
+        textureImage[i] = 0;
+    }
+
+    unsigned char* chunk = decompressedChunk->GetChunk();
+
+    for (uint32_t i = 0; i < planeSize; i++)
+    {
+        for (uint32_t j = 0; j < numberOfEgaPixelsPerByte; j++)
+        {
+            const unsigned char bitValue = (1 << j);
+            const bool blueplane = ((chunk[i] & bitValue) > 0);
+            const bool greenplane = ((chunk[i + planeSize] & bitValue) > 0);
+            const bool redplane = ((chunk[i + (2 * planeSize)] & bitValue) > 0);
+            const bool intensityplane = ((chunk[i + (3 * planeSize)] & bitValue) > 0);
+            const egaColor colorIndex =
+                (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                (redplane ? EgaRed : EgaBlack) +
+                    (greenplane ? EgaGreen : EgaBlack) +
+                    (blueplane ? EgaBlue : EgaBlack));
+            const bool transparentPixel = transparent && (colorIndex == 5);
+            const rgbColor outputColor = EgaToRgb(transparentPixel ? EgaBlack : colorIndex);
+
+            const uint32_t outputImagePixelOffset = ((i * 8) + 7 - j);
+            const uint32_t outputImagePixelX = outputImagePixelOffset % imageWidth;
+            const uint32_t outputImagePixelY = outputImagePixelOffset / imageWidth;
+            const uint32_t outputTextureOffset = ((outputImagePixelY * textureWidth) + outputImagePixelX) * bytesPerOutputPixel;
+            textureImage[outputTextureOffset] = outputColor.red;
+            textureImage[outputTextureOffset + 1] = outputColor.green;
+            textureImage[outputTextureOffset + 2] = outputColor.blue;
+            textureImage[outputTextureOffset + 3] = transparentPixel ? 0 : 255;
+        }
+    }
+
+    const unsigned int textureId = m_renderer.GenerateTextureId();
+    m_renderer.LoadPixelDataIntoTexture(textureWidth, textureHeight, textureImage, textureId);
+
+    delete[] textureImage;
+
+    return textureId;
 }

@@ -31,4 +31,6 @@ class DefaultFont
 {
 public:
     static const Font* Get(IRenderer& renderer, const uint16_t lineHeight);
+private:
+    static TextureAtlas* CreateTextureAtlasForFont(IRenderer& renderer, const bool* fontPicture, const uint16_t lineHeight);
 };

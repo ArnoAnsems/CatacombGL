@@ -69,6 +69,21 @@ public:
 
 private:
     uint32_t GetChunkSize(const uint16_t index);
+    TextureAtlas* CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked) const;
+    TextureAtlas* CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight);
+    unsigned int LoadFileChunkIntoTexture(
+        const FileChunk* decompressedChunk,
+        const uint16_t imageWidth,
+        const uint16_t imageHeight,
+        const uint16_t textureWidth,
+        const uint16_t textureHeight,
+        const bool transparent);
+    unsigned int LoadMaskedFileChunkIntoTexture(
+        const FileChunk* decompressedChunk,
+        const uint16_t imageWidth,
+        const uint16_t imageHeight,
+        const uint16_t textureWidth,
+        const uint16_t textureHeight);
 
     const egaGraphStaticData& m_staticData;
 

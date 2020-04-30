@@ -54,26 +54,6 @@ bool RendererStub::IsVSyncSupported()
     return true;
 }
 
-unsigned int RendererStub::LoadFileChunkIntoTexture(const FileChunk* /*decompressedChunk*/, const uint16_t /*imageWidth*/, const uint16_t /*imageHeight*/, const uint16_t /*textureWidth*/, const uint16_t /*textureHeight*/, const bool /*transparent*/)
-{
-    return 0u;
-}
-
-unsigned int RendererStub::LoadMaskedFileChunkIntoTexture(
-    const FileChunk* /*decompressedChunk*/,
-    const uint16_t /*imageWidth*/,
-    const uint16_t /*imageHeight*/,
-    const uint16_t /*textureWidth*/,
-    const uint16_t /*textureHeight*/)
-{
-    return 0u;
-}
-
-TextureAtlas* RendererStub::CreateTextureAtlasForFont(const bool* /*fontPicture*/, const uint16_t /*lineHeight*/)
-{
-    return nullptr;
-}
-
 void RendererStub::RenderText(const RenderableText& /*renderableText*/)
 {
 
@@ -101,11 +81,6 @@ void RendererStub::Render2DBar(const int16_t /*x*/, const int16_t /*y*/, const u
 
 void RendererStub::RenderTiles(const RenderableTiles& /*renderableTiles*/)
 {
-}
-
-TextureAtlas* RendererStub::CreateTextureAtlasForTilesSize8(const FileChunk* /*decompressedChunk*/, const bool /*masked*/)
-{
-    return nullptr;
 }
 
 void RendererStub::Prepare3DRendering(const bool /*depthShading*/, const float /*aspectRatio*/, uint16_t /*fov*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/)
