@@ -24,20 +24,23 @@ const float FloorZ = 2.2f;
 const float CeilingZ = 1.0f;
 const float PlayerZ = 1.6f;
 
-#define GL_CLAMP_TO_EDGE 0x812F
+constexpr GLint GL_CLAMP_TO_EDGE = 0x812F;
 
 // Constructor
-RendererOpenGLWin32::RendererOpenGLWin32()
+RendererOpenGLWin32::RendererOpenGLWin32() :
+    m_windowWidth(800u),
+    m_windowHeight(600u),
+    m_playerAngle(0.0f),
+    m_playerPosX(2.5f),
+    m_playerPosY(2.5f),
+    m_textureFilter(GL_LINEAR),
+    m_currentSwapInterval(-1),
+    m_isVSyncSupported(false),
+    m_graphicsApiVersion(""),
+    m_graphicsAdapterVendor(""),
+    m_graphicsAdapterModel("")
 {
-    m_playerAngle = 0.0f;
-    m_playerPosX = 2.5f;
-    m_playerPosY = 2.5f;
-
-    m_textureFilter = GL_LINEAR;
-
     memset(&m_singleColorTexture, 0, sizeof(m_singleColorTexture[0]) * EgaRange);
-
-    m_currentSwapInterval = -1;
 }
 
 // Destructor
@@ -72,15 +75,19 @@ void RendererOpenGLWin32::SetWindowDimensions(const uint16_t windowWidth, const 
     m_windowHeight = windowHeight;
 }
 
-void RendererOpenGLWin32::SetPlayerAngle(const float angle)
+void RendererOpenGLWin32::SetFrameSettings(const FrameSettings& frameSettings)
 {
-    m_playerAngle = angle;
-}
+    m_playerAngle = frameSettings.playerAngle;
+    m_playerPosX = frameSettings.playerPosX;
+    m_playerPosY = frameSettings.playerPosY;
+    m_textureFilter = (frameSettings.textureFilter == Nearest) ? GL_NEAREST : GL_LINEAR;
 
-void RendererOpenGLWin32::SetPlayerPosition(const float posX, const float posY)
-{
-    m_playerPosX = posX;
-    m_playerPosY = posY;
+    const int32_t requestedSwapInterval = (frameSettings.vSyncEnabled) ? 1 : 0;
+    if (requestedSwapInterval != m_currentSwapInterval)
+    {
+        SDL_GL_SetSwapInterval(frameSettings.vSyncEnabled ? 1 : 0);
+        m_currentSwapInterval = requestedSwapInterval;
+    }
 }
 
 unsigned int RendererOpenGLWin32::GenerateTextureId() const
@@ -516,21 +523,6 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
     glEnd();
 
     glDepthMask(GL_TRUE);
-}
-
-void RendererOpenGLWin32::SetTextureFilter(const TextureFilterSetting textureFilter)
-{
-    m_textureFilter = (textureFilter == Nearest) ? GL_NEAREST : GL_LINEAR;
-}
-
-void RendererOpenGLWin32::SetVSync(const bool enabled)
-{
-    const int32_t requestedSwapInterval = (enabled) ? 1 : 0;
-    if (requestedSwapInterval != m_currentSwapInterval)
-    {
-        SDL_GL_SetSwapInterval(enabled ? 1 : 0);
-        m_currentSwapInterval = requestedSwapInterval;
-    }
 }
 
 bool RendererOpenGLWin32::IsVSyncSupported()

@@ -78,20 +78,9 @@ uint16_t RenderableSprites::Partition(uint16_t p, uint16_t q)
 
 void RenderableSprites::Swap(uint16_t p, uint16_t q)
 {
-    RenderableSprite dummy;
-    dummy.picture = m_sprites.at(p).picture;
-    dummy.offsetX = m_sprites.at(p).offsetX;
-    dummy.offsetY = m_sprites.at(p).offsetY;
-    dummy.squaredDistance = m_sprites.at(p).squaredDistance;
-    dummy.orientation = m_sprites.at(p).orientation;
-    m_sprites.at(p).picture = m_sprites.at(q).picture;
-    m_sprites.at(p).offsetX = m_sprites.at(q).offsetX;
-    m_sprites.at(p).offsetY = m_sprites.at(q).offsetY;
-    m_sprites.at(p).squaredDistance = m_sprites.at(q).squaredDistance;
-    m_sprites.at(p).orientation = m_sprites.at(q).orientation;
-    m_sprites.at(q).picture = dummy.picture;
-    m_sprites.at(q).offsetX = dummy.offsetX;
-    m_sprites.at(q).offsetY = dummy.offsetY;
-    m_sprites.at(q).squaredDistance = dummy.squaredDistance;
-    m_sprites.at(q).orientation = dummy.orientation;
+    std::swap(m_sprites.at(p).picture, m_sprites.at(q).picture);
+    std::swap(m_sprites.at(p).offsetX, m_sprites.at(q).offsetX);
+    std::swap(m_sprites.at(p).offsetY, m_sprites.at(q).offsetY);
+    std::swap(m_sprites.at(p).squaredDistance, m_sprites.at(q).squaredDistance);
+    std::swap(m_sprites.at(p).orientation, m_sprites.at(q).orientation);
 }

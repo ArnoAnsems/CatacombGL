@@ -171,8 +171,6 @@ void CreateGLWindow(int width, int height, int bits)
 
     m_renderer = new RendererOpenGLWin32();
     m_renderer->Setup();
-    m_renderer->SetVSync(m_configurationSettings.GetVSync());
-    m_renderer->SetTextureFilter(m_configurationSettings.GetTextureFilter());
     SetScreenMode(m_configurationSettings.GetScreenMode());
     
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
@@ -492,6 +490,14 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
             const GameDetectionState abyssv133DetectionState = (gameDetectionAbyssV113.GetBestMatch().score == 0) ? Detected : NotDetected;
             gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
         }
+
+        IRenderer::FrameSettings frameSettings;
+        frameSettings.playerAngle = 0.0f;
+        frameSettings.playerPosX = 0.0f;
+        frameSettings.playerPosY = 0.0f;
+        frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
+        frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
+        m_renderer->SetFrameSettings(frameSettings);
 
         gameSelection.Draw(gameSelectionPresentation);
         m_console->Draw(*m_renderer);

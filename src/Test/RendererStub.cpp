@@ -33,19 +33,7 @@ void RendererStub::SetWindowDimensions(const uint16_t /*windowWidth*/, const uin
 {
 }
 
-void RendererStub::SetPlayerAngle(const float /*angle*/)
-{
-}
-
-void RendererStub::SetPlayerPosition(const float /*posX*/, const float /*posY*/)
-{
-}
-
-void RendererStub::SetTextureFilter(const TextureFilterSetting /*textureFilter*/)
-{
-}
-
-void RendererStub::SetVSync(const bool /*enabled*/)
+void RendererStub::SetFrameSettings(const FrameSettings& /*frameSettings*/)
 {
 }
 

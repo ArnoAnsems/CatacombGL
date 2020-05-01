@@ -137,21 +137,15 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 
 void EngineCore::DrawScene(IRenderer& renderer)
 {
-    if (m_level == nullptr)
-    {
-        renderer.SetPlayerAngle(0.0f);
-        renderer.SetPlayerPosition(0.0f, 0.0f);
-    }
-    else
-    {
-        renderer.SetPlayerAngle(m_level->GetPlayerActor()->GetAngle());
-        renderer.SetPlayerPosition(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY());
-    }
-
-    renderer.SetVSync(m_configurationSettings.GetVSync());
-
     m_framesCounter.AddFrame(m_gameTimer.GetActualTime());
-    renderer.SetTextureFilter(m_configurationSettings.GetTextureFilter());
+
+    IRenderer::FrameSettings frameSettings;
+    frameSettings.playerAngle = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetAngle();
+    frameSettings.playerPosX = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetX();
+    frameSettings.playerPosY = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetY();
+    frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
+    frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
+    renderer.SetFrameSettings(frameSettings);
 
     if (m_setOverlayOnNextDraw)
     {
