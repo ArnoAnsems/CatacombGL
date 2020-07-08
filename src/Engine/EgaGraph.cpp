@@ -70,8 +70,9 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     }
 
     // Initialize Pictures
-    m_pictures = new Picture*[m_pictureTable->GetCount()];
-    for (uint16_t i = 0; i < m_pictureTable->GetCount(); i++)
+    const uint16_t numberOfPictures = (uint16_t)(m_pictureTable->GetCount());
+    m_pictures = new Picture*[numberOfPictures];
+    for (uint16_t i = 0; i < numberOfPictures; i++)
     {
         m_pictures[i] = nullptr;
     }
@@ -90,8 +91,9 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     }
 
     // Initialize Masked Pictures
-    m_maskedPictures = new Picture*[m_maskedPictureTable->GetCount()];
-    for (uint16_t i = 0; i < m_maskedPictureTable->GetCount(); i++)
+    const uint16_t numberOfMaskedPictures = (uint16_t)(m_maskedPictureTable->GetCount());
+    m_maskedPictures = new Picture*[numberOfMaskedPictures];
+    for (uint16_t i = 0; i < numberOfMaskedPictures; i++)
     {
         m_maskedPictures[i] = nullptr;
     }
@@ -110,8 +112,9 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     }
 
     // Initialize sprites
-    m_sprites = new Picture*[m_spriteTable->GetCount()];
-    for (uint16_t i = 0; i < m_spriteTable->GetCount(); i++)
+    const uint16_t numberOfSprites = (uint16_t)(m_spriteTable->GetCount());
+    m_sprites = new Picture*[numberOfSprites];
+    for (uint16_t i = 0; i < numberOfSprites; i++)
     {
         m_sprites[i] = nullptr;
     }
@@ -151,7 +154,8 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
 
 EgaGraph::~EgaGraph()
 {
-    for (uint16_t i = 0; i < m_pictureTable->GetCount(); i++)
+    const uint16_t numberOfPictures = (uint16_t)(m_pictureTable->GetCount());
+    for (uint16_t i = 0; i < numberOfPictures; i++)
     {
         delete m_pictures[i];
         m_pictures[i] = nullptr;
@@ -159,7 +163,8 @@ EgaGraph::~EgaGraph()
     delete[] m_pictures;
     delete m_pictureTable;
 
-    for (uint16_t i = 0; i < m_maskedPictureTable->GetCount(); i++)
+    const uint16_t numberOfMaskedPictures = (uint16_t)(m_maskedPictureTable->GetCount());
+    for (uint16_t i = 0; i < numberOfMaskedPictures; i++)
     {
         delete m_maskedPictures[i];
         m_maskedPictures[i] = nullptr;
@@ -167,7 +172,8 @@ EgaGraph::~EgaGraph()
     delete[] m_maskedPictures;
     delete m_maskedPictureTable;
 
-    for (uint16_t i = 0; i < m_spriteTable->GetCount(); i++)
+    const uint16_t numberOfSprites = (uint16_t)(m_spriteTable->GetCount());
+    for (uint16_t i = 0; i < numberOfSprites; i++)
     {
         delete m_sprites[i];
         m_sprites[i] = nullptr;
@@ -414,8 +420,9 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompr
     uint8_t* textureImage = new uint8_t[numberOfPixelsInTile * bytesPerOutputPixel];
     const uint32_t planeSize = 8;
     unsigned char* chunk = decompressedChunk->GetChunk();
+    const uint32_t numberOfTiles = numberOfColumns * numberOfRows;
 
-    for (uint32_t tile = 0; tile < numberOfColumns * numberOfRows; tile++)
+    for (uint32_t tile = 0; tile < numberOfTiles; tile++)
     {
         const uint32_t tileChunkOffset = tile * inputSizeOfTileInBytes;
         for (uint32_t i = 0; i < planeSize; i++)

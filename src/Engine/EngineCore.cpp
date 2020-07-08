@@ -280,12 +280,12 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     const uint16_t northIconScreenOffsetX = (uint16_t)(radarCenterX + northIconoffsetFromCenterX - 3);
                     const uint16_t northIconScreenOffsetY = (uint16_t)(radarCenterY + northIconoffsetFromCenterY - 3);
                     renderer.Render2DPicture(m_game.GetEgaGraph()->GetSprite(m_game.GetNorthIconSprite()), northIconScreenOffsetX, northIconScreenOffsetY);
-                    renderer.Render2DBar(radarCenterX, radarCenterY, 1u, 1u, EgaBrightWhite);
+                    renderer.Render2DBar((int16_t)radarCenterX, (int16_t)radarCenterY, 1u, 1u, EgaBrightWhite);
 
                     for (uint16_t blipIndex = 0; blipIndex < m_radarModel.GetNumberOfBlips(); blipIndex++)
                     {
                         const radarBlip blip = m_radarModel.GetRadarBlip(blipIndex);
-                        renderer.Render2DBar(radarCenterX + blip.offsetX, radarCenterY + blip.offsetY, 1u, 1u, blip.color);
+                        renderer.Render2DBar((int16_t)(radarCenterX + blip.offsetX), (int16_t)(radarCenterY + blip.offsetY), 1u, 1u, blip.color);
                     }
                 }
             }

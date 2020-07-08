@@ -39,7 +39,7 @@ void RenderableSprites::AddSprite(const Picture* picture, const float offsetX, c
 
 void RenderableSprites::SortSpritesBackToFront()
 {
-    QuickSort(0, m_sprites.size());
+    QuickSort(0, (uint16_t)(m_sprites.size()));
 }
 
 const std::vector<RenderableSprites::RenderableSprite>& RenderableSprites::GetSprites() const
