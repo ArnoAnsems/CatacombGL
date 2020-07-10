@@ -162,7 +162,6 @@ private:
     uint8_t m_warpToLevel;
     std::string m_warpCheatTextField;
     PlayerActions m_playerActions;
-    AudioPlayer* m_audioPlayer;
     int32_t m_lastFreezeTimeTick;
     uint32_t m_timeStampEndOfStatusMessage;
     uint32_t m_startTakeKey;

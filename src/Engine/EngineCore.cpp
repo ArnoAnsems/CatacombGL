@@ -1208,7 +1208,7 @@ bool EngineCore::Think()
             {
                 m_setOverlayOnNextDraw = true;
                 m_timeStampToEnterGame += 1000;
-                m_audioPlayer->StopMusic();
+                m_game.GetAudioPlayer()->StopMusic();
             }
         }
     }
@@ -2099,6 +2099,12 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
     if (playerTouchesTile && m_level->IsSolidWall(tileX, tileY))
     {
         moveOk = false;
+
+        // Play sound while sliding along a wall in Catacomb 3D
+        if (m_game.GetId() == 5 && m_state == InGame && !m_game.GetAudioPlayer()->IsPlaying())
+        {
+            m_game.GetAudioPlayer()->Play(0);
+        }
     }
 
     if (playerTouchesTile && m_level->IsDoor(tileX, tileY))
