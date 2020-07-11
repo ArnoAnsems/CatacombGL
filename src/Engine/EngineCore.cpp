@@ -159,7 +159,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (!m_menu->IsActive() || m_game.GetId() != 5)
     {
-        if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
+        if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
         {
             m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
 
@@ -243,7 +243,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
     }
 
-    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.GetId() != 5)) || (m_state == Victory && m_game.GetId() != 5))
+    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.GetId() != 5)) || (m_state == Victory && m_game.GetId() != 5))
     {
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
@@ -269,7 +269,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 renderer.RenderText(renderableText);
 
                 // Radar
-                if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == VerifyGateExit)
+                if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || m_state == VerifyGateExit)
                 {
                     const float radarCenterX = (31 * 8) + (51 / 2) + 2;
                     const float radarCenterY = (200 - 11 - 8) - (51 / 2) - 2;
@@ -349,6 +349,11 @@ void EngineCore::DrawScene(IRenderer& renderer)
         RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
         renderableText.LeftAligned(warpText, EgaDarkGray, 70, 56);
         renderer.RenderText(renderableText);
+    }
+
+    if (m_state == OverheadMapDialog && m_level != nullptr)
+    {
+        m_overheadMap.Draw(renderer, *m_game.GetEgaGraph(), *m_level);
     }
 
     if (m_state == GodModeCheatDialog)
@@ -543,12 +548,7 @@ void EngineCore::EnterKeyReleased()
             m_warpCheatTextField.clear();
             m_gameTimer.Resume();
         }
-        else if (m_state == GodModeCheatDialog)
-        {
-            m_state = InGame;
-            m_gameTimer.Resume();
-        }
-        else if (m_state == FreeItemsCheatDialog)
+        else if (m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog)
         {
             m_state = InGame;
             m_gameTimer.Resume();
@@ -596,7 +596,7 @@ bool EngineCore::Think()
 
     if (m_menu->IsActive())
     {
-        m_menu->SetSaveGameEnabled((m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog) && !m_level->GetPlayerActor()->IsDead());
+        m_menu->SetSaveGameEnabled((m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog) && !m_level->GetPlayerActor()->IsDead());
         const MenuCommand command = m_menu->ProcessInput(m_playerInput);
         if (command == MenuCommandStartNewGame)
         {
@@ -810,6 +810,10 @@ bool EngineCore::Think()
             if (m_playerInput.IsKeyPressed(SDLK_z)) // Z = freeze time
             {
                 FreezeTimeCheat();
+            }
+            if (m_playerInput.IsKeyPressed(SDLK_o)) // O = overhead map
+            {
+                ShowOverheadMap();
             }
             if (m_playerInput.IsKeyPressed(SDLK_e)) // E = Exit level (Catacomb 3D)
             {
@@ -2754,6 +2758,15 @@ void EngineCore::ShowFreeItemsCheatDialog()
     }
 }
 
+void EngineCore::ShowOverheadMap()
+{
+    if (m_state == InGame && m_level != nullptr)
+    {
+        m_state = OverheadMapDialog;
+        m_gameTimer.Pause();
+    }
+}
+
 void EngineCore::TextFieldInput(const char c)
 {
     if (m_warpCheatTextField.size() < 2)
@@ -2807,6 +2820,7 @@ bool EngineCore::RequiresMouseCapture() const
             m_state == WarpCheatDialog ||
             m_state == GodModeCheatDialog ||
             m_state == FreeItemsCheatDialog ||
+            m_state == OverheadMapDialog ||
             m_state == Victory ||
             m_state == VerifyGateExit));
 }
