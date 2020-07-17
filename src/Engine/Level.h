@@ -146,6 +146,7 @@ public:
     void DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp);
     void DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks);
     void DrawActors(IRenderer& renderer, EgaGraph* egaGraph);
+    void DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph);
 
 private:
     uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;

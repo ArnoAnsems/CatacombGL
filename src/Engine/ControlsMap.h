@@ -40,6 +40,7 @@ enum ControlAction
     ShootXterminator,
     UsePotion,
     Run,
+    ShowOverheadMap,
     MaxControlAction
 };
 
@@ -58,7 +59,8 @@ const std::pair<ControlAction, std::string> controlActionLabelArray[MaxControlAc
     std::make_pair(ShootZappper, "ShootZappper"),
     std::make_pair(ShootXterminator, "ShootXterm"),
     std::make_pair(UsePotion, "UsePotion"),
-    std::make_pair(Run, "Run")
+    std::make_pair(Run, "Run"),
+    std::make_pair(ShowOverheadMap, "OverheadMap")
 };
 
 const std::map<ControlAction, std::string> controlActionLabels(controlActionLabelArray, controlActionLabelArray + sizeof(controlActionLabelArray) / sizeof(std::pair<ControlAction, std::string>));

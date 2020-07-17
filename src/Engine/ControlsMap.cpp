@@ -43,6 +43,7 @@ ControlsMap::ControlsMap()
     AssignActionToKey(UsePotion, SDLK_c);
     AssignActionToKey(UsePotion, SDLK_SPACE);
     // Since the original game did not have a run action, by default no key is assigned to the run action.
+    AssignActionToKey(ShowOverheadMap, SDLK_o);
 
     AssignActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
     AssignActionToMouseButton(ShootZappper, SDL_BUTTON_MIDDLE);

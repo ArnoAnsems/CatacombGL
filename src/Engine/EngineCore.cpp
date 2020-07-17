@@ -784,6 +784,10 @@ bool EngineCore::Think()
         {
             PlayerUsesPotion();
         }
+        if (m_state == InGame && IsActionJustPressed(ControlAction::ShowOverheadMap))
+        {
+            ShowOverheadMap();
+        }
         if (m_playerInput.IsKeyJustPressed(SDLK_w)) // W
         {
             KeyWPressed();

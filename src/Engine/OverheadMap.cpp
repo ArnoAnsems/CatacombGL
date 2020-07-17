@@ -29,6 +29,8 @@ OverheadMap::~OverheadMap()
 
 void OverheadMap::Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level)
 {
+    // TODO: Work in progress !
+    level.DrawOverheadMap(renderer, egaGraph);
     RenderableText renderableText(*egaGraph.GetFont(3));
     renderableText.LeftAligned("Overhead map placeholder", EgaBrightWhite, 8, 8);
     renderer.RenderText(renderableText);

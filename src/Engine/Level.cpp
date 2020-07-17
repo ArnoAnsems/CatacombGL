@@ -1597,6 +1597,26 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
     renderer.Render3DWalls(textureToWallsMap);
 }
 
+void Level::DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph)
+{
+    for (uint16_t y = 0; y < 3; y++)
+    {
+        for (uint16_t x = 0; x < 5; x++)
+        {
+            const uint16_t northwallIndex = GetWallTile(x, y);
+            const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, 0);
+            if (northWall != 1)
+            {
+                const Picture* northPicture = egaGraph.GetPicture(northWall);
+                if (northPicture != nullptr)
+                {
+                    renderer.Render2DPicture(northPicture, x * 64, y * 64);
+                }
+            }
+        }
+    }
+}
+
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
 {
     if (tileIndex < m_wallsInfo.size())
