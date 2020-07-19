@@ -1599,22 +1599,24 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
 
 void Level::DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph)
 {
-    for (uint16_t y = 0; y < 3; y++)
+    RenderableTiles tiles(*egaGraph.GetTilesSize16());
+    for (uint16_t y = 0; y < 8; y++)
     {
-        for (uint16_t x = 0; x < 5; x++)
+        for (uint16_t x = 0; x < 20; x++)
         {
-            const uint16_t northwallIndex = GetWallTile(x, y);
-            const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, 0);
-            if (northWall != 1)
+            const uint16_t wallIndex = GetWallTile(x, y);
+            if (wallIndex < m_wallsInfo.size())
             {
-                const Picture* northPicture = egaGraph.GetPicture(northWall);
-                if (northPicture != nullptr)
-                {
-                    renderer.Render2DPicture(northPicture, x * 64, y * 64);
-                }
+                tiles.Add(x * 16, y * 16, wallIndex);
+            }
+            else
+            {
+                tiles.Add(x * 16, y * 16, 0);
             }
         }
     }
+
+    renderer.RenderTiles(tiles);
 }
 
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const

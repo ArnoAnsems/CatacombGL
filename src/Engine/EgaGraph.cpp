@@ -150,6 +150,8 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     FileChunk* pictureChunkTileSize8Masked = m_huffman->Decompress(compressedPictureTileSize8Masked, compressedSizeTileSize8Masked, uncompressedSizeTileSize8Masked);
     m_tilesSize8MaskedTextureAtlas = CreateTextureAtlasForTilesSize8(pictureChunkTileSize8Masked, true);
     delete pictureChunkTileSize8Masked;
+
+    m_tilesSize16TextureAtlas = CreateTextureAtlasForTilesSize16();
 }
 
 EgaGraph::~EgaGraph()
@@ -203,6 +205,7 @@ EgaGraph::~EgaGraph()
 
     delete m_tilesSize8TextureAtlas;
     delete m_tilesSize8MaskedTextureAtlas;
+    delete m_tilesSize16TextureAtlas;
 }
 
 Picture* EgaGraph::GetPicture(const uint16_t index)
@@ -371,7 +374,7 @@ uint16_t EgaGraph::GetNumberOfWorldLocationNames() const
     return m_staticData.indexOfLastWorldLocationNames - m_staticData.indexOfFirstWorldLocationNames + 1;
 }
 
-uint32_t EgaGraph::GetChunkSize(const uint16_t index)
+uint32_t EgaGraph::GetChunkSize(const uint16_t index) const
 {
     if (index >= m_staticData.offsets.size())
     {
@@ -406,6 +409,11 @@ const TextureAtlas* const EgaGraph::GetTilesSize8() const
 const TextureAtlas* const EgaGraph::GetTilesSize8Masked() const
 {
     return m_tilesSize8MaskedTextureAtlas;
+}
+
+const TextureAtlas* const EgaGraph::GetTilesSize16() const
+{
+    return m_tilesSize16TextureAtlas;
 }
 
 TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked) const
@@ -470,6 +478,66 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompr
                 }
             }
         }
+        textureAtlas->StoreImage(tile, textureImage);
+    }
+
+    delete[] textureImage;
+
+    m_renderer.LoadPixelDataIntoTexture(
+        textureAtlas->GetTextureWidth(),
+        textureAtlas->GetTextureHeight(),
+        textureAtlas->GetTexturePixelData(),
+        textureAtlas->GetTextureId());
+
+    return textureAtlas;
+}
+
+TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize16() const
+{
+    const uint16_t numberOfTiles = m_staticData.indexOfLastTileSize16 - m_staticData.indexOfFirstTileSize16 + 1;
+    const uint16_t numberOfColumns = 512 / 17;
+    const uint16_t numberOfRows = 512 / 17;
+    const unsigned int textureId = m_renderer.GenerateTextureId();
+    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, 16, numberOfColumns, numberOfRows, 1, 1);
+    const uint32_t bytesPerOutputPixel = 4;
+    const uint32_t inputSizeOfTileInBytes = 128;
+    const uint32_t numberOfPixelsInTile = 256; // 16 x 16
+    uint8_t* textureImage = new uint8_t[numberOfPixelsInTile * bytesPerOutputPixel];
+    const uint32_t planeSize = 32;
+
+    for (uint32_t tile = 0; tile < numberOfTiles; tile++)
+    {
+        const uint16_t pictureIndexTileSize16 = m_staticData.indexOfFirstTileSize16 + tile;
+        uint8_t* compressedPictureTileSize16 = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndexTileSize16)];
+        uint32_t compressedSizeTileSize16 = GetChunkSize(pictureIndexTileSize16);
+        FileChunk* chunkTileSize16 = m_huffman->Decompress(compressedPictureTileSize16, compressedSizeTileSize16, inputSizeOfTileInBytes);
+        const uint8_t* chunk = chunkTileSize16->GetChunk();
+
+        const uint32_t tileChunkOffset = 0;
+        for (uint32_t i = 0; i < planeSize; i++)
+        {
+            for (uint32_t j = 0; j < 8; j++)
+            {
+                const unsigned char bitValue = (1 << j);
+                const bool blueplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                const bool greenplane = ((chunk[tileChunkOffset + i + (1 * planeSize)] & bitValue) > 0);
+                const bool redplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                const bool intensityplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                const egaColor colorIndex =
+                    (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                    (redplane ? EgaRed : EgaBlack) +
+                        (greenplane ? EgaGreen : EgaBlack) +
+                        (blueplane ? EgaBlue : EgaBlack));
+                const rgbColor outputColor = EgaToRgb(colorIndex);
+                const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                textureImage[outputPixelOffset] = outputColor.red;
+                textureImage[outputPixelOffset + 1] = outputColor.green;
+                textureImage[outputPixelOffset + 2] = outputColor.blue;
+                textureImage[outputPixelOffset + 3] = 255;
+            }
+        }
+        delete chunk;
+
         textureAtlas->StoreImage(tile, textureImage);
     }
 

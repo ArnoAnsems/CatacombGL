@@ -933,7 +933,8 @@ typedef enum {
 
     FIRSTTILESIZE8 = 166,
     FIRSTTILESIZE8MASKED = 167,
-
+    FIRSTTILESIZE16 = 168,
+    LASTTILESIZE16 = 382,
     LEVEL1TEXT = 456,
     LEVEL2TEXT,                  // 457
     LEVEL3TEXT,                  // 458
@@ -971,6 +972,8 @@ const egaGraphStaticData egaGraphCatacomb3D =
     PADDLESPR,
     FIRSTTILESIZE8,
     FIRSTTILESIZE8MASKED,
+    FIRSTTILESIZE16,
+    LASTTILESIZE16,
     LEVEL1TEXT,
     LEVEL20TEXT,
     HAND1PICM
