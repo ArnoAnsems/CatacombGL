@@ -1597,21 +1597,34 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
     renderer.Render3DWalls(textureToWallsMap);
 }
 
-void Level::DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph)
+void Level::DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t additionalMargin, const uint16_t originX, const uint16_t originY)
 {
+    const int16_t tileWidth = 16;
+    const int16_t additionalTilesInMargin = (additionalMargin / tileWidth);
+    const int16_t firstTileX = -additionalTilesInMargin + originX;
+    const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + originX;
+    const int16_t firstTileY = originY;
+    const int16_t lastTileY = originY + 8;
     RenderableTiles tiles(*egaGraph.GetTilesSize16());
-    for (uint16_t y = 0; y < 8; y++)
+    for (int16_t y = firstTileY; y < lastTileY; y++)
     {
-        for (uint16_t x = 0; x < 20; x++)
+        for (int16_t x = firstTileX; x < lastTileX; x++)
         {
-            const uint16_t wallIndex = GetWallTile(x, y);
-            if (wallIndex < m_wallsInfo.size())
+            if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
             {
-                tiles.Add(x * 16, y * 16, wallIndex);
+                const uint16_t wallIndex = GetWallTile(x, y);
+                if (wallIndex < m_wallsInfo.size())
+                {
+                    tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, wallIndex);
+                }
+                else
+                {
+                    tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
+                }
             }
             else
             {
-                tiles.Add(x * 16, y * 16, 0);
+                tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
             }
         }
     }

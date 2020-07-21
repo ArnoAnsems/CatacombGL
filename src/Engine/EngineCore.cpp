@@ -353,7 +353,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_state == OverheadMapDialog && m_level != nullptr)
     {
-        m_overheadMap.Draw(renderer, *m_game.GetEgaGraph(), *m_level);
+        m_overheadMap.Draw(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
     }
 
     if (m_state == GodModeCheatDialog)
@@ -762,6 +762,10 @@ bool EngineCore::Think()
         m_playerInput.ClearAll();
     }
 
+    if (m_state == OverheadMapDialog && !m_menu->IsActive() && m_level != nullptr)
+    {
+        m_overheadMap.ProcessInput(m_playerInput, *m_level, m_gameTimer.GetActualTime());
+    }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
     {

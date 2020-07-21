@@ -17,7 +17,8 @@
 
 OverheadMap::OverheadMap() :
     m_originX(0),
-    m_originY(0)
+    m_originY(0),
+    m_lastActionTimestamp(0)
 {
 
 }
@@ -27,13 +28,35 @@ OverheadMap::~OverheadMap()
 
 }
 
-void OverheadMap::Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level)
+void OverheadMap::Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin)
 {
     // TODO: Work in progress !
-    level.DrawOverheadMap(renderer, egaGraph);
+    level.DrawOverheadMap(renderer, egaGraph, additionalMargin, m_originX, m_originY);
 }
 
-void OverheadMap::ProcessInput(PlayerInput& playerInput)
+void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp)
 {
-
+    if (timestamp > m_lastActionTimestamp + 200)
+    {
+        if (playerInput.IsKeyPressed(SDLK_RIGHT) && m_originX + 20 < level.GetLevelWidth())
+        {
+            m_originX++;
+            m_lastActionTimestamp = timestamp;
+        }
+        if (playerInput.IsKeyPressed(SDLK_LEFT) && m_originX > 0)
+        {
+            m_originX--;
+            m_lastActionTimestamp = timestamp;
+        }
+        if (playerInput.IsKeyPressed(SDLK_DOWN) && m_originY + 8 < level.GetLevelHeight())
+        {
+            m_originY++;
+            m_lastActionTimestamp = timestamp;
+        }
+        if (playerInput.IsKeyPressed(SDLK_UP) && m_originY > 0)
+        {
+            m_originY--;
+            m_lastActionTimestamp = timestamp;
+        }
+    }
 }

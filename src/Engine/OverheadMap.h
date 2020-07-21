@@ -26,11 +26,12 @@ public:
     OverheadMap();
     ~OverheadMap();
 
-    void Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level);
-    void ProcessInput(PlayerInput& playerInput);
+    void Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);
+    void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp);
 
 private:
     uint16_t m_originX;
     uint16_t m_originY;
+    uint32_t m_lastActionTimestamp;
 };
 
