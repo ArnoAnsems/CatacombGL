@@ -713,3 +713,8 @@ unsigned int EgaGraph::LoadMaskedFileChunkIntoTexture(
 
     return textureId;
 }
+
+uint16_t EgaGraph::GetNumberOfTilesSize16() const
+{
+    return m_staticData.indexOfLastTileSize16 - m_staticData.indexOfFirstTileSize16 + 1;
+}

@@ -788,9 +788,17 @@ bool EngineCore::Think()
         {
             PlayerUsesPotion();
         }
-        if (m_state == InGame && IsActionJustPressed(ControlAction::ShowOverheadMap))
+        if (IsActionJustPressed(ControlAction::ShowOverheadMap))
         {
-            ShowOverheadMap();
+            if (m_state == InGame)
+            {
+                ShowOverheadMap();
+            }
+            else if (m_state == OverheadMapDialog)
+            {
+                m_state = InGame;
+                m_gameTimer.Resume();
+            }
         }
         if (m_playerInput.IsKeyJustPressed(SDLK_w)) // W
         {

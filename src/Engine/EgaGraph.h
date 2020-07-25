@@ -69,6 +69,7 @@ public:
     const TextureAtlas* const GetTilesSize8() const;
     const TextureAtlas* const GetTilesSize8Masked() const;
     const TextureAtlas* const GetTilesSize16() const;
+    uint16_t GetNumberOfTilesSize16() const;
 
 private:
     uint32_t GetChunkSize(const uint16_t index) const;
