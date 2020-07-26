@@ -1597,14 +1597,20 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
     renderer.Render3DWalls(textureToWallsMap);
 }
 
-void Level::DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t additionalMargin, const uint16_t originX, const uint16_t originY)
+void Level::DrawOverheadMap(
+    IRenderer& renderer,
+    EgaGraph& egaGraph,
+    const uint16_t additionalMargin,
+    const uint16_t originX,
+    const uint16_t originY,
+    const OverheadType overheadType)
 {
     const int16_t tileWidth = 16;
-    const int16_t additionalTilesInMargin = (additionalMargin / tileWidth);
+    const int16_t additionalTilesInMargin = (additionalMargin == 0) ? 0 : (additionalMargin / tileWidth) + 1;
     const int16_t firstTileX = -additionalTilesInMargin + originX;
     const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + originX;
     const int16_t firstTileY = originY;
-    const int16_t lastTileY = originY + 8;
+    const int16_t lastTileY = originY + 9;
     RenderableTiles tiles(*egaGraph.GetTilesSize16());
     RenderableTiles numbers(*egaGraph.GetTilesSize8());
     for (int16_t y = firstTileY; y < lastTileY; y++)
@@ -1615,21 +1621,78 @@ void Level::DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph, const uint1
             {
                 const int16_t sx = (x - originX) * tileWidth;
                 const int16_t sy = (y - originY) * tileWidth;
-                const uint16_t wallIndex = GetWallTile(x, y);
-                if (wallIndex < egaGraph.GetNumberOfTilesSize16())
+                switch (overheadType)
                 {
-                    tiles.Add(sx, sy, wallIndex);
+                case MapView:
+                {
+                    const uint16_t wallIndex = GetWallTile(x, y);
+                    if (wallIndex < egaGraph.GetNumberOfTilesSize16())
+                    {
+                        tiles.Add(sx, sy, wallIndex);
+                    }
+                    else
+                    {
+                        tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
+                    }
+                    break;
                 }
-                else
+                case TileMapView:
                 {
-                    numbers.Add(sx, sy, RenderableTiles::TileIdFirstNumber + ((wallIndex & 0xf000) >> 12));
-                    numbers.Add(sx+8, sy, RenderableTiles::TileIdFirstNumber + ((wallIndex & 0x0f00) >> 8));
-                    numbers.Add(sx, sy+8, RenderableTiles::TileIdFirstNumber + ((wallIndex & 0x00f0) >> 4));
-                    numbers.Add(sx+8, sy+8, RenderableTiles::TileIdFirstNumber + (wallIndex & 0x000f));
+                    const uint16_t wallIndex = GetWallTile(x, y);
+                    // Only display wall tiles
+                    if (wallIndex < m_wallsInfo.size())
+                    {
+                        tiles.Add(sx, sy, wallIndex);
+                    }
+                    else
+                    {
+                        tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
+                    }
+                    break;
+                }
+                case ActorAtView:
+                {
+                    const uint16_t wallIndex = GetWallTile(x, y);
+                    if (wallIndex < m_wallsInfo.size())
+                    {
+                        // This is a wall tile
+                        tiles.Add(sx, sy, wallIndex);
+                    }
+                    else
+                    {
+                        // No wall; check for presence of actor
+                        uint16_t tileIndex = 0;
+                        const Actor* blockingActor = GetBlockingActor(x, y);
+                        if (blockingActor != nullptr)
+                        {
+                            // In the original Catacomb 3-D, an actor is displayed here as 4 hexadecimal numbers,
+                            // representing the first 2 bytes of its objtype struct, see C3_DEF.H.
+                            // Since that struct does not exist in CatacombGL, the floor tile index of the
+                            // actor is displayed instead.
+                            const uint16_t tileIndex = blockingActor->GetDecorateActor().spawnOnAllDifficulties;
+                            numbers.Add(sx, sy, RenderableTiles::TileIdFirstNumber + ((tileIndex & 0xf000) >> 12));
+                            numbers.Add(sx + 8, sy, RenderableTiles::TileIdFirstNumber + ((tileIndex & 0x0f00) >> 8));
+                            numbers.Add(sx, sy + 8, RenderableTiles::TileIdFirstNumber + ((tileIndex & 0x00f0) >> 4));
+                            numbers.Add(sx + 8, sy + 8, RenderableTiles::TileIdFirstNumber + (tileIndex & 0x000f));
+                        }
+                        else
+                        {
+                            tiles.Add(sx, sy, 0);
+                        }
+                    }
+                    break;
+                }
+                case VisView:
+                {
+                    const uint16_t tileIndex = (m_visibilityMap[(y * m_levelWidth) + x]) ? 1 : 0;
+                    tiles.Add(sx, sy, tileIndex);
+                    break;
+                }
                 }
             }
             else
             {
+                // Outside the map boundaries; draw a black tile
                 tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
             }
         }

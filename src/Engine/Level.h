@@ -83,6 +83,15 @@ typedef struct LevelWall
     bool isXWall;
 } LevelWall;
 
+enum OverheadType
+{
+    MapView = 0,
+    TileMapView = 1,
+    ActorAtView = 2,
+    VisView = 3,
+    MaxOverheadType = 4
+};
+
 class Level
 {
 public:
@@ -146,7 +155,13 @@ public:
     void DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp);
     void DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks);
     void DrawActors(IRenderer& renderer, EgaGraph* egaGraph);
-    void DrawOverheadMap(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t additionalMargin, const uint16_t originX, const uint16_t originY);
+    void DrawOverheadMap(
+        IRenderer& renderer,
+        EgaGraph& egaGraph,
+        const uint16_t additionalMargin,
+        const uint16_t originX,
+        const uint16_t originY,
+        const OverheadType overheadType);
 
 private:
     uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;

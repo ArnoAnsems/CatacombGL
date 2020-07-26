@@ -33,5 +33,6 @@ private:
     uint16_t m_originX;
     uint16_t m_originY;
     uint32_t m_lastActionTimestamp;
+    OverheadType m_overheadType;
 };
 
