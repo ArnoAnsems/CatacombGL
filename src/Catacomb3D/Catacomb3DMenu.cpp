@@ -275,7 +275,7 @@ void Catacomb3DMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 6)
+            if (m_menuItemSelected == 7)
             {
                 m_menuItemSelected = 0;
             }
@@ -401,7 +401,7 @@ void Catacomb3DMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 6;
+                m_menuItemSelected = 7;
             }
             else
             {
@@ -673,7 +673,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             }
             else
             {
-                    m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
+                m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
             }
         }
         else if (m_menuItemSelected == 4)
@@ -692,6 +692,17 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         else if (m_menuItemSelected == 6)
         {
             m_configurationSettings.SetVSync(!m_configurationSettings.GetVSync());
+        }
+        else if (m_menuItemSelected == 7)
+        {
+            if (m_configurationSettings.GetOverHeadMapMode() == Classic)
+            {
+                m_configurationSettings.SetOverHeadMapMode(Isometric);
+            }
+            else
+            {
+                m_configurationSettings.SetOverHeadMapMode(Classic);
+            }
         }
     }
     else if (m_subMenuSelected == subMenuControls)
@@ -1080,6 +1091,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderableText.LeftAligned("VSync", (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, 111);
         const char* vsyncStr = (!vsyncSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
         renderableText.LeftAligned(vsyncStr, (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, 111);
+
+        renderableTiles.DrawListBullet(76, 118, true, (m_menuItemSelected == 7) && flashIcon);
+        renderableText.LeftAligned("Overhead Map", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, 119);
+        const char* overheadMapModeStr = (m_configurationSettings.GetOverHeadMapMode() == Classic) ? "Classic" : "Isometric";
+        renderableText.LeftAligned(overheadMapModeStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, 180, 119);
 
         renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
         renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);

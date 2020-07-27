@@ -34,6 +34,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_turnSpeed(100),
     m_alwaysRun(false),
     m_autoFire(false),
+    m_overheadMapMode(Isometric),
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
@@ -189,6 +190,14 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_autoFire = (autoFirePair->second.compare("Enabled") == 0);
         }
 
+        auto overheadMapModePair = keyValuePairs.find("overheadmapmode");
+        if (overheadMapModePair != keyValuePairs.end())
+        {
+            m_overheadMapMode =
+                (overheadMapModePair->second.compare("classic") == 0) ? Classic :
+                Isometric;
+        }
+
         for (auto keyPair : keyValuePairs)
         {
             SDL_Keycode keyCode = SDL_GetKeyFromName(keyPair.first.c_str());
@@ -246,6 +255,10 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "texturefilter=" << textureFilterValue << "\n";
         std::string fovValue = std::to_string(m_fov);
         file << "fov=" << fovValue << "\n";
+        const std::string overheadMapModeValue =
+            (m_overheadMapMode == Classic) ? "classic" :
+            "isometric";
+        file << "overheadmapmode=" << overheadMapModeValue << "\n";
         file << "# Sound settings\n";
         const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";
         file << "soundmode=" << modeValue << "\n";
@@ -482,4 +495,14 @@ bool ConfigurationSettings::GetAutoFire() const
 void ConfigurationSettings::SetAutoFire(const bool autoFire)
 {
     m_autoFire = autoFire;
+}
+
+OverheadMapMode ConfigurationSettings::GetOverHeadMapMode() const
+{
+    return m_overheadMapMode;
+}
+
+void ConfigurationSettings::SetOverHeadMapMode(const OverheadMapMode overheadMapMode)
+{
+    m_overheadMapMode = overheadMapMode;
 }
