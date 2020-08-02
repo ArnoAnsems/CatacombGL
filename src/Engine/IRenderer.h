@@ -102,6 +102,7 @@ public:
     virtual void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) = 0;
     virtual void PrepareVisibilityMap() = 0;
     virtual void UnprepareVisibilityMap() = 0;
+    virtual void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) = 0;
 
     //
     // Screen capture

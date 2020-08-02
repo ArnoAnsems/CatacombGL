@@ -491,6 +491,7 @@ void RendererOpenGLWin32::RenderSprites(const RenderableSprites& renderableSprit
 
 void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor)
 {
+    glEnable(GL_CULL_FACE);
     BindTexture(m_singleColorTexture[floorColor]);
 
     // Do not write into the depth buffer. This allows sprites to appear a bit sunken into the floor.
@@ -501,10 +502,10 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
     {
         const float tileX = (float)tile.x;
         const float tileY = (float)tile.y;
-        glTexCoord2i(0, 0); glVertex3f(tileX, tileY, FloorZ);               // Top Left
-        glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, FloorZ);        // Top Right
-        glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, FloorZ); // Bottom Right
         glTexCoord2i(0, 1); glVertex3f(tileX + 1.0f, tileY, FloorZ);        // Bottom Left
+        glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, FloorZ); // Bottom Right
+        glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, FloorZ);        // Top Right
+        glTexCoord2i(0, 0); glVertex3f(tileX, tileY, FloorZ);               // Top Left
     }
     glEnd();
 
@@ -523,6 +524,7 @@ void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate
     glEnd();
 
     glDepthMask(GL_TRUE);
+    glDisable(GL_CULL_FACE);
 }
 
 bool RendererOpenGLWin32::IsVSyncSupported()
@@ -538,6 +540,43 @@ void RendererOpenGLWin32::PrepareVisibilityMap()
 void RendererOpenGLWin32::UnprepareVisibilityMap()
 {
     glEnable(GL_DEPTH_TEST);
+}
+
+void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY)
+{
+    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
+
+    glViewport(rect.left, rect.bottom, rect.width, rect.height);
+
+    glClearDepth(1.0f);                         // Depth Buffer Setup
+    glClearStencil(0);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
+
+    glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
+
+    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
+
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspective 
+
+    glCullFace(GL_FRONT);
+
+    glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+    glLoadIdentity();									// Reset The Projection Matrix
+
+    const double x = originX + 9.0;
+    const double y = originY + 9.0;
+    const double z = -1.0;
+    // use this length so that camera is 1 unit away from origin
+    const double dist = sqrt(1 / 3.0);
+    glOrtho(-20.0f, 20.0f, -5.0f, 5.0f, -20.0f, 20.0f);
+    gluLookAt(dist + x, dist + y, z - dist,  // position of camera
+        x, y, z,   // where camera is pointing at
+        0.0, 0.0, -1.0);  // which direction is up
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glShadeModel(GL_SMOOTH);
 }
 
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)

@@ -162,6 +162,10 @@ public:
         const uint16_t originX,
         const uint16_t originY,
         const OverheadType overheadType);
+    void DrawOverheadMapIso(
+        IRenderer& renderer,
+        EgaGraph& egaGraph,
+        const uint16_t additionalMargin);
 
 private:
     uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;

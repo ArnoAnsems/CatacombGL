@@ -100,6 +100,10 @@ void RendererStub::UnprepareVisibilityMap()
 {
 }
 
+void RendererStub::PrepareIsoRendering(const float /*aspectRatio*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/, const float /*originX*/, const float /*originY*/)
+{
+}
+
 Picture* RendererStub::GetScreenCapture(const unsigned int /*textureId*/)
 {
     return nullptr;

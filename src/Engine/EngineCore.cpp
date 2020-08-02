@@ -155,20 +155,27 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_gameTimer.Pause();
     }
 
-    renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
-
-    if (!m_menu->IsActive() || m_game.GetId() != 5)
+    if (m_state == OverheadMapDialog && m_level != nullptr && m_configurationSettings.GetOverHeadMapMode() == Isometric)
     {
-        if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
+            const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
+            m_overheadMap.DrawIso(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
+    }
+    else
+    {
+        renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
+        if (!m_menu->IsActive() || m_game.GetId() != 5)
         {
-            m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
+            if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
+            {
+                m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
 
-            m_level->DrawWalls(renderer, m_game.GetEgaGraph(), m_gameTimer.GetTicksForWorld());
+                m_level->DrawWalls(renderer, m_game.GetEgaGraph(), m_gameTimer.GetTicksForWorld());
 
 #ifdef DRAWVISIBILITYMAP
-            m_level->DrawVisibilityMap(renderer);
+                m_level->DrawVisibilityMap(renderer);
 #endif
-            m_level->DrawActors(renderer, m_game.GetEgaGraph());
+                m_level->DrawActors(renderer, m_game.GetEgaGraph());
+            }
         }
     }
 
@@ -351,7 +358,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.RenderText(renderableText);
     }
 
-    if (m_state == OverheadMapDialog && m_level != nullptr)
+    if (m_state == OverheadMapDialog && m_level != nullptr && m_configurationSettings.GetOverHeadMapMode() == Classic)
     {
         m_overheadMap.Draw(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
     }

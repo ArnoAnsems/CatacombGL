@@ -34,6 +34,18 @@ void OverheadMap::Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level, co
     level.DrawOverheadMap(renderer, egaGraph, additionalMargin, m_originX, m_originY, m_overheadType);
 }
 
+void OverheadMap::DrawIso(
+    IRenderer& renderer,
+    EgaGraph& egaGraph,
+    Level& level,
+    const float aspectRatio,
+    const ViewPorts::ViewPortRect3D original3DViewArea)
+{
+    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio);
+    renderer.PrepareIsoRendering(aspectRatio, original3DViewArea, (float)m_originX, (float)m_originY);
+    level.DrawOverheadMapIso(renderer, egaGraph, additionalMargin);
+}
+
 void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp)
 {
     if (timestamp > m_lastActionTimestamp + 200)

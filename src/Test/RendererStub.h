@@ -58,6 +58,7 @@ public:
     void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) override;
     void PrepareVisibilityMap() override;
     void UnprepareVisibilityMap() override;
+    void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) override;
 
     //
     // Screen capture

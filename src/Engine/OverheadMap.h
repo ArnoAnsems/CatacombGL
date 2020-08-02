@@ -27,6 +27,12 @@ public:
     ~OverheadMap();
 
     void Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);
+    void DrawIso(
+        IRenderer& renderer,
+        EgaGraph& egaGraph,
+        Level& level,
+        const float aspectRatio,
+        const ViewPorts::ViewPortRect3D original3DViewArea);
     void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp);
 
 private:

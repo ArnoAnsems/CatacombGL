@@ -1702,6 +1702,72 @@ void Level::DrawOverheadMap(
     renderer.RenderTiles(numbers);
 }
 
+void Level::DrawOverheadMapIso(
+    IRenderer& renderer,
+    EgaGraph& egaGraph,
+    const uint16_t additionalMargin)
+{
+    std::vector<IRenderer::tileCoordinate> tiles;
+    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    {
+        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        {
+            if (!IsSolidWall(x, y))
+            {
+                tiles.push_back(IRenderer::tileCoordinate{ x, y });
+            }
+        }
+    }
+    renderer.RenderFloorAndCeiling(tiles, GetGroundColor(), EgaBlack);
+    
+    std::map<unsigned int, std::vector<IRenderer::wallCoordinate>> textureToWallsMap;
+
+    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    {
+        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        {
+            if (!IsSolidWall(x, y))
+            {
+                const uint16_t northwallIndex = GetWallTile(x, y - 1);
+                const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, 0);
+                if (northWall != 1)
+                {
+                    const Picture* northPicture = egaGraph.GetPicture(northWall);
+                    if (northPicture != nullptr)
+                    {
+                        const unsigned int textureId = northPicture->GetTextureId();
+                        IRenderer::wallCoordinate wall = IRenderer::wallCoordinate{ x + 1u, y, x, y };
+                        if (textureToWallsMap.find(textureId) == textureToWallsMap.end())
+                        {
+                            textureToWallsMap.insert(std::make_pair(textureId, std::vector<IRenderer::wallCoordinate>()));
+                        }
+                        textureToWallsMap.at(textureId).push_back(wall);
+                    }
+                }
+
+                const uint16_t westwallIndex = GetWallTile(x - 1, y);
+                const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, 0);
+                if (westWall != 1)
+                {
+                    const Picture* westPicture = egaGraph.GetPicture(westWall);
+                    if (westPicture != nullptr)
+                    {
+                        const unsigned int textureId = westPicture->GetTextureId();
+                        IRenderer::wallCoordinate wall = IRenderer::wallCoordinate{ x, y, x, y + 1u };
+                        if (textureToWallsMap.find(textureId) == textureToWallsMap.end())
+                        {
+                            textureToWallsMap.insert(std::make_pair(textureId, std::vector<IRenderer::wallCoordinate>()));
+                        }
+                        textureToWallsMap.at(textureId).push_back(wall);
+                    }
+                }
+            }
+        }
+    }
+
+    renderer.Render3DWalls(textureToWallsMap);
+}
+
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
 {
     if (tileIndex < m_wallsInfo.size())
