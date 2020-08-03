@@ -49,6 +49,18 @@ public:
         uint16_t y2;
     } wallCoordinate;
 
+    typedef struct
+    {
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        float x3;
+        float y3;
+        float x4;
+        float y4;
+    } quadCoordinates;
+
     enum TextureFilterSetting
     {
         Nearest,
@@ -103,6 +115,7 @@ public:
     virtual void PrepareVisibilityMap() = 0;
     virtual void UnprepareVisibilityMap() = 0;
     virtual void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) = 0;
+    virtual void RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps) = 0;
 
     //
     // Screen capture

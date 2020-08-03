@@ -104,6 +104,10 @@ void RendererStub::PrepareIsoRendering(const float /*aspectRatio*/, const ViewPo
 {
 }
 
+void RendererStub::RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& /*wallCaps*/)
+{
+}
+
 Picture* RendererStub::GetScreenCapture(const unsigned int /*textureId*/)
 {
     return nullptr;

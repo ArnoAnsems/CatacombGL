@@ -579,6 +579,31 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     glShadeModel(GL_SMOOTH);
 }
 
+void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps)
+{
+    glEnable(GL_CULL_FACE);
+
+    for (const std::pair<egaColor, std::vector<quadCoordinates>>& wallCap : wallCaps)
+    {
+        const unsigned int textureId = m_singleColorTexture[wallCap.first];
+        // Select the texture from the picture
+        BindTexture(textureId);
+
+        // Draw the texture as a quad
+        glBegin(GL_QUADS);
+        for (const quadCoordinates& coordinate : wallCap.second)
+        {
+            glTexCoord2i(1, 1); glVertex3f((float)coordinate.x1, (float)coordinate.y1, CeilingZ);
+            glTexCoord2i(0, 1); glVertex3f((float)coordinate.x2, (float)coordinate.y2, CeilingZ);
+            glTexCoord2i(0, 0); glVertex3f((float)coordinate.x3, (float)coordinate.y3, CeilingZ);
+            glTexCoord2i(1, 0); glVertex3f((float)coordinate.x4, (float)coordinate.y4, CeilingZ);
+        }
+        glEnd();
+    }
+
+    glDisable(GL_CULL_FACE);
+}
+
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)
 {
     // Pixels are read as GL_RGBA. Although the alpha channel is stricly speaking not necessary,

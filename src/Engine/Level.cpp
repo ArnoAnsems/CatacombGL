@@ -1721,6 +1721,7 @@ void Level::DrawOverheadMapIso(
     renderer.RenderFloorAndCeiling(tiles, GetGroundColor(), EgaBlack);
     
     std::map<unsigned int, std::vector<IRenderer::wallCoordinate>> textureToWallsMap;
+    std::map <egaColor, std::vector<IRenderer::quadCoordinates>> wallCaps;
 
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -1766,6 +1767,84 @@ void Level::DrawOverheadMapIso(
     }
 
     renderer.Render3DWalls(textureToWallsMap);
+
+    for (uint16_t y = 0; y < m_levelHeight; y++)
+    {
+        for (uint16_t x = 0; x < m_levelWidth; x++)
+        {
+            if (IsSolidWall(x, y))
+            {
+                const KeyId requiredKey = GetRequiredKeyForDoor(x, y);
+                const egaColor centerColor =
+                    IsExplosiveWall(x, y) ? EgaLightGray :
+                    requiredKey == RedKey ? EgaRed :
+                    requiredKey == BlueKey ? EgaBlue :
+                    requiredKey == GreenKey ? EgaGreen :
+                    requiredKey == YellowKey ? EgaBrightYellow :
+                    EgaDarkGray;
+                if (centerColor != EgaDarkGray)
+                {
+                    const float border = 0.2f;
+                    IRenderer::quadCoordinates quad =
+                    {
+                        (float)x + border, (float)y + border,
+                        (float)x + 1.0f - border, (float)y + border,
+                        (float)x + 1.0f - border, (float)y + 1.0f - border,
+                        (float)x + border, (float)y + 1.0f - border,
+                    };
+                    wallCaps[centerColor].push_back(quad);
+                    quad =
+                    {
+                        (float)x, (float)y,
+                        (float)x + 1.0f, (float)y,
+                        (float)x + 1.0f - border, (float)y + border,
+                        (float)x + border, (float)y + border,
+                    };
+                    wallCaps[EgaDarkGray].push_back(quad);
+                    quad =
+                    {
+                        (float)x + 1.0f, (float)y,
+                        (float)x + 1.0f, (float)y + 1.0f,
+                        (float)x + 1.0f - border, (float)y + 1.0f - border,
+                        (float)x + 1.0f - border, (float)y + border,
+                    };
+                    wallCaps[EgaDarkGray].push_back(quad);
+                    quad =
+                    {
+                        (float)x + 1.0f, (float)y + 1.0f,
+                        (float)x, (float)y + 1.0f,
+                        (float)x + border, (float)y + 1.0f - border,
+                        (float)x + 1.0f - border, (float)y + 1.0f - border,
+                    };
+                    wallCaps[EgaDarkGray].push_back(quad);
+                    quad =
+                    {
+                        (float)x, (float)y + 1.0f,
+                        (float)x, (float)y,
+                        (float)x + border, (float)y + border,
+                        (float)x + border, (float)y + 1.0f - border,
+                    };
+                    wallCaps[EgaDarkGray].push_back(quad);
+                }
+                else
+                {
+                    IRenderer::quadCoordinates quad =
+                    {
+                        (float)x,
+                        (float)y,
+                        (float)x + 1.0f,
+                        (float)y,
+                        (float)x + 1.0f,
+                        (float)y + 1.0f,
+                        (float)x,
+                        (float)y + 1.0f,
+                    };
+                    wallCaps[EgaDarkGray].push_back(quad);
+                }
+            }
+        }
+    }
+    renderer.RenderIsoWallCaps(wallCaps);
 }
 
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
