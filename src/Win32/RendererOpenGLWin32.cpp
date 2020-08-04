@@ -454,6 +454,7 @@ void RendererOpenGLWin32::RenderSprites(const RenderableSprites& renderableSprit
         glTranslatef(offsetX, offsetY, 0.0f);
         const float angle =
             (orientation == RenderableSprites::RotatedTowardsPlayer) ? m_playerAngle :
+            (orientation == RenderableSprites::Isometric) ? 135.0f :
             (orientation == RenderableSprites::AlongYAxis) ? 90.0f :
             0.0f;
 
@@ -569,7 +570,7 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     const double z = -1.0;
     // use this length so that camera is 1 unit away from origin
     const double dist = sqrt(1 / 3.0);
-    glOrtho(-20.0f, 20.0f, -5.0f, 5.0f, -20.0f, 20.0f);
+    glOrtho(-16.0f, 16.0f, -4.0f, 4.0f, -20.0f, 20.0f);
     gluLookAt(dist + x, dist + y, z - dist,  // position of camera
         x, y, z,   // where camera is pointing at
         0.0, 0.0, -1.0);  // which direction is up

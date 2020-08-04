@@ -121,6 +121,7 @@ public:
     bool IsExitDoor(const uint16_t x, const uint16_t y) const;
     bool IsVictoryDoor(const uint16_t x, const uint16_t y) const;
     bool IsBlockedDoor(const uint16_t x, const uint16_t y) const;
+    bool IsFakeWall(const uint16_t x, const uint16_t y) const;
     KeyId GetRequiredKeyForDoor(const uint16_t x, const uint16_t y) const;
     const LevelInfo& GetMapInfo() const;
     const char* GetLevelName() const;

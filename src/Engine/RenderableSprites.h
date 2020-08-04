@@ -31,7 +31,8 @@ public:
     {
         RotatedTowardsPlayer,
         AlongXAxis,
-        AlongYAxis
+        AlongYAxis,
+        Isometric
     };
 
     typedef struct

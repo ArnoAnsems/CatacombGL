@@ -301,6 +301,16 @@ bool Level::IsBlockedDoor(const uint16_t x, const uint16_t y) const
     return (spot == 0xfd);
 }
 
+bool Level::IsFakeWall(const uint16_t x, const uint16_t y) const
+{
+    const Actor* actor = GetBlockingActor(x, y);
+    if (actor == nullptr)
+    {
+        return false;
+    }
+    return (actor->GetAction() == ActionFakeWall);
+}
+
 KeyId Level::GetRequiredKeyForDoor(const uint16_t x, const uint16_t y) const
 {
     const uint16_t tile = GetWallTile(x, y);
@@ -1781,6 +1791,9 @@ void Level::DrawOverheadMapIso(
                     requiredKey == BlueKey ? EgaBlue :
                     requiredKey == GreenKey ? EgaGreen :
                     requiredKey == YellowKey ? EgaBrightYellow :
+                    IsRemovableDoor(x, y) ? EgaLightGray :
+                    IsVictoryDoor(x, y) ? EgaBrightCyan :
+                    IsFakeWall(x, y) ? EgaCyan :
                     EgaDarkGray;
                 if (centerColor != EgaDarkGray)
                 {
@@ -1845,6 +1858,64 @@ void Level::DrawOverheadMapIso(
         }
     }
     renderer.RenderIsoWallCaps(wallCaps);
+
+    RenderableSprites renderableSprites(m_playerActor->GetX(), m_playerActor->GetY());
+
+    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    {
+        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        {
+            // Actors
+            Actor* actor = GetBlockingActor(x, y);
+            if (actor != nullptr)
+            {
+                Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
+                if (actorPicture != nullptr)
+                {
+                    RenderableSprites::SpriteOrientation orientation = RenderableSprites::SpriteOrientation::Isometric;
+
+                    if (actor->GetState() == StateIdArch)
+                    {
+                        int16_t storedOrientation = actor->GetTemp1();
+                        if (storedOrientation == 0)
+                        {
+                            actor->SetTemp1(IsSolidWall(x - 1, y) && !IsExplosiveWall(x - 1, y) && !IsDoor(x - 1, y) ||
+                                IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y) && !IsDoor(x + 1, y) ||
+                                (GetBlockingActor(x - 1, y) != nullptr && GetBlockingActor(x - 1, y)->GetState() == StateIdArch) ||
+                                (GetBlockingActor(x + 1, y) != nullptr && GetBlockingActor(x + 1, y)->GetState() == StateIdArch)
+                                ? RenderableSprites::SpriteOrientation::AlongXAxis : RenderableSprites::SpriteOrientation::AlongYAxis);
+                            storedOrientation = actor->GetTemp1();
+                        }
+                        orientation = (RenderableSprites::SpriteOrientation)storedOrientation;
+                    }
+
+                    renderableSprites.AddSprite(actorPicture, actor->GetX(), actor->GetY(), orientation);
+                }
+            }
+        }
+    }
+
+    for (uint16_t i = 0; i < 100; i++)
+    {
+        // Projectiles
+        Actor* projectile = GetNonBlockingActor(i);
+        if (projectile != nullptr)
+        {
+            Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+            if (actorPicture != nullptr)
+            {
+                renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::Isometric);
+            }
+        }
+    }
+
+    renderableSprites.SortSpritesBackToFront();
+    renderer.RenderSprites(renderableSprites);
+
+    renderer.Prepare2DRendering(true);
+    RenderableText locationNames(*egaGraph.GetFont(3));
+    locationNames.Centered("The Towne Cemetery", EgaBrightWhite, 320, 80);
+    renderer.RenderText(locationNames);
 }
 
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
