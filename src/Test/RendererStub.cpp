@@ -104,7 +104,15 @@ void RendererStub::PrepareIsoRendering(const float /*aspectRatio*/, const ViewPo
 {
 }
 
+void RendererStub::PrepareTopDownRendering(const float /*aspectRatio*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/)
+{
+}
+
 void RendererStub::RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& /*wallCaps*/)
+{
+}
+
+void RendererStub::RenderTopDownFloorTiles(const egaColor /*color*/, std::vector<tileCoordinate>& /*floorTiles*/)
 {
 }
 

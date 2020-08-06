@@ -1918,6 +1918,53 @@ void Level::DrawOverheadMapIso(
     renderer.RenderText(locationNames);
 }
 
+void Level::DrawOverheadMapTopDown(
+    IRenderer& renderer,
+    EgaGraph& egaGraph,
+    const uint16_t additionalMargin,
+    const uint16_t originX,
+    const uint16_t originY)
+{
+    std::vector<IRenderer::tileCoordinate> floorTiles;
+    const int16_t tileWidth = 64;
+    const int16_t additionalTilesInMargin = (additionalMargin == 0) ? 0 : (additionalMargin / tileWidth) + 1;
+    const int16_t firstTileX = -additionalTilesInMargin + originX;
+    const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + originX;
+    const int16_t firstTileY = originY;
+    const int16_t lastTileY = originY + 9;
+    RenderableTiles tiles(*egaGraph.GetTilesSize16());
+    RenderableTiles numbers(*egaGraph.GetTilesSize8());
+    for (int16_t y = firstTileY; y < lastTileY; y++)
+    {
+        for (int16_t x = firstTileX; x < lastTileX; x++)
+        {
+            if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
+            {
+                const int16_t sx = (x - originX) * tileWidth;
+                const int16_t sy = (y - originY) * tileWidth;
+
+                const uint16_t wallIndex = GetWallTile(x, y);
+                const uint16_t darkWall = GetDarkWallPictureIndex(wallIndex, 0);
+                if (darkWall != 1)
+                {
+                    const Picture* darkPicture = egaGraph.GetPicture(darkWall);
+                    if (darkPicture != nullptr)
+                    {
+                        const unsigned int textureId = darkPicture->GetTextureId();
+                        renderer.Render2DPicture(darkPicture, sx, sy);
+                    }
+                }
+                else
+                {
+                    IRenderer::tileCoordinate tile = { sx, sy };
+                    floorTiles.push_back(tile);
+                }
+            }
+        }
+    }
+    renderer.RenderTopDownFloorTiles(GetGroundColor(), floorTiles);
+}
+
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
 {
     if (tileIndex < m_wallsInfo.size())

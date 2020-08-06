@@ -195,7 +195,8 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         {
             m_overheadMapMode =
                 (overheadMapModePair->second.compare("classic") == 0) ? Classic :
-                Isometric;
+                (overheadMapModePair->second.compare("isometric") == 0) ? Isometric :
+                TopDown;
         }
 
         for (auto keyPair : keyValuePairs)
@@ -257,7 +258,8 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "fov=" << fovValue << "\n";
         const std::string overheadMapModeValue =
             (m_overheadMapMode == Classic) ? "classic" :
-            "isometric";
+            (m_overheadMapMode == Isometric) ? "isometric" :
+            "topdown";
         file << "overheadmapmode=" << overheadMapModeValue << "\n";
         file << "# Sound settings\n";
         const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";

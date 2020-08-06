@@ -695,14 +695,12 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 7)
         {
-            if (m_configurationSettings.GetOverHeadMapMode() == Classic)
-            {
-                m_configurationSettings.SetOverHeadMapMode(Isometric);
-            }
-            else
-            {
-                m_configurationSettings.SetOverHeadMapMode(Classic);
-            }
+            const OverheadMapMode previousOverHeadMapMode = m_configurationSettings.GetOverHeadMapMode();
+            const OverheadMapMode nextOverHeadMapMode =
+                (previousOverHeadMapMode == Classic) ? Isometric :
+                (previousOverHeadMapMode == Isometric) ? TopDown :
+                Classic;
+            m_configurationSettings.SetOverHeadMapMode(nextOverHeadMapMode);
         }
     }
     else if (m_subMenuSelected == subMenuControls)
@@ -1094,7 +1092,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
 
         renderableTiles.DrawListBullet(76, 118, true, (m_menuItemSelected == 7) && flashIcon);
         renderableText.LeftAligned("Overhead Map", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, 119);
-        const char* overheadMapModeStr = (m_configurationSettings.GetOverHeadMapMode() == Classic) ? "Classic" : "Isometric";
+        const char* overheadMapModeStr =
+            (m_configurationSettings.GetOverHeadMapMode() == Classic) ? "Classic" :
+            (m_configurationSettings.GetOverHeadMapMode() == Isometric) ? "Isometric" :
+            "Top down";
         renderableText.LeftAligned(overheadMapModeStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, 180, 119);
 
         renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);

@@ -26,9 +26,14 @@ public:
     OverheadMap();
     ~OverheadMap();
 
-    void Draw(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);
+    void DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);
     void DrawIso(
         IRenderer& renderer,
+        EgaGraph& egaGraph,
+        Level& level,
+        const float aspectRatio,
+        const ViewPorts::ViewPortRect3D original3DViewArea);
+    void DrawTopDown(IRenderer& renderer,
         EgaGraph& egaGraph,
         Level& level,
         const float aspectRatio,

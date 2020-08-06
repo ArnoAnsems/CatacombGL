@@ -53,7 +53,8 @@ enum ShowFpsMode
 enum OverheadMapMode
 {
     Classic,
-    Isometric
+    Isometric,
+    TopDown
 };
 
 class ConfigurationSettings

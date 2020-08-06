@@ -167,6 +167,12 @@ public:
         IRenderer& renderer,
         EgaGraph& egaGraph,
         const uint16_t additionalMargin);
+    void DrawOverheadMapTopDown(
+        IRenderer& renderer,
+        EgaGraph& egaGraph,
+        const uint16_t additionalMargin,
+        const uint16_t originX,
+        const uint16_t originY);
 
 private:
     uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;

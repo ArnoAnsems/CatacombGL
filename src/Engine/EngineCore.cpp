@@ -155,10 +155,17 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_gameTimer.Pause();
     }
 
-    if (m_state == OverheadMapDialog && m_level != nullptr && m_configurationSettings.GetOverHeadMapMode() == Isometric)
+    if (m_state == OverheadMapDialog && m_level != nullptr && m_configurationSettings.GetOverHeadMapMode() != Classic)
     {
-            const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
+        const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
+        if (m_configurationSettings.GetOverHeadMapMode() == Isometric)
+        {
             m_overheadMap.DrawIso(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
+        }
+        else
+        {
+            m_overheadMap.DrawTopDown(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
+        }
     }
     else
     {
@@ -360,7 +367,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_state == OverheadMapDialog && m_level != nullptr && m_configurationSettings.GetOverHeadMapMode() == Classic)
     {
-        m_overheadMap.Draw(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
+        m_overheadMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
     }
 
     if (m_state == GodModeCheatDialog)

@@ -580,6 +580,33 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     glShadeModel(GL_SMOOTH);
 }
 
+void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea)
+{
+    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
+
+    glViewport(rect.left, rect.bottom, rect.width, rect.height);
+
+    // Make sure no color is set
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    // Make sure the depth test is disabled
+    glDisable(GL_DEPTH_TEST);
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Create a 2D orthographic projection matrix, such that it imitates the 320x200 EGA pixel matrix.
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+
+    gluOrtho2D(rect2D.left * 4, rect2D.right * 4, rect2D.bottom * 4, rect2D.top * 4);
+
+    glDisable(GL_LIGHTING);
+}
+
 void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps)
 {
     glEnable(GL_CULL_FACE);
@@ -603,6 +630,29 @@ void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vecto
     }
 
     glDisable(GL_CULL_FACE);
+}
+
+void RendererOpenGLWin32::RenderTopDownFloorTiles(const egaColor color, std::vector<tileCoordinate>& floorTiles)
+{
+ //   glEnable(GL_CULL_FACE);
+
+    const unsigned int textureId = m_singleColorTexture[color];
+    // Select the texture from the picture
+    BindTexture(textureId);
+
+    glBegin(GL_QUADS);
+    for (const tileCoordinate floorTile : floorTiles)
+    {
+        // Draw the texture as a quad
+        glTexCoord2f(0.0f, 1.0f); glVertex2i(floorTile.x, floorTile.y + 64);
+        glTexCoord2f(1.0f, 1.0f); glVertex2i(floorTile.x + 64, floorTile.y + 64);
+        glTexCoord2f(1.0f, 0.0f); glVertex2i(floorTile.x + 64, floorTile.y);
+        glTexCoord2f(0.0f, 0.0f); glVertex2i(floorTile.x, floorTile.y);
+        
+    }
+    glEnd();
+
+ //   glDisable(GL_CULL_FACE);
 }
 
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)

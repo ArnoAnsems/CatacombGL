@@ -525,14 +525,12 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 8)
         {
-            if (m_configurationSettings.GetOverHeadMapMode() == Classic)
-            {
-                m_configurationSettings.SetOverHeadMapMode(Isometric);
-            }
-            else
-            {
-                m_configurationSettings.SetOverHeadMapMode(Classic);
-            }
+            const OverheadMapMode previousOverHeadMapMode = m_configurationSettings.GetOverHeadMapMode();
+            const OverheadMapMode nextOverHeadMapMode =
+                (previousOverHeadMapMode == Classic) ? Isometric :
+                (previousOverHeadMapMode == Isometric) ? TopDown :
+                Classic;
+            m_configurationSettings.SetOverHeadMapMode(nextOverHeadMapMode);
         }
     }
     else if (m_subMenuSelected == subMenuControls)
@@ -747,7 +745,8 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
                 const OverheadMapMode overheadMapMode = m_configurationSettings.GetOverHeadMapMode();
                 const char* overheadMapModeStr =
                     (overheadMapMode == Classic) ? "Classic" :
-                    "Isometric";
+                    (overheadMapMode == Isometric) ? "Isometric" :
+                    "Top down";
                 renderableText.LeftAligned(overheadMapModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             index++;
