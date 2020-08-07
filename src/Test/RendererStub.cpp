@@ -55,7 +55,7 @@ void RendererStub::Unprepare2DRendering()
 {
 }
 
-void RendererStub::Render2DPicture(const Picture* /*picture*/, const uint16_t /*offsetX*/, const uint16_t /*offsetY*/)
+void RendererStub::Render2DPicture(const Picture* /*picture*/, const int16_t /*offsetX*/, const int16_t /*offsetY*/)
 {
 }
 

@@ -37,8 +37,8 @@ class IRenderer
 public:
     typedef struct
     {
-        uint16_t x;
-        uint16_t y;
+        int16_t x;
+        int16_t y;
     } tileCoordinate;
 
     typedef struct
@@ -98,7 +98,7 @@ public:
     //
     virtual void Prepare2DRendering(const bool helpWindow) = 0;
     virtual void Unprepare2DRendering() = 0;
-    virtual void Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY) = 0;
+    virtual void Render2DPicture(const Picture* picture, const int16_t offsetX, const int16_t offsetY) = 0;
     virtual void Render2DPictureSegment(const Picture* picture, const int16_t offsetX, const int16_t offsetY, const uint16_t segmentOffsetX, const uint16_t segmentOffsetY, const uint16_t segmentWidth, const uint16_t segmentHeight) = 0;
     virtual void Render2DBar(const int16_t x, const int16_t y, const uint16_t width, const uint16_t height, const egaColor colorIndex) = 0;
     virtual void RenderTiles(const RenderableTiles& renderableTiles) = 0;

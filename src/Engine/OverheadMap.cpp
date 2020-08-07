@@ -52,7 +52,7 @@ void OverheadMap::DrawTopDown(IRenderer& renderer,
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio);
+    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio) * 4;
     renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea);
     level.DrawOverheadMapTopDown(renderer, egaGraph, additionalMargin, m_originX, m_originY);
 }

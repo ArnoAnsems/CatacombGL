@@ -253,7 +253,7 @@ void RendererOpenGLWin32::Unprepare2DRendering()
     glDisable(GL_BLEND);
 }
 
-void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const uint16_t offsetX, const uint16_t offsetY)
+void RendererOpenGLWin32::Render2DPicture(const Picture* picture, const int16_t offsetX, const int16_t offsetY)
 {
     if (picture == nullptr)
     {

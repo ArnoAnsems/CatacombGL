@@ -1489,9 +1489,9 @@ void Level::DrawVisibilityMap(IRenderer& renderer)
 {
     
     std::vector<IRenderer::tileCoordinate> tiles;
-    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    for (int16_t y = 1; y < m_levelHeight - 1; y++)
     {
-        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        for (int16_t x = 1; x < m_levelWidth - 1; x++)
         {
             const uint16_t wall = GetWallTile(x, y);
             if (IsTileVisibleForPlayer(x, y))
@@ -1509,9 +1509,9 @@ void Level::DrawVisibilityMap(IRenderer& renderer)
 void Level::DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp)
 {
     std::vector<IRenderer::tileCoordinate> tiles;
-    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    for (int16_t y = 1; y < m_levelHeight - 1; y++)
     {
-        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        for (int16_t x = 1; x < m_levelWidth - 1; x++)
         {
             if (IsTileVisibleForPlayer(x, y))
             {
@@ -1718,9 +1718,9 @@ void Level::DrawOverheadMapIso(
     const uint16_t additionalMargin)
 {
     std::vector<IRenderer::tileCoordinate> tiles;
-    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    for (int16_t y = 1; y < m_levelHeight - 1; y++)
     {
-        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        for (int16_t x = 1; x < m_levelWidth - 1; x++)
         {
             if (!IsSolidWall(x, y))
             {
@@ -1911,11 +1911,12 @@ void Level::DrawOverheadMapIso(
 
     renderableSprites.SortSpritesBackToFront();
     renderer.RenderSprites(renderableSprites);
-
+    /*
     renderer.Prepare2DRendering(true);
     RenderableText locationNames(*egaGraph.GetFont(3));
     locationNames.Centered("The Towne Cemetery", EgaBrightWhite, 320, 80);
     renderer.RenderText(locationNames);
+    */
 }
 
 void Level::DrawOverheadMapTopDown(
@@ -1926,23 +1927,22 @@ void Level::DrawOverheadMapTopDown(
     const uint16_t originY)
 {
     std::vector<IRenderer::tileCoordinate> floorTiles;
+    std::vector<IRenderer::tileCoordinate> borderTiles;
     const int16_t tileWidth = 64;
     const int16_t additionalTilesInMargin = (additionalMargin == 0) ? 0 : (additionalMargin / tileWidth) + 1;
     const int16_t firstTileX = -additionalTilesInMargin + originX;
     const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + originX;
     const int16_t firstTileY = originY;
-    const int16_t lastTileY = originY + 9;
-    RenderableTiles tiles(*egaGraph.GetTilesSize16());
-    RenderableTiles numbers(*egaGraph.GetTilesSize8());
+    const int16_t lastTileY = originY + 13;
     for (int16_t y = firstTileY; y < lastTileY; y++)
     {
         for (int16_t x = firstTileX; x < lastTileX; x++)
         {
+            const int16_t sx = (x - (int16_t)originX) * tileWidth;
+            const int16_t sy = (y - (int16_t)originY) * tileWidth;
+
             if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
             {
-                const int16_t sx = (x - originX) * tileWidth;
-                const int16_t sy = (y - originY) * tileWidth;
-
                 const uint16_t wallIndex = GetWallTile(x, y);
                 const uint16_t darkWall = GetDarkWallPictureIndex(wallIndex, 0);
                 if (darkWall != 1)
@@ -1950,7 +1950,6 @@ void Level::DrawOverheadMapTopDown(
                     const Picture* darkPicture = egaGraph.GetPicture(darkWall);
                     if (darkPicture != nullptr)
                     {
-                        const unsigned int textureId = darkPicture->GetTextureId();
                         renderer.Render2DPicture(darkPicture, sx, sy);
                     }
                 }
@@ -1960,9 +1959,35 @@ void Level::DrawOverheadMapTopDown(
                     floorTiles.push_back(tile);
                 }
             }
+            else
+            {
+                IRenderer::tileCoordinate tile = { sx, sy };
+                borderTiles.push_back(tile);
+            }
         }
     }
     renderer.RenderTopDownFloorTiles(GetGroundColor(), floorTiles);
+    renderer.RenderTopDownFloorTiles(EgaBlack, borderTiles);
+
+    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    {
+        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        {
+            // Actors
+            Actor* actor = GetBlockingActor(x, y);
+            if (actor != nullptr)
+            {
+                const Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
+                if (actorPicture != nullptr)
+                {
+                    const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
+                    const int16_t sx = (x - (int16_t)originX) * tileWidth + marginX;
+                    const int16_t sy = (y - (int16_t)originY) * tileWidth;
+                    renderer.Render2DPicture(actorPicture, sx, sy);
+                }
+            }
+        }
+    }
 }
 
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
