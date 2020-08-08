@@ -185,6 +185,8 @@ private:
     LevelCoordinate GetRightEdgeOfWall(LevelWall& wall) const;
     LevelCoordinate GetLeftEdgeOfWall(LevelWall& wall) const;
     LevelCoordinate GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView) const;
+    egaColor GetWallCapMainColor() const;
+    egaColor GetWallCapCenterColor(const uint16_t x, const uint16_t y) const;
 
     const uint16_t m_levelWidth;
     const uint16_t m_levelHeight;

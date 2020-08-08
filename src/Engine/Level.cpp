@@ -1778,24 +1778,15 @@ void Level::DrawOverheadMapIso(
 
     renderer.Render3DWalls(textureToWallsMap);
 
+    const egaColor wallCapMainColor = GetWallCapMainColor();
     for (uint16_t y = 0; y < m_levelHeight; y++)
     {
         for (uint16_t x = 0; x < m_levelWidth; x++)
         {
             if (IsSolidWall(x, y))
             {
-                const KeyId requiredKey = GetRequiredKeyForDoor(x, y);
-                const egaColor centerColor =
-                    IsExplosiveWall(x, y) ? EgaLightGray :
-                    requiredKey == RedKey ? EgaRed :
-                    requiredKey == BlueKey ? EgaBlue :
-                    requiredKey == GreenKey ? EgaGreen :
-                    requiredKey == YellowKey ? EgaBrightYellow :
-                    IsRemovableDoor(x, y) ? EgaLightGray :
-                    IsVictoryDoor(x, y) ? EgaBrightCyan :
-                    IsFakeWall(x, y) ? EgaCyan :
-                    EgaDarkGray;
-                if (centerColor != EgaDarkGray)
+                const egaColor centerColor = GetWallCapCenterColor(x, y);
+                if (centerColor != wallCapMainColor)
                 {
                     const float border = 0.2f;
                     IRenderer::quadCoordinates quad =
@@ -1813,7 +1804,7 @@ void Level::DrawOverheadMapIso(
                         (float)x + 1.0f - border, (float)y + border,
                         (float)x + border, (float)y + border,
                     };
-                    wallCaps[EgaDarkGray].push_back(quad);
+                    wallCaps[wallCapMainColor].push_back(quad);
                     quad =
                     {
                         (float)x + 1.0f, (float)y,
@@ -1821,7 +1812,7 @@ void Level::DrawOverheadMapIso(
                         (float)x + 1.0f - border, (float)y + 1.0f - border,
                         (float)x + 1.0f - border, (float)y + border,
                     };
-                    wallCaps[EgaDarkGray].push_back(quad);
+                    wallCaps[wallCapMainColor].push_back(quad);
                     quad =
                     {
                         (float)x + 1.0f, (float)y + 1.0f,
@@ -1829,7 +1820,7 @@ void Level::DrawOverheadMapIso(
                         (float)x + border, (float)y + 1.0f - border,
                         (float)x + 1.0f - border, (float)y + 1.0f - border,
                     };
-                    wallCaps[EgaDarkGray].push_back(quad);
+                    wallCaps[wallCapMainColor].push_back(quad);
                     quad =
                     {
                         (float)x, (float)y + 1.0f,
@@ -1837,7 +1828,7 @@ void Level::DrawOverheadMapIso(
                         (float)x + border, (float)y + border,
                         (float)x + border, (float)y + 1.0f - border,
                     };
-                    wallCaps[EgaDarkGray].push_back(quad);
+                    wallCaps[wallCapMainColor].push_back(quad);
                 }
                 else
                 {
@@ -1852,7 +1843,7 @@ void Level::DrawOverheadMapIso(
                         (float)x,
                         (float)y + 1.0f,
                     };
-                    wallCaps[EgaDarkGray].push_back(quad);
+                    wallCaps[wallCapMainColor].push_back(quad);
                 }
             }
         }
@@ -1934,6 +1925,8 @@ void Level::DrawOverheadMapTopDown(
     const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + originX;
     const int16_t firstTileY = originY;
     const int16_t lastTileY = originY + 13;
+
+    const egaColor wallCapMainColor = GetWallCapMainColor();
     for (int16_t y = firstTileY; y < lastTileY; y++)
     {
         for (int16_t x = firstTileX; x < lastTileX; x++)
@@ -1951,6 +1944,18 @@ void Level::DrawOverheadMapTopDown(
                     if (darkPicture != nullptr)
                     {
                         renderer.Render2DPicture(darkPicture, sx, sy);
+                        const egaColor centerColor = GetWallCapCenterColor(x, y);
+                        if (centerColor != wallCapMainColor)
+                        {
+                            const int16_t border = 16;
+                            const int16_t width = tileWidth - (2 * border);
+                            renderer.Render2DBar(sx + border, sy + border, width, width, centerColor);
+                        }
+                    }
+                    else
+                    {
+                        IRenderer::tileCoordinate tile = { sx, sy };
+                        floorTiles.push_back(tile);
                     }
                 }
                 else
@@ -1985,6 +1990,23 @@ void Level::DrawOverheadMapTopDown(
                     const int16_t sy = (y - (int16_t)originY) * tileWidth;
                     renderer.Render2DPicture(actorPicture, sx, sy);
                 }
+            }
+        }
+    }
+
+    for (uint16_t i = 0; i < 100; i++)
+    {
+        // Projectiles
+        Actor* projectile = GetNonBlockingActor(i);
+        if (projectile != nullptr)
+        {
+            Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+            if (actorPicture != nullptr)
+            {
+                const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
+                const int16_t sx = (int16_t)(projectile->GetX() - (float)originX) * tileWidth + marginX;
+                const int16_t sy = (int16_t)(projectile->GetY() - (float)originY) * tileWidth;
+                renderer.Render2DPicture(actorPicture, sx, sy);
             }
         }
     }
@@ -2113,4 +2135,29 @@ void Level::RemoveActor(Actor* actor)
             m_blockingActors[i] = nullptr;
         }
     }
+}
+
+egaColor Level::GetWallCapMainColor() const
+{
+    const egaColor groundColor = GetGroundColor();
+    return (groundColor == EgaDarkGray) ? EgaLightGray : EgaLightGray;
+}
+
+egaColor Level::GetWallCapCenterColor(const uint16_t x, const uint16_t y) const
+{
+    const egaColor wallCapMainColor = GetWallCapMainColor();
+    const egaColor removableWallColor = (wallCapMainColor == EgaDarkGray) ? EgaLightGray : EgaDarkGray;
+    const KeyId requiredKey = GetRequiredKeyForDoor(x, y);
+    const egaColor centerColor =
+        IsExplosiveWall(x, y) ? removableWallColor :
+        requiredKey == RedKey ? EgaRed :
+        requiredKey == BlueKey ? EgaBlue :
+        requiredKey == GreenKey ? EgaGreen :
+        requiredKey == YellowKey ? EgaBrightYellow :
+        IsRemovableDoor(x, y) ? removableWallColor :
+        IsVictoryDoor(x, y) ? EgaBrightCyan :
+        IsFakeWall(x, y) ? EgaCyan :
+        wallCapMainColor;
+
+    return centerColor;
 }
