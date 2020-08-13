@@ -67,7 +67,7 @@ public:
     void PrepareVisibilityMap() override;
     void UnprepareVisibilityMap() override;
     void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) override;
-    void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea) override;
+    void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale) override;
     void RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps) override;
     void RenderTopDownFloorTiles(const egaColor color, std::vector<tileCoordinate>& floorTiles) override;
 

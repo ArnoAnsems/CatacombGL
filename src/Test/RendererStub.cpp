@@ -104,7 +104,7 @@ void RendererStub::PrepareIsoRendering(const float /*aspectRatio*/, const ViewPo
 {
 }
 
-void RendererStub::PrepareTopDownRendering(const float /*aspectRatio*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/)
+void RendererStub::PrepareTopDownRendering(const float /*aspectRatio*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/, const uint16_t /*scale*/)
 {
 }
 

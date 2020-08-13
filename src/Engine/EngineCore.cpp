@@ -115,6 +115,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 
     m_game.SpawnActors(m_level, m_difficultyLevel);
     m_level->GetPlayerActor()->SetHealth(health);
+    m_overheadMap.UpdateLocationNamesBestPositions(*m_level);
 
     m_timeStampOfPlayerCurrentFrame = 0;
     m_timeStampOfPlayerPreviousFrame = 0;

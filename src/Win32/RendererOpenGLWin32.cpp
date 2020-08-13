@@ -580,7 +580,7 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     glShadeModel(GL_SMOOTH);
 }
 
-void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea)
+void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale)
 {
     ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
 
@@ -602,7 +602,7 @@ void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const
 
     ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
 
-    gluOrtho2D(rect2D.left * 4, rect2D.right * 4, rect2D.bottom * 4, rect2D.top * 4);
+    gluOrtho2D(rect2D.left * scale, rect2D.right * scale, (rect2D.bottom - ((rect2D.bottom - rect2D.top) * 0.4)) * scale, rect2D.top * scale);
 
     glDisable(GL_LIGHTING);
 }

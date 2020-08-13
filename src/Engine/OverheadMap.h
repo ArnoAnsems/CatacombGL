@@ -39,11 +39,22 @@ public:
         const float aspectRatio,
         const ViewPorts::ViewPortRect3D original3DViewArea);
     void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp);
+    void UpdateLocationNamesBestPositions(Level& level);
 
 private:
+    struct locationNameBestPos
+    {
+        uint16_t score;
+        uint16_t x;
+        uint16_t y;
+    };
+
+    uint16_t GetScore(Level& level, uint16_t x, uint16_t y) const;
+
     uint16_t m_originX;
     uint16_t m_originY;
     uint32_t m_lastActionTimestamp;
     OverheadType m_overheadType;
+    std::map<uint8_t, locationNameBestPos> m_locationNameBestPositions;
 };
 
