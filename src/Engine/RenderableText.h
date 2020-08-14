@@ -69,6 +69,9 @@ public:
         const int16_t offsetX,
         const int16_t offsetY);
 
+    uint16_t GetWidthInPixels(const std::string& text) const;
+    uint16_t SplitTextInTwo(const std::string& text, std::vector<std::string>& subStrings) const;
+
 private:
     std::vector<renderableCharacter> m_text;
     const Font& m_font;

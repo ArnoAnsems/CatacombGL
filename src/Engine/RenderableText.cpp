@@ -202,3 +202,58 @@ void RenderableText::Number(
 
     LeftAligned(str, color, offsetX + widthOfBlanks, offsetY);
 }
+
+uint16_t RenderableText::GetWidthInPixels(const std::string& text) const
+{
+    uint16_t width = 0;
+    for (size_t i = 0; i < text.size(); i++)
+    {
+        width += m_font.GetCharacterWidth(text.at(i));
+    }
+
+    return width;
+}
+
+uint16_t RenderableText::SplitTextInTwo(const std::string& text, std::vector<std::string>& subStrings) const
+{
+    // Initial result is without split
+    std::string bestSplitString1 = text;
+    std::string bestSplitString2 = "";
+    uint16_t bestSplitWidthInPixels = GetWidthInPixels(text);
+
+    const char separator = ' ';
+    size_t separatorPos = text.find(separator);
+
+    // Find optimal split
+    while (separatorPos != std::string::npos)
+    {
+        const std::string str1 = text.substr(0, separatorPos);
+        const size_t strLength2 = (separatorPos + 1 < text.size()) ? text.size() - separatorPos - 1 : 0;
+        const std::string str2 = text.substr(separatorPos + 1, strLength2);
+        const uint16_t str1WidthInPixels = GetWidthInPixels(str1);
+        const uint16_t str2WidthInPixels = GetWidthInPixels(str2);
+        if (str1WidthInPixels >= str2WidthInPixels && str1WidthInPixels < bestSplitWidthInPixels)
+        {
+            bestSplitString1 = str1;
+            bestSplitString2 = str2;
+            bestSplitWidthInPixels = str1WidthInPixels;
+        }
+        else if (str2WidthInPixels > str1WidthInPixels&& str2WidthInPixels < bestSplitWidthInPixels)
+        {
+            bestSplitString1 = str1;
+            bestSplitString2 = str2;
+            bestSplitWidthInPixels = str2WidthInPixels;
+        }
+        separatorPos = text.find(separator, separatorPos + 1);
+    }
+
+    // Compose result
+    subStrings.clear();
+    subStrings.push_back(bestSplitString1);
+    if (!bestSplitString2.empty())
+    {
+        subStrings.push_back(bestSplitString2);
+    }
+
+    return bestSplitWidthInPixels;
+}

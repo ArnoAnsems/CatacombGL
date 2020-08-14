@@ -64,10 +64,21 @@ void OverheadMap::DrawTopDown(IRenderer& renderer,
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
         int16_t x = ((pair.second.x - m_originX) * 32) + 16;
-        int16_t y = ((pair.second.y - m_originY) * 32) + 8;
+        int16_t y = ((pair.second.y - m_originY) * 32);
 
         const std::string& locationMessage = egaGraph.GetWorldLocationNames(level.GetLevelIndex())->GetLocationName(pair.first);
-        locationNames.Centered(locationMessage, EgaBrightWhite, x, y);
+        std::vector<std::string> subStrings;
+        locationNames.SplitTextInTwo(locationMessage, subStrings);
+        if (subStrings.size() == 1)
+        {
+            locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 11);
+        }
+        else
+        {
+            locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 6);
+            locationNames.Centered(subStrings.at(1), EgaBrightWhite, x, y + 16);
+        }
+
     }
     renderer.RenderText(locationNames);
 }
