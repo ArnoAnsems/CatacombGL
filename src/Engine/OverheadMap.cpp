@@ -68,17 +68,22 @@ void OverheadMap::DrawTopDown(IRenderer& renderer,
 
         const std::string& locationMessage = egaGraph.GetWorldLocationNames(level.GetLevelIndex())->GetLocationName(pair.first);
         std::vector<std::string> subStrings;
-        locationNames.SplitTextInTwo(locationMessage, subStrings);
+        locationNames.SplitTextInThree(locationMessage, subStrings);
         if (subStrings.size() == 1)
         {
             locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 11);
         }
-        else
+        else if (subStrings.size() == 2)
         {
             locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 6);
             locationNames.Centered(subStrings.at(1), EgaBrightWhite, x, y + 16);
         }
-
+        else
+        {
+            locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 1);
+            locationNames.Centered(subStrings.at(1), EgaBrightWhite, x, y + 11);
+            locationNames.Centered(subStrings.at(2), EgaBrightWhite, x, y + 21);
+        }
     }
     renderer.RenderText(locationNames);
 }
@@ -97,7 +102,7 @@ void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uin
             m_originX--;
             m_lastActionTimestamp = timestamp;
         }
-        if (playerInput.IsKeyPressed(SDLK_DOWN) && m_originY + 9 < level.GetLevelHeight())
+        if (playerInput.IsKeyPressed(SDLK_DOWN) && m_originY + 7 < level.GetLevelHeight())
         {
             m_originY++;
             m_lastActionTimestamp = timestamp;

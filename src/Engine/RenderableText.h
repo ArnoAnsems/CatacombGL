@@ -71,6 +71,7 @@ public:
 
     uint16_t GetWidthInPixels(const std::string& text) const;
     uint16_t SplitTextInTwo(const std::string& text, std::vector<std::string>& subStrings) const;
+    uint16_t SplitTextInThree(const std::string& text, std::vector<std::string>& subStrings) const;
 
 private:
     std::vector<renderableCharacter> m_text;

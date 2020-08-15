@@ -257,3 +257,97 @@ uint16_t RenderableText::SplitTextInTwo(const std::string& text, std::vector<std
 
     return bestSplitWidthInPixels;
 }
+
+uint16_t RenderableText::SplitTextInThree(const std::string& text, std::vector<std::string>& subStrings) const
+{
+    // Initial result is without split
+    std::string bestSplitString1 = text;
+    std::string bestSplitString2 = "";
+    std::string bestSplitString3 = "";
+    uint16_t bestSplitWidthInPixels = GetWidthInPixels(text);
+
+    const char separator = ' ';
+    size_t separator1Pos = text.find(separator);
+
+    // Find optimal split
+    while (separator1Pos != std::string::npos)
+    {
+        const std::string str1 = text.substr(0, separator1Pos);
+        const uint16_t str1WidthInPixels = GetWidthInPixels(str1);
+
+        size_t separator2Pos = text.find(separator, separator1Pos + 1);
+
+        if (separator2Pos == std::string::npos)
+        {
+            // Unable to split remaining text in two
+            const std::string str2 = text.substr(separator1Pos + 1, text.size() - separator1Pos - 1);
+            const uint16_t str2WidthInPixels = GetWidthInPixels(str2);
+
+            if (str1WidthInPixels >= str2WidthInPixels && str1WidthInPixels < bestSplitWidthInPixels)
+            {
+                bestSplitString1 = str1;
+                bestSplitString2 = str2;
+                bestSplitString3 = "";
+                bestSplitWidthInPixels = str1WidthInPixels;
+            }
+            else if (str2WidthInPixels > str1WidthInPixels&& str2WidthInPixels < bestSplitWidthInPixels)
+            {
+                bestSplitString1 = str1;
+                bestSplitString2 = str2;
+                bestSplitString3 = "";
+                bestSplitWidthInPixels = str2WidthInPixels;
+            }
+        }
+        else
+        {
+            while (separator2Pos != std::string::npos)
+            {
+                const std::string str2 = text.substr(separator1Pos + 1, separator2Pos - separator1Pos);
+                const uint16_t str2WidthInPixels = GetWidthInPixels(str2);
+
+                const size_t strLength3 = (separator2Pos + 1 < text.size()) ? text.size() - separator2Pos - 1 : 0;
+                const std::string str3 = text.substr(separator2Pos + 1, strLength3);
+
+                const uint16_t str3WidthInPixels = GetWidthInPixels(str3);
+                if (str1WidthInPixels >= str2WidthInPixels && str1WidthInPixels >= str3WidthInPixels && str1WidthInPixels < bestSplitWidthInPixels)
+                {
+                    bestSplitString1 = str1;
+                    bestSplitString2 = str2;
+                    bestSplitString3 = str3;
+                    bestSplitWidthInPixels = str1WidthInPixels;
+                }
+                else if (str2WidthInPixels >= str1WidthInPixels && str2WidthInPixels >= str3WidthInPixels && str2WidthInPixels < bestSplitWidthInPixels)
+                {
+                    bestSplitString1 = str1;
+                    bestSplitString2 = str2;
+                    bestSplitString3 = str3;
+                    bestSplitWidthInPixels = str2WidthInPixels;
+                }
+                else if (str3WidthInPixels >= str1WidthInPixels && str3WidthInPixels >= str2WidthInPixels && str3WidthInPixels < bestSplitWidthInPixels)
+                {
+                    bestSplitString1 = str1;
+                    bestSplitString2 = str2;
+                    bestSplitString3 = str3;
+                    bestSplitWidthInPixels = str3WidthInPixels;
+                }
+                separator2Pos = text.find(separator, separator2Pos + 1);
+            }
+        }
+        separator1Pos = text.find(separator, separator1Pos + 1);
+    }
+
+    // Compose result
+    subStrings.clear();
+    subStrings.push_back(bestSplitString1);
+    if (!bestSplitString2.empty())
+    {
+        subStrings.push_back(bestSplitString2);
+
+        if (!bestSplitString3.empty())
+        {
+            subStrings.push_back(bestSplitString3);
+        }
+    }
+
+    return bestSplitWidthInPixels;
+}
