@@ -53,36 +53,58 @@ void OverheadMap::DrawTopDown(IRenderer& renderer,
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio) * 4;
-    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, 4);
+    // Scale factor is compared to the original 320 x 200 resolution
+    const uint16_t wallsScaleFactor = 4;
+    const uint16_t textScaleFactor = 2;
+    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio) * wallsScaleFactor;
+    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, wallsScaleFactor);
     level.DrawOverheadMapTopDown(renderer, egaGraph, additionalMargin, m_originX, m_originY);
 
-    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, 2);
+    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, textScaleFactor);
 
     RenderableText locationNames(*egaGraph.GetFont(3));
     
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
-        int16_t x = ((pair.second.x - m_originX) * 32) + 16;
-        int16_t y = ((pair.second.y - m_originY) * 32);
+        const int16_t x = ((pair.second.x - m_originX) * 32) + 16;
+        const int16_t y = ((pair.second.y - m_originY) * 32);
+        const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * 32;
 
         const std::string& locationMessage = egaGraph.GetWorldLocationNames(level.GetLevelIndex())->GetLocationName(pair.first);
         std::vector<std::string> subStrings;
-        locationNames.SplitTextInThree(locationMessage, subStrings);
-        if (subStrings.size() == 1)
+        if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
         {
-            locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 11);
-        }
-        else if (subStrings.size() == 2)
-        {
-            locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 6);
-            locationNames.Centered(subStrings.at(1), EgaBrightWhite, x, y + 16);
+            subStrings.push_back(locationMessage);
         }
         else
         {
-            locationNames.Centered(subStrings.at(0), EgaBrightWhite, x, y + 1);
-            locationNames.Centered(subStrings.at(1), EgaBrightWhite, x, y + 11);
-            locationNames.Centered(subStrings.at(2), EgaBrightWhite, x, y + 21);
+            // The text does not fit on a single line; try to split in two
+            locationNames.SplitTextInTwo(locationMessage, subStrings);
+            if (subStrings.size() == 2 &&
+                (locationNames.GetWidthInPixels(subStrings.at(0)) > availableSpaceInPixels ||
+                 locationNames.GetWidthInPixels(subStrings.at(1)) > availableSpaceInPixels))
+            {
+                // Even when split in two it does not split; try to split in three
+                locationNames.SplitTextInThree(locationMessage, subStrings);
+            }
+        }
+
+        const egaColor textColor = (level.GetGroundColor() == EgaBrightWhite) ? EgaBlack : EgaBrightWhite;
+        
+        if (subStrings.size() == 1)
+        {
+            locationNames.Centered(subStrings.at(0), textColor, x, y + 11);
+        }
+        else if (subStrings.size() == 2)
+        {
+            locationNames.Centered(subStrings.at(0), textColor, x, y + 6);
+            locationNames.Centered(subStrings.at(1), textColor, x, y + 16);
+        }
+        else
+        {
+            locationNames.Centered(subStrings.at(0), textColor, x, y + 1);
+            locationNames.Centered(subStrings.at(1), textColor, x, y + 11);
+            locationNames.Centered(subStrings.at(2), textColor, x, y + 21);
         }
     }
     renderer.RenderText(locationNames);
@@ -123,8 +145,12 @@ void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uin
     }
 }
 
-void OverheadMap::UpdateLocationNamesBestPositions(Level& level)
+void OverheadMap::Refresh(Level& level)
 {
+    m_originX = 0;
+    m_originY = 0;
+    m_lastActionTimestamp = 0;
+
     m_locationNameBestPositions.clear();
 
     for (uint16_t y = 0; y < level.GetLevelHeight(); y++)
@@ -135,22 +161,29 @@ void OverheadMap::UpdateLocationNamesBestPositions(Level& level)
             if (wallTile > 180)
             {
                 const uint8_t locationNameIndex = (uint8_t)(wallTile - 180);
-                const uint16_t score = GetScore(level, x, y);
-                const locationNameBestPos currentPos = { score, x, y };
+                const uint16_t horizontalSpaceInTiles = CalculateHorizontalSpaceInTiles(level, x, y);
+                const uint16_t verticalSpaceInTiles = CalculateVerticalSpaceInTiles(level, x, y);
+                const locationNameBestPos currentPos = { horizontalSpaceInTiles, verticalSpaceInTiles, x, y };
                 if (m_locationNameBestPositions.find(locationNameIndex) == m_locationNameBestPositions.end())
                 {
                     m_locationNameBestPositions.insert(std::make_pair(locationNameIndex, currentPos));
                 }
-                else if (score > m_locationNameBestPositions.at(locationNameIndex).score)
+                else
                 {
-                    m_locationNameBestPositions.at(locationNameIndex) = currentPos;
+                    const locationNameBestPos& previousBestPos = m_locationNameBestPositions.at(locationNameIndex);
+                    if (currentPos.horizontalSpaceInTiles > previousBestPos.horizontalSpaceInTiles ||
+                        ((currentPos.horizontalSpaceInTiles == previousBestPos.horizontalSpaceInTiles) &&
+                        (currentPos.verticalSpaceInTiles > previousBestPos.verticalSpaceInTiles)))
+                    {
+                        m_locationNameBestPositions.at(locationNameIndex) = currentPos;
+                    }
                 }
             }
         }
     }
 }
 
-uint16_t OverheadMap::GetScore(Level& level, uint16_t x, uint16_t y) const
+uint16_t OverheadMap::CalculateHorizontalSpaceInTiles(Level& level, uint16_t x, uint16_t y) const
 {
     const uint16_t floorTile = level.GetWallTile(x, y);
     uint16_t tilesToTheLeft = 0;
@@ -163,6 +196,13 @@ uint16_t OverheadMap::GetScore(Level& level, uint16_t x, uint16_t y) const
     {
         tilesToTheRight++;
     }
+
+    return (tilesToTheLeft > tilesToTheRight) ? (tilesToTheRight * 2) + 1 : (tilesToTheLeft * 2) + 1;
+}
+
+uint16_t OverheadMap::CalculateVerticalSpaceInTiles(Level& level, uint16_t x, uint16_t y) const
+{
+    const uint16_t floorTile = level.GetWallTile(x, y);
     uint16_t tilesAbove = 0;
     while (y - tilesAbove > 0 && level.GetWallTile(x, y - tilesAbove - 1) == floorTile)
     {
@@ -173,14 +213,6 @@ uint16_t OverheadMap::GetScore(Level& level, uint16_t x, uint16_t y) const
     {
         tilesBelow++;
     }
-    uint16_t verticalScore =
-        (tilesToTheLeft > tilesToTheRight) ? (tilesToTheRight * 100) + 50 :
-        (tilesToTheLeft < tilesToTheRight) ? (tilesToTheLeft * 100) + 50 :
-        (tilesToTheLeft * 100);
-    uint16_t horizontalScore =
-        (tilesAbove > tilesBelow) ? (tilesBelow * 2) + 1 :
-        (tilesAbove < tilesBelow) ? (tilesAbove * 2) + 1 :
-        (tilesAbove * 2);
 
-    return verticalScore + horizontalScore;
+    return (tilesAbove > tilesBelow) ? (tilesBelow * 2) + 1 : (tilesAbove * 2) + 1;
 }

@@ -602,7 +602,8 @@ void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const
 
     ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
 
-    gluOrtho2D(rect2D.left * scale, rect2D.right * scale, (rect2D.bottom - ((rect2D.bottom - rect2D.top) * 0.4)) * scale, rect2D.top * scale);
+    const double statusBarHeight = ((rect2D.bottom - rect2D.top) * (200 - original3DViewArea.height) / 200.0);
+    gluOrtho2D(rect2D.left * scale, rect2D.right * scale, (rect2D.bottom - statusBarHeight) * scale, rect2D.top * scale);
 
     glDisable(GL_LIGHTING);
 }

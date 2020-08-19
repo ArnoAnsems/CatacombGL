@@ -39,17 +39,19 @@ public:
         const float aspectRatio,
         const ViewPorts::ViewPortRect3D original3DViewArea);
     void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp);
-    void UpdateLocationNamesBestPositions(Level& level);
+    void Refresh(Level& level);
 
 private:
     struct locationNameBestPos
     {
-        uint16_t score;
+        uint16_t horizontalSpaceInTiles;
+        uint16_t verticalSpaceInTiles;
         uint16_t x;
         uint16_t y;
     };
 
-    uint16_t GetScore(Level& level, uint16_t x, uint16_t y) const;
+    uint16_t CalculateHorizontalSpaceInTiles(Level& level, uint16_t x, uint16_t y) const;
+    uint16_t CalculateVerticalSpaceInTiles(Level& level, uint16_t x, uint16_t y) const;
 
     uint16_t m_originX;
     uint16_t m_originY;

@@ -1902,12 +1902,6 @@ void Level::DrawOverheadMapIso(
 
     renderableSprites.SortSpritesBackToFront();
     renderer.RenderSprites(renderableSprites);
-    /*
-    renderer.Prepare2DRendering(true);
-    RenderableText locationNames(*egaGraph.GetFont(3));
-    locationNames.Centered("The Towne Cemetery", EgaBrightWhite, 320, 80);
-    renderer.RenderText(locationNames);
-    */
 }
 
 void Level::DrawOverheadMapTopDown(
