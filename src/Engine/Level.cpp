@@ -1848,6 +1848,30 @@ void Level::DrawOverheadMapIso(
             }
         }
     }
+
+    // Add black borders
+    for (uint16_t y = 0; y < m_levelHeight; y++)
+    {
+        IRenderer::quadCoordinates quad =
+        {
+            (float)m_levelWidth, (float)y,
+            (float)m_levelWidth + 1.0f, (float)y,
+            (float)m_levelWidth + 1.0f, (float)y + 1.0f,
+            (float)m_levelWidth, (float)y + 1.0f
+        };
+        wallCaps[EgaBlack].push_back(quad);
+    }
+    for (uint16_t x = 0; x < m_levelWidth; x++)
+    {
+        IRenderer::quadCoordinates quad =
+        {
+            (float)x, (float)m_levelHeight,
+            (float)x + 1.0f, (float)m_levelHeight,
+            (float)x + 1.0f, (float)m_levelHeight + 1.0f,
+            (float)x, (float)m_levelHeight + 1.0f
+        };
+        wallCaps[EgaBlack].push_back(quad);
+    }
     renderer.RenderIsoWallCaps(wallCaps);
 
     RenderableSprites renderableSprites(m_playerActor->GetX(), m_playerActor->GetY());
