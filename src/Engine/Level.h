@@ -130,6 +130,7 @@ public:
     uint8_t GetLevelIndex() const;
     void UpdateVisibilityMap();
     bool IsTileVisibleForPlayer(const uint16_t x, const uint16_t y) const;
+    bool IsTileClearFromFogOfWar(const uint16_t x, const uint16_t y) const;
     Actor* const GetPlayerActor();
     void SetPlayerActor(Actor* const actor);
     Actor** GetBlockingActors();
@@ -197,6 +198,7 @@ private:
     uint32_t m_lightningStartTimestamp;
     const uint8_t m_levelIndex;
     bool* m_visibilityMap;
+    bool* m_fogOfWarMap;
     Actor* m_playerActor;
     Actor** m_blockingActors;
     Actor** m_nonBlockingActors;

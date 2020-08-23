@@ -33,6 +33,7 @@ Level::Level(
     m_lightningStartTimestamp(0),
     m_levelIndex(mapIndex),
     m_visibilityMap(nullptr),
+    m_fogOfWarMap(nullptr),
     m_playerActor(nullptr),
     m_blockingActors(nullptr),
     m_nonBlockingActors(nullptr),
@@ -49,6 +50,7 @@ Level::Level(
     }
 
     m_visibilityMap = new bool[mapSize];
+    m_fogOfWarMap = new bool[mapSize];
 
     m_blockingActors = new Actor*[mapSize];
     for ( uint16_t i = 0; i < mapSize; i++)
@@ -68,6 +70,7 @@ Level::Level(
     for (uint32_t i = 0u; i < (uint32_t)(m_levelWidth * m_levelHeight); i++)
     {
         m_visibilityMap[i] = false;
+        m_fogOfWarMap[i] = false;
         m_wallXVisible[i] = false;
         m_wallYVisible[i] = false;
     }
@@ -114,6 +117,9 @@ Level::~Level()
 
     delete[] m_visibilityMap;
     m_visibilityMap = nullptr;
+
+    delete[] m_fogOfWarMap;
+    m_fogOfWarMap = nullptr;
 
     delete[] m_wallXVisible;
     delete[] m_wallYVisible;
@@ -467,13 +473,33 @@ void Level::UpdateVisibilityMap()
     {
         for (uint16_t y = 1; y < m_levelHeight - 1; y++)
         {
-            if (IsVisibleTile(x,y) &&
+            if (IsVisibleTile(x, y) &&
                 (m_wallXVisible[(y * m_levelWidth) + x] ||
                 m_wallXVisible[(y * m_levelWidth) + x + 1] ||
                 m_wallYVisible[(y * m_levelWidth) + x] ||
                 m_wallYVisible[((y + 1) * m_levelWidth) + x]))
             {
                 m_visibilityMap[(y * m_levelWidth) + x] = true;
+            }
+        }
+    }
+
+    for (uint16_t x = 0; x < m_levelWidth; x++)
+    {
+        for (uint16_t y = 0; y < m_levelHeight; y++)
+        {
+            if (m_wallXVisible[(y * m_levelWidth) + x] ||
+                 m_wallYVisible[(y * m_levelWidth) + x])
+            {
+                m_fogOfWarMap[(y * m_levelWidth) + x] = true;
+            }
+            if (y < m_levelHeight - 1 && m_wallYVisible[((y + 1) * m_levelWidth) + x])
+            {
+                m_fogOfWarMap[(y * m_levelWidth) + x] = true;
+            }
+            if (x < m_levelWidth && m_wallXVisible[(y * m_levelWidth) + x + 1])
+            {
+                m_fogOfWarMap[(y * m_levelWidth) + x] = true;
             }
         }
     }
@@ -984,6 +1010,11 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
 bool Level::IsTileVisibleForPlayer(const uint16_t x, const uint16_t y) const
 {
     return ( m_visibilityMap[y * m_levelWidth + x] == true);
+}
+
+bool Level::IsTileClearFromFogOfWar(const uint16_t x, const uint16_t y) const
+{
+    return (m_fogOfWarMap[y * m_levelWidth + x] == true);
 }
 
 bool Level::IsActorVisibleForPlayer(const Actor* actor) const
@@ -1722,7 +1753,7 @@ void Level::DrawOverheadMapIso(
     {
         for (int16_t x = 1; x < m_levelWidth - 1; x++)
         {
-            if (!IsSolidWall(x, y))
+            if (!IsSolidWall(x, y) && IsTileClearFromFogOfWar(x, y))
             {
                 tiles.push_back(IRenderer::tileCoordinate{ x, y });
             }
@@ -1737,7 +1768,7 @@ void Level::DrawOverheadMapIso(
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
         {
-            if (!IsSolidWall(x, y))
+            if (!IsSolidWall(x, y) && IsTileClearFromFogOfWar(x, y))
             {
                 const uint16_t northwallIndex = GetWallTile(x, y - 1);
                 const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, 0);
@@ -1783,7 +1814,7 @@ void Level::DrawOverheadMapIso(
     {
         for (uint16_t x = 0; x < m_levelWidth; x++)
         {
-            if (IsSolidWall(x, y))
+            if (IsSolidWall(x, y) && IsTileClearFromFogOfWar(x, y))
             {
                 const egaColor centerColor = GetWallCapCenterColor(x, y);
                 if (centerColor != wallCapMainColor)
@@ -1846,6 +1877,21 @@ void Level::DrawOverheadMapIso(
                     wallCaps[wallCapMainColor].push_back(quad);
                 }
             }
+            else if (!IsTileClearFromFogOfWar(x, y))
+            {
+                IRenderer::quadCoordinates quad =
+                {
+                    (float)x,
+                    (float)y,
+                    (float)x + 1.0f,
+                    (float)y,
+                    (float)x + 1.0f,
+                    (float)y + 1.0f,
+                    (float)x,
+                    (float)y + 1.0f,
+                };
+                wallCaps[EgaBlack].push_back(quad);
+            }
         }
     }
 
@@ -1882,7 +1928,7 @@ void Level::DrawOverheadMapIso(
         {
             // Actors
             Actor* actor = GetBlockingActor(x, y);
-            if (actor != nullptr)
+            if (actor != nullptr && actor->IsActive())
             {
                 Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
                 if (actorPicture != nullptr)
@@ -1954,20 +2000,28 @@ void Level::DrawOverheadMapTopDown(
 
             if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
             {
-                const uint16_t wallIndex = GetWallTile(x, y);
-                const uint16_t darkWall = GetDarkWallPictureIndex(wallIndex, 0);
-                if (darkWall != 1)
+                if (IsTileClearFromFogOfWar(x, y))
                 {
-                    const Picture* darkPicture = egaGraph.GetPicture(darkWall);
-                    if (darkPicture != nullptr)
+                    const uint16_t wallIndex = GetWallTile(x, y);
+                    const uint16_t darkWall = GetDarkWallPictureIndex(wallIndex, 0);
+                    if (darkWall != 1)
                     {
-                        renderer.Render2DPicture(darkPicture, sx, sy);
-                        const egaColor centerColor = GetWallCapCenterColor(x, y);
-                        if (centerColor != wallCapMainColor)
+                        const Picture* darkPicture = egaGraph.GetPicture(darkWall);
+                        if (darkPicture != nullptr)
                         {
-                            const int16_t border = 16;
-                            const int16_t width = tileWidth - (2 * border);
-                            renderer.Render2DBar(sx + border, sy + border, width, width, centerColor);
+                            renderer.Render2DPicture(darkPicture, sx, sy);
+                            const egaColor centerColor = GetWallCapCenterColor(x, y);
+                            if (centerColor != wallCapMainColor)
+                            {
+                                const int16_t border = 16;
+                                const int16_t width = tileWidth - (2 * border);
+                                renderer.Render2DBar(sx + border, sy + border, width, width, centerColor);
+                            }
+                        }
+                        else
+                        {
+                            IRenderer::tileCoordinate tile = { sx, sy };
+                            floorTiles.push_back(tile);
                         }
                     }
                     else
@@ -1979,7 +2033,7 @@ void Level::DrawOverheadMapTopDown(
                 else
                 {
                     IRenderer::tileCoordinate tile = { sx, sy };
-                    floorTiles.push_back(tile);
+                    borderTiles.push_back(tile);
                 }
             }
             else
@@ -1998,7 +2052,7 @@ void Level::DrawOverheadMapTopDown(
         {
             // Actors
             Actor* actor = GetBlockingActor(x, y);
-            if (actor != nullptr)
+            if (actor != nullptr && actor->IsActive())
             {
                 const Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
                 if (actorPicture != nullptr)
@@ -2167,14 +2221,12 @@ egaColor Level::GetWallCapCenterColor(const uint16_t x, const uint16_t y) const
     const egaColor removableWallColor = (wallCapMainColor == EgaDarkGray) ? EgaLightGray : EgaDarkGray;
     const KeyId requiredKey = GetRequiredKeyForDoor(x, y);
     const egaColor centerColor =
-        IsExplosiveWall(x, y) ? removableWallColor :
         requiredKey == RedKey ? EgaRed :
         requiredKey == BlueKey ? EgaBlue :
         requiredKey == GreenKey ? EgaGreen :
         requiredKey == YellowKey ? EgaBrightYellow :
         IsRemovableDoor(x, y) ? removableWallColor :
         IsVictoryDoor(x, y) ? EgaBrightCyan :
-        IsFakeWall(x, y) ? EgaCyan :
         wallCapMainColor;
 
     return centerColor;
