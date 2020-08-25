@@ -19,6 +19,7 @@
 #include "PlayerInput.h"
 #include "EgaGraph.h"
 #include "Level.h"
+#include "ConfigurationSettings.h"
 
 class OverheadMap
 {
@@ -38,8 +39,9 @@ public:
         Level& level,
         const float aspectRatio,
         const ViewPorts::ViewPortRect3D original3DViewArea);
-    void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp);
+    void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const OverheadMapMode overheadMapMode);
     void Refresh(Level& level);
+    void ResetOrigin(Level& level, const OverheadMapMode overheadMapMode);
 
 private:
     struct locationNameBestPos

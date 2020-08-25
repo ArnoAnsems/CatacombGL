@@ -45,6 +45,10 @@ void OverheadMap::DrawIso(
     const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio);
     renderer.PrepareIsoRendering(aspectRatio, original3DViewArea, (float)m_originX, (float)m_originY);
     level.DrawOverheadMapIso(renderer, egaGraph, additionalMargin);
+    renderer.PrepareIsoRenderingText((float)m_originX, (float)m_originY);
+    RenderableText locationNames(*egaGraph.GetFont(3));
+    locationNames.Centered("TEST", EgaBrightWhite, 10, 10);
+    renderer.RenderText(locationNames);
 }
 
 void OverheadMap::DrawTopDown(IRenderer& renderer,
@@ -113,11 +117,13 @@ void OverheadMap::DrawTopDown(IRenderer& renderer,
     renderer.RenderText(locationNames);
 }
 
-void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp)
+void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const OverheadMapMode overheadMapMode)
 {
+    const uint16_t maxOriginX = level.GetLevelWidth() - 20;
+    const uint16_t maxOriginY = (overheadMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
     if (timestamp > m_lastActionTimestamp + 200)
     {
-        if (playerInput.IsKeyPressed(SDLK_RIGHT) && m_originX + 20 < level.GetLevelWidth())
+        if (playerInput.IsKeyPressed(SDLK_RIGHT) && m_originX < maxOriginX)
         {
             m_originX++;
             m_lastActionTimestamp = timestamp;
@@ -127,7 +133,7 @@ void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uin
             m_originX--;
             m_lastActionTimestamp = timestamp;
         }
-        if (playerInput.IsKeyPressed(SDLK_DOWN) && m_originY + 7 < level.GetLevelHeight())
+        if (playerInput.IsKeyPressed(SDLK_DOWN) && m_originY < maxOriginY)
         {
             m_originY++;
             m_lastActionTimestamp = timestamp;
@@ -150,8 +156,6 @@ void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uin
 
 void OverheadMap::Refresh(Level& level)
 {
-    m_originX = 0;
-    m_originY = 0;
     m_lastActionTimestamp = 0;
 
     m_locationNameBestPositions.clear();
@@ -183,6 +187,27 @@ void OverheadMap::Refresh(Level& level)
                 }
             }
         }
+    }
+}
+
+void OverheadMap::ResetOrigin(Level& level, const OverheadMapMode overheadMapMode)
+{
+    if (overheadMapMode == Classic)
+    {
+        m_originX = 0;
+        m_originY = 0;
+    }
+    else
+    {
+        // Put the origin at the player position
+        const uint16_t maxOriginX = level.GetLevelWidth() - 20;
+        const uint16_t maxOriginY = (overheadMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
+        const int16_t bestOriginX = (int16_t)(level.GetPlayerActor()->GetX()) - 10;
+        const int16_t bestOriginY = (int16_t)(level.GetPlayerActor()->GetY()) - 4;
+        m_originX = (bestOriginX < 0) ? 0 :
+            (bestOriginX > maxOriginX) ? maxOriginX : bestOriginX;
+        m_originY = (bestOriginY < 0) ? 0 :
+            (bestOriginY > maxOriginY) ? maxOriginY : bestOriginY;
     }
 }
 

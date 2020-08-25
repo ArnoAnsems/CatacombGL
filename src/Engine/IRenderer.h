@@ -115,6 +115,7 @@ public:
     virtual void PrepareVisibilityMap() = 0;
     virtual void UnprepareVisibilityMap() = 0;
     virtual void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) = 0;
+    virtual void PrepareIsoRenderingText(const float originX, const float originY) = 0;
     virtual void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale) = 0;
     virtual void RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps) = 0;
     virtual void RenderTopDownFloorTiles(const egaColor color, std::vector<tileCoordinate>& floorTiles) = 0;

@@ -580,6 +580,32 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     glShadeModel(GL_SMOOTH);
 }
 
+void RendererOpenGLWin32::PrepareIsoRenderingText(const float originX, const float originY)
+{
+    glDisable(GL_DEPTH_TEST);
+
+    glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+    glLoadIdentity();									// Reset The Projection Matrix
+
+    const double x = originX + 9.0;
+    const double y = originY + 9.0;
+    const double z = -1.0;
+    // use this length so that camera is 1 unit away from origin
+    const double dist = sqrt(1 / 3.0);
+    glOrtho(-512.0f, 512.0f, -128.0f, 128.0f, -40.0f, 40.0f);
+    gluLookAt(dist + x, dist + y, z - dist,  // position of camera
+        x, y, z,   // where camera is pointing at
+        0.0, 0.0, -1.0);  // which direction is up
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glShadeModel(GL_SMOOTH);
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale)
 {
     ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);

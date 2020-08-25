@@ -116,6 +116,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     m_game.SpawnActors(m_level, m_difficultyLevel);
     m_level->GetPlayerActor()->SetHealth(health);
     m_overheadMap.Refresh(*m_level);
+    m_overheadMap.ResetOrigin(*m_level, m_configurationSettings.GetOverHeadMapMode());
 
     m_timeStampOfPlayerCurrentFrame = 0;
     m_timeStampOfPlayerPreviousFrame = 0;
@@ -779,7 +780,7 @@ bool EngineCore::Think()
 
     if (m_state == OverheadMapDialog && !m_menu->IsActive() && m_level != nullptr)
     {
-        m_overheadMap.ProcessInput(m_playerInput, *m_level, m_gameTimer.GetActualTime());
+        m_overheadMap.ProcessInput(m_playerInput, *m_level, m_gameTimer.GetActualTime(), m_configurationSettings.GetOverHeadMapMode());
     }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
@@ -2794,6 +2795,7 @@ void EngineCore::ShowOverheadMap()
     if (m_state == InGame && m_level != nullptr)
     {
         m_state = OverheadMapDialog;
+        m_overheadMap.ResetOrigin(*m_level, m_configurationSettings.GetOverHeadMapMode());
         m_gameTimer.Pause();
     }
 }
