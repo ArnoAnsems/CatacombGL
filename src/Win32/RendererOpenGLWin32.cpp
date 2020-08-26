@@ -587,12 +587,12 @@ void RendererOpenGLWin32::PrepareIsoRenderingText(const float originX, const flo
     glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
     glLoadIdentity();									// Reset The Projection Matrix
 
-    const double x = originX + 9.0;
-    const double y = originY + 9.0;
+    const double x = (originX + 9) * 32;
+    const double y = (originY + 9) * 32;
     const double z = -1.0;
     // use this length so that camera is 1 unit away from origin
     const double dist = sqrt(1 / 3.0);
-    glOrtho(-512.0f, 512.0f, -128.0f, 128.0f, -40.0f, 40.0f);
+    glOrtho(-512.0f, 512.0f, -128.0f, 128.0f, -640.0f, 640.0f);
     gluLookAt(dist + x, dist + y, z - dist,  // position of camera
         x, y, z,   // where camera is pointing at
         0.0, 0.0, -1.0);  // which direction is up

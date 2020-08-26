@@ -47,7 +47,54 @@ void OverheadMap::DrawIso(
     level.DrawOverheadMapIso(renderer, egaGraph, additionalMargin);
     renderer.PrepareIsoRenderingText((float)m_originX, (float)m_originY);
     RenderableText locationNames(*egaGraph.GetFont(3));
-    locationNames.Centered("TEST", EgaBrightWhite, 10, 10);
+    //locationNames.Centered("TEST", EgaBrightWhite, (9 - (int16_t)m_originX) * 32, (4 - (int16_t)m_originY) * 32);
+    for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
+    {
+        if (level.IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
+        {
+            const int16_t x = ((pair.second.x + 2) * 32) + 16;
+            const int16_t y = ((pair.second.y + 2) * 32);
+            const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * 32;
+
+            const std::string& locationMessage = egaGraph.GetWorldLocationNames(level.GetLevelIndex())->GetLocationName(pair.first);
+            std::vector<std::string> subStrings;
+            if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
+            {
+                subStrings.push_back(locationMessage);
+            }
+            else
+            {
+                // The text does not fit on a single line; try to split in two
+                locationNames.SplitTextInTwo(locationMessage, subStrings);
+                if (subStrings.size() == 2 &&
+                    (locationNames.GetWidthInPixels(subStrings.at(0)) > availableSpaceInPixels ||
+                        locationNames.GetWidthInPixels(subStrings.at(1)) > availableSpaceInPixels))
+                {
+                    // Even when split in two it does not split; try to split in three
+                    locationNames.SplitTextInThree(locationMessage, subStrings);
+                }
+            }
+
+            const egaColor textColor = (level.GetGroundColor() == EgaBrightWhite) ? EgaBlack : EgaBrightWhite;
+
+            if (subStrings.size() == 1)
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 11);
+            }
+            else if (subStrings.size() == 2)
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 6);
+                locationNames.Centered(subStrings.at(1), textColor, x, y + 16);
+            }
+            else
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 1);
+                locationNames.Centered(subStrings.at(1), textColor, x, y + 11);
+                locationNames.Centered(subStrings.at(2), textColor, x, y + 21);
+            }
+        }
+    }
+
     renderer.RenderText(locationNames);
 }
 
