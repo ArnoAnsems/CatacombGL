@@ -167,15 +167,27 @@ public:
     void DrawOverheadMapIso(
         IRenderer& renderer,
         EgaGraph& egaGraph,
-        const uint16_t additionalMargin);
+        const float aspectRatio,
+        const ViewPorts::ViewPortRect3D original3DViewArea,
+        const uint16_t originX,
+        const uint16_t originY);
     void DrawOverheadMapTopDown(
         IRenderer& renderer,
         EgaGraph& egaGraph,
-        const uint16_t additionalMargin,
+        const float aspectRatio,
+        const ViewPorts::ViewPortRect3D original3DViewArea,
         const uint16_t originX,
         const uint16_t originY);
 
 private:
+    struct locationNameBestPos
+    {
+        uint16_t horizontalSpaceInTiles;
+        uint16_t verticalSpaceInTiles;
+        uint16_t x;
+        uint16_t y;
+    };
+
     uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;
     uint16_t GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;
     void BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall);
@@ -188,6 +200,9 @@ private:
     LevelCoordinate GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView) const;
     egaColor GetWallCapMainColor() const;
     egaColor GetWallCapCenterColor(const uint16_t x, const uint16_t y) const;
+    uint16_t CalculateHorizontalSpaceInTiles(const uint16_t x, const uint16_t y) const;
+    uint16_t CalculateVerticalSpaceInTiles(const uint16_t x, const uint16_t y) const;
+    void UpdateLocationNamesBestPositions();
 
     const uint16_t m_levelWidth;
     const uint16_t m_levelHeight;
@@ -205,4 +220,5 @@ private:
 
     bool* m_wallXVisible;
     bool* m_wallYVisible;
+    std::map<uint8_t, locationNameBestPos> m_locationNameBestPositions;
 };

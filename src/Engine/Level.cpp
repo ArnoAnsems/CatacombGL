@@ -17,6 +17,7 @@
 #include "PlayerInventory.h"
 #include "EgaGraph.h"
 #include "RenderableSprites.h"
+#include "LevelLocationNames.h"
 
 Level::Level(
     const uint8_t mapIndex,
@@ -74,6 +75,8 @@ Level::Level(
         m_wallXVisible[i] = false;
         m_wallYVisible[i] = false;
     }
+
+    UpdateLocationNamesBestPositions();
 }
 
 bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors)
@@ -1746,8 +1749,14 @@ void Level::DrawOverheadMap(
 void Level::DrawOverheadMapIso(
     IRenderer& renderer,
     EgaGraph& egaGraph,
-    const uint16_t additionalMargin)
+    const float aspectRatio,
+    const ViewPorts::ViewPortRect3D original3DViewArea,
+    const uint16_t originX,
+    const uint16_t originY)
 {
+    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio);
+    renderer.PrepareIsoRendering(aspectRatio, original3DViewArea, (float)originX, (float)originY);
+
     std::vector<IRenderer::tileCoordinate> tiles;
     for (int16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -1972,15 +1981,73 @@ void Level::DrawOverheadMapIso(
 
     renderableSprites.SortSpritesBackToFront();
     renderer.RenderSprites(renderableSprites);
+
+    renderer.PrepareIsoRenderingText((float)originX, (float)originY);
+    RenderableText locationNames(*egaGraph.GetFont(3));
+    for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
+    {
+        if (IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
+        {
+            const int16_t x = ((pair.second.x + 2) * 32) + 16;
+            const int16_t y = ((pair.second.y + 2) * 32);
+            const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * 32;
+
+            const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+            std::vector<std::string> subStrings;
+            if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
+            {
+                subStrings.push_back(locationMessage);
+            }
+            else
+            {
+                // The text does not fit on a single line; try to split in two
+                locationNames.SplitTextInTwo(locationMessage, subStrings);
+                if (subStrings.size() == 2 &&
+                    (locationNames.GetWidthInPixels(subStrings.at(0)) > availableSpaceInPixels ||
+                        locationNames.GetWidthInPixels(subStrings.at(1)) > availableSpaceInPixels))
+                {
+                    // Even when split in two it does not split; try to split in three
+                    locationNames.SplitTextInThree(locationMessage, subStrings);
+                }
+            }
+
+            const egaColor textColor = (GetGroundColor() == EgaBrightWhite) ? EgaBlack : EgaBrightWhite;
+
+            if (subStrings.size() == 1)
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 11);
+            }
+            else if (subStrings.size() == 2)
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 6);
+                locationNames.Centered(subStrings.at(1), textColor, x, y + 16);
+            }
+            else
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 1);
+                locationNames.Centered(subStrings.at(1), textColor, x, y + 11);
+                locationNames.Centered(subStrings.at(2), textColor, x, y + 21);
+            }
+        }
+    }
+
+    renderer.RenderText(locationNames);
 }
 
 void Level::DrawOverheadMapTopDown(
     IRenderer& renderer,
     EgaGraph& egaGraph,
-    const uint16_t additionalMargin,
+    const float aspectRatio,
+    const ViewPorts::ViewPortRect3D original3DViewArea,
     const uint16_t originX,
     const uint16_t originY)
 {
+    // Scale factor is compared to the original 320 x 200 resolution
+    const uint16_t wallsScaleFactor = 4;
+    const uint16_t textScaleFactor = 2;
+    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio) * wallsScaleFactor;
+    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, wallsScaleFactor);
+
     std::vector<IRenderer::tileCoordinate> floorTiles;
     std::vector<IRenderer::tileCoordinate> borderTiles;
     const int16_t tileWidth = 64;
@@ -2082,6 +2149,58 @@ void Level::DrawOverheadMapTopDown(
             }
         }
     }
+
+    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, textScaleFactor);
+
+    RenderableText locationNames(*egaGraph.GetFont(3));
+
+    for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
+    {
+        if (IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
+        {
+            const int16_t x = ((pair.second.x - originX) * 32) + 16;
+            const int16_t y = ((pair.second.y - originY) * 32);
+            const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * 32;
+
+            const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+            std::vector<std::string> subStrings;
+            if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
+            {
+                subStrings.push_back(locationMessage);
+            }
+            else
+            {
+                // The text does not fit on a single line; try to split in two
+                locationNames.SplitTextInTwo(locationMessage, subStrings);
+                if (subStrings.size() == 2 &&
+                    (locationNames.GetWidthInPixels(subStrings.at(0)) > availableSpaceInPixels ||
+                        locationNames.GetWidthInPixels(subStrings.at(1)) > availableSpaceInPixels))
+                {
+                    // Even when split in two it does not split; try to split in three
+                    locationNames.SplitTextInThree(locationMessage, subStrings);
+                }
+            }
+
+            const egaColor textColor = (GetGroundColor() == EgaBrightWhite) ? EgaBlack : EgaBrightWhite;
+
+            if (subStrings.size() == 1)
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 11);
+            }
+            else if (subStrings.size() == 2)
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 6);
+                locationNames.Centered(subStrings.at(1), textColor, x, y + 16);
+            }
+            else
+            {
+                locationNames.Centered(subStrings.at(0), textColor, x, y + 1);
+                locationNames.Centered(subStrings.at(1), textColor, x, y + 11);
+                locationNames.Centered(subStrings.at(2), textColor, x, y + 21);
+            }
+        }
+    }
+    renderer.RenderText(locationNames);
 }
 
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const
@@ -2230,4 +2349,72 @@ egaColor Level::GetWallCapCenterColor(const uint16_t x, const uint16_t y) const
         wallCapMainColor;
 
     return centerColor;
+}
+
+uint16_t Level::CalculateHorizontalSpaceInTiles(const uint16_t x, const uint16_t y) const
+{
+    const uint16_t floorTile = GetWallTile(x, y);
+    uint16_t tilesToTheLeft = 0;
+    while (x - tilesToTheLeft > 0 && GetWallTile(x - tilesToTheLeft - 1, y) == floorTile)
+    {
+        tilesToTheLeft++;
+    }
+    uint16_t tilesToTheRight = 0;
+    while (x + tilesToTheRight + 1 < GetLevelWidth() && GetWallTile(x + tilesToTheRight + 1, y) == floorTile)
+    {
+        tilesToTheRight++;
+    }
+
+    return (tilesToTheLeft > tilesToTheRight) ? (tilesToTheRight * 2) + 1 : (tilesToTheLeft * 2) + 1;
+}
+
+uint16_t Level::CalculateVerticalSpaceInTiles(const uint16_t x, const uint16_t y) const
+{
+    const uint16_t floorTile = GetWallTile(x, y);
+    uint16_t tilesAbove = 0;
+    while (y - tilesAbove > 0 && GetWallTile(x, y - tilesAbove - 1) == floorTile)
+    {
+        tilesAbove++;
+    }
+    uint16_t tilesBelow = 0;
+    while (y + tilesBelow + 1 < GetLevelHeight() && GetWallTile(x, y + tilesBelow + 1) == floorTile)
+    {
+        tilesBelow++;
+    }
+
+    return (tilesAbove > tilesBelow) ? (tilesBelow * 2) + 1 : (tilesAbove * 2) + 1;
+}
+
+void Level::UpdateLocationNamesBestPositions()
+{
+    m_locationNameBestPositions.clear();
+
+    for (uint16_t y = 0; y < GetLevelHeight(); y++)
+    {
+        for (uint16_t x = 0; x < GetLevelWidth(); x++)
+        {
+            const uint16_t wallTile = GetWallTile(x, y);
+            if (wallTile > 180)
+            {
+                const uint8_t locationNameIndex = (uint8_t)(wallTile - 180);
+                const uint16_t horizontalSpaceInTiles = CalculateHorizontalSpaceInTiles(x, y);
+                const uint16_t verticalSpaceInTiles = CalculateVerticalSpaceInTiles(x, y);
+                const locationNameBestPos currentPos = { horizontalSpaceInTiles, verticalSpaceInTiles, x, y };
+                if (m_locationNameBestPositions.find(locationNameIndex) == m_locationNameBestPositions.end())
+                {
+                    m_locationNameBestPositions.insert(std::make_pair(locationNameIndex, currentPos));
+                }
+                else
+                {
+                    const locationNameBestPos& previousBestPos = m_locationNameBestPositions.at(locationNameIndex);
+                    if (currentPos.horizontalSpaceInTiles > previousBestPos.horizontalSpaceInTiles ||
+                        ((currentPos.horizontalSpaceInTiles == previousBestPos.horizontalSpaceInTiles) &&
+                        (currentPos.verticalSpaceInTiles > previousBestPos.verticalSpaceInTiles)))
+                    {
+                        m_locationNameBestPositions.at(locationNameIndex) = currentPos;
+                    }
+                }
+            }
+        }
+    }
 }
