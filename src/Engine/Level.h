@@ -153,7 +153,6 @@ public:
     void StoreToFile(std::ofstream& file) const;
     bool IsWaterLevel() const;
 
-    void DrawVisibilityMap(IRenderer& renderer);
     void DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp);
     void DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks);
     void DrawActors(IRenderer& renderer, EgaGraph* egaGraph);

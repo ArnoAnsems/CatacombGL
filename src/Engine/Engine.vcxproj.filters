@@ -171,6 +171,12 @@
     <ClCompile Include="OverheadMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Renderable3DWalls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable3DTiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h">
@@ -327,6 +333,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OverheadMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable3DWalls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable3DTiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,6 +28,8 @@
 #include "RenderableText.h"
 #include "RenderableTiles.h"
 #include "RenderableSprites.h"
+#include "Renderable3DWalls.h"
+#include "Renderable3DTiles.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -35,20 +37,6 @@
 class IRenderer
 {
 public:
-    typedef struct
-    {
-        int16_t x;
-        int16_t y;
-    } tileCoordinate;
-
-    typedef struct
-    {
-        uint16_t x1;
-        uint16_t y1;
-        uint16_t x2;
-        uint16_t y2;
-    } wallCoordinate;
-
     typedef struct
     {
         float x1;
@@ -109,16 +97,14 @@ public:
     // 3D rendering
     //
     virtual void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) = 0;
-    virtual void Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap) = 0;
+    virtual void Render3DWalls(const Renderable3DWalls& walls) = 0;
+    virtual void Render3DTiles(const Renderable3DTiles& tiles) = 0;
     virtual void RenderSprites(const RenderableSprites& renderableSprites) = 0;
-    virtual void RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor) = 0;
-    virtual void PrepareVisibilityMap() = 0;
-    virtual void UnprepareVisibilityMap() = 0;
     virtual void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) = 0;
     virtual void PrepareIsoRenderingText(const float originX, const float originY) = 0;
     virtual void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale) = 0;
     virtual void RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps) = 0;
-    virtual void RenderTopDownFloorTiles(const egaColor color, std::vector<tileCoordinate>& floorTiles) = 0;
+    virtual void RenderTopDownFloorTiles(const Renderable3DTiles& tiles) = 0;
 
     //
     // Screen capture

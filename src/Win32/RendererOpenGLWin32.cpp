@@ -401,11 +401,11 @@ uint16_t RendererOpenGLWin32::GetAdditionalMarginDueToWideScreen(const float asp
     }
 }
 
-void RendererOpenGLWin32::Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& textureToWallsMap)
+void RendererOpenGLWin32::Render3DWalls(const Renderable3DWalls& walls)
 {
     glEnable(GL_CULL_FACE);
-
-    for (const std::pair<unsigned int, std::vector<wallCoordinate>>& textureToWalls : textureToWallsMap)
+    const std::map<unsigned int, std::vector<Renderable3DWalls::wallCoordinate>>& textureToWallsMap = walls.GetTextureToWallsMap();
+    for (const std::pair<unsigned int, std::vector<Renderable3DWalls::wallCoordinate>>& textureToWalls : textureToWallsMap)
     {
         const unsigned int textureId = textureToWalls.first;
         // Select the texture from the picture
@@ -413,7 +413,7 @@ void RendererOpenGLWin32::Render3DWalls(const std::map<unsigned int, std::vector
 
         // Draw the texture as a quad
         glBegin(GL_QUADS);
-        for (const wallCoordinate& coordinate : textureToWalls.second)
+        for (const Renderable3DWalls::wallCoordinate& coordinate : textureToWalls.second)
         {
             glTexCoord2i(1, 1); glVertex3f((float)coordinate.x1, (float)coordinate.y1, FloorZ);
             glTexCoord2i(0, 1); glVertex3f((float)coordinate.x2, (float)coordinate.y2, FloorZ);
@@ -490,57 +490,33 @@ void RendererOpenGLWin32::RenderSprites(const RenderableSprites& renderableSprit
     glDisable(GL_BLEND);
 }
 
-void RendererOpenGLWin32::RenderFloorAndCeiling(const std::vector<tileCoordinate>& tileCoordinates, const egaColor floorColor, const egaColor ceilingColor)
+void RendererOpenGLWin32::Render3DTiles(const Renderable3DTiles& tiles)
 {
-    glEnable(GL_CULL_FACE);
-    BindTexture(m_singleColorTexture[floorColor]);
+    BindTexture(m_singleColorTexture[tiles.GetColor()]);
 
     // Do not write into the depth buffer. This allows sprites to appear a bit sunken into the floor.
     glDepthMask(GL_FALSE);
 
     glBegin(GL_QUADS);
-    for (const tileCoordinate& tile : tileCoordinates)
+    const std::vector<Renderable3DTiles::tileCoordinate>& tileCoordinates = tiles.GetTileCoordinates();
+    const float z = tiles.IsFloor() ? FloorZ : CeilingZ;
+    for (const Renderable3DTiles::tileCoordinate& tile : tileCoordinates)
     {
         const float tileX = (float)tile.x;
         const float tileY = (float)tile.y;
-        glTexCoord2i(0, 1); glVertex3f(tileX + 1.0f, tileY, FloorZ);        // Bottom Left
-        glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, FloorZ); // Bottom Right
-        glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, FloorZ);        // Top Right
-        glTexCoord2i(0, 0); glVertex3f(tileX, tileY, FloorZ);               // Top Left
-    }
-    glEnd();
-
-    BindTexture(m_singleColorTexture[ceilingColor]);
-
-    glBegin(GL_QUADS);
-    for(const tileCoordinate& tile : tileCoordinates)
-    {
-        const float tileX = (float)tile.x;
-        const float tileY = (float)tile.y;
-        glTexCoord2i(0, 0); glVertex3f(tileX, tileY, CeilingZ);               // Top Left
-        glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, CeilingZ);        // Top Right
-        glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, CeilingZ); // Bottom Right
-        glTexCoord2i(0, 1); glVertex3f(tileX + 1.0f, tileY, CeilingZ);        // Bottom Left
+        glTexCoord2i(0, 1); glVertex3f(tileX + 1.0f, tileY, z);        // Bottom Left
+        glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, z); // Bottom Right
+        glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, z);        // Top Right
+        glTexCoord2i(0, 0); glVertex3f(tileX, tileY, z);               // Top Left
     }
     glEnd();
 
     glDepthMask(GL_TRUE);
-    glDisable(GL_CULL_FACE);
 }
 
 bool RendererOpenGLWin32::IsVSyncSupported()
 {
     return m_isVSyncSupported;
-}
-
-void RendererOpenGLWin32::PrepareVisibilityMap()
-{
-    glDisable(GL_DEPTH_TEST);
-}
-
-void RendererOpenGLWin32::UnprepareVisibilityMap()
-{
-    glEnable(GL_DEPTH_TEST);
 }
 
 void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY)
@@ -659,16 +635,15 @@ void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vecto
     glDisable(GL_CULL_FACE);
 }
 
-void RendererOpenGLWin32::RenderTopDownFloorTiles(const egaColor color, std::vector<tileCoordinate>& floorTiles)
+void RendererOpenGLWin32::RenderTopDownFloorTiles(const Renderable3DTiles& tiles)
 {
- //   glEnable(GL_CULL_FACE);
-
-    const unsigned int textureId = m_singleColorTexture[color];
+    const unsigned int textureId = m_singleColorTexture[tiles.GetColor()];
     // Select the texture from the picture
     BindTexture(textureId);
 
     glBegin(GL_QUADS);
-    for (const tileCoordinate floorTile : floorTiles)
+    const std::vector<Renderable3DTiles::tileCoordinate>& floorTiles = tiles.GetTileCoordinates();
+    for (const Renderable3DTiles::tileCoordinate floorTile : floorTiles)
     {
         // Draw the texture as a quad
         glTexCoord2f(0.0f, 1.0f); glVertex2i(floorTile.x, floorTile.y + 64);
@@ -678,8 +653,6 @@ void RendererOpenGLWin32::RenderTopDownFloorTiles(const egaColor color, std::vec
         
     }
     glEnd();
-
- //   glDisable(GL_CULL_FACE);
 }
 
 Picture* RendererOpenGLWin32::GetScreenCapture(const unsigned int textureId)

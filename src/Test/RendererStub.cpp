@@ -80,23 +80,15 @@ uint16_t RendererStub::GetAdditionalMarginDueToWideScreen(const float /*aspectRa
     return 0;
 }
 
-void RendererStub::Render3DWalls(const std::map<unsigned int, std::vector<wallCoordinate>>& /*textureToWallsMap*/)
+void RendererStub::Render3DWalls(const Renderable3DWalls& /*walls*/)
+{
+}
+
+void RendererStub::Render3DTiles(const Renderable3DTiles& /*tiles*/)
 {
 }
 
 void RendererStub::RenderSprites(const RenderableSprites& /*renderableSprites*/)
-{
-}
-
-void RendererStub::RenderFloorAndCeiling(const std::vector<tileCoordinate>& /*tileCoordinates*/, const egaColor /*floorColor*/, const egaColor /*ceilingColor*/)
-{
-}
-
-void RendererStub::PrepareVisibilityMap()
-{
-}
-
-void RendererStub::UnprepareVisibilityMap()
 {
 }
 
@@ -116,7 +108,7 @@ void RendererStub::RenderIsoWallCaps(const std::map <egaColor, std::vector<quadC
 {
 }
 
-void RendererStub::RenderTopDownFloorTiles(const egaColor /*color*/, std::vector<tileCoordinate>& /*floorTiles*/)
+void RendererStub::RenderTopDownFloorTiles(const Renderable3DTiles& /*tiles*/)
 {
 }
 
