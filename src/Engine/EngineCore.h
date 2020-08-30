@@ -108,7 +108,7 @@ private:
     void ShowWarpCheatDialog();
     void ShowGodModeCheatDialog();
     void ShowFreeItemsCheatDialog();
-    void ShowOverheadMap();
+    void ShowOverheadMap(const bool cheat);
     void FreezeTimeCheat();
 
     void SelectDifficultyLevelNovice();

@@ -162,21 +162,24 @@ public:
         const uint16_t additionalMargin,
         const uint16_t originX,
         const uint16_t originY,
-        const OverheadType overheadType);
+        const OverheadType overheadType,
+        const bool cheat);
     void DrawOverheadMapIso(
         IRenderer& renderer,
         EgaGraph& egaGraph,
         const float aspectRatio,
         const ViewPorts::ViewPortRect3D original3DViewArea,
         const uint16_t originX,
-        const uint16_t originY);
+        const uint16_t originY,
+        const bool cheat);
     void DrawOverheadMapTopDown(
         IRenderer& renderer,
         EgaGraph& egaGraph,
         const float aspectRatio,
         const ViewPorts::ViewPortRect3D original3DViewArea,
         const uint16_t originX,
-        const uint16_t originY);
+        const uint16_t originY,
+        const bool cheat);
 
 private:
     struct locationNameBestPos
@@ -198,7 +201,7 @@ private:
     LevelCoordinate GetLeftEdgeOfWall(LevelWall& wall) const;
     LevelCoordinate GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView) const;
     egaColor GetWallCapMainColor() const;
-    egaColor GetWallCapCenterColor(const uint16_t x, const uint16_t y) const;
+    egaColor GetWallCapCenterColor(const uint16_t x, const uint16_t y, const bool cheat) const;
     uint16_t CalculateHorizontalSpaceInTiles(const uint16_t x, const uint16_t y) const;
     uint16_t CalculateVerticalSpaceInTiles(const uint16_t x, const uint16_t y) const;
     void UpdateLocationNamesBestPositions();

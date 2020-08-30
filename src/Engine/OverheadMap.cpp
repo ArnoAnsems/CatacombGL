@@ -20,7 +20,8 @@ OverheadMap::OverheadMap() :
     m_originX(0),
     m_originY(0),
     m_lastActionTimestamp(0),
-    m_overheadType(ActorAtView)
+    m_overheadType(ActorAtView),
+    m_cheat(false)
 {
 
 }
@@ -30,9 +31,14 @@ OverheadMap::~OverheadMap()
 
 }
 
+void OverheadMap::SetCheat(const bool enabled)
+{
+    m_cheat = enabled;
+}
+
 void OverheadMap::DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin)
 {
-    level.DrawOverheadMap(renderer, egaGraph, additionalMargin, m_originX, m_originY, m_overheadType);
+    level.DrawOverheadMap(renderer, egaGraph, additionalMargin, m_originX, m_originY, m_overheadType, m_cheat);
 }
 
 void OverheadMap::DrawIso(
@@ -42,7 +48,7 @@ void OverheadMap::DrawIso(
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    level.DrawOverheadMapIso(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY);
+    level.DrawOverheadMapIso(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
 }
 
 void OverheadMap::DrawTopDown(IRenderer& renderer,
@@ -51,7 +57,7 @@ void OverheadMap::DrawTopDown(IRenderer& renderer,
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    level.DrawOverheadMapTopDown(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY);
+    level.DrawOverheadMapTopDown(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
 }
 
 void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const OverheadMapMode overheadMapMode)

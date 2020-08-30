@@ -785,41 +785,6 @@ bool EngineCore::Think()
     }
     if (!m_menu->IsActive())
     {
-        for (uint8_t i = 0x31; i < 0x39; i++)
-        {
-            if (m_playerInput.IsKeyJustPressed(i))
-            {
-                ReadScroll(i - 0x31);
-            }
-        }
-        if (m_playerInput.IsKeyJustPressed(SDLK_n)) // N
-        {
-            KeyNPressed();
-        }
-        if (m_state == InGame && IsActionJustPressed(UsePotion))
-        {
-            PlayerUsesPotion();
-        }
-        if (IsActionJustPressed(ControlAction::ShowOverheadMap))
-        {
-            if (m_state == InGame)
-            {
-                ShowOverheadMap();
-            }
-            else if (m_state == OverheadMapDialog)
-            {
-                m_state = InGame;
-                m_gameTimer.Resume();
-            }
-        }
-        if (m_playerInput.IsKeyJustPressed(SDLK_w)) // W
-        {
-            KeyWPressed();
-        }
-        if (m_playerInput.IsKeyJustPressed(SDLK_y)) // Y
-        {
-            KeyYPressed();
-        }
         if (m_playerInput.IsKeyPressed(m_game.GetCheatsKeyCode()))
         {
             // Check for cheat codes
@@ -841,7 +806,7 @@ bool EngineCore::Think()
             }
             if (m_playerInput.IsKeyPressed(SDLK_o)) // O = overhead map
             {
-                ShowOverheadMap();
+                ShowOverheadMap(true);
             }
             if (m_playerInput.IsKeyPressed(SDLK_e)) // E = Exit level (Catacomb 3D)
             {
@@ -851,6 +816,45 @@ bool EngineCore::Think()
                 {
                     m_warpToLevel = m_level->GetLevelIndex() + 1;
                 }
+            }
+        }
+        else
+        {
+            for (uint8_t i = 0x31; i < 0x39; i++)
+            {
+                if (m_playerInput.IsKeyJustPressed(i))
+                {
+                    ReadScroll(i - 0x31);
+                }
+            }
+            if (m_playerInput.IsKeyJustPressed(SDLK_n)) // N
+            {
+                KeyNPressed();
+            }
+            if (m_state == InGame && IsActionJustPressed(UsePotion))
+            {
+                PlayerUsesPotion();
+            }
+            if (IsActionJustPressed(ControlAction::ShowOverheadMap))
+            {
+                if (m_state == InGame)
+                {
+                    ShowOverheadMap(false);
+                }
+                else if (m_state == OverheadMapDialog)
+                {
+                    m_state = InGame;
+                    m_gameTimer.Resume();
+                }
+            }
+
+            if (m_playerInput.IsKeyJustPressed(SDLK_w)) // W
+            {
+                KeyWPressed();
+            }
+            if (m_playerInput.IsKeyJustPressed(SDLK_y)) // Y
+            {
+                KeyYPressed();
             }
         }
         if (m_playerInput.IsKeyPressed(SDLK_F2))
@@ -2786,12 +2790,13 @@ void EngineCore::ShowFreeItemsCheatDialog()
     }
 }
 
-void EngineCore::ShowOverheadMap()
+void EngineCore::ShowOverheadMap(const bool cheat)
 {
     if (m_state == InGame && m_level != nullptr)
     {
         m_state = OverheadMapDialog;
         m_overheadMap.ResetOrigin(*m_level, m_configurationSettings.GetOverHeadMapMode());
+        m_overheadMap.SetCheat(cheat);
         m_gameTimer.Pause();
     }
 }

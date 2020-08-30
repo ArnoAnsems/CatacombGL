@@ -27,6 +27,7 @@ public:
     OverheadMap();
     ~OverheadMap();
 
+    void SetCheat(const bool enabled);
     void DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);
     void DrawIso(
         IRenderer& renderer,
@@ -47,5 +48,6 @@ private:
     uint16_t m_originY;
     uint32_t m_lastActionTimestamp;
     OverheadType m_overheadType;
+    bool m_cheat;
 };
 

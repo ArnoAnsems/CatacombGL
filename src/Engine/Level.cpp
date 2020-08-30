@@ -1616,7 +1616,8 @@ void Level::DrawOverheadMap(
     const uint16_t additionalMargin,
     const uint16_t originX,
     const uint16_t originY,
-    const OverheadType overheadType)
+    const OverheadType overheadType,
+    const bool cheat)
 {
     const int16_t tileWidth = 16;
     const int16_t additionalTilesInMargin = (additionalMargin == 0) ? 0 : (additionalMargin / tileWidth) + 1;
@@ -1721,7 +1722,8 @@ void Level::DrawOverheadMapIso(
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea,
     const uint16_t originX,
-    const uint16_t originY)
+    const uint16_t originY,
+    const bool cheat)
 {
     const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio);
     renderer.PrepareIsoRendering(aspectRatio, original3DViewArea, (float)originX, (float)originY);
@@ -1731,7 +1733,7 @@ void Level::DrawOverheadMapIso(
     {
         for (int16_t x = 1; x < m_levelWidth - 1; x++)
         {
-            if (!IsSolidWall(x, y) && IsTileClearFromFogOfWar(x, y))
+            if (!IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
             {
                 renderable3DTiles.AddTile(Renderable3DTiles::tileCoordinate{ x, y });
             }
@@ -1748,7 +1750,7 @@ void Level::DrawOverheadMapIso(
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
         {
-            if (!IsSolidWall(x, y) && IsTileClearFromFogOfWar(x, y))
+            if (!IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
             {
                 const uint16_t northwallIndex = GetWallTile(x, y - 1);
                 const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, 0);
@@ -1786,9 +1788,9 @@ void Level::DrawOverheadMapIso(
     {
         for (uint16_t x = 0; x < m_levelWidth; x++)
         {
-            if (IsSolidWall(x, y) && IsTileClearFromFogOfWar(x, y))
+            if (IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
             {
-                const egaColor centerColor = GetWallCapCenterColor(x, y);
+                const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
                 if (centerColor != wallCapMainColor)
                 {
                     const float border = 0.2f;
@@ -1849,7 +1851,7 @@ void Level::DrawOverheadMapIso(
                     wallCaps[wallCapMainColor].push_back(quad);
                 }
             }
-            else if (!IsTileClearFromFogOfWar(x, y))
+            else if (!IsTileClearFromFogOfWar(x, y) && !cheat)
             {
                 IRenderer::quadCoordinates quad =
                 {
@@ -1900,7 +1902,7 @@ void Level::DrawOverheadMapIso(
         {
             // Actors
             Actor* actor = GetBlockingActor(x, y);
-            if (actor != nullptr && actor->IsActive())
+            if (actor != nullptr && (actor->IsActive() || cheat))
             {
                 Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
                 if (actorPicture != nullptr)
@@ -1928,16 +1930,19 @@ void Level::DrawOverheadMapIso(
         }
     }
 
-    for (uint16_t i = 0; i < 100; i++)
+    if (cheat)
     {
-        // Projectiles
-        Actor* projectile = GetNonBlockingActor(i);
-        if (projectile != nullptr)
+        for (uint16_t i = 0; i < 100; i++)
         {
-            Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
-            if (actorPicture != nullptr)
+            // Projectiles
+            Actor* projectile = GetNonBlockingActor(i);
+            if (projectile != nullptr)
             {
-                renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::Isometric);
+                Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+                if (actorPicture != nullptr)
+                {
+                    renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::Isometric);
+                }
             }
         }
     }
@@ -1949,7 +1954,7 @@ void Level::DrawOverheadMapIso(
     RenderableText locationNames(*egaGraph.GetFont(3));
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
-        if (IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
+        if (cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
         {
             const int16_t x = ((pair.second.x + 2) * 32) + 16;
             const int16_t y = ((pair.second.y + 2) * 32);
@@ -2003,7 +2008,8 @@ void Level::DrawOverheadMapTopDown(
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea,
     const uint16_t originX,
-    const uint16_t originY)
+    const uint16_t originY,
+    const bool cheat)
 {
     // Scale factor is compared to the original 320 x 200 resolution
     const uint16_t wallsScaleFactor = 4;
@@ -2030,7 +2036,7 @@ void Level::DrawOverheadMapTopDown(
 
             if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
             {
-                if (IsTileClearFromFogOfWar(x, y))
+                if (cheat || IsTileClearFromFogOfWar(x, y))
                 {
                     const uint16_t wallIndex = GetWallTile(x, y);
                     const uint16_t darkWall = GetDarkWallPictureIndex(wallIndex, 0);
@@ -2040,7 +2046,7 @@ void Level::DrawOverheadMapTopDown(
                         if (darkPicture != nullptr)
                         {
                             renderer.Render2DPicture(darkPicture, sx, sy);
-                            const egaColor centerColor = GetWallCapCenterColor(x, y);
+                            const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
                             if (centerColor != wallCapMainColor)
                             {
                                 const int16_t border = 16;
@@ -2084,7 +2090,7 @@ void Level::DrawOverheadMapTopDown(
         {
             // Actors
             Actor* actor = GetBlockingActor(x, y);
-            if (actor != nullptr && actor->IsActive())
+            if (actor != nullptr && (actor->IsActive() || cheat))
             {
                 const Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
                 if (actorPicture != nullptr)
@@ -2098,19 +2104,22 @@ void Level::DrawOverheadMapTopDown(
         }
     }
 
-    for (uint16_t i = 0; i < 100; i++)
+    if (cheat)
     {
-        // Projectiles
-        Actor* projectile = GetNonBlockingActor(i);
-        if (projectile != nullptr)
+        for (uint16_t i = 0; i < 100; i++)
         {
-            Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
-            if (actorPicture != nullptr)
+            // Projectiles
+            Actor* projectile = GetNonBlockingActor(i);
+            if (projectile != nullptr)
             {
-                const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
-                const int16_t sx = (int16_t)(projectile->GetX() - (float)originX) * tileWidth + marginX;
-                const int16_t sy = (int16_t)(projectile->GetY() - (float)originY) * tileWidth;
-                renderer.Render2DPicture(actorPicture, sx, sy);
+                Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+                if (actorPicture != nullptr)
+                {
+                    const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
+                    const int16_t sx = (int16_t)(projectile->GetX() - (float)originX) * tileWidth + marginX;
+                    const int16_t sy = (int16_t)(projectile->GetY() - (float)originY) * tileWidth;
+                    renderer.Render2DPicture(actorPicture, sx, sy);
+                }
             }
         }
     }
@@ -2121,7 +2130,7 @@ void Level::DrawOverheadMapTopDown(
 
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
-        if (IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
+        if (cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
         {
             const int16_t x = ((pair.second.x - originX) * 32) + 16;
             const int16_t y = ((pair.second.y - originY) * 32);
@@ -2299,17 +2308,18 @@ egaColor Level::GetWallCapMainColor() const
     return (groundColor == EgaDarkGray) ? EgaLightGray : EgaLightGray;
 }
 
-egaColor Level::GetWallCapCenterColor(const uint16_t x, const uint16_t y) const
+egaColor Level::GetWallCapCenterColor(const uint16_t x, const uint16_t y, const bool cheat) const
 {
     const egaColor wallCapMainColor = GetWallCapMainColor();
     const egaColor removableWallColor = (wallCapMainColor == EgaDarkGray) ? EgaLightGray : EgaDarkGray;
     const KeyId requiredKey = GetRequiredKeyForDoor(x, y);
+    const bool isDoor = IsDoor(x, y);
     const egaColor centerColor =
-        requiredKey == RedKey ? EgaRed :
-        requiredKey == BlueKey ? EgaBlue :
-        requiredKey == GreenKey ? EgaGreen :
-        requiredKey == YellowKey ? EgaBrightYellow :
-        IsRemovableDoor(x, y) ? removableWallColor :
+        isDoor && requiredKey == RedKey ? EgaRed :
+        isDoor && requiredKey == BlueKey ? EgaBlue :
+        isDoor && requiredKey == GreenKey ? EgaGreen :
+        isDoor && requiredKey == YellowKey ? EgaBrightYellow :
+        IsRemovableDoor(x, y) || (cheat && (IsExplosiveWall(x, y) || IsFakeWall(x, y))) ? removableWallColor :
         IsVictoryDoor(x, y) ? EgaBrightCyan :
         wallCapMainColor;
 
