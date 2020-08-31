@@ -1610,13 +1610,13 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
     renderer.Render3DWalls(renderable3DWalls);
 }
 
-void Level::DrawOverheadMap(
+void Level::DrawAutoMap(
     IRenderer& renderer,
     EgaGraph& egaGraph,
     const uint16_t additionalMargin,
     const uint16_t originX,
     const uint16_t originY,
-    const OverheadType overheadType,
+    const AutoMapType autoMapType,
     const bool cheat)
 {
     const int16_t tileWidth = 16;
@@ -1635,7 +1635,7 @@ void Level::DrawOverheadMap(
             {
                 const int16_t sx = (x - originX) * tileWidth;
                 const int16_t sy = (y - originY) * tileWidth;
-                switch (overheadType)
+                switch (autoMapType)
                 {
                 case MapView:
                 {
@@ -1716,7 +1716,7 @@ void Level::DrawOverheadMap(
     renderer.RenderTiles(numbers);
 }
 
-void Level::DrawOverheadMapIso(
+void Level::DrawAutoMapIso(
     IRenderer& renderer,
     EgaGraph& egaGraph,
     const float aspectRatio,
@@ -2002,7 +2002,7 @@ void Level::DrawOverheadMapIso(
     renderer.RenderText(locationNames);
 }
 
-void Level::DrawOverheadMapTopDown(
+void Level::DrawAutoMapTopDown(
     IRenderer& renderer,
     EgaGraph& egaGraph,
     const float aspectRatio,

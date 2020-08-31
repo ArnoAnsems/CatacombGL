@@ -34,7 +34,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_turnSpeed(100),
     m_alwaysRun(false),
     m_autoFire(false),
-    m_overheadMapMode(Isometric),
+    m_autoMapMode(Isometric),
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
@@ -190,12 +190,12 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_autoFire = (autoFirePair->second.compare("Enabled") == 0);
         }
 
-        auto overheadMapModePair = keyValuePairs.find("overheadmapmode");
-        if (overheadMapModePair != keyValuePairs.end())
+        auto autoMapModePair = keyValuePairs.find("automapmode");
+        if (autoMapModePair != keyValuePairs.end())
         {
-            m_overheadMapMode =
-                (overheadMapModePair->second.compare("classic") == 0) ? Classic :
-                (overheadMapModePair->second.compare("isometric") == 0) ? Isometric :
+            m_autoMapMode =
+                (autoMapModePair->second.compare("classic") == 0) ? ClassicDebug :
+                (autoMapModePair->second.compare("isometric") == 0) ? Isometric :
                 TopDown;
         }
 
@@ -256,11 +256,11 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "texturefilter=" << textureFilterValue << "\n";
         std::string fovValue = std::to_string(m_fov);
         file << "fov=" << fovValue << "\n";
-        const std::string overheadMapModeValue =
-            (m_overheadMapMode == Classic) ? "classic" :
-            (m_overheadMapMode == Isometric) ? "isometric" :
+        const std::string autoMapModeValue =
+            (m_autoMapMode == ClassicDebug) ? "classic" :
+            (m_autoMapMode == Isometric) ? "isometric" :
             "topdown";
-        file << "overheadmapmode=" << overheadMapModeValue << "\n";
+        file << "automapmode=" << autoMapModeValue << "\n";
         file << "# Sound settings\n";
         const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";
         file << "soundmode=" << modeValue << "\n";
@@ -499,12 +499,12 @@ void ConfigurationSettings::SetAutoFire(const bool autoFire)
     m_autoFire = autoFire;
 }
 
-OverheadMapMode ConfigurationSettings::GetOverHeadMapMode() const
+AutoMapMode ConfigurationSettings::GetAutoMapMode() const
 {
-    return m_overheadMapMode;
+    return m_autoMapMode;
 }
 
-void ConfigurationSettings::SetOverHeadMapMode(const OverheadMapMode overheadMapMode)
+void ConfigurationSettings::SetAutoMapMode(const AutoMapMode autoMapMode)
 {
-    m_overheadMapMode = overheadMapMode;
+    m_autoMapMode = autoMapMode;
 }

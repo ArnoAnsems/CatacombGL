@@ -525,12 +525,12 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 8)
         {
-            const OverheadMapMode previousOverHeadMapMode = m_configurationSettings.GetOverHeadMapMode();
-            const OverheadMapMode nextOverHeadMapMode =
-                (previousOverHeadMapMode == Classic) ? Isometric :
-                (previousOverHeadMapMode == Isometric) ? TopDown :
-                Classic;
-            m_configurationSettings.SetOverHeadMapMode(nextOverHeadMapMode);
+            const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
+            const AutoMapMode nextAutoMapMode =
+                (previousAutoMapMode == ClassicDebug) ? Isometric :
+                (previousAutoMapMode == Isometric) ? TopDown :
+                ClassicDebug;
+            m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
         }
     }
     else if (m_subMenuSelected == subMenuControls)
@@ -741,13 +741,13 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == 8)
             {
-                renderableText.LeftAligned("Overhead Map", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const OverheadMapMode overheadMapMode = m_configurationSettings.GetOverHeadMapMode();
-                const char* overheadMapModeStr =
-                    (overheadMapMode == Classic) ? "Classic" :
-                    (overheadMapMode == Isometric) ? "Isometric" :
+                renderableText.LeftAligned("Automap", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
+                const char* autoMapModeStr =
+                    (autoMapMode == ClassicDebug) ? "Classic Debug" :
+                    (autoMapMode == Isometric) ? "Isometric" :
                     "Top down";
-                renderableText.LeftAligned(overheadMapModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             index++;
         }

@@ -115,7 +115,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 
     m_game.SpawnActors(m_level, m_difficultyLevel);
     m_level->GetPlayerActor()->SetHealth(health);
-    m_overheadMap.ResetOrigin(*m_level, m_configurationSettings.GetOverHeadMapMode());
+    m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetAutoMapMode());
 
     m_timeStampOfPlayerCurrentFrame = 0;
     m_timeStampOfPlayerPreviousFrame = 0;
@@ -156,16 +156,16 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_gameTimer.Pause();
     }
 
-    if (m_state == OverheadMapDialog && m_level != nullptr && m_configurationSettings.GetOverHeadMapMode() != Classic)
+    if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetAutoMapMode() != ClassicDebug)
     {
         const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
-        if (m_configurationSettings.GetOverHeadMapMode() == Isometric)
+        if (m_configurationSettings.GetAutoMapMode() == Isometric)
         {
-            m_overheadMap.DrawIso(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
+            m_autoMap.DrawIso(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
         }
         else
         {
-            m_overheadMap.DrawTopDown(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
+            m_autoMap.DrawTopDown(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
         }
     }
     else
@@ -173,7 +173,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
         if (!m_menu->IsActive() || m_game.GetId() != 5)
         {
-            if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
+            if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
             {
                 m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
 
@@ -255,7 +255,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
     }
 
-    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.GetId() != 5)) || (m_state == Victory && m_game.GetId() != 5))
+    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.GetId() != 5)) || (m_state == Victory && m_game.GetId() != 5))
     {
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
@@ -281,7 +281,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 renderer.RenderText(renderableText);
 
                 // Radar
-                if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog || m_state == VerifyGateExit)
+                if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit)
                 {
                     const float radarCenterX = (31 * 8) + (51 / 2) + 2;
                     const float radarCenterY = (200 - 11 - 8) - (51 / 2) - 2;
@@ -363,9 +363,9 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.RenderText(renderableText);
     }
 
-    if (m_state == OverheadMapDialog && m_level != nullptr && m_configurationSettings.GetOverHeadMapMode() == Classic)
+    if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetAutoMapMode() == ClassicDebug)
     {
-        m_overheadMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
+        m_autoMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
     }
 
     if (m_state == GodModeCheatDialog)
@@ -560,7 +560,7 @@ void EngineCore::EnterKeyReleased()
             m_warpCheatTextField.clear();
             m_gameTimer.Resume();
         }
-        else if (m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog)
+        else if (m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog)
         {
             m_state = InGame;
             m_gameTimer.Resume();
@@ -608,7 +608,7 @@ bool EngineCore::Think()
 
     if (m_menu->IsActive())
     {
-        m_menu->SetSaveGameEnabled((m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == OverheadMapDialog) && !m_level->GetPlayerActor()->IsDead());
+        m_menu->SetSaveGameEnabled((m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog) && !m_level->GetPlayerActor()->IsDead());
         const MenuCommand command = m_menu->ProcessInput(m_playerInput);
         if (command == MenuCommandStartNewGame)
         {
@@ -774,9 +774,9 @@ bool EngineCore::Think()
         m_playerInput.ClearAll();
     }
 
-    if (m_state == OverheadMapDialog && !m_menu->IsActive() && m_level != nullptr)
+    if (m_state == AutoMapDialog && !m_menu->IsActive() && m_level != nullptr)
     {
-        m_overheadMap.ProcessInput(m_playerInput, *m_level, m_gameTimer.GetActualTime(), m_configurationSettings.GetOverHeadMapMode());
+        m_autoMap.ProcessInput(m_playerInput, *m_level, m_gameTimer.GetActualTime(), m_configurationSettings.GetAutoMapMode());
     }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
@@ -806,7 +806,7 @@ bool EngineCore::Think()
             }
             if (m_playerInput.IsKeyPressed(SDLK_o)) // O = overhead map
             {
-                ShowOverheadMap(true);
+                ShowAutoMap(true);
             }
             if (m_playerInput.IsKeyPressed(SDLK_e)) // E = Exit level (Catacomb 3D)
             {
@@ -835,13 +835,13 @@ bool EngineCore::Think()
             {
                 PlayerUsesPotion();
             }
-            if (IsActionJustPressed(ControlAction::ShowOverheadMap))
+            if (IsActionJustPressed(ControlAction::ShowAutoMap))
             {
                 if (m_state == InGame)
                 {
-                    ShowOverheadMap(false);
+                    ShowAutoMap(false);
                 }
-                else if (m_state == OverheadMapDialog)
+                else if (m_state == AutoMapDialog)
                 {
                     m_state = InGame;
                     m_gameTimer.Resume();
@@ -2790,13 +2790,13 @@ void EngineCore::ShowFreeItemsCheatDialog()
     }
 }
 
-void EngineCore::ShowOverheadMap(const bool cheat)
+void EngineCore::ShowAutoMap(const bool cheat)
 {
     if (m_state == InGame && m_level != nullptr)
     {
-        m_state = OverheadMapDialog;
-        m_overheadMap.ResetOrigin(*m_level, m_configurationSettings.GetOverHeadMapMode());
-        m_overheadMap.SetCheat(cheat);
+        m_state = AutoMapDialog;
+        m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetAutoMapMode());
+        m_autoMap.SetCheat(cheat);
         m_gameTimer.Pause();
     }
 }
@@ -2854,7 +2854,7 @@ bool EngineCore::RequiresMouseCapture() const
             m_state == WarpCheatDialog ||
             m_state == GodModeCheatDialog ||
             m_state == FreeItemsCheatDialog ||
-            m_state == OverheadMapDialog ||
+            m_state == AutoMapDialog ||
             m_state == Victory ||
             m_state == VerifyGateExit));
 }

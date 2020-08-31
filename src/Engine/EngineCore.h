@@ -35,7 +35,7 @@
 #include "Logging.h"
 #include "Score.h"
 #include "FadeEffect.h"
-#include "OverheadMap.h"
+#include "AutoMap.h"
 
 class EngineCore
 {
@@ -75,7 +75,7 @@ private:
         ExitGame,
         Help,
         Catalog,
-        OverheadMapDialog
+        AutoMapDialog
     };
 
     void LoadLevel(const uint8_t mapIndex);
@@ -108,7 +108,7 @@ private:
     void ShowWarpCheatDialog();
     void ShowGodModeCheatDialog();
     void ShowFreeItemsCheatDialog();
-    void ShowOverheadMap(const bool cheat);
+    void ShowAutoMap(const bool cheat);
     void FreezeTimeCheat();
 
     void SelectDifficultyLevelNovice();
@@ -180,5 +180,5 @@ private:
     Score m_score;
     FadeEffect m_fadeEffect;
     bool m_setOverlayOnNextDraw;
-    OverheadMap m_overheadMap;
+    AutoMap m_autoMap;
 };

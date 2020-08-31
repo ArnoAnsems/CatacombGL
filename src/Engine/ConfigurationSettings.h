@@ -50,11 +50,12 @@ enum ShowFpsMode
     Extended
 };
 
-enum OverheadMapMode
+enum AutoMapMode
 {
-    Classic,
+    ClassicDebug,
     Isometric,
-    TopDown
+    TopDown,
+    TopDow
 };
 
 class ConfigurationSettings
@@ -125,8 +126,8 @@ public:
     bool GetAutoFire() const;
     void SetAutoFire(const bool autoFire);
 
-    OverheadMapMode GetOverHeadMapMode() const;
-    void SetOverHeadMapMode(const OverheadMapMode overheadMapMode);
+    AutoMapMode GetAutoMapMode() const;
+    void SetAutoMapMode(const AutoMapMode autoMapMode);
 
 private:
     ScreenMode m_screenMode;
@@ -144,7 +145,7 @@ private:
     uint8_t m_turnSpeed;
     bool m_alwaysRun;
     bool m_autoFire;
-    OverheadMapMode m_overheadMapMode;
+    AutoMapMode m_autoMapMode;
 
     std::string m_pathAbyssv113;
     std::string m_pathAbyssv124;

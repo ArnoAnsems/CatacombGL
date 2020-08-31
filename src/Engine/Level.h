@@ -83,13 +83,13 @@ typedef struct LevelWall
     bool isXWall;
 } LevelWall;
 
-enum OverheadType
+enum AutoMapType
 {
     MapView = 0,
     TileMapView = 1,
     ActorAtView = 2,
     VisView = 3,
-    MaxOverheadType = 4
+    MaxAutoMapType = 4
 };
 
 class Level
@@ -156,15 +156,15 @@ public:
     void DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp);
     void DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks);
     void DrawActors(IRenderer& renderer, EgaGraph* egaGraph);
-    void DrawOverheadMap(
+    void DrawAutoMap(
         IRenderer& renderer,
         EgaGraph& egaGraph,
         const uint16_t additionalMargin,
         const uint16_t originX,
         const uint16_t originY,
-        const OverheadType overheadType,
+        const AutoMapType autoMapType,
         const bool cheat);
-    void DrawOverheadMapIso(
+    void DrawAutoMapIso(
         IRenderer& renderer,
         EgaGraph& egaGraph,
         const float aspectRatio,
@@ -172,7 +172,7 @@ public:
         const uint16_t originX,
         const uint16_t originY,
         const bool cheat);
-    void DrawOverheadMapTopDown(
+    void DrawAutoMapTopDown(
         IRenderer& renderer,
         EgaGraph& egaGraph,
         const float aspectRatio,

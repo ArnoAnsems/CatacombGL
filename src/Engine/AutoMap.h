@@ -21,11 +21,11 @@
 #include "Level.h"
 #include "ConfigurationSettings.h"
 
-class OverheadMap
+class AutoMap
 {
 public:
-    OverheadMap();
-    ~OverheadMap();
+    AutoMap();
+    ~AutoMap();
 
     void SetCheat(const bool enabled);
     void DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);
@@ -40,14 +40,14 @@ public:
         Level& level,
         const float aspectRatio,
         const ViewPorts::ViewPortRect3D original3DViewArea);
-    void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const OverheadMapMode overheadMapMode);
-    void ResetOrigin(Level& level, const OverheadMapMode overheadMapMode);
+    void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode);
+    void ResetOrigin(Level& level, const AutoMapMode autoMapMode);
 
 private:
     uint16_t m_originX;
     uint16_t m_originY;
     uint32_t m_lastActionTimestamp;
-    OverheadType m_overheadType;
+    AutoMapType m_autoMapType;
     bool m_cheat;
 };
 

@@ -695,12 +695,12 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 7)
         {
-            const OverheadMapMode previousOverHeadMapMode = m_configurationSettings.GetOverHeadMapMode();
-            const OverheadMapMode nextOverHeadMapMode =
-                (previousOverHeadMapMode == Classic) ? Isometric :
-                (previousOverHeadMapMode == Isometric) ? TopDown :
-                Classic;
-            m_configurationSettings.SetOverHeadMapMode(nextOverHeadMapMode);
+            const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
+            const AutoMapMode nextAutoMapMode =
+                (previousAutoMapMode == ClassicDebug) ? Isometric :
+                (previousAutoMapMode == Isometric) ? TopDown :
+                ClassicDebug;
+            m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
         }
     }
     else if (m_subMenuSelected == subMenuControls)
@@ -1091,12 +1091,12 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderableText.LeftAligned(vsyncStr, (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, 111);
 
         renderableTiles.DrawListBullet(76, 118, true, (m_menuItemSelected == 7) && flashIcon);
-        renderableText.LeftAligned("Overhead Map", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, 119);
-        const char* overheadMapModeStr =
-            (m_configurationSettings.GetOverHeadMapMode() == Classic) ? "Classic" :
-            (m_configurationSettings.GetOverHeadMapMode() == Isometric) ? "Isometric" :
+        renderableText.LeftAligned("Automap", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, 119);
+        const char* autoMapModeStr =
+            (m_configurationSettings.GetAutoMapMode() == ClassicDebug) ? "Classic Debug" :
+            (m_configurationSettings.GetAutoMapMode() == Isometric) ? "Isometric" :
             "Top down";
-        renderableText.LeftAligned(overheadMapModeStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, 180, 119);
+        renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, 180, 119);
 
         renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
         renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);

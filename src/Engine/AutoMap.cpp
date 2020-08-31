@@ -13,57 +13,57 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "OverheadMap.h"
+#include "AutoMap.h"
 #include "LevelLocationNames.h"
 
-OverheadMap::OverheadMap() :
+AutoMap::AutoMap() :
     m_originX(0),
     m_originY(0),
     m_lastActionTimestamp(0),
-    m_overheadType(ActorAtView),
+    m_autoMapType(ActorAtView),
     m_cheat(false)
 {
 
 }
 
-OverheadMap::~OverheadMap()
+AutoMap::~AutoMap()
 {
 
 }
 
-void OverheadMap::SetCheat(const bool enabled)
+void AutoMap::SetCheat(const bool enabled)
 {
     m_cheat = enabled;
 }
 
-void OverheadMap::DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin)
+void AutoMap::DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin)
 {
-    level.DrawOverheadMap(renderer, egaGraph, additionalMargin, m_originX, m_originY, m_overheadType, m_cheat);
+    level.DrawAutoMap(renderer, egaGraph, additionalMargin, m_originX, m_originY, m_autoMapType, m_cheat);
 }
 
-void OverheadMap::DrawIso(
+void AutoMap::DrawIso(
     IRenderer& renderer,
     EgaGraph& egaGraph,
     Level& level,
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    level.DrawOverheadMapIso(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
+    level.DrawAutoMapIso(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
 }
 
-void OverheadMap::DrawTopDown(IRenderer& renderer,
+void AutoMap::DrawTopDown(IRenderer& renderer,
     EgaGraph& egaGraph,
     Level& level,
     const float aspectRatio,
     const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    level.DrawOverheadMapTopDown(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
+    level.DrawAutoMapTopDown(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
 }
 
-void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const OverheadMapMode overheadMapMode)
+void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
 {
     const uint16_t maxOriginX = level.GetLevelWidth() - 20;
-    const uint16_t maxOriginY = (overheadMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
+    const uint16_t maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
     if (timestamp > m_lastActionTimestamp + 200)
     {
         if (playerInput.IsKeyPressed(SDLK_RIGHT) && m_originX < maxOriginX)
@@ -88,18 +88,18 @@ void OverheadMap::ProcessInput(PlayerInput& playerInput, Level& level, const uin
         }
         if (playerInput.IsKeyJustPressed(SDLK_LCTRL) || playerInput.IsKeyJustPressed(SDLK_RCTRL))
         {
-            m_overheadType = (OverheadType)(m_overheadType + 1);
-            if (m_overheadType == MaxOverheadType)
+            m_autoMapType = (AutoMapType)(m_autoMapType + 1);
+            if (m_autoMapType == MaxAutoMapType)
             {
-                m_overheadType = MapView;
+                m_autoMapType = MapView;
             }
         }
     }
 }
 
-void OverheadMap::ResetOrigin(Level& level, const OverheadMapMode overheadMapMode)
+void AutoMap::ResetOrigin(Level& level, const AutoMapMode autoMapMode)
 {
-    if (overheadMapMode == Classic)
+    if (autoMapMode == ClassicDebug)
     {
         m_originX = 0;
         m_originY = 0;
@@ -108,7 +108,7 @@ void OverheadMap::ResetOrigin(Level& level, const OverheadMapMode overheadMapMod
     {
         // Put the origin at the player position
         const uint16_t maxOriginX = level.GetLevelWidth() - 20;
-        const uint16_t maxOriginY = (overheadMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
+        const uint16_t maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
         const int16_t bestOriginX = (int16_t)(level.GetPlayerActor()->GetX()) - 10;
         const int16_t bestOriginY = (int16_t)(level.GetPlayerActor()->GetY()) - 4;
         m_originX = (bestOriginX < 0) ? 0 :
