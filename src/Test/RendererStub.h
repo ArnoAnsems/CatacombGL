@@ -56,10 +56,8 @@ public:
     void Render3DWalls(const Renderable3DWalls& walls) override;
     void Render3DTiles(const Renderable3DTiles& tiles) override;
     void RenderSprites(const RenderableSprites& renderableSprites) override;
-    void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) override;
-    void PrepareIsoRenderingText(const float originX, const float originY) override;
+    void RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso) override;
     void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale) override;
-    void RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps) override;
     void RenderTopDownFloorTiles(const Renderable3DTiles& tiles) override;
 
     //

@@ -17,12 +17,19 @@
 
 const uint8_t MaxSpritesToRender = 100;
 
-RenderableSprites::RenderableSprites(const float playerPosX, const float playerPosY) :
-    m_playerPosX(playerPosX),
-    m_playerPosY(playerPosY),
+RenderableSprites::RenderableSprites() :
+    m_playerPosX(1.0f),
+    m_playerPosY(1.0f),
     m_sprites()
 {
 
+}
+
+void RenderableSprites::Reset(const float playerPosX, const float playerPosY)
+{
+    m_playerPosX = playerPosX;
+    m_playerPosY = playerPosY;
+    m_sprites.clear();
 }
 
 void RenderableSprites::AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation)

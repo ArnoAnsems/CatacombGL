@@ -18,6 +18,7 @@
 #include "EgaGraph.h"
 #include "RenderableSprites.h"
 #include "Renderable3DWalls.h"
+#include "RenderableAutoMapIso.h"
 #include "LevelLocationNames.h"
 
 Level::Level(
@@ -1725,10 +1726,10 @@ void Level::DrawAutoMapIso(
     const uint16_t originY,
     const bool cheat)
 {
-    const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio);
-    renderer.PrepareIsoRendering(aspectRatio, original3DViewArea, (float)originX, (float)originY);
+    RenderableAutoMapIso renderableAutoMapIso(*egaGraph.GetFont(3));
+    renderableAutoMapIso.PrepareFrame(aspectRatio, original3DViewArea, originX, originY);
 
-    Renderable3DTiles renderable3DTiles;
+    Renderable3DTiles& renderable3DTiles = renderableAutoMapIso.GetFloorTilesMutable();
     for (int16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (int16_t x = 1; x < m_levelWidth - 1; x++)
@@ -1741,10 +1742,6 @@ void Level::DrawAutoMapIso(
     }
     renderable3DTiles.SetFloor(true);
     renderable3DTiles.SetColor(GetGroundColor());
-    renderer.Render3DTiles(renderable3DTiles);
-    
-    Renderable3DWalls renderable3DWalls;
-    std::map <egaColor, std::vector<IRenderer::quadCoordinates>> wallCaps;
 
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -1759,9 +1756,7 @@ void Level::DrawAutoMapIso(
                     const Picture* northPicture = egaGraph.GetPicture(northWall);
                     if (northPicture != nullptr)
                     {
-                        const unsigned int textureId = northPicture->GetTextureId();
-                        const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x + 1u, y, x, y };
-                        renderable3DWalls.AddWall(textureId, wall);
+                        renderableAutoMapIso.AddNorthWall(x, y, northPicture->GetTextureId());
                     }
                 }
 
@@ -1772,16 +1767,12 @@ void Level::DrawAutoMapIso(
                     const Picture* westPicture = egaGraph.GetPicture(westWall);
                     if (westPicture != nullptr)
                     {
-                        const unsigned int textureId = westPicture->GetTextureId();
-                        Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x, y + 1u };
-                        renderable3DWalls.AddWall(textureId, wall);
+                        renderableAutoMapIso.AddWestWall(x, y, westPicture->GetTextureId());
                     }
                 }
             }
         }
     }
-
-    renderer.Render3DWalls(renderable3DWalls);
 
     const egaColor wallCapMainColor = GetWallCapMainColor();
     for (uint16_t y = 0; y < m_levelHeight; y++)
@@ -1791,80 +1782,11 @@ void Level::DrawAutoMapIso(
             if (IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
             {
                 const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
-                if (centerColor != wallCapMainColor)
-                {
-                    const float border = 0.2f;
-                    IRenderer::quadCoordinates quad =
-                    {
-                        (float)x + border, (float)y + border,
-                        (float)x + 1.0f - border, (float)y + border,
-                        (float)x + 1.0f - border, (float)y + 1.0f - border,
-                        (float)x + border, (float)y + 1.0f - border,
-                    };
-                    wallCaps[centerColor].push_back(quad);
-                    quad =
-                    {
-                        (float)x, (float)y,
-                        (float)x + 1.0f, (float)y,
-                        (float)x + 1.0f - border, (float)y + border,
-                        (float)x + border, (float)y + border,
-                    };
-                    wallCaps[wallCapMainColor].push_back(quad);
-                    quad =
-                    {
-                        (float)x + 1.0f, (float)y,
-                        (float)x + 1.0f, (float)y + 1.0f,
-                        (float)x + 1.0f - border, (float)y + 1.0f - border,
-                        (float)x + 1.0f - border, (float)y + border,
-                    };
-                    wallCaps[wallCapMainColor].push_back(quad);
-                    quad =
-                    {
-                        (float)x + 1.0f, (float)y + 1.0f,
-                        (float)x, (float)y + 1.0f,
-                        (float)x + border, (float)y + 1.0f - border,
-                        (float)x + 1.0f - border, (float)y + 1.0f - border,
-                    };
-                    wallCaps[wallCapMainColor].push_back(quad);
-                    quad =
-                    {
-                        (float)x, (float)y + 1.0f,
-                        (float)x, (float)y,
-                        (float)x + border, (float)y + border,
-                        (float)x + border, (float)y + 1.0f - border,
-                    };
-                    wallCaps[wallCapMainColor].push_back(quad);
-                }
-                else
-                {
-                    IRenderer::quadCoordinates quad =
-                    {
-                        (float)x,
-                        (float)y,
-                        (float)x + 1.0f,
-                        (float)y,
-                        (float)x + 1.0f,
-                        (float)y + 1.0f,
-                        (float)x,
-                        (float)y + 1.0f,
-                    };
-                    wallCaps[wallCapMainColor].push_back(quad);
-                }
+                renderableAutoMapIso.AddWallCap(x, y, wallCapMainColor, centerColor);
             }
             else if (!IsTileClearFromFogOfWar(x, y) && !cheat)
             {
-                IRenderer::quadCoordinates quad =
-                {
-                    (float)x,
-                    (float)y,
-                    (float)x + 1.0f,
-                    (float)y,
-                    (float)x + 1.0f,
-                    (float)y + 1.0f,
-                    (float)x,
-                    (float)y + 1.0f,
-                };
-                wallCaps[EgaBlack].push_back(quad);
+                renderableAutoMapIso.AddWallCap(x, y, EgaBlack, EgaBlack);
             }
         }
     }
@@ -1872,29 +1794,14 @@ void Level::DrawAutoMapIso(
     // Add black borders
     for (uint16_t y = 0; y < m_levelHeight; y++)
     {
-        IRenderer::quadCoordinates quad =
-        {
-            (float)m_levelWidth, (float)y,
-            (float)m_levelWidth + 1.0f, (float)y,
-            (float)m_levelWidth + 1.0f, (float)y + 1.0f,
-            (float)m_levelWidth, (float)y + 1.0f
-        };
-        wallCaps[EgaBlack].push_back(quad);
+        renderableAutoMapIso.AddWallCap(m_levelWidth, y, EgaBlack, EgaBlack);
     }
     for (uint16_t x = 0; x < m_levelWidth; x++)
     {
-        IRenderer::quadCoordinates quad =
-        {
-            (float)x, (float)m_levelHeight,
-            (float)x + 1.0f, (float)m_levelHeight,
-            (float)x + 1.0f, (float)m_levelHeight + 1.0f,
-            (float)x, (float)m_levelHeight + 1.0f
-        };
-        wallCaps[EgaBlack].push_back(quad);
+        renderableAutoMapIso.AddWallCap(x, m_levelHeight, EgaBlack, EgaBlack);
     }
-    renderer.RenderIsoWallCaps(wallCaps);
 
-    RenderableSprites renderableSprites(m_playerActor->GetX(), m_playerActor->GetY());
+    RenderableSprites& renderableSprites = renderableAutoMapIso.GetSpritesMutable();
 
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -1947,11 +1854,7 @@ void Level::DrawAutoMapIso(
         }
     }
 
-    renderableSprites.SortSpritesBackToFront();
-    renderer.RenderSprites(renderableSprites);
-
-    renderer.PrepareIsoRenderingText((float)originX, (float)originY);
-    RenderableText locationNames(*egaGraph.GetFont(3));
+    RenderableText& locationNames = renderableAutoMapIso.GetTextMutable();
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
         if (cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
@@ -1999,7 +1902,9 @@ void Level::DrawAutoMapIso(
         }
     }
 
-    renderer.RenderText(locationNames);
+    renderableAutoMapIso.FinalizeFrame();
+
+    renderer.RenderAutoMapIso(renderableAutoMapIso);
 }
 
 void Level::DrawAutoMapTopDown(
@@ -2222,7 +2127,8 @@ uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_
 }
 void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
 {
-    RenderableSprites renderableSprites(m_playerActor->GetX(), m_playerActor->GetY());
+    RenderableSprites renderableSprites;
+    renderableSprites.Reset(m_playerActor->GetX(), m_playerActor->GetY());
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)

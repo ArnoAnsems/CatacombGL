@@ -30,6 +30,7 @@
 #include "RenderableSprites.h"
 #include "Renderable3DWalls.h"
 #include "Renderable3DTiles.h"
+#include "RenderableAutoMapIso.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -37,18 +38,6 @@
 class IRenderer
 {
 public:
-    typedef struct
-    {
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        float x3;
-        float y3;
-        float x4;
-        float y4;
-    } quadCoordinates;
-
     enum TextureFilterSetting
     {
         Nearest,
@@ -100,10 +89,8 @@ public:
     virtual void Render3DWalls(const Renderable3DWalls& walls) = 0;
     virtual void Render3DTiles(const Renderable3DTiles& tiles) = 0;
     virtual void RenderSprites(const RenderableSprites& renderableSprites) = 0;
-    virtual void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY) = 0;
-    virtual void PrepareIsoRenderingText(const float originX, const float originY) = 0;
+    virtual void RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso) = 0;
     virtual void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale) = 0;
-    virtual void RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps) = 0;
     virtual void RenderTopDownFloorTiles(const Renderable3DTiles& tiles) = 0;
 
     //

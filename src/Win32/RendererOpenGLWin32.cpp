@@ -514,6 +514,29 @@ void RendererOpenGLWin32::Render3DTiles(const Renderable3DTiles& tiles)
     glDepthMask(GL_TRUE);
 }
 
+void RendererOpenGLWin32::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso)
+{
+    PrepareIsoRendering(
+        autoMapIso.GetAspectRatio(),
+        autoMapIso.GetOriginal3DViewArea(),
+        autoMapIso.GetOriginX(),
+        autoMapIso.GetOriginY());
+
+    Render3DTiles(autoMapIso.GetFloorTiles());
+
+    Render3DWalls(autoMapIso.GetWalls());
+
+    RenderIsoWallCaps(autoMapIso.GetWallCaps());
+
+    RenderSprites(autoMapIso.GetSprites());
+
+    PrepareIsoRenderingText(
+        autoMapIso.GetOriginX(),
+        autoMapIso.GetOriginY());
+
+    RenderText(autoMapIso.GetText());
+}
+
 bool RendererOpenGLWin32::IsVSyncSupported()
 {
     return m_isVSyncSupported;
@@ -610,11 +633,11 @@ void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const
     glDisable(GL_LIGHTING);
 }
 
-void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& wallCaps)
+void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vector<RenderableAutoMapIso::quadCoordinates>>& wallCaps)
 {
     glEnable(GL_CULL_FACE);
 
-    for (const std::pair<egaColor, std::vector<quadCoordinates>>& wallCap : wallCaps)
+    for (const std::pair<egaColor, std::vector<RenderableAutoMapIso::quadCoordinates>>& wallCap : wallCaps)
     {
         const unsigned int textureId = m_singleColorTexture[wallCap.first];
         // Select the texture from the picture
@@ -622,7 +645,7 @@ void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vecto
 
         // Draw the texture as a quad
         glBegin(GL_QUADS);
-        for (const quadCoordinates& coordinate : wallCap.second)
+        for (const RenderableAutoMapIso::quadCoordinates& coordinate : wallCap.second)
         {
             glTexCoord2i(1, 1); glVertex3f((float)coordinate.x1, (float)coordinate.y1, CeilingZ);
             glTexCoord2i(0, 1); glVertex3f((float)coordinate.x2, (float)coordinate.y2, CeilingZ);

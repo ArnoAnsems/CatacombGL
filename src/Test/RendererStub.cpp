@@ -92,19 +92,11 @@ void RendererStub::RenderSprites(const RenderableSprites& /*renderableSprites*/)
 {
 }
 
-void RendererStub::PrepareIsoRendering(const float /*aspectRatio*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/, const float /*originX*/, const float /*originY*/)
-{
-}
-
-void RendererStub::PrepareIsoRenderingText(const float /*originX*/, const float /*originY*/)
+void RendererStub::RenderAutoMapIso(const RenderableAutoMapIso& /*autoMapIso*/)
 {
 }
 
 void RendererStub::PrepareTopDownRendering(const float /*aspectRatio*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/, const uint16_t /*scale*/)
-{
-}
-
-void RendererStub::RenderIsoWallCaps(const std::map <egaColor, std::vector<quadCoordinates>>& /*wallCaps*/)
 {
 }
 

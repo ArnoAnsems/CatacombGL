@@ -44,7 +44,8 @@ public:
         SpriteOrientation orientation;
     } RenderableSprite;
 
-    RenderableSprites(const float playerPosX, const float playerPosY);
+    RenderableSprites();
+    void Reset(const float playerPosX, const float playerPosY);
     void AddSprite(const Picture* picture, const float offsetX, const float offsetY, const SpriteOrientation orientation);
     void SortSpritesBackToFront();
 
@@ -56,6 +57,6 @@ private:
     void Swap(uint16_t p, uint16_t q);
 
     std::vector<RenderableSprite> m_sprites;
-    const float m_playerPosX;
-    const float m_playerPosY;
+    float m_playerPosX;
+    float m_playerPosY;
 };
