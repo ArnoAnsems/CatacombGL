@@ -140,14 +140,6 @@ void EngineCore::DrawScene(IRenderer& renderer)
 {
     m_framesCounter.AddFrame(m_gameTimer.GetActualTime());
 
-    IRenderer::FrameSettings frameSettings;
-    frameSettings.playerAngle = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetAngle();
-    frameSettings.playerPosX = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetX();
-    frameSettings.playerPosY = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetY();
-    frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
-    frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
-    renderer.SetFrameSettings(frameSettings);
-
     if (m_setOverlayOnNextDraw)
     {
         m_fadeEffect.SetOverlay(renderer);
@@ -155,6 +147,14 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_setOverlayOnNextDraw = false;
         m_gameTimer.Pause();
     }
+
+    IRenderer::FrameSettings frameSettings;
+    frameSettings.playerAngle = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetAngle();
+    frameSettings.playerPosX = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetX();
+    frameSettings.playerPosY = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetY();
+    frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
+    frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
+    renderer.SetFrameSettings(frameSettings);
 
     if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetAutoMapMode() != ClassicDebug)
     {
@@ -170,16 +170,20 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
     else
     {
-        renderer.Prepare3DRendering(m_configurationSettings.GetDepthShading(), aspectRatios[m_configurationSettings.GetAspectRatio()].ratio, m_configurationSettings.GetFov(), m_game.GetOriginal3DViewArea());
         if (!m_menu->IsActive() || m_game.GetId() != 5)
         {
             if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
             {
-                m_level->DrawFloorAndCeiling(renderer, m_timeStampOfWorldCurrentFrame);
-
-                m_level->DrawWalls(renderer, m_game.GetEgaGraph(), m_gameTimer.GetTicksForWorld());
-
-                m_level->DrawActors(renderer, m_game.GetEgaGraph());
+                m_level->Draw3DScene(
+                    renderer,
+                    *m_game.GetEgaGraph(),
+                    aspectRatios[m_configurationSettings.GetAspectRatio()].ratio,
+                    m_game.GetOriginal3DViewArea(),
+                    m_configurationSettings.GetDepthShading(),
+                    m_configurationSettings.GetFov(),
+                    m_timeStampOfWorldCurrentFrame,
+                    m_gameTimer.GetTicksForWorld()
+                );
             }
         }
     }

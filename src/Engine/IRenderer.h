@@ -31,6 +31,7 @@
 #include "Renderable3DWalls.h"
 #include "Renderable3DTiles.h"
 #include "RenderableAutoMapIso.h"
+#include "Renderable3DScene.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -85,10 +86,7 @@ public:
     //
     // 3D rendering
     //
-    virtual void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea) = 0;
-    virtual void Render3DWalls(const Renderable3DWalls& walls) = 0;
-    virtual void Render3DTiles(const Renderable3DTiles& tiles) = 0;
-    virtual void RenderSprites(const RenderableSprites& renderableSprites) = 0;
+    virtual void Render3DScene(const Renderable3DScene& renderable3DScene) = 0;
     virtual void RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso) = 0;
     virtual void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale) = 0;
     virtual void RenderTopDownFloorTiles(const Renderable3DTiles& tiles) = 0;

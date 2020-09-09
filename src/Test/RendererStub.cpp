@@ -71,24 +71,12 @@ void RendererStub::RenderTiles(const RenderableTiles& /*renderableTiles*/)
 {
 }
 
-void RendererStub::Prepare3DRendering(const bool /*depthShading*/, const float /*aspectRatio*/, uint16_t /*fov*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/)
-{
-}
-
 uint16_t RendererStub::GetAdditionalMarginDueToWideScreen(const float /*aspectRatio*/)
 {
     return 0;
 }
 
-void RendererStub::Render3DWalls(const Renderable3DWalls& /*walls*/)
-{
-}
-
-void RendererStub::Render3DTiles(const Renderable3DTiles& /*tiles*/)
-{
-}
-
-void RendererStub::RenderSprites(const RenderableSprites& /*renderableSprites*/)
+void RendererStub::Render3DScene(const Renderable3DScene& /*renderable3DScene*/)
 {
 }
 

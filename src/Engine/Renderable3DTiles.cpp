@@ -16,8 +16,9 @@
 #include "Renderable3DTiles.h"
 
 Renderable3DTiles::Renderable3DTiles() :
-    m_color(EgaBlack),
-    m_isFloor(true)
+    m_floorColor(EgaBlack),
+    m_ceilingColor(EgaBlack),
+    m_onlyFloor(false)
 {
     m_tileCoordinates.clear();
 }
@@ -27,24 +28,34 @@ void Renderable3DTiles::AddTile(const tileCoordinate coordinate)
     m_tileCoordinates.push_back(coordinate);
 }
 
-egaColor Renderable3DTiles::GetColor() const
+egaColor Renderable3DTiles::GetFloorColor() const
 {
-    return m_color;
+    return m_floorColor;
 }
 
-void Renderable3DTiles::SetColor(const egaColor color)
+egaColor Renderable3DTiles::GetCeilingColor() const
 {
-    m_color = color;
+    return m_ceilingColor;
 }
 
-bool Renderable3DTiles::IsFloor() const
+void Renderable3DTiles::SetFloorColor(const egaColor color)
 {
-    return m_isFloor;
+    m_floorColor = color;
 }
 
-void Renderable3DTiles::SetFloor(const bool isFloor)
+void Renderable3DTiles::SetCeilingColor(const egaColor color)
 {
-    m_isFloor = isFloor;
+    m_ceilingColor = color;
+}
+
+bool Renderable3DTiles::IsOnlyFloor() const
+{
+    return m_onlyFloor;
+}
+
+void Renderable3DTiles::SetOnlyFloor(const bool isOnlyFloor)
+{
+    m_onlyFloor = isOnlyFloor;
 }
 
 const std::vector<Renderable3DTiles::tileCoordinate>& Renderable3DTiles::GetTileCoordinates() const

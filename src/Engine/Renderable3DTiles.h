@@ -34,15 +34,18 @@ public:
 
     Renderable3DTiles();
     void AddTile(const tileCoordinate coordinate);
-    egaColor GetColor() const;
-    void SetColor(const egaColor color);
-    bool IsFloor() const;
-    void SetFloor(const bool isFloor);
+    egaColor GetFloorColor() const;
+    egaColor GetCeilingColor() const;
+    void SetFloorColor(const egaColor color);
+    void SetCeilingColor(const egaColor color);
+    bool IsOnlyFloor() const;
+    void SetOnlyFloor(const bool isOnlyFloor);
     const std::vector<tileCoordinate>& GetTileCoordinates() const;
 
 private:
-    egaColor m_color;
-    bool m_isFloor;
+    egaColor m_floorColor;
+    egaColor m_ceilingColor;
+    bool m_onlyFloor;
     std::vector<tileCoordinate> m_tileCoordinates;
 };
 

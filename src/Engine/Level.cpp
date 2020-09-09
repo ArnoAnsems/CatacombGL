@@ -19,6 +19,7 @@
 #include "RenderableSprites.h"
 #include "Renderable3DWalls.h"
 #include "RenderableAutoMapIso.h"
+#include "Renderable3DScene.h"
 #include "LevelLocationNames.h"
 
 Level::Level(
@@ -1520,10 +1521,27 @@ bool Level::IsWaterLevel() const
 {
     return GetGroundColor() == EgaBlue;
 }
-
-void Level::DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp)
+void Level::Draw3DScene(
+    IRenderer& renderer,
+    EgaGraph& egaGraph,
+    const float aspectRatio,
+    const ViewPorts::ViewPortRect3D original3DViewArea,
+    const bool depthShading,
+    const uint16_t fieldOfView,
+    const uint32_t timeStamp,
+    const uint32_t ticks)
 {
-    Renderable3DTiles renderable3DTiles;
+    Renderable3DScene renderable3DScene;
+    renderable3DScene.PrepareFrame(
+        aspectRatio,
+        original3DViewArea,
+        m_playerActor->GetX(),
+        m_playerActor->GetY(),
+        m_playerActor->GetAngle(),
+        depthShading,
+        fieldOfView);
+
+    Renderable3DTiles& renderable3DTiles = renderable3DScene.Get3DTilesMutable();
     for (int16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (int16_t x = 1; x < m_levelWidth - 1; x++)
@@ -1534,17 +1552,9 @@ void Level::DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp)
             }
         }
     }
-    renderable3DTiles.SetFloor(true);
-    renderable3DTiles.SetColor(GetGroundColor());
-    renderer.Render3DTiles(renderable3DTiles);
-    renderable3DTiles.SetFloor(false);
-    renderable3DTiles.SetColor(GetSkyColor(timeStamp));
-    renderer.Render3DTiles(renderable3DTiles);
-}
-
-void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks)
-{
-    Renderable3DWalls renderable3DWalls;
+    renderable3DTiles.SetOnlyFloor(false);
+    renderable3DTiles.SetFloorColor(GetGroundColor());
+    renderable3DTiles.SetCeilingColor(GetSkyColor(timeStamp));
 
     for (uint16_t y = 1; y < m_levelHeight; y++)
     {
@@ -1556,24 +1566,22 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                 const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, ticks);
                 if (northWall != 1)
                 {
-                    const Picture* northPicture = egaGraph->GetPicture(northWall);
+                    const Picture* northPicture = egaGraph.GetPicture(northWall);
                     if (northPicture != nullptr)
                     {
                         const unsigned int textureId = northPicture->GetTextureId();
-                        const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x + 1u, y, x, y };
-                        renderable3DWalls.AddWall(textureId, wall);
+                        renderable3DScene.AddNorthWall(x, y, textureId);
                     }
                 }
                 const uint16_t southwallIndex = GetWallTile(x, y);
                 const uint16_t southWall = GetDarkWallPictureIndex(southwallIndex, ticks);
                 if (southWall != 1)
                 {
-                    const Picture* southPicture = egaGraph->GetPicture(southWall);
+                    const Picture* southPicture = egaGraph.GetPicture(southWall);
                     if (southPicture != nullptr)
                     {
                         const unsigned int textureId = southPicture->GetTextureId();
-                        const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x + 1u, y };
-                        renderable3DWalls.AddWall(textureId, wall);
+                        renderable3DScene.AddSouthWall(x, y, textureId);
                     }
                 }
             }
@@ -1584,31 +1592,87 @@ void Level::DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ti
                 const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, ticks);
                 if (eastWall != 1)
                 {
-                    const Picture* eastPicture = egaGraph->GetPicture(eastWall);
+                    const Picture* eastPicture = egaGraph.GetPicture(eastWall);
                     if (eastPicture != nullptr)
                     {
                         const unsigned int textureId = eastPicture->GetTextureId();
-                        const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y + 1u, x, y };
-                        renderable3DWalls.AddWall(textureId, wall);
+                        renderable3DScene.AddEastWall(x, y, textureId);
                     }
                 }
                 const uint16_t westwallIndex = GetWallTile(x - 1, y);
                 const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, ticks);
                 if (westWall != 1)
                 {
-                    const Picture* westPicture = egaGraph->GetPicture(westWall);
+                    const Picture* westPicture = egaGraph.GetPicture(westWall);
                     if (westPicture != nullptr)
                     {
                         const unsigned int textureId = westPicture->GetTextureId();
-                        const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x, y + 1u };
-                        renderable3DWalls.AddWall(textureId, wall);
+                        renderable3DScene.AddWestWall(x, y, textureId);
                     }
                 }
             }
         }
     }
 
-    renderer.Render3DWalls(renderable3DWalls);
+    RenderableSprites& renderableSprites = renderable3DScene.GetSpritesMutable();
+    renderableSprites.Reset(m_playerActor->GetX(), m_playerActor->GetY());
+    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+    {
+        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+        {
+            // Actors
+            Actor* actor = GetBlockingActor(x, y);
+            if (actor != nullptr)
+            {
+                Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
+                if (actorPicture != nullptr)
+                {
+                    RenderableSprites::SpriteOrientation orientation = RenderableSprites::SpriteOrientation::RotatedTowardsPlayer;
+
+                    if (actor->GetState() == StateIdArch)
+                    {
+                        int16_t storedOrientation = actor->GetTemp1();
+                        if (storedOrientation == 0)
+                        {
+                            actor->SetTemp1(IsSolidWall(x - 1, y) && !IsExplosiveWall(x - 1, y) && !IsDoor(x - 1, y) ||
+                                IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y) && !IsDoor(x + 1, y) ||
+                                (GetBlockingActor(x - 1, y) != nullptr && GetBlockingActor(x - 1, y)->GetState() == StateIdArch) ||
+                                (GetBlockingActor(x + 1, y) != nullptr && GetBlockingActor(x + 1, y)->GetState() == StateIdArch)
+                                ? RenderableSprites::SpriteOrientation::AlongXAxis : RenderableSprites::SpriteOrientation::AlongYAxis);
+                            storedOrientation = actor->GetTemp1();
+                        }
+                        orientation = (RenderableSprites::SpriteOrientation)storedOrientation;
+                    }
+
+                    if (IsActorVisibleForPlayer(actor))
+                    {
+                        renderableSprites.AddSprite(actorPicture, actor->GetX(), actor->GetY(), orientation);
+                    }
+                }
+            }
+        }
+    }
+
+    for (uint16_t i = 0; i < 100; i++)
+    {
+        // Projectiles
+        Actor* projectile = GetNonBlockingActor(i);
+        if (projectile != nullptr)
+        {
+            Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+            if (actorPicture != nullptr)
+            {
+                if (IsActorVisibleForPlayer(projectile))
+                {
+                    renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::RotatedTowardsPlayer);
+                }
+            }
+        }
+    }
+
+    renderable3DScene.FinalizeFrame();
+
+    renderer.Render3DScene(renderable3DScene);
 }
 
 void Level::DrawAutoMap(
@@ -1740,8 +1804,8 @@ void Level::DrawAutoMapIso(
             }
         }
     }
-    renderable3DTiles.SetFloor(true);
-    renderable3DTiles.SetColor(GetGroundColor());
+    renderable3DTiles.SetOnlyFloor(true);
+    renderable3DTiles.SetFloorColor(GetGroundColor());
 
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -1984,8 +2048,8 @@ void Level::DrawAutoMapTopDown(
             }
         }
     }
-    floorTiles.SetColor(GetGroundColor());
-    borderTiles.SetColor(EgaBlack);
+    floorTiles.SetFloorColor(GetGroundColor());
+    borderTiles.SetFloorColor(EgaBlack);
     renderer.RenderTopDownFloorTiles(floorTiles);
     renderer.RenderTopDownFloorTiles(borderTiles);
 
@@ -2124,67 +2188,6 @@ uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_
     {
         return 1;
     }
-}
-void Level::DrawActors(IRenderer& renderer, EgaGraph* egaGraph)
-{
-    RenderableSprites renderableSprites;
-    renderableSprites.Reset(m_playerActor->GetX(), m_playerActor->GetY());
-    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
-    {
-        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
-        {
-            // Actors
-            Actor* actor = GetBlockingActor(x, y);
-            if (actor != nullptr)
-            {
-                Picture* actorPicture = egaGraph->GetPicture(actor->GetPictureIndex());
-                if (actorPicture != nullptr)
-                {
-                    RenderableSprites::SpriteOrientation orientation = RenderableSprites::SpriteOrientation::RotatedTowardsPlayer;
-
-                    if (actor->GetState() == StateIdArch)
-                    {
-                        int16_t storedOrientation = actor->GetTemp1();
-                        if (storedOrientation == 0)
-                        {
-                            actor->SetTemp1(IsSolidWall(x - 1, y) && !IsExplosiveWall(x - 1, y) && !IsDoor(x - 1, y) ||
-                                IsSolidWall(x + 1, y) && !IsExplosiveWall(x + 1, y) && !IsDoor(x + 1, y) ||
-                                (GetBlockingActor(x - 1, y) != nullptr && GetBlockingActor(x - 1, y)->GetState() == StateIdArch) ||
-                                (GetBlockingActor(x + 1, y) != nullptr && GetBlockingActor(x + 1, y)->GetState() == StateIdArch)
-                                ? RenderableSprites::SpriteOrientation::AlongXAxis : RenderableSprites::SpriteOrientation::AlongYAxis);
-                            storedOrientation = actor->GetTemp1();
-                        }
-                        orientation = (RenderableSprites::SpriteOrientation)storedOrientation;
-                    }
-
-                    if (IsActorVisibleForPlayer(actor))
-                    {
-                        renderableSprites.AddSprite(actorPicture, actor->GetX(), actor->GetY(), orientation);
-                    }
-                }
-            }
-        }
-    }
-
-    for (uint16_t i = 0; i < 100; i++)
-    {
-        // Projectiles
-        Actor* projectile = GetNonBlockingActor(i);
-        if (projectile != nullptr)
-        {
-            Picture* actorPicture = egaGraph->GetPicture(projectile->GetPictureIndex());
-            if (actorPicture != nullptr)
-            {
-                if (IsActorVisibleForPlayer(projectile))
-                {
-                    renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::RotatedTowardsPlayer);
-                }
-            }
-        }
-    }
-
-    renderableSprites.SortSpritesBackToFront();
-    renderer.RenderSprites(renderableSprites);
 }
 
 void Level::RemoveActor(Actor* actor)

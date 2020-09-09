@@ -67,7 +67,6 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
     const Font& defaultFont = *DefaultFont::Get(m_renderer, 10);
     const ViewPorts::ViewPortRect3D dummy3DViewArea = { 0, 320, 0, 200 };
     RenderableText renderableText(defaultFont);
-    m_renderer.Prepare3DRendering(false, 1.0f, 25, dummy3DViewArea);
     m_renderer.Prepare2DRendering(true);
     DrawBox(2, 2, 636, 44, "Catacomb Games Library", renderableText);
     renderableText.LeftAligned("Launch a game by pressing the corresponding number [1-6] on the keyboard.", EgaBrightWhite, 18, 19);

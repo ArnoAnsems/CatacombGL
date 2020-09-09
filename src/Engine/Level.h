@@ -153,9 +153,15 @@ public:
     void StoreToFile(std::ofstream& file) const;
     bool IsWaterLevel() const;
 
-    void DrawFloorAndCeiling(IRenderer& renderer, const uint32_t timeStamp);
-    void DrawWalls(IRenderer& renderer, EgaGraph* egaGraph, const uint32_t ticks);
-    void DrawActors(IRenderer& renderer, EgaGraph* egaGraph);
+    void Draw3DScene(
+        IRenderer& renderer,
+        EgaGraph& egaGraph,
+        const float aspectRatio,
+        const ViewPorts::ViewPortRect3D original3DViewArea,
+        const bool depthShading,
+        const uint16_t fieldOfView,
+        const uint32_t timeStamp,
+        const uint32_t ticks);
     void DrawAutoMap(
         IRenderer& renderer,
         EgaGraph& egaGraph,

@@ -67,6 +67,10 @@ void RendererOpenGLWin32::Setup()
 
     const char* glRenderer = (const char*)glGetString(GL_RENDERER);
     m_graphicsAdapterModel = std::string(glRenderer);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearDepth(1.0f);                         // Depth Buffer Setup
+    glClearStencil(0);
 }
 
 void RendererOpenGLWin32::SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight)
@@ -88,6 +92,8 @@ void RendererOpenGLWin32::SetFrameSettings(const FrameSettings& frameSettings)
         SDL_GL_SetSwapInterval(frameSettings.vSyncEnabled ? 1 : 0);
         m_currentSwapInterval = requestedSwapInterval;
     }
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 }
 
 unsigned int RendererOpenGLWin32::GenerateTextureId() const
@@ -338,16 +344,25 @@ void RendererOpenGLWin32::RenderTiles(const RenderableTiles& renderableTiles)
     glEnd();
 }
 
+void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DScene)
+{
+    Prepare3DRendering(
+        renderable3DScene.GetDepthShading(),
+        renderable3DScene.GetAspectRatio(),
+        renderable3DScene.GetFieldOfView(),
+        renderable3DScene.GetOriginal3DViewArea()
+    );
+
+    Render3DTiles(renderable3DScene.Get3DTiles());
+    Render3DWalls(renderable3DScene.GetWalls());
+    RenderSprites(renderable3DScene.GetSprites());
+}
+
 void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea)
 {
     ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
 
     glViewport(rect.left, rect.bottom, rect.width, rect.height);
-
-    glClearDepth(1.0f);                         // Depth Buffer Setup
-    glClearStencil(0);
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 
     glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 
@@ -492,14 +507,15 @@ void RendererOpenGLWin32::RenderSprites(const RenderableSprites& renderableSprit
 
 void RendererOpenGLWin32::Render3DTiles(const Renderable3DTiles& tiles)
 {
-    BindTexture(m_singleColorTexture[tiles.GetColor()]);
-
     // Do not write into the depth buffer. This allows sprites to appear a bit sunken into the floor.
     glDepthMask(GL_FALSE);
 
-    glBegin(GL_QUADS);
+    BindTexture(m_singleColorTexture[tiles.GetFloorColor()]);
+
     const std::vector<Renderable3DTiles::tileCoordinate>& tileCoordinates = tiles.GetTileCoordinates();
-    const float z = tiles.IsFloor() ? FloorZ : CeilingZ;
+
+    glBegin(GL_QUADS);
+    const float z = FloorZ;
     for (const Renderable3DTiles::tileCoordinate& tile : tileCoordinates)
     {
         const float tileX = (float)tile.x;
@@ -510,6 +526,25 @@ void RendererOpenGLWin32::Render3DTiles(const Renderable3DTiles& tiles)
         glTexCoord2i(0, 0); glVertex3f(tileX, tileY, z);               // Top Left
     }
     glEnd();
+
+    if (!tiles.IsOnlyFloor())
+    {
+        BindTexture(m_singleColorTexture[tiles.GetCeilingColor()]);
+
+        glBegin(GL_QUADS);
+        const std::vector<Renderable3DTiles::tileCoordinate>& tileCoordinates = tiles.GetTileCoordinates();
+        const float z = CeilingZ;
+        for (const Renderable3DTiles::tileCoordinate& tile : tileCoordinates)
+        {
+            const float tileX = (float)tile.x;
+            const float tileY = (float)tile.y;
+            glTexCoord2i(0, 1); glVertex3f(tileX + 1.0f, tileY, z);        // Bottom Left
+            glTexCoord2i(1, 1); glVertex3f(tileX + 1.0f, tileY + 1.0f, z); // Bottom Right
+            glTexCoord2i(1, 0); glVertex3f(tileX, tileY + 1.0f, z);        // Top Right
+            glTexCoord2i(0, 0); glVertex3f(tileX, tileY, z);               // Top Left
+        }
+        glEnd();
+    }
 
     glDepthMask(GL_TRUE);
 }
@@ -547,11 +582,6 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
 
     glViewport(rect.left, rect.bottom, rect.width, rect.height);
-
-    glClearDepth(1.0f);                         // Depth Buffer Setup
-    glClearStencil(0);
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 
     glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 
@@ -660,7 +690,7 @@ void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vecto
 
 void RendererOpenGLWin32::RenderTopDownFloorTiles(const Renderable3DTiles& tiles)
 {
-    const unsigned int textureId = m_singleColorTexture[tiles.GetColor()];
+    const unsigned int textureId = m_singleColorTexture[tiles.GetFloorColor()];
     // Select the texture from the picture
     BindTexture(textureId);
 

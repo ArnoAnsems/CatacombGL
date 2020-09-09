@@ -172,6 +172,7 @@
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="Radar.cpp" />
+    <ClCompile Include="Renderable3DScene.cpp" />
     <ClCompile Include="Renderable3DTiles.cpp" />
     <ClCompile Include="Renderable3DWalls.cpp" />
     <ClCompile Include="RenderableAutoMapIso.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="Radar.h" />
+    <ClInclude Include="Renderable3DScene.h" />
     <ClInclude Include="Renderable3DTiles.h" />
     <ClInclude Include="Renderable3DWalls.h" />
     <ClInclude Include="RenderableAutoMapIso.h" />
