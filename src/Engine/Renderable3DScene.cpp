@@ -15,7 +15,8 @@
 
 #include "Renderable3DScene.h"
 
-Renderable3DScene::Renderable3DScene() :
+Renderable3DScene::Renderable3DScene(const ViewPorts::ViewPortRect3D original3DViewArea) :
+    m_original3DViewArea(original3DViewArea),
     m_aspectRatio(1.0f),
     m_originX(1.0f),
     m_originY(1.0f),
@@ -28,7 +29,6 @@ Renderable3DScene::Renderable3DScene() :
 
 void Renderable3DScene::PrepareFrame(
     const float aspectRatio,
-    const ViewPorts::ViewPortRect3D original3DViewArea,
     const float originX,
     const float originY,
     const float angle,
@@ -36,13 +36,14 @@ void Renderable3DScene::PrepareFrame(
     const uint16_t fieldOfView)
 {
     m_aspectRatio = aspectRatio;
-    m_original3DViewArea = original3DViewArea;
     m_originX = originX;
     m_originY = originY;
     m_angle = angle;
     m_depthShading = depthShading;
     m_fieldOfView = fieldOfView;
-    m_sprites.Reset(originX, originY);
+    m_walls.Reset();
+    m_3DTiles.Reset();
+    m_sprites.Reset(originX, originY, angle);
 }
 
 void Renderable3DScene::FinalizeFrame()
@@ -68,6 +69,11 @@ const float Renderable3DScene::GetOriginX() const
 const float Renderable3DScene::GetOriginY() const
 {
     return m_originY;
+}
+
+const float Renderable3DScene::GetAngle() const
+{
+    return m_angle;
 }
 
 const Renderable3DWalls& Renderable3DScene::GetWalls() const

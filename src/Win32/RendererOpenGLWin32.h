@@ -89,15 +89,12 @@ private:
     void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY);
     void PrepareIsoRenderingText(const float originX, const float originY);
     void RenderIsoWallCaps(const std::map <egaColor, std::vector<RenderableAutoMapIso::quadCoordinates>>& wallCaps);
-    void Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea);
     void Render3DWalls(const Renderable3DWalls& walls);
     void Render3DTiles(const Renderable3DTiles& tiles);
     void RenderSprites(const RenderableSprites& renderableSprites);
 
     uint16_t m_windowWidth;
     uint16_t m_windowHeight;
-    float m_playerAngle;
-    float m_playerPosX, m_playerPosY;
     unsigned int m_singleColorTexture[EgaRange];
 
     GLint m_textureFilter;

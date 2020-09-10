@@ -47,9 +47,6 @@ public:
 
     typedef struct
     {
-        float playerAngle;
-        float playerPosX;
-        float playerPosY;
         TextureFilterSetting textureFilter;
         bool vSyncEnabled;
     } FrameSettings;

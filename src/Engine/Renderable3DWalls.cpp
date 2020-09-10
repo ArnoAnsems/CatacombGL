@@ -33,3 +33,8 @@ const std::map<unsigned int, std::vector<Renderable3DWalls::wallCoordinate>>& Re
 {
     return m_textureToWallsMap;
 }
+
+void Renderable3DWalls::Reset()
+{
+    m_textureToWallsMap.clear();
+}

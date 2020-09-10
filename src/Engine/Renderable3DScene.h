@@ -28,11 +28,10 @@
 class Renderable3DScene
 {
 public:
-    Renderable3DScene();
+    Renderable3DScene(const ViewPorts::ViewPortRect3D original3DViewArea);
 
     void PrepareFrame(
         const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea,
         const float originX,
         const float originY,
         const float angle,
@@ -44,6 +43,7 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() const;
     const float GetOriginX() const;
     const float GetOriginY() const;
+    const float GetAngle() const;
     const Renderable3DWalls& GetWalls() const;
     const Renderable3DTiles& Get3DTiles() const;
     const RenderableSprites& GetSprites() const;
@@ -58,11 +58,11 @@ public:
     RenderableSprites& GetSpritesMutable();
 
 private:
+    const ViewPorts::ViewPortRect3D m_original3DViewArea;
     Renderable3DWalls m_walls;
     Renderable3DTiles m_3DTiles;
     RenderableSprites m_sprites;
     float m_aspectRatio;
-    ViewPorts::ViewPortRect3D m_original3DViewArea;
     float m_originX;
     float m_originY;
     float m_angle;

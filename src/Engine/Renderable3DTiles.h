@@ -41,6 +41,7 @@ public:
     bool IsOnlyFloor() const;
     void SetOnlyFloor(const bool isOnlyFloor);
     const std::vector<tileCoordinate>& GetTileCoordinates() const;
+    void Reset();
 
 private:
     egaColor m_floorColor;

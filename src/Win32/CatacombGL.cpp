@@ -492,9 +492,6 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         }
 
         IRenderer::FrameSettings frameSettings;
-        frameSettings.playerAngle = 0.0f;
-        frameSettings.playerPosX = 0.0f;
-        frameSettings.playerPosY = 0.0f;
         frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
         frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
         m_renderer->SetFrameSettings(frameSettings);

@@ -30,9 +30,6 @@ constexpr GLint GL_CLAMP_TO_EDGE = 0x812F;
 RendererOpenGLWin32::RendererOpenGLWin32() :
     m_windowWidth(800u),
     m_windowHeight(600u),
-    m_playerAngle(0.0f),
-    m_playerPosX(2.5f),
-    m_playerPosY(2.5f),
     m_textureFilter(GL_LINEAR),
     m_currentSwapInterval(-1),
     m_isVSyncSupported(false),
@@ -81,9 +78,6 @@ void RendererOpenGLWin32::SetWindowDimensions(const uint16_t windowWidth, const 
 
 void RendererOpenGLWin32::SetFrameSettings(const FrameSettings& frameSettings)
 {
-    m_playerAngle = frameSettings.playerAngle;
-    m_playerPosX = frameSettings.playerPosX;
-    m_playerPosY = frameSettings.playerPosY;
     m_textureFilter = (frameSettings.textureFilter == Nearest) ? GL_NEAREST : GL_LINEAR;
 
     const int32_t requestedSwapInterval = (frameSettings.vSyncEnabled) ? 1 : 0;
@@ -346,21 +340,7 @@ void RendererOpenGLWin32::RenderTiles(const RenderableTiles& renderableTiles)
 
 void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DScene)
 {
-    Prepare3DRendering(
-        renderable3DScene.GetDepthShading(),
-        renderable3DScene.GetAspectRatio(),
-        renderable3DScene.GetFieldOfView(),
-        renderable3DScene.GetOriginal3DViewArea()
-    );
-
-    Render3DTiles(renderable3DScene.Get3DTiles());
-    Render3DWalls(renderable3DScene.GetWalls());
-    RenderSprites(renderable3DScene.GetSprites());
-}
-
-void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const float aspectRatio, uint16_t fov, const ViewPorts::ViewPortRect3D original3DViewArea)
-{
-    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
+    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, renderable3DScene.GetAspectRatio(), renderable3DScene.GetOriginal3DViewArea());
 
     glViewport(rect.left, rect.bottom, rect.width, rect.height);
 
@@ -376,30 +356,34 @@ void RendererOpenGLWin32::Prepare3DRendering(const bool depthShading, const floa
     glLoadIdentity();									// Reset The Projection Matrix
 
     // Calculate The Aspect Ratio Of The Window
-    gluPerspective((double)fov,(float)rect.width / (float)rect.height,0.1f,100.0f);
+    gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)rect.width / (float)rect.height, 0.1f, 100.0f);
 
     glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-    glRotatef(m_playerAngle, 0.0f, 0.0f, -1.0f);
-    glTranslatef(-m_playerPosX, -m_playerPosY, -PlayerZ);
+    glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
+    glTranslatef(-renderable3DScene.GetOriginX(), -renderable3DScene.GetOriginY(), -PlayerZ);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     glNormal3f(0.0f, 0.0f, -1.0f);
 
-    if (depthShading)
+    if (renderable3DScene.GetDepthShading())
     {
-        GLfloat LightAmbient[]= { 1.0f, 1.0f, 1.0f, 1.0f };
-        GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 
-        GLfloat LightPosition[]= { m_playerPosX, m_playerPosY, -PlayerZ, 1.0f }; 
+        GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
         glEnable(GL_LIGHTING);
-        glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient); 
-        glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);  
-        glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
+        glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+        glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
         glEnable(GL_LIGHT1);
     }
 
     glShadeModel(GL_SMOOTH);
+
+    Render3DTiles(renderable3DScene.Get3DTiles());
+    Render3DWalls(renderable3DScene.GetWalls());
+    RenderSprites(renderable3DScene.GetSprites());
 }
 
 uint16_t RendererOpenGLWin32::GetAdditionalMarginDueToWideScreen(const float aspectRatio)
@@ -468,7 +452,7 @@ void RendererOpenGLWin32::RenderSprites(const RenderableSprites& renderableSprit
 
         glTranslatef(offsetX, offsetY, 0.0f);
         const float angle =
-            (orientation == RenderableSprites::RotatedTowardsPlayer) ? m_playerAngle :
+            (orientation == RenderableSprites::RotatedTowardsPlayer) ? renderableSprites.GetAngle() :
             (orientation == RenderableSprites::Isometric) ? 135.0f :
             (orientation == RenderableSprites::AlongYAxis) ? 90.0f :
             0.0f;

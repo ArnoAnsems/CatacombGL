@@ -25,10 +25,11 @@ RenderableSprites::RenderableSprites() :
 
 }
 
-void RenderableSprites::Reset(const float playerPosX, const float playerPosY)
+void RenderableSprites::Reset(const float playerPosX, const float playerPosY, const float angle)
 {
     m_playerPosX = playerPosX;
     m_playerPosY = playerPosY;
+    m_angle = angle;
     m_sprites.clear();
 }
 
@@ -52,6 +53,11 @@ void RenderableSprites::SortSpritesBackToFront()
 const std::vector<RenderableSprites::RenderableSprite>& RenderableSprites::GetSprites() const
 {
     return m_sprites;
+}
+
+const float RenderableSprites::GetAngle() const
+{
+    return m_angle;
 }
 
 void RenderableSprites::QuickSort(uint16_t p, uint16_t q)

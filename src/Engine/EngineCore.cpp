@@ -74,7 +74,8 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_menu(game.CreateMenu(configurationSettings, m_savedGames)),
     m_configurationSettings(configurationSettings),
     m_scrollsArePresent(AreScrollsPresent()),
-    m_setOverlayOnNextDraw(false)
+    m_setOverlayOnNextDraw(false),
+    m_renderable3DScene(m_game.GetOriginal3DViewArea())
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -149,9 +150,6 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
 
     IRenderer::FrameSettings frameSettings;
-    frameSettings.playerAngle = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetAngle();
-    frameSettings.playerPosX = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetX();
-    frameSettings.playerPosY = (m_level == nullptr) ? 0.0f : m_level->GetPlayerActor()->GetY();
     frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
     frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
     renderer.SetFrameSettings(frameSettings);
@@ -174,16 +172,22 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
             {
-                m_level->Draw3DScene(
-                    renderer,
-                    *m_game.GetEgaGraph(),
+                m_renderable3DScene.PrepareFrame(
                     aspectRatios[m_configurationSettings.GetAspectRatio()].ratio,
-                    m_game.GetOriginal3DViewArea(),
+                    m_level->GetPlayerActor()->GetX(),
+                    m_level->GetPlayerActor()->GetY(),
+                    m_level->GetPlayerActor()->GetAngle(),
                     m_configurationSettings.GetDepthShading(),
-                    m_configurationSettings.GetFov(),
+                    m_configurationSettings.GetFov());
+                m_level->Setup3DScene(
+                    *m_game.GetEgaGraph(),
+                    m_renderable3DScene,
                     m_timeStampOfWorldCurrentFrame,
                     m_gameTimer.GetTicksForWorld()
                 );
+                m_renderable3DScene.FinalizeFrame();
+
+                renderer.Render3DScene(m_renderable3DScene);
             }
         }
     }

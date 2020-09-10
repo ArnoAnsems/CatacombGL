@@ -28,6 +28,7 @@
 #include "Actor.h"
 #include "IRenderer.h"
 #include "Logging.h"
+#include "Renderable3DScene.h"
 
 class EgaGraph;
 
@@ -153,13 +154,9 @@ public:
     void StoreToFile(std::ofstream& file) const;
     bool IsWaterLevel() const;
 
-    void Draw3DScene(
-        IRenderer& renderer,
+    void Setup3DScene(
         EgaGraph& egaGraph,
-        const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea,
-        const bool depthShading,
-        const uint16_t fieldOfView,
+        Renderable3DScene& renderable3DScene,
         const uint32_t timeStamp,
         const uint32_t ticks);
     void DrawAutoMap(

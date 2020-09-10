@@ -62,3 +62,8 @@ const std::vector<Renderable3DTiles::tileCoordinate>& Renderable3DTiles::GetTile
 {
     return m_tileCoordinates;
 }
+
+void Renderable3DTiles::Reset()
+{
+    m_tileCoordinates.clear();
+}

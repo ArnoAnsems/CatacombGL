@@ -181,4 +181,5 @@ private:
     FadeEffect m_fadeEffect;
     bool m_setOverlayOnNextDraw;
     AutoMap m_autoMap;
+    Renderable3DScene m_renderable3DScene;
 };

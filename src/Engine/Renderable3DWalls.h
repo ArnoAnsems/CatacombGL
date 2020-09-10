@@ -37,6 +37,7 @@ public:
     Renderable3DWalls();
     void AddWall(const unsigned int textureId, const wallCoordinate coordinate);
     const std::map<unsigned int, std::vector<wallCoordinate>>& GetTextureToWallsMap() const;
+    void Reset();
 
 private:
     std::map<unsigned int, std::vector<wallCoordinate>> m_textureToWallsMap;

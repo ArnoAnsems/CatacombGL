@@ -1521,26 +1521,12 @@ bool Level::IsWaterLevel() const
 {
     return GetGroundColor() == EgaBlue;
 }
-void Level::Draw3DScene(
-    IRenderer& renderer,
+void Level::Setup3DScene(
     EgaGraph& egaGraph,
-    const float aspectRatio,
-    const ViewPorts::ViewPortRect3D original3DViewArea,
-    const bool depthShading,
-    const uint16_t fieldOfView,
+    Renderable3DScene& renderable3DScene,
     const uint32_t timeStamp,
     const uint32_t ticks)
 {
-    Renderable3DScene renderable3DScene;
-    renderable3DScene.PrepareFrame(
-        aspectRatio,
-        original3DViewArea,
-        m_playerActor->GetX(),
-        m_playerActor->GetY(),
-        m_playerActor->GetAngle(),
-        depthShading,
-        fieldOfView);
-
     Renderable3DTiles& renderable3DTiles = renderable3DScene.Get3DTilesMutable();
     for (int16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -1615,7 +1601,7 @@ void Level::Draw3DScene(
     }
 
     RenderableSprites& renderableSprites = renderable3DScene.GetSpritesMutable();
-    renderableSprites.Reset(m_playerActor->GetX(), m_playerActor->GetY());
+    renderableSprites.Reset(m_playerActor->GetX(), m_playerActor->GetY(), m_playerActor->GetAngle());
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
@@ -1669,10 +1655,6 @@ void Level::Draw3DScene(
             }
         }
     }
-
-    renderable3DScene.FinalizeFrame();
-
-    renderer.Render3DScene(renderable3DScene);
 }
 
 void Level::DrawAutoMap(

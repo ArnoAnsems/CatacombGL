@@ -37,7 +37,7 @@ void RenderableAutoMapIso::PrepareFrame(
     m_original3DViewArea = original3DViewArea;
     m_originX = originX;
     m_originY = originY;
-    m_sprites.Reset(originX, originY);
+    m_sprites.Reset(originX, originY, 0.0f);
 }
 
 void RenderableAutoMapIso::FinalizeFrame()
