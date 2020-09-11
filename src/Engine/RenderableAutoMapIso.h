@@ -54,12 +54,16 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() const;
     const float GetOriginX() const;
     const float GetOriginY() const;
+    const float GetPlayerX() const;
+    const float GetPlayerY() const;
+    const float GetPlayerAngle() const;
     const Renderable3DWalls& GetWalls() const;
     const std::map <egaColor, std::vector<quadCoordinates>>& GetWallCaps() const;
     const Renderable3DTiles& GetFloorTiles() const;
     const RenderableSprites& GetSprites() const;
     const RenderableText& GetText() const;
 
+    void SetPlayerPosition(const float x, const float y, const float angle);
     void AddNorthWall(const uint16_t x, const uint16_t y, const unsigned int textureId);
     void AddWestWall(const uint16_t x, const uint16_t y, const unsigned int textureId);
     void AddWallCap(const uint16_t x, const uint16_t y, const egaColor mainColor, const egaColor centerColor);
@@ -77,4 +81,7 @@ private:
     ViewPorts::ViewPortRect3D m_original3DViewArea;
     float m_originX;
     float m_originY;
+    float m_playerX;
+    float m_playerY;
+    float m_playerAngle;
 };

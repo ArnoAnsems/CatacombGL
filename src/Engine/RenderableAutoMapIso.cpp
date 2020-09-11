@@ -21,6 +21,9 @@ RenderableAutoMapIso::RenderableAutoMapIso(
     m_original3DViewArea(),
     m_originX(1.0f),
     m_originY(1.0f),
+    m_playerX(1.0f),
+    m_playerY(1.0f),
+    m_playerAngle(0.0f),
     m_sprites(),
     m_text(font)
 {
@@ -65,6 +68,21 @@ const float RenderableAutoMapIso::GetOriginY() const
     return m_originY;
 }
 
+const float RenderableAutoMapIso::GetPlayerX() const
+{
+    return m_playerX;
+}
+
+const float RenderableAutoMapIso::GetPlayerY() const
+{
+    return m_playerY;
+}
+
+const float RenderableAutoMapIso::GetPlayerAngle() const
+{
+    return m_playerAngle;
+}
+
 const Renderable3DWalls& RenderableAutoMapIso::GetWalls() const
 {
     return m_walls;
@@ -90,7 +108,12 @@ const RenderableText& RenderableAutoMapIso::GetText() const
     return m_text;
 }
 
-
+void RenderableAutoMapIso::SetPlayerPosition(const float x, const float y, const float angle)
+{
+    m_playerX = x;
+    m_playerY = y;
+    m_playerAngle = angle;
+}
 
 void RenderableAutoMapIso::AddNorthWall(const uint16_t x, const uint16_t y, const unsigned int textureId)
 {

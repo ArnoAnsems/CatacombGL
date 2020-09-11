@@ -549,6 +549,30 @@ void RendererOpenGLWin32::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIs
 
     RenderSprites(autoMapIso.GetSprites());
 
+    BindTexture(m_singleColorTexture[EgaBrightYellow]);
+
+    const float playerX = autoMapIso.GetPlayerX();
+    const float playerY = autoMapIso.GetPlayerY();
+
+    glPushMatrix();
+
+    glTranslatef(playerX, playerY, PlayerZ);
+    glRotatef(autoMapIso.GetPlayerAngle(), 0.0f, 0.0f, 1.0f);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 1); glVertex3f(0.1f, 0.4f, 0.0f);
+    glTexCoord2i(1, 1); glVertex3f(- 0.1f, 0.4f, 0.0f);
+    glTexCoord2i(1, 0); glVertex3f(- 0.1f, 0.0f, 0.0f);
+    glTexCoord2i(0, 0); glVertex3f(0.1f, 0.0f, 0.0f);
+    glEnd();
+    glBegin(GL_TRIANGLES);
+    glTexCoord2i(0, 1); glVertex3f(0.4f, 0.0f, 0.0f);
+    glTexCoord2i(1, 1); glVertex3f(0.0f, - 0.4f, 0.0f);
+    glTexCoord2i(1, 0); glVertex3f(- 0.4f, 0.0f, 0.0f);
+    glEnd();
+
+    glPopMatrix();
+
     PrepareIsoRenderingText(
         autoMapIso.GetOriginX(),
         autoMapIso.GetOriginY());

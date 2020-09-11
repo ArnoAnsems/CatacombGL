@@ -1774,6 +1774,7 @@ void Level::DrawAutoMapIso(
 {
     RenderableAutoMapIso renderableAutoMapIso(*egaGraph.GetFont(3));
     renderableAutoMapIso.PrepareFrame(aspectRatio, original3DViewArea, originX, originY);
+    renderableAutoMapIso.SetPlayerPosition(m_playerActor->GetX(), m_playerActor->GetY(), m_playerActor->GetAngle());
 
     Renderable3DTiles& renderable3DTiles = renderableAutoMapIso.GetFloorTilesMutable();
     for (int16_t y = 1; y < m_levelHeight - 1; y++)
