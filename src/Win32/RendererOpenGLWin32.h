@@ -61,9 +61,8 @@ public:
     // 3D rendering
     //
     void Render3DScene(const Renderable3DScene& renderable3DScene) override;
+    void RenderAutoMapTopDown(const RenderableAutoMapTopDown& autoMapTopDown) override;
     void RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso) override;
-    void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale) override;
-    void RenderTopDownFloorTiles(const Renderable3DTiles& tiles) override;
 
     //
     // Screen capture
@@ -92,6 +91,8 @@ private:
     void Render3DWalls(const Renderable3DWalls& walls);
     void Render3DTiles(const Renderable3DTiles& tiles);
     void RenderSprites(const RenderableSprites& renderableSprites);
+    void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale);
+    void RenderTopDownFloorTiles(const Renderable3DTiles& tiles);
 
     uint16_t m_windowWidth;
     uint16_t m_windowHeight;

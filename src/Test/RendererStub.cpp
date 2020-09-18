@@ -80,15 +80,11 @@ void RendererStub::Render3DScene(const Renderable3DScene& /*renderable3DScene*/)
 {
 }
 
+void RendererStub::RenderAutoMapTopDown(const RenderableAutoMapTopDown& /*autoMapTopDown*/)
+{
+}
+
 void RendererStub::RenderAutoMapIso(const RenderableAutoMapIso& /*autoMapIso*/)
-{
-}
-
-void RendererStub::PrepareTopDownRendering(const float /*aspectRatio*/, const ViewPorts::ViewPortRect3D /*original3DViewArea*/, const uint16_t /*scale*/)
-{
-}
-
-void RendererStub::RenderTopDownFloorTiles(const Renderable3DTiles& /*tiles*/)
 {
 }
 

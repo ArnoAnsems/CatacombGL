@@ -18,6 +18,7 @@
 #include "EgaGraph.h"
 #include "RenderableSprites.h"
 #include "Renderable3DWalls.h"
+#include "RenderableAutoMapTopDown.h"
 #include "RenderableAutoMapIso.h"
 #include "Renderable3DScene.h"
 #include "LevelLocationNames.h"
@@ -1965,12 +1966,14 @@ void Level::DrawAutoMapTopDown(
 {
     // Scale factor is compared to the original 320 x 200 resolution
     const uint16_t wallsScaleFactor = 4;
-    const uint16_t textScaleFactor = 2;
     const uint16_t additionalMargin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatio) * wallsScaleFactor;
-    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, wallsScaleFactor);
 
-    Renderable3DTiles floorTiles;
-    Renderable3DTiles borderTiles;
+    RenderableAutoMapTopDown renderableAutoMap(*egaGraph.GetFont(3));
+    renderableAutoMap.PrepareFrame(aspectRatio, original3DViewArea, originX, originY);
+    renderableAutoMap.SetPlayerPosition(m_playerActor->GetX(), m_playerActor->GetY(), m_playerActor->GetAngle());
+
+    Renderable3DTiles& floorTiles = renderableAutoMap.GetFloorTilesMutable();
+    Renderable3DTiles& borderTiles = renderableAutoMap.GetBorderTilesMutable();
     const int16_t tileWidth = 64;
     const int16_t additionalTilesInMargin = (additionalMargin == 0) ? 0 : (additionalMargin / tileWidth) + 1;
     const int16_t firstTileX = -additionalTilesInMargin + originX;
@@ -1997,13 +2000,12 @@ void Level::DrawAutoMapTopDown(
                         const Picture* darkPicture = egaGraph.GetPicture(darkWall);
                         if (darkPicture != nullptr)
                         {
-                            renderer.Render2DPicture(darkPicture, sx, sy);
+                            renderableAutoMap.AddPicture(darkPicture, {sx, sy});
                             const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
                             if (centerColor != wallCapMainColor)
                             {
                                 const int16_t border = 16;
-                                const int16_t width = tileWidth - (2 * border);
-                                renderer.Render2DBar(sx + border, sy + border, width, width, centerColor);
+                                renderableAutoMap.AddWallCap(centerColor, { sx + border, sy + border });
                             }
                         }
                         else
@@ -2033,8 +2035,6 @@ void Level::DrawAutoMapTopDown(
     }
     floorTiles.SetFloorColor(GetGroundColor());
     borderTiles.SetFloorColor(EgaBlack);
-    renderer.RenderTopDownFloorTiles(floorTiles);
-    renderer.RenderTopDownFloorTiles(borderTiles);
 
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -2050,7 +2050,7 @@ void Level::DrawAutoMapTopDown(
                     const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
                     const int16_t sx = (x - (int16_t)originX) * tileWidth + marginX;
                     const int16_t sy = (y - (int16_t)originY) * tileWidth;
-                    renderer.Render2DPicture(actorPicture, sx, sy);
+                    renderableAutoMap.AddPicture(actorPicture, { sx, sy });
                 }
             }
         }
@@ -2070,15 +2070,13 @@ void Level::DrawAutoMapTopDown(
                     const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
                     const int16_t sx = (int16_t)(projectile->GetX() - (float)originX) * tileWidth + marginX;
                     const int16_t sy = (int16_t)(projectile->GetY() - (float)originY) * tileWidth;
-                    renderer.Render2DPicture(actorPicture, sx, sy);
+                    renderableAutoMap.AddPicture(actorPicture, { sx, sy });
                 }
             }
         }
     }
 
-    renderer.PrepareTopDownRendering(aspectRatio, original3DViewArea, textScaleFactor);
-
-    RenderableText locationNames(*egaGraph.GetFont(3));
+    RenderableText& locationNames = renderableAutoMap.GetTextMutable();
 
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
@@ -2126,7 +2124,7 @@ void Level::DrawAutoMapTopDown(
             }
         }
     }
-    renderer.RenderText(locationNames);
+    renderer.RenderAutoMapTopDown(renderableAutoMap);
 }
 
 uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const

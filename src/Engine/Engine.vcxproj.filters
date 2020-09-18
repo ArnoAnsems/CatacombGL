@@ -183,6 +183,9 @@
     <ClCompile Include="Renderable3DScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RenderableAutoMapTopDown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h">
@@ -351,6 +354,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Renderable3DScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableAutoMapTopDown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

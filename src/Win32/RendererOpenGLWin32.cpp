@@ -533,6 +533,37 @@ void RendererOpenGLWin32::Render3DTiles(const Renderable3DTiles& tiles)
     glDepthMask(GL_TRUE);
 }
 
+void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& autoMapTopDown)
+{
+    const uint16_t wallsScaleFactor = 4;
+    const uint16_t textScaleFactor = 2;
+    PrepareTopDownRendering(autoMapTopDown.GetAspectRatio(), autoMapTopDown.GetOriginal3DViewArea(), wallsScaleFactor);
+
+    RenderTopDownFloorTiles(autoMapTopDown.GetFloorTiles());
+    RenderTopDownFloorTiles(autoMapTopDown.GetBorderTiles());
+    for (const auto picturePair : autoMapTopDown.GetPictures())
+    {
+        for (const RenderableAutoMapTopDown::pictureCoordinate& coordinate : picturePair.second)
+        {
+            Render2DPicture(picturePair.first, coordinate.x, coordinate.y);
+        }
+    }
+    const int16_t tileWidth = 64;
+    const int16_t border = 16;
+    const int16_t width = tileWidth - (2 * border);
+    for (const auto wallCapPair : autoMapTopDown.GetWallCaps())
+    {
+        for (const RenderableAutoMapTopDown::pictureCoordinate& coordinate : wallCapPair.second)
+        {
+            Render2DBar(coordinate.x, coordinate.y, width, width, wallCapPair.first);
+        }
+    }
+
+    PrepareTopDownRendering(autoMapTopDown.GetAspectRatio(), autoMapTopDown.GetOriginal3DViewArea(), textScaleFactor);
+
+    RenderText(autoMapTopDown.GetText());
+}
+
 void RendererOpenGLWin32::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso)
 {
     PrepareIsoRendering(

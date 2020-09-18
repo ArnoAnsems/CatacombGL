@@ -176,6 +176,7 @@
     <ClCompile Include="Renderable3DTiles.cpp" />
     <ClCompile Include="Renderable3DWalls.cpp" />
     <ClCompile Include="RenderableAutoMapIso.cpp" />
+    <ClCompile Include="RenderableAutoMapTopDown.cpp" />
     <ClCompile Include="RenderableSprites.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Shape.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="Renderable3DTiles.h" />
     <ClInclude Include="Renderable3DWalls.h" />
     <ClInclude Include="RenderableAutoMapIso.h" />
+    <ClInclude Include="RenderableAutoMapTopDown.h" />
     <ClInclude Include="RenderableSprites.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Shape.h" />
