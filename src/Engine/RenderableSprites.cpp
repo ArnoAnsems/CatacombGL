@@ -20,6 +20,7 @@ const uint8_t MaxSpritesToRender = 100;
 RenderableSprites::RenderableSprites() :
     m_playerPosX(1.0f),
     m_playerPosY(1.0f),
+    m_angle(0.0f),
     m_sprites()
 {
 

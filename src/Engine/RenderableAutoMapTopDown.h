@@ -34,11 +34,10 @@ public:
         int16_t y;
     } pictureCoordinate;
 
-    RenderableAutoMapTopDown(const Font& font);
+    RenderableAutoMapTopDown(const Font& font, const ViewPorts::ViewPortRect3D original3DViewArea);
 
     void PrepareFrame(
         const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea,
         const float originX,
         const float originY);
 
@@ -69,7 +68,7 @@ public:
     std::map <const Picture*, std::vector<pictureCoordinate>> m_pictures;
     std::map <const egaColor, std::vector<pictureCoordinate>> m_wallCaps;
     float m_aspectRatio;
-    ViewPorts::ViewPortRect3D m_original3DViewArea;
+    const ViewPorts::ViewPortRect3D m_original3DViewArea;
     float m_originX;
     float m_originY;
     float m_playerX;

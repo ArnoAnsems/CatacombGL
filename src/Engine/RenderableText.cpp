@@ -30,6 +30,11 @@ const Font& RenderableText::GetFont() const
     return m_font;
 }
 
+void RenderableText::Reset()
+{
+    m_text.clear();
+}
+
 void RenderableText::LeftAligned(
     const std::string& text,
     const egaColor color,

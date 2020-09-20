@@ -16,9 +16,10 @@
 #include "RenderableAutoMapIso.h"
 
 RenderableAutoMapIso::RenderableAutoMapIso(
-    const Font& font) :
+    const Font& font,
+    const ViewPorts::ViewPortRect3D original3DViewArea) :
+    m_original3DViewArea(original3DViewArea),
     m_aspectRatio(1.0f),
-    m_original3DViewArea(),
     m_originX(1.0f),
     m_originY(1.0f),
     m_playerX(1.0f),
@@ -32,15 +33,17 @@ RenderableAutoMapIso::RenderableAutoMapIso(
 
 void RenderableAutoMapIso::PrepareFrame(
     const float aspectRatio,
-    const ViewPorts::ViewPortRect3D original3DViewArea,
     const float originX,
     const float originY)
 {
     m_aspectRatio = aspectRatio;
-    m_original3DViewArea = original3DViewArea;
     m_originX = originX;
     m_originY = originY;
-    m_sprites.Reset(originX, originY, 0.0f);
+    m_sprites.Reset(100.0f, 100.0f, 0.0f);
+    m_walls.Reset();
+    m_wallCaps.clear();
+    m_floorTiles.Reset();
+    m_text.Reset();
 }
 
 void RenderableAutoMapIso::FinalizeFrame()

@@ -41,23 +41,23 @@ void AutoMap::DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level,
     level.DrawAutoMap(renderer, egaGraph, additionalMargin, m_originX, m_originY, m_autoMapType, m_cheat);
 }
 
-void AutoMap::DrawIso(
-    IRenderer& renderer,
+void AutoMap::SetupIso(
+    RenderableAutoMapIso& renderableAutoMapIso,
     EgaGraph& egaGraph,
     Level& level,
-    const float aspectRatio,
-    const ViewPorts::ViewPortRect3D original3DViewArea)
+    const float aspectRatio)
 {
-    level.DrawAutoMapIso(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
+    level.SetupAutoMapIso(renderableAutoMapIso, egaGraph, aspectRatio, m_originX, m_originY, m_cheat);
 }
 
-void AutoMap::DrawTopDown(IRenderer& renderer,
+void AutoMap::SetupTopDown(
+    RenderableAutoMapTopDown& rendererAutoMapTopDown,
     EgaGraph& egaGraph,
     Level& level,
     const float aspectRatio,
-    const ViewPorts::ViewPortRect3D original3DViewArea)
+    const uint16_t additionalMargin)
 {
-    level.DrawAutoMapTopDown(renderer, egaGraph, aspectRatio, original3DViewArea, m_originX, m_originY, m_cheat);
+    level.SetupAutoMapTopDown(rendererAutoMapTopDown, egaGraph, aspectRatio, additionalMargin, m_originX, m_originY, m_cheat);
 }
 
 void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)

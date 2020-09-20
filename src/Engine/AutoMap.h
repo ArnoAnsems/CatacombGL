@@ -20,6 +20,7 @@
 #include "EgaGraph.h"
 #include "Level.h"
 #include "ConfigurationSettings.h"
+#include "RenderableAutoMapIso.h"
 
 class AutoMap
 {
@@ -29,17 +30,17 @@ public:
 
     void SetCheat(const bool enabled);
     void DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);
-    void DrawIso(
-        IRenderer& renderer,
+    void SetupIso(
+        RenderableAutoMapIso& renderableAutoMapIso,
+        EgaGraph& egaGraph,
+        Level& level,
+        const float aspectRatio);
+    void SetupTopDown(
+        RenderableAutoMapTopDown& rendererAutoMapTopDown,
         EgaGraph& egaGraph,
         Level& level,
         const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea);
-    void DrawTopDown(IRenderer& renderer,
-        EgaGraph& egaGraph,
-        Level& level,
-        const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea);
+        const uint16_t additionalMargin);
     void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode);
     void ResetOrigin(Level& level, const AutoMapMode autoMapMode);
 

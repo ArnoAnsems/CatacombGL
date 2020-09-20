@@ -40,6 +40,7 @@ public:
 
     const std::vector<renderableCharacter>& GetText() const;
     const Font& GetFont() const;
+    void Reset();
 
     void LeftAligned(
         const std::string& text,

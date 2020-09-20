@@ -41,11 +41,11 @@ public:
     } quadCoordinates;
 
     RenderableAutoMapIso(
-        const Font& font);
+        const Font& font,
+        const ViewPorts::ViewPortRect3D original3DViewArea);
 
     void PrepareFrame(
         const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea,
         const float originX,
         const float originY);
     void FinalizeFrame();
@@ -78,7 +78,7 @@ private:
     RenderableSprites m_sprites;
     RenderableText m_text;
     float m_aspectRatio;
-    ViewPorts::ViewPortRect3D m_original3DViewArea;
+    const ViewPorts::ViewPortRect3D m_original3DViewArea;
     float m_originX;
     float m_originY;
     float m_playerX;

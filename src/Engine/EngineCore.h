@@ -182,4 +182,6 @@ private:
     bool m_setOverlayOnNextDraw;
     AutoMap m_autoMap;
     Renderable3DScene m_renderable3DScene;
+    RenderableAutoMapIso m_renderableAutoMapIso;
+    RenderableAutoMapTopDown m_renderableAutoMapTopDown;
 };

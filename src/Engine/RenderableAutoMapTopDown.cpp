@@ -20,22 +20,26 @@
 
 #include "RenderableAutoMapTopDown.h"
 
-RenderableAutoMapTopDown::RenderableAutoMapTopDown(const Font& font) :
-    m_text(font)
+RenderableAutoMapTopDown::RenderableAutoMapTopDown(const Font& font, const ViewPorts::ViewPortRect3D original3DViewArea) :
+    m_text(font),
+    m_original3DViewArea(original3DViewArea)
 {
 
 }
 
 void RenderableAutoMapTopDown::PrepareFrame(
     const float aspectRatio,
-    const ViewPorts::ViewPortRect3D original3DViewArea,
     const float originX,
     const float originY)
 {
     m_aspectRatio = aspectRatio;
-    m_original3DViewArea = original3DViewArea;
     m_originX = originX;
     m_originY = originY;
+    m_floorTiles.Reset();
+    m_borderTiles.Reset();
+    m_wallCaps.clear();
+    m_text.Reset();
+    m_pictures.clear();
 }
 
 const float RenderableAutoMapTopDown::GetAspectRatio() const

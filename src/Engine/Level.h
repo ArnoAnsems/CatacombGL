@@ -29,6 +29,7 @@
 #include "IRenderer.h"
 #include "Logging.h"
 #include "Renderable3DScene.h"
+#include "RenderableAutoMapIso.h"
 
 class EgaGraph;
 
@@ -167,19 +168,18 @@ public:
         const uint16_t originY,
         const AutoMapType autoMapType,
         const bool cheat);
-    void DrawAutoMapIso(
-        IRenderer& renderer,
+    void SetupAutoMapIso(
+        RenderableAutoMapIso& renderableAutoMapIso,
         EgaGraph& egaGraph,
         const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea,
         const uint16_t originX,
         const uint16_t originY,
         const bool cheat);
-    void DrawAutoMapTopDown(
-        IRenderer& renderer,
+    void SetupAutoMapTopDown(
+        RenderableAutoMapTopDown& renderableAutoMapTopDown,
         EgaGraph& egaGraph,
         const float aspectRatio,
-        const ViewPorts::ViewPortRect3D original3DViewArea,
+        const uint16_t additionalMargin,
         const uint16_t originX,
         const uint16_t originY,
         const bool cheat);

@@ -75,7 +75,9 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_configurationSettings(configurationSettings),
     m_scrollsArePresent(AreScrollsPresent()),
     m_setOverlayOnNextDraw(false),
-    m_renderable3DScene(m_game.GetOriginal3DViewArea())
+    m_renderable3DScene(m_game.GetOriginal3DViewArea()),
+    m_renderableAutoMapIso(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea()),
+    m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea())
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -85,7 +87,6 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_system.GetSavedGameNamesFromFolder(savedGamesAbyssPath, m_savedGames);
 
     // Pre-load game data from disk
-    m_game.GetEgaGraph();
     m_game.GetAudioRepository();
     m_game.GetGameMaps();
 }
@@ -159,11 +160,13 @@ void EngineCore::DrawScene(IRenderer& renderer)
         const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
         if (m_configurationSettings.GetAutoMapMode() == Isometric)
         {
-            m_autoMap.DrawIso(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
+            m_autoMap.SetupIso(m_renderableAutoMapIso, *m_game.GetEgaGraph(), *m_level, aspectRatio);
+            renderer.RenderAutoMapIso(m_renderableAutoMapIso);
         }
         else
         {
-            m_autoMap.DrawTopDown(renderer, *m_game.GetEgaGraph(), *m_level, aspectRatio, m_game.GetOriginal3DViewArea());
+            m_autoMap.SetupTopDown(m_renderableAutoMapTopDown, *m_game.GetEgaGraph(), *m_level, aspectRatio, renderer.GetAdditionalMarginDueToWideScreen(aspectRatio));
+            renderer.RenderAutoMapTopDown(m_renderableAutoMapTopDown);
         }
     }
     else
