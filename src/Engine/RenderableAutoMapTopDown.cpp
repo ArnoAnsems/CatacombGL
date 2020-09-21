@@ -20,23 +20,30 @@
 
 #include "RenderableAutoMapTopDown.h"
 
-RenderableAutoMapTopDown::RenderableAutoMapTopDown(const Font& font, const ViewPorts::ViewPortRect3D original3DViewArea) :
+RenderableAutoMapTopDown::RenderableAutoMapTopDown(
+    const Font& font,
+    const ViewPorts::ViewPortRect3D original3DViewArea,
+    const TextureAtlas& textureAtlasTilesSize16) :
     m_text(font),
-    m_original3DViewArea(original3DViewArea)
+    m_original3DViewArea(original3DViewArea),
+    m_tilesSize16(textureAtlasTilesSize16)
 {
 
 }
 
 void RenderableAutoMapTopDown::PrepareFrame(
     const float aspectRatio,
+    const uint16_t tileSize,
     const float originX,
     const float originY)
 {
     m_aspectRatio = aspectRatio;
+    m_tileSize = tileSize;
     m_originX = originX;
     m_originY = originY;
     m_floorTiles.Reset();
     m_borderTiles.Reset();
+    m_tilesSize16.Reset();
     m_wallCaps.clear();
     m_text.Reset();
     m_pictures.clear();
@@ -45,6 +52,10 @@ void RenderableAutoMapTopDown::PrepareFrame(
 const float RenderableAutoMapTopDown::GetAspectRatio() const
 {
     return m_aspectRatio;
+}
+const uint16_t RenderableAutoMapTopDown::GetTileSize() const
+{
+    return m_tileSize;
 }
 
 const ViewPorts::ViewPortRect3D& RenderableAutoMapTopDown::GetOriginal3DViewArea() const
@@ -60,6 +71,11 @@ const Renderable3DTiles& RenderableAutoMapTopDown::GetFloorTiles() const
 const Renderable3DTiles& RenderableAutoMapTopDown::GetBorderTiles() const
 {
     return m_borderTiles;
+}
+
+const RenderableTiles& RenderableAutoMapTopDown::GetTilesSize16() const
+{
+    return m_tilesSize16;
 }
 
 const std::map <const Picture*, std::vector<RenderableAutoMapTopDown::pictureCoordinate>>& RenderableAutoMapTopDown::GetPictures() const
@@ -131,6 +147,10 @@ Renderable3DTiles& RenderableAutoMapTopDown::GetFloorTilesMutable()
 Renderable3DTiles& RenderableAutoMapTopDown::GetBorderTilesMutable()
 {
     return m_borderTiles;
+}
+RenderableTiles& RenderableAutoMapTopDown::GetTilesSize16Mutable()
+{
+    return m_tilesSize16;
 }
 
 RenderableText& RenderableAutoMapTopDown::GetTextMutable()

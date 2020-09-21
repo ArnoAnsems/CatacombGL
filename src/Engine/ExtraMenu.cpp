@@ -527,8 +527,9 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         {
             const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
             const AutoMapMode nextAutoMapMode =
-                (previousAutoMapMode == ClassicDebug) ? Isometric :
-                (previousAutoMapMode == Isometric) ? TopDown :
+                (previousAutoMapMode == ClassicDebug) ? TopDown :
+                (previousAutoMapMode == TopDown) ? TopDownHD :
+                (previousAutoMapMode == TopDownHD) ? Isometric :
                 ClassicDebug;
             m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
         }
@@ -746,7 +747,8 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
                 const char* autoMapModeStr =
                     (autoMapMode == ClassicDebug) ? "Classic Debug" :
                     (autoMapMode == Isometric) ? "Isometric" :
-                    "Top down";
+                    (autoMapMode == TopDown) ? "Top down" :
+                    "Top down HD";
                 renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             index++;

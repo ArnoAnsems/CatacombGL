@@ -92,7 +92,7 @@ private:
     void Render3DTiles(const Renderable3DTiles& tiles);
     void RenderSprites(const RenderableSprites& renderableSprites);
     void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale);
-    void RenderTopDownFloorTiles(const Renderable3DTiles& tiles);
+    void RenderTopDownFloorTiles(const Renderable3DTiles& tiles, const uint16_t tileSize);
 
     uint16_t m_windowWidth;
     uint16_t m_windowHeight;

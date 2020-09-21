@@ -53,9 +53,9 @@ enum ShowFpsMode
 enum AutoMapMode
 {
     ClassicDebug,
-    Isometric,
     TopDown,
-    TopDow
+    TopDownHD,
+    Isometric
 };
 
 class ConfigurationSettings

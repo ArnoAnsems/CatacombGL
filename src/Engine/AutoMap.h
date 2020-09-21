@@ -40,6 +40,7 @@ public:
         EgaGraph& egaGraph,
         Level& level,
         const float aspectRatio,
+        const uint16_t tileSize,
         const uint16_t additionalMargin);
     void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode);
     void ResetOrigin(Level& level, const AutoMapMode autoMapMode);

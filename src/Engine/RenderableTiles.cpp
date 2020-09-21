@@ -31,6 +31,11 @@ const TextureAtlas& RenderableTiles::GetTextureAtlas() const
     return m_textureAtlas;
 }
 
+void RenderableTiles::Reset()
+{
+    m_tiles.clear();
+}
+
 void RenderableTiles::Add(
     const int16_t x,
     const int16_t y,

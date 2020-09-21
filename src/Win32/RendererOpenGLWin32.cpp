@@ -315,6 +315,12 @@ void RendererOpenGLWin32::RenderTiles(const RenderableTiles& renderableTiles)
 {
     const TextureAtlas& textureAtlas = renderableTiles.GetTextureAtlas();
     const std::vector<RenderableTiles::RenderableTile>& tiles = renderableTiles.GetTiles();
+
+    if (tiles.empty())
+    {
+        return;
+    }
+
     const int16_t imageWidth = (int16_t)textureAtlas.GetImageWidth();
     const int16_t imageHeight = (int16_t)textureAtlas.GetImageWidth();
     const float imageRelWidth = textureAtlas.GetImageRelativeWidth();
@@ -535,12 +541,13 @@ void RendererOpenGLWin32::Render3DTiles(const Renderable3DTiles& tiles)
 
 void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& autoMapTopDown)
 {
-    const uint16_t wallsScaleFactor = 4;
+    const uint16_t wallsScaleFactor = autoMapTopDown.GetTileSize() / 16;
     const uint16_t textScaleFactor = 2;
     PrepareTopDownRendering(autoMapTopDown.GetAspectRatio(), autoMapTopDown.GetOriginal3DViewArea(), wallsScaleFactor);
 
-    RenderTopDownFloorTiles(autoMapTopDown.GetFloorTiles());
-    RenderTopDownFloorTiles(autoMapTopDown.GetBorderTiles());
+    const uint16_t tileSize = autoMapTopDown.GetTileSize();
+    RenderTopDownFloorTiles(autoMapTopDown.GetFloorTiles(), tileSize);
+    RenderTopDownFloorTiles(autoMapTopDown.GetBorderTiles(), tileSize);
     for (const auto picturePair : autoMapTopDown.GetPictures())
     {
         for (const RenderableAutoMapTopDown::pictureCoordinate& coordinate : picturePair.second)
@@ -548,9 +555,10 @@ void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& a
             Render2DPicture(picturePair.first, coordinate.x, coordinate.y);
         }
     }
-    const int16_t tileWidth = 64;
-    const int16_t border = 16;
-    const int16_t width = tileWidth - (2 * border);
+    RenderTiles(autoMapTopDown.GetTilesSize16());
+
+    const int16_t border = tileSize / 4;
+    const int16_t width = tileSize - (2 * border);
     for (const auto wallCapPair : autoMapTopDown.GetWallCaps())
     {
         for (const RenderableAutoMapTopDown::pictureCoordinate& coordinate : wallCapPair.second)
@@ -727,7 +735,7 @@ void RendererOpenGLWin32::RenderIsoWallCaps(const std::map <egaColor, std::vecto
     glDisable(GL_CULL_FACE);
 }
 
-void RendererOpenGLWin32::RenderTopDownFloorTiles(const Renderable3DTiles& tiles)
+void RendererOpenGLWin32::RenderTopDownFloorTiles(const Renderable3DTiles& tiles, const uint16_t tileSize)
 {
     const unsigned int textureId = m_singleColorTexture[tiles.GetFloorColor()];
     // Select the texture from the picture
@@ -738,9 +746,9 @@ void RendererOpenGLWin32::RenderTopDownFloorTiles(const Renderable3DTiles& tiles
     for (const Renderable3DTiles::tileCoordinate floorTile : floorTiles)
     {
         // Draw the texture as a quad
-        glTexCoord2f(0.0f, 1.0f); glVertex2i(floorTile.x, floorTile.y + 64);
-        glTexCoord2f(1.0f, 1.0f); glVertex2i(floorTile.x + 64, floorTile.y + 64);
-        glTexCoord2f(1.0f, 0.0f); glVertex2i(floorTile.x + 64, floorTile.y);
+        glTexCoord2f(0.0f, 1.0f); glVertex2i(floorTile.x, floorTile.y + tileSize);
+        glTexCoord2f(1.0f, 1.0f); glVertex2i(floorTile.x + tileSize, floorTile.y + tileSize);
+        glTexCoord2f(1.0f, 0.0f); glVertex2i(floorTile.x + tileSize, floorTile.y);
         glTexCoord2f(0.0f, 0.0f); glVertex2i(floorTile.x, floorTile.y);
         
     }

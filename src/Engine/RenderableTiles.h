@@ -40,6 +40,8 @@ public:
     const std::vector<RenderableTile>& GetTiles() const;
     const TextureAtlas& GetTextureAtlas() const;
 
+    void Reset();
+
     void Add(
         const int16_t x,
         const int16_t y,

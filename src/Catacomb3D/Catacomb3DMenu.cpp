@@ -697,8 +697,9 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         {
             const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
             const AutoMapMode nextAutoMapMode =
-                (previousAutoMapMode == ClassicDebug) ? Isometric :
-                (previousAutoMapMode == Isometric) ? TopDown :
+                (previousAutoMapMode == ClassicDebug) ? TopDown :
+                (previousAutoMapMode == TopDown) ? TopDownHD :
+                (previousAutoMapMode == TopDownHD) ? Isometric :
                 ClassicDebug;
             m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
         }
@@ -1092,10 +1093,12 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
 
         renderableTiles.DrawListBullet(76, 118, true, (m_menuItemSelected == 7) && flashIcon);
         renderableText.LeftAligned("Automap", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, 119);
+        const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
         const char* autoMapModeStr =
-            (m_configurationSettings.GetAutoMapMode() == ClassicDebug) ? "Classic Debug" :
-            (m_configurationSettings.GetAutoMapMode() == Isometric) ? "Isometric" :
-            "Top down";
+            (autoMapMode == ClassicDebug) ? "Classic Debug" :
+            (autoMapMode == Isometric) ? "Isometric" :
+            (autoMapMode == TopDown) ? "Top down" :
+            "Top down HD";
         renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, 180, 119);
 
         renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);

@@ -34,7 +34,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_turnSpeed(100),
     m_alwaysRun(false),
     m_autoFire(false),
-    m_autoMapMode(Isometric),
+    m_autoMapMode(TopDownHD),
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
@@ -196,7 +196,8 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_autoMapMode =
                 (autoMapModePair->second.compare("classic") == 0) ? ClassicDebug :
                 (autoMapModePair->second.compare("isometric") == 0) ? Isometric :
-                TopDown;
+                (autoMapModePair->second.compare("topdown") == 0) ? TopDown :
+                TopDownHD;
         }
 
         for (auto keyPair : keyValuePairs)
@@ -259,7 +260,8 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         const std::string autoMapModeValue =
             (m_autoMapMode == ClassicDebug) ? "classic" :
             (m_autoMapMode == Isometric) ? "isometric" :
-            "topdown";
+            (m_autoMapMode == TopDown) ? "topdown" :
+            "topdownhd";
         file << "automapmode=" << autoMapModeValue << "\n";
         file << "# Sound settings\n";
         const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";

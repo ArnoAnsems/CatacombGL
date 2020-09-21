@@ -55,9 +55,10 @@ void AutoMap::SetupTopDown(
     EgaGraph& egaGraph,
     Level& level,
     const float aspectRatio,
+    const uint16_t tileSize,
     const uint16_t additionalMargin)
 {
-    level.SetupAutoMapTopDown(rendererAutoMapTopDown, egaGraph, aspectRatio, additionalMargin, m_originX, m_originY, m_cheat);
+    level.SetupAutoMapTopDown(rendererAutoMapTopDown, egaGraph, aspectRatio, tileSize, additionalMargin, m_originX, m_originY, m_cheat);
 }
 
 void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)

@@ -77,7 +77,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_setOverlayOnNextDraw(false),
     m_renderable3DScene(m_game.GetOriginal3DViewArea()),
     m_renderableAutoMapIso(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea()),
-    m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea())
+    m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea(), *m_game.GetEgaGraph()->GetTilesSize16())
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -165,7 +165,8 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
         else
         {
-            m_autoMap.SetupTopDown(m_renderableAutoMapTopDown, *m_game.GetEgaGraph(), *m_level, aspectRatio, renderer.GetAdditionalMarginDueToWideScreen(aspectRatio));
+            const uint16_t tileSize = (m_configurationSettings.GetAutoMapMode() == TopDown) ? 16 : 64;
+            m_autoMap.SetupTopDown(m_renderableAutoMapTopDown, *m_game.GetEgaGraph(), *m_level, aspectRatio, tileSize, renderer.GetAdditionalMarginDueToWideScreen(aspectRatio));
             renderer.RenderAutoMapTopDown(m_renderableAutoMapTopDown);
         }
     }

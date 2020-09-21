@@ -179,6 +179,7 @@ public:
         RenderableAutoMapTopDown& renderableAutoMapTopDown,
         EgaGraph& egaGraph,
         const float aspectRatio,
+        const uint16_t tileSize,
         const uint16_t additionalMargin,
         const uint16_t originX,
         const uint16_t originY,
