@@ -23,10 +23,12 @@
 RenderableAutoMapTopDown::RenderableAutoMapTopDown(
     const Font& font,
     const ViewPorts::ViewPortRect3D original3DViewArea,
-    const TextureAtlas& textureAtlasTilesSize16) :
+    const TextureAtlas& textureAtlasTilesSize16,
+    const TextureAtlas& textureAtlasTilesSize16Masked) :
     m_text(font),
     m_original3DViewArea(original3DViewArea),
-    m_tilesSize16(textureAtlasTilesSize16)
+    m_tilesSize16(textureAtlasTilesSize16),
+    m_tilesSize16Masked(textureAtlasTilesSize16Masked)
 {
 
 }
@@ -44,6 +46,7 @@ void RenderableAutoMapTopDown::PrepareFrame(
     m_floorTiles.Reset();
     m_borderTiles.Reset();
     m_tilesSize16.Reset();
+    m_tilesSize16Masked.Reset();
     m_wallCaps.clear();
     m_text.Reset();
     m_pictures.clear();
@@ -76,6 +79,11 @@ const Renderable3DTiles& RenderableAutoMapTopDown::GetBorderTiles() const
 const RenderableTiles& RenderableAutoMapTopDown::GetTilesSize16() const
 {
     return m_tilesSize16;
+}
+
+const RenderableTiles& RenderableAutoMapTopDown::GetTilesSize16Masked() const
+{
+    return m_tilesSize16Masked;
 }
 
 const std::map <const Picture*, std::vector<RenderableAutoMapTopDown::pictureCoordinate>>& RenderableAutoMapTopDown::GetPictures() const
@@ -148,9 +156,15 @@ Renderable3DTiles& RenderableAutoMapTopDown::GetBorderTilesMutable()
 {
     return m_borderTiles;
 }
+
 RenderableTiles& RenderableAutoMapTopDown::GetTilesSize16Mutable()
 {
     return m_tilesSize16;
+}
+
+RenderableTiles& RenderableAutoMapTopDown::GetTilesSize16MaskedMutable()
+{
+    return m_tilesSize16Masked;
 }
 
 RenderableText& RenderableAutoMapTopDown::GetTextMutable()

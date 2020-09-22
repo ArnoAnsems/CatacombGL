@@ -35,7 +35,11 @@ public:
         int16_t y;
     } pictureCoordinate;
 
-    RenderableAutoMapTopDown(const Font& font, const ViewPorts::ViewPortRect3D original3DViewArea, const TextureAtlas& textureAtlasTilesSize16);
+    RenderableAutoMapTopDown(
+        const Font& font,
+        const ViewPorts::ViewPortRect3D original3DViewArea,
+        const TextureAtlas& textureAtlasTilesSize16,
+        const TextureAtlas& textureAtlasTilesSize16Masked);
 
     void PrepareFrame(
         const float aspectRatio,
@@ -48,6 +52,7 @@ public:
     const Renderable3DTiles& GetFloorTiles() const;
     const Renderable3DTiles& GetBorderTiles() const;
     const RenderableTiles& GetTilesSize16() const;
+    const RenderableTiles& GetTilesSize16Masked() const;
     
     const std::map <const Picture*, std::vector<pictureCoordinate>> & GetPictures() const;
     const std::map <const egaColor, std::vector<pictureCoordinate>>& GetWallCaps() const;
@@ -66,11 +71,13 @@ public:
     Renderable3DTiles& GetFloorTilesMutable();
     Renderable3DTiles& GetBorderTilesMutable();
     RenderableTiles& GetTilesSize16Mutable();
+    RenderableTiles& GetTilesSize16MaskedMutable();
     RenderableText& GetTextMutable();
 
     Renderable3DTiles m_floorTiles;
     Renderable3DTiles m_borderTiles;
     RenderableTiles m_tilesSize16;
+    RenderableTiles m_tilesSize16Masked;
     RenderableText m_text;
     std::map <const Picture*, std::vector<pictureCoordinate>> m_pictures;
     std::map <const egaColor, std::vector<pictureCoordinate>> m_wallCaps;

@@ -47,6 +47,8 @@ typedef struct egaGraphStaticData
     uint16_t indexOfTileSize8Masked;
     uint16_t indexOfFirstTileSize16;
     uint16_t indexOfLastTileSize16;
+    uint16_t indexOfFirstTileSize16Masked;
+    uint16_t indexOfLastTileSize16Masked;
     uint16_t indexOfFirstWorldLocationNames;
     uint16_t indexOfLastWorldLocationNames;
     uint16_t indexOfHandPicture;
@@ -69,12 +71,13 @@ public:
     const TextureAtlas* const GetTilesSize8() const;
     const TextureAtlas* const GetTilesSize8Masked() const;
     const TextureAtlas* const GetTilesSize16() const;
-    uint16_t GetNumberOfTilesSize16() const;
+    const TextureAtlas* const GetTilesSize16Masked() const;
+    uint16_t GetNumberOfTilesSize16(const bool masked) const;
 
 private:
     uint32_t GetChunkSize(const uint16_t index) const;
     TextureAtlas* CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked) const;
-    TextureAtlas* CreateTextureAtlasForTilesSize16() const;
+    TextureAtlas* CreateTextureAtlasForTilesSize16(const bool masked) const;
     TextureAtlas* CreateTextureAtlasForFont(const bool* fontPicture, const uint16_t lineHeight);
     unsigned int LoadFileChunkIntoTexture(
         const FileChunk* decompressedChunk,
@@ -107,5 +110,6 @@ private:
     const TextureAtlas* m_tilesSize8TextureAtlas;
     const TextureAtlas* m_tilesSize8MaskedTextureAtlas;
     const TextureAtlas* m_tilesSize16TextureAtlas;
+    const TextureAtlas* m_tilesSize16MaskedTextureAtlas;
 };
 

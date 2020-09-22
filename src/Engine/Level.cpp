@@ -1688,7 +1688,7 @@ void Level::DrawAutoMap(
                 case MapView:
                 {
                     const uint16_t wallIndex = GetWallTile(x, y);
-                    if (wallIndex < egaGraph.GetNumberOfTilesSize16())
+                    if (wallIndex < egaGraph.GetNumberOfTilesSize16(false))
                     {
                         tiles.Add(sx, sy, wallIndex);
                     }
@@ -1971,6 +1971,7 @@ void Level::SetupAutoMapTopDown(
     Renderable3DTiles& floorTiles = renderableAutoMapTopDown.GetFloorTilesMutable();
     Renderable3DTiles& borderTiles = renderableAutoMapTopDown.GetBorderTilesMutable();
     RenderableTiles& tilesSize16 = renderableAutoMapTopDown.GetTilesSize16Mutable();
+    RenderableTiles& tilesSize16Masked = renderableAutoMapTopDown.GetTilesSize16MaskedMutable();
     const int16_t tileWidth = tileSize;
     const int16_t additionalTilesInMargin = (additionalMarginScaled == 0) ? 0 : (additionalMarginScaled / tileWidth) + 1;
     const int16_t firstTileX = -additionalTilesInMargin + originX;
@@ -2003,7 +2004,7 @@ void Level::SetupAutoMapTopDown(
                             }
                             else
                             {
-                                if (wallIndex < egaGraph.GetNumberOfTilesSize16())
+                                if (wallIndex < egaGraph.GetNumberOfTilesSize16(false))
                                 {
                                     tilesSize16.Add(sx, sy, wallIndex);
                                 }
@@ -2047,15 +2048,15 @@ void Level::SetupAutoMapTopDown(
     floorTiles.SetFloorColor(GetGroundColor());
     borderTiles.SetFloorColor(EgaBlack);
 
-    if (tileSize == 64)
+    for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
-        for (uint16_t y = 1; y < m_levelHeight - 1; y++)
+        for (uint16_t x = 1; x < m_levelWidth - 1; x++)
         {
-            for (uint16_t x = 1; x < m_levelWidth - 1; x++)
+            // Actors
+            Actor* actor = GetBlockingActor(x, y);
+            if (actor != nullptr && (actor->IsActive() || cheat))
             {
-                // Actors
-                Actor* actor = GetBlockingActor(x, y);
-                if (actor != nullptr && (actor->IsActive() || cheat))
+                if (tileSize == 64)
                 {
                     const Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
                     if (actorPicture != nullptr)
@@ -2066,16 +2067,25 @@ void Level::SetupAutoMapTopDown(
                         renderableAutoMapTopDown.AddPicture(actorPicture, { sx, sy });
                     }
                 }
+                else
+                {
+                    const int16_t sx = (x - (int16_t)originX) * tileWidth;
+                    const int16_t sy = (y - (int16_t)originY) * tileWidth;
+                    tilesSize16Masked.Add(sx, sy, 0);
+                }
             }
         }
+    }
 
-        if (cheat)
+    if (cheat)
+    {
+        for (uint16_t i = 0; i < 100; i++)
         {
-            for (uint16_t i = 0; i < 100; i++)
+            // Projectiles
+            Actor* projectile = GetNonBlockingActor(i);
+            if (projectile != nullptr)
             {
-                // Projectiles
-                Actor* projectile = GetNonBlockingActor(i);
-                if (projectile != nullptr)
+                if (tileSize == 64)
                 {
                     Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
                     if (actorPicture != nullptr)
@@ -2085,6 +2095,12 @@ void Level::SetupAutoMapTopDown(
                         const int16_t sy = (int16_t)(projectile->GetY() - (float)originY) * tileWidth;
                         renderableAutoMapTopDown.AddPicture(actorPicture, { sx, sy });
                     }
+                }
+                else
+                {
+                    const int16_t sx = (int16_t)(projectile->GetX() - (float)originX) * tileWidth;
+                    const int16_t sy = (int16_t)(projectile->GetY() - (float)originY) * tileWidth;
+                    tilesSize16Masked.Add(sx, sy, 0);
                 }
             }
         }

@@ -151,7 +151,8 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     m_tilesSize8MaskedTextureAtlas = CreateTextureAtlasForTilesSize8(pictureChunkTileSize8Masked, true);
     delete pictureChunkTileSize8Masked;
 
-    m_tilesSize16TextureAtlas = CreateTextureAtlasForTilesSize16();
+    m_tilesSize16TextureAtlas = CreateTextureAtlasForTilesSize16(false);
+    m_tilesSize16MaskedTextureAtlas = CreateTextureAtlasForTilesSize16(true);
 }
 
 EgaGraph::~EgaGraph()
@@ -206,6 +207,7 @@ EgaGraph::~EgaGraph()
     delete m_tilesSize8TextureAtlas;
     delete m_tilesSize8MaskedTextureAtlas;
     delete m_tilesSize16TextureAtlas;
+    delete m_tilesSize16MaskedTextureAtlas;
 }
 
 Picture* EgaGraph::GetPicture(const uint16_t index)
@@ -416,6 +418,11 @@ const TextureAtlas* const EgaGraph::GetTilesSize16() const
     return m_tilesSize16TextureAtlas;
 }
 
+const TextureAtlas* const EgaGraph::GetTilesSize16Masked() const
+{
+    return m_tilesSize16MaskedTextureAtlas;
+}
+
 TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompressedChunk, const bool masked) const
 {
     const uint16_t numberOfColumns = (masked) ? 3 : 8;
@@ -492,22 +499,24 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompr
     return textureAtlas;
 }
 
-TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize16() const
+TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize16(const bool masked) const
 {
-    const uint16_t numberOfTiles = m_staticData.indexOfLastTileSize16 - m_staticData.indexOfFirstTileSize16 + 1;
+    const uint16_t numberOfTiles = GetNumberOfTilesSize16(masked);
     const uint16_t numberOfColumns = 512 / 17;
     const uint16_t numberOfRows = 512 / 17;
     const unsigned int textureId = m_renderer.GenerateTextureId();
     TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, 16, numberOfColumns, numberOfRows, 1, 1);
     const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t inputSizeOfTileInBytes = 128;
+    const uint32_t inputSizeOfTileInBytes = masked ? 160 : 128;
     const uint32_t numberOfPixelsInTile = 256; // 16 x 16
     uint8_t* textureImage = new uint8_t[numberOfPixelsInTile * bytesPerOutputPixel];
     const uint32_t planeSize = 32;
 
     for (uint32_t tile = 0; tile < numberOfTiles; tile++)
     {
-        const uint16_t pictureIndexTileSize16 = m_staticData.indexOfFirstTileSize16 + tile;
+        const uint16_t pictureIndexTileSize16 = masked ?
+            m_staticData.indexOfFirstTileSize16Masked + tile :
+            m_staticData.indexOfFirstTileSize16 + tile;
         uint8_t* compressedPictureTileSize16 = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(pictureIndexTileSize16)];
         uint32_t compressedSizeTileSize16 = GetChunkSize(pictureIndexTileSize16);
         FileChunk* chunkTileSize16 = m_huffman->Decompress(compressedPictureTileSize16, compressedSizeTileSize16, inputSizeOfTileInBytes);
@@ -518,22 +527,45 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize16() const
         {
             for (uint32_t j = 0; j < 8; j++)
             {
-                const unsigned char bitValue = (1 << j);
-                const bool blueplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
-                const bool greenplane = ((chunk[tileChunkOffset + i + (1 * planeSize)] & bitValue) > 0);
-                const bool redplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
-                const bool intensityplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
-                const egaColor colorIndex =
-                    (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
-                    (redplane ? EgaRed : EgaBlack) +
-                        (greenplane ? EgaGreen : EgaBlack) +
-                        (blueplane ? EgaBlue : EgaBlack));
-                const rgbColor outputColor = EgaToRgb(colorIndex);
-                const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
-                textureImage[outputPixelOffset] = outputColor.red;
-                textureImage[outputPixelOffset + 1] = outputColor.green;
-                textureImage[outputPixelOffset + 2] = outputColor.blue;
-                textureImage[outputPixelOffset + 3] = 255;
+                if (masked)
+                {
+                    const unsigned char bitValue = (1 << j);
+                    const bool transparencyplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                    const bool blueplane = ((chunk[tileChunkOffset + i + planeSize] & bitValue) > 0);
+                    const bool greenplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                    const bool redplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                    const bool intensityplane = ((chunk[tileChunkOffset + i + (4 * planeSize)] & bitValue) > 0);
+                    const egaColor colorIndex =
+                        (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                        (redplane ? EgaRed : EgaBlack) +
+                            (greenplane ? EgaGreen : EgaBlack) +
+                            (blueplane ? EgaBlue : EgaBlack));
+                    const rgbColor outputColor = EgaToRgb(transparencyplane ? EgaBlack : colorIndex);
+                    const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                    textureImage[outputPixelOffset] = outputColor.red;
+                    textureImage[outputPixelOffset + 1] = outputColor.green;
+                    textureImage[outputPixelOffset + 2] = outputColor.blue;
+                    textureImage[outputPixelOffset + 3] = transparencyplane ? 0 : 255;
+                }
+                else
+                {
+                    const unsigned char bitValue = (1 << j);
+                    const bool blueplane = ((chunk[tileChunkOffset + i] & bitValue) > 0);
+                    const bool greenplane = ((chunk[tileChunkOffset + i + (1 * planeSize)] & bitValue) > 0);
+                    const bool redplane = ((chunk[tileChunkOffset + i + (2 * planeSize)] & bitValue) > 0);
+                    const bool intensityplane = ((chunk[tileChunkOffset + i + (3 * planeSize)] & bitValue) > 0);
+                    const egaColor colorIndex =
+                        (egaColor)((intensityplane ? EgaDarkGray : EgaBlack) +
+                        (redplane ? EgaRed : EgaBlack) +
+                            (greenplane ? EgaGreen : EgaBlack) +
+                            (blueplane ? EgaBlue : EgaBlack));
+                    const rgbColor outputColor = EgaToRgb(colorIndex);
+                    const uint32_t outputPixelOffset = ((i * 8) + 7 - j) * bytesPerOutputPixel;
+                    textureImage[outputPixelOffset] = outputColor.red;
+                    textureImage[outputPixelOffset + 1] = outputColor.green;
+                    textureImage[outputPixelOffset + 2] = outputColor.blue;
+                    textureImage[outputPixelOffset + 3] = 255;
+                }
             }
         }
         delete chunk;
@@ -714,7 +746,9 @@ unsigned int EgaGraph::LoadMaskedFileChunkIntoTexture(
     return textureId;
 }
 
-uint16_t EgaGraph::GetNumberOfTilesSize16() const
+uint16_t EgaGraph::GetNumberOfTilesSize16(const bool masked) const
 {
-    return m_staticData.indexOfLastTileSize16 - m_staticData.indexOfFirstTileSize16 + 1;
+    return (masked) ?
+        m_staticData.indexOfLastTileSize16Masked - m_staticData.indexOfFirstTileSize16Masked + 1 :
+        m_staticData.indexOfLastTileSize16 - m_staticData.indexOfFirstTileSize16 + 1;
 }

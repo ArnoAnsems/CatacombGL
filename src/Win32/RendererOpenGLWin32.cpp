@@ -556,6 +556,7 @@ void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& a
         }
     }
     RenderTiles(autoMapTopDown.GetTilesSize16());
+    RenderTiles(autoMapTopDown.GetTilesSize16Masked());
 
     const int16_t border = tileSize / 4;
     const int16_t width = tileSize - (2 * border);
