@@ -1951,6 +1951,19 @@ void Level::SetupAutoMapIso(
     renderableAutoMapIso.FinalizeFrame();
 }
 
+uint16_t Level::GetTileIdFromActor(const Actor* actor)
+{
+    const uint16_t tileId0 = actor->GetDecorateActor().spawnOnAllDifficulties;
+    const uint16_t tileId1 = actor->GetDecorateActor().spawnOnNormalAndHard;
+    const uint16_t tileId2 = actor->GetDecorateActor().spawnOnHard;
+    const uint16_t firstTileId =
+        (tileId0 > 0 && (tileId0 < tileId1 || tileId1 == 0) && (tileId0 < tileId2 || tileId2 == 0)) ? tileId0 :
+        (tileId1 > 0 && (tileId1 < tileId0 || tileId0 == 0) && (tileId1 < tileId2 || tileId2 == 0)) ? tileId1 :
+        tileId2;
+
+    return (firstTileId > 0) ? firstTileId - 1 : 0;
+}
+
 void Level::SetupAutoMapTopDown(
     RenderableAutoMapTopDown& renderableAutoMapTopDown,
     EgaGraph& egaGraph,
@@ -2071,7 +2084,11 @@ void Level::SetupAutoMapTopDown(
                 {
                     const int16_t sx = (x - (int16_t)originX) * tileWidth;
                     const int16_t sy = (y - (int16_t)originY) * tileWidth;
-                    tilesSize16Masked.Add(sx, sy, 0);
+                    const uint16_t tileId = GetTileIdFromActor(actor);
+                    if (tileId > 0 && tileId < egaGraph.GetNumberOfTilesSize16(true))
+                    {
+                        tilesSize16Masked.Add(sx, sy, tileId);
+                    }
                 }
             }
         }
@@ -2100,10 +2117,28 @@ void Level::SetupAutoMapTopDown(
                 {
                     const int16_t sx = (int16_t)(projectile->GetX() - (float)originX) * tileWidth;
                     const int16_t sy = (int16_t)(projectile->GetY() - (float)originY) * tileWidth;
-                    tilesSize16Masked.Add(sx, sy, 0);
+                    const uint16_t tileId = GetTileIdFromActor(projectile);
+                    if (tileId > 0 && tileId < egaGraph.GetNumberOfTilesSize16(true))
+                    {
+                        tilesSize16Masked.Add(sx, sy, tileId);
+                    }
                 }
             }
         }
+    }
+
+    if (tileSize == 16)
+    {
+        // Add additional tile for player
+        const float playerAngle = m_playerActor->GetAngle();
+        const uint16_t tileId =
+            (playerAngle > 315 || playerAngle < 45) ? 0 :
+            (playerAngle < 135) ? 1 :
+            (playerAngle < 225) ? 2 :
+            3;
+        const int16_t tileX = ((int16_t)(m_playerActor->GetX() - (float)originX) * 16);
+        const int16_t tileY = ((int16_t)(m_playerActor->GetY() - (float)originY) * 16);
+        tilesSize16Masked.Add(tileX, tileY, tileId);
     }
 
     RenderableText& locationNames = renderableAutoMapTopDown.GetTextMutable();

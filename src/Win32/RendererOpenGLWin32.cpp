@@ -568,6 +568,33 @@ void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& a
         }
     }
 
+    if (autoMapTopDown.GetTileSize() == 64)
+    {
+        BindTexture(m_singleColorTexture[EgaBrightYellow]);
+
+        glPushMatrix();
+
+        const float playerX = (autoMapTopDown.GetPlayerX() - autoMapTopDown.GetOriginX()) * 64.0f;
+        const float playerY = (autoMapTopDown.GetPlayerY() - autoMapTopDown.GetOriginY()) * 64.0f;
+
+        glTranslatef(playerX, playerY, CeilingZ);
+        glRotatef(autoMapTopDown.GetPlayerAngle(), 0.0f, 0.0f, 1.0f);
+
+        glBegin(GL_QUADS);
+        glTexCoord2i(0, 1); glVertex2f(6.4f, 25.6f);
+        glTexCoord2i(1, 1); glVertex2f(-6.4f, 25.6f);
+        glTexCoord2i(1, 0); glVertex2f(-6.4f, 0.0f);
+        glTexCoord2i(0, 0); glVertex2f(6.4f, 0.0f);
+        glEnd();
+        glBegin(GL_TRIANGLES);
+        glTexCoord2i(0, 1); glVertex2f(25.6f, 0.0f);
+        glTexCoord2i(1, 1); glVertex2f(0.0f, -25.6f);
+        glTexCoord2i(1, 0); glVertex2f(-25.6f, 0.0f);
+        glEnd();
+
+        glPopMatrix();
+    }
+
     PrepareTopDownRendering(autoMapTopDown.GetAspectRatio(), autoMapTopDown.GetOriginal3DViewArea(), textScaleFactor);
 
     RenderText(autoMapTopDown.GetText());
@@ -596,7 +623,7 @@ void RendererOpenGLWin32::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIs
 
     glPushMatrix();
 
-    glTranslatef(playerX, playerY, PlayerZ);
+    glTranslatef(playerX, playerY, CeilingZ);
     glRotatef(autoMapIso.GetPlayerAngle(), 0.0f, 0.0f, 1.0f);
 
     glBegin(GL_QUADS);

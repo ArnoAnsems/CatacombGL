@@ -206,6 +206,7 @@ private:
     LevelCoordinate GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView) const;
     egaColor GetWallCapMainColor() const;
     egaColor GetWallCapCenterColor(const uint16_t x, const uint16_t y, const bool cheat) const;
+    static uint16_t GetTileIdFromActor(const Actor* actor);
     uint16_t CalculateHorizontalSpaceInTiles(const uint16_t x, const uint16_t y) const;
     uint16_t CalculateVerticalSpaceInTiles(const uint16_t x, const uint16_t y) const;
     void UpdateLocationNamesBestPositions();
