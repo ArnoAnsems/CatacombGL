@@ -2147,46 +2147,97 @@ void Level::SetupAutoMapTopDown(
     {
         if (cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
         {
-            const int16_t textTileSize = 32;
-            const int16_t x = ((pair.second.x - originX) * textTileSize) + (textTileSize / 2);
-            const int16_t y = ((pair.second.y - originY) * textTileSize);
-            const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
+            if (tileSize == 64)
+            {
+                const int16_t textTileSize = 32;
+                const int16_t x = ((pair.second.x - originX) * textTileSize) + (textTileSize / 2);
+                const int16_t y = ((pair.second.y - originY) * textTileSize);
+                const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
 
-            const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
-            std::vector<std::string> subStrings;
-            if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
-            {
-                subStrings.push_back(locationMessage);
-            }
-            else
-            {
-                // The text does not fit on a single line; try to split in two
-                locationNames.SplitTextInTwo(locationMessage, subStrings);
-                if (subStrings.size() == 2 &&
-                    (locationNames.GetWidthInPixels(subStrings.at(0)) > availableSpaceInPixels ||
-                        locationNames.GetWidthInPixels(subStrings.at(1)) > availableSpaceInPixels))
+                const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+                std::vector<std::string> subStrings;
+                if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
                 {
-                    // Even when split in two it does not split; try to split in three
-                    locationNames.SplitTextInThree(locationMessage, subStrings);
+                    // The text fits on a single line
+                    subStrings.push_back(locationMessage);
+                }
+                else
+                {
+                    // The text does not fit on a single line; try to split in two
+                    locationNames.SplitTextInTwo(locationMessage, subStrings);
+                    if (subStrings.size() == 2 &&
+                        (locationNames.GetWidthInPixels(subStrings.at(0)) > availableSpaceInPixels ||
+                            locationNames.GetWidthInPixels(subStrings.at(1)) > availableSpaceInPixels))
+                    {
+                        // Even when split in two it does not split; try to split in three
+                        locationNames.SplitTextInThree(locationMessage, subStrings);
+                    }
+                }
+
+                const egaColor textColor = (GetGroundColor() == EgaBrightWhite) ? EgaBlack : EgaBrightWhite;
+
+                if (subStrings.size() == 1)
+                {
+                    locationNames.Centered(subStrings.at(0), textColor, x, y + 11);
+                }
+                else if (subStrings.size() == 2)
+                {
+                    locationNames.Centered(subStrings.at(0), textColor, x, y + 6);
+                    locationNames.Centered(subStrings.at(1), textColor, x, y + 16);
+                }
+                else
+                {
+                    locationNames.Centered(subStrings.at(0), textColor, x, y + 1);
+                    locationNames.Centered(subStrings.at(1), textColor, x, y + 11);
+                    locationNames.Centered(subStrings.at(2), textColor, x, y + 21);
                 }
             }
-
-            const egaColor textColor = (GetGroundColor() == EgaBrightWhite) ? EgaBlack : EgaBrightWhite;
-
-            if (subStrings.size() == 1)
-            {
-                locationNames.Centered(subStrings.at(0), textColor, x, y + 11);
-            }
-            else if (subStrings.size() == 2)
-            {
-                locationNames.Centered(subStrings.at(0), textColor, x, y + 6);
-                locationNames.Centered(subStrings.at(1), textColor, x, y + 16);
-            }
             else
             {
-                locationNames.Centered(subStrings.at(0), textColor, x, y + 1);
-                locationNames.Centered(subStrings.at(1), textColor, x, y + 11);
-                locationNames.Centered(subStrings.at(2), textColor, x, y + 21);
+                // tileSize == 16
+                const int16_t textTileSize = 16;
+                const int16_t x = ((pair.second.x - originX) * textTileSize) + (textTileSize / 2);
+                const int16_t y = ((pair.second.y - originY) * textTileSize);
+                const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
+
+                const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+                std::vector<std::string> subStrings;
+                if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
+                {
+                    // The text fits on a single line
+                    subStrings.push_back(locationMessage);
+                }
+                else
+                {
+                    // The text does not fit on a single line; try to split in two
+                    locationNames.SplitTextInTwo(locationMessage, subStrings);
+                    if ((subStrings.size() == 2) && (pair.second.verticalSpaceInTiles > 2))
+                    {
+                        if ((locationNames.GetWidthInPixels(subStrings.at(0)) > availableSpaceInPixels) ||
+                            (locationNames.GetWidthInPixels(subStrings.at(1)) > CalculateHorizontalSpaceInTiles(pair.second.x, pair.second.y + 1)* textTileSize))
+                        {
+                            // Does not fit
+                            subStrings.clear();
+                        }
+                    }
+                    else
+                    {
+                            // Does not fit
+                            subStrings.clear();
+                    }
+                }
+
+                const egaColor textColor = (GetGroundColor() == EgaBrightWhite) ? EgaBlack : EgaBrightWhite;
+
+                if (subStrings.size() == 1)
+                {
+                    locationNames.Centered(subStrings.at(0), textColor, x, y + 3);
+                }
+                else if (subStrings.size() == 2)
+                {
+                    locationNames.Centered(subStrings.at(0), textColor, x, y + 4);
+                    locationNames.Centered(subStrings.at(1), textColor, x, y + 18);
+                }
             }
         }
     }

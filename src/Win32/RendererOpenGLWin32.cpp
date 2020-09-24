@@ -593,9 +593,9 @@ void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& a
         glEnd();
 
         glPopMatrix();
-    }
 
-    PrepareTopDownRendering(autoMapTopDown.GetAspectRatio(), autoMapTopDown.GetOriginal3DViewArea(), textScaleFactor);
+        PrepareTopDownRendering(autoMapTopDown.GetAspectRatio(), autoMapTopDown.GetOriginal3DViewArea(), textScaleFactor);
+    }
 
     RenderText(autoMapTopDown.GetText());
 }
@@ -730,7 +730,7 @@ void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(rect.width, m_windowHeight, false);
 
     const double statusBarHeight = ((rect2D.bottom - rect2D.top) * (200 - original3DViewArea.height) / 200.0);
     gluOrtho2D(rect2D.left * scale, rect2D.right * scale, (rect2D.bottom - statusBarHeight) * scale, rect2D.top * scale);
