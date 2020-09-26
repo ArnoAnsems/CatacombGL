@@ -548,12 +548,31 @@ void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& a
     const uint16_t tileSize = autoMapTopDown.GetTileSize();
     RenderTopDownFloorTiles(autoMapTopDown.GetFloorTiles(), tileSize);
     RenderTopDownFloorTiles(autoMapTopDown.GetBorderTiles(), tileSize);
+
+    // Draw walls and sprites
     for (const auto picturePair : autoMapTopDown.GetPictures())
     {
+        // Select the texture from the picture
+        const Picture* picture = picturePair.first;
+        BindTexture(picture->GetTextureId());
+        const GLint width = (uint16_t)picture->GetImageWidth();
+        const GLint height = (uint16_t)picture->GetImageHeight();
+        const float relativeImageWidth = (float)picture->GetImageWidth() / (float)picture->GetTextureWidth();
+        const float relativeImageHeight = (float)picture->GetImageHeight() / (float)picture->GetTextureHeight();
+
+        // Draw the texture as quads
+        glBegin(GL_QUADS);
+
         for (const RenderableAutoMapTopDown::pictureCoordinate& coordinate : picturePair.second)
         {
-            Render2DPicture(picturePair.first, coordinate.x, coordinate.y);
+            const int16_t offsetX = coordinate.x;
+            const int16_t offsetY = coordinate.y;
+            glTexCoord2f(0, relativeImageHeight); glVertex2i(offsetX, offsetY + height);
+            glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(offsetX + width, offsetY + height);
+            glTexCoord2f(relativeImageWidth, 0); glVertex2i(offsetX + width, offsetY);
+            glTexCoord2f(0, 0); glVertex2i(offsetX, offsetY);
         }
+        glEnd();
     }
     RenderTiles(autoMapTopDown.GetTilesSize16());
     RenderTiles(autoMapTopDown.GetTilesSize16Masked());
@@ -562,10 +581,18 @@ void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& a
     const int16_t width = tileSize - (2 * border);
     for (const auto wallCapPair : autoMapTopDown.GetWallCaps())
     {
+        BindTexture(m_singleColorTexture[wallCapPair.first]);
+        glBegin(GL_QUADS);
         for (const RenderableAutoMapTopDown::pictureCoordinate& coordinate : wallCapPair.second)
         {
-            Render2DBar(coordinate.x, coordinate.y, width, width, wallCapPair.first);
+            const int16_t x = coordinate.x;
+            const int16_t y = coordinate.y;
+            glTexCoord2i(0, 1); glVertex2i(x, y + width);
+            glTexCoord2i(1, 1); glVertex2i(x + width, y + width);
+            glTexCoord2i(1, 0); glVertex2i(x + width, y);
+            glTexCoord2i(0, 0); glVertex2i(x, y);
         }
+        glEnd();
     }
 
     if (autoMapTopDown.GetTileSize() == 64)
