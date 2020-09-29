@@ -17,8 +17,8 @@
 #include "LevelLocationNames.h"
 
 AutoMap::AutoMap() :
-    m_originX(0),
-    m_originY(0),
+    m_originX(0.0f),
+    m_originY(0.0f),
     m_lastActionTimestamp(0),
     m_autoMapType(ActorAtView),
     m_cheat(false)
@@ -38,7 +38,7 @@ void AutoMap::SetCheat(const bool enabled)
 
 void AutoMap::DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin)
 {
-    level.DrawAutoMap(renderer, egaGraph, additionalMargin, m_originX, m_originY, m_autoMapType, m_cheat);
+    level.DrawAutoMap(renderer, egaGraph, additionalMargin, (uint16_t)m_originX, (uint16_t)m_originY, m_autoMapType, m_cheat);
 }
 
 void AutoMap::SetupIso(
@@ -63,28 +63,30 @@ void AutoMap::SetupTopDown(
 
 void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
 {
-    const uint16_t maxOriginX = level.GetLevelWidth() - 20;
-    const uint16_t maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
-    if (timestamp > m_lastActionTimestamp + 200)
+    const float maxOriginX = level.GetLevelWidth() - 20.0f;
+    const float maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
+    const float stepSize = (autoMapMode == ClassicDebug) ? 1.0f : 0.125f;
+    const uint32_t timeInterval = (autoMapMode == ClassicDebug) ? 200 : 25;
+    if (timestamp > m_lastActionTimestamp + timeInterval)
     {
         if (playerInput.IsKeyPressed(SDLK_RIGHT) && m_originX < maxOriginX)
         {
-            m_originX++;
+            m_originX += stepSize;
             m_lastActionTimestamp = timestamp;
         }
-        if (playerInput.IsKeyPressed(SDLK_LEFT) && m_originX > 0)
+        if (playerInput.IsKeyPressed(SDLK_LEFT) && m_originX > 0.0f)
         {
-            m_originX--;
+            m_originX -= stepSize;
             m_lastActionTimestamp = timestamp;
         }
         if (playerInput.IsKeyPressed(SDLK_DOWN) && m_originY < maxOriginY)
         {
-            m_originY++;
+            m_originY += stepSize;
             m_lastActionTimestamp = timestamp;
         }
-        if (playerInput.IsKeyPressed(SDLK_UP) && m_originY > 0)
+        if (playerInput.IsKeyPressed(SDLK_UP) && m_originY > 0.0f)
         {
-            m_originY--;
+            m_originY -= stepSize;
             m_lastActionTimestamp = timestamp;
         }
         if (playerInput.IsKeyJustPressed(SDLK_LCTRL) || playerInput.IsKeyJustPressed(SDLK_RCTRL))
@@ -102,19 +104,19 @@ void AutoMap::ResetOrigin(Level& level, const AutoMapMode autoMapMode)
 {
     if (autoMapMode == ClassicDebug)
     {
-        m_originX = 0;
-        m_originY = 0;
+        m_originX = 0.0f;
+        m_originY = 0.0f;
     }
     else
     {
         // Put the origin at the player position
-        const uint16_t maxOriginX = level.GetLevelWidth() - 20;
-        const uint16_t maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7 : level.GetLevelHeight() - 9;
-        const int16_t bestOriginX = (int16_t)(level.GetPlayerActor()->GetX()) - 10;
-        const int16_t bestOriginY = (int16_t)(level.GetPlayerActor()->GetY()) - 4;
-        m_originX = (bestOriginX < 0) ? 0 :
+        const float maxOriginX = level.GetLevelWidth() - 20.0f;
+        const float maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
+        const float bestOriginX = level.GetPlayerActor()->GetX() - 10.0f;
+        const float bestOriginY = level.GetPlayerActor()->GetY() - 4.0f;
+        m_originX = (bestOriginX < 0.0f) ? 0.0f :
             (bestOriginX > maxOriginX) ? maxOriginX : bestOriginX;
-        m_originY = (bestOriginY < 0) ? 0 :
+        m_originY = (bestOriginY < 0.0f) ? 0.0f :
             (bestOriginY > maxOriginY) ? maxOriginY : bestOriginY;
     }
 }

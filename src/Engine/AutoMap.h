@@ -46,8 +46,8 @@ public:
     void ResetOrigin(Level& level, const AutoMapMode autoMapMode);
 
 private:
-    uint16_t m_originX;
-    uint16_t m_originY;
+    float m_originX;
+    float m_originY;
     uint32_t m_lastActionTimestamp;
     AutoMapType m_autoMapType;
     bool m_cheat;

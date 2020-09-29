@@ -1768,8 +1768,8 @@ void Level::SetupAutoMapIso(
     RenderableAutoMapIso& renderableAutoMapIso,
     EgaGraph& egaGraph,
     const float aspectRatio,
-    const uint16_t originX,
-    const uint16_t originY,
+    const float originX,
+    const float originY,
     const bool cheat)
 {
     renderableAutoMapIso.PrepareFrame(aspectRatio, originX, originY);
@@ -1970,8 +1970,8 @@ void Level::SetupAutoMapTopDown(
     const float aspectRatio,
     const uint16_t tileSize,
     const uint16_t additionalMargin,
-    const uint16_t originX,
-    const uint16_t originY,
+    const float originX,
+    const float originY,
     const bool cheat)
 {
     // Scale factor is compared to the original 320 x 200 resolution
@@ -1987,18 +1987,18 @@ void Level::SetupAutoMapTopDown(
     RenderableTiles& tilesSize16Masked = renderableAutoMapTopDown.GetTilesSize16MaskedMutable();
     const int16_t tileWidth = tileSize;
     const int16_t additionalTilesInMargin = (additionalMarginScaled == 0) ? 0 : (additionalMarginScaled / tileWidth) + 1;
-    const int16_t firstTileX = -additionalTilesInMargin + originX;
-    const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + originX;
-    const int16_t firstTileY = originY;
-    const int16_t lastTileY = originY + 13;
+    const int16_t firstTileX = -additionalTilesInMargin + (int16_t)originX;
+    const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + (int16_t)originX;
+    const int16_t firstTileY = (int16_t)originY;
+    const int16_t lastTileY = (int16_t)originY + 13;
 
     const egaColor wallCapMainColor = GetWallCapMainColor();
     for (int16_t y = firstTileY; y < lastTileY; y++)
     {
         for (int16_t x = firstTileX; x < lastTileX; x++)
         {
-            const int16_t sx = (x - (int16_t)originX) * tileWidth;
-            const int16_t sy = (y - (int16_t)originY) * tileWidth;
+            const int16_t sx = (int16_t)((x - originX) * tileWidth);
+            const int16_t sy = (int16_t)((y - originY) * tileWidth);
 
             if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
             {
@@ -2023,7 +2023,7 @@ void Level::SetupAutoMapTopDown(
                                 }
                                 else
                                 {
-                                    tilesSize16.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
+                                    tilesSize16.Add((int16_t)((x - originX) * tileWidth), (int16_t)((y - originY) * tileWidth), 0);
                                 }
                             }
                             const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
@@ -2084,15 +2084,15 @@ void Level::SetupAutoMapTopDown(
                         if (actorPicture != nullptr)
                         {
                             const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
-                            const int16_t sx = (x - (int16_t)originX) * tileWidth + marginX;
-                            const int16_t sy = (y - (int16_t)originY) * tileWidth;
+                            const int16_t sx = (int16_t)((x - originX) * tileWidth) + marginX;
+                            const int16_t sy = (int16_t)((y - originY) * tileWidth);
                             renderableAutoMapTopDown.AddPicture(actorPicture, { sx, sy });
                         }
                     }
                     else
                     {
-                        const int16_t sx = (x - (int16_t)originX) * tileWidth;
-                        const int16_t sy = (y - (int16_t)originY) * tileWidth;
+                        const int16_t sx = (int16_t)((x - originX) * tileWidth);
+                        const int16_t sy = (int16_t)((y - originY) * tileWidth);
                         const uint16_t tileId = GetTileIdFromActor(actor);
                         if (tileId > 0 && tileId < egaGraph.GetNumberOfTilesSize16(true))
                         {
@@ -2124,15 +2124,15 @@ void Level::SetupAutoMapTopDown(
                         if (actorPicture != nullptr)
                         {
                             const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
-                            const int16_t sx = (int16_t)((projectile->GetX() - (float)originX) * tileWidth + marginX) - halfTileWidth;
-                            const int16_t sy = (int16_t)((projectile->GetY() - (float)originY) * tileWidth) - halfTileWidth;
+                            const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth + marginX) - halfTileWidth;
+                            const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
                             renderableAutoMapTopDown.AddPicture(actorPicture, { sx, sy });
                         }
                     }
                     else
                     {
-                        const int16_t sx = (int16_t)((projectile->GetX() - (float)originX) * tileWidth) - halfTileWidth;
-                        const int16_t sy = (int16_t)((projectile->GetY() - (float)originY) * tileWidth) - halfTileWidth;
+                        const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth) - halfTileWidth;
+                        const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
                         const uint16_t tileId = GetTileIdFromActor(projectile);
                         if (tileId > 0 && tileId < egaGraph.GetNumberOfTilesSize16(true))
                         {
@@ -2153,8 +2153,8 @@ void Level::SetupAutoMapTopDown(
             (playerAngle < 135) ? 1 :
             (playerAngle < 225) ? 2 :
             3;
-        const int16_t tileX = ((int16_t)((m_playerActor->GetX() - (float)originX) * tileWidth) - halfTileWidth);
-        const int16_t tileY = ((int16_t)((m_playerActor->GetY() - (float)originY) * tileWidth) - halfTileWidth);
+        const int16_t tileX = ((int16_t)((m_playerActor->GetX() - originX) * tileWidth) - halfTileWidth);
+        const int16_t tileY = ((int16_t)((m_playerActor->GetY() - originY) * tileWidth) - halfTileWidth);
         tilesSize16Masked.Add(tileX, tileY, tileId);
     }
 
@@ -2167,8 +2167,8 @@ void Level::SetupAutoMapTopDown(
             if (tileSize == 64)
             {
                 const int16_t textTileSize = 32;
-                const int16_t x = ((pair.second.x - originX) * textTileSize) + (textTileSize / 2);
-                const int16_t y = ((pair.second.y - originY) * textTileSize);
+                const int16_t x = (int16_t)((pair.second.x - originX) * textTileSize) + (textTileSize / 2);
+                const int16_t y = (int16_t)((pair.second.y - originY) * textTileSize);
                 const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
 
                 const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
@@ -2213,8 +2213,8 @@ void Level::SetupAutoMapTopDown(
             {
                 // tileSize == 16
                 const int16_t textTileSize = 16;
-                const int16_t x = ((pair.second.x - originX) * textTileSize) + (textTileSize / 2);
-                const int16_t y = ((pair.second.y - originY) * textTileSize);
+                const int16_t x = (int16_t)((pair.second.x - originX) * textTileSize) + (textTileSize / 2);
+                const int16_t y = (int16_t)((pair.second.y - originY) * textTileSize);
                 const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
 
                 const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);

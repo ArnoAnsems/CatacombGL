@@ -172,8 +172,8 @@ public:
         RenderableAutoMapIso& renderableAutoMapIso,
         EgaGraph& egaGraph,
         const float aspectRatio,
-        const uint16_t originX,
-        const uint16_t originY,
+        const float originX,
+        const float originY,
         const bool cheat);
     void SetupAutoMapTopDown(
         RenderableAutoMapTopDown& renderableAutoMapTopDown,
@@ -181,8 +181,8 @@ public:
         const float aspectRatio,
         const uint16_t tileSize,
         const uint16_t additionalMargin,
-        const uint16_t originX,
-        const uint16_t originY,
+        const float originX,
+        const float originY,
         const bool cheat);
 
 private:
