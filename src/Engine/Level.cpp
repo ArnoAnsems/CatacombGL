@@ -117,6 +117,18 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
     return true;
 }
 
+bool Level::LoadFogOfWarFromFile(std::ifstream& file)
+{
+    file.read((char*)m_fogOfWarMap, m_levelWidth * m_levelHeight * sizeof(m_fogOfWarMap[0]));
+    if (file.fail())
+    {
+        Logging::Instance().FatalError("Failed to read fog of war map from saved game");
+        return false;
+    }
+
+    return true;
+}
+
 Level::~Level()
 {
     delete[] m_plane0;
@@ -198,6 +210,7 @@ void Level::StoreToFile(std::ofstream& file) const
             m_nonBlockingActors[i]->StoreToFile(file);
         }
     }
+    file.write((const char*)m_fogOfWarMap, m_levelWidth * m_levelHeight * sizeof(m_fogOfWarMap[0]));
 }
 
 uint16_t Level::GetLevelWidth() const

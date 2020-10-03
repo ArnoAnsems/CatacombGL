@@ -23,8 +23,8 @@
 #include <fstream>
 
 const uint8_t versionMajor = 0;
-const uint8_t versionMinor = 4;
-const uint8_t versionLevel = 3;
+const uint8_t versionMinor = 5;
+const uint8_t versionLevel = 0;
 const std::string versionPhase = "Beta";
 
 const uint8_t VictoryStatePlayGetBolt = 0;
@@ -3076,6 +3076,11 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         UnloadLevel();
         m_level = m_game.GetGameMaps()->GetLevelFromSavedGame(file);
         m_level->LoadActorsFromFile(file, m_game.GetDecorateActors());
+        if (versionMajorRead > 0 || versionMinorRead >= 5)
+        {
+            // The fog of war map gets stored since version 0.5.0
+            m_level->LoadFogOfWarFromFile(file);
+        }
         m_gameTimer.LoadFromFile(file);
         if (versionMajorRead > 0 || versionMinorRead >= 4)
         {

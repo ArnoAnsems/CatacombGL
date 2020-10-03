@@ -106,6 +106,7 @@ public:
         const LevelInfo& mapInfo,
         const std::vector<WallInfo>& wallsInfo);
     bool LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
+    bool LoadFogOfWarFromFile(std::ifstream& file);
     ~Level();
 
     uint16_t GetLevelWidth() const;
