@@ -211,6 +211,7 @@ private:
     uint16_t CalculateHorizontalSpaceInTiles(const uint16_t x, const uint16_t y) const;
     uint16_t CalculateVerticalSpaceInTiles(const uint16_t x, const uint16_t y) const;
     void UpdateLocationNamesBestPositions();
+    const std::string RemoveTrailingSpaces(const std::string& str) const;
 
     const uint16_t m_levelWidth;
     const uint16_t m_levelHeight;

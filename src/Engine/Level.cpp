@@ -2001,9 +2001,9 @@ void Level::SetupAutoMapTopDown(
     const int16_t tileWidth = tileSize;
     const int16_t additionalTilesInMargin = (additionalMarginScaled == 0) ? 0 : (additionalMarginScaled / tileWidth) + 1;
     const int16_t firstTileX = -additionalTilesInMargin + (int16_t)originX;
-    const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + (int16_t)originX;
+    const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + (int16_t)ceil(originX);
     const int16_t firstTileY = (int16_t)originY;
-    const int16_t lastTileY = (int16_t)originY + 13;
+    const int16_t lastTileY = (int16_t)ceil(originY) + 13;
 
     const egaColor wallCapMainColor = GetWallCapMainColor();
     for (int16_t y = firstTileY; y < lastTileY; y++)
@@ -2184,7 +2184,7 @@ void Level::SetupAutoMapTopDown(
                 const int16_t y = (int16_t)((pair.second.y - originY) * textTileSize);
                 const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
 
-                const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+                const std::string locationMessage = RemoveTrailingSpaces(egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first));
                 std::vector<std::string> subStrings;
                 if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
                 {
@@ -2230,7 +2230,7 @@ void Level::SetupAutoMapTopDown(
                 const int16_t y = (int16_t)((pair.second.y - originY) * textTileSize);
                 const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
 
-                const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+                const std::string locationMessage = RemoveTrailingSpaces(egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first));
                 std::vector<std::string> subStrings;
                 if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
                 {
@@ -2341,7 +2341,7 @@ void Level::RemoveActor(Actor* actor)
 egaColor Level::GetWallCapMainColor() const
 {
     const egaColor groundColor = GetGroundColor();
-    return (groundColor == EgaDarkGray) ? EgaLightGray : EgaLightGray;
+    return (groundColor == EgaLightGray) ? EgaDarkGray : EgaLightGray;
 }
 
 egaColor Level::GetWallCapCenterColor(const uint16_t x, const uint16_t y, const bool cheat) const
@@ -2428,4 +2428,12 @@ void Level::UpdateLocationNamesBestPositions()
             }
         }
     }
+}
+
+const std::string Level::RemoveTrailingSpaces(const std::string& str) const
+{
+    const char spaceChar = ' ';
+    const int lastCharIndex = str.find_last_not_of(spaceChar);
+    std::string result = str.substr(0, lastCharIndex + 1);
+    return result;
 }

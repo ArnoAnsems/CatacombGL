@@ -64,29 +64,45 @@ void AutoMap::SetupTopDown(
 void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
 {
     const float maxOriginX = level.GetLevelWidth() - 20.0f;
-    const float maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
+    const float maxOriginY = (autoMapMode == TopDown || autoMapMode == TopDownHD) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
     const float stepSize = (autoMapMode == ClassicDebug) ? 1.0f : 0.125f;
     const uint32_t timeInterval = (autoMapMode == ClassicDebug) ? 200 : 25;
     if (timestamp > m_lastActionTimestamp + timeInterval)
     {
-        if (playerInput.IsKeyPressed(SDLK_RIGHT) && m_originX < maxOriginX)
+        if (playerInput.IsKeyPressed(SDLK_RIGHT))
         {
             m_originX += stepSize;
+            if (autoMapMode == Isometric)
+            {
+                m_originY -= stepSize;
+            }
             m_lastActionTimestamp = timestamp;
         }
-        if (playerInput.IsKeyPressed(SDLK_LEFT) && m_originX > 0.0f)
+        if (playerInput.IsKeyPressed(SDLK_LEFT))
         {
             m_originX -= stepSize;
+            if (autoMapMode == Isometric)
+            {
+                m_originY += stepSize;
+            }
             m_lastActionTimestamp = timestamp;
         }
-        if (playerInput.IsKeyPressed(SDLK_DOWN) && m_originY < maxOriginY)
+        if (playerInput.IsKeyPressed(SDLK_DOWN))
         {
             m_originY += stepSize;
+            if (autoMapMode == Isometric)
+            {
+                m_originX += stepSize;
+            }
             m_lastActionTimestamp = timestamp;
         }
-        if (playerInput.IsKeyPressed(SDLK_UP) && m_originY > 0.0f)
+        if (playerInput.IsKeyPressed(SDLK_UP))
         {
             m_originY -= stepSize;
+            if (autoMapMode == Isometric)
+            {
+                m_originX -= stepSize;
+            }
             m_lastActionTimestamp = timestamp;
         }
         if (playerInput.IsKeyJustPressed(SDLK_LCTRL) || playerInput.IsKeyJustPressed(SDLK_RCTRL))
@@ -96,6 +112,22 @@ void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_
             {
                 m_autoMapType = MapView;
             }
+        }
+        if (m_originX < 0.0f)
+        {
+            m_originX = 0.0f;
+        }
+        if (m_originX > maxOriginX)
+        {
+            m_originX = maxOriginX;
+        }
+        if (m_originY < 0.0f)
+        {
+            m_originY = 0.0f;
+        }
+        if (m_originY > maxOriginY)
+        {
+            m_originY = maxOriginY;
         }
     }
 }
