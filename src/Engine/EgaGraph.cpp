@@ -428,7 +428,7 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompr
     const uint16_t numberOfColumns = (masked) ? 3 : 8;
     const uint16_t numberOfRows = (masked) ? 4 : 13;
     const unsigned int textureId = m_renderer.GenerateTextureId();
-    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 8, 8, numberOfColumns, numberOfRows, 1, 1);
+    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 8, 8, numberOfColumns, numberOfRows, 2, 2);
     const uint32_t bytesPerOutputPixel = 4;
     const uint32_t inputSizeOfTileInBytes = masked ? 40 : 32;
     const uint32_t numberOfPixelsInTile = 64; // 8 x 8
@@ -502,10 +502,10 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompr
 TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize16(const bool masked) const
 {
     const uint16_t numberOfTiles = GetNumberOfTilesSize16(masked);
-    const uint16_t numberOfColumns = 512 / 17;
-    const uint16_t numberOfRows = 512 / 17;
+    const uint16_t numberOfColumns = 512 / 18;
+    const uint16_t numberOfRows = 512 / 18;
     const unsigned int textureId = m_renderer.GenerateTextureId();
-    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, 16, numberOfColumns, numberOfRows, 1, 1);
+    TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, 16, numberOfColumns, numberOfRows, 2, 2);
     const uint32_t bytesPerOutputPixel = 4;
     const uint32_t inputSizeOfTileInBytes = masked ? 160 : 128;
     const uint32_t numberOfPixelsInTile = 256; // 16 x 16

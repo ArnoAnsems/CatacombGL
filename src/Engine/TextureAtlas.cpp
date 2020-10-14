@@ -107,6 +107,59 @@ void TextureAtlas::StoreImage(const uint16_t imageIndex, const uint8_t* const pi
             destinationRowPtr++;
         }
     }
+    
+    if (offsetInPixelsX > 0 && m_imageSpacingX > 1)
+    {
+        // Pad column to the left
+        for (uint16_t rowIndex = 0; rowIndex < m_imageHeight; rowIndex++)
+        {
+            uint8_t* destinationPixel = m_texturePixelData + ((((offsetInPixelsY + rowIndex) * m_textureWidth) + offsetInPixelsX - 1) * m_bytesPerPixel);
+            for (uint16_t b = 0; b < m_bytesPerPixel; b++)
+            {
+                destinationPixel[b] = destinationPixel[b + m_bytesPerPixel];
+            }
+        }
+    }
+    
+    if (offsetInPixelsX + m_imageWidth + 1 < m_textureWidth && m_imageSpacingX > 1)
+    {
+        // Pad column to the right
+        for (uint16_t rowIndex = 0; rowIndex < m_imageHeight; rowIndex++)
+        {
+            uint8_t* destinationPixel = m_texturePixelData + ((((offsetInPixelsY + rowIndex) * m_textureWidth) + offsetInPixelsX) * m_bytesPerPixel);
+            for (uint16_t b = 0; b < m_bytesPerPixel; b++)
+            {
+                destinationPixel[(m_imageWidth * m_bytesPerPixel) + b] = destinationPixel[((m_imageWidth - 1) * m_bytesPerPixel) + b];
+            }
+        }
+    }
+
+    if (offsetInPixelsY > 0 && m_imageSpacingY > 1)
+    {
+        // Pad row above
+        for (uint16_t columnIndex = 0; columnIndex < m_imageWidth; columnIndex++)
+        {
+            uint8_t* destinationPixel = m_texturePixelData + ((((offsetInPixelsY - 1) * m_textureWidth) + (offsetInPixelsX + columnIndex)) * m_bytesPerPixel);
+            for (uint16_t b = 0; b < m_bytesPerPixel; b++)
+            {
+                destinationPixel[b] = destinationPixel[b + (m_textureWidth * m_bytesPerPixel)];
+            }
+        }
+    }
+
+    if (offsetInPixelsY + m_imageHeight + 1 < m_textureHeight && m_imageSpacingY > 1)
+    {
+        // Pad row below
+        for (uint16_t columnIndex = 0; columnIndex < m_imageWidth; columnIndex++)
+        {
+            uint8_t* destinationPixel = m_texturePixelData + ((((offsetInPixelsY + m_imageHeight - 1) * m_textureWidth) + (offsetInPixelsX + columnIndex)) * m_bytesPerPixel);
+            for (uint16_t b = 0; b < m_bytesPerPixel; b++)
+            {
+                 destinationPixel[b + (m_textureWidth * m_bytesPerPixel)] = destinationPixel[b];
+            }
+        }
+    }
+    
 }
 
 uint16_t TextureAtlas::GetImageWidth() const
