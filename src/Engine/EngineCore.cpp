@@ -155,7 +155,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
     renderer.SetFrameSettings(frameSettings);
 
-    if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetAutoMapMode() != ClassicDebug)
+    if (m_state == AutoMapDialog && m_level != nullptr)
     {
         const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
         if (m_configurationSettings.GetAutoMapMode() == Isometric)
@@ -163,7 +163,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
             m_autoMap.SetupIso(m_renderableAutoMapIso, *m_game.GetEgaGraph(), *m_level, aspectRatio);
             renderer.RenderAutoMapIso(m_renderableAutoMapIso);
         }
-        else
+        else if (m_configurationSettings.GetAutoMapMode() == TopDown || m_configurationSettings.GetAutoMapMode() == TopDownHD)
         {
             const uint16_t tileSize = (m_configurationSettings.GetAutoMapMode() == TopDown) ? 16 : 64;
             m_autoMap.SetupTopDown(m_renderableAutoMapTopDown, *m_game.GetEgaGraph(), *m_level, aspectRatio, tileSize, renderer.GetAdditionalMarginDueToWideScreen(aspectRatio));
@@ -788,7 +788,7 @@ bool EngineCore::Think()
 
     if (m_state == AutoMapDialog && !m_menu->IsActive() && m_level != nullptr)
     {
-        m_autoMap.ProcessInput(m_playerInput, *m_level, m_gameTimer.GetActualTime(), m_configurationSettings.GetAutoMapMode());
+        m_autoMap.ProcessInput(m_playerInput, m_configurationSettings.GetMouseSensitivity(), *m_level, m_gameTimer.GetActualTime(), m_configurationSettings.GetAutoMapMode());
     }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))

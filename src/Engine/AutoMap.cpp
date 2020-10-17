@@ -21,7 +21,9 @@ AutoMap::AutoMap() :
     m_originY(0.0f),
     m_lastActionTimestamp(0),
     m_autoMapType(ActorAtView),
-    m_cheat(false)
+    m_cheat(false),
+    m_accumulatedMouseX(0),
+    m_accumulatedMouseY(0)
 {
 
 }
@@ -61,14 +63,61 @@ void AutoMap::SetupTopDown(
     level.SetupAutoMapTopDown(rendererAutoMapTopDown, egaGraph, aspectRatio, tileSize, additionalMargin, m_originX, m_originY, m_cheat);
 }
 
-void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
+void AutoMap::ProcessInput(PlayerInput& playerInput, const float mouseSensitivity, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
 {
     const float maxOriginX = level.GetLevelWidth() - 20.0f;
     const float maxOriginY = (autoMapMode == TopDown || autoMapMode == TopDownHD) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
     const float stepSize = (autoMapMode == ClassicDebug) ? 1.0f : 0.125f;
     const uint32_t timeInterval = (autoMapMode == ClassicDebug) ? 200 : 25;
+    const float mouseSensitivityScaled = (autoMapMode == ClassicDebug) ? (mouseSensitivity / 400.0f) : (mouseSensitivity / 50.0f);
+    m_accumulatedMouseX += playerInput.GetMouseXPos();
+    m_accumulatedMouseY += playerInput.GetMouseYPos();
     if (timestamp > m_lastActionTimestamp + timeInterval)
     {
+        if (m_accumulatedMouseX > 0)
+        {
+            // Scroll right
+            const float mouseMovement = stepSize * (int32_t)((float)m_accumulatedMouseX * mouseSensitivityScaled);
+            m_originX += mouseMovement;
+            if (autoMapMode == Isometric)
+            {
+                m_originY -= mouseMovement;
+            }
+        }
+
+        if (m_accumulatedMouseX < 0)
+        {
+            // Scroll left
+            const float mouseMovement = stepSize * (int32_t)((float)-m_accumulatedMouseX * mouseSensitivityScaled);
+            m_originX -= mouseMovement;
+            if (autoMapMode == Isometric)
+            {
+                m_originY += mouseMovement;
+            }
+        }
+
+        if (m_accumulatedMouseY > 0)
+        {
+            // Scroll down
+            const float mouseMovement = stepSize * (int32_t)((float)m_accumulatedMouseY * mouseSensitivityScaled);
+            m_originY += mouseMovement;
+            if (autoMapMode == Isometric)
+            {
+                m_originX += mouseMovement;
+            }
+        }
+
+        if (m_accumulatedMouseY < 0)
+        {
+            // Scroll up
+            const float mouseMovement = stepSize * (int32_t)((float)-m_accumulatedMouseY * mouseSensitivityScaled);
+            m_originY -= mouseMovement;
+            if (autoMapMode == Isometric)
+            {
+                m_originX -= mouseMovement;
+            }
+        }
+
         if (playerInput.IsKeyPressed(SDLK_RIGHT))
         {
             m_originX += stepSize;
@@ -76,7 +125,6 @@ void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_
             {
                 m_originY -= stepSize;
             }
-            m_lastActionTimestamp = timestamp;
         }
         if (playerInput.IsKeyPressed(SDLK_LEFT))
         {
@@ -85,7 +133,6 @@ void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_
             {
                 m_originY += stepSize;
             }
-            m_lastActionTimestamp = timestamp;
         }
         if (playerInput.IsKeyPressed(SDLK_DOWN))
         {
@@ -94,7 +141,6 @@ void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_
             {
                 m_originX += stepSize;
             }
-            m_lastActionTimestamp = timestamp;
         }
         if (playerInput.IsKeyPressed(SDLK_UP))
         {
@@ -103,7 +149,6 @@ void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_
             {
                 m_originX -= stepSize;
             }
-            m_lastActionTimestamp = timestamp;
         }
         if (playerInput.IsKeyJustPressed(SDLK_LCTRL) || playerInput.IsKeyJustPressed(SDLK_RCTRL))
         {
@@ -129,6 +174,10 @@ void AutoMap::ProcessInput(PlayerInput& playerInput, Level& level, const uint32_
         {
             m_originY = maxOriginY;
         }
+
+        m_lastActionTimestamp = timestamp;
+        m_accumulatedMouseX = 0;
+        m_accumulatedMouseY = 0;
     }
 }
 

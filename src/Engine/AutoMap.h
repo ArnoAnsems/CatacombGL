@@ -42,7 +42,7 @@ public:
         const float aspectRatio,
         const uint16_t tileSize,
         const uint16_t additionalMargin);
-    void ProcessInput(PlayerInput& playerInput, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode);
+    void ProcessInput(PlayerInput& playerInput, const float mouseSensitivity, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode);
     void ResetOrigin(Level& level, const AutoMapMode autoMapMode);
 
 private:
@@ -51,5 +51,8 @@ private:
     uint32_t m_lastActionTimestamp;
     AutoMapType m_autoMapType;
     bool m_cheat;
+    int32_t m_accumulatedMouseX;
+    int32_t m_accumulatedMouseY;
+
 };
 
