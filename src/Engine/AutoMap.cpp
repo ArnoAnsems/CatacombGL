@@ -63,7 +63,7 @@ void AutoMap::SetupTopDown(
     level.SetupAutoMapTopDown(rendererAutoMapTopDown, egaGraph, aspectRatio, tileSize, additionalMargin, m_originX, m_originY, m_cheat);
 }
 
-void AutoMap::ProcessInput(PlayerInput& playerInput, const float mouseSensitivity, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
+void AutoMap::ProcessInput(const PlayerInput& playerInput, const float mouseSensitivity, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
 {
     const float maxOriginX = level.GetLevelWidth() - 20.0f;
     const float maxOriginY = (autoMapMode == TopDown || autoMapMode == TopDownHD) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;

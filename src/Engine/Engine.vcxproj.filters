@@ -186,6 +186,9 @@
     <ClCompile Include="RenderableAutoMapTopDown.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ManaBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h">
@@ -357,6 +360,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenderableAutoMapTopDown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ManaBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
