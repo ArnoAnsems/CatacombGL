@@ -129,6 +129,9 @@ public:
     AutoMapMode GetAutoMapMode() const;
     void SetAutoMapMode(const AutoMapMode autoMapMode);
 
+    bool GetManaBar() const;
+    void SetManaBar(const bool enabled);
+
 private:
     ScreenMode m_screenMode;
     uint8_t m_aspectRatio;
@@ -146,6 +149,7 @@ private:
     bool m_alwaysRun;
     bool m_autoFire;
     AutoMapMode m_autoMapMode;
+    bool m_manaBar;
 
     std::string m_pathAbyssv113;
     std::string m_pathAbyssv124;

@@ -286,7 +286,7 @@ void Catacomb3DMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuControls)
         {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
+            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
             {
                 m_menuItemSelected = 0;
                 m_menuItemOffset = 0;
@@ -412,7 +412,7 @@ void Catacomb3DMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3;
+                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4;
                 m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
             }
             else
@@ -744,6 +744,11 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         {
             // Auto Fire
             m_configurationSettings.SetAutoFire(!m_configurationSettings.GetAutoFire());
+        }
+        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
+        {
+            // Mana Bar
+            m_configurationSettings.SetManaBar(!m_configurationSettings.GetManaBar());
         }
         else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size() - 1)
         {
@@ -1172,6 +1177,13 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
                 renderableText.LeftAligned("Auto Fire", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
                 const char* autoFireStr = (m_configurationSettings.GetAutoFire()) ? "Enabled" : "Disabled";
                 renderableText.LeftAligned(autoFireStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
+            }
+            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5)
+            {
+                renderableTiles.DrawListBullet(76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
+                renderableText.LeftAligned("Mana Bar", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                const char* manaBarStr = (m_configurationSettings.GetManaBar()) ? "Enabled" : "Disabled";
+                renderableText.LeftAligned(manaBarStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             index++;
         }

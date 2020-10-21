@@ -36,6 +36,7 @@
 #include "Score.h"
 #include "FadeEffect.h"
 #include "AutoMap.h"
+#include "ManaBar.h"
 
 class EngineCore
 {
@@ -184,4 +185,5 @@ private:
     Renderable3DScene m_renderable3DScene;
     RenderableAutoMapIso m_renderableAutoMapIso;
     RenderableAutoMapTopDown m_renderableAutoMapTopDown;
+    ManaBar m_manaBar;
 };

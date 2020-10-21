@@ -77,7 +77,8 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_setOverlayOnNextDraw(false),
     m_renderable3DScene(m_game.GetOriginal3DViewArea()),
     m_renderableAutoMapIso(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea()),
-    m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea(), *m_game.GetEgaGraph()->GetTilesSize16(), *m_game.GetEgaGraph()->GetTilesSize16Masked())
+    m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea(), *m_game.GetEgaGraph()->GetTilesSize16(), *m_game.GetEgaGraph()->GetTilesSize16Masked()),
+    m_manaBar()
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -227,6 +228,9 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 // Draw only the segment of the hand graphic that is visible above the statusbar.
                 renderer.Render2DPictureSegment(handPicture, offsetX, statusbarOffset - m_playerActions.GetHandHeight(), 0, 0, handPicture->GetImageWidth(), m_playerActions.GetHandHeight());
             }
+
+            m_manaBar.Draw(renderer);
+
 #ifdef DRAWTILEINFO
             char tileStr[40];
             sprintf_s(tileStr, 40, "tile: %d", m_level->GetFloorTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
@@ -1011,6 +1015,11 @@ bool EngineCore::Think()
 
     if (m_state == InGame)
     {
+        if (m_configurationSettings.GetManaBar() != m_manaBar.IsEnabled())
+        {
+            m_manaBar.Reset(m_configurationSettings.GetManaBar());
+        }
+
         if (!m_level->GetPlayerActor()->IsDead())
         {
             if (m_keyToTake != NoKey)

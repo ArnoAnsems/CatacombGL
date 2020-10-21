@@ -35,6 +35,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_alwaysRun(false),
     m_autoFire(false),
     m_autoMapMode(TopDownHD),
+    m_manaBar(false),
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
@@ -200,6 +201,12 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                 TopDownHD;
         }
 
+        auto manaBarPair = keyValuePairs.find("manaBar");
+        if (manaBarPair != keyValuePairs.end())
+        {
+            m_manaBar = (manaBarPair->second.compare("Enabled") == 0);
+        }
+
         for (auto keyPair : keyValuePairs)
         {
             SDL_Keycode keyCode = SDL_GetKeyFromName(keyPair.first.c_str());
@@ -279,6 +286,8 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "alwaysRun=" << alwaysRunValue << "\n";
         const std::string autoFireValue = (m_autoFire) ? "Enabled" : "Disabled";
         file << "autoFire=" << autoFireValue << "\n";
+        const std::string manaBarValue = (m_manaBar) ? "Enabled" : "Disabled";
+        file << "manaBar=" << manaBarValue << "\n";
         file << "# Key bindings\n";
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
 	    {
@@ -509,4 +518,14 @@ AutoMapMode ConfigurationSettings::GetAutoMapMode() const
 void ConfigurationSettings::SetAutoMapMode(const AutoMapMode autoMapMode)
 {
     m_autoMapMode = autoMapMode;
+}
+
+bool ConfigurationSettings::GetManaBar() const
+{
+    return m_manaBar;
+}
+
+void ConfigurationSettings::SetManaBar(const bool enabled)
+{
+    m_manaBar = enabled;
 }
