@@ -709,6 +709,13 @@ unsigned int EgaGraph::LoadMaskedFileChunkIntoTexture(
     }
 
     uint8_t* textureImage = new uint8_t[textureImageSize];
+
+    // Clear the whole texture
+    for (uint32_t i = 0; i < textureImageSize; i++)
+    {
+        textureImage[i] = 0;
+    }
+
     unsigned char* chunk = decompressedChunk->GetChunk();
 
     for (uint32_t i = 0; i < planeSize; i++)

@@ -22,6 +22,7 @@
 
 #include <stdint.h>
 #include "ControlsMap.h"
+#include "ManaBar.h"
 
 class PlayerActions
 {
@@ -30,8 +31,8 @@ public:
     ~PlayerActions();
 
     uint16_t GetHandHeight() const;
-    bool UpdateShoot(const uint32_t timeStamp, const bool autoFire);
-    bool UpdateShootWithCharge(const uint32_t timeStamp, const bool autoFire);
+    bool UpdateShoot(const uint32_t timeStamp, const bool autoFire, ManaBar& manaBar);
+    bool UpdateShootWithCharge(const uint32_t timeStamp, const bool autoFire, ManaBar& manaBar);
     bool IsReadyToShootBolt(const uint32_t timeStamp);
     void ShootBolt(const uint32_t timeStamp);
     bool UpdateContinueBolt(const uint32_t timeStamp);

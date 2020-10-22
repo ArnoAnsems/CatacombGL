@@ -1066,15 +1066,17 @@ bool EngineCore::Think()
 
             if (m_timeStampOfPlayerCurrentFrame > m_timeStampOfPlayerPreviousFrame)
             {
+                m_manaBar.Update(m_timeStampOfPlayerCurrentFrame);
+
                 bool shoot = false;
                 const bool autoFire = m_configurationSettings.GetAutoFire();
                 if (m_game.GetId() != 5)
                 {
-                    shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire);
+                    shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
                 }
                 else
                 {
-                    shoot = m_playerActions.UpdateShootWithCharge(m_timeStampOfPlayerCurrentFrame, autoFire);
+                    shoot = m_playerActions.UpdateShootWithCharge(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
                 }
                 if (shoot)
                 {

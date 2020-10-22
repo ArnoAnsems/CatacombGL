@@ -70,13 +70,13 @@ uint16_t PlayerActions::GetHandHeight() const
     return m_handHeight;
 }
 
-bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire)
+bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire, ManaBar& manaBar)
 {
     bool fireShot = false;
     m_shotPower = 0;
     if (m_controlActionActive[Shoot])
     {
-        if (m_shotFired == false)
+        if (m_shotFired == false && manaBar.FireShot())
         {
             fireShot = true;
             m_shotFired = true;
@@ -138,7 +138,7 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire)
     return fireShot;
 }
 
-bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool autoFire)
+bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool autoFire, ManaBar& manaBar)
 {
     bool fireShot = false;
     if (m_controlActionActive[Shoot])
@@ -164,7 +164,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
 
         if (!m_controlActionActive[Shoot])
         {
-            if (!autoFire || m_shotPower == 56)
+            if ((!autoFire || m_shotPower == 56) && manaBar.FireShot())
             {
                 fireShot = true;
             }
@@ -197,7 +197,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
 
     if (autoFire)
     {
-        if (m_shotFired && m_autoFireTimeStamp + 250 < timeStamp)
+        if (m_shotFired && m_autoFireTimeStamp + 250 < timeStamp && manaBar.FireShot())
         {
             fireShot = true;
             m_autoFireTimeStamp = timeStamp;

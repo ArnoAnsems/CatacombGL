@@ -87,7 +87,7 @@ void ManaBar::Draw(IRenderer& renderer)
     if (m_enabled)
     {
         const int16_t barLengthInPixels = 100;
-        const int16_t manaLengthInPixels = barLengthInPixels * (m_mana / maxMana);
+        const int16_t manaLengthInPixels = (int16_t)(barLengthInPixels * ((float)m_mana / (float)maxMana));
         const int16_t xOffset = 160 - (barLengthInPixels / 2);
         const uint32_t manaForGreenBar = manaRequiredForOneShot * 2;
         const uint32_t manaForYellowBar = manaRequiredForOneShot;
