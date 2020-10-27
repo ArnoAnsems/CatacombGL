@@ -26,7 +26,13 @@
 class ManaBar
 {
 public:
-    ManaBar();
+    struct ManaBarConfig
+    {
+        int16_t offsetY;
+        egaColor frameColor;
+        egaColor frameShadowColor;
+    };
+    ManaBar(const ManaBarConfig config);
     ~ManaBar();
 
     void Reset(const bool enabled);
@@ -36,6 +42,7 @@ public:
     void Draw(IRenderer& renderer);
 
 private:
+    const ManaBarConfig m_config;
     bool m_enabled;
     uint32_t m_mana;
     uint32_t m_previousTimestamp;

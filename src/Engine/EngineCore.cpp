@@ -78,7 +78,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_renderable3DScene(m_game.GetOriginal3DViewArea()),
     m_renderableAutoMapIso(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea()),
     m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea(), *m_game.GetEgaGraph()->GetTilesSize16(), *m_game.GetEgaGraph()->GetTilesSize16Masked()),
-    m_manaBar()
+    m_manaBar({ 114, EgaBrightCyan, EgaCyan })
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -128,6 +128,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     m_timeStampLastMouseMoveBackward = 0;
     m_gameTimer.Reset();
     m_playerActions.ResetForNewLevel();
+    m_manaBar.Reset(m_configurationSettings.GetManaBar());
     if (m_difficultyLevel == Easy)
     {
         DisplayStatusMessage("*** NOVICE ***", 3000);
@@ -3103,6 +3104,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         file.close();
 
         m_playerActions.ResetForNewLevel();
+        m_manaBar.Reset(m_configurationSettings.GetManaBar());
         m_warpToLevel = m_level->GetLevelIndex();
         m_menu->SetActive(false);
         m_state = InGame;
