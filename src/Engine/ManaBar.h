@@ -28,6 +28,7 @@ class ManaBar
 public:
     struct ManaBarConfig
     {
+        int16_t centerX;
         int16_t offsetY;
         egaColor frameColor;
         egaColor frameShadowColor;

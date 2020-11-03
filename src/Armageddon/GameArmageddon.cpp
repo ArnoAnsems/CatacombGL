@@ -857,3 +857,10 @@ const ViewPorts::ViewPortRect3D& GameArmageddon::GetOriginal3DViewArea()
 {
     return original3DViewArea;
 }
+
+static const ManaBar::ManaBarConfig manaBarConfig = { original3DViewArea.width / 2, 114, EgaBrightRed, EgaRed };
+
+const ManaBar::ManaBarConfig& GameArmageddon::GetManaBarConfig()
+{
+    return manaBarConfig;
+}

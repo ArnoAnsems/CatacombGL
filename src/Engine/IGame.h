@@ -33,6 +33,7 @@
 #include "PlayerInput.h"
 #include "ViewPorts.h"
 #include "ConfigurationSettings.h"
+#include "ManaBar.h"
 #include "../../ThirdParty//SDL/include/SDL_keycode.h"
 
 enum DifficultyLevel
@@ -97,6 +98,7 @@ public:
     virtual void PlaySoundWarp() = 0;
     virtual void PlaySoundPortal() = 0;
     virtual const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() = 0;
+    virtual const ManaBar::ManaBarConfig& GetManaBarConfig() = 0;
 
 
 protected:

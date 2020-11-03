@@ -676,3 +676,10 @@ const ViewPorts::ViewPortRect3D& GameCatacomb3D::GetOriginal3DViewArea()
 {
     return original3DViewArea;
 }
+
+static const ManaBar::ManaBarConfig manaBarConfig = { original3DViewArea.width / 2, 138, EgaBrightWhite, EgaLightGray };
+
+const ManaBar::ManaBarConfig& GameCatacomb3D::GetManaBarConfig()
+{
+    return manaBarConfig;
+}

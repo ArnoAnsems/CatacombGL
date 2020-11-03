@@ -84,6 +84,7 @@ public:
     void PlaySoundWarp() override;
     void PlaySoundPortal() override;
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
+    const ManaBar::ManaBarConfig& GetManaBarConfig() override;
 
 private:
     void DrawStatusBarWideScreenMargin(const int16_t offsetX, const int16_t marginWidth);

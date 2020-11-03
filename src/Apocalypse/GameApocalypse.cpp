@@ -722,3 +722,10 @@ const ViewPorts::ViewPortRect3D& GameApocalypse::GetOriginal3DViewArea()
 {
     return original3DViewArea;
 }
+
+static const ManaBar::ManaBarConfig manaBarConfig = { original3DViewArea.width / 2, 114, EgaBrightCyan, EgaCyan };
+
+const ManaBar::ManaBarConfig& GameApocalypse::GetManaBarConfig()
+{
+    return manaBarConfig;
+}
