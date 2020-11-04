@@ -681,6 +681,32 @@ unsigned int EgaGraph::LoadFileChunkIntoTexture(
         }
     }
 
+    if (textureWidth > imageWidth)
+    {
+        // Pad column to the right to prevent linear filtering artifacts
+        for (int16_t y = 0; y < imageHeight; y++)
+        {
+            const uint32_t outputImagePixelOffset = ((y * textureWidth) + imageWidth - 1) * bytesPerOutputPixel;
+            for (uint32_t b = 0; b < bytesPerOutputPixel; b++)
+            {
+                textureImage[outputImagePixelOffset + bytesPerOutputPixel + b] = textureImage[outputImagePixelOffset + b];
+            }
+        }
+    }
+
+    if (textureHeight > imageHeight)
+    {
+        // Pad row to the bottom to prevent linear filtering artifacts
+        for (int16_t x = 0; x < imageWidth; x++)
+        {
+            const uint32_t outputImagePixelOffset = (((imageHeight - 1) * textureWidth) + x) * bytesPerOutputPixel;
+            for (uint32_t b = 0; b < bytesPerOutputPixel; b++)
+            {
+                textureImage[outputImagePixelOffset + (bytesPerOutputPixel * textureWidth) + b] = textureImage[outputImagePixelOffset + b];
+            }
+        }
+    }
+
     const unsigned int textureId = m_renderer.GenerateTextureId();
     m_renderer.LoadPixelDataIntoTexture(textureWidth, textureHeight, textureImage, textureId);
 
@@ -742,6 +768,32 @@ unsigned int EgaGraph::LoadMaskedFileChunkIntoTexture(
             textureImage[outputTextureOffset + 1] = outputColor.green;
             textureImage[outputTextureOffset + 2] = outputColor.blue;
             textureImage[outputTextureOffset + 3] = transparencyplane ? 0 : 255;
+        }
+    }
+
+    if (textureWidth > imageWidth)
+    {
+        // Pad column to the right to prevent linear filtering artifacts
+        for (int16_t y = 0; y < imageHeight; y++)
+        {
+            const uint32_t outputImagePixelOffset = ((y * textureWidth) + imageWidth - 1) * bytesPerOutputPixel;
+            for (uint32_t b = 0; b < bytesPerOutputPixel; b++)
+            {
+                textureImage[outputImagePixelOffset + bytesPerOutputPixel + b] = textureImage[outputImagePixelOffset + b];
+            }
+        }
+    }
+
+    if (textureHeight > imageHeight)
+    {
+        // Pad row to the bottom to prevent linear filtering artifacts
+        for (int16_t x = 0; x < imageWidth; x++)
+        {
+            const uint32_t outputImagePixelOffset = (((imageHeight - 1) * textureWidth) + x) * bytesPerOutputPixel;
+            for (uint32_t b = 0; b < bytesPerOutputPixel; b++)
+            {
+                textureImage[outputImagePixelOffset + (bytesPerOutputPixel * textureWidth) + b] = textureImage[outputImagePixelOffset + b];
+            }
         }
     }
 
