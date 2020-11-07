@@ -27,6 +27,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_depthShading(true),
     m_showFps(Off),
     m_vsync(true),
+    m_screenResolution(High),
     m_soundMode(2),
     m_musicOn(true),
     m_mouseSensitivity(10),
@@ -146,6 +147,12 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_fov = (fov < 25) ? 25 : (fov > 45) ? 45 : fov;
         }
 
+        auto screenResolutionPair = keyValuePairs.find("screenresolution");
+        if (screenResolutionPair != keyValuePairs.end())
+        {
+            m_screenResolution = (screenResolutionPair->second.compare("classic") == 0) ? Classic : High;
+        }
+
         auto soundModePair = keyValuePairs.find("soundmode");
         if (soundModePair != keyValuePairs.end())
         {
@@ -249,6 +256,8 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
             (m_screenMode == Fullscreen) ? "fullscreen" :
             "borderlesswindowed";
         file << "screenmode=" << screenModeValue << "\n";
+        const std::string screenResolutionValue = (m_screenResolution == Classic) ? "classic" : "high";
+        file << "screenresolution=" << screenResolutionValue << "\n";
         const std::string aspectRatioValue = (m_aspectRatio == 0) ? "Classic" : "FitToScreen";
         file << "aspectratio=" << aspectRatioValue << "\n";
         const std::string depthShadingValue = m_depthShading ? "true" : "false";
@@ -428,6 +437,16 @@ bool ConfigurationSettings::GetVSync() const
 void ConfigurationSettings::SetVSync(const bool enabled)
 {
     m_vsync = enabled;
+}
+
+ScreenResolution ConfigurationSettings::GetScreenResolution() const
+{
+    return m_screenResolution;
+}
+
+void ConfigurationSettings::SetScreenResolution(const ScreenResolution screenResolution)
+{
+    m_screenResolution = screenResolution;
 }
 
 ControlsMap& ConfigurationSettings::GetControlsMap()

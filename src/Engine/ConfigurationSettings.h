@@ -43,6 +43,12 @@ enum ScreenMode
     BorderlessWindowed
 };
 
+enum ScreenResolution
+{
+    Classic,
+    High
+};
+
 enum ShowFpsMode
 {
     Off,
@@ -102,6 +108,9 @@ public:
     bool GetVSync() const;
     void SetVSync(const bool enabled);
 
+    ScreenResolution GetScreenResolution() const;
+    void SetScreenResolution(const ScreenResolution screenResolution);
+
     ControlsMap& GetControlsMap();
     const ControlsMap& GetConstControlsMap() const;
 
@@ -140,6 +149,7 @@ private:
     bool m_depthShading;
     ShowFpsMode m_showFps;
     bool m_vsync;
+    ScreenResolution m_screenResolution;
     ControlsMap m_controlsMap;
     uint8_t m_soundMode;
     bool m_musicOn;
