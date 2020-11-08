@@ -67,9 +67,9 @@ void AutoMap::ProcessInput(const PlayerInput& playerInput, const float mouseSens
 {
     const float maxOriginX = level.GetLevelWidth() - 20.0f;
     const float maxOriginY = (autoMapMode == TopDown || autoMapMode == TopDownHD) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
-    const float stepSize = (autoMapMode == ClassicDebug) ? 1.0f : 0.125f;
-    const uint32_t timeInterval = (autoMapMode == ClassicDebug) ? 200 : 25;
-    const float mouseSensitivityScaled = (autoMapMode == ClassicDebug) ? (mouseSensitivity / 400.0f) : (mouseSensitivity / 50.0f);
+    const float stepSize = (autoMapMode == OriginalDebug) ? 1.0f : 0.125f;
+    const uint32_t timeInterval = (autoMapMode == OriginalDebug) ? 200 : 25;
+    const float mouseSensitivityScaled = (autoMapMode == OriginalDebug) ? (mouseSensitivity / 400.0f) : (mouseSensitivity / 50.0f);
     m_accumulatedMouseX += playerInput.GetMouseXPos();
     m_accumulatedMouseY += playerInput.GetMouseYPos();
     if (timestamp > m_lastActionTimestamp + timeInterval)
@@ -183,7 +183,7 @@ void AutoMap::ProcessInput(const PlayerInput& playerInput, const float mouseSens
 
 void AutoMap::ResetOrigin(Level& level, const AutoMapMode autoMapMode)
 {
-    if (autoMapMode == ClassicDebug)
+    if (autoMapMode == OriginalDebug)
     {
         m_originX = 0.0f;
         m_originY = 0.0f;

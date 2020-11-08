@@ -45,7 +45,7 @@ enum ScreenMode
 
 enum ScreenResolution
 {
-    Classic,
+    Original,
     High
 };
 
@@ -58,7 +58,7 @@ enum ShowFpsMode
 
 enum AutoMapMode
 {
-    ClassicDebug,
+    OriginalDebug,
     TopDown,
     TopDownHD,
     Isometric

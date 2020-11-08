@@ -380,7 +380,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.RenderText(renderableText);
     }
 
-    if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetAutoMapMode() == ClassicDebug)
+    if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetAutoMapMode() == OriginalDebug)
     {
         m_autoMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
     }

@@ -275,13 +275,18 @@ void Catacomb3DMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 7)
+            if (m_menuItemSelected == 8)
             {
                 m_menuItemSelected = 0;
+                m_menuItemOffset = 0;
             }
             else
             {
                 m_menuItemSelected++;
+                if (m_menuItemSelected - m_menuItemOffset > 7)
+                {
+                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
+                }
             }
         }
         else if (m_subMenuSelected == subMenuControls)
@@ -401,11 +406,16 @@ void Catacomb3DMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 7;
+                m_menuItemSelected = 8;
+                m_menuItemOffset = 1;
             }
             else
             {
                 m_menuItemSelected--;
+                if (m_menuItemSelected < m_menuItemOffset)
+                {
+                    m_menuItemOffset = m_menuItemSelected;
+                }
             }
         }
         else if (m_subMenuSelected == subMenuControls)
@@ -490,7 +500,7 @@ void Catacomb3DMenu::MenuLeft()
     {
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 2)
+            if (m_menuItemSelected == 3)
             {
                 if (m_configurationSettings.GetFov() > 25)
                 {
@@ -528,7 +538,7 @@ void Catacomb3DMenu::MenuRight()
     {
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 2)
+            if (m_menuItemSelected == 3)
             {
                 if (m_configurationSettings.GetFov() < 45)
                 {
@@ -645,6 +655,17 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 1)
         {
+            if (m_configurationSettings.GetScreenResolution() == Original)
+            {
+                m_configurationSettings.SetScreenResolution(High);
+            }
+            else
+            {
+                m_configurationSettings.SetScreenResolution(Original);
+            }
+        }
+        else if (m_menuItemSelected == 2)
+        {
             if (m_configurationSettings.GetAspectRatio() == 1)
             {
                 m_configurationSettings.SetAspectRatio(0);
@@ -654,7 +675,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                 m_configurationSettings.SetAspectRatio(1);
             }
         }
-        else if (m_menuItemSelected == 2)
+        else if (m_menuItemSelected == 3)
         {
             if (m_configurationSettings.GetFov() == 45)
             {
@@ -665,7 +686,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                 m_configurationSettings.SetFov(m_configurationSettings.GetFov() + 1);
             }
         }
-        else if (m_menuItemSelected == 3)
+        else if (m_menuItemSelected == 4)
         {
             if (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest)
             {
@@ -676,11 +697,11 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                 m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
             }
         }
-        else if (m_menuItemSelected == 4)
+        else if (m_menuItemSelected == 5)
         {
             m_configurationSettings.SetDepthShading(!m_configurationSettings.GetDepthShading());
         }
-        else if (m_menuItemSelected == 5)
+        else if (m_menuItemSelected == 6)
         {
             const ShowFpsMode previousShowFpsMode = m_configurationSettings.GetShowFps();
             const ShowFpsMode nextShowFpsMode =
@@ -689,18 +710,18 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                 Off;
             m_configurationSettings.SetShowFps(nextShowFpsMode);
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == 7)
         {
             m_configurationSettings.SetVSync(!m_configurationSettings.GetVSync());
         }
-        else if (m_menuItemSelected == 7)
+        else if (m_menuItemSelected == 8)
         {
             const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
             const AutoMapMode nextAutoMapMode =
-                (previousAutoMapMode == ClassicDebug) ? TopDown :
+                (previousAutoMapMode == OriginalDebug) ? TopDown :
                 (previousAutoMapMode == TopDown) ? TopDownHD :
                 (previousAutoMapMode == TopDownHD) ? Isometric :
-                ClassicDebug;
+                OriginalDebug;
             m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
         }
     }
@@ -1052,59 +1073,91 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_MAINMENUPIC), 112, 48, 30, 0, 34, 12); // MENU
 
         RenderableText renderableText(*egaGraph->GetFont(4));
-        renderableTiles.DrawListBullet(76, 62, true, (m_menuItemSelected == 0) && flashIcon);
-        renderableText.LeftAligned("Screen Mode", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, 63);
-        const char* screenModeStr =
-            (m_configurationSettings.GetScreenMode() == Windowed) ? "Windowed" :
-            (m_configurationSettings.GetScreenMode() == Fullscreen) ? "Fullscreen" :
-            "Borderless";
-        renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == 0) ? EgaLightGray : EgaDarkGray, 180, 63);
 
-        renderableTiles.DrawListBullet(76, 70, true, (m_menuItemSelected == 1) && flashIcon);
-        renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, 70);
-        const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
-        renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 160, 71);
+        uint16_t index = 0;
+        while (index < 8)
+        {
+            const int16_t offsetY = 62 + (index * 8);
+            if (index + m_menuItemOffset == 0)
+            {
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 0) && flashIcon);
+                renderableText.LeftAligned("Screen Mode", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const char* screenModeStr =
+                    (m_configurationSettings.GetScreenMode() == Windowed) ? "Windowed" :
+                    (m_configurationSettings.GetScreenMode() == Fullscreen) ? "Fullscreen" :
+                    "Borderless";
+                renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == 0) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 1)
+            {
 
-        renderableTiles.DrawListBullet(76, 78, true, (m_menuItemSelected == 2) && flashIcon);
-        renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, 79);
-        char fovStr[40];
-        sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
-        renderableText.LeftAligned(fovStr, (m_menuItemSelected == 2) ? EgaLightGray : EgaDarkGray, 180, 79);
-
-        renderableTiles.DrawListBullet(76, 86, true, (m_menuItemSelected == 3) && flashIcon);
-        renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, 87);
-        const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
-        renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == 3) ? EgaLightGray : EgaDarkGray, 180, 87);
-
-        renderableTiles.DrawListBullet(76, 94, true, (m_menuItemSelected == 4) && flashIcon);
-        renderableText.LeftAligned("Depth shading", (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, 95);
-        const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
-        renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == 4) ? EgaLightGray : EgaDarkGray, 180, 95);
-
-        renderableTiles.DrawListBullet(76, 102, true, (m_menuItemSelected == 5) && flashIcon);
-        renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 84, 103);
-        const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
-        const char* showFpsStr =
-            (showFpsMode == Minimal) ? "Minimal" :
-            (showFpsMode == Extended) ? "Extended" :
-            "Off";
-        renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == 5) ? EgaLightGray : EgaDarkGray, 180, 103);
-
-        const bool vsyncSupported = renderer.IsVSyncSupported();
-        renderableTiles.DrawListBullet(76, 110, vsyncSupported, (m_menuItemSelected == 6) && flashIcon);
-        renderableText.LeftAligned("VSync", (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, 111);
-        const char* vsyncStr = (!vsyncSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
-        renderableText.LeftAligned(vsyncStr, (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, 111);
-
-        renderableTiles.DrawListBullet(76, 118, true, (m_menuItemSelected == 7) && flashIcon);
-        renderableText.LeftAligned("Automap", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, 119);
-        const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
-        const char* autoMapModeStr =
-            (autoMapMode == ClassicDebug) ? "Classic Debug" :
-            (autoMapMode == Isometric) ? "Isometric" :
-            (autoMapMode == TopDown) ? "Top down" :
-            "Top down HD";
-        renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, 180, 119);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 1) && flashIcon);
+                renderableText.LeftAligned("Screen Resolution", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const char* screenResolutionStr = (m_configurationSettings.GetScreenResolution() == Original) ? "Original" : "High";
+                renderableText.LeftAligned(screenResolutionStr, (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 2)
+            {
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 2) && flashIcon);
+                renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
+                renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == 2) ? EgaLightGray : EgaDarkGray, 160, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 3)
+            {
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 3) && flashIcon);
+                renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                char fovStr[40];
+                sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
+                renderableText.LeftAligned(fovStr, (m_menuItemSelected == 3) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 4)
+            {
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 4) && flashIcon);
+                renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
+                renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == 4) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 5)
+            {
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 5) && flashIcon);
+                renderableText.LeftAligned("Depth shading", (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
+                renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == 5) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 6)
+            {
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 6) && flashIcon);
+                renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
+                const char* showFpsStr =
+                    (showFpsMode == Minimal) ? "Minimal" :
+                    (showFpsMode == Extended) ? "Extended" :
+                    "Off";
+                renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 7)
+            {
+                const bool vsyncSupported = renderer.IsVSyncSupported();
+                renderableTiles.DrawListBullet(76, offsetY, vsyncSupported, (m_menuItemSelected == 7) && flashIcon);
+                renderableText.LeftAligned("VSync", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const char* vsyncStr = (!vsyncSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
+                renderableText.LeftAligned(vsyncStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, offsetY + 1);
+            }
+            else if (index + m_menuItemOffset == 8)
+            {
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 8) && flashIcon);
+                renderableText.LeftAligned("Automap", (m_menuItemSelected == 8) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
+                const char* autoMapModeStr =
+                    (autoMapMode == OriginalDebug) ? "Original" :
+                    (autoMapMode == Isometric) ? "Isometric" :
+                    (autoMapMode == TopDown) ? "Top down" :
+                    "Top down HD";
+                renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == 8) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+            }
+            index++;
+        }
 
         renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
         renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);

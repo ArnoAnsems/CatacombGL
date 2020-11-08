@@ -159,7 +159,7 @@ void ExtraMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 8)
+            if (m_menuItemSelected == 9)
             {
                 m_menuItemSelected = 0;
                 m_menuItemOffset = 0;
@@ -262,7 +262,7 @@ void ExtraMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 8;
+                m_menuItemSelected = 9;
                 m_menuItemOffset = m_menuItemSelected - 7;
             }
             else
@@ -346,7 +346,7 @@ void ExtraMenu::MenuLeft()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 3)
+            if (m_menuItemSelected == 4)
             {
                 if (m_configurationSettings.GetFov() > 25)
                 {
@@ -385,7 +385,7 @@ void ExtraMenu::MenuRight()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 3)
+            if (m_menuItemSelected == 4)
             {
                 if (m_configurationSettings.GetFov() < 45)
                 {
@@ -486,6 +486,17 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 2)
         {
+            if (m_configurationSettings.GetScreenResolution() == Original)
+            {
+                m_configurationSettings.SetScreenResolution(High);
+            }
+            else
+            {
+                m_configurationSettings.SetScreenResolution(Original);
+            }
+        }
+        else if (m_menuItemSelected == 3)
+        {
             if (m_configurationSettings.GetAspectRatio() == 1)
             {
                 m_configurationSettings.SetAspectRatio(0);
@@ -495,7 +506,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 m_configurationSettings.SetAspectRatio(1);
             }
         }
-        else if (m_menuItemSelected == 4)
+        else if (m_menuItemSelected == 5)
         {
             if (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest)
             {
@@ -506,11 +517,11 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                     m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
             }
         }
-        else if (m_menuItemSelected == 5)
+        else if (m_menuItemSelected == 6)
         {
             m_configurationSettings.SetDepthShading(!m_configurationSettings.GetDepthShading());
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == 7)
         {
             const ShowFpsMode previousShowFpsMode = m_configurationSettings.GetShowFps();
             const ShowFpsMode nextShowFpsMode =
@@ -519,18 +530,18 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 Off;
             m_configurationSettings.SetShowFps(nextShowFpsMode);
         }
-        else if (m_menuItemSelected == 7)
+        else if (m_menuItemSelected == 8)
         {
             m_configurationSettings.SetVSync(!m_configurationSettings.GetVSync());
         }
-        else if (m_menuItemSelected == 8)
+        else if (m_menuItemSelected == 9)
         {
             const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
             const AutoMapMode nextAutoMapMode =
-                (previousAutoMapMode == ClassicDebug) ? TopDown :
+                (previousAutoMapMode == OriginalDebug) ? TopDown :
                 (previousAutoMapMode == TopDown) ? TopDownHD :
                 (previousAutoMapMode == TopDownHD) ? Isometric :
-                ClassicDebug;
+                OriginalDebug;
             m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
         }
     }
@@ -683,7 +694,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     else if (m_subMenuSelected == subMenuVideo)
     {
         const uint16_t xOffset = 60;
-        const uint16_t xOffset2 = 200;
+        const uint16_t xOffset2 = 192;
         RenderableText renderableText(*egaGraph->GetFont(3));
         renderableText.Centered("Video", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic), 20, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
@@ -705,30 +716,36 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == 2)
             {
+                renderableText.LeftAligned("Screen Resolution", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const char* screenResolutionStr = (m_configurationSettings.GetScreenResolution() == Original) ? "Original (320x200)" : "High";
+                renderableText.LeftAligned(screenResolutionStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+            }
+            else if (index + m_menuItemOffset == 3)
+            {
                 renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
                 renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 3)
+            else if (index + m_menuItemOffset == 4)
             {
                 renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 char fovStr[40];
                 sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
                 renderableText.LeftAligned(fovStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 4)
+            else if (index + m_menuItemOffset == 5)
             {
                 renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
                 renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 5)
+            else if (index + m_menuItemOffset == 6)
             {
                 renderableText.LeftAligned("Depth shading", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
                 renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 6)
+            else if (index + m_menuItemOffset == 7)
             {
                 renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
@@ -738,19 +755,19 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
                     "Off";
                 renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 7)
+            else if (index + m_menuItemOffset == 8)
             {
                 const bool vsyncNotSupported = !renderer.IsVSyncSupported();
                 renderableText.LeftAligned("VSync", (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* vsyncStr = (vsyncNotSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
                 renderableText.LeftAligned(vsyncStr, (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 8)
+            else if (index + m_menuItemOffset == 9)
             {
                 renderableText.LeftAligned("Automap", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
                 const char* autoMapModeStr =
-                    (autoMapMode == ClassicDebug) ? "Classic Debug" :
+                    (autoMapMode == OriginalDebug) ? "Original (Debug)" :
                     (autoMapMode == Isometric) ? "Isometric" :
                     (autoMapMode == TopDown) ? "Top down" :
                     "Top down HD";

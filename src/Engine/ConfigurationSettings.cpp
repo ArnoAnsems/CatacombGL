@@ -150,7 +150,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         auto screenResolutionPair = keyValuePairs.find("screenresolution");
         if (screenResolutionPair != keyValuePairs.end())
         {
-            m_screenResolution = (screenResolutionPair->second.compare("classic") == 0) ? Classic : High;
+            m_screenResolution = (screenResolutionPair->second.compare("original") == 0) ? Original : High;
         }
 
         auto soundModePair = keyValuePairs.find("soundmode");
@@ -202,7 +202,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         if (autoMapModePair != keyValuePairs.end())
         {
             m_autoMapMode =
-                (autoMapModePair->second.compare("classic") == 0) ? ClassicDebug :
+                (autoMapModePair->second.compare("original") == 0) ? OriginalDebug :
                 (autoMapModePair->second.compare("isometric") == 0) ? Isometric :
                 (autoMapModePair->second.compare("topdown") == 0) ? TopDown :
                 TopDownHD;
@@ -256,7 +256,7 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
             (m_screenMode == Fullscreen) ? "fullscreen" :
             "borderlesswindowed";
         file << "screenmode=" << screenModeValue << "\n";
-        const std::string screenResolutionValue = (m_screenResolution == Classic) ? "classic" : "high";
+        const std::string screenResolutionValue = (m_screenResolution == Original) ? "original" : "high";
         file << "screenresolution=" << screenResolutionValue << "\n";
         const std::string aspectRatioValue = (m_aspectRatio == 0) ? "Classic" : "FitToScreen";
         file << "aspectratio=" << aspectRatioValue << "\n";
@@ -274,7 +274,7 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         std::string fovValue = std::to_string(m_fov);
         file << "fov=" << fovValue << "\n";
         const std::string autoMapModeValue =
-            (m_autoMapMode == ClassicDebug) ? "classic" :
+            (m_autoMapMode == OriginalDebug) ? "original" :
             (m_autoMapMode == Isometric) ? "isometric" :
             (m_autoMapMode == TopDown) ? "topdown" :
             "topdownhd";
