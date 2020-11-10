@@ -166,6 +166,7 @@
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="AutoMap.cpp" />
     <ClCompile Include="ManaBar.cpp" />
+    <ClCompile Include="OpenGLFrameBuffer.cpp" />
     <ClCompile Include="PCSound.cpp" />
     <ClCompile Include="Picture.cpp" />
     <ClCompile Include="PictureTable.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Logging.h" />
     <ClInclude Include="AutoMap.h" />
     <ClInclude Include="ManaBar.h" />
+    <ClInclude Include="OpenGLFrameBuffer.h" />
     <ClInclude Include="PCSound.h" />
     <ClInclude Include="Picture.h" />
     <ClInclude Include="PictureTable.h" />
