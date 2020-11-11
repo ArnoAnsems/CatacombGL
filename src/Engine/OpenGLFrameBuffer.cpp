@@ -17,11 +17,18 @@
 #include "..\..\ThirdParty\SDL\include\SDL_video.h"
 #include "..\Engine\Logging.h"
 
-OpenGLFrameBuffer::OpenGLFrameBuffer() :
+static const unsigned int GL_DRAW_FRAMEBUFFER = 0x8CA9;
+static const unsigned int GL_COLOR_ATTACHMENT0 = 0x8CE0;
+static const unsigned int GL_DEPTH_ATTACHMENT = 0x8D00;
+static const unsigned int GL_FRAMEBUFFER = 0x8D40;
+
+OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
+    m_openGLTextures(openGLTextures),
     m_genFrameBuffersFuncPtr(nullptr),
     m_bindFrameBufferFuncPtr(nullptr),
     m_frameBufferTexture2DFuncPtr(nullptr),
     m_isSupported(false),
+    m_frameBufferObject(0),
     m_textureIdColor(0),
     m_textureIdDepth(0)
 {
@@ -59,17 +66,56 @@ bool OpenGLFrameBuffer::IsSupported() const
 
 void OpenGLFrameBuffer::SetDimensions(const uint16_t width, const uint16_t height)
 {
+    m_genFrameBuffersFuncPtr(1, &m_frameBufferObject);
 
+    m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, m_frameBufferObject);
+
+    m_openGLTextures.GlGenTextures(1, &m_textureIdColor);
+
+    m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, m_textureIdColor);
+
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MAG_FILTER, OpenGLTextures::GL_NEAREST);
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MIN_FILTER, OpenGLTextures::GL_NEAREST);
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_S, OpenGLTextures::GL_CLAMP);
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_T, OpenGLTextures::GL_CLAMP);
+
+    m_openGLTextures.GlTexImage2D(OpenGLTextures::GL_TEXTURE_2D, 0, OpenGLTextures::GL_RGBA,
+        width,
+        height,
+        0, OpenGLTextures::GL_RGBA, OpenGLTextures::GL_UNSIGNED_BYTE,
+        NULL);
+
+    m_openGLTextures.GlGenTextures(1, &m_textureIdDepth);
+
+    m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, m_textureIdDepth);
+
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MAG_FILTER, OpenGLTextures::GL_NEAREST);
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MIN_FILTER, OpenGLTextures::GL_NEAREST);
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_S, OpenGLTextures::GL_CLAMP);
+    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_T, OpenGLTextures::GL_CLAMP);
+
+    m_openGLTextures.GlTexImage2D(OpenGLTextures::GL_TEXTURE_2D, 0, OpenGLTextures::GL_DEPTH_COMPONENT,
+        width,
+        height,
+        0, OpenGLTextures::GL_DEPTH_COMPONENT, OpenGLTextures::GL_FLOAT,
+        NULL);
+
+    m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, 0);
+
+    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, OpenGLTextures::GL_TEXTURE_2D, m_textureIdColor, 0);
+    m_frameBufferTexture2DFuncPtr(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, OpenGLTextures::GL_TEXTURE_2D, m_textureIdDepth, 0);
+
+    m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 void OpenGLFrameBuffer::Bind()
 {
-
+    m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, m_frameBufferObject);
 }
 
 void OpenGLFrameBuffer::Unbind()
 {
-
+    m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 unsigned int OpenGLFrameBuffer::GetTextureId() const

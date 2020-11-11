@@ -20,12 +20,12 @@
 //
 #pragma once
 
-#include <stdint.h>
+#include "OpenGLTextures.h"
 
 class OpenGLFrameBuffer
 {
 public:
-    OpenGLFrameBuffer();
+    OpenGLFrameBuffer(const OpenGLTextures& openGLTextures);
     ~OpenGLFrameBuffer();
 
     bool IsSupported() const;
@@ -44,7 +44,9 @@ private:
     GL_BindFramebuffer_Func m_bindFrameBufferFuncPtr;
     GL_FrameBufferTexture2D_Func m_frameBufferTexture2DFuncPtr;
 
+    const OpenGLTextures& m_openGLTextures;
     bool m_isSupported;
+    unsigned int m_frameBufferObject;
     unsigned int m_textureIdColor;
     unsigned int m_textureIdDepth;
 };
