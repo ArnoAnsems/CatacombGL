@@ -716,9 +716,10 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == 2)
             {
-                renderableText.LeftAligned("Screen Resolution", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const char* screenResolutionStr = (m_configurationSettings.GetScreenResolution() == Original) ? "Original (320x200)" : "High";
-                renderableText.LeftAligned(screenResolutionStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                const bool screenResolutionNotSupported = !renderer.IsOriginalScreenResolutionSupported();
+                renderableText.LeftAligned("Screen Resolution", (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const char* screenResolutionStr = (screenResolutionNotSupported) ? "Not supported" : (m_configurationSettings.GetScreenResolution() == Original) ? "Original (320x200)" : "High";
+                renderableText.LeftAligned(screenResolutionStr, (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == 3)
             {

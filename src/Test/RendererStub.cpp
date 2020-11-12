@@ -42,6 +42,11 @@ bool RendererStub::IsVSyncSupported()
     return true;
 }
 
+bool RendererStub::IsOriginalScreenResolutionSupported()
+{
+    return true;
+}
+
 void RendererStub::RenderText(const RenderableText& /*renderableText*/)
 {
 

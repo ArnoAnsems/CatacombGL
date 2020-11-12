@@ -102,4 +102,5 @@ public:
     virtual const std::string& GetGraphicsAdapterVendor() const = 0;
     virtual const std::string& GetGraphicsAdapterModel() const = 0;
     virtual bool IsVSyncSupported() = 0;
+    virtual bool IsOriginalScreenResolutionSupported() = 0;
 };

@@ -52,6 +52,9 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
         Logging::Instance().AddLogMessage("Failed to obtain function pointer for glFrameBufferTexture2D_ptr");
         return;
     }
+
+    Logging::Instance().AddLogMessage("OpenGL frame buffer is supported");
+    m_isSupported = true;
 }
 
 OpenGLFrameBuffer::~OpenGLFrameBuffer()

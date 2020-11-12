@@ -1090,10 +1090,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == 1)
             {
-
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 1) && flashIcon);
+                const bool screenResolutionSupported = renderer.IsOriginalScreenResolutionSupported();
+                renderableTiles.DrawListBullet(76, offsetY, screenResolutionSupported, (m_menuItemSelected == 1) && flashIcon);
                 renderableText.LeftAligned("Screen Resolution", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                const char* screenResolutionStr = (m_configurationSettings.GetScreenResolution() == Original) ? "Original" : "High";
+                const char* screenResolutionStr = (!screenResolutionSupported) ? "Not suppor." : (m_configurationSettings.GetScreenResolution() == Original) ? "Original" : "High";
                 renderableText.LeftAligned(screenResolutionStr, (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             else if (index + m_menuItemOffset == 2)

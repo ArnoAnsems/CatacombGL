@@ -70,5 +70,6 @@ public:
     const std::string& GetGraphicsAdapterVendor() const override;
     const std::string& GetGraphicsAdapterModel() const override;
     bool IsVSyncSupported() override;
+    bool IsOriginalScreenResolutionSupported() override;
 };
 

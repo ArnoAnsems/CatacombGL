@@ -35,7 +35,9 @@ RendererOpenGLWin32::RendererOpenGLWin32() :
     m_isVSyncSupported(false),
     m_graphicsApiVersion(""),
     m_graphicsAdapterVendor(""),
-    m_graphicsAdapterModel("")
+    m_graphicsAdapterModel(""),
+    m_openGLTextures(),
+    m_openGLFramebuffer(m_openGLTextures)
 {
     memset(&m_singleColorTexture, 0, sizeof(m_singleColorTexture[0]) * EgaRange);
 }
@@ -677,6 +679,11 @@ void RendererOpenGLWin32::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIs
 bool RendererOpenGLWin32::IsVSyncSupported()
 {
     return m_isVSyncSupported;
+}
+
+bool RendererOpenGLWin32::IsOriginalScreenResolutionSupported()
+{
+    return m_openGLFramebuffer.IsSupported();
 }
 
 void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY)

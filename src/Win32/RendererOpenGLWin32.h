@@ -20,6 +20,7 @@
 #include "..\Engine\Decompressor.h"
 #include "..\Engine\EgaColor.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\OpenGLFrameBuffer.h"
 
 #include <windows.h>		// Header File For Windows
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
@@ -78,6 +79,7 @@ public:
     const std::string& GetGraphicsAdapterVendor() const override;
     const std::string& GetGraphicsAdapterModel() const override;
     bool IsVSyncSupported() override;
+    bool IsOriginalScreenResolutionSupported() override;
 
 private:
     void BindTexture(unsigned int textureId) const;
@@ -105,5 +107,8 @@ private:
     std::string m_graphicsApiVersion;
     std::string m_graphicsAdapterVendor;
     std::string m_graphicsAdapterModel;
+
+    OpenGLTextures m_openGLTextures;
+    OpenGLFrameBuffer m_openGLFramebuffer;
 };
 
