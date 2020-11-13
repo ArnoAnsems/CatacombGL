@@ -184,7 +184,8 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     m_level->GetPlayerActor()->GetY(),
                     m_level->GetPlayerActor()->GetAngle(),
                     m_configurationSettings.GetDepthShading(),
-                    m_configurationSettings.GetFov());
+                    m_configurationSettings.GetFov(),
+                    renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetScreenResolution() == ScreenResolution::Original);
                 m_level->Setup3DScene(
                     *m_game.GetEgaGraph(),
                     m_renderable3DScene,

@@ -33,7 +33,8 @@ void Renderable3DScene::PrepareFrame(
     const float originY,
     const float angle,
     const bool depthShading,
-    const uint16_t fieldOfView)
+    const uint16_t fieldOfView,
+    const bool originalScreenResolution)
 {
     m_aspectRatio = aspectRatio;
     m_originX = originX;
@@ -44,6 +45,7 @@ void Renderable3DScene::PrepareFrame(
     m_walls.Reset();
     m_3DTiles.Reset();
     m_sprites.Reset(originX, originY, angle);
+    m_originalScreenResolution = originalScreenResolution;
 }
 
 void Renderable3DScene::FinalizeFrame()
@@ -99,6 +101,11 @@ const bool Renderable3DScene::GetDepthShading() const
 const uint16_t Renderable3DScene::GetFieldOfView() const
 {
     return m_fieldOfView;
+}
+
+const bool Renderable3DScene::GetOriginalScreenResolution() const
+{
+    return m_originalScreenResolution;
 }
 
 void Renderable3DScene::AddNorthWall(const uint16_t x, const uint16_t y, const unsigned int textureId)

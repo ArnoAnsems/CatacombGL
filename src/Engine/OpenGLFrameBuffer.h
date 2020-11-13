@@ -36,9 +36,9 @@ public:
     unsigned int GetTextureId() const;
 
 private:
-    typedef void (__cdecl* GL_GenFrameBuffers_Func)(int, unsigned int*);
-    typedef void (__cdecl* GL_BindFramebuffer_Func)(unsigned int, unsigned int);
-    typedef void (__cdecl* GL_FrameBufferTexture2D_Func)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
+    typedef void (__stdcall* GL_GenFrameBuffers_Func)(int, unsigned int*);
+    typedef void (__stdcall* GL_BindFramebuffer_Func)(unsigned int, unsigned int);
+    typedef void (__stdcall* GL_FrameBufferTexture2D_Func)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
 
     GL_GenFrameBuffers_Func m_genFrameBuffersFuncPtr;
     GL_BindFramebuffer_Func m_bindFrameBufferFuncPtr;

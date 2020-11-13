@@ -57,10 +57,10 @@ public:
         void* pixels) const;
 
 private:
-    typedef void(__cdecl* GL_GenTextures_Func)(unsigned int, unsigned int*);
-    typedef void(__cdecl* GL_BindTexture_Func)(unsigned int, unsigned int);
-    typedef void(__cdecl* GL_TexParameteri_Func)(unsigned int, unsigned int, int);
-    typedef void(__cdecl* GL_TexImage2D_Func)(unsigned int, int, int, unsigned int, unsigned int, int, unsigned int, unsigned int, void*);
+    typedef void(__stdcall* GL_GenTextures_Func)(unsigned int, unsigned int*);
+    typedef void(__stdcall* GL_BindTexture_Func)(unsigned int, unsigned int);
+    typedef void(__stdcall* GL_TexParameteri_Func)(unsigned int, unsigned int, int);
+    typedef void(__stdcall* GL_TexImage2D_Func)(unsigned int, int, int, unsigned int, unsigned int, int, unsigned int, unsigned int, void*);
 
     GL_GenTextures_Func m_genTexturesFuncPtr;
     GL_BindTexture_Func m_bindTextureFuncPtr;

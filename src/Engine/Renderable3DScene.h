@@ -36,7 +36,8 @@ public:
         const float originY,
         const float angle,
         const bool depthShading,
-        const uint16_t fieldOfView);
+        const uint16_t fieldOfView,
+        const bool originalScreenResolution);
     void FinalizeFrame();
 
     const float GetAspectRatio() const;
@@ -49,6 +50,7 @@ public:
     const RenderableSprites& GetSprites() const;
     const bool GetDepthShading() const;
     const uint16_t GetFieldOfView() const;
+    const bool GetOriginalScreenResolution() const;
 
     void AddNorthWall(const uint16_t x, const uint16_t y, const unsigned int textureId);
     void AddSouthWall(const uint16_t x, const uint16_t y, const unsigned int textureId);
@@ -68,4 +70,5 @@ private:
     float m_angle;
     bool m_depthShading;
     uint16_t m_fieldOfView;
+    bool m_originalScreenResolution;
 };

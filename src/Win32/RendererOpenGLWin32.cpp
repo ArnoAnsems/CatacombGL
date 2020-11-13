@@ -70,6 +70,8 @@ void RendererOpenGLWin32::Setup()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepth(1.0f);                         // Depth Buffer Setup
     glClearStencil(0);
+
+    m_openGLFramebuffer.SetDimensions(320, 200);
 }
 
 void RendererOpenGLWin32::SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight)
@@ -348,50 +350,121 @@ void RendererOpenGLWin32::RenderTiles(const RenderableTiles& renderableTiles)
 
 void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DScene)
 {
-    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, renderable3DScene.GetAspectRatio(), renderable3DScene.GetOriginal3DViewArea());
-
-    glViewport(rect.left, rect.bottom, rect.width, rect.height);
-
-    glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
-
-    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
-
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspective 
-
-    glCullFace(GL_FRONT);
-
-    glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-    glLoadIdentity();									// Reset The Projection Matrix
-
-    // Calculate The Aspect Ratio Of The Window
-    gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)rect.width / (float)rect.height, 0.1f, 100.0f);
-
-    glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-    glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
-    glTranslatef(-renderable3DScene.GetOriginX(), -renderable3DScene.GetOriginY(), -PlayerZ);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glNormal3f(0.0f, 0.0f, -1.0f);
-
-    if (renderable3DScene.GetDepthShading())
+    if (renderable3DScene.GetOriginalScreenResolution())
     {
-        GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-        GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-        GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
-        glEnable(GL_LIGHTING);
-        glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
-        glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-        glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
-        glEnable(GL_LIGHT1);
+        m_openGLFramebuffer.Bind();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glViewport(0, 80, 320, 120);
+
+        glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
+
+        glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
+
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspective 
+
+        glCullFace(GL_FRONT);
+
+        glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+        glLoadIdentity();									// Reset The Projection Matrix
+
+        // Calculate The Aspect Ratio Of The Window
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)320 / (float)120, 0.1f, 100.0f);
+
+        glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+        glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
+        glTranslatef(-renderable3DScene.GetOriginX(), -renderable3DScene.GetOriginY(), -PlayerZ);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        glNormal3f(0.0f, 0.0f, -1.0f);
+
+        if (renderable3DScene.GetDepthShading())
+        {
+            GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
+            glEnable(GL_LIGHTING);
+            glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
+            glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+            glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
+            glEnable(GL_LIGHT1);
+        }
+
+        glShadeModel(GL_SMOOTH);
+
+        Render3DTiles(renderable3DScene.Get3DTiles());
+        Render3DWalls(renderable3DScene.GetWalls());
+        RenderSprites(renderable3DScene.GetSprites());
+
+        m_openGLFramebuffer.Unbind();
+
+        Prepare2DRendering(false);
+
+        // Select the texture from the picture
+        BindTexture(m_openGLFramebuffer.GetTextureId());
+
+        // Draw the texture as a quad
+        const GLint width = 320;
+        const GLint height = 200;
+        const float relativeImageWidth = 1.0f;
+        const float relativeImageHeight = 1.0f;
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, relativeImageHeight); glVertex2i(0, 0);
+        glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(width, 0);
+        glTexCoord2f(relativeImageWidth, 0); glVertex2i(width, height);
+        glTexCoord2f(0, 0); glVertex2i(0, height);
+        glEnd();
     }
+    else
+    {
+        ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, renderable3DScene.GetAspectRatio(), renderable3DScene.GetOriginal3DViewArea());
 
-    glShadeModel(GL_SMOOTH);
+        glViewport(rect.left, rect.bottom, rect.width, rect.height);
 
-    Render3DTiles(renderable3DScene.Get3DTiles());
-    Render3DWalls(renderable3DScene.GetWalls());
-    RenderSprites(renderable3DScene.GetSprites());
+        glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
+
+        glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
+
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // Really Nice Perspective 
+
+        glCullFace(GL_FRONT);
+
+        glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+        glLoadIdentity();									// Reset The Projection Matrix
+
+        // Calculate The Aspect Ratio Of The Window
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)rect.width / (float)rect.height, 0.1f, 100.0f);
+
+        glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+        glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
+        glTranslatef(-renderable3DScene.GetOriginX(), -renderable3DScene.GetOriginY(), -PlayerZ);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        glNormal3f(0.0f, 0.0f, -1.0f);
+
+        if (renderable3DScene.GetDepthShading())
+        {
+            GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
+            glEnable(GL_LIGHTING);
+            glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
+            glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+            glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
+            glEnable(GL_LIGHT1);
+        }
+
+        glShadeModel(GL_SMOOTH);
+
+        Render3DTiles(renderable3DScene.Get3DTiles());
+        Render3DWalls(renderable3DScene.GetWalls());
+        RenderSprites(renderable3DScene.GetSprites());
+    }
 }
 
 uint16_t RendererOpenGLWin32::GetAdditionalMarginDueToWideScreen(const float aspectRatio)
