@@ -356,7 +356,8 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glViewport(0, 80, 320, 120);
+        const ViewPorts::ViewPortRect3D rect3D = renderable3DScene.GetOriginal3DViewArea();
+        glViewport(rect3D.left, 200 - rect3D.bottom, rect3D.width, rect3D.height);
 
         glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 
@@ -370,7 +371,8 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
         glLoadIdentity();									// Reset The Projection Matrix
 
         // Calculate The Aspect Ratio Of The Window
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)320 / (float)120, 0.1f, 100.0f);
+        
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)rect3D.width / ((float)rect3D.height * 1.2f), 0.1f, 100.0f);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
