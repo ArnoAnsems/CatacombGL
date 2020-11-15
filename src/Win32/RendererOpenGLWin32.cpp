@@ -70,8 +70,6 @@ void RendererOpenGLWin32::Setup()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepth(1.0f);                         // Depth Buffer Setup
     glClearStencil(0);
-
-    m_openGLFramebuffer.SetDimensions(320, 200);
 }
 
 void RendererOpenGLWin32::SetWindowDimensions(const uint16_t windowWidth, const uint16_t windowHeight)
@@ -352,12 +350,14 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
 {
     if (renderable3DScene.GetOriginalScreenResolution())
     {
-        m_openGLFramebuffer.Bind();
+        const ViewPorts::ViewPortRect3D rect3D = renderable3DScene.GetOriginal3DViewArea();
+        const uint16_t additionalMargin = GetAdditionalMarginDueToWideScreen(renderable3DScene.GetAspectRatio());
+        const uint16_t bufferWidth = rect3D.width + (additionalMargin * 2);
+        m_openGLFramebuffer.Bind(bufferWidth, rect3D.height);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        const ViewPorts::ViewPortRect3D rect3D = renderable3DScene.GetOriginal3DViewArea();
-        glViewport(rect3D.left, 200 - rect3D.bottom, rect3D.width, rect3D.height);
+        glViewport(0, 0, bufferWidth, rect3D.height);
 
         glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 
@@ -372,7 +372,7 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
 
         // Calculate The Aspect Ratio Of The Window
         
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)rect3D.width / ((float)rect3D.height * 1.2f), 0.1f, 100.0f);
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)bufferWidth / ((float)rect3D.height * 1.2f), 0.1f, 100.0f);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
@@ -409,15 +409,17 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
         BindTexture(m_openGLFramebuffer.GetTextureId());
 
         // Draw the texture as a quad
-        const GLint width = 320;
-        const GLint height = 200;
+        const GLint width = bufferWidth;
+        const GLint height = rect3D.height;
+        const GLint offsetX = rect3D.left - (GLint)additionalMargin;
+        const GLint offsetY = rect3D.bottom - rect3D.height;
         const float relativeImageWidth = 1.0f;
         const float relativeImageHeight = 1.0f;
         glBegin(GL_QUADS);
-        glTexCoord2f(0, relativeImageHeight); glVertex2i(0, 0);
-        glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(width, 0);
-        glTexCoord2f(relativeImageWidth, 0); glVertex2i(width, height);
-        glTexCoord2f(0, 0); glVertex2i(0, height);
+        glTexCoord2f(0, relativeImageHeight); glVertex2i(offsetX, offsetY);
+        glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(offsetX + width, offsetY);
+        glTexCoord2f(relativeImageWidth, 0); glVertex2i(offsetX + width, offsetY + height);
+        glTexCoord2f(0, 0); glVertex2i(offsetX, offsetY + height);
         glEnd();
     }
     else

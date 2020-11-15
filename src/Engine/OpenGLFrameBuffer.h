@@ -30,12 +30,12 @@ public:
 
     bool IsSupported() const;
 
-    void SetDimensions(const uint16_t width, const uint16_t height);
-    void Bind();
+    void Bind(const uint16_t width, const uint16_t height);
     void Unbind();
     unsigned int GetTextureId() const;
 
 private:
+    void ResizeBuffer(const uint16_t width, const uint16_t height);
     typedef void (__stdcall* GL_GenFrameBuffers_Func)(int, unsigned int*);
     typedef void (__stdcall* GL_BindFramebuffer_Func)(unsigned int, unsigned int);
     typedef void (__stdcall* GL_FrameBufferTexture2D_Func)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
@@ -49,4 +49,6 @@ private:
     unsigned int m_frameBufferObject;
     unsigned int m_textureIdColor;
     unsigned int m_textureIdDepth;
+    uint16_t m_bufferWidth;
+    uint16_t m_bufferHeight;
 };

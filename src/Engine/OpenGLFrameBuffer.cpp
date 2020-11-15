@@ -30,7 +30,9 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
     m_isSupported(false),
     m_frameBufferObject(0),
     m_textureIdColor(0),
-    m_textureIdDepth(0)
+    m_textureIdDepth(0),
+    m_bufferWidth(1),
+    m_bufferHeight(1)
 {
     m_genFrameBuffersFuncPtr = (GL_GenFrameBuffers_Func)SDL_GL_GetProcAddress("glGenFramebuffers");
     if (m_genFrameBuffersFuncPtr == nullptr)
@@ -53,6 +55,11 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
         return;
     }
 
+    m_genFrameBuffersFuncPtr(1, &m_frameBufferObject);
+
+    m_openGLTextures.GlGenTextures(1, &m_textureIdColor);
+    m_openGLTextures.GlGenTextures(1, &m_textureIdDepth);
+
     Logging::Instance().AddLogMessage("OpenGL frame buffer is supported");
     m_isSupported = true;
 }
@@ -67,13 +74,9 @@ bool OpenGLFrameBuffer::IsSupported() const
     return m_isSupported;
 }
 
-void OpenGLFrameBuffer::SetDimensions(const uint16_t width, const uint16_t height)
+void OpenGLFrameBuffer::ResizeBuffer(const uint16_t width, const uint16_t height)
 {
-    m_genFrameBuffersFuncPtr(1, &m_frameBufferObject);
-
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, m_frameBufferObject);
-
-    m_openGLTextures.GlGenTextures(1, &m_textureIdColor);
 
     m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, m_textureIdColor);
 
@@ -87,8 +90,6 @@ void OpenGLFrameBuffer::SetDimensions(const uint16_t width, const uint16_t heigh
         height,
         0, OpenGLTextures::GL_RGBA, OpenGLTextures::GL_UNSIGNED_BYTE,
         NULL);
-
-    m_openGLTextures.GlGenTextures(1, &m_textureIdDepth);
 
     m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, m_textureIdDepth);
 
@@ -109,10 +110,17 @@ void OpenGLFrameBuffer::SetDimensions(const uint16_t width, const uint16_t heigh
     m_frameBufferTexture2DFuncPtr(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, OpenGLTextures::GL_TEXTURE_2D, m_textureIdDepth, 0);
 
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, 0);
+
+    m_bufferWidth = width;
+    m_bufferHeight = height;
 }
 
-void OpenGLFrameBuffer::Bind()
+void OpenGLFrameBuffer::Bind(const uint16_t width, const uint16_t height)
 {
+    if (width != m_bufferWidth || height != m_bufferHeight)
+    {
+        ResizeBuffer(width, height);
+    }
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, m_frameBufferObject);
 }
 
