@@ -36,8 +36,8 @@ RendererOpenGLWin32::RendererOpenGLWin32() :
     m_graphicsApiVersion(""),
     m_graphicsAdapterVendor(""),
     m_graphicsAdapterModel(""),
-    m_openGLTextures(),
-    m_openGLFramebuffer(m_openGLTextures)
+    m_openGLBasic(),
+    m_openGLFramebuffer(m_openGLBasic)
 {
     memset(&m_singleColorTexture, 0, sizeof(m_singleColorTexture[0]) * EgaRange);
 }

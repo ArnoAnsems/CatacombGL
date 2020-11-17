@@ -14,15 +14,15 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/
 
 //
-// OpenGLTextures
+// OpenGLBasic
 //
-// Implements OpenGL texture functionality.
+// Wrapper for basic OpenGL v1.0 functionality.
 //
 #pragma once
 
 #include <stdint.h>
 
-class OpenGLTextures
+class OpenGLBasic
 {
 public:
     static const unsigned int GL_TEXTURE_2D = 0x0DE1;
@@ -37,8 +37,8 @@ public:
     static const unsigned int GL_NEAREST = 0x2600;
     static const unsigned int GL_CLAMP = 0x2900;
 
-    OpenGLTextures();
-    ~OpenGLTextures();
+    OpenGLBasic();
+    ~OpenGLBasic();
 
     bool IsSupported() const;
 

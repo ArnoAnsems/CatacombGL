@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/
 
-#include "OpenGLTextures.h"
+#include "OpenGLBasic.h"
 #include "..\..\ThirdParty\SDL\include\SDL_video.h"
 #include "..\Engine\Logging.h"
 
-OpenGLTextures::OpenGLTextures() :
+OpenGLBasic::OpenGLBasic() :
     m_genTexturesFuncPtr(nullptr),
     m_bindTextureFuncPtr(nullptr),
     m_texParameteriFuncPtr(nullptr),
@@ -57,32 +57,32 @@ OpenGLTextures::OpenGLTextures() :
     }
 }
 
-OpenGLTextures::~OpenGLTextures()
+OpenGLBasic::~OpenGLBasic()
 {
 
 }
 
-bool OpenGLTextures::IsSupported() const
+bool OpenGLBasic::IsSupported() const
 {
     return m_isSupported;
 }
 
-void OpenGLTextures::GlGenTextures(unsigned int n, unsigned int* textures) const
+void OpenGLBasic::GlGenTextures(unsigned int n, unsigned int* textures) const
 {
     m_genTexturesFuncPtr(n, textures);
 }
 
-void OpenGLTextures::GlBindTexture(unsigned int target, unsigned int texture) const
+void OpenGLBasic::GlBindTexture(unsigned int target, unsigned int texture) const
 {
     m_bindTextureFuncPtr(target, texture);
 }
 
-void OpenGLTextures::GlTexParameteri(unsigned int target, unsigned int pname, int param) const
+void OpenGLBasic::GlTexParameteri(unsigned int target, unsigned int pname, int param) const
 {
     m_texParameteriFuncPtr(target, pname, param);
 }
 
-void OpenGLTextures::GlTexImage2D(
+void OpenGLBasic::GlTexImage2D(
     unsigned int target,
     int level,
     int internalformat,

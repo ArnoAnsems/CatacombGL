@@ -20,12 +20,13 @@
 //
 #pragma once
 
-#include "OpenGLTextures.h"
+#include "OpenGLBasic.h"
+#include <string>
 
 class OpenGLFrameBuffer
 {
 public:
-    OpenGLFrameBuffer(const OpenGLTextures& openGLTextures);
+    OpenGLFrameBuffer(const OpenGLBasic& openGLBasic);
     ~OpenGLFrameBuffer();
 
     bool IsSupported() const;
@@ -36,15 +37,18 @@ public:
 
 private:
     void ResizeBuffer(const uint16_t width, const uint16_t height);
+    const std::string FrameBufferStatusToString(const unsigned int status);
     typedef void (__stdcall* GL_GenFrameBuffers_Func)(int, unsigned int*);
     typedef void (__stdcall* GL_BindFramebuffer_Func)(unsigned int, unsigned int);
     typedef void (__stdcall* GL_FrameBufferTexture2D_Func)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
+    typedef unsigned int (__stdcall* GL_CheckFrameBufferStatus_Func)(unsigned int);
 
     GL_GenFrameBuffers_Func m_genFrameBuffersFuncPtr;
     GL_BindFramebuffer_Func m_bindFrameBufferFuncPtr;
     GL_FrameBufferTexture2D_Func m_frameBufferTexture2DFuncPtr;
+    GL_CheckFrameBufferStatus_Func m_checkFrameBufferStatusFuncPtr;
 
-    const OpenGLTextures& m_openGLTextures;
+    const OpenGLBasic& m_openGLBasic;
     bool m_isSupported;
     unsigned int m_frameBufferObject;
     unsigned int m_textureIdColor;

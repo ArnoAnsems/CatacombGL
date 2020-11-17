@@ -18,12 +18,18 @@
 #include "..\Engine\Logging.h"
 
 static const unsigned int GL_DRAW_FRAMEBUFFER = 0x8CA9;
+static const unsigned int GL_FRAMEBUFFER_COMPLETE = 0x8CD5;
+static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT = 0x8CD6;
+static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT = 0x8CD7;
+static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER = 0x8CDB;
+static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER = 0x8CDC;
+static const unsigned int GL_FRAMEBUFFER_UNSUPPORTED = 0x8CDD;
 static const unsigned int GL_COLOR_ATTACHMENT0 = 0x8CE0;
 static const unsigned int GL_DEPTH_ATTACHMENT = 0x8D00;
 static const unsigned int GL_FRAMEBUFFER = 0x8D40;
 
-OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
-    m_openGLTextures(openGLTextures),
+OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLBasic& openGLBasic) :
+    m_openGLBasic(openGLBasic),
     m_genFrameBuffersFuncPtr(nullptr),
     m_bindFrameBufferFuncPtr(nullptr),
     m_frameBufferTexture2DFuncPtr(nullptr),
@@ -31,9 +37,10 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
     m_frameBufferObject(0),
     m_textureIdColor(0),
     m_textureIdDepth(0),
-    m_bufferWidth(1),
-    m_bufferHeight(1)
+    m_bufferWidth(320),
+    m_bufferHeight(200)
 {
+    // glGenFramebuffers requires OpenGL 3.0
     m_genFrameBuffersFuncPtr = (GL_GenFrameBuffers_Func)SDL_GL_GetProcAddress("glGenFramebuffers");
     if (m_genFrameBuffersFuncPtr == nullptr)
     {
@@ -41,6 +48,7 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
         return;
     }
 
+    // glBindFramebuffer requires OpenGL 3.0
     m_bindFrameBufferFuncPtr = (GL_BindFramebuffer_Func)SDL_GL_GetProcAddress("glBindFramebuffer");
     if (m_bindFrameBufferFuncPtr == nullptr)
     {
@@ -48,6 +56,7 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
         return;
     }
 
+    // glFramebufferTexture2D requires OpenGL 3.0
     m_frameBufferTexture2DFuncPtr = (GL_FrameBufferTexture2D_Func)SDL_GL_GetProcAddress("glFramebufferTexture2D");
     if (m_frameBufferTexture2DFuncPtr == nullptr)
     {
@@ -55,10 +64,31 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLTextures& openGLTextures) :
         return;
     }
 
+    // glCheckFramebufferStatus requires OpenGL 3.0
+    m_checkFrameBufferStatusFuncPtr = (GL_CheckFrameBufferStatus_Func)SDL_GL_GetProcAddress("glCheckFramebufferStatus");
+    if (m_checkFrameBufferStatusFuncPtr == nullptr)
+    {
+        Logging::Instance().AddLogMessage("Failed to obtain function pointer for glCheckFramebufferStatus");
+        return;
+    }
+
     m_genFrameBuffersFuncPtr(1, &m_frameBufferObject);
 
-    m_openGLTextures.GlGenTextures(1, &m_textureIdColor);
-    m_openGLTextures.GlGenTextures(1, &m_textureIdDepth);
+    m_openGLBasic.GlGenTextures(1, &m_textureIdColor);
+    m_openGLBasic.GlGenTextures(1, &m_textureIdDepth);
+
+    ResizeBuffer(m_bufferWidth, m_bufferHeight);
+
+    const unsigned int frameBufferStatus = m_checkFrameBufferStatusFuncPtr(GL_DRAW_FRAMEBUFFER);
+    if (frameBufferStatus != GL_FRAMEBUFFER_COMPLETE)
+    {
+        const std::string statusString = FrameBufferStatusToString(frameBufferStatus);
+        const std::string errorString =
+            "Framebuffer not complete; glCheckFramebufferStatus returned " +
+            std::to_string(frameBufferStatus) + " (" + statusString + ")";
+        Logging::Instance().AddLogMessage(errorString);
+        return;
+    }
 
     Logging::Instance().AddLogMessage("OpenGL frame buffer is supported");
     m_isSupported = true;
@@ -78,36 +108,36 @@ void OpenGLFrameBuffer::ResizeBuffer(const uint16_t width, const uint16_t height
 {
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, m_frameBufferObject);
 
-    m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, m_textureIdColor);
+    m_openGLBasic.GlBindTexture(OpenGLBasic::GL_TEXTURE_2D, m_textureIdColor);
 
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MAG_FILTER, OpenGLTextures::GL_NEAREST);
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MIN_FILTER, OpenGLTextures::GL_NEAREST);
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_S, OpenGLTextures::GL_CLAMP);
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_T, OpenGLTextures::GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MAG_FILTER, OpenGLBasic::GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MIN_FILTER, OpenGLBasic::GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_S, OpenGLBasic::GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_T, OpenGLBasic::GL_CLAMP);
 
-    m_openGLTextures.GlTexImage2D(OpenGLTextures::GL_TEXTURE_2D, 0, OpenGLTextures::GL_RGBA,
+    m_openGLBasic.GlTexImage2D(OpenGLBasic::GL_TEXTURE_2D, 0, OpenGLBasic::GL_RGBA,
         width,
         height,
-        0, OpenGLTextures::GL_RGBA, OpenGLTextures::GL_UNSIGNED_BYTE,
+        0, OpenGLBasic::GL_RGBA, OpenGLBasic::GL_UNSIGNED_BYTE,
         NULL);
 
-    m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, m_textureIdDepth);
+    m_openGLBasic.GlBindTexture(OpenGLBasic::GL_TEXTURE_2D, m_textureIdDepth);
 
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MAG_FILTER, OpenGLTextures::GL_NEAREST);
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_MIN_FILTER, OpenGLTextures::GL_NEAREST);
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_S, OpenGLTextures::GL_CLAMP);
-    m_openGLTextures.GlTexParameteri(OpenGLTextures::GL_TEXTURE_2D, OpenGLTextures::GL_TEXTURE_WRAP_T, OpenGLTextures::GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MAG_FILTER, OpenGLBasic::GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MIN_FILTER, OpenGLBasic::GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_S, OpenGLBasic::GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_T, OpenGLBasic::GL_CLAMP);
 
-    m_openGLTextures.GlTexImage2D(OpenGLTextures::GL_TEXTURE_2D, 0, OpenGLTextures::GL_DEPTH_COMPONENT,
+    m_openGLBasic.GlTexImage2D(OpenGLBasic::GL_TEXTURE_2D, 0, OpenGLBasic::GL_DEPTH_COMPONENT,
         width,
         height,
-        0, OpenGLTextures::GL_DEPTH_COMPONENT, OpenGLTextures::GL_FLOAT,
+        0, OpenGLBasic::GL_DEPTH_COMPONENT, OpenGLBasic::GL_FLOAT,
         NULL);
 
-    m_openGLTextures.GlBindTexture(OpenGLTextures::GL_TEXTURE_2D, 0);
+    m_openGLBasic.GlBindTexture(OpenGLBasic::GL_TEXTURE_2D, 0);
 
-    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, OpenGLTextures::GL_TEXTURE_2D, m_textureIdColor, 0);
-    m_frameBufferTexture2DFuncPtr(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, OpenGLTextures::GL_TEXTURE_2D, m_textureIdDepth, 0);
+    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, OpenGLBasic::GL_TEXTURE_2D, m_textureIdColor, 0);
+    m_frameBufferTexture2DFuncPtr(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, OpenGLBasic::GL_TEXTURE_2D, m_textureIdDepth, 0);
 
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -132,4 +162,18 @@ void OpenGLFrameBuffer::Unbind()
 unsigned int OpenGLFrameBuffer::GetTextureId() const
 {
     return m_textureIdColor;
+}
+
+const std::string OpenGLFrameBuffer::FrameBufferStatusToString(const unsigned int status)
+{
+    const std::string str =
+        (status == GL_FRAMEBUFFER_COMPLETE) ? "GL_FRAMEBUFFER_COMPLETE" :
+        (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT) ? "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT" :
+        (status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT) ? "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT" :
+        (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER) ? "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER" :
+        (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER) ? "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER" :
+        (status == GL_FRAMEBUFFER_UNSUPPORTED) ? "GL_FRAMEBUFFER_UNSUPPORTED" :
+        "Unknown";
+
+    return str;
 }

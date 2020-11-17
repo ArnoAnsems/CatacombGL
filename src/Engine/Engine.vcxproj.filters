@@ -192,7 +192,7 @@
     <ClCompile Include="OpenGLFrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenGLTextures.cpp">
+    <ClCompile Include="OpenGLBasic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -374,7 +374,7 @@
     <ClInclude Include="OpenGLFrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OpenGLTextures.h">
+    <ClInclude Include="OpenGLBasic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

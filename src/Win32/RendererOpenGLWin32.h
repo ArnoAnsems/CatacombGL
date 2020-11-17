@@ -108,7 +108,7 @@ private:
     std::string m_graphicsAdapterVendor;
     std::string m_graphicsAdapterModel;
 
-    OpenGLTextures m_openGLTextures;
+    OpenGLBasic m_openGLBasic;
     OpenGLFrameBuffer m_openGLFramebuffer;
 };
 

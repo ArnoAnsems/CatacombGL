@@ -167,7 +167,7 @@
     <ClCompile Include="AutoMap.cpp" />
     <ClCompile Include="ManaBar.cpp" />
     <ClCompile Include="OpenGLFrameBuffer.cpp" />
-    <ClCompile Include="OpenGLTextures.cpp" />
+    <ClCompile Include="OpenGLBasic.cpp" />
     <ClCompile Include="PCSound.cpp" />
     <ClCompile Include="Picture.cpp" />
     <ClCompile Include="PictureTable.cpp" />
@@ -229,7 +229,7 @@
     <ClInclude Include="AutoMap.h" />
     <ClInclude Include="ManaBar.h" />
     <ClInclude Include="OpenGLFrameBuffer.h" />
-    <ClInclude Include="OpenGLTextures.h" />
+    <ClInclude Include="OpenGLBasic.h" />
     <ClInclude Include="PCSound.h" />
     <ClInclude Include="Picture.h" />
     <ClInclude Include="PictureTable.h" />
