@@ -33,6 +33,7 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLBasic& openGLBasic) :
     m_genFrameBuffersFuncPtr(nullptr),
     m_bindFrameBufferFuncPtr(nullptr),
     m_frameBufferTexture2DFuncPtr(nullptr),
+    m_checkFrameBufferStatusFuncPtr(nullptr),
     m_isSupported(false),
     m_frameBufferObject(0),
     m_textureIdColor(0),
@@ -137,7 +138,7 @@ void OpenGLFrameBuffer::ResizeBuffer(const uint16_t width, const uint16_t height
     m_openGLBasic.GlBindTexture(OpenGLBasic::GL_TEXTURE_2D, 0);
 
     m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, OpenGLBasic::GL_TEXTURE_2D, m_textureIdColor, 0);
-    m_frameBufferTexture2DFuncPtr(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, OpenGLBasic::GL_TEXTURE_2D, m_textureIdDepth, 0);
+    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, OpenGLBasic::GL_TEXTURE_2D, m_textureIdDepth, 0);
 
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, 0);
 

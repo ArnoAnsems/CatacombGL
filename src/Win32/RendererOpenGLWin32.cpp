@@ -346,6 +346,21 @@ void RendererOpenGLWin32::RenderTiles(const RenderableTiles& renderableTiles)
     glEnd();
 }
 
+void RendererOpenGLWin32::ApplyDepthShading(const Renderable3DScene& renderable3DScene) const
+{
+    if (renderable3DScene.GetDepthShading())
+    {
+        const GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        const GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        const GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
+        glEnable(GL_LIGHTING);
+        glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+        glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
+        glEnable(GL_LIGHT1);
+    }
+}
+
 void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DScene)
 {
     if (renderable3DScene.GetOriginalScreenResolution())
@@ -371,8 +386,8 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
         glLoadIdentity();									// Reset The Projection Matrix
 
         // Calculate The Aspect Ratio Of The Window
-        
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)bufferWidth / ((float)rect3D.height * 1.2f), 0.1f, 100.0f);
+        const double aspect = (double)bufferWidth / ((double)rect3D.height * 1.2);
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.1, 100.0);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
@@ -383,17 +398,7 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
 
         glNormal3f(0.0f, 0.0f, -1.0f);
 
-        if (renderable3DScene.GetDepthShading())
-        {
-            GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-            GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-            GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
-            glEnable(GL_LIGHTING);
-            glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
-            glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-            glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
-            glEnable(GL_LIGHT1);
-        }
+        ApplyDepthShading(renderable3DScene);
 
         glShadeModel(GL_SMOOTH);
 
@@ -413,18 +418,16 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
         const GLint height = rect3D.height;
         const GLint offsetX = rect3D.left - (GLint)additionalMargin;
         const GLint offsetY = rect3D.bottom - rect3D.height;
-        const float relativeImageWidth = 1.0f;
-        const float relativeImageHeight = 1.0f;
         glBegin(GL_QUADS);
-        glTexCoord2f(0, relativeImageHeight); glVertex2i(offsetX, offsetY);
-        glTexCoord2f(relativeImageWidth, relativeImageHeight); glVertex2i(offsetX + width, offsetY);
-        glTexCoord2f(relativeImageWidth, 0); glVertex2i(offsetX + width, offsetY + height);
-        glTexCoord2f(0, 0); glVertex2i(offsetX, offsetY + height);
+        glTexCoord2i(0, 1); glVertex2i(offsetX, offsetY);
+        glTexCoord2i(1, 1); glVertex2i(offsetX + width, offsetY);
+        glTexCoord2i(1, 0); glVertex2i(offsetX + width, offsetY + height);
+        glTexCoord2i(0, 0); glVertex2i(offsetX, offsetY + height);
         glEnd();
     }
     else
     {
-        ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, renderable3DScene.GetAspectRatio(), renderable3DScene.GetOriginal3DViewArea());
+        const ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, renderable3DScene.GetAspectRatio(), renderable3DScene.GetOriginal3DViewArea());
 
         glViewport(rect.left, rect.bottom, rect.width, rect.height);
 
@@ -440,7 +443,8 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
         glLoadIdentity();									// Reset The Projection Matrix
 
         // Calculate The Aspect Ratio Of The Window
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), (float)rect.width / (float)rect.height, 0.1f, 100.0f);
+        const double aspect = (double)rect.width / (double)rect.height;
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.1, 100.0);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
@@ -451,17 +455,7 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
 
         glNormal3f(0.0f, 0.0f, -1.0f);
 
-        if (renderable3DScene.GetDepthShading())
-        {
-            GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-            GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-            GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
-            glEnable(GL_LIGHTING);
-            glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
-            glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-            glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
-            glEnable(GL_LIGHT1);
-        }
+        ApplyDepthShading(renderable3DScene);
 
         glShadeModel(GL_SMOOTH);
 
