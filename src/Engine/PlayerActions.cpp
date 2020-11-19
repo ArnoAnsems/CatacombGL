@@ -76,61 +76,54 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire, M
     m_shotPower = 0;
     if (m_controlActionActive[Shoot])
     {
+        // Fire button is pressed
         if (m_shotFired == false && manaBar.FireShot())
         {
+            // No shot fired yet, so fire and register the time.
             fireShot = true;
             m_shotFired = true;
             m_shotFiredHandHeight = m_handHeight;
             m_shotFiredTimeStamp = timeStamp;
         }
-        else if (autoFire)
+        else if (autoFire && m_shotFiredTimeStamp + 250 < timeStamp)
         {
-            if (m_shotFiredTimeStamp + 250 < timeStamp)
-            {
-                m_shotFired = false;
-            }
+            // Autofire is enabled and sufficient time has passed since the previous shot,
+            // so allow for a new shot to be fired.
+            m_shotFired = false;
+        }
+
+        // While the fire button is in a pressed state, keep raising the hand.
+        const uint16_t deltaTicksSinceFire = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+        m_handHeight = m_shotFiredHandHeight + (deltaTicksSinceFire + 2) * 6;
+        if (m_handHeight > 72)
+        {
+            m_handHeight = 72;
         }
     }
     else
     {
+        // Fire button is released
         if (m_shotFired)
         {
+            // Fire button was just released, so register time of release.
             m_shotFiredTimeStamp = timeStamp;
             m_shotFired = false;
         }
-    }
 
-    const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
-    if (deltaTicks < 60)
-    {
-        // Fire button was pressed less than a second ago
-        if (m_shotFired)
+        const uint16_t deltaTicksSinceRelease = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+        if (deltaTicksSinceRelease < 60)
         {
-            // Fire button is still in a pressed state. Keep raising hand.
-            m_handHeight = m_shotFiredHandHeight + (deltaTicks + 2) * 6;
-            if (m_handHeight > 72)
-            {
-                m_handHeight = 72;
-            }
+            // Fire button was released less than 60 ticks ago. Keep hand height as-is.
+            m_shotFiredHandHeight = m_handHeight;
         }
         else
         {
-            // Fire button is released. Keep hand height as-is.
-            m_shotFiredHandHeight = m_handHeight;
-        }
-    }
-    else
-    {
-        // Fire button was released more than a second ago and is no longer in a pressed state. Lower hand.
-        if (m_handHeight > 0)
-        {
-            if ((deltaTicks - 60) * 2 >= m_shotFiredHandHeight)
+            // Fire button was released more than 60 ticks ago.
+            if (m_handHeight > 0)
             {
-                m_handHeight = 0;
-            }
-            else
-            {
-                m_handHeight = m_shotFiredHandHeight - ((deltaTicks - 60) * 2);
+                // Hand is still up. Lower hand.
+                const uint16_t distanceToLower = (deltaTicksSinceRelease - 60) * 2;
+                m_handHeight = (distanceToLower < m_shotFiredHandHeight) ? m_shotFiredHandHeight - distanceToLower : 0;
             }
         }
     }
@@ -182,7 +175,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
         {
             if (deltaTicks < 60)
             {
-                // Fire button was pressed less than a second ago. Keep hand height as-is.
+                // Fire button was pressed less than 60 ticks ago. Keep hand height as-is.
             }
             else if ((deltaTicks - 60) * 2 >= m_shotFiredHandHeight)
             {
