@@ -136,64 +136,65 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
     bool fireShot = false;
     if (m_controlActionActive[Shoot])
     {
+        // Fire button is pressed
         if (m_shotFired == false)
         {
+            // Fire button was just pressed, so register the time.
             m_shotFired = true;
             m_shotFiredHandHeight = m_handHeight;
             m_shotFiredTimeStamp = timeStamp;
         }
-    }
 
-    if (m_shotFired)
-    {
-        const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
-        m_shotPower = (deltaTicks > 56) ? 56 : deltaTicks;
+        if (autoFire && m_autoFireTimeStamp + 250 < timeStamp && manaBar.FireShot())
+        {
+            fireShot = true;
+            m_autoFireTimeStamp = timeStamp;
+        }
 
-        m_handHeight = m_shotFiredHandHeight + (deltaTicks + 2) * 6;
+        // While the fire button is in a pressed state, keep raising the hand.
+        const uint16_t deltaTicksSincePress = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+        m_shotPower = (deltaTicksSincePress > 56) ? 56 : deltaTicksSincePress;
+
+        m_handHeight = m_shotFiredHandHeight + (deltaTicksSincePress + 2) * 6;
         if (m_handHeight > 72)
         {
             m_handHeight = 72;
         }
-
-        if (!m_controlActionActive[Shoot])
+    }
+    else
+    {
+        // Fire button is released
+        if (m_shotFired)
         {
+            // Fire button was just released
+            m_shotFired = false;
+            m_shotFiredTimeStamp = timeStamp;
+            m_shotFiredHandHeight = m_handHeight;
+
             if ((!autoFire || m_shotPower == 56) && manaBar.FireShot())
             {
                 fireShot = true;
             }
-            m_shotFired = false;
-            m_shotFiredTimeStamp = timeStamp;
-            m_shotFiredHandHeight = m_handHeight;
         }
-    }
-    else
-    {
-        m_shotPower = 0;
-
-        const uint16_t deltaTicks = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
-        if (m_handHeight > 0)
+        else
         {
-            if (deltaTicks < 60)
+            m_shotPower = 0;
+
+            const uint16_t deltaTicksSinceRelease = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+            if (deltaTicksSinceRelease < 60)
             {
                 // Fire button was pressed less than 60 ticks ago. Keep hand height as-is.
             }
-            else if ((deltaTicks - 60) * 2 >= m_shotFiredHandHeight)
-            {
-                m_handHeight = 0;
-            }
             else
             {
-                m_handHeight = m_shotFiredHandHeight - ((deltaTicks - 60) * 2);
+                // Fire button was released more than 60 ticks ago.
+                if (m_handHeight > 0)
+                {
+                    // Hand is still up. Lower hand.
+                    const uint16_t distanceToLower = (deltaTicksSinceRelease - 60) * 2;
+                    m_handHeight = (distanceToLower < m_shotFiredHandHeight) ? m_shotFiredHandHeight - distanceToLower : 0;
+                }
             }
-        }
-    }
-
-    if (autoFire)
-    {
-        if (m_shotFired && m_autoFireTimeStamp + 250 < timeStamp && manaBar.FireShot())
-        {
-            fireShot = true;
-            m_autoFireTimeStamp = timeStamp;
         }
     }
 
