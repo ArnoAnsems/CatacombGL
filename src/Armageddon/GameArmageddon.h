@@ -90,6 +90,14 @@ private:
     void DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory);
     void DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory);
     void DrawGems(const PlayerInventory& playerInventory);
+    void DrawFrame(
+        const int16_t offsetX,
+        const int16_t offsetY,
+        const uint16_t width,
+        const uint16_t height,
+        const egaColor frameColor,
+        const egaColor frameShadowColor,
+        const egaColor innerColor);
 
     IIntroView* m_introView;
     const uint8_t m_gameId;

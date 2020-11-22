@@ -604,6 +604,12 @@ void GameArmageddon::DrawStatusBar(const int16_t health, const std::string& loca
 
     renderableText.Centered(locationMessage, EgaBrightYellow, 160, 121);
     m_renderer.RenderText(renderableText);
+
+    if (wideScreenMargin > 0)
+    {
+        DrawFrame(0 - (int16_t)wideScreenMargin, 120, wideScreenMargin, 80u, EgaBrightRed, EgaRed, EgaDarkGray);
+        DrawFrame(320, 120, wideScreenMargin, 80u, EgaBrightRed, EgaRed, EgaDarkGray);
+    }
 }
 
 void GameArmageddon::DrawHealth(RenderableText& renderableText, const int16_t health)
@@ -863,4 +869,32 @@ static const ManaBar::ManaBarConfig manaBarConfig = { original3DViewArea.width /
 const ManaBar::ManaBarConfig& GameArmageddon::GetManaBarConfig()
 {
     return manaBarConfig;
+}
+
+void GameArmageddon::DrawFrame(
+    const int16_t offsetX,
+    const int16_t offsetY,
+    const uint16_t width,
+    const uint16_t height,
+    const egaColor frameColor,
+    const egaColor frameShadowColor,
+    const egaColor innerColor)
+{
+    // Top of frame
+    m_renderer.Render2DBar(offsetX, offsetY, width - 1, 1, frameColor);
+    m_renderer.Render2DBar(offsetX + 1, offsetY + 1, width - 3, 1, frameShadowColor);
+
+    // Left side of frame
+    m_renderer.Render2DBar(offsetX, offsetY + 1, 1, height - 2, frameColor);
+    m_renderer.Render2DBar(offsetX + 1, offsetY + 2, 1, height - 4, frameShadowColor);
+
+    // Right side of frame
+    m_renderer.Render2DBar(offsetX + width - 1, offsetY, 1, height, frameShadowColor);
+    m_renderer.Render2DBar(offsetX + width - 2, offsetY + 1, 1, height - 3, frameColor);
+
+    // Bottom of frame
+    m_renderer.Render2DBar(offsetX, offsetY + height - 2, width - 1, 1, frameColor);
+    m_renderer.Render2DBar(offsetX, offsetY + height - 1, width - 1, 1, frameShadowColor);
+
+    m_renderer.Render2DBar(offsetX + 2, offsetY + 2, width - 4, height - 4, innerColor);
 }
