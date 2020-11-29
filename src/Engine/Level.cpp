@@ -446,42 +446,45 @@ void Level::UpdateVisibilityMap()
             firstWallHit = wallHit;
         }
         done = (!(firstWallBackTraced.x == wallHit.x && firstWallBackTraced.y == wallHit.y && firstWallBackTraced.isXWall == wallHit.isXWall)) &&
-                ((wallHit.isXWall && m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true) ||
-                (!wallHit.isXWall && m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true));
-        if (wallHit.isXWall)
+            ((wallHit.isXWall && m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true) ||
+            (!wallHit.isXWall && m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true));
+        if (!done)
         {
-            m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
-        }
-        else
-        {
-            m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
-        }
-        const LevelCoordinate wallEdge = GetRightEdgeOfWall(wallHit);
-        const LevelCoordinate intersection = GetIntersectionWithOuterWall(wallEdge);
-        const float distance = GetDistanceOnOuterWall(intersection);
-        if (abs(distance - previousDistance) < 0.0000001f)
-        {
-            // Distance did not change; we must have hit the same wall again.
-            if (retryDistance)
+            if (wallHit.isXWall)
             {
-                // Already retried once; prevent infinite loop
-                done = true;
+                m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
             }
             else
             {
-                // Try one more time with additional distance.
-                retryDistance = true;
+                m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
             }
+            const LevelCoordinate wallEdge = GetRightEdgeOfWall(wallHit);
+            const LevelCoordinate intersection = GetIntersectionWithOuterWall(wallEdge);
+            const float distance = GetDistanceOnOuterWall(intersection);
+            if (abs(distance - previousDistance) < 0.0000001f)
+            {
+                // Distance did not change; we must have hit the same wall again.
+                if (retryDistance)
+                {
+                    // Already retried once; prevent infinite loop
+                    done = true;
+                }
+                else
+                {
+                    // Try one more time with additional distance.
+                    retryDistance = true;
+                }
+            }
+            else
+            {
+                // Distance changed as expected
+                previousDistance = distance;
+                retryDistance = false;
+            }
+            BackTraceWalls(distance, firstWallBackTraced);
+            const float additionalDistance = (retryDistance) ? 0.01f : 0.001f;
+            coordinateOnOuterWall = GetOuterWallCoordinate(distance + additionalDistance);
         }
-        else
-        {
-            // Distance changed as expected
-            previousDistance = distance;
-            retryDistance = false;
-        }
-        BackTraceWalls(distance, firstWallBackTraced);
-        const float additionalDistance = (retryDistance) ? 0.01f : 0.001f;
-        coordinateOnOuterWall = GetOuterWallCoordinate(distance + additionalDistance);
     }
 
     LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(firstWallHit);
@@ -841,7 +844,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
     uint16_t hitWallY_y = 0;
     float hitWallY_x = 0.0f;
     int32_t tileX, tileY;
-    if (x > m_playerActor->GetX())
+    if (x >= m_playerActor->GetX())
     {
         tileX = (int32_t)(m_playerActor->GetX() + 1.0f);
     }
@@ -849,7 +852,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
     {
         tileX = (int32_t)m_playerActor->GetX();
     }
-    if (y > m_playerActor->GetY())
+    if (y >= m_playerActor->GetY())
     {
         tileY = (int32_t)(m_playerActor->GetY() + 1.0f);
     }
@@ -868,8 +871,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
     {
         if ((traceStateX == LookingForWall) &&
            ((traceStateY == LookingForWall && squareDistanceX <= squareDistanceY) ||
-            (traceStateY == WallFound) ||
-            (traceStateY == NoWallFound)))
+            (traceStateY != LookingForWall)))
         {
             if (x > m_playerActor->GetX())
             {
@@ -886,7 +888,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateX = WallIsFurtherAway;
                     }
-                    else if (!IsVisibleTile((uint16_t)tileX, (uint16_t)hitWallX_y))
+                    else if (!IsVisibleTile(hitWallX_x, (uint16_t)hitWallX_y))
                     {
                         traceStateX = WallFound;
                     }
@@ -894,7 +896,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
                     }
-                    else
+                    else if (squareDistanceX <= squareDistanceY || traceStateY == NoWallFound)
                     {
                         m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
                     }
@@ -920,7 +922,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateX = WallIsFurtherAway;
                     }
-                    else if (!IsVisibleTile((uint16_t)tileX - 1, (uint16_t)hitWallX_y))
+                    else if (!IsVisibleTile(hitWallX_x - 1, (uint16_t)hitWallX_y))
                     {
                         traceStateX = WallFound;
                     }
@@ -928,7 +930,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
                     }
-                    else
+                    else if (squareDistanceX <= squareDistanceY || traceStateY == NoWallFound)
                     {
                         m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
                     }
@@ -957,7 +959,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateY = WallIsFurtherAway;
                     }
-                    else if (!IsVisibleTile((uint16_t)hitWallY_x, (uint16_t)tileY))
+                    else if (!IsVisibleTile((uint16_t)hitWallY_x, hitWallY_y))
                     {
                         traceStateY = WallFound;
                     }
@@ -965,7 +967,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
                     }
-                    else
+                    else if (squareDistanceY <= squareDistanceX || traceStateX == NoWallFound)
                     {
                         m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
                     }
@@ -991,7 +993,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         traceStateY = WallIsFurtherAway;
                     }
-                    else if (!IsVisibleTile((uint16_t)hitWallY_x, (uint16_t)tileY - 1))
+                    else if (!IsVisibleTile((uint16_t)hitWallY_x, hitWallY_y - 1))
                     {
                         traceStateY = WallFound;
                     }
@@ -999,7 +1001,7 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
                     {
                         m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
                     }
-                    else
+                    else if (squareDistanceY <= squareDistanceX || traceStateX == NoWallFound)
                     {
                         m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
                     }
