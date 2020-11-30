@@ -1558,58 +1558,71 @@ void Level::Setup3DScene(
     renderable3DTiles.SetFloorColor(GetGroundColor());
     renderable3DTiles.SetCeilingColor(GetSkyColor(timeStamp));
 
+    const float x1 = m_playerActor->GetX();
+    const float y1 = m_playerActor->GetY();
+    const float x2 = x1 - 1.0f * (float)sin((m_playerActor->GetAngle() + 270.0f) * 3.14159265f / 180.0f);
+    const float y2 = y1 + 1.0f * (float)cos((m_playerActor->GetAngle() + 270.0f) * 3.14159265f / 180.0f);
+
     for (uint16_t y = 1; y < m_levelHeight; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth; x++)
         {
             if (m_wallYVisible[(y * m_levelWidth) + x])
             {
-                const uint16_t northwallIndex = GetWallTile(x, y - 1);
-                const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, ticks);
-                if (northWall != 1)
+                if (IsPointVisible((float)x, (float)y, x1, y1, x2, y2) ||
+                    IsPointVisible((float)x + 1, (float)y, x1, y1, x2, y2))
                 {
-                    const Picture* northPicture = egaGraph.GetPicture(northWall);
-                    if (northPicture != nullptr)
+                    const uint16_t northwallIndex = GetWallTile(x, y - 1);
+                    const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, ticks);
+                    if (northWall != 1)
                     {
-                        const unsigned int textureId = northPicture->GetTextureId();
-                        renderable3DScene.AddNorthWall(x, y, textureId);
+                        const Picture* northPicture = egaGraph.GetPicture(northWall);
+                        if (northPicture != nullptr)
+                        {
+                            const unsigned int textureId = northPicture->GetTextureId();
+                            renderable3DScene.AddNorthWall(x, y, textureId);
+                        }
                     }
-                }
-                const uint16_t southwallIndex = GetWallTile(x, y);
-                const uint16_t southWall = GetDarkWallPictureIndex(southwallIndex, ticks);
-                if (southWall != 1)
-                {
-                    const Picture* southPicture = egaGraph.GetPicture(southWall);
-                    if (southPicture != nullptr)
+                    const uint16_t southwallIndex = GetWallTile(x, y);
+                    const uint16_t southWall = GetDarkWallPictureIndex(southwallIndex, ticks);
+                    if (southWall != 1)
                     {
-                        const unsigned int textureId = southPicture->GetTextureId();
-                        renderable3DScene.AddSouthWall(x, y, textureId);
+                        const Picture* southPicture = egaGraph.GetPicture(southWall);
+                        if (southPicture != nullptr)
+                        {
+                            const unsigned int textureId = southPicture->GetTextureId();
+                            renderable3DScene.AddSouthWall(x, y, textureId);
+                        }
                     }
                 }
             }
 
             if (m_wallXVisible[(y * m_levelWidth) + x])
             {
-                const uint16_t eastwallIndex = GetWallTile(x, y);
-                const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, ticks);
-                if (eastWall != 1)
+                if (IsPointVisible((float)x, (float)y, x1, y1, x2, y2) ||
+                    IsPointVisible((float)x, (float)y + 1, x1, y1, x2, y2))
                 {
-                    const Picture* eastPicture = egaGraph.GetPicture(eastWall);
-                    if (eastPicture != nullptr)
+                    const uint16_t eastwallIndex = GetWallTile(x, y);
+                    const uint16_t eastWall = GetLightWallPictureIndex(eastwallIndex, ticks);
+                    if (eastWall != 1)
                     {
-                        const unsigned int textureId = eastPicture->GetTextureId();
-                        renderable3DScene.AddEastWall(x, y, textureId);
+                        const Picture* eastPicture = egaGraph.GetPicture(eastWall);
+                        if (eastPicture != nullptr)
+                        {
+                            const unsigned int textureId = eastPicture->GetTextureId();
+                            renderable3DScene.AddEastWall(x, y, textureId);
+                        }
                     }
-                }
-                const uint16_t westwallIndex = GetWallTile(x - 1, y);
-                const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, ticks);
-                if (westWall != 1)
-                {
-                    const Picture* westPicture = egaGraph.GetPicture(westWall);
-                    if (westPicture != nullptr)
+                    const uint16_t westwallIndex = GetWallTile(x - 1, y);
+                    const uint16_t westWall = GetLightWallPictureIndex(westwallIndex, ticks);
+                    if (westWall != 1)
                     {
-                        const unsigned int textureId = westPicture->GetTextureId();
-                        renderable3DScene.AddWestWall(x, y, textureId);
+                        const Picture* westPicture = egaGraph.GetPicture(westWall);
+                        if (westPicture != nullptr)
+                        {
+                            const unsigned int textureId = westPicture->GetTextureId();
+                            renderable3DScene.AddWestWall(x, y, textureId);
+                        }
                     }
                 }
             }
@@ -1646,7 +1659,14 @@ void Level::Setup3DScene(
                         orientation = (RenderableSprites::SpriteOrientation)storedOrientation;
                     }
 
-                    if (IsActorVisibleForPlayer(actor))
+                    const float actorSize = actor->GetDecorateActor().size;
+                    const float actorX = actor->GetX();
+                    const float actorY = actor->GetY();
+                    if (IsActorVisibleForPlayer(actor) &&
+                        (IsPointVisible(actorX - actorSize, actorY - actorSize, x1, y1, x2, y2) ||
+                         IsPointVisible(actorX - actorSize, actorY + actorSize, x1, y1, x2, y2) ||
+                         IsPointVisible(actorX + actorSize, actorY - actorSize, x1, y1, x2, y2) ||
+                         IsPointVisible(actorX + actorSize, actorY + actorSize, x1, y1, x2, y2)))
                     {
                         renderableSprites.AddSprite(actorPicture, actor->GetX(), actor->GetY(), orientation);
                     }
@@ -2438,4 +2458,18 @@ const std::string Level::RemoveTrailingSpaces(const std::string& str) const
     const int lastCharIndex = str.find_last_not_of(spaceChar);
     std::string result = str.substr(0, lastCharIndex + 1);
     return result;
+}
+
+bool Level::IsPointVisible(
+    const float pointX, const float pointY,
+    const float x1, const float y1,
+    const float x2, const float y2)
+{
+    const float xv1 = x2 - x1;
+    const float yv1 = y2 - y1;
+    const float xv2 = x2 - pointX;
+    const float yv2 = y2 - pointY;
+    const float xp = xv1 * yv2 - yv1 * xv2; // Cross product
+
+    return xp > 0;
 }
