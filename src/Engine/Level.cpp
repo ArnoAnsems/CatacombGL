@@ -873,144 +873,76 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
            ((traceStateY == LookingForWall && squareDistanceX <= squareDistanceY) ||
             (traceStateY != LookingForWall)))
         {
-            if (x > m_playerActor->GetX())
+            const bool traceEast = (x > m_playerActor->GetX() && (float)tileX < x);
+            const bool traceWest = (x <= m_playerActor->GetX() && (float)tileX > x);
+            if (traceWest || traceEast)
             {
-                if ((float)tileX < x)
-                {
-                    hitWallX_x = (uint16_t)tileX;
-                    hitWallX_y = ((((float)tileX - m_playerActor->GetX()) * normalY) + m_playerActor->GetY());
+                hitWallX_x = (uint16_t)tileX;
+                hitWallX_y = ((((float)tileX - m_playerActor->GetX()) * normalY) + m_playerActor->GetY());
 
-                    const float deltaX_x = abs(m_playerActor->GetX() - (float)hitWallX_x);
-                    const float deltaX_y = abs(m_playerActor->GetY() - hitWallX_y);
-                    squareDistanceX = (deltaX_x * deltaX_x) + (deltaX_y * deltaX_y);
+                const float deltaX_x = abs(m_playerActor->GetX() - (float)hitWallX_x);
+                const float deltaX_y = abs(m_playerActor->GetY() - hitWallX_y);
+                squareDistanceX = (deltaX_x * deltaX_x) + (deltaX_y * deltaX_y);
 
-                    if (squareDistanceX > squareDistanceY && traceStateY == WallFound)
-                    {
-                        traceStateX = WallIsFurtherAway;
-                    }
-                    else if (!IsVisibleTile(hitWallX_x, (uint16_t)hitWallX_y))
-                    {
-                        traceStateX = WallFound;
-                    }
-                    else if (squareDistanceX > squareDistanceY && traceStateY == LookingForWall && hitWallY_y > 0)
-                    {
-                        m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
-                    }
-                    else if (squareDistanceX <= squareDistanceY || traceStateY == NoWallFound)
-                    {
-                        m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
-                    }
-                    tileX++;
-                }
-                else
+                const uint16_t nextTileX = (traceEast) ? hitWallX_x : hitWallX_x - 1;
+                if (squareDistanceX > squareDistanceY && traceStateY == WallFound)
                 {
-                    traceStateX = NoWallFound;
+                    traceStateX = WallIsFurtherAway;
                 }
+                else if (!IsVisibleTile(nextTileX, (uint16_t)hitWallX_y))
+                {
+                    traceStateX = WallFound;
+                }
+                else if (squareDistanceX > squareDistanceY && traceStateY == LookingForWall && hitWallY_y > 0)
+                {
+                    m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
+                }
+                else if (squareDistanceX <= squareDistanceY || traceStateY == NoWallFound)
+                {
+                    m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
+                }
+                tileX += (traceEast) ? 1 : -1;
             }
             else
             {
-                if ((float)tileX > x)
-                {
-                    hitWallX_x = (uint16_t)tileX;
-                    hitWallX_y = (((m_playerActor->GetX() - (float)tileX) * -normalY) + m_playerActor->GetY());
-
-                    const float deltaX_x = abs(m_playerActor->GetX() - (float)hitWallX_x);
-                    const float deltaX_y = abs(m_playerActor->GetY() - hitWallX_y);
-                    squareDistanceX = (deltaX_x * deltaX_x) + (deltaX_y * deltaX_y);
-
-                    if (squareDistanceX >= squareDistanceY && traceStateY == WallFound)
-                    {
-                        traceStateX = WallIsFurtherAway;
-                    }
-                    else if (!IsVisibleTile(hitWallX_x - 1, (uint16_t)hitWallX_y))
-                    {
-                        traceStateX = WallFound;
-                    }
-                    else if (squareDistanceX > squareDistanceY && traceStateY == LookingForWall && hitWallY_y > 0)
-                    {
-                        m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
-                    }
-                    else if (squareDistanceX <= squareDistanceY || traceStateY == NoWallFound)
-                    {
-                        m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
-                    }
-                    tileX--;
-                }
-                else
-                {
-                    traceStateX = NoWallFound;
-                }
+                traceStateX = NoWallFound;
             }
         }
         else
         {
-            if (y > m_playerActor->GetY())
+            const bool traceNorth = (y > m_playerActor->GetY() && (float)tileY < y);
+            const bool traceSouth = (y <= m_playerActor->GetY() && (float)tileY > y);
+            if (traceNorth || traceSouth)
             {
-                if ((float)tileY < y)
-                {
-                    hitWallY_x = ((((float)tileY - m_playerActor->GetY()) * normalX) + m_playerActor->GetX());
-                    hitWallY_y = (uint16_t)tileY;
+                hitWallY_x = ((((float)tileY - m_playerActor->GetY()) * normalX) + m_playerActor->GetX());
+                hitWallY_y = (uint16_t)tileY;
 
-                    const float deltaY_x = abs(m_playerActor->GetX() - hitWallY_x);
-                    const float deltaY_y = abs(m_playerActor->GetY() - (float)hitWallY_y);
-                    squareDistanceY = (deltaY_x * deltaY_x) + (deltaY_y * deltaY_y);
+                const float deltaY_x = abs(m_playerActor->GetX() - hitWallY_x);
+                const float deltaY_y = abs(m_playerActor->GetY() - (float)hitWallY_y);
+                squareDistanceY = (deltaY_x * deltaY_x) + (deltaY_y * deltaY_y);
 
-                    if (squareDistanceY >= squareDistanceX && traceStateX == WallFound)
-                    {
-                        traceStateY = WallIsFurtherAway;
-                    }
-                    else if (!IsVisibleTile((uint16_t)hitWallY_x, hitWallY_y))
-                    {
-                        traceStateY = WallFound;
-                    }
-                    else if (squareDistanceY > squareDistanceX && traceStateX == LookingForWall && hitWallX_x > 0)
-                    {
-                        m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
-                    }
-                    else if (squareDistanceY <= squareDistanceX || traceStateX == NoWallFound)
-                    {
-                        m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
-                    }
-                    tileY++;
-                }
-                else
+                const uint16_t nextTileY = (traceNorth) ? hitWallY_y : hitWallY_y - 1;
+                if (squareDistanceY >= squareDistanceX && traceStateX == WallFound)
                 {
-                    traceStateY = NoWallFound;
+                    traceStateY = WallIsFurtherAway;
                 }
+                else if (!IsVisibleTile((uint16_t)hitWallY_x, nextTileY))
+                {
+                    traceStateY = WallFound;
+                }
+                else if (squareDistanceY > squareDistanceX && traceStateX == LookingForWall && hitWallX_x > 0)
+                {
+                    m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
+                }
+                else if (squareDistanceY <= squareDistanceX || traceStateX == NoWallFound)
+                {
+                    m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
+                }
+                tileY += (traceNorth) ? 1 : -1;
             }
             else
             {
-                if ((float)tileY > y)
-                {
-                    hitWallY_x = (((m_playerActor->GetY() - (float)tileY) * -normalX) + m_playerActor->GetX());
-                    hitWallY_y = (uint16_t)tileY;
-
-                    const float deltaY_x = abs(m_playerActor->GetX() - hitWallY_x);
-                    const float deltaY_y = abs(m_playerActor->GetY() - (float)hitWallY_y);
-                    squareDistanceY = (deltaY_x * deltaY_x) + (deltaY_y * deltaY_y);
-
-                    if (squareDistanceY >= squareDistanceX && traceStateX == WallFound)
-                    {
-                        traceStateY = WallIsFurtherAway;
-                    }
-                    else if (!IsVisibleTile((uint16_t)hitWallY_x, hitWallY_y - 1))
-                    {
-                        traceStateY = WallFound;
-                    }
-                    else if (squareDistanceY > squareDistanceX && traceStateX == LookingForWall && hitWallX_x > 0)
-                    {
-                        m_wallXVisible[((uint16_t)hitWallX_y * m_levelWidth) + hitWallX_x] = true;
-                    }
-                    else if (squareDistanceY <= squareDistanceX || traceStateX == NoWallFound)
-                    {
-                        m_wallYVisible[(hitWallY_y * m_levelWidth) + (uint16_t)hitWallY_x] = true;
-                    }
-                    tileY--;
-                }
-                else
-                {
-                    traceStateY = NoWallFound;
-                }
+                traceStateY = NoWallFound;
             }
         }
     }
