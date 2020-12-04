@@ -445,18 +445,19 @@ void Level::UpdateVisibilityMap()
         {
             firstWallHit = wallHit;
         }
+        const uint16_t wallArrayIndex = (wallHit.y * m_levelWidth) + wallHit.x;
         done = (!(firstWallBackTraced.x == wallHit.x && firstWallBackTraced.y == wallHit.y && firstWallBackTraced.isXWall == wallHit.isXWall)) &&
-            ((wallHit.isXWall && m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true) ||
-            (!wallHit.isXWall && m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true));
+            ((wallHit.isXWall && m_wallXVisible[wallArrayIndex]) ||
+            (!wallHit.isXWall && m_wallYVisible[wallArrayIndex]));
         if (!done)
         {
             if (wallHit.isXWall)
             {
-                m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
+                m_wallXVisible[wallArrayIndex] = true;
             }
             else
             {
-                m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
+                m_wallYVisible[wallArrayIndex] = true;
             }
             const LevelCoordinate wallEdge = GetRightEdgeOfWall(wallHit);
             const LevelCoordinate intersection = GetIntersectionWithOuterWall(wallEdge);
@@ -487,9 +488,9 @@ void Level::UpdateVisibilityMap()
         }
     }
 
-    LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(firstWallHit);
-    LevelCoordinate intersection2 = GetIntersectionWithOuterWall(wallEdgeLeft);
-    float distanceForBackTracing = GetDistanceOnOuterWall(intersection2) - 0.001f;
+    const LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(firstWallHit);
+    const LevelCoordinate intersection2 = GetIntersectionWithOuterWall(wallEdgeLeft);
+    const float distanceForBackTracing = GetDistanceOnOuterWall(intersection2) - 0.001f;
     BackTraceWalls(distanceForBackTracing, firstWallBackTraced);
 
     for (uint16_t x = 1; x < m_levelWidth - 1; x++)
@@ -520,7 +521,7 @@ void Level::UpdateVisibilityMap()
             {
                 m_fogOfWarMap[(y * m_levelWidth) + x] = true;
             }
-            if (x < m_levelWidth && m_wallXVisible[(y * m_levelWidth) + x + 1])
+            if (x < m_levelWidth - 1 && m_wallXVisible[(y * m_levelWidth) + x + 1])
             {
                 m_fogOfWarMap[(y * m_levelWidth) + x] = true;
             }
@@ -679,63 +680,18 @@ LevelCoordinate Level::GetRightEdgeOfWall(LevelWall& wall) const
 {
     const float x = m_playerActor->GetX();
     const float y = m_playerActor->GetY();
-
-    LevelCoordinate coordinate = { 0.0f, 0.0f };
-    if (!wall.isXWall) // YWall
-    {
-        if (y > wall.y)
-        {
-            coordinate = { (float)wall.x + 1.0f, (float)wall.y };
-        }
-        else
-        {
-            coordinate = { (float)wall.x, (float)wall.y };
-        }
-    }
-    else // XWall
-    {
-        if (x > wall.x)
-        {
-            coordinate = { (float)wall.x, (float)wall.y };
-        }
-        else
-        {
-            coordinate = { (float)wall.x, (float)wall.y + 1.0f };
-        }
-    }
-
-    return coordinate;
+    const float levelX = (!wall.isXWall && y > wall.y) ? (float)wall.x + 1.0f : (float)wall.x;
+    const float levelY = (wall.isXWall && x <= wall.x) ? (float)wall.y + 1.0f : (float)wall.y;
+    return { levelX, levelY };
 }
 
 LevelCoordinate Level::GetLeftEdgeOfWall(LevelWall& wall) const
 {
     const float x = m_playerActor->GetX();
     const float y = m_playerActor->GetY();
-    LevelCoordinate coordinate = { 0.0f, 0.0f };
-    if (!wall.isXWall) // YWall
-    {
-        if (y < wall.y)
-        {
-            coordinate = { (float)wall.x + 1.0f, (float)wall.y };
-        }
-        else
-        {
-            coordinate = { (float)wall.x, (float)wall.y };
-        }
-    }
-    else // XWall
-    {
-        if (x < wall.x)
-        {
-            coordinate = { (float)wall.x, (float)wall.y };
-        }
-        else
-        {
-            coordinate = { (float)wall.x, (float)wall.y + 1.0f };
-        }
-    }
-
-    return coordinate;
+    const float levelX = (!wall.isXWall && y < wall.y) ? (float)wall.x + 1.0f : (float)wall.x;
+    const float levelY = (wall.isXWall && x >= wall.x) ? (float)wall.y + 1.0f : (float)wall.y;
+    return { levelX, levelY };
 }
 
 LevelCoordinate Level::GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView) const
@@ -843,23 +799,8 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
     float hitWallX_y = 0.0f;
     uint16_t hitWallY_y = 0;
     float hitWallY_x = 0.0f;
-    int32_t tileX, tileY;
-    if (x >= m_playerActor->GetX())
-    {
-        tileX = (int32_t)(m_playerActor->GetX() + 1.0f);
-    }
-    else
-    {
-        tileX = (int32_t)m_playerActor->GetX();
-    }
-    if (y >= m_playerActor->GetY())
-    {
-        tileY = (int32_t)(m_playerActor->GetY() + 1.0f);
-    }
-    else
-    {
-        tileY = (int32_t)m_playerActor->GetY();
-    }
+    int32_t tileX = (x >= m_playerActor->GetX()) ? (int32_t)(m_playerActor->GetX() + 1.0f) : (int32_t)m_playerActor->GetX();
+    int32_t tileY = (y >= m_playerActor->GetY()) ? (int32_t)(m_playerActor->GetY() + 1.0f) : (int32_t)m_playerActor->GetY();
 
     float squareDistanceX = 0.0f;
     float squareDistanceY = 0.0f;
@@ -947,18 +888,9 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
         }
     }
 
-    if (traceStateX == WallFound && ((traceStateY == WallFound && squareDistanceX <= squareDistanceY) || traceStateY != WallFound))
-    {
-        wallHit.x = hitWallX_x;
-        wallHit.y = (uint16_t)hitWallX_y;
-        wallHit.isXWall = true;
-    }
-    else
-    {
-        wallHit.x = (uint16_t)hitWallY_x;
-        wallHit.y = hitWallY_y;
-        wallHit.isXWall = false;
-    }
+    wallHit.isXWall = (traceStateX == WallFound && squareDistanceX <= squareDistanceY) || traceStateY != WallFound;
+    wallHit.x = wallHit.isXWall ? hitWallX_x : (uint16_t)hitWallY_x;
+    wallHit.y = wallHit.isXWall ? (uint16_t)hitWallX_y : hitWallY_y;
 }
 
 bool Level::IsTileVisibleForPlayer(const uint16_t x, const uint16_t y) const
