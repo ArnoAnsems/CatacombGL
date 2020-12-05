@@ -1578,10 +1578,10 @@ void Level::DrawAutoMap(
     {
         for (int16_t x = firstTileX; x < lastTileX; x++)
         {
+            const int16_t sx = (x - (int16_t)originX) * tileWidth;
+            const int16_t sy = (y - (int16_t)originY) * tileWidth;
             if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
             {
-                const int16_t sx = (x - originX) * tileWidth;
-                const int16_t sy = (y - originY) * tileWidth;
                 switch (autoMapType)
                 {
                 case MapView:
@@ -1593,7 +1593,7 @@ void Level::DrawAutoMap(
                     }
                     else
                     {
-                        tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
+                        tiles.Add(sx, sy, 0);
                     }
                     break;
                 }
@@ -1607,7 +1607,7 @@ void Level::DrawAutoMap(
                     }
                     else
                     {
-                        tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
+                        tiles.Add(sx, sy, 0);
                     }
                     break;
                 }
@@ -1654,7 +1654,7 @@ void Level::DrawAutoMap(
             else
             {
                 // Outside the map boundaries; draw a black tile
-                tiles.Add((x - originX) * tileWidth, (y - originY) * tileWidth, 0);
+                tiles.Add(sx, sy, 0);
             }
         }
     }
@@ -1802,13 +1802,18 @@ void Level::SetupAutoMapIso(
     RenderableText& locationNames = renderableAutoMapIso.GetTextMutable();
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
-        if (cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
+        const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+        // Location messages with a length of 1 are intentionally not shown, as Catacomb 3D has some single letter
+        // location messages on top of portals.
+        if ((cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y)) &&
+            locationMessage.length() > 1)
         {
             const int16_t x = ((pair.second.x + 2) * 32) + 16;
             const int16_t y = ((pair.second.y + 2) * 32);
             const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * 32;
 
             const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+
             std::vector<std::string> subStrings;
             if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
             {
@@ -1922,7 +1927,7 @@ void Level::SetupAutoMapTopDown(
                                 }
                                 else
                                 {
-                                    tilesSize16.Add((int16_t)((x - originX) * tileWidth), (int16_t)((y - originY) * tileWidth), 0);
+                                    tilesSize16.Add(sx, sy, 0);
                                 }
                             }
                             const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
@@ -1947,13 +1952,13 @@ void Level::SetupAutoMapTopDown(
                 else
                 {
                     Renderable3DTiles::tileCoordinate tile = { sx, sy };
-                    borderTiles.AddTile(tile);
+                    //borderTiles.AddTile(tile);
                 }
             }
             else
             {
                 Renderable3DTiles::tileCoordinate tile = { sx, sy };
-                borderTiles.AddTile(tile);
+                //borderTiles.AddTile(tile);
             }
         }
     }
@@ -2061,7 +2066,11 @@ void Level::SetupAutoMapTopDown(
 
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
-        if (cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y))
+        const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
+        // Location messages with a length of 1 are intentionally not shown, as Catacomb 3D has some single letter
+        // location messages on top of portals.
+        if ((cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y)) &&
+             locationMessage.length() > 1)
         {
             if (tileSize == 64)
             {
@@ -2070,7 +2079,6 @@ void Level::SetupAutoMapTopDown(
                 const int16_t y = (int16_t)((pair.second.y - originY) * textTileSize);
                 const uint16_t availableSpaceInPixels = pair.second.horizontalSpaceInTiles * textTileSize;
 
-                const std::string locationMessage = RemoveTrailingSpaces(egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first));
                 std::vector<std::string> subStrings;
                 if (locationNames.GetWidthInPixels(locationMessage) <= availableSpaceInPixels)
                 {

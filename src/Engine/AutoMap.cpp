@@ -150,14 +150,6 @@ void AutoMap::ProcessInput(const PlayerInput& playerInput, const float mouseSens
                 m_originX -= stepSize;
             }
         }
-        if (playerInput.IsKeyJustPressed(SDLK_LCTRL) || playerInput.IsKeyJustPressed(SDLK_RCTRL))
-        {
-            m_autoMapType = (AutoMapType)(m_autoMapType + 1);
-            if (m_autoMapType == MaxAutoMapType)
-            {
-                m_autoMapType = MapView;
-            }
-        }
         if (m_originX < 0.0f)
         {
             m_originX = 0.0f;
@@ -178,6 +170,15 @@ void AutoMap::ProcessInput(const PlayerInput& playerInput, const float mouseSens
         m_lastActionTimestamp = timestamp;
         m_accumulatedMouseX = 0;
         m_accumulatedMouseY = 0;
+    }
+
+    if (playerInput.IsKeyJustPressed(SDLK_LCTRL) || playerInput.IsKeyJustPressed(SDLK_RCTRL))
+    {
+        m_autoMapType = (AutoMapType)(m_autoMapType + 1);
+        if (m_autoMapType == MaxAutoMapType)
+        {
+            m_autoMapType = MapView;
+        }
     }
 }
 
