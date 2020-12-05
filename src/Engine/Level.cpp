@@ -1952,13 +1952,13 @@ void Level::SetupAutoMapTopDown(
                 else
                 {
                     Renderable3DTiles::tileCoordinate tile = { sx, sy };
-                    //borderTiles.AddTile(tile);
+                    borderTiles.AddTile(tile);
                 }
             }
             else
             {
                 Renderable3DTiles::tileCoordinate tile = { sx, sy };
-                //borderTiles.AddTile(tile);
+                borderTiles.AddTile(tile);
             }
         }
     }
