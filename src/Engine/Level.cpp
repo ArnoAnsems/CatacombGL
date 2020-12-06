@@ -1880,7 +1880,7 @@ void Level::SetupAutoMapTopDown(
 {
     // Scale factor is compared to the original 320 x 200 resolution
     const uint16_t wallsScaleFactor = tileSize / 16;
-    const uint16_t additionalMarginScaled = additionalMargin * wallsScaleFactor;
+    const uint16_t additionalMarginScaled = 2 * additionalMargin * wallsScaleFactor;
 
     renderableAutoMapTopDown.PrepareFrame(aspectRatio, tileSize, originX, originY);
     renderableAutoMapTopDown.SetPlayerPosition(m_playerActor->GetX(), m_playerActor->GetY(), m_playerActor->GetAngle());
@@ -1891,10 +1891,10 @@ void Level::SetupAutoMapTopDown(
     RenderableTiles& tilesSize16Masked = renderableAutoMapTopDown.GetTilesSize16MaskedMutable();
     const int16_t tileWidth = tileSize;
     const int16_t additionalTilesInMargin = (additionalMarginScaled == 0) ? 0 : (additionalMarginScaled / tileWidth) + 1;
-    const int16_t firstTileX = -additionalTilesInMargin + (int16_t)originX;
-    const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + (int16_t)ceil(originX);
+    const int16_t firstTileX = (int16_t)originX;
+    const int16_t lastTileX = (int16_t)(ceil(renderableAutoMapTopDown.GetOriginal3DViewArea().width / 16) + 1 + additionalTilesInMargin + ceil(originX));
     const int16_t firstTileY = (int16_t)originY;
-    const int16_t lastTileY = (int16_t)ceil(originY) + 13;
+    const int16_t lastTileY = (int16_t)ceil(originY + renderableAutoMapTopDown.GetOriginal3DViewArea().bottom / 16) + 1;
 
     const egaColor wallCapMainColor = GetWallCapMainColor();
     for (int16_t y = firstTileY; y < lastTileY; y++)

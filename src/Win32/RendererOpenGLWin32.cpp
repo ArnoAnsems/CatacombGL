@@ -835,10 +835,11 @@ void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(rect.width, m_windowHeight, false);
-
-    const double statusBarHeight = ((rect2D.bottom - rect2D.top) * (200 - original3DViewArea.height) / 200.0);
-    gluOrtho2D(rect2D.left * scale, rect2D.right * scale, (rect2D.bottom - statusBarHeight) * scale, rect2D.top * scale);
+    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+    const double additionalMargin = (rect.left == 0) ? rect2D.right - rect2D.left - 320.0 : 0.0;
+    const double orthoRight = ((double)(original3DViewArea.width) + additionalMargin) * (double)scale;
+    const double orthoBottom = (double)(original3DViewArea.bottom * scale);
+    gluOrtho2D(0.0, orthoRight, orthoBottom, 0.0);
 
     glDisable(GL_LIGHTING);
 }
