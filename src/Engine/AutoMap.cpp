@@ -63,10 +63,23 @@ void AutoMap::SetupTopDown(
     level.SetupAutoMapTopDown(rendererAutoMapTopDown, egaGraph, aspectRatio, tileSize, additionalMargin, m_originX, m_originY, m_cheat);
 }
 
-void AutoMap::ProcessInput(const PlayerInput& playerInput, const float mouseSensitivity, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode)
+void AutoMap::ProcessInput(
+    const PlayerInput& playerInput,
+    const float mouseSensitivity,
+    Level& level,
+    const uint32_t timestamp,
+    const AutoMapMode autoMapMode,
+    const ViewPorts::ViewPortRect3D original3DViewArea)
 {
-    const float maxOriginX = level.GetLevelWidth() - 20.0f;
-    const float maxOriginY = (autoMapMode == TopDown || autoMapMode == TopDownHD) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
+    const uint16_t topDownTileSize = 16;
+    const uint16_t topDownMaxTilesX = original3DViewArea.width / topDownTileSize;
+    const uint16_t topDownMaxTilesY = original3DViewArea.height / topDownTileSize;
+    const float maxOriginX = (float)(level.GetLevelWidth() - topDownMaxTilesX);
+    const float minOriginY = (autoMapMode == Isometric) ? -3.0f : 0.0f;
+    const float maxOriginY =
+        (autoMapMode == TopDown || autoMapMode == TopDownHD) ? (float)(level.GetLevelHeight() - topDownMaxTilesY) :
+        (autoMapMode == OriginalDebug) ? (float)(level.GetLevelHeight() - 9.0f) :
+        (float)(level.GetLevelHeight() - 5.0f); // Isometric
     const float stepSize = (autoMapMode == OriginalDebug) ? 1.0f : 0.125f;
     const uint32_t timeInterval = (autoMapMode == OriginalDebug) ? 200 : 25;
     const float mouseSensitivityScaled = (autoMapMode == OriginalDebug) ? (mouseSensitivity / 400.0f) : (mouseSensitivity / 50.0f);
@@ -158,9 +171,9 @@ void AutoMap::ProcessInput(const PlayerInput& playerInput, const float mouseSens
         {
             m_originX = maxOriginX;
         }
-        if (m_originY < 0.0f)
+        if (m_originY < minOriginY)
         {
-            m_originY = 0.0f;
+            m_originY = minOriginY;
         }
         if (m_originY > maxOriginY)
         {

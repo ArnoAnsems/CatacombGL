@@ -42,7 +42,13 @@ public:
         const float aspectRatio,
         const uint16_t tileSize,
         const uint16_t additionalMargin);
-    void ProcessInput(const PlayerInput& playerInput, const float mouseSensitivity, Level& level, const uint32_t timestamp, const AutoMapMode autoMapMode);
+    void ProcessInput(
+        const PlayerInput& playerInput,
+        const float mouseSensitivity,
+        Level& level,
+        const uint32_t timestamp,
+        const AutoMapMode autoMapMode,
+        const ViewPorts::ViewPortRect3D original3DViewArea);
     void ResetOrigin(Level& level, const AutoMapMode autoMapMode);
 
 private:

@@ -794,7 +794,13 @@ bool EngineCore::Think()
 
     if (m_state == AutoMapDialog && !m_menu->IsActive() && m_level != nullptr)
     {
-        m_autoMap.ProcessInput(m_playerInput, m_configurationSettings.GetMouseSensitivity(), *m_level, m_gameTimer.GetActualTime(), m_configurationSettings.GetAutoMapMode());
+        m_autoMap.ProcessInput(
+            m_playerInput,
+            m_configurationSettings.GetMouseSensitivity(),
+            *m_level,
+            m_gameTimer.GetActualTime(),
+            m_configurationSettings.GetAutoMapMode(),
+            m_game.GetOriginal3DViewArea());
     }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
