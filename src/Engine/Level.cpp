@@ -272,12 +272,8 @@ bool Level::IsSolidWall(const uint16_t x, const uint16_t y) const
 bool Level::IsVisibleTile(const uint16_t x, const uint16_t y) const
 {
     const uint16_t wallTile = GetWallTile(x, y);
-    if (wallTile < m_wallsInfo.size())
-    {
-        return (m_wallsInfo.at(wallTile).wallType == WTOpen || m_wallsInfo.at(wallTile).wallType == WTInvisibleWall);
-    }
-
-    return true;
+    const WallType wallType = (wallTile < m_wallsInfo.size()) ? m_wallsInfo.at(wallTile).wallType : WTOpen;
+    return (wallType == WTOpen || wallType == WTInvisibleWall);
 }
 
 bool Level::IsExplosiveWall(const uint16_t x, const uint16_t y) const
@@ -294,13 +290,13 @@ bool Level::IsExplosiveWall(const uint16_t x, const uint16_t y) const
 bool Level::IsDoor(const uint16_t x, const uint16_t y) const
 {
     const uint16_t wallTile = GetWallTile(x, y);
+    const WallType wallType = (wallTile < m_wallsInfo.size()) ? m_wallsInfo.at(wallTile).wallType : WTOpen;
     return
-        ((wallTile < m_wallsInfo.size()) &&
-         (m_wallsInfo.at(wallTile).wallType == WTDoor ||
-          m_wallsInfo.at(wallTile).wallType == WTDoorRedKeyRequired ||
-          m_wallsInfo.at(wallTile).wallType == WTDoorYellowKeyRequired || 
-          m_wallsInfo.at(wallTile).wallType == WTDoorGreenKeyRequired || 
-          m_wallsInfo.at(wallTile).wallType == WTDoorBlueKeyRequired));
+        (wallType == WTDoor ||
+         wallType == WTDoorRedKeyRequired ||
+         wallType == WTDoorYellowKeyRequired ||
+         wallType == WTDoorGreenKeyRequired ||
+         wallType == WTDoorBlueKeyRequired);
 }
 
 bool Level::IsRemovableDoor(const uint16_t x, const uint16_t y) const
@@ -330,11 +326,7 @@ bool Level::IsBlockedDoor(const uint16_t x, const uint16_t y) const
 bool Level::IsFakeWall(const uint16_t x, const uint16_t y) const
 {
     const Actor* actor = GetBlockingActor(x, y);
-    if (actor == nullptr)
-    {
-        return false;
-    }
-    return (actor->GetAction() == ActionFakeWall);
+    return (actor == nullptr) ? false : (actor->GetAction() == ActionFakeWall);
 }
 
 KeyId Level::GetRequiredKeyForDoor(const uint16_t x, const uint16_t y) const
@@ -346,19 +338,20 @@ KeyId Level::GetRequiredKeyForDoor(const uint16_t x, const uint16_t y) const
         return NoKey;
     }
 
-    if (m_wallsInfo.at(tile).wallType == WTDoorRedKeyRequired)
+    const WallType wallType = m_wallsInfo.at(tile).wallType;
+    if (wallType == WTDoorRedKeyRequired)
     {
         return RedKey;
     }
-    if (m_wallsInfo.at(tile).wallType == WTDoorYellowKeyRequired)
+    if (wallType == WTDoorYellowKeyRequired)
     {
         return YellowKey;
     }
-    if (m_wallsInfo.at(tile).wallType == WTDoorGreenKeyRequired)
+    if (wallType == WTDoorGreenKeyRequired)
     {
         return GreenKey;
     }
-    if (m_wallsInfo.at(tile).wallType == WTDoorBlueKeyRequired)
+    if (wallType == WTDoorBlueKeyRequired)
     {
         return BlueKey;
     }
@@ -497,11 +490,12 @@ void Level::UpdateVisibilityMap()
     {
         for (uint16_t y = 1; y < m_levelHeight - 1; y++)
         {
+            const uint16_t tileIndex = (y * m_levelWidth) + x;
             if (IsVisibleTile(x, y) &&
-                (m_wallXVisible[(y * m_levelWidth) + x] ||
-                m_wallXVisible[(y * m_levelWidth) + x + 1] ||
-                m_wallYVisible[(y * m_levelWidth) + x] ||
-                m_wallYVisible[((y + 1) * m_levelWidth) + x]))
+                (m_wallXVisible[tileIndex] ||
+                m_wallXVisible[tileIndex + 1] ||
+                m_wallYVisible[tileIndex] ||
+                m_wallYVisible[tileIndex + m_levelWidth]))
             {
                 m_visibilityMap[(y * m_levelWidth) + x] = true;
             }
@@ -512,19 +506,12 @@ void Level::UpdateVisibilityMap()
     {
         for (uint16_t y = 0; y < m_levelHeight; y++)
         {
-            if (m_wallXVisible[(y * m_levelWidth) + x] ||
-                 m_wallYVisible[(y * m_levelWidth) + x])
-            {
-                m_fogOfWarMap[(y * m_levelWidth) + x] = true;
-            }
-            if (y < m_levelHeight - 1 && m_wallYVisible[((y + 1) * m_levelWidth) + x])
-            {
-                m_fogOfWarMap[(y * m_levelWidth) + x] = true;
-            }
-            if (x < m_levelWidth - 1 && m_wallXVisible[(y * m_levelWidth) + x + 1])
-            {
-                m_fogOfWarMap[(y * m_levelWidth) + x] = true;
-            }
+            const uint16_t tileIndex = (y * m_levelWidth) + x;
+            m_fogOfWarMap[tileIndex] |=
+                (m_wallXVisible[tileIndex] ||
+                 m_wallYVisible[tileIndex] ||
+                 (y < m_levelHeight - 1 && m_wallYVisible[tileIndex + m_levelWidth]) ||
+                 (x < m_levelWidth - 1 && m_wallXVisible[tileIndex + 1]));
         }
     }
 }
@@ -559,25 +546,27 @@ void Level::BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall
             retryDistance = false;
         }
         const float additionalDistance = (retryDistance) ? 0.01f : 0.001f;
-        LevelCoordinate leftCoordinate = GetOuterWallCoordinate(distanceForBackTracing - additionalDistance);
+        const LevelCoordinate leftCoordinate = GetOuterWallCoordinate(distanceForBackTracing - additionalDistance);
         LevelWall wallHit;
         RayTraceWall(leftCoordinate, wallHit);
+        const uint16_t wallHitIndex = (wallHit.y * m_levelWidth) + wallHit.x;
         if (firstWall.x == 0 && firstWall.y == 0)
         {
             firstWall = wallHit;
         }
-        doneBackTracing = ((wallHit.isXWall && m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true) ||
-            (!wallHit.isXWall && m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] == true));
+        doneBackTracing =
+            ((wallHit.isXWall && m_wallXVisible[wallHitIndex]) ||
+            (!wallHit.isXWall && m_wallYVisible[wallHitIndex]));
 
         if (!doneBackTracing)
         {
             if (wallHit.isXWall)
             {
-                m_wallXVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
+                m_wallXVisible[wallHitIndex] = true;
             }
             else
             {
-                m_wallYVisible[(wallHit.y * m_levelWidth) + wallHit.x] = true;
+                m_wallYVisible[wallHitIndex] = true;
             }
 
             const LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(wallHit);
@@ -895,12 +884,12 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
 
 bool Level::IsTileVisibleForPlayer(const uint16_t x, const uint16_t y) const
 {
-    return ( m_visibilityMap[y * m_levelWidth + x] == true);
+    return m_visibilityMap[y * m_levelWidth + x];
 }
 
 bool Level::IsTileClearFromFogOfWar(const uint16_t x, const uint16_t y) const
 {
-    return (m_fogOfWarMap[y * m_levelWidth + x] == true);
+    return m_fogOfWarMap[y * m_levelWidth + x];
 }
 
 bool Level::IsActorVisibleForPlayer(const Actor* actor) const
@@ -1075,14 +1064,14 @@ bool Level::Walk(Actor* const actor)
 
 void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarget target)
 {
-    actorDirection dirtable[9] = {northwest,north,northeast,west,nodir,east,southwest,south,southeast};
-    actorDirection opposite[9] = {south,west,north,east,southwest,northwest,northeast,southeast,nodir};
+    const actorDirection dirtable[9] = {northwest,north,northeast,west,nodir,east,southwest,south,southeast};
+    const actorDirection opposite[9] = {south,west,north,east,southwest,northwest,northeast,southeast,nodir};
 
     actorDirection tdir = nodir;
     actorDirection d[3];
 
-    actorDirection olddir=actor->GetDirection();
-    actorDirection turnaround=opposite[olddir];
+    const actorDirection olddir = actor->GetDirection();
+    const actorDirection turnaround = opposite[olddir];
 
     float targetX = 0.0f;
     float targetY = 0.0f;
@@ -1111,8 +1100,8 @@ void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarge
         break;
     }
 
-    int8_t deltax=(int8_t)targetX - actor->GetTileX();
-    int8_t deltay=(int8_t)targetY - actor->GetTileY();
+    const int8_t deltax = (int8_t)targetX - actor->GetTileX();
+    const int8_t deltay = (int8_t)targetY - actor->GetTileY();
 
     d[1]=nodir;
     d[2]=nodir;
@@ -1157,7 +1146,6 @@ void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarge
     }
     else
     {                  //ramstraights try the second best dir first
-
         if (d[2]!=nodir)
         {
             actor->SetDirection(d[2]);
@@ -1251,17 +1239,17 @@ void Level::MoveActor(Actor* const actor, const float distance)
 
 void Level::RunAwayThink(Actor* const actor)
 {
-    actorDirection dirtable[9] = { northwest,north,northeast,west,nodir,east,southwest,south,southeast };
+    const actorDirection dirtable[9] = { northwest,north,northeast,west,nodir,east,southwest,south,southeast };
 
-    actorDirection oldDir = actor->GetDirection();
+    const actorDirection oldDir = actor->GetDirection();
     actorDirection tdir = nodir;
     actorDirection d[3];
 
     const float targetX = m_playerActor->GetX();
     const float targetY = m_playerActor->GetY();
 
-    int8_t deltax = (int8_t)targetX - actor->GetTileX();
-    int8_t deltay = (int8_t)targetY - actor->GetTileY();
+    const int8_t deltax = (int8_t)targetX - actor->GetTileX();
+    const int8_t deltay = (int8_t)targetY - actor->GetTileY();
 
     d[1] = nodir;
     d[2] = nodir;
