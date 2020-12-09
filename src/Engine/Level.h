@@ -141,6 +141,7 @@ public:
     void SetBlockingActor(const uint16_t x, const uint16_t y, Actor* actor);
     Actor* GetBlockingActor(const uint16_t x, const uint16_t y) const;
     Actor* GetNonBlockingActor(const uint16_t index) const;
+    uint16_t GetMaxNonBlockingActors() const;
     void AddNonBlockingActor(Actor* projectile);
     void RemoveActor(Actor* actor);
 
@@ -230,6 +231,7 @@ private:
     Actor* m_playerActor;
     Actor** m_blockingActors;
     Actor** m_nonBlockingActors;
+    const uint16_t m_maxNonBlockingActors = 100;
 
     bool* m_wallXVisible;
     bool* m_wallYVisible;

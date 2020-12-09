@@ -1263,7 +1263,7 @@ bool EngineCore::Think()
         m_radarModel.ResetRadar(m_level->GetPlayerActor(), m_playerInventory, m_timeStampOfPlayerCurrentFrame);
         const uint16_t mapSize = m_level->GetLevelWidth() * m_level->GetLevelHeight();
         m_radarModel.AddActors((const Actor**)m_level->GetBlockingActors(), mapSize);
-        m_radarModel.AddActors((const Actor**)m_level->GetNonBlockingActors(), 100);
+        m_radarModel.AddActors((const Actor**)m_level->GetNonBlockingActors(), m_level->GetMaxNonBlockingActors());
 
         if (m_level->GetLevelIndex() != m_warpToLevel && m_state != VerifyGateExit && m_keyToTake == NoKey)
         {
@@ -2084,7 +2084,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
 
 void EngineCore::ThinkNonBlockingActors()
 {
-    for ( uint16_t i = 0; i < 100; i++)
+    for ( uint16_t i = 0; i < m_level->GetMaxNonBlockingActors(); i++)
     {
         if (m_level->GetNonBlockingActors()[i] != nullptr)
         {

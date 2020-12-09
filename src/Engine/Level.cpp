@@ -63,8 +63,8 @@ Level::Level(
         m_blockingActors[i] = nullptr;
     }
 
-    m_nonBlockingActors = new Actor*[100];
-    for ( uint16_t i = 0; i < 100; i++)
+    m_nonBlockingActors = new Actor*[m_maxNonBlockingActors];
+    for ( uint16_t i = 0; i < m_maxNonBlockingActors; i++)
     {
         m_nonBlockingActors[i] = nullptr;
     }
@@ -104,9 +104,9 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
     {
         Logging::Instance().FatalError("Failed to read number of non-blocking actors from saved game");
     }
-    if (numberOfNonBlockingActors > 100)
+    if (numberOfNonBlockingActors > m_maxNonBlockingActors)
     {
-        Logging::Instance().FatalError("Saved game contains " + std::to_string(numberOfNonBlockingActors) + " non-blocking actors, while 100 is the maximum");
+        Logging::Instance().FatalError("Saved game contains " + std::to_string(numberOfNonBlockingActors) + " non-blocking actors, while " + std::to_string(m_maxNonBlockingActors) + " is the maximum");
     }
     for (uint16_t i = 0; i < numberOfNonBlockingActors; i++)
     {
@@ -159,7 +159,7 @@ Level::~Level()
 
     if (m_nonBlockingActors != nullptr)
     {
-        for ( uint16_t i = 0; i < 100; i++)
+        for ( uint16_t i = 0; i < m_maxNonBlockingActors; i++)
         {
             delete m_nonBlockingActors[i];
             m_nonBlockingActors[i] = nullptr;
@@ -195,7 +195,7 @@ void Level::StoreToFile(std::ofstream& file) const
         }
     }
     uint16_t numberOfNonBlockingActors = 0;
-    for (uint16_t i = 0; i < 100; i++)
+    for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
     {
         if (m_nonBlockingActors[i] != nullptr)
         {
@@ -203,7 +203,7 @@ void Level::StoreToFile(std::ofstream& file) const
         }
     }
     file.write((const char*)&numberOfNonBlockingActors, sizeof(numberOfNonBlockingActors));
-    for (uint16_t i = 0; i < 100; i++)
+    for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
     {
         if (m_nonBlockingActors[i] != nullptr)
         {
@@ -941,6 +941,11 @@ Actor** Level::GetNonBlockingActors()
     return m_nonBlockingActors;
 }
 
+uint16_t Level::GetMaxNonBlockingActors() const
+{
+    return m_maxNonBlockingActors;
+}
+
 void Level::SetBlockingActor(const uint16_t x, const uint16_t y, Actor* actor)
 {
     if (x >= m_levelWidth || y >= m_levelHeight)
@@ -974,9 +979,11 @@ void Level::AddNonBlockingActor(Actor* projectile)
     // the last five indices can only be occupied by bonus items.
     // To ensure that the corpses of fallen monsters can spawn after crystal hour glass usages, the
     // ten indices before that cannot be occupied by projectiles.
+    const uint16_t maxNonBonusItems = m_maxNonBlockingActors - 5;
+    const uint16_t maxProjectiles = maxNonBonusItems - 10;
     const bool isBonusItem = (projectile->GetDecorateActor().initialState == StateIdWaitForPickup);
     const bool isProjectile = (projectile->GetDecorateActor().initialState == StateIdProjectileFly);
-    const uint8_t maxActorIndex = isBonusItem ? 100 : isProjectile ? 85 : 95;
+    const uint8_t maxActorIndex = isBonusItem ? m_maxNonBlockingActors : isProjectile ? maxProjectiles : maxNonBonusItems;
     
     while (m_nonBlockingActors[i] != nullptr && i < maxActorIndex)
     {
@@ -1539,7 +1546,7 @@ void Level::Setup3DScene(
         }
     }
 
-    for (uint16_t i = 0; i < 100; i++)
+    for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
     {
         // Projectiles
         Actor* projectile = GetNonBlockingActor(i);
@@ -1784,7 +1791,7 @@ void Level::SetupAutoMapIso(
 
     if (cheat)
     {
-        for (uint16_t i = 0; i < 100; i++)
+        for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
         {
             // Projectiles
             Actor* projectile = GetNonBlockingActor(i);
@@ -2011,7 +2018,7 @@ void Level::SetupAutoMapTopDown(
     const int16_t halfTileWidth = tileWidth / 2;
     if (cheat)
     {
-        for (uint16_t i = 0; i < 100; i++)
+        for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
         {
             // Projectiles
             Actor* projectile = GetNonBlockingActor(i);
@@ -2213,7 +2220,7 @@ uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_
 
 void Level::RemoveActor(Actor* actor)
 {
-    for (uint16_t i = 0; i < 100; i++)
+    for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
     {
         if (m_nonBlockingActors[i] == actor)
         {
