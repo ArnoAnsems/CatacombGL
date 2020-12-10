@@ -196,7 +196,8 @@ void RendererOpenGLWin32::RenderText(const RenderableText& renderableText)
 
     for (uint16_t chari = 0; chari < characters.size(); chari++)
     {
-        const egaColor currentColor = characters.at(chari).color;
+        const RenderableText::renderableCharacter& character = characters.at(chari);
+        const egaColor currentColor = character.color;
         if (chari == 0 || currentColor != previousColor)
         {
             const rgbColor colorInRGB = EgaToRgb(currentColor);
@@ -204,9 +205,9 @@ void RendererOpenGLWin32::RenderText(const RenderableText& renderableText)
             previousColor = currentColor;
         }
 
-        const uint8_t charIndex = (uint8_t)characters.at(chari).imageIndex;
-        const int16_t offsetX = characters.at(chari).offsetX;
-        const int16_t offsetY = characters.at(chari).offsetY;
+        const uint8_t charIndex = (uint8_t)character.imageIndex;
+        const int16_t offsetX = character.offsetX;
+        const int16_t offsetY = character.offsetY;
         const uint16_t charWidth = font.GetCharacterWidth(charIndex);
         const uint16_t charHeight = textureAtlas->GetImageHeight();
         const float textureHeight = textureAtlas->GetImageRelativeHeight();
@@ -817,7 +818,7 @@ void RendererOpenGLWin32::PrepareIsoRenderingText(const float originX, const flo
 
 void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale)
 {
-    ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
+    const ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
 
     glViewport(rect.left, rect.bottom, rect.width, rect.height);
 
@@ -835,7 +836,7 @@ void RendererOpenGLWin32::PrepareTopDownRendering(const float aspectRatio, const
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
+    const ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, false);
     const double additionalMargin = (rect.left == 0) ? rect2D.right - rect2D.left - 320.0 : 0.0;
     const double orthoRight = ((double)(original3DViewArea.width) + additionalMargin) * (double)scale;
     const double orthoBottom = (double)(original3DViewArea.bottom * scale);

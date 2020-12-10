@@ -1581,29 +1581,17 @@ void Level::DrawAutoMap(
                 {
                 case MapView:
                 {
-                    const uint16_t wallIndex = GetWallTile(x, y);
-                    if (wallIndex < egaGraph.GetNumberOfTilesSize16(false))
-                    {
-                        tiles.Add(sx, sy, wallIndex);
-                    }
-                    else
-                    {
-                        tiles.Add(sx, sy, 0);
-                    }
+                    const uint16_t wallTile = GetWallTile(x, y);
+                    const uint16_t wallIndex = (wallTile < egaGraph.GetNumberOfTilesSize16(false)) ? wallTile : 0;
+                    tiles.Add(sx, sy, wallIndex);
                     break;
                 }
                 case TileMapView:
                 {
-                    const uint16_t wallIndex = GetWallTile(x, y);
-                    // Only display wall tiles
-                    if (wallIndex < m_wallsInfo.size())
-                    {
-                        tiles.Add(sx, sy, wallIndex);
-                    }
-                    else
-                    {
-                        tiles.Add(sx, sy, 0);
-                    }
+                    const uint16_t wallTile = GetWallTile(x, y);
+                    // Only display wall tiles; skip floor tiles.
+                    const uint16_t wallIndex = (wallTile < m_wallsInfo.size()) ? wallTile : 0;
+                    tiles.Add(sx, sy, wallIndex);
                     break;
                 }
                 case ActorAtView:
@@ -1633,6 +1621,7 @@ void Level::DrawAutoMap(
                         }
                         else
                         {
+                            // No actor present; draw a black tile
                             tiles.Add(sx, sy, 0);
                         }
                     }
@@ -1670,18 +1659,6 @@ void Level::SetupAutoMapIso(
     renderableAutoMapIso.SetPlayerPosition(m_playerActor->GetX(), m_playerActor->GetY(), m_playerActor->GetAngle());
 
     Renderable3DTiles& renderable3DTiles = renderableAutoMapIso.GetFloorTilesMutable();
-    for (int16_t y = 1; y < m_levelHeight - 1; y++)
-    {
-        for (int16_t x = 1; x < m_levelWidth - 1; x++)
-        {
-            if (!IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
-            {
-                renderable3DTiles.AddTile(Renderable3DTiles::tileCoordinate{ x, y });
-            }
-        }
-    }
-    renderable3DTiles.SetOnlyFloor(true);
-    renderable3DTiles.SetFloorColor(GetGroundColor());
 
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
@@ -1689,6 +1666,10 @@ void Level::SetupAutoMapIso(
         {
             if (!IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
             {
+                // Add floor and ceiling tile
+                renderable3DTiles.AddTile(Renderable3DTiles::tileCoordinate{ (int16_t)x, (int16_t)y });
+
+                // Add walls
                 const uint16_t northwallIndex = GetWallTile(x, y - 1);
                 const uint16_t northWall = GetDarkWallPictureIndex(northwallIndex, 0);
                 if (northWall != 1)
@@ -1714,17 +1695,21 @@ void Level::SetupAutoMapIso(
         }
     }
 
+    renderable3DTiles.SetOnlyFloor(true);
+    renderable3DTiles.SetFloorColor(GetGroundColor());
+
     const egaColor wallCapMainColor = GetWallCapMainColor();
     for (uint16_t y = 0; y < m_levelHeight; y++)
     {
         for (uint16_t x = 0; x < m_levelWidth; x++)
         {
-            if (IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
+            const bool isTileClearFromFogOfWar = IsTileClearFromFogOfWar(x, y);
+            if (IsSolidWall(x, y) && (cheat || isTileClearFromFogOfWar))
             {
                 const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
                 renderableAutoMapIso.AddWallCap(x, y, wallCapMainColor, centerColor);
             }
-            else if (!IsTileClearFromFogOfWar(x, y) && !cheat)
+            else if (!isTileClearFromFogOfWar && !cheat)
             {
                 renderableAutoMapIso.AddWallCap(x, y, EgaBlack, EgaBlack);
             }
@@ -1751,7 +1736,7 @@ void Level::SetupAutoMapIso(
             Actor* actor = GetBlockingActor(x, y);
             if (actor != nullptr && (actor->IsActive() || cheat))
             {
-                Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
+                const Picture* actorPicture = egaGraph.GetPicture(actor->GetPictureIndex());
                 if (actorPicture != nullptr)
                 {
                     RenderableSprites::SpriteOrientation orientation = RenderableSprites::SpriteOrientation::Isometric;
@@ -1782,10 +1767,10 @@ void Level::SetupAutoMapIso(
         for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
         {
             // Projectiles
-            Actor* projectile = GetNonBlockingActor(i);
+            const Actor* projectile = GetNonBlockingActor(i);
             if (projectile != nullptr)
             {
-                Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+                const Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
                 if (actorPicture != nullptr)
                 {
                     renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::Isometric);
@@ -1892,6 +1877,7 @@ void Level::SetupAutoMapTopDown(
     const int16_t lastTileY = (int16_t)ceil(originY + renderableAutoMapTopDown.GetOriginal3DViewArea().bottom / 16) + 1;
 
     const egaColor wallCapMainColor = GetWallCapMainColor();
+    const uint16_t numberOfTilesSize16 = egaGraph.GetNumberOfTilesSize16(false);
     for (int16_t y = firstTileY; y < lastTileY; y++)
     {
         for (int16_t x = firstTileX; x < lastTileX; x++)
@@ -1899,43 +1885,30 @@ void Level::SetupAutoMapTopDown(
             const int16_t sx = (int16_t)((x - originX) * tileWidth);
             const int16_t sy = (int16_t)((y - originY) * tileWidth);
 
-            if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
+            if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight &&
+                (cheat || IsTileClearFromFogOfWar(x, y)))
             {
-                if (cheat || IsTileClearFromFogOfWar(x, y))
+                const uint16_t wallIndex = GetWallTile(x, y);
+                const uint16_t darkWall = GetDarkWallPictureIndex(wallIndex, 0);
+                if (darkWall != 1)
                 {
-                    const uint16_t wallIndex = GetWallTile(x, y);
-                    const uint16_t darkWall = GetDarkWallPictureIndex(wallIndex, 0);
-                    if (darkWall != 1)
+                    const Picture* darkPicture = egaGraph.GetPicture(darkWall);
+                    if (darkPicture != nullptr)
                     {
-                        const Picture* darkPicture = egaGraph.GetPicture(darkWall);
-                        if (darkPicture != nullptr)
+                        if (tileSize == 64)
                         {
-                            if (tileSize == 64)
-                            {
-                                renderableAutoMapTopDown.AddPicture(darkPicture, { sx, sy });
-                            }
-                            else
-                            {
-                                if (wallIndex < egaGraph.GetNumberOfTilesSize16(false))
-                                {
-                                    tilesSize16.Add(sx, sy, wallIndex);
-                                }
-                                else
-                                {
-                                    tilesSize16.Add(sx, sy, 0);
-                                }
-                            }
-                            const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
-                            if (centerColor != wallCapMainColor)
-                            {
-                                    const int16_t border = tileSize / 4;
-                                    renderableAutoMapTopDown.AddWallCap(centerColor, { sx + border, sy + border });
-                            }
+                            renderableAutoMapTopDown.AddPicture(darkPicture, { sx, sy });
                         }
                         else
                         {
-                            Renderable3DTiles::tileCoordinate tile = { sx, sy };
-                            floorTiles.AddTile(tile);
+                            const uint16_t tileIndex = (wallIndex < numberOfTilesSize16) ? wallIndex : 0;
+                            tilesSize16.Add(sx, sy, tileIndex);
+                        }
+                        const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
+                        if (centerColor != wallCapMainColor)
+                        {
+                            const int16_t border = tileSize / 4;
+                            renderableAutoMapTopDown.AddWallCap(centerColor, { sx + border, sy + border });
                         }
                     }
                     else
@@ -1947,7 +1920,7 @@ void Level::SetupAutoMapTopDown(
                 else
                 {
                     Renderable3DTiles::tileCoordinate tile = { sx, sy };
-                    borderTiles.AddTile(tile);
+                    floorTiles.AddTile(tile);
                 }
             }
             else
@@ -1963,13 +1936,13 @@ void Level::SetupAutoMapTopDown(
     const float actorMaxX = (float(lastTileX + 1));
     const float actorMinY = (float)(firstTileY - 1);
     const float actorMaxY = (float(lastTileY + 1));
-
+    const uint16_t numberOfTilesSize16Masked = egaGraph.GetNumberOfTilesSize16(true);
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
         {
             // Actors
-            Actor* actor = GetBlockingActor(x, y);
+            const Actor* actor = GetBlockingActor(x, y);
             if (actor != nullptr && (actor->IsActive() || cheat))
             {
                 if (actor->GetX() > actorMinX &&
@@ -1990,11 +1963,11 @@ void Level::SetupAutoMapTopDown(
                     }
                     else
                     {
-                        const int16_t sx = (int16_t)((x - originX) * tileWidth);
-                        const int16_t sy = (int16_t)((y - originY) * tileWidth);
                         const uint16_t tileId = GetTileIdFromActor(actor);
-                        if (tileId > 0 && tileId < egaGraph.GetNumberOfTilesSize16(true))
+                        if (tileId > 0 && tileId < numberOfTilesSize16Masked)
                         {
+                            const int16_t sx = (int16_t)((x - originX) * tileWidth);
+                            const int16_t sy = (int16_t)((y - originY) * tileWidth);
                             tilesSize16Masked.Add(sx, sy, tileId);
                         }
                     }
@@ -2009,7 +1982,7 @@ void Level::SetupAutoMapTopDown(
         for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
         {
             // Projectiles
-            Actor* projectile = GetNonBlockingActor(i);
+            const Actor* projectile = GetNonBlockingActor(i);
             if (projectile != nullptr)
             {
                 if (projectile->GetX() > actorMinX &&
@@ -2019,7 +1992,7 @@ void Level::SetupAutoMapTopDown(
                 {
                     if (tileSize == 64)
                     {
-                        Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+                        const Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
                         if (actorPicture != nullptr)
                         {
                             const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
@@ -2030,11 +2003,11 @@ void Level::SetupAutoMapTopDown(
                     }
                     else
                     {
-                        const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth) - halfTileWidth;
-                        const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
                         const uint16_t tileId = GetTileIdFromActor(projectile);
-                        if (tileId > 0 && tileId < egaGraph.GetNumberOfTilesSize16(true))
+                        if (tileId > 0 && tileId < numberOfTilesSize16Masked)
                         {
+                            const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth) - halfTileWidth;
+                            const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
                             tilesSize16Masked.Add(sx, sy, tileId);
                         }
                     }
@@ -2166,16 +2139,18 @@ uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t
 {
     if (tileIndex < m_wallsInfo.size())
     {
-        if (m_wallsInfo.at(tileIndex).textureDark.size() > 1)
+        const std::vector<uint16_t>& frames = m_wallsInfo.at(tileIndex).textureDark;
+        const uint32_t numberOfFrames = (uint32_t)frames.size();
+        if (numberOfFrames > 1)
         {
             const uint32_t frameDurationInTicks = 8;
-            const uint32_t animDurationInTicks = frameDurationInTicks * (uint32_t)m_wallsInfo.at(tileIndex).textureDark.size();
+            const uint32_t animDurationInTicks = frameDurationInTicks * numberOfFrames;
             const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
-            return m_wallsInfo.at(tileIndex).textureDark[currentFrame];
+            return frames[currentFrame];
         }
         else
         {
-            return m_wallsInfo.at(tileIndex).textureDark[0];
+            return frames[0];
         }
     }
     else
@@ -2188,16 +2163,18 @@ uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_
 {
     if (tileIndex < m_wallsInfo.size())
     {
-        if (m_wallsInfo.at(tileIndex).textureLight.size() > 1)
+        const std::vector<uint16_t>& frames = m_wallsInfo.at(tileIndex).textureLight;
+        const uint32_t numberOfFrames = (uint32_t)frames.size();
+        if (numberOfFrames > 1)
         {
             const uint32_t frameDurationInTicks = 8;
-            const uint32_t animDurationInTicks = frameDurationInTicks * (uint32_t)m_wallsInfo.at(tileIndex).textureLight.size();
+            const uint32_t animDurationInTicks = frameDurationInTicks * numberOfFrames;
             const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
-            return m_wallsInfo.at(tileIndex).textureLight[currentFrame];
+            return frames[currentFrame];
         }
         else
         {
-            return m_wallsInfo.at(tileIndex).textureLight[0];
+            return frames[0];
         }
     }
     else
@@ -2322,7 +2299,7 @@ void Level::UpdateLocationNamesBestPositions()
 const std::string Level::RemoveTrailingSpaces(const std::string& str) const
 {
     const char spaceChar = ' ';
-    const int lastCharIndex = str.find_last_not_of(spaceChar);
+    const size_t lastCharIndex = str.find_last_not_of(spaceChar);
     std::string result = str.substr(0, lastCharIndex + 1);
     return result;
 }

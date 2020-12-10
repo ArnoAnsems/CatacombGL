@@ -441,34 +441,6 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_game.GetIntroView()->DrawCatalog();
     }
 
-#ifdef DRAWTIME
-    char ticsStr[40];
-    sprintf_s(ticsStr, 40, "tics (player): %d", m_gameTimer.GetTicksForPlayer());
-    renderer->RenderTextLeftAligned(ticsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,2);
-    sprintf_s(ticsStr, 40, "tics (world): %d", m_gameTimer.GetTicksForWorld());
-    renderer->RenderTextLeftAligned(ticsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,150,2);
-    sprintf_s(ticsStr, 40, "msec (player): %d", m_gameTimer.GetMillisecondsForPlayer());
-    renderer->RenderTextLeftAligned(ticsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,12);
-    sprintf_s(ticsStr, 40, "msec (world): %d", m_gameTimer.GetMilliSecondsForWorld());
-    renderer->RenderTextLeftAligned(ticsStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,150,12);
-#endif
-
-#ifdef DRAWFONT
-    for (int x = 0; x < 16; x++)
-    {
-        {
-            for (int y = 0; y < 16; y++)
-            {
-                char s[2];
-                s[0] = (y * 16) + x;
-                s[1] = 0;
-                
-                renderer.RenderTextLeftAligned(s, m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow, x * 16, y * 10);
-            }
-        }
-    }
-#endif
-
     if (m_state == InGame || m_state == EnteringLevel)
     {
         if (m_timeStampFadeEffect + 1000 > m_gameTimer.GetActualTime())
@@ -1174,7 +1146,7 @@ bool EngineCore::Think()
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
                 }
-                const float playerSpeed = 5120.0f / 65536.0f;
+                constexpr float playerSpeed = 5120.0f / 65536.0f;
                 const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
                 const bool isRunning = m_configurationSettings.GetAlwaysRun() != m_playerActions.GetActionActive(Run);
                 const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
@@ -1216,7 +1188,7 @@ bool EngineCore::Think()
                 }
                 if (m_playerInput.GetMouseXPos() != 0)
                 {
-                    const float mouseMovement = m_playerInput.GetMouseXPos() * (m_configurationSettings.GetMouseSensitivity() / 50.0f);
+                    const float mouseMovement = (float)m_playerInput.GetMouseXPos() * ((float)m_configurationSettings.GetMouseSensitivity() / 50.0f);
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
                     m_playerInput.SetMouseXPos(0);
                 }
