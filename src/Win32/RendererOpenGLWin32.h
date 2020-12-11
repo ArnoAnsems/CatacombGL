@@ -87,8 +87,8 @@ private:
     unsigned int GenerateSingleColorTexture(const egaColor color) const;
     static const std::string ErrorCodeToString(const GLenum errorCode);
 
-    void PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY);
-    void PrepareIsoRenderingText(const float originX, const float originY);
+    float PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY);
+    void PrepareIsoRenderingText(const float originX, const float originY, const float xScale);
     void RenderIsoWallCaps(const std::map <egaColor, std::vector<RenderableAutoMapIso::quadCoordinates>>& wallCaps);
     void Render3DWalls(const Renderable3DWalls& walls);
     void Render3DTiles(const Renderable3DTiles& tiles);

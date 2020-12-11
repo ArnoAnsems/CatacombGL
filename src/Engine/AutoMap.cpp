@@ -197,7 +197,7 @@ void AutoMap::ProcessInput(
 
 void AutoMap::ResetOrigin(Level& level, const AutoMapMode autoMapMode)
 {
-    if (autoMapMode == OriginalDebug)
+    if (autoMapMode == OriginalDebug && m_cheat)
     {
         m_originX = 0.0f;
         m_originY = 0.0f;

@@ -1575,7 +1575,8 @@ void Level::DrawAutoMap(
         {
             const int16_t sx = (x - (int16_t)originX) * tileWidth;
             const int16_t sy = (y - (int16_t)originY) * tileWidth;
-            if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight)
+            if (x >= 0 && x < m_levelWidth && y >= 0 && y < m_levelHeight &&
+                (cheat || IsTileClearFromFogOfWar(x, y)))
             {
                 switch (autoMapType)
                 {
@@ -1783,10 +1784,15 @@ void Level::SetupAutoMapIso(
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
         const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
-        // Location messages with a length of 1 are intentionally not shown, as Catacomb 3D has some single letter
-        // location messages on top of portals.
         if ((cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y)) &&
-            locationMessage.length() > 1)
+            // Filter out some garbage location messages from Catacomb 3D that should not be
+            // shown on the automap.
+            locationMessage != "I" &&
+            locationMessage != "Description I" &&
+            locationMessage != "Description L" &&
+            locationMessage != "Description N" &&
+            locationMessage != "Description P" &&
+            locationMessage != "Description Q")
         {
             const int16_t x = ((pair.second.x + 2) * 32) + 16;
             const int16_t y = ((pair.second.y + 2) * 32);
@@ -2035,10 +2041,15 @@ void Level::SetupAutoMapTopDown(
     for (std::pair<uint8_t, locationNameBestPos> pair : m_locationNameBestPositions)
     {
         const std::string& locationMessage = egaGraph.GetWorldLocationNames(GetLevelIndex())->GetLocationName(pair.first);
-        // Location messages with a length of 1 are intentionally not shown, as Catacomb 3D has some single letter
-        // location messages on top of portals.
         if ((cheat || IsTileClearFromFogOfWar(pair.second.x, pair.second.y)) &&
-             locationMessage.length() > 1)
+            // Filter out some garbage location messages from Catacomb 3D that should not be
+            // shown on the automap.
+            locationMessage != "I" &&
+            locationMessage != "Description I" &&
+            locationMessage != "Description L" &&
+            locationMessage != "Description N" &&
+            locationMessage != "Description P" &&
+            locationMessage != "Description Q")
         {
             if (tileSize == 64)
             {

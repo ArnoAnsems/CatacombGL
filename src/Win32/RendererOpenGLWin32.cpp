@@ -703,7 +703,7 @@ void RendererOpenGLWin32::RenderAutoMapTopDown(const RenderableAutoMapTopDown& a
 
 void RendererOpenGLWin32::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso)
 {
-    PrepareIsoRendering(
+    const float xScale = PrepareIsoRendering(
         autoMapIso.GetAspectRatio(),
         autoMapIso.GetOriginal3DViewArea(),
         autoMapIso.GetOriginX(),
@@ -743,7 +743,8 @@ void RendererOpenGLWin32::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIs
 
     PrepareIsoRenderingText(
         autoMapIso.GetOriginX(),
-        autoMapIso.GetOriginY());
+        autoMapIso.GetOriginY(),
+        xScale);
 
     RenderText(autoMapIso.GetText());
 }
@@ -758,7 +759,7 @@ bool RendererOpenGLWin32::IsOriginalScreenResolutionSupported()
     return m_openGLFramebuffer.IsSupported();
 }
 
-void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY)
+float RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const float originX, const float originY)
 {
     ViewPorts::ViewPortRect3D rect = ViewPorts::Get3D(m_windowWidth, m_windowHeight, aspectRatio, original3DViewArea);
 
@@ -780,7 +781,8 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     const double z = -1.0;
     // use this length so that camera is 1 unit away from origin
     const double dist = sqrt(1 / 3.0);
-    glOrtho(-16.0f, 16.0f, -4.0f, 4.0f, -20.0f, 20.0f);
+    const float xScale = (float)rect.width / (float)rect.height * 6.0f;
+    glOrtho(-xScale, xScale, -4.0f, 4.0f, -20.0f, 20.0f);
     gluLookAt(dist + x, dist + y, z - dist,  // position of camera
         x, y, z,   // where camera is pointing at
         0.0, 0.0, -1.0);  // which direction is up
@@ -788,9 +790,11 @@ void RendererOpenGLWin32::PrepareIsoRendering(const float aspectRatio, const Vie
     glLoadIdentity();
 
     glShadeModel(GL_SMOOTH);
+
+    return xScale;
 }
 
-void RendererOpenGLWin32::PrepareIsoRenderingText(const float originX, const float originY)
+void RendererOpenGLWin32::PrepareIsoRenderingText(const float originX, const float originY, const float xScale)
 {
     glDisable(GL_DEPTH_TEST);
 
@@ -802,7 +806,7 @@ void RendererOpenGLWin32::PrepareIsoRenderingText(const float originX, const flo
     const double z = -1.0;
     // use this length so that camera is 1 unit away from origin
     const double dist = sqrt(1 / 3.0);
-    glOrtho(-512.0f, 512.0f, -128.0f, 128.0f, -640.0f, 640.0f);
+    glOrtho(-xScale * 32.0f, xScale * 32.0f, -128.0f, 128.0f, -640.0f, 640.0f);
     gluLookAt(dist + x, dist + y, z - dist,  // position of camera
         x, y, z,   // where camera is pointing at
         0.0, 0.0, -1.0);  // which direction is up

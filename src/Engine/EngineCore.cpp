@@ -2798,8 +2798,8 @@ void EngineCore::ShowAutoMap(const bool cheat)
     if (m_state == InGame && m_level != nullptr)
     {
         m_state = AutoMapDialog;
-        m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetAutoMapMode());
         m_autoMap.SetCheat(cheat);
+        m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetAutoMapMode());
         m_gameTimer.Pause();
     }
 }
