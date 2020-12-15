@@ -1665,7 +1665,7 @@ void Level::SetupAutoMapIso(
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)
         {
-            if (!IsSolidWall(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
+            if (IsVisibleTile(x, y) && (cheat || IsTileClearFromFogOfWar(x, y)))
             {
                 // Add floor and ceiling tile
                 renderable3DTiles.AddTile(Renderable3DTiles::tileCoordinate{ (int16_t)x, (int16_t)y });
@@ -1705,7 +1705,7 @@ void Level::SetupAutoMapIso(
         for (uint16_t x = 0; x < m_levelWidth; x++)
         {
             const bool isTileClearFromFogOfWar = IsTileClearFromFogOfWar(x, y);
-            if (IsSolidWall(x, y) && (cheat || isTileClearFromFogOfWar))
+            if (!IsVisibleTile(x, y) && (cheat || isTileClearFromFogOfWar))
             {
                 const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);
                 renderableAutoMapIso.AddWallCap(x, y, wallCapMainColor, centerColor);

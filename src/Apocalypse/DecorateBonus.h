@@ -686,9 +686,9 @@ const std::map<DecorateStateId, DecorateState>gemRedStates =
 const DecorateActor decorateGemRed =
 {
     actorIdBonusGemRed,   // Id
-    58, // spawnOnAllDifficulties;
-    58, // spawnOnNormalAndHard;
-    58,  // spawnOnHard
+    40, // spawnOnAllDifficulties;
+    40, // spawnOnNormalAndHard;
+    40,  // spawnOnHard
     1,  // initialHealth;
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
@@ -726,9 +726,9 @@ const std::map<DecorateStateId, DecorateState>gemYellowStates =
 const DecorateActor decorateGemYellow =
 {
     actorIdBonusGemYellow,   // Id
-    59, // spawnOnAllDifficulties;
-    59, // spawnOnNormalAndHard;
-    59,  // spawnOnHard
+    43, // spawnOnAllDifficulties;
+    43, // spawnOnNormalAndHard;
+    43,  // spawnOnHard
     1,  // initialHealth;
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
@@ -766,9 +766,9 @@ const std::map<DecorateStateId, DecorateState>gemGreenStates =
 const DecorateActor decorateGemGreen =
 {
     actorIdBonusGemGreen,   // Id
-    60, // spawnOnAllDifficulties;
-    60, // spawnOnNormalAndHard;
-    60,  // spawnOnHard
+    41, // spawnOnAllDifficulties;
+    41, // spawnOnNormalAndHard;
+    41,  // spawnOnHard
     1,  // initialHealth;
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
@@ -806,9 +806,9 @@ const std::map<DecorateStateId, DecorateState>gemBlueStates =
 const DecorateActor decorateGemBlue =
 {
     actorIdBonusGemBlue,   // Id
-    61, // spawnOnAllDifficulties;
-    61, // spawnOnNormalAndHard;
-    61,  // spawnOnHard
+    42, // spawnOnAllDifficulties;
+    42, // spawnOnNormalAndHard;
+    42,  // spawnOnHard
     1,  // initialHealth;
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
@@ -846,9 +846,9 @@ const std::map<DecorateStateId, DecorateState>gemPurpleStates =
 const DecorateActor decorateGemPurple =
 {
     actorIdBonusGemPurple,   // Id
-    62, // spawnOnAllDifficulties;
-    62, // spawnOnNormalAndHard;
-    62,  // spawnOnHard
+    44, // spawnOnAllDifficulties;
+    44, // spawnOnNormalAndHard;
+    44,  // spawnOnHard
     1,  // initialHealth;
     35 * pixelRadius,    // size;
     Never,  // radarVisibility;
