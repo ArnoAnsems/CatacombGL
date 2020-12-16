@@ -121,7 +121,7 @@ void TextureAtlas::StoreImage(const uint16_t imageIndex, const uint8_t* const pi
         }
     }
     
-    if (offsetInPixelsX + m_imageWidth + 1 < m_textureWidth && m_imageSpacingX > 1)
+    if (offsetInPixelsX + m_imageWidth < m_textureWidth && m_imageSpacingX > 1)
     {
         // Pad column to the right
         for (uint16_t rowIndex = 0; rowIndex < m_imageHeight; rowIndex++)
@@ -147,7 +147,7 @@ void TextureAtlas::StoreImage(const uint16_t imageIndex, const uint8_t* const pi
         }
     }
 
-    if (offsetInPixelsY + m_imageHeight + 1 < m_textureHeight && m_imageSpacingY > 1)
+    if (offsetInPixelsY + m_imageHeight < m_textureHeight && m_imageSpacingY > 1)
     {
         // Pad row below
         for (uint16_t columnIndex = 0; columnIndex < m_imageWidth; columnIndex++)
