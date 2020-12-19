@@ -1763,19 +1763,16 @@ void Level::SetupAutoMapIso(
         }
     }
 
-    if (cheat)
+    for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
     {
-        for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
+        // Projectiles
+        const Actor* projectile = GetNonBlockingActor(i);
+        if (projectile != nullptr)
         {
-            // Projectiles
-            const Actor* projectile = GetNonBlockingActor(i);
-            if (projectile != nullptr)
+            const Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+            if (actorPicture != nullptr)
             {
-                const Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
-                if (actorPicture != nullptr)
-                {
-                    renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::Isometric);
-                }
+                renderableSprites.AddSprite(actorPicture, projectile->GetX(), projectile->GetY(), RenderableSprites::SpriteOrientation::Isometric);
             }
         }
     }
@@ -1987,39 +1984,36 @@ void Level::SetupAutoMapTopDown(
     }
 
     const int16_t halfTileWidth = tileWidth / 2;
-    if (cheat)
+    for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
     {
-        for (uint16_t i = 0; i < m_maxNonBlockingActors; i++)
+        // Projectiles
+        const Actor* projectile = GetNonBlockingActor(i);
+        if (projectile != nullptr)
         {
-            // Projectiles
-            const Actor* projectile = GetNonBlockingActor(i);
-            if (projectile != nullptr)
+            if (projectile->GetX() > actorMinX &&
+                projectile->GetX() < actorMaxX &&
+                projectile->GetY() > actorMinY &&
+                projectile->GetY() < actorMaxY)
             {
-                if (projectile->GetX() > actorMinX &&
-                    projectile->GetX() < actorMaxX &&
-                    projectile->GetY() > actorMinY &&
-                    projectile->GetY() < actorMaxY)
+                if (tileSize == 64)
                 {
-                    if (tileSize == 64)
+                    const Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
+                    if (actorPicture != nullptr)
                     {
-                        const Picture* actorPicture = egaGraph.GetPicture(projectile->GetPictureIndex());
-                        if (actorPicture != nullptr)
-                        {
-                            const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
-                            const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth + marginX) - halfTileWidth;
-                            const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
-                            renderableAutoMapTopDown.AddPicture(actorPicture, { sx, sy });
-                        }
+                        const int16_t marginX = (tileWidth - actorPicture->GetImageWidth()) / 2;
+                        const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth + marginX) - halfTileWidth;
+                        const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
+                        renderableAutoMapTopDown.AddPicture(actorPicture, { sx, sy });
                     }
-                    else
+                }
+                else
+                {
+                    const uint16_t tileId = GetTileIdFromActor(projectile);
+                    if (tileId > 0 && tileId < numberOfTilesSize16Masked)
                     {
-                        const uint16_t tileId = GetTileIdFromActor(projectile);
-                        if (tileId > 0 && tileId < numberOfTilesSize16Masked)
-                        {
-                            const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth) - halfTileWidth;
-                            const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
-                            tilesSize16Masked.Add(sx, sy, tileId);
-                        }
+                        const int16_t sx = (int16_t)((projectile->GetX() - originX) * tileWidth) - halfTileWidth;
+                        const int16_t sy = (int16_t)((projectile->GetY() - originY) * tileWidth) - halfTileWidth;
+                        tilesSize16Masked.Add(sx, sy, tileId);
                     }
                 }
             }
