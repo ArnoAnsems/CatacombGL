@@ -9,7 +9,7 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.4.3: 
+Current limitations as of version 0.5.0: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 * No "demo" functionality (preview slideshow of Catacomb Armageddon and Apocalypse in shareware version).
@@ -29,7 +29,8 @@ The keyboard and mouse controls for moving, shooting, etc. can be customized via
 # Additional notes
 * The original Catacomb 3D allowed the player to reconfigure movement and action keys, but CatacombGL ignores those settings. Instead, CatacombGL has its own keyboard/mouse configuration, which is shared across all four games.
 * High scores achieved in Catacomb 3D are not stored in the GOG folder, to avoid file access issues. Instead, CatacombGL stores the high scores in \%appdata%\CatacombGL\CONFIG.C3D.
-* To aid in navigating through narrow corridors, CatacombGL allows the player to slide along walls in Catacomb 3D. 
+* To aid in navigating through narrow corridors, CatacombGL allows the player to slide along walls in Catacomb 3D.
+* The automap can be opened via a configurable key, with the default being the 'O' key. The automap can be visualized in four different styles, which is configurable via the Video menu. The "original" style is based on the Catacomb 3D debug automap. Pressing the Ctrl key in the original style automap will cycle it through several different view modes, just like in the original Catacomb 3D. Only locations that were visited by the player are shown on the automap. The automap can also be opened via a cheat code, which is F10+O in Catacomb 3D and Abyss, or Backspace+O in Armageddon and Apocalypse. When this cheat code is used, then all locations are shown immediately.
 
 # License
 CatacombGL is licensed under the GNU GPLv3 license. See gpl3.txt for details. 
@@ -59,6 +60,16 @@ Special thanks goes to:
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
 
 # History
+* Version 0.5.0 (2020-12-19) New in this release:
+  * Added an automap. The automap can be opened via a configurable key, with the default being the 'O' key. The automap can be visualized in four different styles, which is configurable via the Video menu. The automap feature was suggested by Master O, with additional feedback provided by SiFi270 and NY00123.
+  * Added an option to simulate the original 320x200 screen resolution, which can be enabled via the Video menu. Suggested by Dinoaur.
+  * Added a configurable "Strafe" key, which when pressed changes the turn keys into strafe keys. This was also possible in the original games. Suggested by Dinoaur.
+  * Added an option for a mana bar, which can be enabled via the Controls menu. When enabled, the mana bar will restrict the use of the primary magic missiles. Suggested by Hellbent.
+  * Fix: create folder prior to storing the log file. Reported by InDOOMnesia.
+  * Fix: touching a wall in Catacomb 3D will now make a sound. Reported by Dinoaur.
+  * Fix: prevented enemies from occasionally spotting the player through solid walls.
+  * Fix: keep player hand high while fire button is pressed in the Catacomb Adventure series.
+
 * Version 0.4.3 (2020-03-25) New in this release:
   * Improved the performance of the OpenGL renderer.
   * Added an "Extended" mode for the "Show frame rate" setting. When set, additional information such as the name of the graphics card is displayed.
@@ -68,7 +79,6 @@ Special thanks goes to:
   * Fix: added the fizzle fade effect when opening the title screen in Catacomb 3D. Reported by Dinoaur.
   * Fix: prevent the wizard's hand from bopping while shooting magick missiles repeatedly. Reported by Dinoaur.
 
-# History
 * Version 0.4.2 (2020-02-20) New in this release:
   * Added the "fizzle fade" effect when entering a level or travelling through a magic gate. Based on code from Wolf4SDL.
   * Fix: corrected the aspect ratio of the 3D view to match with the original 4:3 monitors.
