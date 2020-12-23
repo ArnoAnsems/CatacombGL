@@ -510,7 +510,10 @@ void EngineCore::EnterKeyReleased()
         if (m_readingScroll != 255)
         {
             m_readingScroll = 255;
-            m_gameTimer.Resume();
+            if (!m_takingChest)
+            {
+                m_gameTimer.Resume();
+            }
         }
 
         if (m_state == Introduction)
@@ -548,12 +551,18 @@ void EngineCore::EnterKeyReleased()
                 m_warpToLevel = (uint8_t)level;
             }
             m_warpCheatTextField.clear();
-            m_gameTimer.Resume();
+            if (!m_takingChest)
+            {
+                m_gameTimer.Resume();
+            }
         }
         else if (m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog)
         {
             m_state = InGame;
-            m_gameTimer.Resume();
+            if (!m_takingChest)
+            {
+                m_gameTimer.Resume();
+            }
         }
     }
 }
@@ -840,7 +849,10 @@ bool EngineCore::Think()
                 else if (m_state == AutoMapDialog)
                 {
                     m_state = InGame;
-                    m_gameTimer.Resume();
+                    if (!m_takingChest)
+                    {
+                        m_gameTimer.Resume();
+                    }
                 }
             }
 
@@ -1198,26 +1210,26 @@ bool EngineCore::Think()
                 ThinkActors();
                 ThinkNonBlockingActors();
             }
-        }
 
-        if (m_takingChest)
-        {
-            if (!m_game.GetAudioPlayer()->IsPlaying())
+            if (m_takingChest && !m_menu->IsActive() && m_readingScroll == 255)
             {
-                if (m_playerInventory.HasItemsInChest())
+                if (!m_game.GetAudioPlayer()->IsPlaying())
                 {
-                    m_playerInventory.GiveNextItemInChest();
-                }
-                else
-                {
-                    m_takingChest = false;
-                    m_gameTimer.Resume();
+                    if (m_playerInventory.HasItemsInChest())
+                    {
+                        m_playerInventory.GiveNextItemInChest();
+                    }
+                    else
+                    {
+                        m_takingChest = false;
+                        m_gameTimer.Resume();
+                    }
                 }
             }
         }
 
         // Check for player dead
-        if (m_state == InGame && m_level->GetPlayerActor()->IsDead())
+        if (m_level->GetPlayerActor()->IsDead())
         {
             if (!m_gameTimer.IsPaused())
             {
@@ -2911,7 +2923,7 @@ void EngineCore::OpenMenu()
 void EngineCore::CloseMenu()
 {
     m_menu->SetActive(false);
-    if (m_state == InGame)
+    if (m_state == InGame && !m_takingChest)
     {
         m_gameTimer.Resume();
     }
