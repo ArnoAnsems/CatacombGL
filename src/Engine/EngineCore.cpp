@@ -374,8 +374,12 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_state == WarpCheatDialog)
     {
         DrawCenteredTiledWindow(renderer, 26, 3);
-        const uint8_t lastLevel = m_game.GetGameMaps()->GetNumberOfLevels() - 1;
-        const std::string warpText = "Warp to which level(0-" + std::to_string(lastLevel) + "):" + m_warpCheatTextField;
+        // In Catacomb 3-D, the on-screen level indices start at 1 instead of 0.
+        const bool onScreenLevelIndexStartsAtZero = (m_game.GetId() != 5);
+        const uint8_t firstLevel = onScreenLevelIndexStartsAtZero ? 0 : 1;
+        const uint8_t totalNumberOfLevels = m_game.GetGameMaps()->GetNumberOfLevels();
+        const uint8_t lastLevel = onScreenLevelIndexStartsAtZero ? totalNumberOfLevels - 1 : totalNumberOfLevels;
+        const std::string warpText = "Warp to which level(" + std::to_string(firstLevel) + "-" + std::to_string(lastLevel) + "):" + m_warpCheatTextField;
         RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
         renderableText.LeftAligned(warpText, EgaDarkGray, 70, 56);
         renderer.RenderText(renderableText);
@@ -545,10 +549,12 @@ void EngineCore::EnterKeyReleased()
         {
             m_state = InGame;
             // Warp to level
-            const int level = atoi(m_warpCheatTextField.c_str());
-            if (level >= 0 && level < m_game.GetGameMaps()->GetNumberOfLevels())
+            const int levelIndexOnScreen = atoi(m_warpCheatTextField.c_str());
+            // In Catacomb 3-D, the on-screen level indices start at 1 instead of 0.
+            const int levelIndexInGameMaps = (m_game.GetId() == 5) ? levelIndexOnScreen - 1 : levelIndexOnScreen;
+            if (levelIndexInGameMaps >= 0 && levelIndexInGameMaps < m_game.GetGameMaps()->GetNumberOfLevels())
             {
-                m_warpToLevel = (uint8_t)level;
+                m_warpToLevel = (uint8_t)levelIndexInGameMaps;
             }
             m_warpCheatTextField.clear();
             if (!m_takingChest)
