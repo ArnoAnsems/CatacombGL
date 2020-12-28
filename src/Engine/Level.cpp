@@ -1855,6 +1855,12 @@ uint16_t Level::GetTileIdFromActor(const Actor* actor)
     return (firstTileId > 0) ? firstTileId - 1 : 0;
 }
 
+uint16_t inline Level::HideDestructibleTiles(const uint16_t tileIndex) const
+{
+    // In Catacomb 3-D, the seven destructable tiles are preceded by their seven non-destructible counterparts.
+    return (m_wallsInfo.at(tileIndex).wallType == WTDestructable) ? tileIndex - 7 : tileIndex;
+}
+
 void Level::SetupAutoMapTopDown(
     RenderableAutoMapTopDown& renderableAutoMapTopDown,
     EgaGraph& egaGraph,
@@ -1908,7 +1914,7 @@ void Level::SetupAutoMapTopDown(
                         }
                         else
                         {
-                            const uint16_t tileIndex = (wallIndex < numberOfTilesSize16) ? wallIndex : 0;
+                            const uint16_t tileIndex = (wallIndex < numberOfTilesSize16) ? HideDestructibleTiles(wallIndex) : 0;
                             tilesSize16.Add(sx, sy, tileIndex);
                         }
                         const egaColor centerColor = GetWallCapCenterColor(x, y, cheat);

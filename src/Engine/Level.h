@@ -217,6 +217,7 @@ private:
         const float pointX, const float pointY,
         const float x1, const float y1,
         const float x2, const float y2);
+    uint16_t inline HideDestructibleTiles(const uint16_t tileIndex) const;
 
     const uint16_t m_levelWidth;
     const uint16_t m_levelHeight;
