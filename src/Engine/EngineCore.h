@@ -136,6 +136,7 @@ private:
     void LoadGameFromFileWithFullPath(const std::string filename);
     void LoadGameFromFile(const std::string filename);
     bool AreScrollsPresent() const;
+    void StartMusicIfNeeded();
 
     IGame& m_game;
     ConfigurationSettings& m_configurationSettings;

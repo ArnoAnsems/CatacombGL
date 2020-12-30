@@ -676,20 +676,14 @@ bool EngineCore::Think()
         {
             const std::string& saveGameName = m_menu->GetNewSaveGameName();
             LoadGameFromFile(saveGameName);
-            if (m_game.GetId() == 5 && m_configurationSettings.GetMusicOn())
-            {
-                m_game.GetAudioPlayer()->StartMusic(0);
-            }
+            StartMusicIfNeeded();
             m_playerInput.ClearJustPressed();
             return false;
         }
         else if (command == MenuCommandCloseMenu)
         {
             CloseMenu();
-            if (m_game.GetId() == 5 && m_state == InGame && m_configurationSettings.GetMusicOn())
-            {
-                m_game.GetAudioPlayer()->StartMusic(0);
-            }
+            StartMusicIfNeeded();
             m_playerInput.ClearJustPressed();
             return false;
         }
@@ -940,10 +934,7 @@ bool EngineCore::Think()
         {
             m_state = InGame;
             m_setOverlayOnNextDraw = true;
-            if (m_game.GetId() == 5 && m_configurationSettings.GetMusicOn() && !m_menu->IsActive())
-            {
-                m_game.GetAudioPlayer()->StartMusic(0);
-            }
+            StartMusicIfNeeded();
         }
     }
 
@@ -3154,4 +3145,15 @@ bool EngineCore::AreScrollsPresent() const
     }
 
     return scrollsArePresent;
+}
+
+void EngineCore::StartMusicIfNeeded()
+{
+    if (m_game.GetId() == 5 &&
+        m_configurationSettings.GetMusicOn() &&
+        (m_state == InGame || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == WarpCheatDialog || m_state == AutoMapDialog) &&
+        !m_menu->IsActive())
+    {
+        m_game.GetAudioPlayer()->StartMusic(0);
+    }
 }
