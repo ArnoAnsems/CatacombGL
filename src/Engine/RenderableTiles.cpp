@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "RenderableTiles.h"
+#include <string>
 
 RenderableTiles::RenderableTiles(const TextureAtlas& textureAtlas) :
     m_textureAtlas(textureAtlas),
@@ -121,4 +122,19 @@ void RenderableTiles::DrawRadioButton(
         (!selected && flash) ? TileIdListRadioButtonNotSelectedFlashing :
         TileIdListRadioButtonNotSelected;
     m_tiles.push_back({ x, y, imageId });
+}
+
+void RenderableTiles::DrawNumberRightAligned(
+    const int16_t x,
+    const int16_t y,
+    const int16_t number)
+{
+    const std::string str = std::to_string(number);
+    const int16_t length = (int16_t)str.length();
+    int16_t tilex = x - (8 * (int16_t)length);
+    for (int16_t i = 0; i < length; i++)
+    {
+        m_tiles.push_back({ tilex, y, (uint16_t)(RenderableTiles::TileIdFirstNumber + str.at(i) - '0') });
+        tilex += 8;
+    }
 }

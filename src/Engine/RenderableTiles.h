@@ -66,6 +66,10 @@ public:
         const int16_t y,
         const bool selected,
         const bool flash);
+    void DrawNumberRightAligned(
+        const int16_t x,
+        const int16_t y,
+        const int16_t number);
 
     static const uint16_t TileIdWindowTopLeft = 0u;
     static const uint16_t TileIdWindowTop = 1u;

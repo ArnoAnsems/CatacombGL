@@ -457,16 +457,19 @@ const DecorateActor& GameAbyss::GetPlayerActor()
 void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float /*playerAngle*/, const uint8_t /*levelIndex*/, const uint16_t /*shotPower*/, const uint32_t /*points*/)
 {
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsAbyss::STATUSPIC), 0, 120);
+
     const Font& font = *GetEgaGraph()->GetFont(3);
     RenderableText renderableText(font);
-    DrawHealth(renderableText, health);
+    RenderableTiles tiles(*GetEgaGraph()->GetTilesSize8());
+    DrawHealth(tiles, health);
     DrawScrolls(renderableText, playerInventory);
-    DrawKeys(renderableText, playerInventory);
-    DrawBonus(renderableText, playerInventory);
+    DrawKeys(tiles, playerInventory);
+    DrawBonus(tiles, playerInventory);
     DrawGems(playerInventory);
 
     renderableText.Centered(locationMessage, EgaBrightYellow, 160, 121);
     m_renderer.RenderText(renderableText);
+    m_renderer.RenderTiles(tiles);
 
     if (wideScreenMargin > 0)
     {
@@ -474,11 +477,10 @@ void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationM
     }
 }
 
-void GameAbyss::DrawHealth(RenderableText& renderableText, const int16_t health)
+void GameAbyss::DrawHealth(RenderableTiles& renderableTiles, const int16_t health)
 {
     const uint16_t percentage = (uint16_t) health;
-
-    renderableText.Number(percentage, 3, EgaBrightYellow, 74, 176);
+    renderableTiles.DrawNumberRightAligned(96, 177, health);
 
     uint16_t picnum;
     if (percentage > 75)
@@ -518,19 +520,19 @@ void GameAbyss::DrawScrolls(RenderableText& renderableText, const PlayerInventor
     }
 }
 
-void GameAbyss::DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory)
+void GameAbyss::DrawKeys(RenderableTiles& renderableTiles, const PlayerInventory& playerInventory)
 {
-    renderableText.Number(playerInventory.GetKeys(RedKey), 2, EgaBrightYellow, 160, 149);
-    renderableText.Number(playerInventory.GetKeys(YellowKey), 2, EgaBrightYellow, 184, 176);
-    renderableText.Number(playerInventory.GetKeys(GreenKey), 2, EgaBrightYellow, 184, 149);
-    renderableText.Number(playerInventory.GetKeys(BlueKey), 2, EgaBrightYellow, 160, 176);
+    renderableTiles.DrawNumberRightAligned(176, 150, playerInventory.GetKeys(RedKey));
+    renderableTiles.DrawNumberRightAligned(200, 177, playerInventory.GetKeys(YellowKey));
+    renderableTiles.DrawNumberRightAligned(200, 150, playerInventory.GetKeys(GreenKey));
+    renderableTiles.DrawNumberRightAligned(176, 177, playerInventory.GetKeys(BlueKey));
 }
 
-void GameAbyss::DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory)
+void GameAbyss::DrawBonus(RenderableTiles& renderableTiles, const PlayerInventory& playerInventory)
 {
-    renderableText.Number(playerInventory.GetBolts(), 2, EgaBrightYellow, 134, 137);
-    renderableText.Number(playerInventory.GetNukes(), 2, EgaBrightYellow, 134, 155);
-    renderableText.Number(playerInventory.GetPotions(), 2, EgaBrightYellow, 134, 173);
+    renderableTiles.DrawNumberRightAligned(152, 138, playerInventory.GetBolts());
+    renderableTiles.DrawNumberRightAligned(152, 156, playerInventory.GetNukes());
+    renderableTiles.DrawNumberRightAligned(152, 174, playerInventory.GetPotions());
 }
 
 void GameAbyss::DrawGems(const PlayerInventory& playerInventory)

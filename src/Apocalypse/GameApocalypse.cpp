@@ -459,13 +459,15 @@ void GameApocalypse::DrawStatusBar(const int16_t health, const std::string& loca
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsApocalypse::STATUSPIC), 0, 120);
     const Font& font = *GetEgaGraph()->GetFont(3);
     RenderableText renderableText(font);
-    DrawHealth(renderableText, health);
-    DrawKeys(renderableText, playerInventory);
-    DrawBonus(renderableText, playerInventory);
+    RenderableTiles tiles(*GetEgaGraph()->GetTilesSize8());
+    DrawHealth(tiles, health);
+    DrawKeys(tiles, playerInventory);
+    DrawBonus(tiles, playerInventory);
     DrawGems(playerInventory);
 
     renderableText.Centered(locationMessage, EgaBrightYellow, 160, 121);
     m_renderer.RenderText(renderableText);
+    m_renderer.RenderTiles(tiles);
 
     if (wideScreenMargin > 0)
     {
@@ -473,11 +475,11 @@ void GameApocalypse::DrawStatusBar(const int16_t health, const std::string& loca
     }
 }
 
-void GameApocalypse::DrawHealth(RenderableText& renderableText, const int16_t health)
+void GameApocalypse::DrawHealth(RenderableTiles& renderableTiles, const int16_t health)
 {
     const uint16_t percentage = (uint16_t)health;
 
-    renderableText.Number(percentage, 3, EgaBrightYellow, 90, 176);
+    renderableTiles.DrawNumberRightAligned(112, 177, health);
 
     uint16_t picnum;
     if (percentage > 75)
@@ -504,19 +506,19 @@ void GameApocalypse::DrawHealth(RenderableText& renderableText, const int16_t he
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picnum), 80, 134);
 }
 
-void GameApocalypse::DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory)
+void GameApocalypse::DrawKeys(RenderableTiles& renderableTiles, const PlayerInventory& playerInventory)
 {
-    renderableText.Number(playerInventory.GetKeys(RedKey), 2, EgaBrightYellow, 192, 149);
-    renderableText.Number(playerInventory.GetKeys(YellowKey), 2, EgaBrightYellow, 216, 176);
-    renderableText.Number(playerInventory.GetKeys(GreenKey), 2, EgaBrightYellow, 216, 149);
-    renderableText.Number(playerInventory.GetKeys(BlueKey), 2, EgaBrightYellow, 192, 176);
+    renderableTiles.DrawNumberRightAligned(208, 150, playerInventory.GetKeys(RedKey));
+    renderableTiles.DrawNumberRightAligned(232, 177, playerInventory.GetKeys(YellowKey));
+    renderableTiles.DrawNumberRightAligned(232, 150, playerInventory.GetKeys(GreenKey));
+    renderableTiles.DrawNumberRightAligned(208, 177, playerInventory.GetKeys(BlueKey));
 }
 
-void GameApocalypse::DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory)
+void GameApocalypse::DrawBonus(RenderableTiles& renderableTiles, const PlayerInventory& playerInventory)
 {
-    renderableText.Number(playerInventory.GetBolts(), 2, EgaBrightYellow, 158, 137);
-    renderableText.Number(playerInventory.GetNukes(), 2, EgaBrightYellow, 158, 155);
-    renderableText.Number(playerInventory.GetPotions(), 2, EgaBrightYellow, 158, 173);
+    renderableTiles.DrawNumberRightAligned(176, 138, playerInventory.GetBolts());
+    renderableTiles.DrawNumberRightAligned(176, 156, playerInventory.GetNukes());
+    renderableTiles.DrawNumberRightAligned(176, 174, playerInventory.GetPotions());
 }
 
 void GameApocalypse::DrawGems(const PlayerInventory& playerInventory)

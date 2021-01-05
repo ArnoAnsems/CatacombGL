@@ -86,9 +86,9 @@ public:
     const ManaBar::ManaBarConfig& GetManaBarConfig() override;
 
 private:
-    void DrawHealth(RenderableText& renderableText, const int16_t health);
-    void DrawKeys(RenderableText& renderableText, const PlayerInventory& playerInventory);
-    void DrawBonus(RenderableText& renderableText, const PlayerInventory& playerInventory);
+    void DrawHealth(RenderableTiles& renderableTiles, const int16_t health);
+    void DrawKeys(RenderableTiles& renderableTiles, const PlayerInventory& playerInventory);
+    void DrawBonus(RenderableTiles& renderableTiles, const PlayerInventory& playerInventory);
     void DrawGems(const PlayerInventory& playerInventory);
 
     IIntroView* m_introView;
