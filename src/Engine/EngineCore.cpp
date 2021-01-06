@@ -301,14 +301,15 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 // Radar
                 if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit)
                 {
-                    const float radarCenterX = (31 * 8) + (51 / 2) + 2;
-                    const float radarCenterY = (200 - 11 - 8) - (51 / 2) - 2;
-                    const float radarXRadius = 113.0f / 5.0f;
-                    const float radarYRadius = 113.0f / 7.0f;
-                    const float northIconoffsetFromCenterX = -(radarXRadius * sin(m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f));
-                    const float northIconoffsetFromCenterY = -(radarYRadius * cos(m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f));
-                    const uint16_t northIconScreenOffsetX = (uint16_t)(radarCenterX + northIconoffsetFromCenterX - 3);
-                    const uint16_t northIconScreenOffsetY = (uint16_t)(radarCenterY + northIconoffsetFromCenterY - 3);
+                    const float radarCenterX = 276.5f;
+                    const float radarCenterY = 153.5f;
+                    const float radarXRadius = 21.0f;
+                    const float radarYRadius = 15.0f;
+                    const float playerAngleInRadians = m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f;
+                    const float northIconoffsetFromCenterX = radarXRadius * sin(playerAngleInRadians);
+                    const float northIconoffsetFromCenterY = radarYRadius * cos(playerAngleInRadians);
+                    const uint16_t northIconScreenOffsetX = (uint16_t)(radarCenterX - northIconoffsetFromCenterX - 4.5f);
+                    const uint16_t northIconScreenOffsetY = (uint16_t)(radarCenterY - northIconoffsetFromCenterY - 2.5f);
                     renderer.Render2DPicture(m_game.GetEgaGraph()->GetSprite(m_game.GetNorthIconSprite()), northIconScreenOffsetX, northIconScreenOffsetY);
                     renderer.Render2DBar((int16_t)radarCenterX, (int16_t)radarCenterY, 1u, 1u, EgaBrightWhite);
 
