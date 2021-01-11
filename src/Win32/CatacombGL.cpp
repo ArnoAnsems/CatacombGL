@@ -61,6 +61,7 @@ PlayerInput playerInput;
 SystemWin32 systemWin32;
 ConfigurationSettings m_configurationSettings;
 Console* m_console;
+uint32_t m_previousMouseUpdateTimestamp = 0;
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
@@ -194,17 +195,23 @@ void UpdatePlayerInput()
         playerInput.SetKeyPressed(SDL_GetKeyFromScancode((SDL_Scancode)(i)), state[i]);
     }
 
-    int x = 0;
-    int y = 0;
-    const uint32_t mouseState = SDL_GetRelativeMouseState(&x, &y);
-    playerInput.SetMouseXPos(x);
-    playerInput.SetMouseYPos(y);
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseState & SDL_BUTTON_LMASK);
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseState & SDL_BUTTON_MMASK);
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseState & SDL_BUTTON_RMASK);
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_X1, mouseState & SDL_BUTTON_X1MASK);
-    playerInput.SetMouseButtonPressed(SDL_BUTTON_X2, mouseState & SDL_BUTTON_X2MASK);
-    playerInput.SetHasFocus(SDL_GetMouseFocus() == SDLwindow);
+    const uint32_t timestamp = SDL_GetTicks();
+    const uint32_t minimumTimeBetweenMouseUpdates = 10u; // in milliseconds
+    if (timestamp >= m_previousMouseUpdateTimestamp + minimumTimeBetweenMouseUpdates)
+    {
+        int x = 0;
+        int y = 0;
+        const uint32_t mouseState = SDL_GetRelativeMouseState(&x, &y);
+        playerInput.SetMouseXPos(x);
+        playerInput.SetMouseYPos(y);
+        playerInput.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseState & SDL_BUTTON_LMASK);
+        playerInput.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseState & SDL_BUTTON_MMASK);
+        playerInput.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseState & SDL_BUTTON_RMASK);
+        playerInput.SetMouseButtonPressed(SDL_BUTTON_X1, mouseState & SDL_BUTTON_X1MASK);
+        playerInput.SetMouseButtonPressed(SDL_BUTTON_X2, mouseState & SDL_BUTTON_X2MASK);
+        playerInput.SetHasFocus(SDL_GetMouseFocus() == SDLwindow);
+        m_previousMouseUpdateTimestamp = timestamp;
+    }
 }
 
 void HandleWindowEvent(const SDL_WindowEvent * event)

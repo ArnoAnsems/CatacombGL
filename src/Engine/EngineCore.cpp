@@ -783,6 +783,8 @@ bool EngineCore::Think()
             m_gameTimer.GetActualTime(),
             m_configurationSettings.GetAutoMapMode(),
             m_game.GetOriginal3DViewArea());
+        m_playerInput.SetMouseXPos(0);
+        m_playerInput.SetMouseYPos(0);
     }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
