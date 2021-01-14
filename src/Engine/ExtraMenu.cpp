@@ -24,6 +24,30 @@ const uint8_t subMenuSound = 3;
 const uint8_t subMenuRestoreGame = 4;
 const uint8_t subMenuSaveGame = 5;
 
+const uint8_t menuItemMainStartNewGame = 0;
+const uint8_t menuItemMainRestoreGame = 1;
+const uint8_t menuItemMainSaveGame = 2;
+const uint8_t menuItemMainVideo = 3;
+const uint8_t menuItemMainSound = 4;
+const uint8_t menuItemMainControls = 5;
+const uint8_t menuItemMainExitGame = 6;
+
+const uint8_t menuItemVideoBack = 0;
+const uint8_t menuItemVideoScreenMode = 1;
+const uint8_t menuItemVideoScreenResolution = 2;
+const uint8_t menuItemVideoAspectRatio = 3;
+const uint8_t menuItemVideoFov = 4;
+const uint8_t menuItemVideoTextureFilter = 5;
+const uint8_t menuItemVideoDepthShading = 6;
+const uint8_t menuItemVideoShowFps = 7;
+const uint8_t menuItemVideoVSync = 8;
+const uint8_t menuItemVideoAutoMapMode = 9;
+
+const uint8_t menuItemControlsBack = 0;
+
+const uint8_t menuItemSoundBack = 0;
+const uint8_t menuItemSoundMode = 1;
+
 const uint16_t browseMenuSound = 0;
 
 ExtraMenu::ExtraMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames) :
@@ -144,7 +168,7 @@ void ExtraMenu::MenuDown()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuMain)
         {
-            if (m_menuItemSelected == 6)
+            if (m_menuItemSelected == menuItemMainExitGame)
             {
                 m_menuItemSelected = 0;
             }
@@ -152,14 +176,14 @@ void ExtraMenu::MenuDown()
             {
                 m_menuItemSelected++;
             }
-            if (m_menuItemSelected == 2 && !m_saveGameEnabled)
+            if (m_menuItemSelected == menuItemMainSaveGame && !m_saveGameEnabled)
             {
                 m_menuItemSelected++;
             }
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 9)
+            if (m_menuItemSelected == menuItemVideoAutoMapMode)
             {
                 m_menuItemSelected = 0;
                 m_menuItemOffset = 0;
@@ -193,7 +217,7 @@ void ExtraMenu::MenuDown()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 1;
+                m_menuItemSelected = menuItemSoundMode;
             }
             else
             {
@@ -247,13 +271,13 @@ void ExtraMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 6;
+                m_menuItemSelected = menuItemMainExitGame;
             }
             else
             {
                 m_menuItemSelected--;
             }
-            if (m_menuItemSelected == 2 && !m_saveGameEnabled)
+            if (m_menuItemSelected == menuItemMainSaveGame && !m_saveGameEnabled)
             {
                 m_menuItemSelected--;
             }
@@ -262,7 +286,7 @@ void ExtraMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 9;
+                m_menuItemSelected = menuItemVideoAutoMapMode;
                 m_menuItemOffset = m_menuItemSelected - 7;
             }
             else
@@ -294,7 +318,7 @@ void ExtraMenu::MenuUp()
         {
             if (m_menuItemSelected == 0)
             {
-                m_menuItemSelected = 1;
+                m_menuItemSelected = menuItemSoundMode;
             }
             else
             {
@@ -346,7 +370,7 @@ void ExtraMenu::MenuLeft()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 4)
+            if (m_menuItemSelected == menuItemVideoFov)
             {
                 if (m_configurationSettings.GetFov() > 25)
                 {
@@ -360,14 +384,15 @@ void ExtraMenu::MenuLeft()
         }
         else if (m_subMenuSelected == subMenuControls)
         {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+            const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
+            if (m_menuItemSelected == numberOfActionLabels + 1)
             {
                 if (m_configurationSettings.GetMouseSensitivity() > 1)
                 {
                     m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() - 1);
                 }
             }
-            else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            else if (m_menuItemSelected == numberOfActionLabels + 2)
             {
                 if (m_configurationSettings.GetTurnSpeed() > 100)
                 {
@@ -385,7 +410,7 @@ void ExtraMenu::MenuRight()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 4)
+            if (m_menuItemSelected == menuItemVideoFov)
             {
                 if (m_configurationSettings.GetFov() < 45)
                 {
@@ -399,14 +424,15 @@ void ExtraMenu::MenuRight()
         }
         else if (m_subMenuSelected == subMenuControls)
         {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+            const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
+            if (m_menuItemSelected == numberOfActionLabels + 1)
             {
                 if (m_configurationSettings.GetMouseSensitivity() < 20)
                 {
                     m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() + 1);
                 }
             }
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            if (m_menuItemSelected == numberOfActionLabels + 2)
             {
                 if (m_configurationSettings.GetTurnSpeed() < 250)
                 {
@@ -422,54 +448,54 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     MenuCommand command = MenuCommandNone;
     if (m_subMenuSelected == subMenuMain) // Main menu
     {
-        if (m_menuItemSelected == 0)
+        if (m_menuItemSelected == menuItemMainStartNewGame)
         {
             // New game
             command = MenuCommandStartNewGame;
             m_menuActive = false;
         }
-        else if (m_menuItemSelected == 1)
+        else if (m_menuItemSelected == menuItemMainRestoreGame)
         {
             m_subMenuSelected = subMenuRestoreGame;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 2)
+        else if (m_menuItemSelected == menuItemMainSaveGame)
         {
             m_subMenuSelected = subMenuSaveGame;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 3)
+        else if (m_menuItemSelected == menuItemMainVideo)
         {
             // Video
             m_subMenuSelected = subMenuVideo;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 4)
+        else if (m_menuItemSelected == menuItemMainSound)
         {
             // Sound
             m_subMenuSelected = subMenuSound;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 5)
+        else if (m_menuItemSelected == menuItemMainControls)
         {
             // Controls
             m_subMenuSelected = subMenuControls;
             m_menuItemSelected = 0;
             m_menuItemOffset = 0;
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == menuItemMainExitGame)
         {
             command = MenuCommandExitGame;
         }
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        if (m_menuItemSelected == 0)
+        if (m_menuItemSelected == menuItemVideoBack)
         {
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 3;
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = menuItemMainVideo;
         }
-        else if (m_menuItemSelected == 1)
+        else if (m_menuItemSelected == menuItemVideoScreenMode)
         {
             if (m_configurationSettings.GetScreenMode() == Windowed)
             {
@@ -484,7 +510,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 m_configurationSettings.SetScreenMode(Windowed);
             }
         }
-        else if (m_menuItemSelected == 2)
+        else if (m_menuItemSelected == menuItemVideoScreenResolution)
         {
             if (m_configurationSettings.GetScreenResolution() == Original)
             {
@@ -495,7 +521,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 m_configurationSettings.SetScreenResolution(Original);
             }
         }
-        else if (m_menuItemSelected == 3)
+        else if (m_menuItemSelected == menuItemVideoAspectRatio)
         {
             if (m_configurationSettings.GetAspectRatio() == 1)
             {
@@ -506,7 +532,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 m_configurationSettings.SetAspectRatio(1);
             }
         }
-        else if (m_menuItemSelected == 5)
+        else if (m_menuItemSelected == menuItemVideoTextureFilter)
         {
             if (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest)
             {
@@ -517,11 +543,11 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                     m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
             }
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == menuItemVideoDepthShading)
         {
             m_configurationSettings.SetDepthShading(!m_configurationSettings.GetDepthShading());
         }
-        else if (m_menuItemSelected == 7)
+        else if (m_menuItemSelected == menuItemVideoShowFps)
         {
             const ShowFpsMode previousShowFpsMode = m_configurationSettings.GetShowFps();
             const ShowFpsMode nextShowFpsMode =
@@ -530,11 +556,11 @@ MenuCommand ExtraMenu::EnterKeyPressed()
                 Off;
             m_configurationSettings.SetShowFps(nextShowFpsMode);
         }
-        else if (m_menuItemSelected == 8)
+        else if (m_menuItemSelected == menuItemVideoVSync)
         {
             m_configurationSettings.SetVSync(!m_configurationSettings.GetVSync());
         }
-        else if (m_menuItemSelected == 9)
+        else if (m_menuItemSelected == menuItemVideoAutoMapMode)
         {
             const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
             const AutoMapMode nextAutoMapMode =
@@ -547,33 +573,34 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuControls)
     {
-        if (m_menuItemSelected == 0)
+        const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
+        if (m_menuItemSelected == menuItemControlsBack)
         {
             // Go back to main menu
             m_subMenuSelected = 0;
             m_menuItemSelected = 5;
         }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
+        else if (m_menuItemSelected == numberOfActionLabels)
         {
             // Mouse look
             m_configurationSettings.SetMouseLook(!m_configurationSettings.GetMouseLook());
         }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
+        else if (m_menuItemSelected == numberOfActionLabels + 3)
         {
             // Always run
             m_configurationSettings.SetAlwaysRun(!m_configurationSettings.GetAlwaysRun());
         }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
+        else if (m_menuItemSelected == numberOfActionLabels + 4)
         {
             // Auto fire
             m_configurationSettings.SetAutoFire(!m_configurationSettings.GetAutoFire());
         }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5)
+        else if (m_menuItemSelected == numberOfActionLabels + 5)
         {
             // Mana bar
             m_configurationSettings.SetManaBar(!m_configurationSettings.GetManaBar());
         }
-        else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+        else if (m_menuItemSelected < numberOfActionLabels + 1)
         {
             // Any of the control options
             if (!m_waitingForKeyToBind)
@@ -584,12 +611,12 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuSound)
     {
-        if (m_menuItemSelected == 0)
+        if (m_menuItemSelected == menuItemSoundBack)
         {
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 4;
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = menuItemMainSound;
         }
-        else if (m_menuItemSelected == 1)
+        else if (m_menuItemSelected == menuItemSoundMode)
         {
             if (m_configurationSettings.GetSoundMode() == 0)
             {
@@ -609,8 +636,8 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     {
         if (m_menuItemSelected == 0)
         {
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 1;
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = menuItemMainRestoreGame;
         }
         else
         {
@@ -622,8 +649,8 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     {
         if (m_menuItemSelected == 0)
         {
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 2;
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = menuItemMainSaveGame;
         }
         else if (m_menuItemSelected == 1)
         {
@@ -701,11 +728,11 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         uint16_t index = 0;
         while (index < 8)
         {
-            if (index + m_menuItemOffset == 0)
+            if (index + m_menuItemOffset == menuItemVideoBack)
             {
                 renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 1)
+            else if (index + m_menuItemOffset == menuItemVideoScreenMode)
             {
                 renderableText.LeftAligned("Screen Mode", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* screenModeStr =
@@ -714,39 +741,39 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
                     "Borderless";
                 renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 2)
+            else if (index + m_menuItemOffset == menuItemVideoScreenResolution)
             {
                 const bool screenResolutionNotSupported = !renderer.IsOriginalScreenResolutionSupported();
                 renderableText.LeftAligned("Screen Resolution", (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* screenResolutionStr = (screenResolutionNotSupported) ? "Not supported" : (m_configurationSettings.GetScreenResolution() == Original) ? "Original (320x200)" : "High";
                 renderableText.LeftAligned(screenResolutionStr, (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 3)
+            else if (index + m_menuItemOffset == menuItemVideoAspectRatio)
             {
                 renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
                 renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 4)
+            else if (index + m_menuItemOffset == menuItemVideoFov)
             {
                 renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 char fovStr[40];
                 sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
                 renderableText.LeftAligned(fovStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 5)
+            else if (index + m_menuItemOffset == menuItemVideoTextureFilter)
             {
                 renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
                 renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 6)
+            else if (index + m_menuItemOffset == menuItemVideoDepthShading)
             {
                 renderableText.LeftAligned("Depth shading", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* depthShadingStr = (m_configurationSettings.GetDepthShading()) ? "Enabled" : "Disabled";
                 renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 7)
+            else if (index + m_menuItemOffset == menuItemVideoShowFps)
             {
                 renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
@@ -756,14 +783,14 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
                     "Off";
                 renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 8)
+            else if (index + m_menuItemOffset == menuItemVideoVSync)
             {
                 const bool vsyncNotSupported = !renderer.IsVSyncSupported();
                 renderableText.LeftAligned("VSync", (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const char* vsyncStr = (vsyncNotSupported) ? "Not supported" : (m_configurationSettings.GetVSync()) ? "Enabled" : "Disabled";
                 renderableText.LeftAligned(vsyncStr, (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
-            else if (index + m_menuItemOffset == 9)
+            else if (index + m_menuItemOffset == menuItemVideoAutoMapMode)
             {
                 renderableText.LeftAligned("Automap", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
                 const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
@@ -790,7 +817,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         uint16_t index = 0;
         while (index < 8)
         {
-            if (index + m_menuItemOffset == 0)
+            if (index + m_menuItemOffset == menuItemControlsBack)
             {
                 renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
             }
@@ -859,10 +886,10 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         RenderableText renderableText(*egaGraph->GetFont(3));
         renderableText.Centered("Sound", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
-        renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        renderableText.LeftAligned("Sound Mode", (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
+        renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == menuItemSoundBack) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
+        renderableText.LeftAligned("Sound Mode", (m_menuItemSelected == menuItemSoundMode) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
         const char* soundModeStr = (m_configurationSettings.GetSoundMode() == 0) ? "Off" : (m_configurationSettings.GetSoundMode() == 1) ? "PC Speaker" : "Adlib";
-        renderableText.LeftAligned(soundModeStr, (m_menuItemSelected == 1) ? EgaBrightCyan : EgaBrightWhite,xOffset2,40);
+        renderableText.LeftAligned(soundModeStr, (m_menuItemSelected == menuItemSoundMode) ? EgaBrightCyan : EgaBrightWhite,xOffset2,40);
         renderer.RenderText(renderableText);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
@@ -966,7 +993,7 @@ void ExtraMenu::OpenSaveGameMenu()
 void ExtraMenu::OpenSoundMenu()
 {
     m_menuActive = true;
-    m_menuItemSelected = 0;
+    m_menuItemSelected = menuItemSoundBack;
     m_subMenuSelected = subMenuSound;
     m_menuItemOffset = 0;
     m_waitingForKeyToBind = false;
