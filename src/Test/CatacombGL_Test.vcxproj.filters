@@ -54,6 +54,9 @@
     <ClCompile Include="TextureAtlas_Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleVariableBool_Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FramesCounter_Test.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureAtlas_Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleVariableBool_Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

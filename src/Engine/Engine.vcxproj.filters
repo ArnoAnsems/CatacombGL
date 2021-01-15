@@ -195,6 +195,12 @@
     <ClCompile Include="OpenGLBasic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleVariableBool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h">
@@ -375,6 +381,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenGLBasic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleVariable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleVariableBool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

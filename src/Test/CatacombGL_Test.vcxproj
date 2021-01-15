@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ThirdParty\GoogleTest\src\gtest-all.cc" />
+    <ClCompile Include="ConsoleVariableBool_Test.cpp" />
     <ClCompile Include="FramesCounter_Test.cpp" />
     <ClCompile Include="GameAbyss_Test.cpp" />
     <ClCompile Include="GameApocalypse_Test.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="ViewPorts_Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsoleVariableBool_Test.h" />
     <ClInclude Include="FramesCounter_Test.h" />
     <ClInclude Include="GameAbyss_Test.h" />
     <ClInclude Include="GameApocalypse_Test.h" />
