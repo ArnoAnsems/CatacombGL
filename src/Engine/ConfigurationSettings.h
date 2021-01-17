@@ -23,6 +23,14 @@
 #include <stdint.h>
 #include "IRenderer.h"
 #include "ControlsMap.h"
+#include "ConsoleVariableBool.h"
+
+static const uint8_t CVarIdDepthShading = 0;
+static const uint8_t CVarIdVSync = 1;
+static const uint8_t CVarIdMouseLook = 2;
+static const uint8_t CVarIdAlwaysRun = 3;
+static const uint8_t CVarIdAutoFire = 4;
+static const uint8_t CVarIdManaBar = 5;
 
 struct AspectRatioData
 {
@@ -99,14 +107,8 @@ public:
     IRenderer::TextureFilterSetting GetTextureFilter() const;
     void SetTextureFilter(const IRenderer::TextureFilterSetting filter);
 
-    bool GetDepthShading() const;
-    void SetDepthShading(const bool enabled);
-
     ShowFpsMode GetShowFps() const;
     void SetShowFps(const ShowFpsMode showFpsMode);
-
-    bool GetVSync() const;
-    void SetVSync(const bool enabled);
 
     ScreenResolution GetScreenResolution() const;
     void SetScreenResolution(const ScreenResolution screenResolution);
@@ -123,47 +125,43 @@ public:
     uint8_t GetMouseSensitivity() const;
     void SetMouseSensitivity(const uint8_t sensitivity);
 
-    bool GetMouseLook() const;
-    void SetMouseLook(const bool enabled);
-
     uint8_t GetTurnSpeed() const;
     void SetTurnSpeed(const uint8_t speed);
-
-    bool GetAlwaysRun() const;
-    void SetAlwaysRun(const bool alwaysRun);
-
-    bool GetAutoFire() const;
-    void SetAutoFire(const bool autoFire);
 
     AutoMapMode GetAutoMapMode() const;
     void SetAutoMapMode(const AutoMapMode autoMapMode);
 
-    bool GetManaBar() const;
-    void SetManaBar(const bool enabled);
+    const ConsoleVariable& GetCVar(const uint8_t cvarId) const;
+    ConsoleVariable& GetCVarMutable(const uint8_t cvarId);
+    const ConsoleVariableBool& GetCVarBool(const uint8_t cvarId) const;
+    ConsoleVariableBool& GetCVarBoolMutable(const uint8_t cvarId);
 
 private:
     ScreenMode m_screenMode;
     uint8_t m_aspectRatio;
     uint8_t m_fov;
     IRenderer::TextureFilterSetting m_textureFilter;
-    bool m_depthShading;
     ShowFpsMode m_showFps;
-    bool m_vsync;
     ScreenResolution m_screenResolution;
     ControlsMap m_controlsMap;
     uint8_t m_soundMode;
     bool m_musicOn;
     uint8_t m_mouseSensitivity;
-    bool m_mouseLook;
     uint8_t m_turnSpeed;
-    bool m_alwaysRun;
-    bool m_autoFire;
     AutoMapMode m_autoMapMode;
-    bool m_manaBar;
 
     std::string m_pathAbyssv113;
     std::string m_pathAbyssv124;
     std::string m_pathArmageddonv102;
     std::string m_pathApocalypsev101;
     std::string m_pathCatacomb3Dv122;
+
+    std::map<const uint8_t, ConsoleVariableBool* const> m_cvarsBool;
+    ConsoleVariableBool m_dummyCvarBool;
+    ConsoleVariableBool m_depthShading;
+    ConsoleVariableBool m_vSync;
+    ConsoleVariableBool m_mouseLook;
+    ConsoleVariableBool m_alwaysRun;
+    ConsoleVariableBool m_autoFire;
+    ConsoleVariableBool m_manaBar;
 };

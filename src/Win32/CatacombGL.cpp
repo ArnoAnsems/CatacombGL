@@ -500,7 +500,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
         IRenderer::FrameSettings frameSettings;
         frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
-        frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
+        frameSettings.vSyncEnabled = m_configurationSettings.GetCVarBool(CVarIdVSync).IsEnabled();
         m_renderer->SetFrameSettings(frameSettings);
 
         gameSelection.Draw(gameSelectionPresentation);

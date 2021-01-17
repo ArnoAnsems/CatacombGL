@@ -24,25 +24,35 @@ ConfigurationSettings::ConfigurationSettings() :
     m_aspectRatio(0),
     m_fov(25),
     m_textureFilter(IRenderer::Nearest),
-    m_depthShading(true),
     m_showFps(Off),
-    m_vsync(true),
     m_screenResolution(High),
     m_soundMode(2),
     m_musicOn(true),
     m_mouseSensitivity(10),
-    m_mouseLook(true),
     m_turnSpeed(100),
-    m_alwaysRun(false),
-    m_autoFire(false),
     m_autoMapMode(TopDownHD),
-    m_manaBar(false),
     m_controlsMap(),
     m_pathAbyssv113(""),
     m_pathAbyssv124(""),
     m_pathArmageddonv102(""),
     m_pathApocalypsev101(""),
-    m_pathCatacomb3Dv122("")
+    m_pathCatacomb3Dv122(""),
+    m_dummyCvarBool("", "", false),
+    m_depthShading("Depth shading", "depthshading", true),
+    m_vSync("VSync", "vsync", true),
+    m_mouseLook("Mouse Look", "mlook", true),
+    m_alwaysRun("Always Run", "alwaysRun", false),
+    m_autoFire("Auto Fire", "autoFire", false),
+    m_manaBar("Mana Bar", "manaBar", false),
+    m_cvarsBool(
+    {
+        std::make_pair(CVarIdDepthShading, &m_depthShading),
+        std::make_pair(CVarIdVSync, &m_vSync),
+        std::make_pair(CVarIdMouseLook, &m_mouseLook),
+        std::make_pair(CVarIdAlwaysRun, &m_alwaysRun),
+        std::make_pair(CVarIdAutoFire, &m_autoFire),
+        std::make_pair(CVarIdManaBar, &m_manaBar)
+    })
 {
 
 }
@@ -107,10 +117,11 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                 BorderlessWindowed;
         }
 
-        auto depthShadingPair = keyValuePairs.find("depthshading");
+        ConsoleVariable& cvarDepthShading = GetCVarMutable(CVarIdDepthShading);
+        const auto depthShadingPair = keyValuePairs.find(cvarDepthShading.GetNameInConfigFile());
         if (depthShadingPair != keyValuePairs.end())
         {
-            m_depthShading = (depthShadingPair->second.compare("true") == 0);
+            cvarDepthShading.Deserialize(depthShadingPair->second);
         }
         
         auto showfpsPair = keyValuePairs.find("showfps");
@@ -122,10 +133,11 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                 Off;
         }
 
-        auto vsyncPair = keyValuePairs.find("vsync");
+        ConsoleVariable& cvarVSync = GetCVarMutable(CVarIdVSync);
+        const auto vsyncPair = keyValuePairs.find(cvarVSync.GetNameInConfigFile());
         if (vsyncPair != keyValuePairs.end())
         {
-            m_vsync = (vsyncPair->second.compare("true") == 0);
+            cvarVSync.Deserialize(vsyncPair->second);
         }
 
         auto aspectRatioPair = keyValuePairs.find("aspectratio");
@@ -166,10 +178,11 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_musicOn = (musicPair->second.compare("Adlib") == 0);
         }
 
-        auto mouseLookPair = keyValuePairs.find("mlook");
+        ConsoleVariable& cvarMouseLook = GetCVarMutable(CVarIdMouseLook);
+        auto mouseLookPair = keyValuePairs.find(cvarMouseLook.GetNameInConfigFile());
         if (mouseLookPair != keyValuePairs.end())
         {
-            m_mouseLook = (mouseLookPair->second.compare("Enabled") == 0);
+            cvarMouseLook.Deserialize(mouseLookPair->second);
         }
 
         auto mouseSensitivityPair = keyValuePairs.find("mouseSensitivity");
@@ -186,16 +199,18 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_turnSpeed = (turnSpeed < 100) ? 100 : (turnSpeed > 250) ? 250 : (uint8_t)turnSpeed;
         }
 
-        auto alwaysRunPair = keyValuePairs.find("alwaysRun");
+        ConsoleVariable& cvarAlwaysRun = GetCVarMutable(CVarIdAlwaysRun);
+        const auto alwaysRunPair = keyValuePairs.find(cvarAlwaysRun.GetNameInConfigFile());
         if (alwaysRunPair != keyValuePairs.end())
         {
-            m_alwaysRun = (alwaysRunPair->second.compare("Enabled") == 0);
+            cvarAlwaysRun.Deserialize(alwaysRunPair->second);
         }
 
-        auto autoFirePair = keyValuePairs.find("autoFire");
+        ConsoleVariable& cvarAutoFire = GetCVarMutable(CVarIdAutoFire);
+        const auto autoFirePair = keyValuePairs.find(cvarAutoFire.GetNameInConfigFile());
         if (autoFirePair != keyValuePairs.end())
         {
-            m_autoFire = (autoFirePair->second.compare("Enabled") == 0);
+            cvarAutoFire.Deserialize(autoFirePair->second);
         }
 
         auto autoMapModePair = keyValuePairs.find("automapmode");
@@ -208,10 +223,11 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                 TopDownHD;
         }
 
-        auto manaBarPair = keyValuePairs.find("manaBar");
+        ConsoleVariable& cvarManaBar = GetCVarMutable(CVarIdManaBar);
+        const auto manaBarPair = keyValuePairs.find(cvarManaBar.GetNameInConfigFile());
         if (manaBarPair != keyValuePairs.end())
         {
-            m_manaBar = (manaBarPair->second.compare("Enabled") == 0);
+            cvarManaBar.Deserialize(manaBarPair->second);
         }
 
         for (auto keyPair : keyValuePairs)
@@ -260,14 +276,14 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "screenresolution=" << screenResolutionValue << "\n";
         const std::string aspectRatioValue = (m_aspectRatio == 0) ? "Classic" : "FitToScreen";
         file << "aspectratio=" << aspectRatioValue << "\n";
-        const std::string depthShadingValue = m_depthShading ? "true" : "false";
+        const std::string depthShadingValue = GetCVar(CVarIdDepthShading).Serialize();
         file << "depthshading=" << depthShadingValue << "\n";
         const std::string showfpsValue =
             (m_showFps == Minimal) ? "minimal" :
             (m_showFps == Extended) ? "extended" :
             "off";
         file << "showfps=" << showfpsValue << "\n";
-        const std::string vsyncValue = m_vsync ? "true" : "false";
+        const std::string vsyncValue = GetCVar(CVarIdVSync).Serialize();
         file << "vsync=" << vsyncValue << "\n";
         const std::string textureFilterValue = (m_textureFilter == IRenderer::TextureFilterSetting::Nearest) ? "Nearest" : "Linear";
         file << "texturefilter=" << textureFilterValue << "\n";
@@ -285,17 +301,17 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         const std::string musicValue = (m_musicOn) ? "Adlib" : "Off";
         file << "music=" << musicValue << "\n";
         file << "# Controls settings\n";
-        const std::string mlookValue = (m_mouseLook) ? "Enabled" : "Disabled";
+        const std::string mlookValue = GetCVar(CVarIdMouseLook).Serialize();
         file << "mlook=" << mlookValue << "\n"; 
         std::string mouseSensitivityValue = std::to_string(m_mouseSensitivity);
         file << "mouseSensitivity=" << mouseSensitivityValue << "\n";
         std::string turnSpeedValue = std::to_string(m_turnSpeed);
         file << "turnSpeed=" << turnSpeedValue << "\n";
-        const std::string alwaysRunValue = (m_alwaysRun) ? "Enabled" : "Disabled";
+        const std::string alwaysRunValue = GetCVar(CVarIdAlwaysRun).Serialize();
         file << "alwaysRun=" << alwaysRunValue << "\n";
-        const std::string autoFireValue = (m_autoFire) ? "Enabled" : "Disabled";
+        const std::string autoFireValue = GetCVar(CVarIdAutoFire).Serialize();
         file << "autoFire=" << autoFireValue << "\n";
-        const std::string manaBarValue = (m_manaBar) ? "Enabled" : "Disabled";
+        const std::string manaBarValue = GetCVar(CVarIdManaBar).Serialize();
         file << "manaBar=" << manaBarValue << "\n";
         file << "# Key bindings\n";
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
@@ -409,16 +425,6 @@ void ConfigurationSettings::SetTextureFilter(const IRenderer::TextureFilterSetti
     m_textureFilter = filter;
 }
 
-bool ConfigurationSettings::GetDepthShading() const
-{
-    return m_depthShading;
-}
-
-void ConfigurationSettings::SetDepthShading(const bool enabled)
-{
-    m_depthShading = enabled;
-}
-
 ShowFpsMode ConfigurationSettings::GetShowFps() const
 {
     return m_showFps;
@@ -427,16 +433,6 @@ ShowFpsMode ConfigurationSettings::GetShowFps() const
 void ConfigurationSettings::SetShowFps(const ShowFpsMode showFpsMode)
 {
     m_showFps = showFpsMode;
-}
-
-bool ConfigurationSettings::GetVSync() const
-{
-    return m_vsync;
-}
-
-void ConfigurationSettings::SetVSync(const bool enabled)
-{
-    m_vsync = enabled;
 }
 
 ScreenResolution ConfigurationSettings::GetScreenResolution() const
@@ -489,16 +485,6 @@ void ConfigurationSettings::SetMouseSensitivity(const uint8_t sensitivity)
     m_mouseSensitivity = sensitivity;
 }
 
-bool ConfigurationSettings::GetMouseLook() const
-{
-    return m_mouseLook;
-}
-
-void ConfigurationSettings::SetMouseLook(const bool enabled)
-{
-    m_mouseLook = enabled;
-}
-
 uint8_t ConfigurationSettings::GetTurnSpeed() const
 {
     return m_turnSpeed;
@@ -507,26 +493,6 @@ uint8_t ConfigurationSettings::GetTurnSpeed() const
 void ConfigurationSettings::SetTurnSpeed(const uint8_t speed)
 {
     m_turnSpeed = speed;
-}
-
-bool ConfigurationSettings::GetAlwaysRun() const
-{
-    return m_alwaysRun;
-}
-
-void ConfigurationSettings::SetAlwaysRun(const bool alwaysRun)
-{
-    m_alwaysRun = alwaysRun;
-}
-
-bool ConfigurationSettings::GetAutoFire() const
-{
-    return m_autoFire;
-}
-
-void ConfigurationSettings::SetAutoFire(const bool autoFire)
-{
-    m_autoFire = autoFire;
 }
 
 AutoMapMode ConfigurationSettings::GetAutoMapMode() const
@@ -539,12 +505,34 @@ void ConfigurationSettings::SetAutoMapMode(const AutoMapMode autoMapMode)
     m_autoMapMode = autoMapMode;
 }
 
-bool ConfigurationSettings::GetManaBar() const
+const ConsoleVariable& ConfigurationSettings::GetCVar(const uint8_t cvarId) const
 {
-    return m_manaBar;
+    return (const ConsoleVariable&)GetCVarBool(cvarId);
 }
 
-void ConfigurationSettings::SetManaBar(const bool enabled)
+ConsoleVariable& ConfigurationSettings::GetCVarMutable(const uint8_t cvarId)
 {
-    m_manaBar = enabled;
+    return (ConsoleVariable&)GetCVarBoolMutable(cvarId);
+}
+
+const ConsoleVariableBool& ConfigurationSettings::GetCVarBool(const uint8_t cvarId) const
+{
+    const auto it = m_cvarsBool.find(cvarId);
+    if (it != m_cvarsBool.end())
+    {
+        return *it->second;
+    }
+
+    return m_dummyCvarBool;
+}
+
+ConsoleVariableBool& ConfigurationSettings::GetCVarBoolMutable(const uint8_t cvarId)
+{
+    auto it = m_cvarsBool.find(cvarId);
+    if (it != m_cvarsBool.end())
+    {
+        return *it->second;
+    }
+
+    return m_dummyCvarBool;
 }

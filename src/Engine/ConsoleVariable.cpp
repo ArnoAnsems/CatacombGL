@@ -22,8 +22,8 @@ ConsoleVariable::ConsoleVariable():
 
 }
 ConsoleVariable::ConsoleVariable(const std::string& nameInMenu, const std::string& nameInConfigFile):
-    m_nameInMenu(m_nameInMenu),
-    m_nameInConfigFile(m_nameInConfigFile)
+    m_nameInMenu(nameInMenu),
+    m_nameInConfigFile(nameInConfigFile)
 {
 
 }

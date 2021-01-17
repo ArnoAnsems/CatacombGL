@@ -128,7 +128,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     m_timeStampLastMouseMoveBackward = 0;
     m_gameTimer.Reset();
     m_playerActions.ResetForNewLevel();
-    m_manaBar.Reset(m_configurationSettings.GetManaBar());
+    m_manaBar.Reset(m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled());
     if (m_difficultyLevel == Easy)
     {
         DisplayStatusMessage("*** NOVICE ***", 3000);
@@ -154,7 +154,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     IRenderer::FrameSettings frameSettings;
     frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
-    frameSettings.vSyncEnabled = m_configurationSettings.GetVSync();
+    frameSettings.vSyncEnabled = m_configurationSettings.GetCVarBool(CVarIdVSync).IsEnabled();
     renderer.SetFrameSettings(frameSettings);
 
     if (m_state == AutoMapDialog && m_level != nullptr)
@@ -183,7 +183,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     m_level->GetPlayerActor()->GetX(),
                     m_level->GetPlayerActor()->GetY(),
                     m_level->GetPlayerActor()->GetAngle(),
-                    m_configurationSettings.GetDepthShading(),
+                    m_configurationSettings.GetCVarBool(CVarIdDepthShading).IsEnabled(),
                     m_configurationSettings.GetFov(),
                     renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetScreenResolution() == ScreenResolution::Original);
                 m_level->Setup3DScene(
@@ -702,7 +702,7 @@ bool EngineCore::Think()
 	        m_playerActions.SetActionActive((ControlAction)i, IsActionActive((ControlAction)i));
         }
 
-        if (!m_configurationSettings.GetMouseLook())
+        if (!m_configurationSettings.GetCVarBool(CVarIdMouseLook).IsEnabled())
         {
             // When mouse look is disabled, the Y-movement of the mouse will let the player walk forward and backward.
             if (!IsActionActive(MoveForward))
@@ -1007,9 +1007,10 @@ bool EngineCore::Think()
 
     if (m_state == InGame)
     {
-        if (m_configurationSettings.GetManaBar() != m_manaBar.IsEnabled())
+        const bool manaBarEnabledInConfig = m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled();
+        if (manaBarEnabledInConfig != m_manaBar.IsEnabled())
         {
-            m_manaBar.Reset(m_configurationSettings.GetManaBar());
+            m_manaBar.Reset(manaBarEnabledInConfig);
         }
 
         if (!m_level->GetPlayerActor()->IsDead())
@@ -1061,7 +1062,7 @@ bool EngineCore::Think()
                 m_manaBar.Update(m_timeStampOfPlayerCurrentFrame);
 
                 bool shoot = false;
-                const bool autoFire = m_configurationSettings.GetAutoFire();
+                const bool autoFire = m_configurationSettings.GetCVarBool(CVarIdAutoFire).IsEnabled();
                 if (m_game.GetId() != 5)
                 {
                     shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
@@ -1160,7 +1161,7 @@ bool EngineCore::Think()
                 }
                 constexpr float playerSpeed = 5120.0f / 65536.0f;
                 const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
-                const bool isRunning = m_configurationSettings.GetAlwaysRun() != m_playerActions.GetActionActive(Run);
+                const bool isRunning = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun).IsEnabled() != m_playerActions.GetActionActive(Run);
                 const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
                 const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
                     (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft)));
@@ -3095,7 +3096,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         file.close();
 
         m_playerActions.ResetForNewLevel();
-        m_manaBar.Reset(m_configurationSettings.GetManaBar());
+        m_manaBar.Reset(m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled());
         m_warpToLevel = m_level->GetLevelIndex();
         m_menu->SetActive(false);
         m_state = InGame;

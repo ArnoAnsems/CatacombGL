@@ -15,6 +15,9 @@
 
 #include "ConsoleVariableBool.h"
 
+static const std::string enabledStr = "Enabled";
+static const std::string disabledStr = "Disabled";
+
 ConsoleVariableBool::ConsoleVariableBool(const std::string& nameInMenu, const std::string& nameInConfigFile, const bool defaultValue) :
     ConsoleVariable(nameInMenu, nameInConfigFile),
     m_enabled(defaultValue)
@@ -54,5 +57,5 @@ void ConsoleVariableBool::Toggle()
 
 const std::string& ConsoleVariableBool::GetValueInMenu() const
 {
-    return (m_enabled) ? "Enabled" : "Disabled";
+    return (m_enabled) ? enabledStr : disabledStr;
 }
