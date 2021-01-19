@@ -24,6 +24,7 @@
 #include "IRenderer.h"
 #include "ControlsMap.h"
 #include "ConsoleVariableBool.h"
+#include "ConsoleVariableString.h"
 
 static const uint8_t CVarIdDepthShading = 0;
 static const uint8_t CVarIdVSync = 1;
@@ -31,6 +32,11 @@ static const uint8_t CVarIdMouseLook = 2;
 static const uint8_t CVarIdAlwaysRun = 3;
 static const uint8_t CVarIdAutoFire = 4;
 static const uint8_t CVarIdManaBar = 5;
+static const uint8_t CVarIdPathAbyssv113 = 10;
+static const uint8_t CVarIdPathAbyssv124 = 11;
+static const uint8_t CVarIdPathArmageddonv102 = 12;
+static const uint8_t CVarIdPathApocalypsev101 = 13;
+static const uint8_t CVarIdPathCatacomb3Dv122 = 14;
 
 struct AspectRatioData
 {
@@ -80,21 +86,6 @@ public:
     void LoadFromFile(const std::string& configurationFile);
     void StoreToFile(const std::string& configurationFile) const;
 
-    const std::string& GetPathAbyssv113() const;
-    void SetPathAbyssv113(const std::string path);
-
-    const std::string& GetPathAbyssv124() const;
-    void SetPathAbyssv124(const std::string path);
-
-    const std::string& GetPathArmageddonv102() const;
-    void SetPathArmageddonv102(const std::string path);
-
-    const std::string& GetPathApocalypsev101() const;
-    void SetPathApocalypsev101(const std::string path);
-
-    const std::string& GetPathCatacomb3Dv122() const;
-    void SetPathCatacomb3Dv122(const std::string path);
-
     ScreenMode GetScreenMode() const;
     void SetScreenMode(const ScreenMode screenMode);
 
@@ -135,6 +126,8 @@ public:
     ConsoleVariable& GetCVarMutable(const uint8_t cvarId);
     const ConsoleVariableBool& GetCVarBool(const uint8_t cvarId) const;
     ConsoleVariableBool& GetCVarBoolMutable(const uint8_t cvarId);
+    const ConsoleVariableString& GetCVarString(const uint8_t cvarId) const;
+    ConsoleVariableString& GetCVarStringMutable(const uint8_t cvarId);
 
 private:
     ScreenMode m_screenMode;
@@ -150,13 +143,15 @@ private:
     uint8_t m_turnSpeed;
     AutoMapMode m_autoMapMode;
 
-    std::string m_pathAbyssv113;
-    std::string m_pathAbyssv124;
-    std::string m_pathArmageddonv102;
-    std::string m_pathApocalypsev101;
-    std::string m_pathCatacomb3Dv122;
+    ConsoleVariableString m_dummyCvarString;
+    ConsoleVariableString m_pathAbyssv113;
+    ConsoleVariableString m_pathAbyssv124;
+    ConsoleVariableString m_pathArmageddonv102;
+    ConsoleVariableString m_pathApocalypsev101;
+    ConsoleVariableString m_pathCatacomb3Dv122;
 
     std::map<const uint8_t, ConsoleVariableBool* const> m_cvarsBool;
+    std::map<const uint8_t, ConsoleVariableString* const> m_cvarsString;
     ConsoleVariableBool m_dummyCvarBool;
     ConsoleVariableBool m_depthShading;
     ConsoleVariableBool m_vSync;

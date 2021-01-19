@@ -26,6 +26,25 @@ ConsoleVariableBool_Test::~ConsoleVariableBool_Test()
 
 }
 
+TEST(ConsoleVariableBool_Test, CheckNaming)
+{
+    ConsoleVariableBool var("MenuName", "ConfigFileName", true);
+    EXPECT_EQ("MenuName", var.GetNameInMenu());
+    EXPECT_EQ("ConfigFileName", var.GetNameInConfigFile());
+}
+
+TEST(ConsoleVariableBool_Test, CheckAssignment)
+{
+    ConsoleVariableBool var("MenuName", "ConfigFileName", true);
+    EXPECT_TRUE(var.IsEnabled());
+    var.Toggle();
+    EXPECT_FALSE(var.IsEnabled());
+    var.Toggle();
+    EXPECT_TRUE(var.IsEnabled());
+    var.SetEnabled(false);
+    EXPECT_FALSE(var.IsEnabled());
+}
+
 TEST(ConsoleVariableBool_Test, CheckSerialization)
 {
     ConsoleVariableBool var("MenuName", "ConfigFileName", true);

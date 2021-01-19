@@ -364,29 +364,29 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     }
 
     // Try to find game files via configuration file
-    if (gameDetectionAbyssV113.GetBestMatch().score != 0 && !m_configurationSettings.GetPathAbyssv113().empty())
+    if (gameDetectionAbyssV113.GetBestMatch().score != 0 && !m_configurationSettings.GetCVarString(CVarIdPathAbyssv113).Get().empty())
     {
-        gameDetectionAbyssV113.GetDetectionReport(GameIdCatacombAbyssv113, m_configurationSettings.GetPathAbyssv113(), abyssFilesv113);
+        gameDetectionAbyssV113.GetDetectionReport(GameIdCatacombAbyssv113, m_configurationSettings.GetCVarString(CVarIdPathAbyssv113).Get(), abyssFilesv113);
     }
 
-    if (gameDetectionAbyssV124.GetBestMatch().score != 0 && !m_configurationSettings.GetPathAbyssv124().empty())
+    if (gameDetectionAbyssV124.GetBestMatch().score != 0 && !m_configurationSettings.GetCVarString(CVarIdPathAbyssv124).Get().empty())
     {
-        gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, m_configurationSettings.GetPathAbyssv124(), abyssFilesv124);
+        gameDetectionAbyssV124.GetDetectionReport(GameIdCatacombAbyssv124, m_configurationSettings.GetCVarString(CVarIdPathAbyssv124).Get(), abyssFilesv124);
     }
 
-    if (gameDetectionArmageddonv102.GetBestMatch().score != 0 && !m_configurationSettings.GetPathArmageddonv102().empty())
+    if (gameDetectionArmageddonv102.GetBestMatch().score != 0 && !m_configurationSettings.GetCVarString(CVarIdPathArmageddonv102).Get().empty())
     {
-        gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, m_configurationSettings.GetPathArmageddonv102(), armageddonFiles);
+        gameDetectionArmageddonv102.GetDetectionReport(GameIdCatacombArmageddonv102, m_configurationSettings.GetCVarString(CVarIdPathArmageddonv102).Get(), armageddonFiles);
     }
 
-    if (gameDetectionApocalypsev101.GetBestMatch().score != 0 && !m_configurationSettings.GetPathApocalypsev101().empty())
+    if (gameDetectionApocalypsev101.GetBestMatch().score != 0 && !m_configurationSettings.GetCVarString(CVarIdPathApocalypsev101).Get().empty())
     {
-        gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, m_configurationSettings.GetPathApocalypsev101(), apocalypseFiles);
+        gameDetectionApocalypsev101.GetDetectionReport(GameIdCatacombApocalypsev101, m_configurationSettings.GetCVarString(CVarIdPathApocalypsev101).Get(), apocalypseFiles);
     }
 
-    if (gameDetectionCatacomb3Dv122.GetBestMatch().score != 0 && !m_configurationSettings.GetPathCatacomb3Dv122().empty())
+    if (gameDetectionCatacomb3Dv122.GetBestMatch().score != 0 && !m_configurationSettings.GetCVarString(CVarIdPathCatacomb3Dv122).Get().empty())
     {
-        gameDetectionCatacomb3Dv122.GetDetectionReport(GameIdCatacomb3Dv122, m_configurationSettings.GetPathCatacomb3Dv122(), catacomb3DFiles);
+        gameDetectionCatacomb3Dv122.GetDetectionReport(GameIdCatacomb3Dv122, m_configurationSettings.GetCVarString(CVarIdPathCatacomb3Dv122).Get(), catacomb3DFiles);
     }
  
     // Try to find registered game files in local path
@@ -723,27 +723,27 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
     // If game data was found, remember the path!
     if (gameDetectionAbyssV113.GetBestMatch().score == 0)
     {
-        m_configurationSettings.SetPathAbyssv113(gameDetectionAbyssV113.GetBestMatch().folder);
+        m_configurationSettings.GetCVarStringMutable(CVarIdPathAbyssv113).Set(gameDetectionAbyssV113.GetBestMatch().folder);
     }
 
     if (gameDetectionAbyssV124.GetBestMatch().score == 0)
     {
-        m_configurationSettings.SetPathAbyssv124(gameDetectionAbyssV124.GetBestMatch().folder);
+        m_configurationSettings.GetCVarStringMutable(CVarIdPathAbyssv124).Set(gameDetectionAbyssV124.GetBestMatch().folder);
     }
 
     if (gameDetectionArmageddonv102.GetBestMatch().score == 0)
     {
-        m_configurationSettings.SetPathArmageddonv102(gameDetectionArmageddonv102.GetBestMatch().folder);
+        m_configurationSettings.GetCVarStringMutable(CVarIdPathArmageddonv102).Set(gameDetectionArmageddonv102.GetBestMatch().folder);
     }
 
     if (gameDetectionApocalypsev101.GetBestMatch().score == 0)
     {
-        m_configurationSettings.SetPathApocalypsev101(gameDetectionApocalypsev101.GetBestMatch().folder);
+        m_configurationSettings.GetCVarStringMutable(CVarIdPathApocalypsev101).Set(gameDetectionApocalypsev101.GetBestMatch().folder);
     }
 
     if (gameDetectionCatacomb3Dv122.GetBestMatch().score == 0)
     {
-        m_configurationSettings.SetPathCatacomb3Dv122(gameDetectionCatacomb3Dv122.GetBestMatch().folder);
+        m_configurationSettings.GetCVarStringMutable(CVarIdPathCatacomb3Dv122).Set(gameDetectionCatacomb3Dv122.GetBestMatch().folder);
     }
 
     // Kill The Window
