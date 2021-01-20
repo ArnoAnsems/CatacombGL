@@ -147,6 +147,7 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ConsoleVariable.cpp" />
     <ClCompile Include="ConsoleVariableBool.cpp" />
+    <ClCompile Include="ConsoleVariableEnum.cpp" />
     <ClCompile Include="ConsoleVariableString.cpp" />
     <ClCompile Include="ControlsMap.cpp" />
     <ClCompile Include="Decompressor.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="ConsoleVariable.h" />
     <ClInclude Include="ConsoleVariableBool.h" />
+    <ClInclude Include="ConsoleVariableEnum.h" />
     <ClInclude Include="ConsoleVariableString.h" />
     <ClInclude Include="ControlsMap.h" />
     <ClInclude Include="Decompressor.h" />
