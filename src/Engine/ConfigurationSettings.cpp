@@ -87,40 +87,11 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
 
         file.close();
 
-        ConsoleVariable& cvarPathAbyssv113 = GetCVarMutable(CVarIdPathAbyssv113);
-        const auto pathAbyssv113Pair = keyValuePairs.find(cvarPathAbyssv113.GetNameInConfigFile());
-        if (pathAbyssv113Pair != keyValuePairs.end())
-        {
-            cvarPathAbyssv113.Deserialize(pathAbyssv113Pair->second);
-        }
-
-        ConsoleVariable& cvarPathAbyssv124 = GetCVarMutable(CVarIdPathAbyssv124);
-        auto pathAbyssv124Pair = keyValuePairs.find(cvarPathAbyssv124.GetNameInConfigFile());
-        if (pathAbyssv124Pair != keyValuePairs.end())
-        {
-            cvarPathAbyssv124.Deserialize(pathAbyssv124Pair->second);
-        }
-
-        ConsoleVariable& cvarPathArmageddonv102 = GetCVarMutable(CVarIdPathArmageddonv102);
-        const auto pathArmageddonv102Pair = keyValuePairs.find(cvarPathArmageddonv102.GetNameInConfigFile());
-        if (pathArmageddonv102Pair != keyValuePairs.end())
-        {
-            cvarPathArmageddonv102.Deserialize(pathArmageddonv102Pair->second);
-        }
-
-        ConsoleVariable& cvarPathApocalypsev101 = GetCVarMutable(CVarIdPathApocalypsev101);
-        const auto pathApocalypsev101Pair = keyValuePairs.find(cvarPathApocalypsev101.GetNameInConfigFile());
-        if (pathApocalypsev101Pair != keyValuePairs.end())
-        {
-            cvarPathApocalypsev101.Deserialize(pathApocalypsev101Pair->second);
-        }
-
-        ConsoleVariable& cvarPathCatacomb3Dv122 = GetCVarMutable(CVarIdPathCatacomb3Dv122);
-        const auto pathCatacomb3Dv122Pair = keyValuePairs.find(cvarPathCatacomb3Dv122.GetNameInConfigFile());
-        if (pathCatacomb3Dv122Pair != keyValuePairs.end())
-        {
-            cvarPathCatacomb3Dv122.Deserialize(pathCatacomb3Dv122Pair->second);
-        }
+        DeserializeCVar(keyValuePairs, CVarIdPathAbyssv113);
+        DeserializeCVar(keyValuePairs, CVarIdPathAbyssv124);
+        DeserializeCVar(keyValuePairs, CVarIdPathArmageddonv102);
+        DeserializeCVar(keyValuePairs, CVarIdPathApocalypsev101);
+        DeserializeCVar(keyValuePairs, CVarIdPathCatacomb3Dv122);
 
         auto screenModePair = keyValuePairs.find("screenmode");
         if (screenModePair != keyValuePairs.end())
@@ -131,13 +102,8 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                 BorderlessWindowed;
         }
 
-        ConsoleVariable& cvarDepthShading = GetCVarMutable(CVarIdDepthShading);
-        const auto depthShadingPair = keyValuePairs.find(cvarDepthShading.GetNameInConfigFile());
-        if (depthShadingPair != keyValuePairs.end())
-        {
-            cvarDepthShading.Deserialize(depthShadingPair->second);
-        }
-        
+        DeserializeCVar(keyValuePairs, CVarIdDepthShading);
+
         auto showfpsPair = keyValuePairs.find("showfps");
         if (showfpsPair != keyValuePairs.end())
         {
@@ -147,12 +113,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                 Off;
         }
 
-        ConsoleVariable& cvarVSync = GetCVarMutable(CVarIdVSync);
-        const auto vsyncPair = keyValuePairs.find(cvarVSync.GetNameInConfigFile());
-        if (vsyncPair != keyValuePairs.end())
-        {
-            cvarVSync.Deserialize(vsyncPair->second);
-        }
+        DeserializeCVar(keyValuePairs, CVarIdVSync);
 
         auto aspectRatioPair = keyValuePairs.find("aspectratio");
         if (aspectRatioPair != keyValuePairs.end())
@@ -192,12 +153,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_musicOn = (musicPair->second.compare("Adlib") == 0);
         }
 
-        ConsoleVariable& cvarMouseLook = GetCVarMutable(CVarIdMouseLook);
-        auto mouseLookPair = keyValuePairs.find(cvarMouseLook.GetNameInConfigFile());
-        if (mouseLookPair != keyValuePairs.end())
-        {
-            cvarMouseLook.Deserialize(mouseLookPair->second);
-        }
+        DeserializeCVar(keyValuePairs, CVarIdMouseLook);
 
         auto mouseSensitivityPair = keyValuePairs.find("mouseSensitivity");
         if (mouseSensitivityPair != keyValuePairs.end())
@@ -213,19 +169,8 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_turnSpeed = (turnSpeed < 100) ? 100 : (turnSpeed > 250) ? 250 : (uint8_t)turnSpeed;
         }
 
-        ConsoleVariable& cvarAlwaysRun = GetCVarMutable(CVarIdAlwaysRun);
-        const auto alwaysRunPair = keyValuePairs.find(cvarAlwaysRun.GetNameInConfigFile());
-        if (alwaysRunPair != keyValuePairs.end())
-        {
-            cvarAlwaysRun.Deserialize(alwaysRunPair->second);
-        }
-
-        ConsoleVariable& cvarAutoFire = GetCVarMutable(CVarIdAutoFire);
-        const auto autoFirePair = keyValuePairs.find(cvarAutoFire.GetNameInConfigFile());
-        if (autoFirePair != keyValuePairs.end())
-        {
-            cvarAutoFire.Deserialize(autoFirePair->second);
-        }
+        DeserializeCVar(keyValuePairs, CVarIdAlwaysRun);
+        DeserializeCVar(keyValuePairs, CVarIdAutoFire);
 
         auto autoMapModePair = keyValuePairs.find("automapmode");
         if (autoMapModePair != keyValuePairs.end())
@@ -237,12 +182,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
                 TopDownHD;
         }
 
-        ConsoleVariable& cvarManaBar = GetCVarMutable(CVarIdManaBar);
-        const auto manaBarPair = keyValuePairs.find(cvarManaBar.GetNameInConfigFile());
-        if (manaBarPair != keyValuePairs.end())
-        {
-            cvarManaBar.Deserialize(manaBarPair->second);
-        }
+        DeserializeCVar(keyValuePairs, CVarIdManaBar);
 
         for (auto keyPair : keyValuePairs)
         {
@@ -275,11 +215,11 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
     {
         file << "# This file was generated by CatacombGL\n";
         file << "# Path to game data\n";
-        file << "pathabyssv113=" << GetCVar(CVarIdPathAbyssv113).Serialize() << "\n";
-        file << "pathabyssv124=" << GetCVar(CVarIdPathAbyssv124).Serialize() << "\n";
-        file << "patharmageddonv102=" << GetCVar(CVarIdPathArmageddonv102).Serialize() << "\n";
-        file << "pathapocalypsev101=" << GetCVar(CVarIdPathApocalypsev101).Serialize() << "\n";
-        file << "pathcatacomb3dv122=" << GetCVar(CVarIdPathCatacomb3Dv122).Serialize() << "\n";
+        SerializeCVar(file, CVarIdPathAbyssv113);
+        SerializeCVar(file, CVarIdPathAbyssv124);
+        SerializeCVar(file, CVarIdPathArmageddonv102);
+        SerializeCVar(file, CVarIdPathApocalypsev101);
+        SerializeCVar(file, CVarIdPathCatacomb3Dv122);
         file << "# Video settings\n";
         const std::string screenModeValue =
             (m_screenMode == Windowed) ? "windowed" :
@@ -290,15 +230,13 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "screenresolution=" << screenResolutionValue << "\n";
         const std::string aspectRatioValue = (m_aspectRatio == 0) ? "Classic" : "FitToScreen";
         file << "aspectratio=" << aspectRatioValue << "\n";
-        const std::string depthShadingValue = GetCVar(CVarIdDepthShading).Serialize();
-        file << "depthshading=" << depthShadingValue << "\n";
+        SerializeCVar(file, CVarIdDepthShading);
         const std::string showfpsValue =
             (m_showFps == Minimal) ? "minimal" :
             (m_showFps == Extended) ? "extended" :
             "off";
         file << "showfps=" << showfpsValue << "\n";
-        const std::string vsyncValue = GetCVar(CVarIdVSync).Serialize();
-        file << "vsync=" << vsyncValue << "\n";
+        SerializeCVar(file, CVarIdVSync);
         const std::string textureFilterValue = (m_textureFilter == IRenderer::TextureFilterSetting::Nearest) ? "Nearest" : "Linear";
         file << "texturefilter=" << textureFilterValue << "\n";
         std::string fovValue = std::to_string(m_fov);
@@ -315,18 +253,14 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         const std::string musicValue = (m_musicOn) ? "Adlib" : "Off";
         file << "music=" << musicValue << "\n";
         file << "# Controls settings\n";
-        const std::string mlookValue = GetCVar(CVarIdMouseLook).Serialize();
-        file << "mlook=" << mlookValue << "\n"; 
+        SerializeCVar(file, CVarIdMouseLook);
         std::string mouseSensitivityValue = std::to_string(m_mouseSensitivity);
         file << "mouseSensitivity=" << mouseSensitivityValue << "\n";
         std::string turnSpeedValue = std::to_string(m_turnSpeed);
         file << "turnSpeed=" << turnSpeedValue << "\n";
-        const std::string alwaysRunValue = GetCVar(CVarIdAlwaysRun).Serialize();
-        file << "alwaysRun=" << alwaysRunValue << "\n";
-        const std::string autoFireValue = GetCVar(CVarIdAutoFire).Serialize();
-        file << "autoFire=" << autoFireValue << "\n";
-        const std::string manaBarValue = GetCVar(CVarIdManaBar).Serialize();
-        file << "manaBar=" << manaBarValue << "\n";
+        SerializeCVar(file, CVarIdAlwaysRun);
+        SerializeCVar(file, CVarIdAutoFire);
+        SerializeCVar(file, CVarIdManaBar);
         file << "# Key bindings\n";
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
 	    {
@@ -533,4 +467,22 @@ ConsoleVariableString& ConfigurationSettings::GetCVarStringMutable(const uint8_t
     }
 
     return m_dummyCvarString;
+}
+
+void ConfigurationSettings::SerializeCVar(std::ofstream& file, const uint8_t cvarId) const
+{
+    const ConsoleVariable& cvar = GetCVar(cvarId);
+    const std::string& configName = cvar.GetNameInConfigFile();
+    const std::string configValue = cvar.Serialize();
+    file << configName << "=" << configValue << "\n";
+}
+
+void ConfigurationSettings::DeserializeCVar(const std::map<std::string, std::string>& keyValuePairs, const uint8_t cvarId)
+{
+    ConsoleVariable& cvar = GetCVarMutable(cvarId);
+    const auto cvarPair = keyValuePairs.find(cvar.GetNameInConfigFile());
+    if (cvarPair != keyValuePairs.end())
+    {
+        cvar.Deserialize(cvarPair->second);
+    }
 }

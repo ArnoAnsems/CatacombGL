@@ -130,6 +130,9 @@ public:
     ConsoleVariableString& GetCVarStringMutable(const uint8_t cvarId);
 
 private:
+    void SerializeCVar(std::ofstream& file, const uint8_t cvarId) const;
+    void DeserializeCVar(const std::map<std::string, std::string>& keyValuePairs, const uint8_t cvarId);
+
     ScreenMode m_screenMode;
     uint8_t m_aspectRatio;
     uint8_t m_fov;
