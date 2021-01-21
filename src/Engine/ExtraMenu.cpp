@@ -497,18 +497,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == menuItemVideoScreenMode)
         {
-            if (m_configurationSettings.GetScreenMode() == Windowed)
-            {
-                m_configurationSettings.SetScreenMode(Fullscreen);
-            }
-            else if (m_configurationSettings.GetScreenMode() == Fullscreen)
-            {
-                m_configurationSettings.SetScreenMode(BorderlessWindowed);
-            }
-            else
-            {
-                m_configurationSettings.SetScreenMode(Windowed);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenMode).Next();
         }
         else if (m_menuItemSelected == menuItemVideoScreenResolution)
         {
@@ -734,11 +723,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == menuItemVideoScreenMode)
             {
-                renderableText.LeftAligned("Screen Mode", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const char* screenModeStr =
-                    (m_configurationSettings.GetScreenMode() == Windowed) ? "Windowed" :
-                    (m_configurationSettings.GetScreenMode() == Fullscreen) ? "Fullscreen" :
-                    "Borderless";
+                const ConsoleVariableEnum& cvarScreenMode = m_configurationSettings.GetCVarEnum(CVarIdScreenMode);
+                renderableText.LeftAligned(cvarScreenMode.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& screenModeStr = cvarScreenMode.GetValueInMenu();
                 renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == menuItemVideoScreenResolution)

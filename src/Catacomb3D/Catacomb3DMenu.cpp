@@ -640,18 +640,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     {
         if (m_menuItemSelected == 0)
         {
-            if (m_configurationSettings.GetScreenMode() == Windowed)
-            {
-                m_configurationSettings.SetScreenMode(Fullscreen);
-            }
-            else if (m_configurationSettings.GetScreenMode() == Fullscreen)
-            {
-                m_configurationSettings.SetScreenMode(BorderlessWindowed);
-            }
-            else
-            {
-                m_configurationSettings.SetScreenMode(Windowed);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenMode).Next();
         }
         else if (m_menuItemSelected == 1)
         {
@@ -1080,12 +1069,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             const int16_t offsetY = 62 + (index * 8);
             if (index + m_menuItemOffset == 0)
             {
+                const ConsoleVariableEnum& cvarScreenMode = m_configurationSettings.GetCVarEnum(CVarIdScreenMode);
                 renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 0) && flashIcon);
-                renderableText.LeftAligned("Screen Mode", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                const char* screenModeStr =
-                    (m_configurationSettings.GetScreenMode() == Windowed) ? "Windowed" :
-                    (m_configurationSettings.GetScreenMode() == Fullscreen) ? "Fullscreen" :
-                    "Borderless";
+                renderableText.LeftAligned(cvarScreenMode.GetNameInMenu(), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& screenModeStr = cvarScreenMode.GetValueInMenu();
                 renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == 0) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             else if (index + m_menuItemOffset == 1)

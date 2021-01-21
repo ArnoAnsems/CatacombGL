@@ -52,7 +52,7 @@ bool	active = true;		// Window Active Flag
 
 SDL_Window* SDLwindow = nullptr;
 SDL_GLContext glcontext = nullptr;
-ScreenMode m_screenMode = Windowed;
+uint8_t m_screenMode = CVarItemIdScreenModeWindowed;
 
 EngineCore* engineCore = nullptr;
 IGame* game = nullptr;
@@ -113,9 +113,9 @@ GLvoid KillGLWindow(GLvoid)
     SDL_DestroyWindow(SDLwindow);
 }
 
-void SetScreenMode(const ScreenMode screenMode)
+void SetScreenMode(const uint8_t screenMode)
 {
-    if (screenMode == Fullscreen)
+    if (screenMode == CVarItemIdScreenModeFullscreen)
     {
         // Set the width and height of the fullscreen to the width and height of the desktop area of the
         // display in use.
@@ -126,11 +126,11 @@ void SetScreenMode(const ScreenMode screenMode)
         SDL_SetWindowDisplayMode(SDLwindow, &displayMode);
         SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN);
     }
-    else if (screenMode == BorderlessWindowed)
+    else if (screenMode == CVarItemIdScreenModeBorderlessWindowed)
     {
         SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
     }
-    else // Windowed
+    else // CVarItemIdScreenModeWindowed
     {
         SDL_SetWindowFullscreen(SDLwindow, 0);
     }
@@ -172,7 +172,7 @@ void CreateGLWindow(int width, int height, int bits)
 
     m_renderer = new RendererOpenGLWin32();
     m_renderer->Setup();
-    SetScreenMode(m_configurationSettings.GetScreenMode());
+    SetScreenMode(m_configurationSettings.GetCVarEnum(CVarIdScreenMode).GetItemIndex());
     
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
 

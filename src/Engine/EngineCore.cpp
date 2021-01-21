@@ -3124,9 +3124,9 @@ void EngineCore::LoadGameFromFile(const std::string filename)
     LoadGameFromFileWithFullPath(fullPath);
 }
 
-ScreenMode EngineCore::GetScreenMode() const
+uint8_t EngineCore::GetScreenMode() const
 {
-    return m_configurationSettings.GetScreenMode();
+    return m_configurationSettings.GetCVarEnum(CVarIdScreenMode).GetItemIndex();
 }
 
 bool EngineCore::AreScrollsPresent() const

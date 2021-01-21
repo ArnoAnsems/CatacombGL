@@ -25,6 +25,7 @@
 #include "ControlsMap.h"
 #include "ConsoleVariableBool.h"
 #include "ConsoleVariableString.h"
+#include "ConsoleVariableEnum.h"
 
 static const uint8_t CVarIdDepthShading = 0;
 static const uint8_t CVarIdVSync = 1;
@@ -37,6 +38,11 @@ static const uint8_t CVarIdPathAbyssv124 = 11;
 static const uint8_t CVarIdPathArmageddonv102 = 12;
 static const uint8_t CVarIdPathApocalypsev101 = 13;
 static const uint8_t CVarIdPathCatacomb3Dv122 = 14;
+static const uint8_t CVarIdScreenMode = 20;
+
+static const uint8_t CVarItemIdScreenModeWindowed = 0;
+static const uint8_t CVarItemIdScreenModeFullscreen = 1;
+static const uint8_t CVarItemIdScreenModeBorderlessWindowed = 2;
 
 struct AspectRatioData
 {
@@ -48,13 +54,6 @@ const AspectRatioData aspectRatios[2] =
 {
     { 4.0f / 3.0f, "Original (4:3)" },
     { 10.0f, "Fit to window" }
-};
-
-enum ScreenMode
-{
-    Windowed,
-    Fullscreen,
-    BorderlessWindowed
 };
 
 enum ScreenResolution
@@ -85,9 +84,6 @@ public:
 
     void LoadFromFile(const std::string& configurationFile);
     void StoreToFile(const std::string& configurationFile) const;
-
-    ScreenMode GetScreenMode() const;
-    void SetScreenMode(const ScreenMode screenMode);
 
     uint8_t GetAspectRatio() const;
     void SetAspectRatio(const uint8_t ratio);
@@ -128,12 +124,13 @@ public:
     ConsoleVariableBool& GetCVarBoolMutable(const uint8_t cvarId);
     const ConsoleVariableString& GetCVarString(const uint8_t cvarId) const;
     ConsoleVariableString& GetCVarStringMutable(const uint8_t cvarId);
+    const ConsoleVariableEnum& GetCVarEnum(const uint8_t cvarId) const;
+    ConsoleVariableEnum& GetCVarEnumMutable(const uint8_t cvarId);
 
 private:
     void SerializeCVar(std::ofstream& file, const uint8_t cvarId) const;
     void DeserializeCVar(const std::map<std::string, std::string>& keyValuePairs, const uint8_t cvarId);
 
-    ScreenMode m_screenMode;
     uint8_t m_aspectRatio;
     uint8_t m_fov;
     IRenderer::TextureFilterSetting m_textureFilter;
@@ -155,6 +152,7 @@ private:
 
     std::map<const uint8_t, ConsoleVariableBool* const> m_cvarsBool;
     std::map<const uint8_t, ConsoleVariableString* const> m_cvarsString;
+    std::map<const uint8_t, ConsoleVariableEnum* const> m_cvarsEnum;
     ConsoleVariableBool m_dummyCvarBool;
     ConsoleVariableBool m_depthShading;
     ConsoleVariableBool m_vSync;
@@ -162,4 +160,7 @@ private:
     ConsoleVariableBool m_alwaysRun;
     ConsoleVariableBool m_autoFire;
     ConsoleVariableBool m_manaBar;
+
+    ConsoleVariableEnum m_dummyCvarEnum;
+    ConsoleVariableEnum m_screenMode;
 };

@@ -57,7 +57,7 @@ public:
     static const std::string GetVersionInfo();
 
     // Get the screen mode from the current configuration
-    ScreenMode GetScreenMode() const;
+    uint8_t GetScreenMode() const;
 
 private:
     enum State

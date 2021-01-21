@@ -20,7 +20,6 @@
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 
 ConfigurationSettings::ConfigurationSettings() :
-    m_screenMode(Windowed),
     m_aspectRatio(0),
     m_fov(25),
     m_textureFilter(IRenderer::Nearest),
@@ -61,7 +60,19 @@ ConfigurationSettings::ConfigurationSettings() :
         std::make_pair(CVarIdPathArmageddonv102, &m_pathArmageddonv102),
         std::make_pair(CVarIdPathApocalypsev101, &m_pathApocalypsev101),
         std::make_pair(CVarIdPathCatacomb3Dv122, &m_pathCatacomb3Dv122)
-    })
+    }),
+    m_dummyCvarEnum("Dummy", "Dummy", { {"","",""} }, 0),
+    m_screenMode("Screen Mode", "screenmode",
+                    {
+                        {"Windowed", "windowed", ""},
+                        {"Fullscreen", "fullscreen", ""} ,
+                        {"Borderless", "borderlesswindowed", ""}
+                    },
+                CVarItemIdScreenModeWindowed),
+    m_cvarsEnum(
+        {
+            std::make_pair(CVarIdScreenMode, &m_screenMode)
+        })
 {
 
 }
@@ -93,15 +104,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdPathApocalypsev101);
         DeserializeCVar(keyValuePairs, CVarIdPathCatacomb3Dv122);
 
-        auto screenModePair = keyValuePairs.find("screenmode");
-        if (screenModePair != keyValuePairs.end())
-        {
-            m_screenMode =
-                (screenModePair->second.compare("windowed") == 0) ? Windowed :
-                (screenModePair->second.compare("fullscreen") == 0) ? Fullscreen :
-                BorderlessWindowed;
-        }
-
+        DeserializeCVar(keyValuePairs, CVarIdScreenMode);
         DeserializeCVar(keyValuePairs, CVarIdDepthShading);
 
         auto showfpsPair = keyValuePairs.find("showfps");
@@ -221,11 +224,7 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         SerializeCVar(file, CVarIdPathApocalypsev101);
         SerializeCVar(file, CVarIdPathCatacomb3Dv122);
         file << "# Video settings\n";
-        const std::string screenModeValue =
-            (m_screenMode == Windowed) ? "windowed" :
-            (m_screenMode == Fullscreen) ? "fullscreen" :
-            "borderlesswindowed";
-        file << "screenmode=" << screenModeValue << "\n";
+        SerializeCVar(file, CVarIdScreenMode);
         const std::string screenResolutionValue = (m_screenResolution == Original) ? "original" : "high";
         file << "screenresolution=" << screenResolutionValue << "\n";
         const std::string aspectRatioValue = (m_aspectRatio == 0) ? "Classic" : "FitToScreen";
@@ -281,16 +280,6 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
             
         file.close();
     }
-}
-
-ScreenMode ConfigurationSettings::GetScreenMode() const
-{
-    return m_screenMode;
-}
-
-void ConfigurationSettings::SetScreenMode(const ScreenMode screenMode)
-{
-    m_screenMode = screenMode;
 }
 
 uint8_t ConfigurationSettings::GetAspectRatio() const
@@ -411,7 +400,13 @@ const ConsoleVariable& ConfigurationSettings::GetCVar(const uint8_t cvarId) cons
         return (const ConsoleVariable&)varBool;
     }
 
-    return (const ConsoleVariable&)GetCVarString(cvarId);
+    const ConsoleVariableString& varString = (const ConsoleVariableString&)GetCVarString(cvarId);
+    if (varString.GetNameInConfigFile() != m_dummyCvarString.GetNameInConfigFile())
+    {
+        return (const ConsoleVariable&)varString;
+    }
+
+    return (const ConsoleVariable&)GetCVarEnum(cvarId);
 }
 
 ConsoleVariable& ConfigurationSettings::GetCVarMutable(const uint8_t cvarId)
@@ -422,7 +417,13 @@ ConsoleVariable& ConfigurationSettings::GetCVarMutable(const uint8_t cvarId)
         return (ConsoleVariable&)varBool;
     }
 
-    return (ConsoleVariable&)GetCVarStringMutable(cvarId);
+    ConsoleVariableString& varString = (ConsoleVariableString&)GetCVarStringMutable(cvarId);
+    if (varString.GetNameInConfigFile() != m_dummyCvarString.GetNameInConfigFile())
+    {
+        return (ConsoleVariable&)varString;
+    }
+
+    return (ConsoleVariable&)GetCVarEnumMutable(cvarId);
 }
 
 const ConsoleVariableBool& ConfigurationSettings::GetCVarBool(const uint8_t cvarId) const
@@ -467,6 +468,28 @@ ConsoleVariableString& ConfigurationSettings::GetCVarStringMutable(const uint8_t
     }
 
     return m_dummyCvarString;
+}
+
+const ConsoleVariableEnum& ConfigurationSettings::GetCVarEnum(const uint8_t cvarId) const
+{
+    const auto it = m_cvarsEnum.find(cvarId);
+    if (it != m_cvarsEnum.end())
+    {
+        return *it->second;
+    }
+
+    return m_dummyCvarEnum;
+}
+
+ConsoleVariableEnum& ConfigurationSettings::GetCVarEnumMutable(const uint8_t cvarId)
+{
+    auto it = m_cvarsEnum.find(cvarId);
+    if (it != m_cvarsEnum.end())
+    {
+        return *it->second;
+    }
+
+    return m_dummyCvarEnum;
 }
 
 void ConfigurationSettings::SerializeCVar(std::ofstream& file, const uint8_t cvarId) const
