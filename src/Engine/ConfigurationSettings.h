@@ -39,10 +39,25 @@ static const uint8_t CVarIdPathArmageddonv102 = 12;
 static const uint8_t CVarIdPathApocalypsev101 = 13;
 static const uint8_t CVarIdPathCatacomb3Dv122 = 14;
 static const uint8_t CVarIdScreenMode = 20;
+static const uint8_t CVarIdAutoMapMode = 21;
+static const uint8_t CVarIdShowFpsMode = 22;
+static const uint8_t CVarIdScreenResolution = 23;
 
 static const uint8_t CVarItemIdScreenModeWindowed = 0;
 static const uint8_t CVarItemIdScreenModeFullscreen = 1;
 static const uint8_t CVarItemIdScreenModeBorderlessWindowed = 2;
+
+static const uint8_t CVarItemIdAutoMapOriginal = 0;
+static const uint8_t CVarItemIdAutoMapTopDown = 1;
+static const uint8_t CVarItemIdAutoMapTopDownHD = 2;
+static const uint8_t CVarItemIdAutoMapIsometric = 3;
+
+static const uint8_t CVarItemIdShowFpsOff = 0;
+static const uint8_t CVarItemIdShowFpsMinimal = 1;
+static const uint8_t CVarItemIdShowFpsExtended = 2;
+
+static const uint8_t CVarItemIdScreenResolutionOriginal = 0;
+static const uint8_t CVarItemIdScreenResolutionHigh = 0;
 
 struct AspectRatioData
 {
@@ -54,27 +69,6 @@ const AspectRatioData aspectRatios[2] =
 {
     { 4.0f / 3.0f, "Original (4:3)" },
     { 10.0f, "Fit to window" }
-};
-
-enum ScreenResolution
-{
-    Original,
-    High
-};
-
-enum ShowFpsMode
-{
-    Off,
-    Minimal,
-    Extended
-};
-
-enum AutoMapMode
-{
-    OriginalDebug,
-    TopDown,
-    TopDownHD,
-    Isometric
 };
 
 class ConfigurationSettings
@@ -94,12 +88,6 @@ public:
     IRenderer::TextureFilterSetting GetTextureFilter() const;
     void SetTextureFilter(const IRenderer::TextureFilterSetting filter);
 
-    ShowFpsMode GetShowFps() const;
-    void SetShowFps(const ShowFpsMode showFpsMode);
-
-    ScreenResolution GetScreenResolution() const;
-    void SetScreenResolution(const ScreenResolution screenResolution);
-
     ControlsMap& GetControlsMap();
     const ControlsMap& GetConstControlsMap() const;
 
@@ -114,9 +102,6 @@ public:
 
     uint8_t GetTurnSpeed() const;
     void SetTurnSpeed(const uint8_t speed);
-
-    AutoMapMode GetAutoMapMode() const;
-    void SetAutoMapMode(const AutoMapMode autoMapMode);
 
     const ConsoleVariable& GetCVar(const uint8_t cvarId) const;
     ConsoleVariable& GetCVarMutable(const uint8_t cvarId);
@@ -134,14 +119,15 @@ private:
     uint8_t m_aspectRatio;
     uint8_t m_fov;
     IRenderer::TextureFilterSetting m_textureFilter;
-    ShowFpsMode m_showFps;
-    ScreenResolution m_screenResolution;
     ControlsMap m_controlsMap;
     uint8_t m_soundMode;
     bool m_musicOn;
     uint8_t m_mouseSensitivity;
     uint8_t m_turnSpeed;
-    AutoMapMode m_autoMapMode;
+
+    std::map<const uint8_t, ConsoleVariableBool* const> m_cvarsBool;
+    std::map<const uint8_t, ConsoleVariableString* const> m_cvarsString;
+    std::map<const uint8_t, ConsoleVariableEnum* const> m_cvarsEnum;
 
     ConsoleVariableString m_dummyCvarString;
     ConsoleVariableString m_pathAbyssv113;
@@ -150,9 +136,6 @@ private:
     ConsoleVariableString m_pathApocalypsev101;
     ConsoleVariableString m_pathCatacomb3Dv122;
 
-    std::map<const uint8_t, ConsoleVariableBool* const> m_cvarsBool;
-    std::map<const uint8_t, ConsoleVariableString* const> m_cvarsString;
-    std::map<const uint8_t, ConsoleVariableEnum* const> m_cvarsEnum;
     ConsoleVariableBool m_dummyCvarBool;
     ConsoleVariableBool m_depthShading;
     ConsoleVariableBool m_vSync;
@@ -163,4 +146,7 @@ private:
 
     ConsoleVariableEnum m_dummyCvarEnum;
     ConsoleVariableEnum m_screenMode;
+    ConsoleVariableEnum m_autoMapMode;
+    ConsoleVariableEnum m_showFps;
+    ConsoleVariableEnum m_screenResolution;
 };

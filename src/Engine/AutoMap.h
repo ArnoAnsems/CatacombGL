@@ -47,9 +47,9 @@ public:
         const float mouseSensitivity,
         Level& level,
         const uint32_t timestamp,
-        const AutoMapMode autoMapMode,
+        const uint8_t autoMapMode,
         const ViewPorts::ViewPortRect3D original3DViewArea);
-    void ResetOrigin(Level& level, const AutoMapMode autoMapMode);
+    void ResetOrigin(Level& level, const uint8_t autoMapMode);
 
 private:
     float m_originX;

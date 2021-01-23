@@ -23,13 +23,10 @@ ConfigurationSettings::ConfigurationSettings() :
     m_aspectRatio(0),
     m_fov(25),
     m_textureFilter(IRenderer::Nearest),
-    m_showFps(Off),
-    m_screenResolution(High),
     m_soundMode(2),
     m_musicOn(true),
     m_mouseSensitivity(10),
     m_turnSpeed(100),
-    m_autoMapMode(TopDownHD),
     m_controlsMap(),
     m_dummyCvarBool("Dummy", "Dummy", false),
     m_depthShading("Depth shading", "depthshading", true),
@@ -63,15 +60,39 @@ ConfigurationSettings::ConfigurationSettings() :
     }),
     m_dummyCvarEnum("Dummy", "Dummy", { {"","",""} }, 0),
     m_screenMode("Screen Mode", "screenmode",
-                    {
-                        {"Windowed", "windowed", ""},
-                        {"Fullscreen", "fullscreen", ""} ,
-                        {"Borderless", "borderlesswindowed", ""}
-                    },
-                CVarItemIdScreenModeWindowed),
+        {
+            {"Windowed", "windowed", ""},
+            {"Fullscreen", "fullscreen", ""} ,
+            {"Borderless", "borderlesswindowed", ""}
+        },
+        CVarItemIdScreenModeWindowed),
+    m_autoMapMode("Automap", "automapmode",
+        {
+            {"Original (Debug)", "original", ""},
+            {"Top down", "topdown", ""} ,
+            {"Top down HD", "topdownhd", ""},
+            {"Isometric", "isometric", ""}
+        },
+        CVarItemIdAutoMapTopDownHD),
+    m_showFps("Show frame rate", "showfps",
+        {
+            {"Off", "off", "false"},
+            {"Minimal", "minimal", "true"},
+            {"Extended", "extended", ""}
+        },
+        CVarItemIdShowFpsOff),
+    m_screenResolution("Screen Resolution", "screenresolution",
+        {
+            {"Original", "original", ""},
+            {"High", "high", ""}
+        },
+        CVarItemIdScreenResolutionHigh),
     m_cvarsEnum(
         {
-            std::make_pair(CVarIdScreenMode, &m_screenMode)
+            std::make_pair(CVarIdScreenMode, &m_screenMode),
+            std::make_pair(CVarIdAutoMapMode, &m_autoMapMode),
+            std::make_pair(CVarIdShowFpsMode, &m_showFps),
+            std::make_pair(CVarIdScreenResolution, &m_screenResolution)
         })
 {
 
@@ -106,16 +127,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
 
         DeserializeCVar(keyValuePairs, CVarIdScreenMode);
         DeserializeCVar(keyValuePairs, CVarIdDepthShading);
-
-        auto showfpsPair = keyValuePairs.find("showfps");
-        if (showfpsPair != keyValuePairs.end())
-        {
-            m_showFps = 
-                (showfpsPair->second.compare("true") == 0 || showfpsPair->second.compare("minimal") == 0) ? Minimal :
-                (showfpsPair->second.compare("extended") == 0) ? Extended :
-                Off;
-        }
-
+        DeserializeCVar(keyValuePairs, CVarIdShowFpsMode);
         DeserializeCVar(keyValuePairs, CVarIdVSync);
 
         auto aspectRatioPair = keyValuePairs.find("aspectratio");
@@ -137,11 +149,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
             m_fov = (fov < 25) ? 25 : (fov > 45) ? 45 : fov;
         }
 
-        auto screenResolutionPair = keyValuePairs.find("screenresolution");
-        if (screenResolutionPair != keyValuePairs.end())
-        {
-            m_screenResolution = (screenResolutionPair->second.compare("original") == 0) ? Original : High;
-        }
+        DeserializeCVar(keyValuePairs, CVarIdScreenResolution);
 
         auto soundModePair = keyValuePairs.find("soundmode");
         if (soundModePair != keyValuePairs.end())
@@ -174,17 +182,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
 
         DeserializeCVar(keyValuePairs, CVarIdAlwaysRun);
         DeserializeCVar(keyValuePairs, CVarIdAutoFire);
-
-        auto autoMapModePair = keyValuePairs.find("automapmode");
-        if (autoMapModePair != keyValuePairs.end())
-        {
-            m_autoMapMode =
-                (autoMapModePair->second.compare("original") == 0) ? OriginalDebug :
-                (autoMapModePair->second.compare("isometric") == 0) ? Isometric :
-                (autoMapModePair->second.compare("topdown") == 0) ? TopDown :
-                TopDownHD;
-        }
-
+        DeserializeCVar(keyValuePairs, CVarIdAutoMapMode);
         DeserializeCVar(keyValuePairs, CVarIdManaBar);
 
         for (auto keyPair : keyValuePairs)
@@ -225,27 +223,17 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         SerializeCVar(file, CVarIdPathCatacomb3Dv122);
         file << "# Video settings\n";
         SerializeCVar(file, CVarIdScreenMode);
-        const std::string screenResolutionValue = (m_screenResolution == Original) ? "original" : "high";
-        file << "screenresolution=" << screenResolutionValue << "\n";
+        SerializeCVar(file, CVarIdScreenResolution);
         const std::string aspectRatioValue = (m_aspectRatio == 0) ? "Classic" : "FitToScreen";
         file << "aspectratio=" << aspectRatioValue << "\n";
         SerializeCVar(file, CVarIdDepthShading);
-        const std::string showfpsValue =
-            (m_showFps == Minimal) ? "minimal" :
-            (m_showFps == Extended) ? "extended" :
-            "off";
-        file << "showfps=" << showfpsValue << "\n";
+        SerializeCVar(file, CVarIdShowFpsMode);
         SerializeCVar(file, CVarIdVSync);
         const std::string textureFilterValue = (m_textureFilter == IRenderer::TextureFilterSetting::Nearest) ? "Nearest" : "Linear";
         file << "texturefilter=" << textureFilterValue << "\n";
         std::string fovValue = std::to_string(m_fov);
         file << "fov=" << fovValue << "\n";
-        const std::string autoMapModeValue =
-            (m_autoMapMode == OriginalDebug) ? "original" :
-            (m_autoMapMode == Isometric) ? "isometric" :
-            (m_autoMapMode == TopDown) ? "topdown" :
-            "topdownhd";
-        file << "automapmode=" << autoMapModeValue << "\n";
+        SerializeCVar(file, CVarIdAutoMapMode);
         file << "# Sound settings\n";
         const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";
         file << "soundmode=" << modeValue << "\n";
@@ -312,26 +300,6 @@ void ConfigurationSettings::SetTextureFilter(const IRenderer::TextureFilterSetti
     m_textureFilter = filter;
 }
 
-ShowFpsMode ConfigurationSettings::GetShowFps() const
-{
-    return m_showFps;
-}
-
-void ConfigurationSettings::SetShowFps(const ShowFpsMode showFpsMode)
-{
-    m_showFps = showFpsMode;
-}
-
-ScreenResolution ConfigurationSettings::GetScreenResolution() const
-{
-    return m_screenResolution;
-}
-
-void ConfigurationSettings::SetScreenResolution(const ScreenResolution screenResolution)
-{
-    m_screenResolution = screenResolution;
-}
-
 ControlsMap& ConfigurationSettings::GetControlsMap()
 {
     return m_controlsMap;
@@ -380,16 +348,6 @@ uint8_t ConfigurationSettings::GetTurnSpeed() const
 void ConfigurationSettings::SetTurnSpeed(const uint8_t speed)
 {
     m_turnSpeed = speed;
-}
-
-AutoMapMode ConfigurationSettings::GetAutoMapMode() const
-{
-    return m_autoMapMode;
-}
-
-void ConfigurationSettings::SetAutoMapMode(const AutoMapMode autoMapMode)
-{
-    m_autoMapMode = autoMapMode;
 }
 
 const ConsoleVariable& ConfigurationSettings::GetCVar(const uint8_t cvarId) const

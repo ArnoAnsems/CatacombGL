@@ -644,14 +644,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 1)
         {
-            if (m_configurationSettings.GetScreenResolution() == Original)
-            {
-                m_configurationSettings.SetScreenResolution(High);
-            }
-            else
-            {
-                m_configurationSettings.SetScreenResolution(Original);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution).Next();
         }
         else if (m_menuItemSelected == 2)
         {
@@ -692,12 +685,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 6)
         {
-            const ShowFpsMode previousShowFpsMode = m_configurationSettings.GetShowFps();
-            const ShowFpsMode nextShowFpsMode =
-                (previousShowFpsMode == Off) ? Minimal :
-                (previousShowFpsMode == Minimal) ? Extended :
-                Off;
-            m_configurationSettings.SetShowFps(nextShowFpsMode);
+            m_configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode).Next();
         }
         else if (m_menuItemSelected == 7)
         {
@@ -705,13 +693,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 8)
         {
-            const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
-            const AutoMapMode nextAutoMapMode =
-                (previousAutoMapMode == OriginalDebug) ? TopDown :
-                (previousAutoMapMode == TopDown) ? TopDownHD :
-                (previousAutoMapMode == TopDownHD) ? Isometric :
-                OriginalDebug;
-            m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
+            m_configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode).Next();
         }
     }
     else if (m_subMenuSelected == subMenuControls)
@@ -1077,10 +1059,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == 1)
             {
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdScreenResolution);
                 const bool screenResolutionSupported = renderer.IsOriginalScreenResolutionSupported();
                 renderableTiles.DrawListBullet(76, offsetY, screenResolutionSupported, (m_menuItemSelected == 1) && flashIcon);
-                renderableText.LeftAligned("Screen Resolution", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                const char* screenResolutionStr = (!screenResolutionSupported) ? "Not suppor." : (m_configurationSettings.GetScreenResolution() == Original) ? "Original" : "High";
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& screenResolutionStr = (!screenResolutionSupported) ? "Not suppor." : cvar.GetValueInMenu();
                 renderableText.LeftAligned(screenResolutionStr, (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             else if (index + m_menuItemOffset == 2)
@@ -1115,13 +1098,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == 6)
             {
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdShowFpsMode);
                 renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 6) && flashIcon);
-                renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
-                const char* showFpsStr =
-                    (showFpsMode == Minimal) ? "Minimal" :
-                    (showFpsMode == Extended) ? "Extended" :
-                    "Off";
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& showFpsStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             else if (index + m_menuItemOffset == 7)
@@ -1135,14 +1115,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == 8)
             {
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode);
                 renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 8) && flashIcon);
-                renderableText.LeftAligned("Automap", (m_menuItemSelected == 8) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
-                const char* autoMapModeStr =
-                    (autoMapMode == OriginalDebug) ? "Original" :
-                    (autoMapMode == Isometric) ? "Isometric" :
-                    (autoMapMode == TopDown) ? "Top down" :
-                    "Top down HD";
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 8) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& autoMapModeStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == 8) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             index++;

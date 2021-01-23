@@ -501,14 +501,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == menuItemVideoScreenResolution)
         {
-            if (m_configurationSettings.GetScreenResolution() == Original)
-            {
-                m_configurationSettings.SetScreenResolution(High);
-            }
-            else
-            {
-                m_configurationSettings.SetScreenResolution(Original);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution).Next();
         }
         else if (m_menuItemSelected == menuItemVideoAspectRatio)
         {
@@ -538,12 +531,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == menuItemVideoShowFps)
         {
-            const ShowFpsMode previousShowFpsMode = m_configurationSettings.GetShowFps();
-            const ShowFpsMode nextShowFpsMode =
-                (previousShowFpsMode == Off) ? Minimal :
-                (previousShowFpsMode == Minimal) ? Extended :
-                Off;
-            m_configurationSettings.SetShowFps(nextShowFpsMode);
+            m_configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode).Next();
         }
         else if (m_menuItemSelected == menuItemVideoVSync)
         {
@@ -551,13 +539,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == menuItemVideoAutoMapMode)
         {
-            const AutoMapMode previousAutoMapMode = m_configurationSettings.GetAutoMapMode();
-            const AutoMapMode nextAutoMapMode =
-                (previousAutoMapMode == OriginalDebug) ? TopDown :
-                (previousAutoMapMode == TopDown) ? TopDownHD :
-                (previousAutoMapMode == TopDownHD) ? Isometric :
-                OriginalDebug;
-            m_configurationSettings.SetAutoMapMode(nextAutoMapMode);
+            m_configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode).Next();
         }
     }
     else if (m_subMenuSelected == subMenuControls)
@@ -730,9 +712,10 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == menuItemVideoScreenResolution)
             {
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdScreenResolution);
                 const bool screenResolutionNotSupported = !renderer.IsOriginalScreenResolutionSupported();
-                renderableText.LeftAligned("Screen Resolution", (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const char* screenResolutionStr = (screenResolutionNotSupported) ? "Not supported" : (m_configurationSettings.GetScreenResolution() == Original) ? "Original (320x200)" : "High";
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& screenResolutionStr = (screenResolutionNotSupported) ? "Not supported" : cvar.GetValueInMenu();
                 renderableText.LeftAligned(screenResolutionStr, (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == menuItemVideoAspectRatio)
@@ -763,12 +746,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == menuItemVideoShowFps)
             {
-                renderableText.LeftAligned("Show frame rate", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
-                const char* showFpsStr =
-                    (showFpsMode == Minimal) ? "Minimal" :
-                    (showFpsMode == Extended) ? "Extended" :
-                    "Off";
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdShowFpsMode);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& showFpsStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == menuItemVideoVSync)
@@ -781,13 +761,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == menuItemVideoAutoMapMode)
             {
-                renderableText.LeftAligned("Automap", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const AutoMapMode autoMapMode = m_configurationSettings.GetAutoMapMode();
-                const char* autoMapModeStr =
-                    (autoMapMode == OriginalDebug) ? "Original (Debug)" :
-                    (autoMapMode == Isometric) ? "Isometric" :
-                    (autoMapMode == TopDown) ? "Top down" :
-                    "Top down HD";
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& autoMapModeStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             index++;

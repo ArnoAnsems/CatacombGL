@@ -68,21 +68,21 @@ void AutoMap::ProcessInput(
     const float mouseSensitivity,
     Level& level,
     const uint32_t timestamp,
-    const AutoMapMode autoMapMode,
+    const uint8_t autoMapMode,
     const ViewPorts::ViewPortRect3D original3DViewArea)
 {
     const uint16_t topDownTileSize = 16;
     const uint16_t topDownMaxTilesX = original3DViewArea.width / topDownTileSize;
     const uint16_t topDownMaxTilesY = original3DViewArea.height / topDownTileSize;
     const float maxOriginX = (float)(level.GetLevelWidth() - topDownMaxTilesX);
-    const float minOriginY = (autoMapMode == Isometric) ? -3.0f : 0.0f;
+    const float minOriginY = (autoMapMode == CVarItemIdAutoMapIsometric) ? -3.0f : 0.0f;
     const float maxOriginY =
-        (autoMapMode == TopDown || autoMapMode == TopDownHD) ? (float)(level.GetLevelHeight() - topDownMaxTilesY) :
-        (autoMapMode == OriginalDebug) ? (float)(level.GetLevelHeight() - 9.0f) :
+        (autoMapMode == CVarItemIdAutoMapTopDown || autoMapMode == CVarItemIdAutoMapTopDownHD) ? (float)(level.GetLevelHeight() - topDownMaxTilesY) :
+        (autoMapMode == CVarItemIdAutoMapOriginal) ? (float)(level.GetLevelHeight() - 9.0f) :
         (float)(level.GetLevelHeight() - 5.0f); // Isometric
-    const float stepSize = (autoMapMode == OriginalDebug) ? 1.0f : 0.125f;
-    const uint32_t timeInterval = (autoMapMode == OriginalDebug) ? 200 : 25;
-    const float mouseSensitivityScaled = (autoMapMode == OriginalDebug) ? (mouseSensitivity / 400.0f) : (mouseSensitivity / 50.0f);
+    const float stepSize = (autoMapMode == CVarItemIdAutoMapOriginal) ? 1.0f : 0.125f;
+    const uint32_t timeInterval = (autoMapMode == CVarItemIdAutoMapOriginal) ? 200 : 25;
+    const float mouseSensitivityScaled = (autoMapMode == CVarItemIdAutoMapOriginal) ? (mouseSensitivity / 400.0f) : (mouseSensitivity / 50.0f);
     m_accumulatedMouseX += playerInput.GetMouseXPos();
     m_accumulatedMouseY += playerInput.GetMouseYPos();
     if (timestamp > m_lastActionTimestamp + timeInterval)
@@ -92,7 +92,7 @@ void AutoMap::ProcessInput(
             // Scroll right
             const float mouseMovement = stepSize * (int32_t)((float)m_accumulatedMouseX * mouseSensitivityScaled);
             m_originX += mouseMovement;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originY -= mouseMovement;
             }
@@ -103,7 +103,7 @@ void AutoMap::ProcessInput(
             // Scroll left
             const float mouseMovement = stepSize * (int32_t)((float)-m_accumulatedMouseX * mouseSensitivityScaled);
             m_originX -= mouseMovement;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originY += mouseMovement;
             }
@@ -114,7 +114,7 @@ void AutoMap::ProcessInput(
             // Scroll down
             const float mouseMovement = stepSize * (int32_t)((float)m_accumulatedMouseY * mouseSensitivityScaled);
             m_originY += mouseMovement;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originX += mouseMovement;
             }
@@ -125,7 +125,7 @@ void AutoMap::ProcessInput(
             // Scroll up
             const float mouseMovement = stepSize * (int32_t)((float)-m_accumulatedMouseY * mouseSensitivityScaled);
             m_originY -= mouseMovement;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originX -= mouseMovement;
             }
@@ -134,7 +134,7 @@ void AutoMap::ProcessInput(
         if (playerInput.IsKeyPressed(SDLK_RIGHT))
         {
             m_originX += stepSize;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originY -= stepSize;
             }
@@ -142,7 +142,7 @@ void AutoMap::ProcessInput(
         if (playerInput.IsKeyPressed(SDLK_LEFT))
         {
             m_originX -= stepSize;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originY += stepSize;
             }
@@ -150,7 +150,7 @@ void AutoMap::ProcessInput(
         if (playerInput.IsKeyPressed(SDLK_DOWN))
         {
             m_originY += stepSize;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originX += stepSize;
             }
@@ -158,7 +158,7 @@ void AutoMap::ProcessInput(
         if (playerInput.IsKeyPressed(SDLK_UP))
         {
             m_originY -= stepSize;
-            if (autoMapMode == Isometric)
+            if (autoMapMode == CVarItemIdAutoMapIsometric)
             {
                 m_originX -= stepSize;
             }
@@ -195,9 +195,9 @@ void AutoMap::ProcessInput(
     }
 }
 
-void AutoMap::ResetOrigin(Level& level, const AutoMapMode autoMapMode)
+void AutoMap::ResetOrigin(Level& level, uint8_t autoMapMode)
 {
-    if (autoMapMode == OriginalDebug && m_cheat)
+    if (autoMapMode == CVarItemIdAutoMapOriginal && m_cheat)
     {
         m_originX = 0.0f;
         m_originY = 0.0f;
@@ -206,7 +206,7 @@ void AutoMap::ResetOrigin(Level& level, const AutoMapMode autoMapMode)
     {
         // Put the origin at the player position
         const float maxOriginX = level.GetLevelWidth() - 20.0f;
-        const float maxOriginY = (autoMapMode == TopDown) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
+        const float maxOriginY = (autoMapMode == CVarItemIdAutoMapTopDown) ? level.GetLevelHeight() - 7.0f : level.GetLevelHeight() - 9.0f;
         const float bestOriginX = level.GetPlayerActor()->GetX() - 10.0f;
         const float bestOriginY = level.GetPlayerActor()->GetY() - 4.0f;
         m_originX = (bestOriginX < 0.0f) ? 0.0f :

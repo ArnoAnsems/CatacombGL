@@ -118,7 +118,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 
     m_game.SpawnActors(m_level, m_difficultyLevel);
     m_level->GetPlayerActor()->SetHealth(health);
-    m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetAutoMapMode());
+    m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex());
 
     m_timeStampOfPlayerCurrentFrame = 0;
     m_timeStampOfPlayerPreviousFrame = 0;
@@ -160,14 +160,15 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_state == AutoMapDialog && m_level != nullptr)
     {
         const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
-        if (m_configurationSettings.GetAutoMapMode() == Isometric)
+        const uint8_t autoMapMode = m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex();
+        if (autoMapMode == CVarItemIdAutoMapIsometric)
         {
             m_autoMap.SetupIso(m_renderableAutoMapIso, *m_game.GetEgaGraph(), *m_level, aspectRatio);
             renderer.RenderAutoMapIso(m_renderableAutoMapIso);
         }
-        else if (m_configurationSettings.GetAutoMapMode() == TopDown || m_configurationSettings.GetAutoMapMode() == TopDownHD)
+        else if (autoMapMode == CVarItemIdAutoMapTopDown || autoMapMode == CVarItemIdAutoMapTopDownHD)
         {
-            const uint16_t tileSize = (m_configurationSettings.GetAutoMapMode() == TopDown) ? 16 : 64;
+            const uint16_t tileSize = (autoMapMode == CVarItemIdAutoMapTopDown) ? 16 : 64;
             m_autoMap.SetupTopDown(m_renderableAutoMapTopDown, *m_game.GetEgaGraph(), *m_level, aspectRatio, tileSize, renderer.GetAdditionalMarginDueToWideScreen(aspectRatio));
             renderer.RenderAutoMapTopDown(m_renderableAutoMapTopDown);
         }
@@ -185,7 +186,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     m_level->GetPlayerActor()->GetAngle(),
                     m_configurationSettings.GetCVarBool(CVarIdDepthShading).IsEnabled(),
                     m_configurationSettings.GetFov(),
-                    renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetScreenResolution() == ScreenResolution::Original);
+                    renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetCVarEnum(CVarIdScreenResolution).GetItemIndex() == CVarItemIdScreenResolutionOriginal);
                 m_level->Setup3DScene(
                     *m_game.GetEgaGraph(),
                     m_renderable3DScene,
@@ -386,7 +387,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.RenderText(renderableText);
     }
 
-    if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetAutoMapMode() == OriginalDebug)
+    if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex() == CVarItemIdAutoMapOriginal)
     {
         m_autoMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
     }
@@ -468,17 +469,17 @@ void EngineCore::DrawScene(IRenderer& renderer)
         m_menu->Draw(renderer, m_game.GetEgaGraph(), m_game.GetMenuCursorPic(), m_gameTimer.GetActualTime());
     }
 
-    const ShowFpsMode showFpsMode = m_configurationSettings.GetShowFps();
-    if (showFpsMode != ShowFpsMode::Off)
+    const uint8_t showFpsMode = m_configurationSettings.GetCVarEnum(CVarIdShowFpsMode).GetItemIndex();
+    if (showFpsMode != CVarItemIdShowFpsOff)
     {
         const int16_t offsetX = 6 - renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
         const std::string fpsStr =
-            (showFpsMode == ShowFpsMode::Minimal) ? std::to_string(m_framesCounter.GetFramesPerSecond()) :
+            (showFpsMode == CVarItemIdShowFpsMinimal) ? std::to_string(m_framesCounter.GetFramesPerSecond()) :
             std::to_string(m_framesCounter.GetFramesPerSecond()) + " FPS";
         RenderableText renderableTextFont10(*DefaultFont::Get(renderer, 10));
         renderableTextFont10.LeftAligned(fpsStr, EgaBrightYellow, offsetX, 2);
         renderer.RenderText(renderableTextFont10);
-        if (showFpsMode == ShowFpsMode::Extended)
+        if (showFpsMode == CVarItemIdShowFpsExtended)
         {
             const std::string windowDimensionsStr = std::to_string(renderer.GetWindowWidth()) + " x " + std::to_string(renderer.GetWindowHeight());
             RenderableText renderableTextFont7(*DefaultFont::Get(renderer, 7));
@@ -781,7 +782,7 @@ bool EngineCore::Think()
             m_configurationSettings.GetMouseSensitivity(),
             *m_level,
             m_gameTimer.GetActualTime(),
-            m_configurationSettings.GetAutoMapMode(),
+            m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex(),
             m_game.GetOriginal3DViewArea());
         m_playerInput.SetMouseXPos(0);
         m_playerInput.SetMouseYPos(0);
@@ -2812,7 +2813,7 @@ void EngineCore::ShowAutoMap(const bool cheat)
     {
         m_state = AutoMapDialog;
         m_autoMap.SetCheat(cheat);
-        m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetAutoMapMode());
+        m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex());
         m_gameTimer.Pause();
     }
 }
