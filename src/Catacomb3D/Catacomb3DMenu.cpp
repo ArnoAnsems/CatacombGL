@@ -648,14 +648,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 2)
         {
-            if (m_configurationSettings.GetAspectRatio() == 1)
-            {
-                m_configurationSettings.SetAspectRatio(0);
-            }
-            else
-            {
-                m_configurationSettings.SetAspectRatio(1);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio).Next();
         }
         else if (m_menuItemSelected == 3)
         {
@@ -670,14 +663,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 4)
         {
-            if (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest)
-            {
-                m_configurationSettings.SetTextureFilter(IRenderer::Linear);
-            }
-            else
-            {
-                m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter).Next();
         }
         else if (m_menuItemSelected == 5)
         {
@@ -753,11 +739,11 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuSound)
     {
-        m_configurationSettings.SetSoundMode(m_menuItemSelected);
+        m_configurationSettings.GetCVarEnumMutable(CVarIdSoundMode).SetItemIndex(m_menuItemSelected);
     }
     else if (m_subMenuSelected == subMenuMusic)
     {
-        m_configurationSettings.SetMusicOn(m_menuItemSelected != 0);
+        m_configurationSettings.GetCVarEnumMutable(CVarIdMusicMode).SetItemIndex(m_menuItemSelected);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
@@ -1068,9 +1054,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == 2)
             {
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAspectRatio);
                 renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 2) && flashIcon);
-                renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& aspectRatioStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == 2) ? EgaLightGray : EgaDarkGray, 160, offsetY + 1);
             }
             else if (index + m_menuItemOffset == 3)
@@ -1083,9 +1070,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == 4)
             {
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdTextureFilter);
                 renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 4) && flashIcon);
-                renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& textureFilterStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == 4) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             else if (index + m_menuItemOffset == 5)
@@ -1226,7 +1214,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_SOUNDMENUPIC), 80, 48);
 
-        const uint8_t soundMode = m_configurationSettings.GetSoundMode();
+        const uint8_t soundMode = m_configurationSettings.GetCVarEnum(CVarIdSoundMode).GetItemIndex();
         renderableTiles.DrawRadioButton(88, 62, (soundMode == 0), (m_menuItemSelected == 0) && flashIcon);
         renderableText.LeftAligned("NO SOUND EFFECTS", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
         renderableTiles.DrawRadioButton(88, 70, (soundMode == 1), (m_menuItemSelected == 1) && flashIcon);
@@ -1248,7 +1236,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_MUSICMENUPIC), 80, 48);
 
-        const bool musicOn = m_configurationSettings.GetMusicOn();
+        const bool musicOn = m_configurationSettings.GetCVarEnum(CVarIdMusicMode).GetItemIndex() == CVarItemIdMusicModeAdlib;
         renderableTiles.DrawRadioButton(88, 62, !musicOn, (m_menuItemSelected == 0) && flashIcon);
         renderableText.LeftAligned("NO MUSIC", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
         renderableTiles.DrawRadioButton(88, 70, musicOn, (m_menuItemSelected == 1) && flashIcon);

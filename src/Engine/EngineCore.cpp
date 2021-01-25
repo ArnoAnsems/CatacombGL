@@ -41,6 +41,12 @@ const uint8_t VictoryStatePlayGetPoint = 10;
 const uint8_t VictoryStatePlayingGetPoint = 11;
 const uint8_t VictoryStateDone = 12;
 
+const float aspectRatios[2] =
+{
+    { 4.0f / 3.0f },
+    { 10.0f }
+};
+
 EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput, ConfigurationSettings& configurationSettings) :
     m_gameTimer(),
     m_game(game),
@@ -153,13 +159,13 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
 
     IRenderer::FrameSettings frameSettings;
-    frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
+    frameSettings.textureFilter = (m_configurationSettings.GetCVarEnum(CVarIdTextureFilter).GetItemIndex() == CVarItemIdTextureFilterNearest) ? IRenderer::Nearest : IRenderer::Linear;
     frameSettings.vSyncEnabled = m_configurationSettings.GetCVarBool(CVarIdVSync).IsEnabled();
     renderer.SetFrameSettings(frameSettings);
 
     if (m_state == AutoMapDialog && m_level != nullptr)
     {
-        const float aspectRatio = aspectRatios[m_configurationSettings.GetAspectRatio()].ratio;
+        const float aspectRatio = aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()];
         const uint8_t autoMapMode = m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex();
         if (autoMapMode == CVarItemIdAutoMapIsometric)
         {
@@ -180,7 +186,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
             if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
             {
                 m_renderable3DScene.PrepareFrame(
-                    aspectRatios[m_configurationSettings.GetAspectRatio()].ratio,
+                    aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()],
                     m_level->GetPlayerActor()->GetX(),
                     m_level->GetPlayerActor()->GetY(),
                     m_level->GetPlayerActor()->GetAngle(),
@@ -279,7 +285,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
         const uint8_t levelIndex = (m_level != 0) ? m_level->GetLevelIndex() : 0;
-        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio), playerAngle, levelIndex, m_playerActions.GetShotPower(), m_score.GetPoints());
+        m_game.DrawStatusBar(playerHealth, locationMessage, m_playerInventory, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]), playerAngle, levelIndex, m_playerActions.GetShotPower(), m_score.GetPoints());
 
         if (m_state != Victory)
         {
@@ -326,7 +332,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     
     if ( m_state == EnteringLevel)
     {
-        const uint16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
+        const uint16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]);
         RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
         if (m_game.GetId() == 5)
         {
@@ -389,7 +395,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex() == CVarItemIdAutoMapOriginal)
     {
-        m_autoMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio));
+        m_autoMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]));
     }
 
     if (m_state == GodModeCheatDialog)
@@ -472,7 +478,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     const uint8_t showFpsMode = m_configurationSettings.GetCVarEnum(CVarIdShowFpsMode).GetItemIndex();
     if (showFpsMode != CVarItemIdShowFpsOff)
     {
-        const int16_t offsetX = 6 - renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetAspectRatio()].ratio);
+        const int16_t offsetX = 6 - renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]);
         const std::string fpsStr =
             (showFpsMode == CVarItemIdShowFpsMinimal) ? std::to_string(m_framesCounter.GetFramesPerSecond()) :
             std::to_string(m_framesCounter.GetFramesPerSecond()) + " FPS";
@@ -589,26 +595,28 @@ bool EngineCore::Think()
         return false;
     }
 
-    SDMode soundMode = SD_GetSoundMode();
-    if (m_configurationSettings.GetSoundMode() == 0 && soundMode != sdm_Off)
+    const SDMode soundMode = SD_GetSoundMode();
+    const uint8_t soundModeIndex = m_configurationSettings.GetCVarEnum(CVarIdSoundMode).GetItemIndex();
+    if (soundModeIndex == CVarItemIdSoundModeOff && soundMode != sdm_Off)
     {
         SD_SetSoundMode(sdm_Off);
     }
-    else if (m_configurationSettings.GetSoundMode() == 1 && soundMode != sdm_PC)
+    else if (soundModeIndex == CVarItemIdSoundModePCSpeaker && soundMode != sdm_PC)
     {
         SD_SetSoundMode(sdm_PC);
     }
-    else if (m_configurationSettings.GetSoundMode() == 2 && soundMode != sdm_AdLib)
+    else if (soundModeIndex == CVarItemIdSoundModeAdlib && soundMode != sdm_AdLib)
     {
         SD_SetSoundMode(sdm_AdLib);
     }
 
     const SMMode musicMode = SD_GetMusicMode();
-    if (m_configurationSettings.GetMusicOn() && musicMode == smm_Off)
+    const uint8_t musicModeIndex = m_configurationSettings.GetCVarEnum(CVarIdMusicMode).GetItemIndex();
+    if (musicModeIndex == CVarItemIdMusicModeAdlib && musicMode == smm_Off)
     {
         SD_SetMusicMode(smm_AdLib);
     }
-    else if (!m_configurationSettings.GetMusicOn() && musicMode == smm_AdLib)
+    else if (musicModeIndex == CVarItemIdMusicModeOff && musicMode == smm_AdLib)
     {
         SD_SetMusicMode(smm_Off);
     }
@@ -3155,7 +3163,7 @@ bool EngineCore::AreScrollsPresent() const
 void EngineCore::StartMusicIfNeeded()
 {
     if (m_game.GetId() == 5 &&
-        m_configurationSettings.GetMusicOn() &&
+        m_configurationSettings.GetCVarEnum(CVarIdMusicMode).GetItemIndex() == CVarItemIdMusicModeAdlib &&
         (m_state == InGame || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == WarpCheatDialog || m_state == AutoMapDialog) &&
         !m_menu->IsActive())
     {

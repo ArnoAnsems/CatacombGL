@@ -499,7 +499,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
         }
 
         IRenderer::FrameSettings frameSettings;
-        frameSettings.textureFilter = m_configurationSettings.GetTextureFilter();
+        frameSettings.textureFilter = (m_configurationSettings.GetCVarEnum(CVarIdTextureFilter).GetItemIndex() == CVarItemIdTextureFilterNearest) ? IRenderer::Nearest : IRenderer::Linear;
         frameSettings.vSyncEnabled = m_configurationSettings.GetCVarBool(CVarIdVSync).IsEnabled();
         m_renderer->SetFrameSettings(frameSettings);
 

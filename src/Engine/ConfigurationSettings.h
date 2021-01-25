@@ -21,7 +21,6 @@
 #pragma once
 
 #include <stdint.h>
-#include "IRenderer.h"
 #include "ControlsMap.h"
 #include "ConsoleVariableBool.h"
 #include "ConsoleVariableString.h"
@@ -42,6 +41,10 @@ static const uint8_t CVarIdScreenMode = 20;
 static const uint8_t CVarIdAutoMapMode = 21;
 static const uint8_t CVarIdShowFpsMode = 22;
 static const uint8_t CVarIdScreenResolution = 23;
+static const uint8_t CVarIdSoundMode = 24;
+static const uint8_t CVarIdMusicMode = 25;
+static const uint8_t CVarIdTextureFilter = 26;
+static const uint8_t CVarIdAspectRatio = 27;
 
 static const uint8_t CVarItemIdScreenModeWindowed = 0;
 static const uint8_t CVarItemIdScreenModeFullscreen = 1;
@@ -57,19 +60,20 @@ static const uint8_t CVarItemIdShowFpsMinimal = 1;
 static const uint8_t CVarItemIdShowFpsExtended = 2;
 
 static const uint8_t CVarItemIdScreenResolutionOriginal = 0;
-static const uint8_t CVarItemIdScreenResolutionHigh = 0;
+static const uint8_t CVarItemIdScreenResolutionHigh = 1;
 
-struct AspectRatioData
-{
-    float ratio;
-    std::string description;
-};
+static const uint8_t CVarItemIdSoundModeOff = 0;
+static const uint8_t CVarItemIdSoundModePCSpeaker = 1;
+static const uint8_t CVarItemIdSoundModeAdlib = 2;
 
-const AspectRatioData aspectRatios[2] =
-{
-    { 4.0f / 3.0f, "Original (4:3)" },
-    { 10.0f, "Fit to window" }
-};
+static const uint8_t CVarItemIdMusicModeOff = 0;
+static const uint8_t CVarItemIdMusicModeAdlib = 1;
+
+static const uint8_t CVarItemIdTextureFilterNearest = 0;
+static const uint8_t CVarItemIdTextureFilterLinear = 1;
+
+static const uint8_t CVarItemIdAspectRatioOriginal = 0;
+static const uint8_t CVarItemIdAspectRatioFitToWindow = 1;
 
 class ConfigurationSettings
 {
@@ -79,23 +83,11 @@ public:
     void LoadFromFile(const std::string& configurationFile);
     void StoreToFile(const std::string& configurationFile) const;
 
-    uint8_t GetAspectRatio() const;
-    void SetAspectRatio(const uint8_t ratio);
-
     uint8_t GetFov() const;
     void SetFov(const uint8_t fov);
 
-    IRenderer::TextureFilterSetting GetTextureFilter() const;
-    void SetTextureFilter(const IRenderer::TextureFilterSetting filter);
-
     ControlsMap& GetControlsMap();
     const ControlsMap& GetConstControlsMap() const;
-
-    uint8_t GetSoundMode() const;
-    void SetSoundMode(const uint8_t mode);
-
-    bool GetMusicOn() const;
-    void SetMusicOn(const bool on);
 
     uint8_t GetMouseSensitivity() const;
     void SetMouseSensitivity(const uint8_t sensitivity);
@@ -116,12 +108,8 @@ private:
     void SerializeCVar(std::ofstream& file, const uint8_t cvarId) const;
     void DeserializeCVar(const std::map<std::string, std::string>& keyValuePairs, const uint8_t cvarId);
 
-    uint8_t m_aspectRatio;
     uint8_t m_fov;
-    IRenderer::TextureFilterSetting m_textureFilter;
     ControlsMap m_controlsMap;
-    uint8_t m_soundMode;
-    bool m_musicOn;
     uint8_t m_mouseSensitivity;
     uint8_t m_turnSpeed;
 
@@ -149,4 +137,8 @@ private:
     ConsoleVariableEnum m_autoMapMode;
     ConsoleVariableEnum m_showFps;
     ConsoleVariableEnum m_screenResolution;
+    ConsoleVariableEnum m_soundMode;
+    ConsoleVariableEnum m_musicMode;
+    ConsoleVariableEnum m_textureFilter;
+    ConsoleVariableEnum m_aspectRatio;
 };

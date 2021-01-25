@@ -20,11 +20,7 @@
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 
 ConfigurationSettings::ConfigurationSettings() :
-    m_aspectRatio(0),
     m_fov(25),
-    m_textureFilter(IRenderer::Nearest),
-    m_soundMode(2),
-    m_musicOn(true),
     m_mouseSensitivity(10),
     m_turnSpeed(100),
     m_controlsMap(),
@@ -87,12 +83,41 @@ ConfigurationSettings::ConfigurationSettings() :
             {"High", "high", ""}
         },
         CVarItemIdScreenResolutionHigh),
+    m_soundMode("Screen Resolution", "soundmode",
+        {
+            {"Off", "Off", ""},
+            {"PC Speaker", "PCSpeaker", ""},
+            {"Adlib", "Adlib", ""}
+        },
+        CVarItemIdSoundModeAdlib),
+    m_musicMode("MUSIC", "music",
+        {
+            {"NO MUSIC", "Off", ""},
+            {"ADLIB/SOUNDBLASTER", "Adlib", ""}
+        },
+        CVarItemIdMusicModeAdlib),
+    m_textureFilter("Texture filtering", "texturefilter",
+        {
+            {"Nearest", "Nearest", ""},
+            {"Linear", "Linear", ""}
+        },
+        CVarItemIdTextureFilterNearest),
+    m_aspectRatio("Aspect ratio", "aspectratio",
+        {
+            {"Original (4:3)", "Classic", ""},
+            {"Fit to window", "FitToScreen", ""}
+        },
+        CVarItemIdAspectRatioOriginal),
     m_cvarsEnum(
         {
             std::make_pair(CVarIdScreenMode, &m_screenMode),
             std::make_pair(CVarIdAutoMapMode, &m_autoMapMode),
             std::make_pair(CVarIdShowFpsMode, &m_showFps),
-            std::make_pair(CVarIdScreenResolution, &m_screenResolution)
+            std::make_pair(CVarIdScreenResolution, &m_screenResolution),
+            std::make_pair(CVarIdSoundMode, &m_soundMode),
+            std::make_pair(CVarIdMusicMode, &m_musicMode),
+            std::make_pair(CVarIdTextureFilter, &m_textureFilter),
+            std::make_pair(CVarIdAspectRatio, &m_aspectRatio)
         })
 {
 
@@ -129,18 +154,8 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdDepthShading);
         DeserializeCVar(keyValuePairs, CVarIdShowFpsMode);
         DeserializeCVar(keyValuePairs, CVarIdVSync);
-
-        auto aspectRatioPair = keyValuePairs.find("aspectratio");
-        if (aspectRatioPair != keyValuePairs.end())
-        {
-            m_aspectRatio = (aspectRatioPair->second.compare("Classic") == 0) ? 0 : 1;
-        }
-
-        auto textureFilterPair = keyValuePairs.find("texturefilter");
-        if (textureFilterPair != keyValuePairs.end())
-        {
-            m_textureFilter = (textureFilterPair->second.compare("Linear") == 0) ? IRenderer::Linear : IRenderer::Nearest;
-        }
+        DeserializeCVar(keyValuePairs, CVarIdAspectRatio);
+        DeserializeCVar(keyValuePairs, CVarIdTextureFilter);
 
         auto fovPair = keyValuePairs.find("fov");
         if (fovPair != keyValuePairs.end())
@@ -150,20 +165,8 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         }
 
         DeserializeCVar(keyValuePairs, CVarIdScreenResolution);
-
-        auto soundModePair = keyValuePairs.find("soundmode");
-        if (soundModePair != keyValuePairs.end())
-        {
-            m_soundMode = (soundModePair->second.compare("Off") == 0) ? 0 :
-                          (soundModePair->second.compare("PCSpeaker") == 0) ? 1 : 2;
-        }
-
-        auto musicPair = keyValuePairs.find("music");
-        if (musicPair != keyValuePairs.end())
-        {
-            m_musicOn = (musicPair->second.compare("Adlib") == 0);
-        }
-
+        DeserializeCVar(keyValuePairs, CVarIdSoundMode);
+        DeserializeCVar(keyValuePairs, CVarIdMusicMode);
         DeserializeCVar(keyValuePairs, CVarIdMouseLook);
 
         auto mouseSensitivityPair = keyValuePairs.find("mouseSensitivity");
@@ -224,21 +227,17 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         file << "# Video settings\n";
         SerializeCVar(file, CVarIdScreenMode);
         SerializeCVar(file, CVarIdScreenResolution);
-        const std::string aspectRatioValue = (m_aspectRatio == 0) ? "Classic" : "FitToScreen";
-        file << "aspectratio=" << aspectRatioValue << "\n";
+        SerializeCVar(file, CVarIdAspectRatio);
         SerializeCVar(file, CVarIdDepthShading);
         SerializeCVar(file, CVarIdShowFpsMode);
         SerializeCVar(file, CVarIdVSync);
-        const std::string textureFilterValue = (m_textureFilter == IRenderer::TextureFilterSetting::Nearest) ? "Nearest" : "Linear";
-        file << "texturefilter=" << textureFilterValue << "\n";
+        SerializeCVar(file, CVarIdTextureFilter);
         std::string fovValue = std::to_string(m_fov);
         file << "fov=" << fovValue << "\n";
         SerializeCVar(file, CVarIdAutoMapMode);
         file << "# Sound settings\n";
-        const std::string modeValue = (m_soundMode == 0) ? "Off" : (m_soundMode == 1) ? "PCSpeaker" : "Adlib";
-        file << "soundmode=" << modeValue << "\n";
-        const std::string musicValue = (m_musicOn) ? "Adlib" : "Off";
-        file << "music=" << musicValue << "\n";
+        SerializeCVar(file, CVarIdSoundMode);
+        SerializeCVar(file, CVarIdMusicMode);
         file << "# Controls settings\n";
         SerializeCVar(file, CVarIdMouseLook);
         std::string mouseSensitivityValue = std::to_string(m_mouseSensitivity);
@@ -270,16 +269,6 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
     }
 }
 
-uint8_t ConfigurationSettings::GetAspectRatio() const
-{
-    return m_aspectRatio;
-}
-
-void ConfigurationSettings::SetAspectRatio(const uint8_t ratio)
-{
-    m_aspectRatio = ratio;
-}
-
 uint8_t ConfigurationSettings::GetFov() const
 {
     return m_fov;
@@ -290,16 +279,6 @@ void ConfigurationSettings::SetFov(const uint8_t fov)
     m_fov = fov;
 }
 
-IRenderer::TextureFilterSetting ConfigurationSettings::GetTextureFilter() const
-{
-    return m_textureFilter;
-}
-
-void ConfigurationSettings::SetTextureFilter(const IRenderer::TextureFilterSetting filter)
-{
-    m_textureFilter = filter;
-}
-
 ControlsMap& ConfigurationSettings::GetControlsMap()
 {
     return m_controlsMap;
@@ -308,26 +287,6 @@ ControlsMap& ConfigurationSettings::GetControlsMap()
 const ControlsMap& ConfigurationSettings::GetConstControlsMap() const
 {
     return m_controlsMap;
-}
-
-uint8_t ConfigurationSettings::GetSoundMode() const
-{
-    return m_soundMode;
-}
-
-void ConfigurationSettings::SetSoundMode(const uint8_t mode)
-{
-    m_soundMode = mode;
-}
-
-bool ConfigurationSettings::GetMusicOn() const
-{
-    return m_musicOn;
-}
-
-void ConfigurationSettings::SetMusicOn(const bool on)
-{
-    m_musicOn = on;
 }
 
 uint8_t ConfigurationSettings::GetMouseSensitivity() const

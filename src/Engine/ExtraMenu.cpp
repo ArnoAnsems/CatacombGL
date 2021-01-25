@@ -505,25 +505,11 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == menuItemVideoAspectRatio)
         {
-            if (m_configurationSettings.GetAspectRatio() == 1)
-            {
-                m_configurationSettings.SetAspectRatio(0);
-            }
-            else
-            {
-                m_configurationSettings.SetAspectRatio(1);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio).Next();
         }
         else if (m_menuItemSelected == menuItemVideoTextureFilter)
         {
-            if (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest)
-            {
-                m_configurationSettings.SetTextureFilter(IRenderer::Linear);
-            }
-            else
-            {
-                    m_configurationSettings.SetTextureFilter(IRenderer::Nearest);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter).Next();
         }
         else if (m_menuItemSelected == menuItemVideoDepthShading)
         {
@@ -589,18 +575,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == menuItemSoundMode)
         {
-            if (m_configurationSettings.GetSoundMode() == 0)
-            {
-                m_configurationSettings.SetSoundMode(1);
-            }
-            else if (m_configurationSettings.GetSoundMode() == 1)
-            {
-                m_configurationSettings.SetSoundMode(2);
-            }
-            else
-            {
-                m_configurationSettings.SetSoundMode(0);
-            }
+            m_configurationSettings.GetCVarEnumMutable(CVarIdSoundMode).Next();
         }
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
@@ -720,8 +695,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == menuItemVideoAspectRatio)
             {
-                renderableText.LeftAligned("Aspect ratio", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const std::string& aspectRatioStr = aspectRatios[m_configurationSettings.GetAspectRatio()].description;
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAspectRatio);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& aspectRatioStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == menuItemVideoFov)
@@ -733,8 +709,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == menuItemVideoTextureFilter)
             {
-                renderableText.LeftAligned("Texture filtering", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const char* textureFilterStr = (m_configurationSettings.GetTextureFilter() == IRenderer::Nearest) ? "Nearest" : "Linear";
+                const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdTextureFilter);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& textureFilterStr = cvar.GetValueInMenu();
                 renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == menuItemVideoDepthShading)
@@ -850,14 +827,15 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     }
     else if (m_subMenuSelected == subMenuSound)
     {
+        const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdSoundMode);
         const uint16_t xOffset = 60;
         const uint16_t xOffset2 = 200;
         RenderableText renderableText(*egaGraph->GetFont(3));
-        renderableText.Centered("Sound", EgaBrightYellow,160,12);
+        renderableText.Centered(cvar.GetNameInMenu(), EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
         renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == menuItemSoundBack) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
         renderableText.LeftAligned("Sound Mode", (m_menuItemSelected == menuItemSoundMode) ? EgaBrightCyan : EgaBrightWhite,xOffset,40);
-        const char* soundModeStr = (m_configurationSettings.GetSoundMode() == 0) ? "Off" : (m_configurationSettings.GetSoundMode() == 1) ? "PC Speaker" : "Adlib";
+        const std::string& soundModeStr = cvar.GetValueInMenu();
         renderableText.LeftAligned(soundModeStr, (m_menuItemSelected == menuItemSoundMode) ? EgaBrightCyan : EgaBrightWhite,xOffset2,40);
         renderer.RenderText(renderableText);
     }
