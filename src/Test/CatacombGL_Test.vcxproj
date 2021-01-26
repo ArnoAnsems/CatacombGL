@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\ThirdParty\GoogleTest\src\gtest-all.cc" />
     <ClCompile Include="ConsoleVariableBool_Test.cpp" />
     <ClCompile Include="ConsoleVariableEnum_Test.cpp" />
+    <ClCompile Include="ConsoleVariableInt_Test.cpp" />
     <ClCompile Include="ConsoleVariableString_Test.cpp" />
     <ClCompile Include="FramesCounter_Test.cpp" />
     <ClCompile Include="GameAbyss_Test.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="ConsoleVariableBool_Test.h" />
     <ClInclude Include="ConsoleVariableEnum_Test.h" />
+    <ClInclude Include="ConsoleVariableInt_Test.h" />
     <ClInclude Include="ConsoleVariableString_Test.h" />
     <ClInclude Include="FramesCounter_Test.h" />
     <ClInclude Include="GameAbyss_Test.h" />
