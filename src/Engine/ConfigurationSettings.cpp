@@ -20,9 +20,6 @@
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 
 ConfigurationSettings::ConfigurationSettings() :
-    m_fov(25),
-    m_mouseSensitivity(10),
-    m_turnSpeed(100),
     m_controlsMap(),
     m_dummyCvarBool("Dummy", "Dummy", false),
     m_depthShading("Depth shading", "depthshading", true),
@@ -118,6 +115,16 @@ ConfigurationSettings::ConfigurationSettings() :
             std::make_pair(CVarIdMusicMode, &m_musicMode),
             std::make_pair(CVarIdTextureFilter, &m_textureFilter),
             std::make_pair(CVarIdAspectRatio, &m_aspectRatio)
+        }),
+    m_dummyCvarInt("Dummy", "Dummy", 0, 0, 0),
+    m_fov("Field Of View (Y)", "fov", 25, 45, 25),
+    m_mouseSensitivity("Mouse Sensitiv.", "mouseSensitivity", 1, 20, 10),
+    m_turnSpeed("Turn Speed", "turnSpeed", 100, 250, 100),
+    m_cvarsInt(
+        {
+            std::make_pair(CVarIdFov, &m_fov),
+            std::make_pair(CVarIdMouseSensitivity, &m_mouseSensitivity),
+            std::make_pair(CVarIdTurnSpeed, &m_turnSpeed)
         })
 {
 
@@ -156,33 +163,13 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdVSync);
         DeserializeCVar(keyValuePairs, CVarIdAspectRatio);
         DeserializeCVar(keyValuePairs, CVarIdTextureFilter);
-
-        auto fovPair = keyValuePairs.find("fov");
-        if (fovPair != keyValuePairs.end())
-        {
-            int32_t fov = std::stoi(fovPair->second);
-            m_fov = (fov < 25) ? 25 : (fov > 45) ? 45 : fov;
-        }
-
+        DeserializeCVar(keyValuePairs, CVarIdFov);
         DeserializeCVar(keyValuePairs, CVarIdScreenResolution);
         DeserializeCVar(keyValuePairs, CVarIdSoundMode);
         DeserializeCVar(keyValuePairs, CVarIdMusicMode);
         DeserializeCVar(keyValuePairs, CVarIdMouseLook);
-
-        auto mouseSensitivityPair = keyValuePairs.find("mouseSensitivity");
-        if (mouseSensitivityPair != keyValuePairs.end())
-        {
-            int32_t sensitivity = std::stoi(mouseSensitivityPair->second);
-            m_mouseSensitivity = (sensitivity < 1) ? 1 : (sensitivity > 20) ? 20: sensitivity;
-        }
-
-        auto turnSpeedPair = keyValuePairs.find("turnSpeed");
-        if (turnSpeedPair != keyValuePairs.end())
-        {
-            int32_t turnSpeed = std::stoi(turnSpeedPair->second);
-            m_turnSpeed = (turnSpeed < 100) ? 100 : (turnSpeed > 250) ? 250 : (uint8_t)turnSpeed;
-        }
-
+        DeserializeCVar(keyValuePairs, CVarIdMouseSensitivity);
+        DeserializeCVar(keyValuePairs, CVarIdTurnSpeed);
         DeserializeCVar(keyValuePairs, CVarIdAlwaysRun);
         DeserializeCVar(keyValuePairs, CVarIdAutoFire);
         DeserializeCVar(keyValuePairs, CVarIdAutoMapMode);
@@ -232,18 +219,15 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         SerializeCVar(file, CVarIdShowFpsMode);
         SerializeCVar(file, CVarIdVSync);
         SerializeCVar(file, CVarIdTextureFilter);
-        std::string fovValue = std::to_string(m_fov);
-        file << "fov=" << fovValue << "\n";
+        SerializeCVar(file, CVarIdFov);
         SerializeCVar(file, CVarIdAutoMapMode);
         file << "# Sound settings\n";
         SerializeCVar(file, CVarIdSoundMode);
         SerializeCVar(file, CVarIdMusicMode);
         file << "# Controls settings\n";
         SerializeCVar(file, CVarIdMouseLook);
-        std::string mouseSensitivityValue = std::to_string(m_mouseSensitivity);
-        file << "mouseSensitivity=" << mouseSensitivityValue << "\n";
-        std::string turnSpeedValue = std::to_string(m_turnSpeed);
-        file << "turnSpeed=" << turnSpeedValue << "\n";
+        SerializeCVar(file, CVarIdMouseSensitivity);
+        SerializeCVar(file, CVarIdTurnSpeed);
         SerializeCVar(file, CVarIdAlwaysRun);
         SerializeCVar(file, CVarIdAutoFire);
         SerializeCVar(file, CVarIdManaBar);
@@ -269,16 +253,6 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
     }
 }
 
-uint8_t ConfigurationSettings::GetFov() const
-{
-    return m_fov;
-}
-
-void ConfigurationSettings::SetFov(const uint8_t fov)
-{
-    m_fov = fov;
-}
-
 ControlsMap& ConfigurationSettings::GetControlsMap()
 {
     return m_controlsMap;
@@ -287,26 +261,6 @@ ControlsMap& ConfigurationSettings::GetControlsMap()
 const ControlsMap& ConfigurationSettings::GetConstControlsMap() const
 {
     return m_controlsMap;
-}
-
-uint8_t ConfigurationSettings::GetMouseSensitivity() const
-{
-    return m_mouseSensitivity;
-}
-
-void ConfigurationSettings::SetMouseSensitivity(const uint8_t sensitivity)
-{
-    m_mouseSensitivity = sensitivity;
-}
-
-uint8_t ConfigurationSettings::GetTurnSpeed() const
-{
-    return m_turnSpeed;
-}
-
-void ConfigurationSettings::SetTurnSpeed(const uint8_t speed)
-{
-    m_turnSpeed = speed;
 }
 
 const ConsoleVariable& ConfigurationSettings::GetCVar(const uint8_t cvarId) const
@@ -323,7 +277,13 @@ const ConsoleVariable& ConfigurationSettings::GetCVar(const uint8_t cvarId) cons
         return (const ConsoleVariable&)varString;
     }
 
-    return (const ConsoleVariable&)GetCVarEnum(cvarId);
+    const ConsoleVariableEnum& varEnum = (const ConsoleVariableEnum&)GetCVarEnum(cvarId);
+    if (varEnum.GetNameInConfigFile() != m_dummyCvarEnum.GetNameInConfigFile())
+    {
+        return (const ConsoleVariable&)varEnum;
+    }
+
+    return (const ConsoleVariable&)GetCVarInt(cvarId);
 }
 
 ConsoleVariable& ConfigurationSettings::GetCVarMutable(const uint8_t cvarId)
@@ -340,7 +300,13 @@ ConsoleVariable& ConfigurationSettings::GetCVarMutable(const uint8_t cvarId)
         return (ConsoleVariable&)varString;
     }
 
-    return (ConsoleVariable&)GetCVarEnumMutable(cvarId);
+    ConsoleVariableEnum& varEnum = (ConsoleVariableEnum&)GetCVarEnumMutable(cvarId);
+    if (varEnum.GetNameInConfigFile() != m_dummyCvarEnum.GetNameInConfigFile())
+    {
+        return (ConsoleVariable&)varEnum;
+    }
+
+    return (ConsoleVariable&)GetCVarIntMutable(cvarId);
 }
 
 const ConsoleVariableBool& ConfigurationSettings::GetCVarBool(const uint8_t cvarId) const
@@ -407,6 +373,28 @@ ConsoleVariableEnum& ConfigurationSettings::GetCVarEnumMutable(const uint8_t cva
     }
 
     return m_dummyCvarEnum;
+}
+
+const ConsoleVariableInt& ConfigurationSettings::GetCVarInt(const uint8_t cvarId) const
+{
+    const auto it = m_cvarsInt.find(cvarId);
+    if (it != m_cvarsInt.end())
+    {
+        return *it->second;
+    }
+
+    return m_dummyCvarInt;
+}
+
+ConsoleVariableInt& ConfigurationSettings::GetCVarIntMutable(const uint8_t cvarId)
+{
+    auto it = m_cvarsInt.find(cvarId);
+    if (it != m_cvarsInt.end())
+    {
+        return *it->second;
+    }
+
+    return m_dummyCvarInt;
 }
 
 void ConfigurationSettings::SerializeCVar(std::ofstream& file, const uint8_t cvarId) const

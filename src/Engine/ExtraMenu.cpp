@@ -372,14 +372,7 @@ void ExtraMenu::MenuLeft()
         {
             if (m_menuItemSelected == menuItemVideoFov)
             {
-                if (m_configurationSettings.GetFov() > 25)
-                {
-                    m_configurationSettings.SetFov(m_configurationSettings.GetFov() - 1);
-                }
-                else
-                {
-                    m_configurationSettings.SetFov(45);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Decrease();
             }
         }
         else if (m_subMenuSelected == subMenuControls)
@@ -387,17 +380,11 @@ void ExtraMenu::MenuLeft()
             const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
             if (m_menuItemSelected == numberOfActionLabels + 1)
             {
-                if (m_configurationSettings.GetMouseSensitivity() > 1)
-                {
-                    m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() - 1);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Decrease();
             }
             else if (m_menuItemSelected == numberOfActionLabels + 2)
             {
-                if (m_configurationSettings.GetTurnSpeed() > 100)
-                {
-                    m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() - 10);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Decrease();
             }
         }
     }
@@ -412,14 +399,7 @@ void ExtraMenu::MenuRight()
         {
             if (m_menuItemSelected == menuItemVideoFov)
             {
-                if (m_configurationSettings.GetFov() < 45)
-                {
-                    m_configurationSettings.SetFov(m_configurationSettings.GetFov() + 1);
-                }
-                else
-                {
-                    m_configurationSettings.SetFov(25);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
             }
         }
         else if (m_subMenuSelected == subMenuControls)
@@ -427,17 +407,11 @@ void ExtraMenu::MenuRight()
             const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
             if (m_menuItemSelected == numberOfActionLabels + 1)
             {
-                if (m_configurationSettings.GetMouseSensitivity() < 20)
-                {
-                    m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() + 1);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Increase();
             }
             if (m_menuItemSelected == numberOfActionLabels + 2)
             {
-                if (m_configurationSettings.GetTurnSpeed() < 250)
-                {
-                    m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() + 10);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Increase();
             }
         }
     }
@@ -702,9 +676,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == menuItemVideoFov)
             {
-                renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                char fovStr[40];
-                sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
+                const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdFov);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& fovStr = std::to_string(cvar.GetValue());
                 renderableText.LeftAligned(fovStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == menuItemVideoTextureFilter)
@@ -787,16 +761,16 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
-                renderableText.LeftAligned("Mouse Sensitiv.", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
-                char mouseSensitivityStr[5];
-                sprintf_s(mouseSensitivityStr, 5, "%d", m_configurationSettings.GetMouseSensitivity());
+                const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
+                const std::string& mouseSensitivityStr = std::to_string(cvar.GetValue());
                 renderableText.LeftAligned(mouseSensitivityStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
             {
-                renderableText.LeftAligned("Turn Speed", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                char turnSpeedStr[5];
-                sprintf_s(turnSpeedStr, 5, "%d", m_configurationSettings.GetTurnSpeed());
+                const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                const std::string& turnSpeedStr = std::to_string(cvar.GetValue());
                 renderableText.LeftAligned(turnSpeedStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)

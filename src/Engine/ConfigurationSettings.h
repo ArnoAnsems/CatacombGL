@@ -25,6 +25,7 @@
 #include "ConsoleVariableBool.h"
 #include "ConsoleVariableString.h"
 #include "ConsoleVariableEnum.h"
+#include "ConsoleVariableInt.h"
 
 static const uint8_t CVarIdDepthShading = 0;
 static const uint8_t CVarIdVSync = 1;
@@ -45,6 +46,9 @@ static const uint8_t CVarIdSoundMode = 24;
 static const uint8_t CVarIdMusicMode = 25;
 static const uint8_t CVarIdTextureFilter = 26;
 static const uint8_t CVarIdAspectRatio = 27;
+static const uint8_t CVarIdFov = 40;
+static const uint8_t CVarIdMouseSensitivity = 41;
+static const uint8_t CVarIdTurnSpeed = 42;
 
 static const uint8_t CVarItemIdScreenModeWindowed = 0;
 static const uint8_t CVarItemIdScreenModeFullscreen = 1;
@@ -83,17 +87,8 @@ public:
     void LoadFromFile(const std::string& configurationFile);
     void StoreToFile(const std::string& configurationFile) const;
 
-    uint8_t GetFov() const;
-    void SetFov(const uint8_t fov);
-
     ControlsMap& GetControlsMap();
     const ControlsMap& GetConstControlsMap() const;
-
-    uint8_t GetMouseSensitivity() const;
-    void SetMouseSensitivity(const uint8_t sensitivity);
-
-    uint8_t GetTurnSpeed() const;
-    void SetTurnSpeed(const uint8_t speed);
 
     const ConsoleVariable& GetCVar(const uint8_t cvarId) const;
     ConsoleVariable& GetCVarMutable(const uint8_t cvarId);
@@ -103,19 +98,19 @@ public:
     ConsoleVariableString& GetCVarStringMutable(const uint8_t cvarId);
     const ConsoleVariableEnum& GetCVarEnum(const uint8_t cvarId) const;
     ConsoleVariableEnum& GetCVarEnumMutable(const uint8_t cvarId);
+    const ConsoleVariableInt& GetCVarInt(const uint8_t cvarId) const;
+    ConsoleVariableInt& GetCVarIntMutable(const uint8_t cvarId);
 
 private:
     void SerializeCVar(std::ofstream& file, const uint8_t cvarId) const;
     void DeserializeCVar(const std::map<std::string, std::string>& keyValuePairs, const uint8_t cvarId);
 
-    uint8_t m_fov;
     ControlsMap m_controlsMap;
-    uint8_t m_mouseSensitivity;
-    uint8_t m_turnSpeed;
 
     std::map<const uint8_t, ConsoleVariableBool* const> m_cvarsBool;
     std::map<const uint8_t, ConsoleVariableString* const> m_cvarsString;
     std::map<const uint8_t, ConsoleVariableEnum* const> m_cvarsEnum;
+    std::map<const uint8_t, ConsoleVariableInt* const> m_cvarsInt;
 
     ConsoleVariableString m_dummyCvarString;
     ConsoleVariableString m_pathAbyssv113;
@@ -141,4 +136,9 @@ private:
     ConsoleVariableEnum m_musicMode;
     ConsoleVariableEnum m_textureFilter;
     ConsoleVariableEnum m_aspectRatio;
+
+    ConsoleVariableInt m_dummyCvarInt;
+    ConsoleVariableInt m_fov;
+    ConsoleVariableInt m_mouseSensitivity;
+    ConsoleVariableInt m_turnSpeed;
 };

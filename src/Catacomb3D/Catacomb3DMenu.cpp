@@ -502,31 +502,18 @@ void Catacomb3DMenu::MenuLeft()
         {
             if (m_menuItemSelected == 3)
             {
-                if (m_configurationSettings.GetFov() > 25)
-                {
-                    m_configurationSettings.SetFov(m_configurationSettings.GetFov() - 1);
-                }
-                else
-                {
-                    m_configurationSettings.SetFov(45);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Decrease();
             }
         }
         else if (m_subMenuSelected == subMenuControls)
         {
             if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
-                if (m_configurationSettings.GetMouseSensitivity() > 1)
-                {
-                    m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() - 1);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Decrease();
             }
             else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
-                if (m_configurationSettings.GetTurnSpeed() > 100)
-                {
-                    m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() - 10);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Decrease();
             }
         }
     }
@@ -540,31 +527,18 @@ void Catacomb3DMenu::MenuRight()
         {
             if (m_menuItemSelected == 3)
             {
-                if (m_configurationSettings.GetFov() < 45)
-                {
-                    m_configurationSettings.SetFov(m_configurationSettings.GetFov() + 1);
-                }
-                else
-                {
-                    m_configurationSettings.SetFov(25);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
             }
         }
         else if (m_subMenuSelected == subMenuControls)
         {
             if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
-                if (m_configurationSettings.GetMouseSensitivity() < 20)
-                {
-                    m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() + 1);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Increase();
             }
             if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
-                if (m_configurationSettings.GetTurnSpeed() < 250)
-                {
-                    m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() + 10);
-                }
+                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Increase();
             }
         }
     }
@@ -652,14 +626,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         }
         else if (m_menuItemSelected == 3)
         {
-            if (m_configurationSettings.GetFov() == 45)
-            {
-                m_configurationSettings.SetFov(25);
-            }
-            else
-            {
-                m_configurationSettings.SetFov(m_configurationSettings.GetFov() + 1);
-            }
+            m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
         }
         else if (m_menuItemSelected == 4)
         {
@@ -687,26 +654,12 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
         {
             // Mouse sensitivity
-            if (m_configurationSettings.GetMouseSensitivity() < 15)
-            {
-                m_configurationSettings.SetMouseSensitivity(m_configurationSettings.GetMouseSensitivity() + 1);
-            }
-            else
-            {
-                m_configurationSettings.SetMouseSensitivity(1);
-            }
+            m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Increase();
         }
         else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
         {
             // Turn speed
-            if (m_configurationSettings.GetTurnSpeed() < 250)
-            {
-                m_configurationSettings.SetTurnSpeed(m_configurationSettings.GetTurnSpeed() + 10);
-            }
-            else
-            {
-                m_configurationSettings.SetTurnSpeed(100);
-            }
+            m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Increase();
         }
         else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() - 1)
         {
@@ -1062,10 +1015,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == 3)
             {
+                const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdFov);
                 renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 3) && flashIcon);
-                renderableText.LeftAligned("Field Of View (Y)", (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
-                char fovStr[40];
-                sprintf_s(fovStr, 40, "%d", m_configurationSettings.GetFov());
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                const std::string& fovStr = std::to_string(cvar.GetValue());
                 renderableText.LeftAligned(fovStr, (m_menuItemSelected == 3) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             else if (index + m_menuItemOffset == 4)
@@ -1157,18 +1110,18 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
+                const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity);
                 renderableTiles.DrawListBullet(76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
-                renderableText.LeftAligned("Mouse Sens.", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
-                char mouseSensitivityStr[5];
-                sprintf_s(mouseSensitivityStr, 5, "%d", m_configurationSettings.GetMouseSensitivity());
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                const std::string& mouseSensitivityStr = std::to_string(cvar.GetValue());
                 renderableText.LeftAligned(mouseSensitivityStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
             {
+                const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed);
                 renderableTiles.DrawListBullet(76, 62 + ((index - 1) * 8), true, (m_menuItemSelected == index + m_menuItemOffset - 1) && flashIcon);
-                renderableText.LeftAligned("Turn Speed", (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
-                char turnSpeedStr[5];
-                sprintf_s(turnSpeedStr, 5, "%d", m_configurationSettings.GetTurnSpeed());
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaBrightRed : EgaRed, 84, 55 + (index * 8));
+                const std::string& turnSpeedStr = std::to_string(cvar.GetValue());
                 renderableText.LeftAligned(turnSpeedStr, (m_menuItemSelected == index + m_menuItemOffset - 1) ? EgaLightGray : EgaDarkGray, 160, 55 + (index * 8));
             }
             else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)

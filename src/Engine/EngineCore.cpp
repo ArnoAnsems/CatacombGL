@@ -191,7 +191,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     m_level->GetPlayerActor()->GetY(),
                     m_level->GetPlayerActor()->GetAngle(),
                     m_configurationSettings.GetCVarBool(CVarIdDepthShading).IsEnabled(),
-                    m_configurationSettings.GetFov(),
+                    m_configurationSettings.GetCVarInt(CVarIdFov).GetValue(),
                     renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetCVarEnum(CVarIdScreenResolution).GetItemIndex() == CVarItemIdScreenResolutionOriginal);
                 m_level->Setup3DScene(
                     *m_game.GetEgaGraph(),
@@ -787,7 +787,7 @@ bool EngineCore::Think()
     {
         m_autoMap.ProcessInput(
             m_playerInput,
-            m_configurationSettings.GetMouseSensitivity(),
+            (float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue(),
             *m_level,
             m_gameTimer.GetActualTime(),
             m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex(),
@@ -1157,7 +1157,7 @@ bool EngineCore::Think()
                 const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
                 const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
                 const float deltaTimeInTics = (truncatedDeltaTimeInMs * 70.0f) / 1000.0f;
-                const float turnSpeedFactor = m_configurationSettings.GetTurnSpeed() / 100.0f;
+                const float turnSpeedFactor = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed).GetValue() / 100.0f;
                 if (m_playerActions.GetActionActive(TurnLeft) && !m_playerActions.GetActionActive(Strafe))
                 {
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
@@ -1210,7 +1210,7 @@ bool EngineCore::Think()
                 }
                 if (m_playerInput.GetMouseXPos() != 0)
                 {
-                    const float mouseMovement = (float)m_playerInput.GetMouseXPos() * ((float)m_configurationSettings.GetMouseSensitivity() / 50.0f);
+                    const float mouseMovement = (float)m_playerInput.GetMouseXPos() * ((float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue() / 50.0f);
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
                     m_playerInput.SetMouseXPos(0);
                 }
