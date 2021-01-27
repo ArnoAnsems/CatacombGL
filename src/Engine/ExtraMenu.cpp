@@ -648,74 +648,70 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         uint16_t index = 0;
         while (index < 8)
         {
-            if (index + m_menuItemOffset == menuItemVideoBack)
+            const int16_t offsetY = 30 + (index * 10);
+            const uint8_t itemIndex = index + m_menuItemOffset;
+            const bool itemSelected = m_menuItemSelected == itemIndex;
+            if (itemIndex == menuItemVideoBack)
             {
-                renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned("Back to main menu", itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
             }
-            else if (index + m_menuItemOffset == menuItemVideoScreenMode)
+            else if (itemIndex == menuItemVideoScreenMode)
             {
                 const ConsoleVariableEnum& cvarScreenMode = m_configurationSettings.GetCVarEnum(CVarIdScreenMode);
-                renderableText.LeftAligned(cvarScreenMode.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvarScreenMode.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& screenModeStr = cvarScreenMode.GetValueInMenu();
-                renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(screenModeStr, itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == menuItemVideoScreenResolution)
+            else if (itemIndex == menuItemVideoScreenResolution)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdScreenResolution);
                 const bool screenResolutionNotSupported = !renderer.IsOriginalScreenResolutionSupported();
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (screenResolutionNotSupported) ? EgaDarkGray : itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& screenResolutionStr = (screenResolutionNotSupported) ? "Not supported" : cvar.GetValueInMenu();
-                renderableText.LeftAligned(screenResolutionStr, (screenResolutionNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(screenResolutionStr, (screenResolutionNotSupported) ? EgaDarkGray : itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == menuItemVideoAspectRatio)
+            else if (itemIndex == menuItemVideoAspectRatio)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAspectRatio);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& aspectRatioStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(aspectRatioStr, itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == menuItemVideoFov)
+            else if (itemIndex == menuItemVideoFov)
             {
                 const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdFov);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& fovStr = std::to_string(cvar.GetValue());
-                renderableText.LeftAligned(fovStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(fovStr, itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == menuItemVideoTextureFilter)
+            else if (itemIndex == menuItemVideoTextureFilter)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdTextureFilter);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& textureFilterStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(textureFilterStr, itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == menuItemVideoDepthShading)
+            else if (itemIndex == menuItemVideoDepthShading)
             {
-                const ConsoleVariableBool& cvarDepthShading = m_configurationSettings.GetCVarBool(CVarIdDepthShading);
-                renderableText.LeftAligned(cvarDepthShading.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const std::string& depthShadingStr = cvarDepthShading.GetValueInMenu();
-                renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                DrawMenuItemBool(CVarIdDepthShading, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
             }
-            else if (index + m_menuItemOffset == menuItemVideoShowFps)
+            else if (itemIndex == menuItemVideoShowFps)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdShowFpsMode);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& showFpsStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(showFpsStr, itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == menuItemVideoVSync)
+            else if (itemIndex == menuItemVideoVSync)
             {
-                const bool vsyncNotSupported = !renderer.IsVSyncSupported();
-                const ConsoleVariableBool& cvarVSync = m_configurationSettings.GetCVarBool(CVarIdVSync);
-                renderableText.LeftAligned(cvarVSync.GetNameInMenu(), (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const std::string& vsyncStr = (vsyncNotSupported) ? "Not supported" : cvarVSync.GetValueInMenu();
-                renderableText.LeftAligned(vsyncStr, (vsyncNotSupported) ? EgaDarkGray : (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                DrawMenuItemBool(CVarIdVSync, itemSelected, renderer.IsVSyncSupported(), xOffset, xOffset2, offsetY, renderableText);
             }
-            else if (index + m_menuItemOffset == menuItemVideoAutoMapMode)
+            else if (itemIndex == menuItemVideoAutoMapMode)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& autoMapModeStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(autoMapModeStr, itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
             index++;
         }
@@ -730,69 +726,59 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         RenderableText renderableTextDefaultFont(*DefaultFont::Get(renderer, 10));
         renderableText.Centered("Controls", EgaBrightYellow,160,12);
         renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),20,4+((m_menuItemSelected - m_menuItemOffset) * 10));
-        uint16_t index = 0;
+        uint8_t index = 0;
         while (index < 8)
         {
-            if (index + m_menuItemOffset == menuItemControlsBack)
+            const uint16_t offsetY = 30 + (index * 10);
+            const uint8_t itemIndex = index + m_menuItemOffset;
+            const bool itemSelected = m_menuItemSelected == itemIndex;
+            if (itemIndex == menuItemControlsBack)
             {
-                renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
+                renderableText.LeftAligned("Back to main menu", itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
             }
-            else if (index + m_menuItemOffset < (uint16_t)m_configurationSettings.GetControlsMap().GetActionLabels().size())
+            else if (itemIndex < (uint16_t)m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
-                const std::string& actionLabel = m_configurationSettings.GetControlsMap().GetActionLabels().at((ControlAction)(index + m_menuItemOffset));
-                const uint16_t yOffset = 30 + (index * 10);
-                renderableText.LeftAligned(actionLabel, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,yOffset);
-                if (m_waitingForKeyToBind && m_menuItemSelected == index + m_menuItemOffset)
+                const std::string& actionLabel = m_configurationSettings.GetControlsMap().GetActionLabels().at((ControlAction)(itemIndex));
+                renderableText.LeftAligned(actionLabel, itemSelected ? EgaBrightCyan : EgaBrightWhite,xOffset, offsetY);
+                if (m_waitingForKeyToBind && m_menuItemSelected == itemIndex)
                 {
-                    renderableText.LeftAligned("< Press key to bind >", EgaBrightCyan,xOffset2,yOffset);
+                    renderableText.LeftAligned("< Press key to bind >", EgaBrightCyan,xOffset2, offsetY);
                 }
                 else
                 {
                     // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-                    renderableTextDefaultFont.LeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,yOffset);
+                    renderableTextDefaultFont.LeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(itemIndex)), itemSelected ? EgaBrightCyan : EgaBrightWhite,xOffset2, offsetY);
                 }
             }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size())
+            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size())
             {
-                const ConsoleVariableBool& cvarMouseLook = m_configurationSettings.GetCVarBool(CVarIdMouseLook);
-                renderableText.LeftAligned(cvarMouseLook.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
-                const std::string& mouseLookStr = cvarMouseLook.GetValueInMenu();
-                renderableText.LeftAligned(mouseLookStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
+                DrawMenuItemBool(CVarIdMouseLook, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
             }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
+            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
             {
                 const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset,30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite,xOffset, offsetY);
                 const std::string& mouseSensitivityStr = std::to_string(cvar.GetValue());
-                renderableText.LeftAligned(mouseSensitivityStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite,xOffset2,30 + (index * 10));
+                renderableText.LeftAligned(mouseSensitivityStr, itemSelected ? EgaBrightCyan : EgaBrightWhite,xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
+            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
             {
                 const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
+                renderableText.LeftAligned(cvar.GetNameInMenu(), itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
                 const std::string& turnSpeedStr = std::to_string(cvar.GetValue());
-                renderableText.LeftAligned(turnSpeedStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                renderableText.LeftAligned(turnSpeedStr, itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset2, offsetY);
             }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
+            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
             {
-                const ConsoleVariableBool& cvarAlwaysRun = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun);
-                renderableText.LeftAligned(cvarAlwaysRun.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const std::string& alwaysRunStr = cvarAlwaysRun.GetValueInMenu();
-                renderableText.LeftAligned(alwaysRunStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                DrawMenuItemBool(CVarIdAlwaysRun, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
             }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
+            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
             {
-                const ConsoleVariableBool& cvarAutoFire = m_configurationSettings.GetCVarBool(CVarIdAutoFire);
-                renderableText.LeftAligned(cvarAutoFire.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const std::string& autoFireStr = cvarAutoFire.GetValueInMenu();
-                renderableText.LeftAligned(autoFireStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                DrawMenuItemBool(CVarIdAutoFire, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
             }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5)
+            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5)
             {
-                const ConsoleVariableBool& cvarManaBar = m_configurationSettings.GetCVarBool(CVarIdManaBar);
-                renderableText.LeftAligned(cvarManaBar.GetNameInMenu(), (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + (index * 10));
-                const std::string& manaBarStr = cvarManaBar.GetValueInMenu();
-                renderableText.LeftAligned(manaBarStr, (m_menuItemSelected == index + m_menuItemOffset) ? EgaBrightCyan : EgaBrightWhite, xOffset2, 30 + (index * 10));
+                DrawMenuItemBool(CVarIdManaBar, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
             }
             index++;
         }
@@ -935,4 +921,25 @@ bool ExtraMenu::IsNewSaveGameNameAlreadyInUse() const
 void ExtraMenu::CheckHighScore(const uint16_t level, const uint32_t score)
 {
     // Not applicable
+}
+
+void ExtraMenu::DrawMenuItemBool(
+    const uint8_t cvarId,
+    const bool selected,
+    const bool supported,
+    const int16_t offsetXName,
+    const int16_t offsetXValue,
+    const int16_t offsetY,
+    RenderableText& renderableText)
+{
+    const ConsoleVariableBool& cvar = m_configurationSettings.GetCVarBool(cvarId);
+    const egaColor color = GetMenuItemColor(selected, supported);
+    renderableText.LeftAligned(cvar.GetNameInMenu(), color, offsetXName, offsetY);
+    const std::string& valueStr = (!supported) ? "Not supported" : cvar.GetValueInMenu();
+    renderableText.LeftAligned(valueStr, color, offsetXValue, offsetY);
+}
+
+egaColor inline ExtraMenu::GetMenuItemColor(const bool selected, const bool supported)
+{
+    return !supported ? EgaDarkGray : selected ? EgaBrightCyan : EgaBrightWhite;
 }
