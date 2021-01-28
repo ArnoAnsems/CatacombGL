@@ -62,6 +62,24 @@ private:
         const int16_t offsetY,
         RenderableText& renderableText);
 
+    void ExtraMenu::DrawMenuItemEnum(
+        const uint8_t cvarId,
+        const bool selected,
+        const bool supported,
+        const int16_t offsetXName,
+        const int16_t offsetXValue,
+        const int16_t offsetY,
+        RenderableText& renderableText);
+
+    void ExtraMenu::DrawMenuItemInt(
+        const uint8_t cvarId,
+        const bool selected,
+        const bool supported,
+        const int16_t offsetXName,
+        const int16_t offsetXValue,
+        const int16_t offsetY,
+        RenderableText& renderableText);
+
     static egaColor inline GetMenuItemColor(const bool selected, const bool supported);
 
     bool m_menuActive;

@@ -80,7 +80,7 @@ ConfigurationSettings::ConfigurationSettings() :
             {"High", "high", ""}
         },
         CVarItemIdScreenResolutionHigh),
-    m_soundMode("Screen Resolution", "soundmode",
+    m_soundMode("Sound mode", "soundmode",
         {
             {"Off", "Off", ""},
             {"PC Speaker", "PCSpeaker", ""},
