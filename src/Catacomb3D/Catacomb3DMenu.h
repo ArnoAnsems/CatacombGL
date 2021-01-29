@@ -58,6 +58,37 @@ private:
     void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
     void DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
 
+    void DrawMenuItemBool(
+        const uint8_t cvarId,
+        const bool selected,
+        const bool supported,
+        const bool flashIcon,
+        const int16_t offsetXName,
+        const int16_t offsetXValue,
+        const int16_t offsetY,
+        RenderableText& renderableText,
+        RenderableTiles& renderableTiles);
+    void DrawMenuItemEnum(
+        const uint8_t cvarId,
+        const bool selected,
+        const bool supported,
+        const bool flashIcon,
+        const int16_t offsetXName,
+        const int16_t offsetXValue,
+        const int16_t offsetY,
+        RenderableText& renderableText,
+        RenderableTiles& renderableTiles);
+    void DrawMenuItemInt(
+        const uint8_t cvarId,
+        const bool selected,
+        const bool supported,
+        const bool flashIcon,
+        const int16_t offsetXName,
+        const int16_t offsetXValue,
+        const int16_t offsetY,
+        RenderableText& renderableText,
+        RenderableTiles& renderableTiles);
+
     bool m_menuActive;
     uint8_t m_menuItemSelected;
     uint8_t m_subMenuSelected;
