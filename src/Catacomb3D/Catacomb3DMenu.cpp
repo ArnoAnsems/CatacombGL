@@ -31,6 +31,25 @@ const uint8_t subMenuMusic = 8;
 const uint8_t subMenuSkullNBones = 9;
 const uint8_t subMenuHighScores = 10;
 
+const uint8_t menuItemMainNewGame = 0;
+const uint8_t menuItemMainRestoreGame = 1;
+const uint8_t menuItemMainSaveGame = 2;
+const uint8_t menuItemMainConfigure = 3;
+const uint8_t menuItemMainReturnToDemo = 4;
+const uint8_t menuItemMainEndGame = 5;
+const uint8_t menuItemMainSkullNBones = 6;
+const uint8_t menuItemMainQuit = 7;
+
+const uint8_t menuItemVideoScreenMode = 0;
+const uint8_t menuItemVideoScreenResolution = 1;
+const uint8_t menuItemVideoAspectRatio = 2;
+const uint8_t menuItemVideoFov = 3;
+const uint8_t menuItemVideoTextureFilter = 4;
+const uint8_t menuItemVideoDepthShading = 5;
+const uint8_t menuItemVideoShowFps = 6;
+const uint8_t menuItemVideoVSync = 7;
+const uint8_t menuItemVideoAutoMapMode = 8;
+
 Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames, HighScores& highScores) :
     m_menuActive (false),
     m_menuItemSelected (0),
@@ -500,7 +519,7 @@ void Catacomb3DMenu::MenuLeft()
     {
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 3)
+            if (m_menuItemSelected == menuItemVideoFov)
             {
                 m_configurationSettings.GetCVarIntMutable(CVarIdFov).Decrease();
             }
@@ -525,7 +544,7 @@ void Catacomb3DMenu::MenuRight()
     {
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 3)
+            if (m_menuItemSelected == menuItemVideoFov)
             {
                 m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
             }
@@ -549,47 +568,47 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     MenuCommand command = MenuCommandNone;
     if (m_subMenuSelected == subMenuMain) // Main menu
     {
-        if (m_menuItemSelected == 0)
+        if (m_menuItemSelected == menuItemMainNewGame)
         {
             // New game
             m_subMenuSelected = subMenuNewGame;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 1 && m_savedGames.size() > 0)
+        else if (m_menuItemSelected == menuItemMainRestoreGame && m_savedGames.size() > 0)
         {
             m_subMenuSelected = subMenuRestoreGame;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 2 && m_saveGameEnabled)
+        else if (m_menuItemSelected == menuItemMainSaveGame && m_saveGameEnabled)
         {
             m_subMenuSelected = subMenuSaveGame;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 3)
+        else if (m_menuItemSelected == menuItemMainConfigure)
         {
             // Configure
             m_subMenuSelected = subMenuConfigure;
             m_menuItemSelected = 0;
         }
-        else if (m_menuItemSelected == 4)
+        else if (m_menuItemSelected == menuItemMainReturnToDemo)
         {
             // Return to demo or game
             m_menuItemSelected = 0;
             command = MenuCommandCloseMenu;
         }
-        else if (m_menuItemSelected == 5 && m_saveGameEnabled)
+        else if (m_menuItemSelected == menuItemMainEndGame && m_saveGameEnabled)
         {
             // End game
             m_askForEndGame = true;
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == menuItemMainSkullNBones)
         {
             // Skull 'n' Bones
             m_subMenuSelected = subMenuSkullNBones;
             m_menuItemSelected = 0;
             m_skullNBones.Reset();
         }
-        else if (m_menuItemSelected == 7)
+        else if (m_menuItemSelected == menuItemMainQuit)
         {
             m_askForQuit = true;
         }
@@ -612,39 +631,39 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        if (m_menuItemSelected == 0)
+        if (m_menuItemSelected == menuItemVideoScreenMode)
         {
             m_configurationSettings.GetCVarEnumMutable(CVarIdScreenMode).Next();
         }
-        else if (m_menuItemSelected == 1)
+        else if (m_menuItemSelected == menuItemVideoScreenResolution)
         {
             m_configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution).Next();
         }
-        else if (m_menuItemSelected == 2)
+        else if (m_menuItemSelected == menuItemVideoAspectRatio)
         {
             m_configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio).Next();
         }
-        else if (m_menuItemSelected == 3)
+        else if (m_menuItemSelected == menuItemVideoFov)
         {
             m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
         }
-        else if (m_menuItemSelected == 4)
+        else if (m_menuItemSelected == menuItemVideoTextureFilter)
         {
             m_configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter).Next();
         }
-        else if (m_menuItemSelected == 5)
+        else if (m_menuItemSelected == menuItemVideoDepthShading)
         {
             m_configurationSettings.GetCVarBoolMutable(CVarIdDepthShading).Toggle();
         }
-        else if (m_menuItemSelected == 6)
+        else if (m_menuItemSelected == menuItemVideoShowFps)
         {
             m_configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode).Next();
         }
-        else if (m_menuItemSelected == 7)
+        else if (m_menuItemSelected == menuItemVideoVSync)
         {
             m_configurationSettings.GetCVarBoolMutable(CVarIdVSync).Toggle();
         }
-        else if (m_menuItemSelected == 8)
+        else if (m_menuItemSelected == menuItemVideoAutoMapMode)
         {
             m_configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode).Next();
         }
@@ -885,23 +904,23 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_MAINMENUPIC), 80, 48);
-        renderableTiles.DrawListBullet(112, 62, true, (m_menuItemSelected == 0) && flashIcon);
-        renderableText.LeftAligned("NEW GAME", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 120, 63);
-        renderableTiles.DrawListBullet(112, 70, m_savedGames.size() > 0, (m_menuItemSelected == 1) && flashIcon);
-        renderableText.LeftAligned("LOAD GAME", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 120, 71);
-        renderableTiles.DrawListBullet(112, 78, m_saveGameEnabled, (m_menuItemSelected == 2) && flashIcon);
-        renderableText.LeftAligned("SAVE GAME", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 120, 79);
-        renderableTiles.DrawListBullet(112, 86, true, (m_menuItemSelected == 3) && flashIcon);
-        renderableText.LeftAligned("CONFIGURE", (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 120, 87);
-        renderableTiles.DrawListBullet(112, 94, true, (m_menuItemSelected == 4) && flashIcon);
+        renderableTiles.DrawListBullet(112, 62, true, (m_menuItemSelected == menuItemMainNewGame) && flashIcon);
+        renderableText.LeftAligned("NEW GAME", (m_menuItemSelected == menuItemMainNewGame) ? EgaBrightRed : EgaRed, 120, 63);
+        renderableTiles.DrawListBullet(112, 70, m_savedGames.size() > 0, (m_menuItemSelected == menuItemMainRestoreGame) && flashIcon);
+        renderableText.LeftAligned("LOAD GAME", (m_menuItemSelected == menuItemMainRestoreGame) ? EgaBrightRed : EgaRed, 120, 71);
+        renderableTiles.DrawListBullet(112, 78, m_saveGameEnabled, (m_menuItemSelected == menuItemMainSaveGame) && flashIcon);
+        renderableText.LeftAligned("SAVE GAME", (m_menuItemSelected == menuItemMainSaveGame) ? EgaBrightRed : EgaRed, 120, 79);
+        renderableTiles.DrawListBullet(112, 86, true, (m_menuItemSelected == menuItemMainConfigure) && flashIcon);
+        renderableText.LeftAligned("CONFIGURE", (m_menuItemSelected == menuItemMainConfigure) ? EgaBrightRed : EgaRed, 120, 87);
+        renderableTiles.DrawListBullet(112, 94, true, (m_menuItemSelected == menuItemMainReturnToDemo) && flashIcon);
         const char* returnOptionText = (m_saveGameEnabled) ? "RETURN TO GAME" : "RETURN TO DEMO";
-        renderableText.LeftAligned(returnOptionText, (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 120, 95);
-        renderableTiles.DrawListBullet(112, 102, m_saveGameEnabled, (m_menuItemSelected == 5) && flashIcon);
-        renderableText.LeftAligned("END GAME", (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 120, 103);
-        renderableTiles.DrawListBullet(112, 110, true, (m_menuItemSelected == 6) && flashIcon);
-        renderableText.LeftAligned("SKULL 'N' BONES", (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 120, 111);
-        renderableTiles.DrawListBullet(112, 118, true, (m_menuItemSelected == 7) && flashIcon);
-        renderableText.LeftAligned("QUIT", (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 120, 119);
+        renderableText.LeftAligned(returnOptionText, (m_menuItemSelected == menuItemMainReturnToDemo) ? EgaBrightRed : EgaRed, 120, 95);
+        renderableTiles.DrawListBullet(112, 102, m_saveGameEnabled, (m_menuItemSelected == menuItemMainEndGame) && flashIcon);
+        renderableText.LeftAligned("END GAME", (m_menuItemSelected == menuItemMainEndGame) ? EgaBrightRed : EgaRed, 120, 103);
+        renderableTiles.DrawListBullet(112, 110, true, (m_menuItemSelected == menuItemMainSkullNBones) && flashIcon);
+        renderableText.LeftAligned("SKULL 'N' BONES", (m_menuItemSelected == menuItemMainSkullNBones) ? EgaBrightRed : EgaRed, 120, 111);
+        renderableTiles.DrawListBullet(112, 118, true, (m_menuItemSelected == menuItemMainQuit) && flashIcon);
+        renderableText.LeftAligned("QUIT", (m_menuItemSelected == menuItemMainQuit) ? EgaBrightRed : EgaRed, 120, 119);
 
         renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
         renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
@@ -988,79 +1007,79 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         while (index < 8)
         {
             const int16_t offsetY = 62 + (index * 8);
-            if (index + m_menuItemOffset == 0)
+            if (index + m_menuItemOffset == menuItemVideoScreenMode)
             {
                 const ConsoleVariableEnum& cvarScreenMode = m_configurationSettings.GetCVarEnum(CVarIdScreenMode);
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 0) && flashIcon);
-                renderableText.LeftAligned(cvarScreenMode.GetNameInMenu(), (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == menuItemVideoScreenMode) && flashIcon);
+                renderableText.LeftAligned(cvarScreenMode.GetNameInMenu(), (m_menuItemSelected == menuItemVideoScreenMode) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& screenModeStr = cvarScreenMode.GetValueInMenu();
-                renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == 0) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+                renderableText.LeftAligned(screenModeStr, (m_menuItemSelected == menuItemVideoScreenMode) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 1)
+            else if (index + m_menuItemOffset == menuItemVideoScreenResolution)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdScreenResolution);
                 const bool screenResolutionSupported = renderer.IsOriginalScreenResolutionSupported();
-                renderableTiles.DrawListBullet(76, offsetY, screenResolutionSupported, (m_menuItemSelected == 1) && flashIcon);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, screenResolutionSupported, (m_menuItemSelected == menuItemVideoScreenResolution) && flashIcon);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == menuItemVideoScreenResolution) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& screenResolutionStr = (!screenResolutionSupported) ? "Not suppor." : cvar.GetValueInMenu();
-                renderableText.LeftAligned(screenResolutionStr, (m_menuItemSelected == 1) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+                renderableText.LeftAligned(screenResolutionStr, (m_menuItemSelected == menuItemVideoScreenResolution) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 2)
+            else if (index + m_menuItemOffset == menuItemVideoAspectRatio)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAspectRatio);
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 2) && flashIcon);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == menuItemVideoAspectRatio) && flashIcon);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == menuItemVideoAspectRatio) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& aspectRatioStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == 2) ? EgaLightGray : EgaDarkGray, 160, offsetY + 1);
+                renderableText.LeftAligned(aspectRatioStr, (m_menuItemSelected == menuItemVideoAspectRatio) ? EgaLightGray : EgaDarkGray, 160, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 3)
+            else if (index + m_menuItemOffset == menuItemVideoFov)
             {
                 const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(CVarIdFov);
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 3) && flashIcon);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 3) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == menuItemVideoFov) && flashIcon);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == menuItemVideoFov) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& fovStr = std::to_string(cvar.GetValue());
-                renderableText.LeftAligned(fovStr, (m_menuItemSelected == 3) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+                renderableText.LeftAligned(fovStr, (m_menuItemSelected == menuItemVideoFov) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 4)
+            else if (index + m_menuItemOffset == menuItemVideoTextureFilter)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdTextureFilter);
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 4) && flashIcon);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 4) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == menuItemVideoTextureFilter) && flashIcon);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == menuItemVideoTextureFilter) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& textureFilterStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == 4) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+                renderableText.LeftAligned(textureFilterStr, (m_menuItemSelected == menuItemVideoTextureFilter) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 5)
+            else if (index + m_menuItemOffset == menuItemVideoDepthShading)
             {
                 const ConsoleVariableBool& cvarDepthShading = m_configurationSettings.GetCVarBool(CVarIdDepthShading);
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 5) && flashIcon);
-                renderableText.LeftAligned(cvarDepthShading.GetNameInMenu(), (m_menuItemSelected == 5) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == menuItemVideoDepthShading) && flashIcon);
+                renderableText.LeftAligned(cvarDepthShading.GetNameInMenu(), (m_menuItemSelected == menuItemVideoDepthShading) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& depthShadingStr = cvarDepthShading.GetValueInMenu();
-                renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == 5) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+                renderableText.LeftAligned(depthShadingStr, (m_menuItemSelected == menuItemVideoDepthShading) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 6)
+            else if (index + m_menuItemOffset == menuItemVideoShowFps)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdShowFpsMode);
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 6) && flashIcon);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 6) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == menuItemVideoShowFps) && flashIcon);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == menuItemVideoShowFps) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& showFpsStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == 6) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+                renderableText.LeftAligned(showFpsStr, (m_menuItemSelected == menuItemVideoShowFps) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 7)
+            else if (index + m_menuItemOffset == menuItemVideoVSync)
             {
                 const bool vsyncSupported = renderer.IsVSyncSupported();
                 const ConsoleVariableBool& cvarVSync = m_configurationSettings.GetCVarBool(CVarIdVSync);
-                renderableTiles.DrawListBullet(76, offsetY, vsyncSupported, (m_menuItemSelected == 7) && flashIcon);
-                renderableText.LeftAligned(cvarVSync.GetNameInMenu(), (m_menuItemSelected == 7) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, vsyncSupported, (m_menuItemSelected == menuItemVideoVSync) && flashIcon);
+                renderableText.LeftAligned(cvarVSync.GetNameInMenu(), (m_menuItemSelected == menuItemVideoVSync) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& vsyncStr = (!vsyncSupported) ? "Not supported" : cvarVSync.GetValueInMenu();
-                renderableText.LeftAligned(vsyncStr, (m_menuItemSelected == 7) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, offsetY + 1);
+                renderableText.LeftAligned(vsyncStr, (m_menuItemSelected == menuItemVideoVSync) ? EgaLightGray : EgaDarkGray, !vsyncSupported ? 160 : 180, offsetY + 1);
             }
-            else if (index + m_menuItemOffset == 8)
+            else if (index + m_menuItemOffset == menuItemVideoAutoMapMode)
             {
                 const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode);
-                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == 8) && flashIcon);
-                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == 8) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
+                renderableTiles.DrawListBullet(76, offsetY, true, (m_menuItemSelected == menuItemVideoAutoMapMode) && flashIcon);
+                renderableText.LeftAligned(cvar.GetNameInMenu(), (m_menuItemSelected == menuItemVideoAutoMapMode) ? EgaBrightRed : EgaRed, 84, offsetY + 1);
                 const std::string& autoMapModeStr = cvar.GetValueInMenu();
-                renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == 8) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
+                renderableText.LeftAligned(autoMapModeStr, (m_menuItemSelected == menuItemVideoAutoMapMode) ? EgaLightGray : EgaDarkGray, 180, offsetY + 1);
             }
             index++;
         }
@@ -1168,11 +1187,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DPicture(egaGraph->GetPicture(CP_SOUNDMENUPIC), 80, 48);
 
         const uint8_t soundMode = m_configurationSettings.GetCVarEnum(CVarIdSoundMode).GetItemIndex();
-        renderableTiles.DrawRadioButton(88, 62, (soundMode == 0), (m_menuItemSelected == 0) && flashIcon);
+        renderableTiles.DrawRadioButton(88, 62, (soundMode == CVarItemIdSoundModeOff), (m_menuItemSelected == 0) && flashIcon);
         renderableText.LeftAligned("NO SOUND EFFECTS", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
-        renderableTiles.DrawRadioButton(88, 70, (soundMode == 1), (m_menuItemSelected == 1) && flashIcon);
+        renderableTiles.DrawRadioButton(88, 70, (soundMode == CVarItemIdSoundModePCSpeaker), (m_menuItemSelected == 1) && flashIcon);
         renderableText.LeftAligned("PC SPEAKER", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
-        renderableTiles.DrawRadioButton(88, 78, (soundMode == 2), (m_menuItemSelected == 2) && flashIcon);
+        renderableTiles.DrawRadioButton(88, 78, (soundMode == CVarItemIdSoundModeAdlib), (m_menuItemSelected == 2) && flashIcon);
         renderableText.LeftAligned("ADLIB/SOUNDBLASTER", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
 
         renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
