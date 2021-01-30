@@ -164,6 +164,8 @@
     <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="GameSelection.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GuiElementBase.cpp" />
+    <ClCompile Include="GuiElementEnumSelection.cpp" />
     <ClCompile Include="HelpPages.cpp" />
     <ClCompile Include="HighScores.cpp" />
     <ClCompile Include="Huffman.cpp" />
@@ -223,6 +225,8 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="FramesCounter.h" />
     <ClInclude Include="GameSelection.h" />
+    <ClInclude Include="GuiElementBase.h" />
+    <ClInclude Include="GuiElementEnumSelection.h" />
     <ClInclude Include="HelpPages.h" />
     <ClInclude Include="HighScores.h" />
     <ClInclude Include="IGame.h" />
