@@ -14,21 +14,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "PlayerInput.h"
-#include "EgaColor.h"
+#include "GuiElementBase.h"
+#include "ConsoleVariableBool.h"
+#include "RenderableText.h"
 
-const uint8_t GuiActionNone = 0;
-
-class GuiElementBase
+class GuiElementBoolSelection : public GuiElementBase
 {
 public:
-    GuiElementBase(const PlayerInput& playerInput);
-    ~GuiElementBase();
+    GuiElementBoolSelection(
+        const PlayerInput& playerInput,
+        ConsoleVariableBool& cvarEnum,
+        const bool supported,
+        const int16_t offsetXValue,
+        RenderableText& renderableText);
+    ~GuiElementBoolSelection();
 
-    virtual uint8_t ProcessInput();
-    virtual void Draw(const int16_t originX, const int16_t originY, const bool selected) const;
+    virtual uint8_t ProcessInput() override;
+    virtual void Draw(const int16_t originX, const int16_t originY, const bool selected) const override;
 
-protected:
-    static egaColor GetMenuItemColor(const bool selected, const bool supported);
-    const PlayerInput& m_playerInput;
+private:
+    ConsoleVariableBool& m_cvarEnum;
+    const bool m_supported;
+    const int16_t m_offsetXValue;
+    RenderableText& m_renderableText;
 };
+
+
+
