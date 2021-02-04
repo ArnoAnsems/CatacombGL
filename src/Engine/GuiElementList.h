@@ -15,27 +15,36 @@
 #pragma once
 
 #include "GuiElementBase.h"
-#include "ConsoleVariableEnum.h"
 #include "RenderableText.h"
 
-class GuiElementEnumSelection : public GuiElementBase
+class GuiElementList : public GuiElementBase
 {
 public:
-    GuiElementEnumSelection(
+    GuiElementList(
         const PlayerInput& playerInput,
-        ConsoleVariableEnum& cvarEnum,
-        const bool supported,
-        const int16_t offsetXValue,
-        RenderableText& renderableText);
-    ~GuiElementEnumSelection();
+        const uint16_t maxElementsDrawn,
+        const int16_t originX,
+        const int16_t originY,
+        const uint16_t elementHeight,
+        const Picture* cursorPicture);
+    ~GuiElementList();
 
     virtual uint8_t ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
+    void AddElement(GuiElementBase* element);
+
 private:
-    ConsoleVariableEnum& m_cvarEnum;
-    const bool m_supported;
-    const int16_t m_offsetXValue;
-    RenderableText& m_renderableText;
+    std::vector<GuiElementBase*> m_elements;
+    const int16_t m_originX;
+    const int16_t m_originY;
+    const uint16_t m_elementHeight;
+    const uint16_t m_maxElementsDrawn;
+    uint16_t m_elementSelected;
+    uint16_t m_firstElementDrawn;
+    const Picture* m_cursorPicture;
 };
+
+
+
 

@@ -16,6 +16,9 @@
 #include "ExtraMenu.h"
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 #include "DefaultFont.h"
+#include "GuiElementBoolSelection.h"
+#include "GuiElementEnumSelection.h"
+#include "GuiElementIntSelection.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -50,7 +53,13 @@ const uint8_t menuItemSoundMode = 1;
 
 const uint16_t browseMenuSound = 0;
 
-ExtraMenu::ExtraMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames) :
+ExtraMenu::ExtraMenu(
+    ConfigurationSettings& configurationSettings,
+    AudioPlayer& audioPlayer,
+    PlayerInput& playerInput,
+    EgaGraph* const egaGraph,
+    const uint16_t menuCursorPic,
+    std::vector<std::string>& savedGames) :
     m_menuActive(false),
     m_menuItemSelected(0),
     m_subMenuSelected(0),
@@ -62,9 +71,19 @@ ExtraMenu::ExtraMenu(ConfigurationSettings& configurationSettings, AudioPlayer& 
     m_savedGames(savedGames),
     m_newSaveGameName(""),
     m_waitingForNewSaveGameName(false),
-    m_askForOverwrite(false)
+    m_askForOverwrite(false),
+    m_elementListVideo(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic)),
+    m_renderableText(*egaGraph->GetFont(3))
 {
-
+    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), true, 132, m_renderableText));
+    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), true, 132, m_renderableText));
 }
 
 bool ExtraMenu::IsActive() const
@@ -183,19 +202,7 @@ void ExtraMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == menuItemVideoAutoMapMode)
-            {
-                m_menuItemSelected = 0;
-                m_menuItemOffset = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 7)
-                {
-                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-                }
-            }
+            m_elementListVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -284,19 +291,7 @@ void ExtraMenu::MenuUp()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = menuItemVideoAutoMapMode;
-                m_menuItemOffset = m_menuItemSelected - 7;
-            }
-            else
-            {
-                m_menuItemSelected--;
-                if (m_menuItemSelected < m_menuItemOffset)
-                {
-                    m_menuItemOffset = m_menuItemSelected;
-                }
-            }
+            m_elementListVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -370,10 +365,7 @@ void ExtraMenu::MenuLeft()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == menuItemVideoFov)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Decrease();
-            }
+            m_elementListVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -397,10 +389,7 @@ void ExtraMenu::MenuRight()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            if (m_menuItemSelected == menuItemVideoFov)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
-            }
+            m_elementListVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -464,43 +453,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        if (m_menuItemSelected == menuItemVideoBack)
-        {
-            m_subMenuSelected = subMenuMain;
-            m_menuItemSelected = menuItemMainVideo;
-        }
-        else if (m_menuItemSelected == menuItemVideoScreenMode)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenMode).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoScreenResolution)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoAspectRatio)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoTextureFilter)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoDepthShading)
-        {
-            m_configurationSettings.GetCVarBoolMutable(CVarIdDepthShading).Toggle();
-        }
-        else if (m_menuItemSelected == menuItemVideoShowFps)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoVSync)
-        {
-            m_configurationSettings.GetCVarBoolMutable(CVarIdVSync).Toggle();
-        }
-        else if (m_menuItemSelected == menuItemVideoAutoMapMode)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode).Next();
-        }
+        m_elementListVideo.ProcessInput();
     }
     else if (m_subMenuSelected == subMenuControls)
     {
@@ -639,61 +592,10 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        const uint16_t xOffset = 60;
-        const uint16_t xOffset2 = 192;
-        RenderableText renderableText(*egaGraph->GetFont(3));
-        renderableText.Centered("Video", EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic), 20, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
-        uint16_t index = 0;
-        while (index < 8)
-        {
-            const int16_t offsetY = 30 + (index * 10);
-            const uint8_t itemIndex = index + m_menuItemOffset;
-            const bool itemSelected = m_menuItemSelected == itemIndex;
-            if (itemIndex == menuItemVideoBack)
-            {
-                renderableText.LeftAligned("Back to main menu", itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
-            }
-            else if (itemIndex == menuItemVideoScreenMode)
-            {
-                DrawMenuItemEnum(CVarIdScreenMode, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoScreenResolution)
-            {
-                const bool screenResolutionSupported = renderer.IsOriginalScreenResolutionSupported();
-                DrawMenuItemEnum(CVarIdScreenResolution, itemSelected, screenResolutionSupported, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoAspectRatio)
-            {
-                DrawMenuItemEnum(CVarIdAspectRatio, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoFov)
-            {
-                DrawMenuItemInt(CVarIdFov, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoTextureFilter)
-            {
-                DrawMenuItemEnum(CVarIdTextureFilter, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoDepthShading)
-            {
-                DrawMenuItemBool(CVarIdDepthShading, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoShowFps)
-            {
-                DrawMenuItemEnum(CVarIdShowFpsMode, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoVSync)
-            {
-                DrawMenuItemBool(CVarIdVSync, itemSelected, renderer.IsVSyncSupported(), xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == menuItemVideoAutoMapMode)
-            {
-                DrawMenuItemEnum(CVarIdAutoMapMode, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            index++;
-        }
-        renderer.RenderText(renderableText);
+        m_renderableText.Reset();
+        m_renderableText.Centered("Video", EgaBrightYellow,160,12);
+        m_elementListVideo.Draw(renderer, 60, 30, false);
+        renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuControls)
     {

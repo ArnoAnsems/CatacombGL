@@ -392,9 +392,9 @@ IIntroView* GameApocalypse::GetIntroView()
     return m_introView;
 }
 
-IMenu* GameApocalypse::CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames)
+IMenu* GameApocalypse::CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames)
 {
-    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), savedGames);
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames);
 }
 
 void GameApocalypse::DrawHelpPage()

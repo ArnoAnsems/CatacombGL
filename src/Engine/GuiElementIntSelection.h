@@ -30,7 +30,7 @@ public:
     ~GuiElementIntSelection();
 
     virtual uint8_t ProcessInput() override;
-    virtual void Draw(const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
 private:
     ConsoleVariableInt& m_cvarEnum;

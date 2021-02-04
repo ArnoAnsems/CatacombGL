@@ -31,12 +31,12 @@ uint8_t GuiElementBase::ProcessInput()
     return GuiActionNone;
 }
 
-void GuiElementBase::Draw(const int16_t /*originX*/, const int16_t /*originY*/, const bool /*selected*/) const
+void GuiElementBase::Draw(IRenderer& /*renderer*/, const int16_t /*originX*/, const int16_t /*originY*/, const bool /*selected*/) const
 {
 
 }
 
-inline egaColor GuiElementBase::GetMenuItemColor(const bool selected, const bool supported)
+egaColor GuiElementBase::GetMenuItemColor(const bool selected, const bool supported)
 {
     return !supported ? EgaDarkGray : selected ? EgaBrightCyan : EgaBrightWhite;
 }

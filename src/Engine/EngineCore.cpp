@@ -77,7 +77,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_keyToTake(KeyId::NoKey),
     m_playerInput(keyboardInput),
     m_savedGames(),
-    m_menu(game.CreateMenu(configurationSettings, m_savedGames)),
+    m_menu(game.CreateMenu(configurationSettings, keyboardInput, m_savedGames)),
     m_configurationSettings(configurationSettings),
     m_scrollsArePresent(AreScrollsPresent()),
     m_setOverlayOnNextDraw(false),

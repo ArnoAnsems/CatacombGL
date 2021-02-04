@@ -15,6 +15,7 @@
 #pragma once
 
 #include "PlayerInput.h"
+#include "IRenderer.h"
 #include "EgaColor.h"
 
 const uint8_t GuiActionNone = 0;
@@ -26,7 +27,7 @@ public:
     ~GuiElementBase();
 
     virtual uint8_t ProcessInput();
-    virtual void Draw(const int16_t originX, const int16_t originY, const bool selected) const;
+    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const;
 
 protected:
     static egaColor GetMenuItemColor(const bool selected, const bool supported);

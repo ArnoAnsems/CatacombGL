@@ -28,11 +28,18 @@
 #include "IRenderer.h"
 #include "EgaGraph.h"
 #include "IMenu.h"
+#include "GuiElementList.h"
 
 class ExtraMenu: public IMenu
 {
 public:
-    ExtraMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames);
+    ExtraMenu(
+        ConfigurationSettings& configurationSettings,
+        AudioPlayer& audioPlayer,
+        PlayerInput& playerInput,
+        EgaGraph* const egaGraph,
+        const uint16_t menuCursorPic,
+        std::vector<std::string>& savedGames);
     bool IsActive() const override;
     void SetActive(bool active) override;
     MenuCommand ProcessInput(const PlayerInput& playerInput) override;
@@ -95,4 +102,6 @@ private:
     std::vector<std::string>& m_savedGames;
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
+    GuiElementList m_elementListVideo;
+    RenderableText m_renderableText;
 };

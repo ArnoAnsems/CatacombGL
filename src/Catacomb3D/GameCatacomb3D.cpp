@@ -335,7 +335,7 @@ IIntroView* GameCatacomb3D::GetIntroView()
     return m_introView;
 }
 
-IMenu* GameCatacomb3D::CreateMenu(ConfigurationSettings& configurationSettings, std::vector<std::string>& savedGames)
+IMenu* GameCatacomb3D::CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames)
 {
     return new Catacomb3DMenu(configurationSettings, *GetAudioPlayer(), savedGames, *m_highScores);
 }

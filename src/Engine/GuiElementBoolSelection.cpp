@@ -45,7 +45,7 @@ uint8_t GuiElementBoolSelection::ProcessInput()
     return GuiActionNone;
 }
 
-void GuiElementBoolSelection::Draw(const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementBoolSelection::Draw(IRenderer& /*renderer*/, const int16_t originX, const int16_t originY, const bool selected) const
 {
     const egaColor color = GetMenuItemColor(selected, m_supported);
     m_renderableText.LeftAligned(m_cvarEnum.GetNameInMenu(), color, originX, originY);
