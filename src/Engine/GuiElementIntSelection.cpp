@@ -35,7 +35,7 @@ GuiElementIntSelection::~GuiElementIntSelection()
 
 }
 
-uint8_t GuiElementIntSelection::ProcessInput()
+const GuiEvent& GuiElementIntSelection::ProcessInput()
 {
     if (m_playerInput.IsKeyJustPressed(SDLK_LEFT))
     {
@@ -45,7 +45,7 @@ uint8_t GuiElementIntSelection::ProcessInput()
     {
         m_cvarEnum.Increase();
     }
-    return GuiActionNone;
+    return GetEvent();
 }
 
 void GuiElementIntSelection::Draw(IRenderer& /*renderer*/, const int16_t originX, const int16_t originY, const bool selected) const

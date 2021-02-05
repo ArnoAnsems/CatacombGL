@@ -29,7 +29,7 @@ public:
         RenderableText& renderableText);
     ~GuiElementIntSelection();
 
-    virtual uint8_t ProcessInput() override;
+    virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
 private:

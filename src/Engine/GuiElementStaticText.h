@@ -15,27 +15,27 @@
 #pragma once
 
 #include "GuiElementBase.h"
-#include "ConsoleVariableEnum.h"
 #include "RenderableText.h"
 
-class GuiElementEnumSelection : public GuiElementBase
+class GuiElementStaticText : public GuiElementBase
 {
 public:
-    GuiElementEnumSelection(
+    GuiElementStaticText(
         const PlayerInput& playerInput,
-        ConsoleVariableEnum& cvarEnum,
-        const bool supported,
-        const int16_t offsetXValue,
+        const std::string& text,
+        const egaColor color,
         RenderableText& renderableText);
-    ~GuiElementEnumSelection();
+    ~GuiElementStaticText();
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
 private:
-    ConsoleVariableEnum& m_cvarEnum;
-    const bool m_supported;
-    const int16_t m_offsetXValue;
+    const std::string m_text;
+    const egaColor m_color;
     RenderableText& m_renderableText;
 };
+
+
+
 

@@ -35,14 +35,14 @@ GuiElementEnumSelection::~GuiElementEnumSelection()
 
 }
 
-uint8_t GuiElementEnumSelection::ProcessInput()
+const GuiEvent& GuiElementEnumSelection::ProcessInput()
 {
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
     {
         m_cvarEnum.Next();
     }
 
-    return GuiActionNone;
+    return GetEvent();
 }
 
 void GuiElementEnumSelection::Draw(IRenderer& /*renderer*/, const int16_t originX, const int16_t originY, const bool selected) const

@@ -225,6 +225,9 @@
     <ClCompile Include="GuiElementList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GuiElementStaticText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h">
@@ -435,6 +438,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GuiElementList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiElementStaticText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

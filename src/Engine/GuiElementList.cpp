@@ -42,7 +42,7 @@ GuiElementList::~GuiElementList()
     }
 }
 
-uint8_t GuiElementList::ProcessInput()
+const GuiEvent& GuiElementList::ProcessInput()
 {
     if (m_playerInput.IsKeyJustPressed(SDLK_UP))
     {

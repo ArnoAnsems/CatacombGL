@@ -16,7 +16,8 @@
 #include "GuiElementBase.h"
 
 GuiElementBase::GuiElementBase(const PlayerInput& playerInput) :
-    m_playerInput(playerInput)
+    m_playerInput(playerInput),
+    m_guiEvent({GuiActionNone, 0})
 {
 
 }
@@ -26,14 +27,25 @@ GuiElementBase::~GuiElementBase()
 
 }
 
-uint8_t GuiElementBase::ProcessInput()
+const GuiEvent& GuiElementBase::ProcessInput()
 {
-    return GuiActionNone;
+    return m_guiEvent;
 }
 
 void GuiElementBase::Draw(IRenderer& /*renderer*/, const int16_t /*originX*/, const int16_t /*originY*/, const bool /*selected*/) const
 {
 
+}
+
+void GuiElementBase::SetEvent(const uint8_t guiAction, const int16_t guiParameter)
+{
+    m_guiEvent.guiAction = guiAction;
+    m_guiEvent.guiParameter = guiParameter;
+}
+
+const GuiEvent& GuiElementBase::GetEvent() const
+{
+    return m_guiEvent;
 }
 
 egaColor GuiElementBase::GetMenuItemColor(const bool selected, const bool supported)

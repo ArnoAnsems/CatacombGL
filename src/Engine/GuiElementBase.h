@@ -20,16 +20,27 @@
 
 const uint8_t GuiActionNone = 0;
 
+struct GuiEvent
+{
+    uint8_t guiAction;
+    int16_t guiParameter;
+};
+
 class GuiElementBase
 {
 public:
     GuiElementBase(const PlayerInput& playerInput);
     ~GuiElementBase();
 
-    virtual uint8_t ProcessInput();
+    virtual const GuiEvent& ProcessInput();
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const;
 
 protected:
+    void SetEvent(const uint8_t guiAction, const int16_t guiParameter);
+    const GuiEvent& GetEvent() const;
+
     static egaColor GetMenuItemColor(const bool selected, const bool supported);
+
     const PlayerInput& m_playerInput;
+    GuiEvent m_guiEvent;
 };
