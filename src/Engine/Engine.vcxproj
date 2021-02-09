@@ -170,6 +170,7 @@
     <ClCompile Include="GuiElementIntSelection.cpp" />
     <ClCompile Include="GuiElementList.cpp" />
     <ClCompile Include="GuiElementStaticText.cpp" />
+    <ClCompile Include="GuiPage.cpp" />
     <ClCompile Include="HelpPages.cpp" />
     <ClCompile Include="HighScores.cpp" />
     <ClCompile Include="Huffman.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="GuiElementBoolSelection.h" />
     <ClInclude Include="GuiElementList.h" />
     <ClInclude Include="GuiElementStaticText.h" />
+    <ClInclude Include="GuiPage.h" />
     <ClInclude Include="HelpPages.h" />
     <ClInclude Include="HighScores.h" />
     <ClInclude Include="IGame.h" />

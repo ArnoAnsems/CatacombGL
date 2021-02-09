@@ -28,7 +28,7 @@
 #include "IRenderer.h"
 #include "EgaGraph.h"
 #include "IMenu.h"
-#include "GuiElementList.h"
+#include "GuiPage.h"
 
 class ExtraMenu: public IMenu
 {
@@ -102,6 +102,6 @@ private:
     std::vector<std::string>& m_savedGames;
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
-    GuiElementList m_elementListVideo;
+    GuiPage m_pageVideo;
     RenderableText m_renderableText;
 };

@@ -19,6 +19,8 @@
 #include "GuiElementBoolSelection.h"
 #include "GuiElementEnumSelection.h"
 #include "GuiElementIntSelection.h"
+#include "GuiElementList.h"
+#include "GuiElementStaticText.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -72,18 +74,23 @@ ExtraMenu::ExtraMenu(
     m_newSaveGameName(""),
     m_waitingForNewSaveGameName(false),
     m_askForOverwrite(false),
-    m_elementListVideo(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic)),
+    m_pageVideo(playerInput),
     m_renderableText(*egaGraph->GetFont(3))
 {
-    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), true, 132, m_renderableText));
-    m_elementListVideo.AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), true, 132, m_renderableText));
+    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic));
+    elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), true, 132, m_renderableText));
+    elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), true, 132, m_renderableText));
+    m_pageVideo.AddElement(elementListVideo, 60, 30);
+
+    GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video", EgaBrightYellow, m_renderableText);
+    m_pageVideo.AddElement(pageLabelVideo, 160, 12);
 }
 
 bool ExtraMenu::IsActive() const
@@ -202,7 +209,7 @@ void ExtraMenu::MenuDown()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            m_elementListVideo.ProcessInput();
+            m_pageVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -291,7 +298,7 @@ void ExtraMenu::MenuUp()
         }
         else if (m_subMenuSelected == subMenuVideo)
         {
-            m_elementListVideo.ProcessInput();
+            m_pageVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -365,7 +372,7 @@ void ExtraMenu::MenuLeft()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            m_elementListVideo.ProcessInput();
+            m_pageVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -389,7 +396,7 @@ void ExtraMenu::MenuRight()
         m_audioPlayer.Play(browseMenuSound);
         if (m_subMenuSelected == subMenuVideo)
         {
-            m_elementListVideo.ProcessInput();
+            m_pageVideo.ProcessInput();
         }
         else if (m_subMenuSelected == subMenuControls)
         {
@@ -453,7 +460,7 @@ MenuCommand ExtraMenu::EnterKeyPressed()
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        m_elementListVideo.ProcessInput();
+        m_pageVideo.ProcessInput();
     }
     else if (m_subMenuSelected == subMenuControls)
     {
@@ -593,8 +600,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     else if (m_subMenuSelected == subMenuVideo)
     {
         m_renderableText.Reset();
-        m_renderableText.Centered("Video", EgaBrightYellow,160,12);
-        m_elementListVideo.Draw(renderer, 60, 30, false);
+        m_pageVideo.Draw(renderer, 0, 0, false);
         renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuControls)
