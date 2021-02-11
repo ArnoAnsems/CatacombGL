@@ -165,6 +165,7 @@
     <ClCompile Include="GameSelection.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GuiElementBase.cpp" />
+    <ClCompile Include="GuiElementBindKey.cpp" />
     <ClCompile Include="GuiElementBoolSelection.cpp" />
     <ClCompile Include="GuiElementEnumSelection.cpp" />
     <ClCompile Include="GuiElementIntSelection.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="FramesCounter.h" />
     <ClInclude Include="GameSelection.h" />
     <ClInclude Include="GuiElementBase.h" />
+    <ClInclude Include="GuiElementBindKey.h" />
     <ClInclude Include="GuiElementEnumSelection.h" />
     <ClInclude Include="GuiElementIntSelection.h" />
     <ClInclude Include="GuiElementBoolSelection.h" />

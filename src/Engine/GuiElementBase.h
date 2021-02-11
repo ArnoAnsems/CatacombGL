@@ -19,6 +19,7 @@
 #include "EgaColor.h"
 
 const uint8_t GuiActionNone = 0;
+const uint8_t GuiActionKeyBinding = 1;
 
 struct GuiEvent
 {
