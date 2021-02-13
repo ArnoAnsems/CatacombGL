@@ -44,41 +44,46 @@ GuiElementList::~GuiElementList()
 
 const GuiEvent& GuiElementList::ProcessInput()
 {
-    if (m_playerInput.IsKeyJustPressed(SDLK_UP))
+    GuiElementBase* element = m_elements.at(m_elementSelected);
+    const GuiEvent& guiEvent = element->ProcessInput();
+
+    if (guiEvent.guiAction == GuiActionNone)
     {
-        if (m_elementSelected == 0)
+        if (m_playerInput.IsKeyJustPressed(SDLK_UP))
         {
-            m_elementSelected = (uint16_t)m_elements.size() - 1;
-            m_firstElementDrawn = m_elementSelected - m_maxElementsDrawn + 1;
-        }
-        else
-        {
-            m_elementSelected--;
-            if (m_elementSelected < m_firstElementDrawn)
+            if (m_elementSelected == 0)
             {
-                m_firstElementDrawn = m_elementSelected;
+                m_elementSelected = (uint16_t)m_elements.size() - 1;
+                m_firstElementDrawn = (m_elementSelected >= m_maxElementsDrawn) ? m_elementSelected - m_maxElementsDrawn + 1 : 0;
+            }
+            else
+            {
+                m_elementSelected--;
+                if (m_elementSelected < m_firstElementDrawn)
+                {
+                    m_firstElementDrawn = m_elementSelected;
+                }
             }
         }
-    }
-    else if (m_playerInput.IsKeyJustPressed(SDLK_DOWN))
-    {
-        if (m_elementSelected == m_elements.size() - 1)
+        else if (m_playerInput.IsKeyJustPressed(SDLK_DOWN))
         {
-            m_elementSelected = 0;
-            m_firstElementDrawn = 0;
-        }
-        else
-        {
-            m_elementSelected++;
-            if (m_elementSelected - m_firstElementDrawn > m_maxElementsDrawn - 1)
+            if (m_elementSelected == m_elements.size() - 1)
             {
-                m_firstElementDrawn = m_elementSelected - m_maxElementsDrawn + 1;
+                m_elementSelected = 0;
+                m_firstElementDrawn = 0;
+            }
+            else
+            {
+                m_elementSelected++;
+                if (m_elementSelected - m_firstElementDrawn > m_maxElementsDrawn - 1)
+                {
+                    m_firstElementDrawn = m_elementSelected - m_maxElementsDrawn + 1;
+                }
             }
         }
     }
 
-    GuiElementBase* element = m_elements.at(m_elementSelected);
-    return element->ProcessInput();
+    return guiEvent;
 }
 
 void GuiElementList::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
@@ -89,7 +94,8 @@ void GuiElementList::Draw(IRenderer& renderer, const int16_t originX, const int1
     }
 
     uint16_t index = 0;
-    while (index < m_maxElementsDrawn)
+    const size_t elementsToDraw = (m_elements.size() > m_maxElementsDrawn) ? m_maxElementsDrawn : m_elements.size();
+    while (index < elementsToDraw)
     {
         const int16_t offsetY = originY + (index * m_elementHeight);
         const uint8_t itemIndex = index + m_firstElementDrawn;

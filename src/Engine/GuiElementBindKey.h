@@ -26,8 +26,7 @@ public:
         ControlsMap& controlsMap,
         ControlAction controlAction,
         const int16_t offsetXValue,
-        RenderableText& renderableText,
-        RenderableText& renderableTexDefaultFont);
+        RenderableText& renderableText);
     ~GuiElementBindKey();
 
     virtual const GuiEvent& ProcessInput() override;
@@ -38,7 +37,6 @@ private:
     ControlAction m_controlAction;
     const int16_t m_offsetXValue;
     RenderableText& m_renderableText;
-    RenderableText& m_renderableTextDefaultFont;
     bool m_waitingForKey;
 };
 

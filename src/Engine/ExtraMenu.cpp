@@ -21,6 +21,7 @@
 #include "GuiElementIntSelection.h"
 #include "GuiElementList.h"
 #include "GuiElementStaticText.h"
+#include "GuiElementBindKey.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -66,7 +67,6 @@ ExtraMenu::ExtraMenu(
     m_menuItemSelected(0),
     m_subMenuSelected(0),
     m_menuItemOffset(0),
-    m_waitingForKeyToBind(false),
     m_saveGameEnabled(false),
     m_configurationSettings(configurationSettings),
     m_audioPlayer(audioPlayer),
@@ -75,7 +75,9 @@ ExtraMenu::ExtraMenu(
     m_waitingForNewSaveGameName(false),
     m_askForOverwrite(false),
     m_pageVideo(playerInput),
-    m_renderableText(*egaGraph->GetFont(3))
+    m_pageControls(playerInput),
+    m_renderableText(*egaGraph->GetFont(3)),
+    m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10))
 {
     GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic));
     elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), true, 132, m_renderableText));
@@ -91,6 +93,28 @@ ExtraMenu::ExtraMenu(
 
     GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video", EgaBrightYellow, m_renderableText);
     m_pageVideo.AddElement(pageLabelVideo, 160, 12);
+
+    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 50, 30, 10, egaGraph->GetPicture(menuCursorPic));
+    ControlsMap& controlsMap = configurationSettings.GetControlsMap();
+    const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
+    for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
+    {
+        if (actionLabel.first != None)
+        {
+            elementListControls->AddElement(new GuiElementBindKey(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
+        }
+    }
+    elementListControls->AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), true, 95, m_renderableText));
+    elementListControls->AddElement(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), true, 95, m_renderableText));
+    elementListControls->AddElement(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), true, 95, m_renderableText));
+    elementListControls->AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), true, 95, m_renderableText));
+    elementListControls->AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), true, 95, m_renderableText));
+    elementListControls->AddElement(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), true, 95, m_renderableText));
+
+    m_pageControls.AddElement(elementListControls, 60, 30);
+
+    GuiElementStaticText* pageLabelControls = new GuiElementStaticText(playerInput, "Controls", EgaBrightYellow, m_renderableText);
+    m_pageControls.AddElement(pageLabelControls, 160, 12);
 }
 
 bool ExtraMenu::IsActive() const
@@ -103,7 +127,6 @@ void ExtraMenu::SetActive(bool active)
     m_menuActive = active;
     if (!active)
     {
-        m_waitingForKeyToBind = false;
         m_waitingForNewSaveGameName = false;
         m_subMenuSelected = subMenuMain;
         m_menuItemSelected = 0;
@@ -128,23 +151,8 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
             m_askForOverwrite = false;
         }
     }
-    if (m_waitingForKeyToBind)
-    {
-        // Check which key is pressed
-        if (keyCode != SDLK_UNKNOWN && m_configurationSettings.GetControlsMap().AssignActionToKey((ControlAction)(m_menuItemSelected), keyCode))
-        {
-            m_waitingForKeyToBind = false;
-        }
-        else
-        {
-            const uint8_t buttonCode = playerInput.GetFirstMouseButtonPressed();
-            if (buttonCode != 0 && m_configurationSettings.GetControlsMap().AssignActionToMouseButton((ControlAction)(m_menuItemSelected), buttonCode))
-            {
-                m_waitingForKeyToBind = false;
-            }
-        }
-    }
-    else if (m_waitingForNewSaveGameName)
+
+    if (m_waitingForNewSaveGameName)
     {
         const uint16_t maxSaveGameNameLength = 20;
         // Check which key is pressed
@@ -172,6 +180,15 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     else if (playerInput.IsKeyJustPressed(SDLK_RIGHT))
     {
         MenuRight();
+    }
+
+    if (m_subMenuSelected == subMenuVideo)
+    {
+        m_pageVideo.ProcessInput();
+    }
+    else if (m_subMenuSelected == subMenuControls)
+    {
+        m_pageControls.ProcessInput();
     }
     
     if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
@@ -205,26 +222,6 @@ void ExtraMenu::MenuDown()
             if (m_menuItemSelected == menuItemMainSaveGame && !m_saveGameEnabled)
             {
                 m_menuItemSelected++;
-            }
-        }
-        else if (m_subMenuSelected == subMenuVideo)
-        {
-            m_pageVideo.ProcessInput();
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5)
-            {
-                m_menuItemSelected = 0;
-                m_menuItemOffset = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 7)
-                {
-                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-                }
             }
         }
         else if (m_subMenuSelected == subMenuSound)
@@ -296,26 +293,6 @@ void ExtraMenu::MenuUp()
                 m_menuItemSelected--;
             }
         }
-        else if (m_subMenuSelected == subMenuVideo)
-        {
-            m_pageVideo.ProcessInput();
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5;
-                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-            }
-            else
-            {
-                m_menuItemSelected--;
-                if (m_menuItemSelected < m_menuItemOffset)
-                {
-                    m_menuItemOffset = m_menuItemSelected;
-                }
-            }
-        }
         else if (m_subMenuSelected == subMenuSound)
         {
             if (m_menuItemSelected == 0)
@@ -370,22 +347,6 @@ void ExtraMenu::MenuLeft()
     if (m_menuActive)
     {
         m_audioPlayer.Play(browseMenuSound);
-        if (m_subMenuSelected == subMenuVideo)
-        {
-            m_pageVideo.ProcessInput();
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
-            if (m_menuItemSelected == numberOfActionLabels + 1)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Decrease();
-            }
-            else if (m_menuItemSelected == numberOfActionLabels + 2)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Decrease();
-            }
-        }
     }
 }
 
@@ -394,22 +355,6 @@ void ExtraMenu::MenuRight()
     if (m_menuActive)
     {
         m_audioPlayer.Play(browseMenuSound);
-        if (m_subMenuSelected == subMenuVideo)
-        {
-            m_pageVideo.ProcessInput();
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
-            if (m_menuItemSelected == numberOfActionLabels + 1)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Increase();
-            }
-            if (m_menuItemSelected == numberOfActionLabels + 2)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Increase();
-            }
-        }
     }
 }
 
@@ -456,48 +401,6 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         else if (m_menuItemSelected == menuItemMainExitGame)
         {
             command = MenuCommandExitGame;
-        }
-    }
-    else if (m_subMenuSelected == subMenuVideo)
-    {
-        m_pageVideo.ProcessInput();
-    }
-    else if (m_subMenuSelected == subMenuControls)
-    {
-        const uint8_t numberOfActionLabels = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size();
-        if (m_menuItemSelected == menuItemControlsBack)
-        {
-            // Go back to main menu
-            m_subMenuSelected = 0;
-            m_menuItemSelected = 5;
-        }
-        else if (m_menuItemSelected == numberOfActionLabels)
-        {
-            // Mouse look
-            m_configurationSettings.GetCVarBoolMutable(CVarIdMouseLook).Toggle();
-        }
-        else if (m_menuItemSelected == numberOfActionLabels + 3)
-        {
-            // Always run
-            m_configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun).Toggle();
-        }
-        else if (m_menuItemSelected == numberOfActionLabels + 4)
-        {
-            // Auto fire
-            m_configurationSettings.GetCVarBoolMutable(CVarIdAutoFire).Toggle();
-        }
-        else if (m_menuItemSelected == numberOfActionLabels + 5)
-        {
-            // Mana bar
-            m_configurationSettings.GetCVarBoolMutable(CVarIdManaBar).Toggle();
-        }
-        else if (m_menuItemSelected < numberOfActionLabels + 1)
-        {
-            // Any of the control options
-            if (!m_waitingForKeyToBind)
-            {
-                m_waitingForKeyToBind = true;
-            }
         }
     }
     else if (m_subMenuSelected == subMenuSound)
@@ -605,65 +508,11 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     }
     else if (m_subMenuSelected == subMenuControls)
     {
-        const uint16_t xOffset = 50;
-        const uint16_t xOffset2 = 145;
-        const uint8_t maxRowsVisible = 8;
-        RenderableText renderableText(*egaGraph->GetFont(3));
-        RenderableText renderableTextDefaultFont(*DefaultFont::Get(renderer, 10));
-        renderableText.Centered("Controls", EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),20,4+((m_menuItemSelected - m_menuItemOffset) * 10));
-        uint8_t index = 0;
-        while (index < 8)
-        {
-            const uint16_t offsetY = 30 + (index * 10);
-            const uint8_t itemIndex = index + m_menuItemOffset;
-            const bool itemSelected = m_menuItemSelected == itemIndex;
-            if (itemIndex == menuItemControlsBack)
-            {
-                renderableText.LeftAligned("Back to main menu", itemSelected ? EgaBrightCyan : EgaBrightWhite, xOffset, offsetY);
-            }
-            else if (itemIndex < (uint16_t)m_configurationSettings.GetControlsMap().GetActionLabels().size())
-            {
-                const std::string& actionLabel = m_configurationSettings.GetControlsMap().GetActionLabels().at((ControlAction)(itemIndex));
-                renderableText.LeftAligned(actionLabel, itemSelected ? EgaBrightCyan : EgaBrightWhite,xOffset, offsetY);
-                if (m_waitingForKeyToBind && m_menuItemSelected == itemIndex)
-                {
-                    renderableText.LeftAligned("< Press key to bind >", EgaBrightCyan,xOffset2, offsetY);
-                }
-                else
-                {
-                    // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-                    renderableTextDefaultFont.LeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(itemIndex)), itemSelected ? EgaBrightCyan : EgaBrightWhite,xOffset2, offsetY);
-                }
-            }
-            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size())
-            {
-                DrawMenuItemBool(CVarIdMouseLook, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
-            {
-                DrawMenuItemInt(CVarIdMouseSensitivity, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
-            {
-                DrawMenuItemInt(CVarIdTurnSpeed, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
-            {
-                DrawMenuItemBool(CVarIdAlwaysRun, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
-            {
-                DrawMenuItemBool(CVarIdAutoFire, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            else if (itemIndex == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5)
-            {
-                DrawMenuItemBool(CVarIdManaBar, itemSelected, true, xOffset, xOffset2, offsetY, renderableText);
-            }
-            index++;
-        }
-        renderer.RenderText(renderableText);
-        renderer.RenderText(renderableTextDefaultFont);
+        m_renderableText.Reset();
+        m_renderableTextDefaultFont.Reset();
+        m_pageControls.Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderText(m_renderableTextDefaultFont);
     }
     else if (m_subMenuSelected == subMenuSound)
     {
@@ -761,7 +610,6 @@ void ExtraMenu::OpenRestoreGameMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuRestoreGame;
     m_menuItemOffset = 0;
-    m_waitingForKeyToBind = false;
     m_waitingForNewSaveGameName = false;
 }
 
@@ -771,7 +619,6 @@ void ExtraMenu::OpenSaveGameMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuSaveGame;
     m_menuItemOffset = 0;
-    m_waitingForKeyToBind = false;
     m_waitingForNewSaveGameName = false;
 }
 
@@ -781,7 +628,6 @@ void ExtraMenu::OpenSoundMenu()
     m_menuItemSelected = menuItemSoundBack;
     m_subMenuSelected = subMenuSound;
     m_menuItemOffset = 0;
-    m_waitingForKeyToBind = false;
     m_waitingForNewSaveGameName = false;
 }
 
@@ -801,22 +647,6 @@ void ExtraMenu::CheckHighScore(const uint16_t level, const uint32_t score)
     // Not applicable
 }
 
-void ExtraMenu::DrawMenuItemBool(
-    const uint8_t cvarId,
-    const bool selected,
-    const bool supported,
-    const int16_t offsetXName,
-    const int16_t offsetXValue,
-    const int16_t offsetY,
-    RenderableText& renderableText)
-{
-    const ConsoleVariableBool& cvar = m_configurationSettings.GetCVarBool(cvarId);
-    const egaColor color = GetMenuItemColor(selected, supported);
-    renderableText.LeftAligned(cvar.GetNameInMenu(), color, offsetXName, offsetY);
-    const std::string& valueStr = (!supported) ? "Not supported" : cvar.GetValueInMenu();
-    renderableText.LeftAligned(valueStr, color, offsetXValue, offsetY);
-}
-
 void ExtraMenu::DrawMenuItemEnum(
     const uint8_t cvarId,
     const bool selected,
@@ -830,22 +660,6 @@ void ExtraMenu::DrawMenuItemEnum(
     const egaColor color = GetMenuItemColor(selected, supported);
     renderableText.LeftAligned(cvar.GetNameInMenu(), color, offsetXName, offsetY);
     const std::string& valueStr = (!supported) ? "Not supported" : cvar.GetValueInMenu();
-    renderableText.LeftAligned(valueStr, color, offsetXValue, offsetY);
-}
-
-void ExtraMenu::DrawMenuItemInt(
-    const uint8_t cvarId,
-    const bool selected,
-    const bool supported,
-    const int16_t offsetXName,
-    const int16_t offsetXValue,
-    const int16_t offsetY,
-    RenderableText& renderableText)
-{
-    const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(cvarId);
-    const egaColor color = GetMenuItemColor(selected, supported);
-    renderableText.LeftAligned(cvar.GetNameInMenu(), color, offsetXName, offsetY);
-    const std::string& valueStr = (!supported) ? "Not supported" : std::to_string(cvar.GetValue());
     renderableText.LeftAligned(valueStr, color, offsetXValue, offsetY);
 }
 

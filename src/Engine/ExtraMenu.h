@@ -60,25 +60,7 @@ private:
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
 
-    void ExtraMenu::DrawMenuItemBool(
-        const uint8_t cvarId,
-        const bool selected,
-        const bool supported,
-        const int16_t offsetXName,
-        const int16_t offsetXValue,
-        const int16_t offsetY,
-        RenderableText& renderableText);
-
     void ExtraMenu::DrawMenuItemEnum(
-        const uint8_t cvarId,
-        const bool selected,
-        const bool supported,
-        const int16_t offsetXName,
-        const int16_t offsetXValue,
-        const int16_t offsetY,
-        RenderableText& renderableText);
-
-    void ExtraMenu::DrawMenuItemInt(
         const uint8_t cvarId,
         const bool selected,
         const bool supported,
@@ -93,7 +75,6 @@ private:
     uint8_t m_menuItemSelected;
     uint8_t m_subMenuSelected;
     uint8_t m_menuItemOffset;
-	bool m_waitingForKeyToBind;
     bool m_waitingForNewSaveGameName;
     bool m_saveGameEnabled;
 
@@ -103,5 +84,7 @@ private:
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
     GuiPage m_pageVideo;
+    GuiPage m_pageControls;
     RenderableText m_renderableText;
+    RenderableText m_renderableTextDefaultFont;
 };

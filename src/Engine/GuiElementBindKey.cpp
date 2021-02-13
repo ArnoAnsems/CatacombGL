@@ -20,14 +20,12 @@ GuiElementBindKey::GuiElementBindKey(
     ControlsMap& controlsMap,
     ControlAction controlAction,
     const int16_t offsetXValue,
-    RenderableText& renderableText,
-    RenderableText& renderableTexDefaultFont) :
+    RenderableText& renderableText) :
     GuiElementBase(playerInput),
     m_controlsMap(controlsMap),
     m_controlAction(controlAction),
     m_offsetXValue(offsetXValue),
     m_renderableText(renderableText),
-    m_renderableTextDefaultFont(renderableTexDefaultFont),
     m_waitingForKey(false)
 {
 
@@ -85,6 +83,6 @@ void GuiElementBindKey::Draw(IRenderer& renderer, const int16_t originX, const i
     else
     {
         // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-        m_renderableTextDefaultFont.LeftAligned(m_controlsMap.GetKeyStringFromAction(m_controlAction), color, originX + m_offsetXValue, originY);
+        m_renderableText.LeftAligned(m_controlsMap.GetKeyStringFromAction(m_controlAction), color, originX + m_offsetXValue, originY);
     }
 }

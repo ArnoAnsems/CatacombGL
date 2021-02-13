@@ -356,6 +356,11 @@ Font* EgaGraph::GetFont(const uint16_t index)
     return m_fonts[indexInFontArray];
 }
 
+const Font* EgaGraph::GetDefaultFont(const uint16_t lineHeight)
+{
+    return DefaultFont::Get(m_renderer, lineHeight);
+}
+
 LevelLocationNames* EgaGraph::GetWorldLocationNames(const uint16_t index)
 {
     if (m_worldLocationNames[index] == nullptr)

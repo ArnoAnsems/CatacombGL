@@ -64,6 +64,7 @@ public:
     Picture* GetMaskedPicture(const uint16_t index);
     Picture* GetSprite(const uint16_t index);
     Font* GetFont(const uint16_t index);
+    const Font* GetDefaultFont(const uint16_t lineHeight);
     LevelLocationNames* GetWorldLocationNames(const uint16_t index);
     uint16_t GetNumberOfWorldLocationNames() const;
     uint16_t GetHandPictureIndex() const;
