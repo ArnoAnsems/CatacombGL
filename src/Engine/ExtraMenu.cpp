@@ -38,22 +38,6 @@ const uint8_t menuItemMainSound = 4;
 const uint8_t menuItemMainControls = 5;
 const uint8_t menuItemMainExitGame = 6;
 
-const uint8_t menuItemVideoBack = 0;
-const uint8_t menuItemVideoScreenMode = 1;
-const uint8_t menuItemVideoScreenResolution = 2;
-const uint8_t menuItemVideoAspectRatio = 3;
-const uint8_t menuItemVideoFov = 4;
-const uint8_t menuItemVideoTextureFilter = 5;
-const uint8_t menuItemVideoDepthShading = 6;
-const uint8_t menuItemVideoShowFps = 7;
-const uint8_t menuItemVideoVSync = 8;
-const uint8_t menuItemVideoAutoMapMode = 9;
-
-const uint8_t menuItemControlsBack = 0;
-
-const uint8_t menuItemSoundBack = 0;
-const uint8_t menuItemSoundMode = 1;
-
 const uint16_t browseMenuSound = 0;
 
 ExtraMenu::ExtraMenu(
@@ -76,9 +60,11 @@ ExtraMenu::ExtraMenu(
     m_askForOverwrite(false),
     m_pageVideo(playerInput),
     m_pageControls(playerInput),
+    m_pageSound(playerInput),
     m_renderableText(*egaGraph->GetFont(3)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10))
 {
+    // Video menu
     GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic));
     elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), true, 132, m_renderableText));
     elementListVideo->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), true, 132, m_renderableText));
@@ -94,6 +80,7 @@ ExtraMenu::ExtraMenu(
     GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video", EgaBrightYellow, m_renderableText);
     m_pageVideo.AddElement(pageLabelVideo, 160, 12);
 
+    // Controls menu
     GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 50, 30, 10, egaGraph->GetPicture(menuCursorPic));
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
@@ -115,6 +102,14 @@ ExtraMenu::ExtraMenu(
 
     GuiElementStaticText* pageLabelControls = new GuiElementStaticText(playerInput, "Controls", EgaBrightYellow, m_renderableText);
     m_pageControls.AddElement(pageLabelControls, 160, 12);
+
+    // Sound menu
+    GuiElementList* elementListSound = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic));
+    elementListSound->AddElement(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), true, 140, m_renderableText));
+    m_pageSound.AddElement(elementListSound, 60, 30);
+
+    GuiElementStaticText* pageLabelSound = new GuiElementStaticText(playerInput, "Sound", EgaBrightYellow, m_renderableText);
+    m_pageSound.AddElement(pageLabelSound, 160, 12);
 }
 
 bool ExtraMenu::IsActive() const
@@ -190,6 +185,10 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     {
         m_pageControls.ProcessInput();
     }
+    else if (m_subMenuSelected == subMenuSound)
+    {
+        m_pageSound.ProcessInput();
+    }
     
     if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
     {
@@ -222,17 +221,6 @@ void ExtraMenu::MenuDown()
             if (m_menuItemSelected == menuItemMainSaveGame && !m_saveGameEnabled)
             {
                 m_menuItemSelected++;
-            }
-        }
-        else if (m_subMenuSelected == subMenuSound)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = menuItemSoundMode;
-            }
-            else
-            {
-                m_menuItemSelected = 0;
             }
         }
         else if (m_subMenuSelected == subMenuRestoreGame)
@@ -291,17 +279,6 @@ void ExtraMenu::MenuUp()
             if (m_menuItemSelected == menuItemMainSaveGame && !m_saveGameEnabled)
             {
                 m_menuItemSelected--;
-            }
-        }
-        else if (m_subMenuSelected == subMenuSound)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = menuItemSoundMode;
-            }
-            else
-            {
-                m_menuItemSelected = 0;
             }
         }
         else if (m_subMenuSelected == subMenuRestoreGame)
@@ -401,18 +378,6 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         else if (m_menuItemSelected == menuItemMainExitGame)
         {
             command = MenuCommandExitGame;
-        }
-    }
-    else if (m_subMenuSelected == subMenuSound)
-    {
-        if (m_menuItemSelected == menuItemSoundBack)
-        {
-            m_subMenuSelected = subMenuMain;
-            m_menuItemSelected = menuItemMainSound;
-        }
-        else if (m_menuItemSelected == menuItemSoundMode)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdSoundMode).Next();
         }
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
@@ -516,15 +481,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     }
     else if (m_subMenuSelected == subMenuSound)
     {
-        const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(CVarIdSoundMode);
-        const uint16_t xOffset = 60;
-        const uint16_t xOffset2 = 200;
-        RenderableText renderableText(*egaGraph->GetFont(3));
-        renderableText.Centered("Sound", EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30,4+(m_menuItemSelected * 10));
-        renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == menuItemSoundBack) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        DrawMenuItemEnum(CVarIdSoundMode, m_menuItemSelected == menuItemSoundMode, true, xOffset, xOffset2, 40, renderableText);
-        renderer.RenderText(renderableText);
+        m_renderableText.Reset();
+        m_pageSound.Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
@@ -625,7 +584,7 @@ void ExtraMenu::OpenSaveGameMenu()
 void ExtraMenu::OpenSoundMenu()
 {
     m_menuActive = true;
-    m_menuItemSelected = menuItemSoundBack;
+    m_menuItemSelected = 0;
     m_subMenuSelected = subMenuSound;
     m_menuItemOffset = 0;
     m_waitingForNewSaveGameName = false;
@@ -645,22 +604,6 @@ bool ExtraMenu::IsNewSaveGameNameAlreadyInUse() const
 void ExtraMenu::CheckHighScore(const uint16_t level, const uint32_t score)
 {
     // Not applicable
-}
-
-void ExtraMenu::DrawMenuItemEnum(
-    const uint8_t cvarId,
-    const bool selected,
-    const bool supported,
-    const int16_t offsetXName,
-    const int16_t offsetXValue,
-    const int16_t offsetY,
-    RenderableText& renderableText)
-{
-    const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(cvarId);
-    const egaColor color = GetMenuItemColor(selected, supported);
-    renderableText.LeftAligned(cvar.GetNameInMenu(), color, offsetXName, offsetY);
-    const std::string& valueStr = (!supported) ? "Not supported" : cvar.GetValueInMenu();
-    renderableText.LeftAligned(valueStr, color, offsetXValue, offsetY);
 }
 
 egaColor inline ExtraMenu::GetMenuItemColor(const bool selected, const bool supported)

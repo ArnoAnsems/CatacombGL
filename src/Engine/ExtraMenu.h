@@ -60,15 +60,6 @@ private:
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
 
-    void ExtraMenu::DrawMenuItemEnum(
-        const uint8_t cvarId,
-        const bool selected,
-        const bool supported,
-        const int16_t offsetXName,
-        const int16_t offsetXValue,
-        const int16_t offsetY,
-        RenderableText& renderableText);
-
     static egaColor inline GetMenuItemColor(const bool selected, const bool supported);
 
     bool m_menuActive;
@@ -85,6 +76,7 @@ private:
     bool m_askForOverwrite;
     GuiPage m_pageVideo;
     GuiPage m_pageControls;
+    GuiPage m_pageSound;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
 };
