@@ -15,27 +15,23 @@
 #pragma once
 
 #include "GuiElementBase.h"
-#include "ControlsMap.h"
-#include "RenderableText.h"
 
-class GuiElementBindKey : public GuiElementBase
+class GuiElementButton : public GuiElementBase
 {
 public:
-    GuiElementBindKey(
+    GuiElementButton(
         const PlayerInput& playerInput,
-        ControlsMap& controlsMap,
-        ControlAction controlAction,
-        const int16_t offsetXValue,
+        const std::string& buttonLabel,
+        const GuiEvent& guiEventWhenActivated,
         RenderableText& renderableText);
-    ~GuiElementBindKey();
+    ~GuiElementButton();
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
 private:
-    ControlsMap& m_controlsMap;
-    ControlAction m_controlAction;
-    const int16_t m_offsetXValue;
+    const std::string m_buttonLabel;
+    const GuiEvent m_guiEventWhenActivated;
     RenderableText& m_renderableText;
-    bool m_waitingForKey;
 };
+

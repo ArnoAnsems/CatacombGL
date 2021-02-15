@@ -77,6 +77,7 @@ private:
     GuiPage m_pageVideo;
     GuiPage m_pageControls;
     GuiPage m_pageSound;
+    GuiPage m_pageRestoreGame;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
 };

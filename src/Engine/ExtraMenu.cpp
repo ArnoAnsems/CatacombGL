@@ -22,6 +22,7 @@
 #include "GuiElementList.h"
 #include "GuiElementStaticText.h"
 #include "GuiElementBindKey.h"
+#include "GuiElementButton.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -61,6 +62,7 @@ ExtraMenu::ExtraMenu(
     m_pageVideo(playerInput),
     m_pageControls(playerInput),
     m_pageSound(playerInput),
+    m_pageRestoreGame(playerInput),
     m_renderableText(*egaGraph->GetFont(3)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10))
 {
@@ -110,6 +112,22 @@ ExtraMenu::ExtraMenu(
 
     GuiElementStaticText* pageLabelSound = new GuiElementStaticText(playerInput, "Sound", EgaBrightYellow, m_renderableText);
     m_pageSound.AddElement(pageLabelSound, 160, 12);
+
+    // Restore game menu
+    GuiElementList* elementListRestoreGame = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic));
+    if (savedGames.size() > 0)
+    {
+        int16_t savedGameIndex = 0;
+        for (const std::string& savedGame : savedGames)
+        {
+            elementListRestoreGame->AddElement(new GuiElementButton(playerInput, savedGame, { GuiActionRestoreGame, savedGameIndex }, m_renderableText));
+            savedGameIndex++;
+        }
+        m_pageRestoreGame.AddElement(elementListRestoreGame, 60, 30);
+    }
+
+    GuiElementStaticText* pageLabelRestoreGame = new GuiElementStaticText(playerInput, "Restore game", EgaBrightYellow, m_renderableText);
+    m_pageRestoreGame.AddElement(pageLabelRestoreGame, 160, 12);
 }
 
 bool ExtraMenu::IsActive() const
@@ -189,13 +207,24 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     {
         m_pageSound.ProcessInput();
     }
+    else if (m_subMenuSelected == subMenuRestoreGame)
+    {
+        const GuiEvent& guiEvent = m_pageRestoreGame.ProcessInput();
+        if (guiEvent.guiAction == GuiActionRestoreGame)
+        {
+            command = MenuCommandLoadGame;
+            m_newSaveGameName = m_savedGames.at(guiEvent.guiParameter);
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = 0;
+        }
+    }
     
     if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
     {
         command = MenuCommandCloseMenu;
     }
     
-    if (playerInput.IsKeyJustPressed(SDLK_RETURN))
+    if (command == MenuCommandNone && playerInput.IsKeyJustPressed(SDLK_RETURN))
     {
         command = EnterKeyPressed();
     }
@@ -221,22 +250,6 @@ void ExtraMenu::MenuDown()
             if (m_menuItemSelected == menuItemMainSaveGame && !m_saveGameEnabled)
             {
                 m_menuItemSelected++;
-            }
-        }
-        else if (m_subMenuSelected == subMenuRestoreGame)
-        {
-            if (m_menuItemSelected == m_savedGames.size())
-            {
-                m_menuItemSelected = 0;
-                m_menuItemOffset = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 7)
-                {
-                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-                }
             }
         }
         else if (m_subMenuSelected == subMenuSaveGame)
@@ -279,22 +292,6 @@ void ExtraMenu::MenuUp()
             if (m_menuItemSelected == menuItemMainSaveGame && !m_saveGameEnabled)
             {
                 m_menuItemSelected--;
-            }
-        }
-        else if (m_subMenuSelected == subMenuRestoreGame)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = (uint8_t)m_savedGames.size();
-                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-            }
-            else
-            {
-                m_menuItemSelected--;
-                if (m_menuItemSelected < m_menuItemOffset)
-                {
-                    m_menuItemOffset = m_menuItemSelected;
-                }
             }
         }
         else if (m_subMenuSelected == subMenuSaveGame)
@@ -378,19 +375,6 @@ MenuCommand ExtraMenu::EnterKeyPressed()
         else if (m_menuItemSelected == menuItemMainExitGame)
         {
             command = MenuCommandExitGame;
-        }
-    }
-    else if (m_subMenuSelected == subMenuRestoreGame)
-    {
-        if (m_menuItemSelected == 0)
-        {
-            m_subMenuSelected = subMenuMain;
-            m_menuItemSelected = menuItemMainRestoreGame;
-        }
-        else
-        {
-            m_newSaveGameName = m_savedGames.at(m_menuItemSelected - 1);
-            command = MenuCommandLoadGame;
         }
     }
     else if (m_subMenuSelected == subMenuSaveGame)
@@ -487,26 +471,9 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
-        const uint16_t xOffset = 60;
-        const uint16_t xOffset2 = 150;
-        RenderableText renderableText(*egaGraph->GetFont(3));
-        renderableText.Centered("Restore game", EgaBrightYellow,160,12);
-        renderer.Render2DPicture(egaGraph->GetPicture(menuCursorPic),30, 4 + ((m_menuItemSelected - m_menuItemOffset) * 10));
-
-        if (m_menuItemOffset == 0)
-        {
-            renderableText.LeftAligned("Back to main menu", (m_menuItemSelected == 0) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30);
-        }
-        uint8_t index = 1;
-        for (auto savedGameName: m_savedGames)
-        {
-            if (index >= m_menuItemOffset && index <= m_menuItemOffset + 7)
-            {
-                renderableText.LeftAligned(savedGameName, (m_menuItemSelected == index) ? EgaBrightCyan : EgaBrightWhite, xOffset, 30 + ((index - m_menuItemOffset) * 10));
-            }
-            index++;
-        }
-        renderer.RenderText(renderableText);
+        m_renderableText.Reset();
+        m_pageRestoreGame.Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuSaveGame)
     {

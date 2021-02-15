@@ -77,7 +77,6 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_keyToTake(KeyId::NoKey),
     m_playerInput(keyboardInput),
     m_savedGames(),
-    m_menu(game.CreateMenu(configurationSettings, keyboardInput, m_savedGames)),
     m_configurationSettings(configurationSettings),
     m_scrollsArePresent(AreScrollsPresent()),
     m_setOverlayOnNextDraw(false),
@@ -92,6 +91,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     const std::string filenamePath = m_system.GetConfigurationFilePath();
     const std::string savedGamesAbyssPath = filenamePath + m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesAbyssPath, m_savedGames);
+    m_menu = game.CreateMenu(configurationSettings, keyboardInput, m_savedGames);
 
     // Pre-load game data from disk
     m_game.GetAudioRepository();

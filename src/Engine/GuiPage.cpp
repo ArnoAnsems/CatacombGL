@@ -39,7 +39,7 @@ const GuiEvent& GuiPage::ProcessInput()
         const GuiEvent& elementGuiEvent = pageElement.element->ProcessInput();
         if (elementGuiEvent.guiAction != GuiActionNone)
         {
-            SetEvent(elementGuiEvent.guiAction, elementGuiEvent.guiParameter);
+            return elementGuiEvent;
         }
     }
 
