@@ -22,7 +22,7 @@ class GuiPage : public GuiElementBase
 public:
     GuiPage(
         const PlayerInput& playerInput);
-    ~GuiPage();
+    ~GuiPage() override;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;

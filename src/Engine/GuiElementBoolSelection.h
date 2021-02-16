@@ -27,7 +27,7 @@ public:
         const bool supported,
         const int16_t offsetXValue,
         RenderableText& renderableText);
-    ~GuiElementBoolSelection();
+    ~GuiElementBoolSelection() override;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
@@ -38,6 +38,3 @@ private:
     const int16_t m_offsetXValue;
     RenderableText& m_renderableText;
 };
-
-
-

@@ -27,7 +27,7 @@ public:
         const int16_t originY,
         const uint16_t elementHeight,
         const Picture* cursorPicture);
-    ~GuiElementList();
+    ~GuiElementList() override;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;

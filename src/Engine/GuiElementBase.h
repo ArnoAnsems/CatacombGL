@@ -32,7 +32,7 @@ class GuiElementBase
 {
 public:
     GuiElementBase(const PlayerInput& playerInput);
-    ~GuiElementBase();
+    virtual ~GuiElementBase();
 
     virtual const GuiEvent& ProcessInput();
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const;
