@@ -159,6 +159,7 @@
     <ClCompile Include="GameApocalypse_Test.cpp" />
     <ClCompile Include="GameArmageddon_Test.cpp" />
     <ClCompile Include="GameCatacomb3D_Test.cpp" />
+    <ClCompile Include="GuiElementEditText_Test.cpp" />
     <ClCompile Include="HelpPages_Test.cpp" />
     <ClCompile Include="LevelLocationNames_Test.cpp" />
     <ClCompile Include="main.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="GameApocalypse_Test.h" />
     <ClInclude Include="GameArmageddon_Test.h" />
     <ClInclude Include="GameCatacomb3D_Test.h" />
+    <ClInclude Include="GuiElementEditText_Test.h" />
     <ClInclude Include="HelpPages_Test.h" />
     <ClInclude Include="LevelLocationNames_Test.h" />
     <ClInclude Include="RendererStub.h" />
