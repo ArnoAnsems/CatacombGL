@@ -16,12 +16,16 @@
 #pragma once
 
 #include <gtest\gtest.h>
+#include "../Engine/Font.h"
+#include "../Engine/RenderableText.h"
 
 class GuiElementEditText_Test : public ::testing::Test
 {
 public:
     GuiElementEditText_Test();
     virtual ~GuiElementEditText_Test();
+    static const Font& GetDefaultFont();
+    static const std::string RenderableTextToString(const RenderableText& renderableText);
 };
 
 

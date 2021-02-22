@@ -48,6 +48,7 @@ const GuiEvent& GuiElementEditText::ProcessInput()
             if (!m_outputText.empty())
             {
                 isTextComplete = true;
+                m_enteringText = false;
             }
         }
         else

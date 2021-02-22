@@ -35,7 +35,7 @@ private:
     static bool KeyIsSuitableForText(const SDL_Keycode keyCode);
 
     std::string& m_outputText;
-    const std::string& m_initialText;
+    const std::string m_initialText;
     RenderableText& m_renderableText;
     const GuiEvent m_textCompleteAction;
     bool m_enteringText;

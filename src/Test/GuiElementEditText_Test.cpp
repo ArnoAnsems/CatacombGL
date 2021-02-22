@@ -35,30 +35,98 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     std::string outputText;
     GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
     RendererStub rendererStub;
-    const Font* font = DefaultFont::Get(rendererStub, 10);
-    RenderableText renderableText(*font);
-    GuiElementEditText guiElementEditText(playerInput, outputText, "", renderableText, completeEvent);
+    RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
+    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", renderableText, completeEvent);
 
-    EXPECT_EQ(outputText, "");
-    playerInput.SetKeyPressed(SDLK_RETURN, true);
+    // Initially no key is pressed
     guiElementEditText.ProcessInput();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+
+    // Check initial state
     EXPECT_EQ(outputText, "");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "Type text ...");
+
+    // Press Enter to start typing
+    renderableText.Reset();
+    playerInput.ClearAll();
+    playerInput.SetKeyPressed(SDLK_RETURN, true);
+    const GuiEvent& firstEvent = guiElementEditText.ProcessInput();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+
+    // Check that we're ready to receive key presses
+    EXPECT_EQ(outputText, "");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "_");
+
+    // Check that default event is received
+    EXPECT_EQ(firstEvent.guiAction, GuiActionNone);
+    EXPECT_EQ(firstEvent.guiParameter, 0);
+
+    // Press "c"
+    renderableText.Reset();
     playerInput.ClearAll();
     playerInput.SetKeyPressed(SDLK_c, true);
     guiElementEditText.ProcessInput();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+
+    // Check that "C" is displayed
     EXPECT_EQ(outputText, "C");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "C_");
+
+    // Press "a"
+    renderableText.Reset();
     playerInput.ClearAll();
     playerInput.SetKeyPressed(SDLK_a, true);
     guiElementEditText.ProcessInput();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+
+    // "Check that "CA" is displayed
     EXPECT_EQ(outputText, "CA");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "CA_");
+
+    // Press "t"
+    renderableText.Reset();
     playerInput.ClearAll();
     playerInput.SetKeyPressed(SDLK_t, true);
     guiElementEditText.ProcessInput();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+
+    // "Check that "CAT" is displayed
     EXPECT_EQ(outputText, "CAT");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "CAT_");
+
+    // Press Enter to finalize text
+    renderableText.Reset();
     playerInput.ClearAll();
     playerInput.SetKeyPressed(SDLK_RETURN, true);
     const GuiEvent& finalEvent = guiElementEditText.ProcessInput();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+
+    // "Check that "CAT" is still in the outputText
     EXPECT_EQ(outputText, "CAT");
+
+    // Check that the initial text is displayed again
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "Type text ...");
+
+    // Check that completed event is received
     EXPECT_EQ(finalEvent.guiAction, completeEvent.guiAction);
     EXPECT_EQ(finalEvent.guiParameter, completeEvent.guiParameter);
+}
+
+const Font& GuiElementEditText_Test::GetDefaultFont()
+{
+    RendererStub rendererStub;
+    const Font* font = DefaultFont::Get(rendererStub, 10);
+    return *font;
+}
+
+const std::string GuiElementEditText_Test::RenderableTextToString(const RenderableText& renderableText)
+{
+    std::string outputStr = "";
+    const std::vector<RenderableText::renderableCharacter>& text = renderableText.GetText();
+    for (size_t i = 0; i < text.size(); i++)
+    {
+        outputStr += (char)(text.at(i).imageIndex);
+    }
+
+    return outputStr;
 }
