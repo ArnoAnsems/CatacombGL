@@ -21,6 +21,7 @@
 const uint8_t GuiActionNone = 0;
 const uint8_t GuiActionKeyBinding = 1;
 const uint8_t GuiActionRestoreGame = 2;
+const uint8_t GuiActionBusy = 3;
 
 struct GuiEvent
 {

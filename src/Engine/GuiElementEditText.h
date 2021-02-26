@@ -38,6 +38,7 @@ private:
     const std::string m_initialText;
     RenderableText& m_renderableText;
     const GuiEvent m_textCompleteAction;
+    const GuiEvent m_busyAction = { GuiActionBusy, 0 };
     bool m_enteringText;
 };
 

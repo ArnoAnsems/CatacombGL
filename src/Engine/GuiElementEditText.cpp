@@ -69,9 +69,16 @@ const GuiEvent& GuiElementEditText::ProcessInput()
         {
             m_outputText.pop_back();
         }
+        else if (keyCode == SDLK_ESCAPE)
+        {
+            m_outputText.clear();
+            m_enteringText = false;
+        }
     }
 
-    return (isTextComplete) ? m_textCompleteAction : GetEvent();
+    return (isTextComplete) ? m_textCompleteAction : 
+        m_enteringText ? m_busyAction :
+        GetEvent();
 }
 
 void GuiElementEditText::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
