@@ -20,6 +20,7 @@ GuiElementEditText::GuiElementEditText(
     const PlayerInput& playerInput,
     std::string& outputText,
     const std::string& initialText,
+    const uint16_t maxTextLength,
     RenderableText& renderableText,
     GuiEvent& textCompleteAction) :
     GuiElementBase(playerInput),
@@ -27,7 +28,8 @@ GuiElementEditText::GuiElementEditText(
     m_initialText(initialText),
     m_renderableText(renderableText),
     m_textCompleteAction(textCompleteAction),
-    m_enteringText(false)
+    m_enteringText(false),
+    m_maxTextLength(maxTextLength)
 {
 
 }
@@ -59,9 +61,8 @@ const GuiEvent& GuiElementEditText::ProcessInput()
     }
     else
     {
-        const uint16_t maxTextLength = 20;
         // Check which key is pressed
-        if (KeyIsSuitableForText(keyCode) && m_outputText.length() < maxTextLength)
+        if (KeyIsSuitableForText(keyCode) && m_outputText.length() < m_maxTextLength)
         {
             m_outputText += std::string(SDL_GetKeyName(keyCode));
         }

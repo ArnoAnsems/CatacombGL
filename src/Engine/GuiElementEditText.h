@@ -24,6 +24,7 @@ public:
         const PlayerInput& playerInput,
         std::string& outputText,
         const std::string& initialText,
+        const uint16_t maxTextLength,
         RenderableText& renderableText,
         GuiEvent& textCompleteAction);
     ~GuiElementEditText() override;
@@ -40,6 +41,7 @@ private:
     const GuiEvent m_textCompleteAction;
     const GuiEvent m_busyAction = { GuiActionBusy, 0 };
     bool m_enteringText;
+    const uint16_t m_maxTextLength;
 };
 
 

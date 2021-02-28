@@ -36,10 +36,10 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Initially no key is pressed
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check initial state
@@ -49,20 +49,17 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     // Press Enter to start typing
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
-    const GuiEvent& busyTypingEvent = guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that we're ready to receive key presses
     EXPECT_EQ(outputText, "");
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "_");
 
-    // Check that busy event is received
-    EXPECT_EQ(busyTypingEvent.guiAction, GuiActionBusy);
-
     // Press "c"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_c);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that "C" is displayed
@@ -72,7 +69,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     // Press "a"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_a);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // "Check that "CA" is displayed
@@ -82,7 +79,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     // Press "t"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_t);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // "Check that "CAT" is displayed
@@ -113,16 +110,13 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Press Enter to start typing
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
-    const GuiEvent& busyTypingEvent = guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
-
-    // Check that busy event is received
-    EXPECT_EQ(busyTypingEvent.guiAction, GuiActionBusy);
 
     // Check that we're ready to receive key presses
     EXPECT_EQ(outputText, "");
@@ -131,7 +125,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     // Press "3"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_3);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that "3" is displayed
@@ -141,7 +135,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     // Press "D"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_d);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that "3D" is displayed
@@ -151,7 +145,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     // Press "Backspace"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_BACKSPACE);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that "3" is displayed
@@ -161,7 +155,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     // Press "Backspace" again
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_BACKSPACE);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that we're back to an empty output text, but still ready to receive key presses
@@ -171,7 +165,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     // Press "Backspace" again
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_BACKSPACE);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that this has no effect, output text was already empty
@@ -186,16 +180,13 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
     GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Press Enter to start typing
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
-    const GuiEvent& busyTypingEvent = guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
-
-    // Check that busy event is received
-    EXPECT_EQ(busyTypingEvent.guiAction, GuiActionBusy);
 
     // Check that we're ready to receive key presses
     EXPECT_EQ(outputText, "");
@@ -204,7 +195,7 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
     // Press "Z"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_z);
-    guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
 
     // Check that "Z" is displayed
@@ -214,11 +205,8 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
     // Press "Esc"
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_ESCAPE);
-    const GuiEvent& escEvent = guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
-
-    // Check that default action is returned
-    EXPECT_EQ(escEvent.guiAction, GuiActionNone);
 
     // Check that we have returned to the initial state
     EXPECT_EQ(outputText, "");
@@ -232,16 +220,13 @@ TEST(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
     GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Press UP
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_UP);
-    const GuiEvent& notBusyTypingEvent = guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
-
-    // Check that default action is returned
-    EXPECT_EQ(notBusyTypingEvent.guiAction, GuiActionNone);
 
     // Check that we are still in the initial state
     EXPECT_EQ(outputText, "");
@@ -250,24 +235,58 @@ TEST(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
     // Press Enter to start typing
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
-    const GuiEvent& busyTypingEvent = guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
-
-    // Check that busy event is received
-    EXPECT_EQ(busyTypingEvent.guiAction, GuiActionBusy);
 
     // Press RIGHT
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RIGHT);
-    const GuiEvent& stillBusyTypingEvent = guiElementEditText.ProcessInput();
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub, 0, 0, true);
-
-    // Check that still the busy event is received
-    EXPECT_EQ(stillBusyTypingEvent.guiAction, GuiActionBusy);
 
     // Check that we're still ready to receive key presses
     EXPECT_EQ(outputText, "");
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "_");
+}
+
+TEST(GuiElementEditText_Test, CheckMaxTextLength)
+{
+    const uint16_t maxTextLength = 5;
+    PlayerInput playerInput;
+    std::string outputText = "";
+    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    RendererStub rendererStub;
+    RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
+    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
+
+    // Press Enter to start typing
+    renderableText.Reset();
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
+
+    // Press keys until maximum text length is reached
+    for (uint16_t i = 0; i < maxTextLength; i++)
+    {
+        GuiElementEditText_Test::PressKey(playerInput, SDLK_a);
+        EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
+        playerInput.ClearAll();
+    }
+
+    // Check that output is at the maximum text length
+    renderableText.Reset();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    EXPECT_EQ(outputText, "AAAAA");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "AAAAA_");
+
+    // Press one more key
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_b);
+    guiElementEditText.ProcessInput();
+
+    // Check that output did not change
+    renderableText.Reset();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    EXPECT_EQ(outputText, "AAAAA");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "AAAAA_");
 }
 
 const Font& GuiElementEditText_Test::GetDefaultFont()
