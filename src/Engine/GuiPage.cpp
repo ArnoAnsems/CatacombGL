@@ -54,8 +54,20 @@ void GuiPage::Draw(IRenderer& renderer, const int16_t originX, const int16_t ori
     }
 }
 
-void GuiPage::AddElement(GuiElementBase* element, const int16_t offsetX, const int16_t offsetY)
+void GuiPage::AddChild(GuiElementBase* child, const int16_t offsetX, const int16_t offsetY, const int16_t parentId)
 {
-    PageElement pageElement{ element, offsetX, offsetY };
-    m_elements.push_back(pageElement);
+    if (parentId == GetId() || parentId == 0)
+    {
+        // Add child to this page
+        PageElement pageElement{ child, offsetX, offsetY };
+        m_elements.push_back(pageElement);
+    }
+    else
+    {
+        // Add child to one of the existing elements on this page
+        for (size_t i = 0; i < m_elements.size(); i++)
+        {
+            m_elements.at(i).element->AddChild(child, offsetX, offsetY, parentId);
+        }
+    }
 }

@@ -27,6 +27,21 @@ GuiElementBase::~GuiElementBase()
 
 }
 
+void GuiElementBase::SetId(const int16_t id)
+{
+    m_id = id;
+}
+
+int16_t GuiElementBase::GetId() const
+{
+    return m_id;
+}
+
+void GuiElementBase::AddChild(GuiElementBase*, const int16_t, const int16_t, const int16_t)
+{
+
+}
+
 const GuiEvent& GuiElementBase::ProcessInput()
 {
     return m_guiEvent;

@@ -678,6 +678,7 @@ bool EngineCore::Think()
                 {
                     m_savedGames.push_back(saveGameName);
                     m_playerInput.ClearJustPressed();
+                    m_menu->AddNewSavedGame(m_playerInput, saveGameName);
                     return false;
                 }
             }

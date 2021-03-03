@@ -1248,6 +1248,11 @@ const std::string& Catacomb3DMenu::GetNewSaveGameName() const
     return m_newSaveGameName;
 }
 
+void Catacomb3DMenu::AddNewSavedGame(const PlayerInput& playerInput, const std::string& name)
+{
+
+}
+
 bool Catacomb3DMenu::KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode)
 {
     return ((keyCode >= SDLK_a && keyCode <= SDLK_z) ||

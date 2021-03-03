@@ -40,6 +40,7 @@ public:
     void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp) override;
     void SetSaveGameEnabled(const bool enabled) override;
     const std::string& GetNewSaveGameName() const override;
+    void AddNewSavedGame(const PlayerInput& playerInput, const std::string& name) override;
     void OpenRestoreGameMenu() override;
     void OpenSaveGameMenu() override;
     void OpenSoundMenu() override;

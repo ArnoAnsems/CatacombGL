@@ -46,6 +46,7 @@ public:
     void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp) override;
     void SetSaveGameEnabled(const bool enabled) override;
     const std::string& GetNewSaveGameName() const override;
+    void AddNewSavedGame(const PlayerInput& playerInput, const std::string& name) override;
     void OpenRestoreGameMenu() override;
     void OpenSaveGameMenu() override;
     void OpenSoundMenu() override;
@@ -57,7 +58,6 @@ private:
     void MenuLeft();
     void MenuRight();
     MenuCommand EnterKeyPressed();
-    static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
 
     static egaColor inline GetMenuItemColor(const bool selected, const bool supported);
@@ -66,7 +66,6 @@ private:
     uint8_t m_menuItemSelected;
     uint8_t m_subMenuSelected;
     uint8_t m_menuItemOffset;
-    bool m_waitingForNewSaveGameName;
     bool m_saveGameEnabled;
 
     ConfigurationSettings& m_configurationSettings;
@@ -78,6 +77,7 @@ private:
     GuiPage m_pageControls;
     GuiPage m_pageSound;
     GuiPage m_pageRestoreGame;
+    GuiPage m_pageSaveGame;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
 };

@@ -105,7 +105,19 @@ void GuiElementList::Draw(IRenderer& renderer, const int16_t originX, const int1
     }
 }
 
-void GuiElementList::AddElement(GuiElementBase* element)
+void GuiElementList::AddChild(GuiElementBase* child, const int16_t offsetX, const int16_t offsetY, const int16_t parentId)
 {
-    m_elements.push_back(element);
+    if (parentId == GetId() || parentId == 0)
+    {
+        // Add child to this list
+        m_elements.push_back(child);
+    }
+    else
+    {
+        // Add child to one of the existing children in the list
+        for (size_t i = 0; i < m_elements.size(); i++)
+        {
+            m_elements.at(i)->AddChild(child, offsetX, offsetY, parentId);
+        }
+    }
 }

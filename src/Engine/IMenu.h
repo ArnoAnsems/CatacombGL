@@ -49,6 +49,7 @@ public:
     virtual void Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp) = 0;
     virtual void SetSaveGameEnabled(const bool enabled) = 0;
     virtual const std::string& GetNewSaveGameName() const = 0;
+    virtual void AddNewSavedGame(const PlayerInput& playerInput, const std::string& name) = 0;
     virtual void OpenRestoreGameMenu() = 0;
     virtual void OpenSaveGameMenu() = 0;
     virtual void OpenSoundMenu() = 0;

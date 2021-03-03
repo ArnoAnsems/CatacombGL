@@ -43,11 +43,11 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     GuiElementList guiElementList(playerInput, 4, 10, 20, 16, nullptr);
 
     GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
-    guiElementList.AddElement(firstButton);
+    guiElementList.AddChild(firstButton);
     GuiElementButton* secondButton = new GuiElementButton(playerInput, "Second button", { actionSecondButtonPressed, 0 }, renderableText);
-    guiElementList.AddElement(secondButton);
+    guiElementList.AddChild(secondButton);
     GuiElementButton* thirdButton = new GuiElementButton(playerInput, "Third button", { actionThirdButtonPressed, 0 }, renderableText);
-    guiElementList.AddElement(thirdButton);
+    guiElementList.AddChild(thirdButton);
 
     // Initially no key is pressed
     EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
@@ -119,13 +119,13 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     GuiElementList guiElementList(playerInput, 3, 10, 20, 16, nullptr);
 
     GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
-    guiElementList.AddElement(firstButton);
+    guiElementList.AddChild(firstButton);
     GuiElementButton* secondButton = new GuiElementButton(playerInput, "Second button", { actionSecondButtonPressed, 0 }, renderableText);
-    guiElementList.AddElement(secondButton);
+    guiElementList.AddChild(secondButton);
     GuiElementButton* thirdButton = new GuiElementButton(playerInput, "Third button", { actionThirdButtonPressed, 0 }, renderableText);
-    guiElementList.AddElement(thirdButton);
+    guiElementList.AddChild(thirdButton);
     GuiElementButton* fourthButton = new GuiElementButton(playerInput, "Fourth button", { actionFourthButtonPressed, 0 }, renderableText);
-    guiElementList.AddElement(fourthButton);
+    guiElementList.AddChild(fourthButton);
 
     // Initially no key is pressed
     EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
