@@ -17,25 +17,24 @@
 #include "GuiElementBase.h"
 #include "RenderableText.h"
 
-class GuiPage : public GuiElementBase
+class GuiMenu : public GuiElementBase
 {
 public:
-    GuiPage(
+    GuiMenu(
         const PlayerInput& playerInput);
-    ~GuiPage() override;
+    ~GuiMenu() override;
 
     virtual void AddChild(GuiElementBase* child, const int16_t offsetX = 0, const int16_t offsetY = 0, const int16_t parentId = 0) override;
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
-private:
-    struct PageElement
-    {
-        GuiElementBase* element;
-        int16_t offsetX;
-        int16_t offsetY;
-    };
+    void Open(const int16_t id);
 
-    std::vector<PageElement> m_elements;
-    const GuiEvent m_closeEvent = { GuiActionClose, 0 };
+private:
+    size_t GetIndexFromId(const int16_t id) const;
+
+    std::vector<GuiElementBase*> m_elements;
+    size_t m_elementOpenIndex;
+    std::vector<int16_t> m_previouslyOpen;
 };
+

@@ -43,6 +43,11 @@ const GuiEvent& GuiPage::ProcessInput()
         }
     }
 
+    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        return m_closeEvent;
+    }
+
     return GetEvent();
 }
 

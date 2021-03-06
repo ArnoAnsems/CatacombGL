@@ -23,6 +23,8 @@ const uint8_t GuiActionKeyBinding = 1;
 const uint8_t GuiActionRestoreGame = 2;
 const uint8_t GuiActionBusy = 3;
 const uint8_t GuiActionSaveGame = 4;
+const uint8_t GuiActionNavigateTo = 5;
+const uint8_t GuiActionClose = 6;
 
 struct GuiEvent
 {
