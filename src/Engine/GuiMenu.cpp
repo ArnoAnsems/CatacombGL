@@ -40,7 +40,7 @@ const GuiEvent& GuiMenu::ProcessInput()
         return GetEvent();
     }
 
-    const GuiEvent guiEvent = m_elements.at(m_elementOpenIndex)->ProcessInput();
+    const GuiEvent& guiEvent = m_elements.at(m_elementOpenIndex)->ProcessInput();
 
     if (guiEvent.guiAction == GuiActionNavigateTo)
     {
@@ -51,12 +51,18 @@ const GuiEvent& GuiMenu::ProcessInput()
             m_previouslyOpen.push_back(m_elements.at(m_elementOpenIndex)->GetId());
             m_elementOpenIndex = targetIndex;
         }
+
+        // Higher level Gui element can ignore the navigation action.
+        return m_noneEvent;
     }
     else if (guiEvent.guiAction == GuiActionClose && !m_previouslyOpen.empty())
     {
         // Return to previous page
         m_elementOpenIndex = GetIndexFromId(m_previouslyOpen.back());
         m_previouslyOpen.pop_back();
+
+        // Higher level Gui element can ignore the close action.
+        return m_noneEvent;
     }
 
     return guiEvent;
@@ -92,8 +98,8 @@ void GuiMenu::Open(const int16_t id)
     const size_t index = GetIndexFromId(id);
     if (index < m_elements.size())
     {
-    m_elementOpenIndex = index;
-    m_previouslyOpen.clear();
+        m_elementOpenIndex = index;
+        m_previouslyOpen.clear();
     }
 }
 

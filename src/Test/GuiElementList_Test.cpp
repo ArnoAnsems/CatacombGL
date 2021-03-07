@@ -34,7 +34,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
 {
     const uint8_t actionFirstButtonPressed = 1;
     const uint8_t actionSecondButtonPressed = 2;
-    const uint8_t actionThirdButtonPressed = 2;
+    const uint8_t actionThirdButtonPressed = 3;
 
     PlayerInput playerInput;
     RendererStub rendererStub;
