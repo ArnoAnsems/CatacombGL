@@ -29,6 +29,7 @@
 #include "EgaGraph.h"
 #include "IMenu.h"
 #include "GuiPage.h"
+#include "GuiMenu.h"
 
 class ExtraMenu: public IMenu
 {
@@ -53,19 +54,9 @@ public:
     void CheckHighScore(const uint16_t level, const uint32_t score) override;
 
 private:
-    void MenuDown();
-    void MenuUp();
-    void MenuLeft();
-    void MenuRight();
-    MenuCommand EnterKeyPressed();
     bool IsNewSaveGameNameAlreadyInUse() const;
 
-    static egaColor inline GetMenuItemColor(const bool selected, const bool supported);
-
     bool m_menuActive;
-    uint8_t m_menuItemSelected;
-    uint8_t m_subMenuSelected;
-    uint8_t m_menuItemOffset;
     bool m_saveGameEnabled;
 
     ConfigurationSettings& m_configurationSettings;
@@ -73,11 +64,7 @@ private:
     std::vector<std::string>& m_savedGames;
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
-    GuiPage m_pageVideo;
-    GuiPage m_pageControls;
-    GuiPage m_pageSound;
-    GuiPage m_pageRestoreGame;
-    GuiPage m_pageSaveGame;
+    GuiMenu m_guiMenu;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
 };

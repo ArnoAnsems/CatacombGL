@@ -36,11 +36,13 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     const uint8_t actionSecondButtonPressed = 2;
     const uint8_t actionThirdButtonPressed = 3;
 
+    const uint16_t soundWhenBrowsing = 13;
+
     PlayerInput playerInput;
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementList_Test::GetDefaultFont());
 
-    GuiElementList guiElementList(playerInput, 4, 10, 20, 16, nullptr);
+    GuiElementList guiElementList(playerInput, 4, 10, 20, 16, nullptr, soundWhenBrowsing);
 
     GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(firstButton);
@@ -64,7 +66,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     // Scroll down to go from the first to the second button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_DOWN);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // When ENTER is pressed, the second button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -73,7 +75,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     // Scroll down to go from the second to the third button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_DOWN);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // When ENTER is pressed, the third button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -87,7 +89,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     // Scroll down to go from the third back to the first button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_DOWN);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // When ENTER is pressed, the first button is triggered again.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -96,7 +98,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     // Scroll up to go from the first to the third button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_UP);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // When ENTER is pressed, the third button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -110,13 +112,15 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     const uint8_t actionThirdButtonPressed = 3;
     const uint8_t actionFourthButtonPressed = 4;
 
+    const uint16_t soundWhenBrowsing = 13;
+
     PlayerInput playerInput;
     std::string outputText;
     GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementList_Test::GetDefaultFont());
 
-    GuiElementList guiElementList(playerInput, 3, 10, 20, 16, nullptr);
+    GuiElementList guiElementList(playerInput, 3, 10, 20, 16, nullptr, soundWhenBrowsing);
 
     GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(firstButton);
@@ -140,7 +144,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Scroll up to go from the first to the last button.
     GuiElementList_Test::PressKey(playerInput, SDLK_UP);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // Check that the last three buttons are rendered.
     renderableText.Reset();
@@ -153,7 +157,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Scroll down to go from the last button back to the first button.
     GuiElementList_Test::PressKey(playerInput, SDLK_DOWN);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // Check that the first three buttons are rendered again.
     renderableText.Reset();
@@ -163,7 +167,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Scroll down to go from the first to the second button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_DOWN);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // When ENTER is pressed, the second button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -172,7 +176,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Scroll down to go from the second to the third button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_DOWN);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // When ENTER is pressed, the third button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -186,7 +190,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Scroll down to go from the third to the fourth button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_DOWN);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // Check that the last three buttons are rendered.
     renderableText.Reset();
@@ -196,12 +200,12 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Scroll up to go from the fourth to the third button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_UP);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // Scroll up to go from the third to the second button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_UP);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // Check that still the last three buttons are rendered.
     renderableText.Reset();
@@ -211,7 +215,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Scroll up to go from the second to the first button.
     playerInput.ClearAll();
     GuiElementList_Test::PressKey(playerInput, SDLK_UP);
-    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
+    EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionPlaySound);
 
     // Check that the first three buttons are rendered again.
     renderableText.Reset();

@@ -26,7 +26,8 @@ public:
         const int16_t originX,
         const int16_t originY,
         const uint16_t elementHeight,
-        const Picture* cursorPicture);
+        const Picture* cursorPicture,
+        const uint16_t soundWhenBrowsing);
     ~GuiElementList() override;
 
     virtual void AddChild(GuiElementBase* child, const int16_t offsetX = 0, const int16_t offsetY = 0, const int16_t parentId = 0) override;
@@ -42,6 +43,7 @@ private:
     uint16_t m_elementSelected;
     uint16_t m_firstElementDrawn;
     const Picture* m_cursorPicture;
+    const GuiEvent m_guiEventPlayBrowseSound;
 };
 
 

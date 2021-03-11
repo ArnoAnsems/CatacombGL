@@ -33,7 +33,6 @@ GuiPage::~GuiPage()
 
 const GuiEvent& GuiPage::ProcessInput()
 {
-    const GuiEvent& guiEvent = GetEvent();
     for (PageElement& pageElement : m_elements)
     {
         const GuiEvent& elementGuiEvent = pageElement.element->ProcessInput();

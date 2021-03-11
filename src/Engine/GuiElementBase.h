@@ -24,7 +24,10 @@ const uint8_t GuiActionRestoreGame = 2;
 const uint8_t GuiActionBusy = 3;
 const uint8_t GuiActionSaveGame = 4;
 const uint8_t GuiActionNavigateTo = 5;
-const uint8_t GuiActionClose = 6;
+const uint8_t GuiActionNewGame = 6;
+const uint8_t GuiActionClose = 7;
+const uint8_t GuiActionQuit = 8;
+const uint8_t GuiActionPlaySound = 9;
 
 struct GuiEvent
 {

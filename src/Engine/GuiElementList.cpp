@@ -21,7 +21,8 @@ GuiElementList::GuiElementList(
     const int16_t originX,
     const int16_t originY,
     const uint16_t elementHeight,
-    const Picture* cursorPicture) :
+    const Picture* cursorPicture,
+    const uint16_t soundWhenBrowsing) :
     GuiElementBase(playerInput),
     m_maxElementsDrawn(maxElementsDrawn),
     m_originX(originX),
@@ -29,7 +30,8 @@ GuiElementList::GuiElementList(
     m_elementHeight(elementHeight),
     m_elementSelected(0),
     m_firstElementDrawn(0),
-    m_cursorPicture(cursorPicture)
+    m_cursorPicture(cursorPicture),
+    m_guiEventPlayBrowseSound({GuiActionPlaySound, (int16_t)soundWhenBrowsing})
 {
 
 }
@@ -64,6 +66,8 @@ const GuiEvent& GuiElementList::ProcessInput()
                     m_firstElementDrawn = m_elementSelected;
                 }
             }
+
+            return m_guiEventPlayBrowseSound;
         }
         else if (m_playerInput.IsKeyJustPressed(SDLK_DOWN))
         {
@@ -80,6 +84,8 @@ const GuiEvent& GuiElementList::ProcessInput()
                     m_firstElementDrawn = m_elementSelected - m_maxElementsDrawn + 1;
                 }
             }
+
+            return m_guiEventPlayBrowseSound;
         }
     }
 
