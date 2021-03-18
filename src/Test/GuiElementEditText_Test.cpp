@@ -289,6 +289,39 @@ TEST(GuiElementEditText_Test, CheckMaxTextLength)
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "AAAAA_");
 }
 
+TEST(GuiElementEditText_Test, CheckDisabled)
+{
+    const uint16_t maxTextLength = 5;
+    PlayerInput playerInput;
+    std::string outputText = "";
+    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    RendererStub rendererStub;
+    RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
+    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
+
+    // Disable
+    guiElementEditText.SetEnabled(false);
+
+    // Press Enter to start typing
+    renderableText.Reset();
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
+
+    // Check that input is ignored
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
+
+    // Press one more key
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_b);
+
+    // Input is still ignored
+    EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
+
+    // Check that output is still at default
+    renderableText.Reset();
+    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    EXPECT_EQ(outputText, "");
+    EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "Type text ...");
+}
+
 const Font& GuiElementEditText_Test::GetDefaultFont()
 {
     RendererStub rendererStub;

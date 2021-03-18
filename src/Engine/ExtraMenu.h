@@ -57,7 +57,6 @@ private:
     bool IsNewSaveGameNameAlreadyInUse() const;
 
     bool m_menuActive;
-    bool m_saveGameEnabled;
 
     ConfigurationSettings& m_configurationSettings;
     AudioPlayer& m_audioPlayer;

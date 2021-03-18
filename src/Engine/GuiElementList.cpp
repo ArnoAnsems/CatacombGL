@@ -127,3 +127,20 @@ void GuiElementList::AddChild(GuiElementBase* child, const int16_t offsetX, cons
         }
     }
 }
+
+void GuiElementList::SetEnabled(const bool enabled, const int16_t id)
+{
+    if (id == GetId() || id == 0)
+    {
+        // Set enable flag for the whole list
+        m_enabled = enabled;
+    }
+    else
+    {
+        // Set enable flag for the children in the list
+        for (size_t i = 0; i < m_elements.size(); i++)
+        {
+            m_elements.at(i)->SetEnabled(enabled, id);
+        }
+    }
+}

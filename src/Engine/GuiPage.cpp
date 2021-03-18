@@ -75,3 +75,20 @@ void GuiPage::AddChild(GuiElementBase* child, const int16_t offsetX, const int16
         }
     }
 }
+
+void GuiPage::SetEnabled(const bool enabled, const int16_t id)
+{
+    if (id == GetId() || id == 0)
+    {
+        // Set enable flag for the whole menu
+        m_enabled = enabled;
+    }
+    else
+    {
+        // Set enable flag for the elements in the menu
+        for (size_t i = 0; i < m_elements.size(); i++)
+        {
+            m_elements.at(i).element->SetEnabled(enabled, id);
+        }
+    }
+}

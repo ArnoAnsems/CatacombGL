@@ -39,6 +39,9 @@ const int16_t pageControlsId = 5;
 const int16_t pageSoundId = 6;
 const int16_t pageRestoreGameId = 7;
 const int16_t pageSaveGameId = 8;
+const int16_t goToSaveGameId = 9;
+const int16_t selectVSyncId = 10;
+const int16_t selectScreenResolutionId = 11;
 
 ExtraMenu::ExtraMenu(
     ConfigurationSettings& configurationSettings,
@@ -48,7 +51,6 @@ ExtraMenu::ExtraMenu(
     const uint16_t menuCursorPic,
     std::vector<std::string>& savedGames) :
     m_menuActive(false),
-    m_saveGameEnabled(false),
     m_configurationSettings(configurationSettings),
     m_audioPlayer(audioPlayer),
     m_savedGames(savedGames),
@@ -65,7 +67,9 @@ ExtraMenu::ExtraMenu(
     GuiElementList* elementListMain = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     elementListMain->AddChild(new GuiElementButton(playerInput, "New game", {GuiActionNewGame, 0}, m_renderableText));
     elementListMain->AddChild(new GuiElementButton(playerInput, "Restore game", { GuiActionNavigateTo, pageRestoreGameId }, m_renderableText));
-    elementListMain->AddChild(new GuiElementButton(playerInput, "Save game", { GuiActionNavigateTo, pageSaveGameId }, m_renderableText));
+    GuiElementButton* goToSaveGameButton = new GuiElementButton(playerInput, "Save game", { GuiActionNavigateTo, pageSaveGameId }, m_renderableText);
+    goToSaveGameButton->SetId(goToSaveGameId);
+    elementListMain->AddChild(goToSaveGameButton);
     elementListMain->AddChild(new GuiElementButton(playerInput, "Video", { GuiActionNavigateTo, pageVideoId }, m_renderableText));
     elementListMain->AddChild(new GuiElementButton(playerInput, "Sound", { GuiActionNavigateTo, pageSoundId }, m_renderableText));
     elementListMain->AddChild(new GuiElementButton(playerInput, "Controls", { GuiActionNavigateTo, pageControlsId }, m_renderableText));
@@ -80,15 +84,19 @@ ExtraMenu::ExtraMenu(
     pageVideo->SetId(pageVideoId);
 
     GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), true, 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), true, 132, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 132, m_renderableText));
+    GuiElementEnumSelection* VScreenResolutionSelection = new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 132, m_renderableText);
+    VScreenResolutionSelection->SetId(selectScreenResolutionId);
+    elementListVideo->AddChild(VScreenResolutionSelection);
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 132, m_renderableText));
+    elementListVideo->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 132, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 132, m_renderableText));
+    elementListVideo->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 132, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 132, m_renderableText));
+    GuiElementBoolSelection* VSyncSelection = new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), 132, m_renderableText);
+    VSyncSelection->SetId(selectVSyncId);
+    elementListVideo->AddChild(VSyncSelection);
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 132, m_renderableText));
     pageVideo->AddChild(elementListVideo, 60, 30);
 
     GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video", EgaBrightYellow, m_renderableText);
@@ -108,12 +116,12 @@ ExtraMenu::ExtraMenu(
             elementListControls->AddChild(new GuiElementBindKey(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
         }
     }
-    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), true, 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), true, 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), true, 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), true, 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), true, 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), true, 95, m_renderableText));
+    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 95, m_renderableText));
+    elementListControls->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 95, m_renderableText));
+    elementListControls->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 95, m_renderableText));
+    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 95, m_renderableText));
+    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 95, m_renderableText));
+    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 95, m_renderableText));
 
     pageControls->AddChild(elementListControls, 60, 30);
 
@@ -125,7 +133,7 @@ ExtraMenu::ExtraMenu(
     pageSound->SetId(pageSoundId);
 
     GuiElementList* elementListSound = new GuiElementList(playerInput, 8, 60, 30, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), true, 140, m_renderableText));
+    elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), 140, m_renderableText));
     pageSound->AddChild(elementListSound, 60, 30);
 
     GuiElementStaticText* pageLabelSound = new GuiElementStaticText(playerInput, "Sound", EgaBrightYellow, m_renderableText);
@@ -270,6 +278,10 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         return;
     }
 
+    // Check if video features are supported by graphics hardware
+    m_guiMenu.SetEnabled(renderer.IsVSyncSupported(), selectVSyncId);
+    m_guiMenu.SetEnabled(renderer.IsOriginalScreenResolutionSupported(), selectScreenResolutionId);
+
     m_renderableText.Reset();
     m_renderableTextDefaultFont.Reset();
     m_guiMenu.Draw(renderer, 0, 0, false);
@@ -279,7 +291,7 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
 
 void ExtraMenu::SetSaveGameEnabled(const bool enabled)
 {
-    m_saveGameEnabled = enabled;
+    m_guiMenu.SetEnabled(enabled, goToSaveGameId);
 }
 
 const std::string& ExtraMenu::GetNewSaveGameName() const

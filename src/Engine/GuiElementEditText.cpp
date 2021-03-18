@@ -42,38 +42,41 @@ GuiElementEditText::~GuiElementEditText()
 const GuiEvent& GuiElementEditText::ProcessInput()
 {
     bool isTextComplete = false;
-    const SDL_Keycode keyCode = m_playerInput.GetFirstKeyPressed();
-    if (keyCode == SDLK_RETURN)
+    if (m_enabled)
     {
-        if (m_enteringText)
+        const SDL_Keycode keyCode = m_playerInput.GetFirstKeyPressed();
+        if (keyCode == SDLK_RETURN)
         {
-            if (!m_outputText.empty())
+            if (m_enteringText)
             {
-                isTextComplete = true;
-                m_enteringText = false;
+                if (!m_outputText.empty())
+                {
+                    isTextComplete = true;
+                    m_enteringText = false;
+                }
+            }
+            else
+            {
+                m_enteringText = true;
+                m_outputText = "";
             }
         }
         else
         {
-            m_enteringText = true;
-            m_outputText = "";
-        }
-    }
-    else
-    {
-        // Check which key is pressed
-        if (KeyIsSuitableForText(keyCode) && m_outputText.length() < m_maxTextLength)
-        {
-            m_outputText += std::string(SDL_GetKeyName(keyCode));
-        }
-        else if (keyCode == SDLK_BACKSPACE && !m_outputText.empty())
-        {
-            m_outputText.pop_back();
-        }
-        else if (keyCode == SDLK_ESCAPE)
-        {
-            m_outputText.clear();
-            m_enteringText = false;
+            // Check which key is pressed
+            if (KeyIsSuitableForText(keyCode) && m_outputText.length() < m_maxTextLength)
+            {
+                m_outputText += std::string(SDL_GetKeyName(keyCode));
+            }
+            else if (keyCode == SDLK_BACKSPACE && !m_outputText.empty())
+            {
+                m_outputText.pop_back();
+            }
+            else if (keyCode == SDLK_ESCAPE)
+            {
+                m_outputText.clear();
+                m_enteringText = false;
+            }
         }
     }
 

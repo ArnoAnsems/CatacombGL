@@ -46,6 +46,7 @@ public:
     virtual void AddChild(GuiElementBase* child, const int16_t offsetX = 0, const int16_t offsetY = 0, const int16_t parentId = 0);
     virtual const GuiEvent& ProcessInput();
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const;
+    virtual void SetEnabled(const bool enabled, const int16_t id = 0);
 
 protected:
     void SetEvent(const uint8_t guiAction, const int16_t guiParameter);
@@ -56,4 +57,5 @@ protected:
     const PlayerInput& m_playerInput;
     GuiEvent m_guiEvent;
     int16_t m_id;
+    bool m_enabled;
 };

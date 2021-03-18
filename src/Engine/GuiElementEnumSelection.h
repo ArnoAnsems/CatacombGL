@@ -24,7 +24,6 @@ public:
     GuiElementEnumSelection(
         const PlayerInput& playerInput,
         ConsoleVariableEnum& cvarEnum,
-        const bool supported,
         const int16_t offsetXValue,
         RenderableText& renderableText);
     ~GuiElementEnumSelection() override;
@@ -34,7 +33,6 @@ public:
 
 private:
     ConsoleVariableEnum& m_cvarEnum;
-    const bool m_supported;
     const int16_t m_offsetXValue;
     RenderableText& m_renderableText;
 };

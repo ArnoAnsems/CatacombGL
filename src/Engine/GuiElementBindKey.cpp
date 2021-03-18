@@ -38,34 +38,42 @@ GuiElementBindKey::~GuiElementBindKey()
 
 const GuiEvent& GuiElementBindKey::ProcessInput()
 {
-    if (m_waitingForKey)
+    if (m_enabled)
     {
-        // Check which key is pressed
-        const SDL_Keycode keyCode = m_playerInput.GetFirstKeyPressed();
-        if (keyCode != SDLK_UNKNOWN && m_controlsMap.AssignActionToKey(m_controlAction, keyCode))
+        if (m_waitingForKey)
         {
-            m_waitingForKey = false;
+            // Check which key is pressed
+            const SDL_Keycode keyCode = m_playerInput.GetFirstKeyPressed();
+            if (keyCode != SDLK_UNKNOWN && m_controlsMap.AssignActionToKey(m_controlAction, keyCode))
+            {
+                m_waitingForKey = false;
+            }
+            else
+            {
+                const uint8_t buttonCode = m_playerInput.GetFirstMouseButtonPressed();
+                if (buttonCode != 0 && m_controlsMap.AssignActionToMouseButton(m_controlAction, buttonCode))
+                {
+                    m_waitingForKey = false;
+                }
+            }
         }
         else
         {
-            const uint8_t buttonCode = m_playerInput.GetFirstMouseButtonPressed();
-            if (buttonCode != 0 && m_controlsMap.AssignActionToMouseButton(m_controlAction, buttonCode))
+            if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
             {
-                m_waitingForKey = false;
+                m_waitingForKey = true;
+                SetEvent(GuiActionKeyBinding, 0);
+            }
+            else
+            {
+                SetEvent(GuiActionNone, 0);
             }
         }
     }
     else
     {
-        if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
-        {
-            m_waitingForKey = true;
-            SetEvent(GuiActionKeyBinding, 0);
-        }
-        else
-        {
-            SetEvent(GuiActionNone, 0);
-        }
+        // Disabled
+        SetEvent(GuiActionNone, 0);
     }
 
     return GetEvent();
@@ -74,7 +82,7 @@ const GuiEvent& GuiElementBindKey::ProcessInput()
 void GuiElementBindKey::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
 {
     const std::string& actionLabel = m_controlsMap.GetActionLabels().at(m_controlAction);
-    const egaColor color = GetMenuItemColor(selected, true);
+    const egaColor color = GetMenuItemColor(selected, m_enabled);
     m_renderableText.LeftAligned(actionLabel, color, originX, originY);
     if (m_waitingForKey && selected)
     {

@@ -24,7 +24,6 @@ public:
     GuiElementBoolSelection(
         const PlayerInput& playerInput,
         ConsoleVariableBool& cvarEnum,
-        const bool supported,
         const int16_t offsetXValue,
         RenderableText& renderableText);
     ~GuiElementBoolSelection() override;
@@ -34,7 +33,6 @@ public:
 
 private:
     ConsoleVariableBool& m_cvarEnum;
-    const bool m_supported;
     const int16_t m_offsetXValue;
     RenderableText& m_renderableText;
 };

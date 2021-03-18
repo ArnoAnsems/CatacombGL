@@ -17,7 +17,8 @@
 
 GuiElementBase::GuiElementBase(const PlayerInput& playerInput) :
     m_playerInput(playerInput),
-    m_guiEvent({GuiActionNone, 0})
+    m_guiEvent({GuiActionNone, 0}),
+    m_enabled(true)
 {
 
 }
@@ -50,6 +51,14 @@ const GuiEvent& GuiElementBase::ProcessInput()
 void GuiElementBase::Draw(IRenderer& /*renderer*/, const int16_t /*originX*/, const int16_t /*originY*/, const bool /*selected*/) const
 {
 
+}
+
+void GuiElementBase::SetEnabled(const bool enabled, const int16_t id)
+{
+    if (id == m_id || id == 0)
+    {
+        m_enabled = enabled;
+    }
 }
 
 void GuiElementBase::SetEvent(const uint8_t guiAction, const int16_t guiParameter)
