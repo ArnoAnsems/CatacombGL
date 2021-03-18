@@ -25,10 +25,6 @@
 #include "GuiElementButton.h"
 #include "GuiElementEditText.h"
 
-// TODO:
-// - disable save game option when not in a game
-// - disable restore game option when no saved games
-
 const uint16_t browseMenuSound = 0;
 
 const int16_t restoreGameListId = 1;
