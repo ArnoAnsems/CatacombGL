@@ -14,27 +14,24 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "GuiElementBase.h"
-#include "ConsoleVariableInt.h"
-#include "RenderableText.h"
+#include "..\Engine\GuiElementBoolSelection.h"
+#include "..\Engine\RenderableTiles.h"
 
-class GuiElementIntSelection : public GuiElementBase
+class GuiElementBoolSelectionCat3D : public GuiElementBoolSelection
 {
 public:
-    GuiElementIntSelection(
+    GuiElementBoolSelectionCat3D(
         const PlayerInput& playerInput,
-        ConsoleVariableInt& cvarInt,
+        ConsoleVariableBool& cvarBool,
         const int16_t offsetXValue,
-        RenderableText& renderableText);
-    ~GuiElementIntSelection() override;
+        RenderableText& renderableText,
+        RenderableTiles& renderableTiles,
+        bool& flashIcon);
 
-    virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
-protected:
-    ConsoleVariableInt& m_cvarInt;
-    const int16_t m_offsetXValue;
-    RenderableText& m_renderableText;
+private:
+    RenderableTiles& m_renderableTiles;
+    bool& m_flashIcon;
 };
-
 

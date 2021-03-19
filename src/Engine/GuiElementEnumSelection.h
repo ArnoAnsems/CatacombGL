@@ -31,7 +31,7 @@ public:
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
-private:
+protected:
     ConsoleVariableEnum& m_cvarEnum;
     const int16_t m_offsetXValue;
     RenderableText& m_renderableText;

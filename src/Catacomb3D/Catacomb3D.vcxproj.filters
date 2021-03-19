@@ -54,6 +54,15 @@
     <ClInclude Include="SkullNBones.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GuiElementEnumSelectionCat3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiElementIntSelectionCat3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiElementBoolSelectionCat3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewCatacomb3D.cpp">
@@ -66,6 +75,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SkullNBones.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiElementEnumSelectionCat3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiElementIntSelectionCat3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiElementBoolSelectionCat3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -23,7 +23,7 @@ class GuiElementBoolSelection : public GuiElementBase
 public:
     GuiElementBoolSelection(
         const PlayerInput& playerInput,
-        ConsoleVariableBool& cvarEnum,
+        ConsoleVariableBool& cvarBool,
         const int16_t offsetXValue,
         RenderableText& renderableText);
     ~GuiElementBoolSelection() override;
@@ -31,8 +31,8 @@ public:
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
-private:
-    ConsoleVariableBool& m_cvarEnum;
+protected:
+    ConsoleVariableBool& m_cvarBool;
     const int16_t m_offsetXValue;
     RenderableText& m_renderableText;
 };

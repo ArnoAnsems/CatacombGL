@@ -17,11 +17,11 @@
 
 GuiElementIntSelection::GuiElementIntSelection(
     const PlayerInput& playerInput,
-    ConsoleVariableInt& cvarEnum,
+    ConsoleVariableInt& cvarInt,
     const int16_t offsetXValue,
     RenderableText& renderableText) :
     GuiElementBase(playerInput),
-    m_cvarEnum(cvarEnum),
+    m_cvarInt(cvarInt),
     m_offsetXValue(offsetXValue),
     m_renderableText(renderableText)
 {
@@ -39,11 +39,11 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
     {
         if (m_playerInput.IsKeyJustPressed(SDLK_LEFT))
         {
-            m_cvarEnum.Decrease();
+            m_cvarInt.Decrease();
         }
         else if (m_playerInput.IsKeyJustPressed(SDLK_RIGHT))
         {
-            m_cvarEnum.Increase();
+            m_cvarInt.Increase();
         }
     }
     return GetEvent();
@@ -52,7 +52,7 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
 void GuiElementIntSelection::Draw(IRenderer& /*renderer*/, const int16_t originX, const int16_t originY, const bool selected) const
 {
     const egaColor color = GetMenuItemColor(selected, m_enabled);
-    m_renderableText.LeftAligned(m_cvarEnum.GetNameInMenu(), color, originX, originY);
-    const std::string& valueStr = (!m_enabled) ? "Not supported" : std::to_string(m_cvarEnum.GetValue());
+    m_renderableText.LeftAligned(m_cvarInt.GetNameInMenu(), color, originX, originY);
+    const std::string& valueStr = (!m_enabled) ? "Not supported" : std::to_string(m_cvarInt.GetValue());
     m_renderableText.LeftAligned(valueStr, color, originX + m_offsetXValue, originY);
 }
