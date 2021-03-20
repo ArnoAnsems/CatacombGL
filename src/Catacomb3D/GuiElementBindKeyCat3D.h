@@ -14,28 +14,24 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "GuiElementBase.h"
-#include "ControlsMap.h"
-#include "RenderableText.h"
+#include "..\Engine\GuiElementBindKey.h"
+#include "..\Engine\RenderableTiles.h"
 
-class GuiElementBindKey : public GuiElementBase
+class GuiElementBindKeyCat3D : public GuiElementBindKey
 {
 public:
-    GuiElementBindKey(
+    GuiElementBindKeyCat3D(
         const PlayerInput& playerInput,
         ControlsMap& controlsMap,
         ControlAction controlAction,
         const int16_t offsetXValue,
-        RenderableText& renderableText);
-    ~GuiElementBindKey() override;
+        RenderableText& renderableText,
+        RenderableTiles& renderableTiles,
+        bool& flashIcon);
 
-    virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
-protected:
-    ControlsMap& m_controlsMap;
-    ControlAction m_controlAction;
-    const int16_t m_offsetXValue;
-    RenderableText& m_renderableText;
-    bool m_waitingForKey;
+private:
+    RenderableTiles& m_renderableTiles;
+    bool& m_flashIcon;
 };

@@ -29,11 +29,18 @@
 #include "..\Engine\IMenu.h"
 #include "..\Engine\HighScores.h"
 #include "SkullNBones.h"
+#include "..\Engine\GuiElementList.h"
 
 class Catacomb3DMenu: public IMenu
 {
 public:
-    Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames, HighScores& highScores);
+    Catacomb3DMenu(
+        ConfigurationSettings& configurationSettings,
+        AudioPlayer& audioPlayer,
+        PlayerInput& playerInput,
+        EgaGraph* const egaGraph,
+        std::vector<std::string>& savedGames,
+        HighScores& highScores);
     bool IsActive() const override;
     void SetActive(bool active) override;
     MenuCommand ProcessInput(const PlayerInput& playerInput) override;
@@ -49,8 +56,6 @@ public:
 private:
     void MenuDown();
     void MenuUp();
-    void MenuLeft();
-    void MenuRight();
     MenuCommand EnterKeyPressed();
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
@@ -59,42 +64,10 @@ private:
     void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
     void DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
 
-    void DrawMenuItemBool(
-        const uint8_t cvarId,
-        const bool selected,
-        const bool supported,
-        const bool flashIcon,
-        const int16_t offsetXName,
-        const int16_t offsetXValue,
-        const int16_t offsetY,
-        RenderableText& renderableText,
-        RenderableTiles& renderableTiles);
-    void DrawMenuItemEnum(
-        const uint8_t cvarId,
-        const bool selected,
-        const bool supported,
-        const bool flashIcon,
-        const int16_t offsetXName,
-        const int16_t offsetXValue,
-        const int16_t offsetY,
-        RenderableText& renderableText,
-        RenderableTiles& renderableTiles);
-    void DrawMenuItemInt(
-        const uint8_t cvarId,
-        const bool selected,
-        const bool supported,
-        const bool flashIcon,
-        const int16_t offsetXName,
-        const int16_t offsetXValue,
-        const int16_t offsetY,
-        RenderableText& renderableText,
-        RenderableTiles& renderableTiles);
-
     bool m_menuActive;
     uint8_t m_menuItemSelected;
     uint8_t m_subMenuSelected;
     uint8_t m_menuItemOffset;
-	bool m_waitingForKeyToBind;
     bool m_waitingForNewSaveGameName;
     bool m_saveGameEnabled;
 
@@ -108,4 +81,11 @@ private:
     HighScores& m_highScores;
     SkullNBones m_skullNBones;
     uint32_t m_menuActivatedTimestamp;
+
+    GuiElementList* m_elementListVideo;
+    GuiElementList* m_elementListControls;
+    RenderableText m_renderableText;
+    RenderableText m_renderableTextDefaultFont;
+    RenderableTiles m_renderableTiles;
+    bool m_flashIcon;
 };

@@ -18,6 +18,10 @@
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 #include "..\Engine\DefaultFont.h"
 #include "..\Engine\IRenderer.h"
+#include "GuiElementBoolSelectionCat3D.h"
+#include "GuiElementEnumSelectionCat3D.h"
+#include "GuiElementIntSelectionCat3D.h"
+#include "GuiElementBindKeyCat3D.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -40,22 +44,31 @@ const uint8_t menuItemMainEndGame = 5;
 const uint8_t menuItemMainSkullNBones = 6;
 const uint8_t menuItemMainQuit = 7;
 
-const uint8_t menuItemVideoScreenMode = 0;
-const uint8_t menuItemVideoScreenResolution = 1;
-const uint8_t menuItemVideoAspectRatio = 2;
-const uint8_t menuItemVideoFov = 3;
-const uint8_t menuItemVideoTextureFilter = 4;
-const uint8_t menuItemVideoDepthShading = 5;
-const uint8_t menuItemVideoShowFps = 6;
-const uint8_t menuItemVideoVSync = 7;
-const uint8_t menuItemVideoAutoMapMode = 8;
+const uint16_t browseMenuSound = 0;
 
-Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, AudioPlayer& audioPlayer, std::vector<std::string>& savedGames, HighScores& highScores) :
+const int16_t restoreGameListId = 1;
+const int16_t saveGameListId = 2;
+const int16_t pageMainId = 3;
+const int16_t pageVideoId = 4;
+const int16_t pageControlsId = 5;
+const int16_t pageSoundId = 6;
+const int16_t pageRestoreGameId = 7;
+const int16_t pageSaveGameId = 8;
+const int16_t goToSaveGameId = 9;
+const int16_t selectVSyncId = 10;
+const int16_t selectScreenResolutionId = 11;
+
+Catacomb3DMenu::Catacomb3DMenu(
+    ConfigurationSettings& configurationSettings,
+    AudioPlayer& audioPlayer,
+    PlayerInput& playerInput,
+    EgaGraph* const egaGraph,
+    std::vector<std::string>& savedGames,
+    HighScores& highScores) :
     m_menuActive (false),
     m_menuItemSelected (0),
     m_subMenuSelected (0),
     m_menuItemOffset (0),
-	m_waitingForKeyToBind (false),
     m_saveGameEnabled (false),
     m_configurationSettings (configurationSettings),
     m_audioPlayer (audioPlayer),
@@ -67,9 +80,45 @@ Catacomb3DMenu::Catacomb3DMenu(ConfigurationSettings& configurationSettings, Aud
     m_askForQuit (false),
     m_highScores(highScores),
     m_skullNBones(audioPlayer),
-    m_menuActivatedTimestamp(0u)
+    m_menuActivatedTimestamp(0u),
+    m_elementListVideo(nullptr),
+    m_elementListControls(nullptr),
+    m_renderableText(*egaGraph->GetFont(4)),
+    m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
+    m_renderableTiles(*egaGraph->GetTilesSize8()),
+    m_flashIcon(false)
 {
+    m_elementListVideo = new GuiElementList(playerInput, 8, 76, 62, 8, nullptr, browseMenuSound);
+    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementEnumSelectionCat3D* VScreenResolutionSelection = new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 104, m_renderableText, m_renderableTiles, m_flashIcon);
+    VScreenResolutionSelection->SetId(selectScreenResolutionId);
+    m_elementListVideo->AddChild(VScreenResolutionSelection);
+    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListVideo->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListVideo->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementBoolSelectionCat3D* VSyncSelection = new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), 104, m_renderableText, m_renderableTiles, m_flashIcon);
+    VSyncSelection->SetId(selectVSyncId);
+    m_elementListVideo->AddChild(VSyncSelection);
+    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
 
+    m_elementListControls = new GuiElementList(playerInput, 8, 76, 54, 8, nullptr, browseMenuSound);
+    ControlsMap& controlsMap = configurationSettings.GetControlsMap();
+    const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
+    for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
+    {
+        if (actionLabel.first != None)
+        {
+            m_elementListControls->AddChild(new GuiElementBindKeyCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
+        }
+    }
+    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
 }
 
 bool Catacomb3DMenu::IsActive() const
@@ -82,7 +131,6 @@ void Catacomb3DMenu::SetActive(bool active)
     m_menuActive = active;
     if (!active)
     {
-        m_waitingForKeyToBind = false;
         m_waitingForNewSaveGameName = false;
         m_subMenuSelected = subMenuMain;
         m_menuItemSelected = 0;
@@ -106,24 +154,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             m_askForOverwrite = false;
         }
     }
-    if (m_waitingForKeyToBind)
-    {
-        // Check which key is pressed
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (keyCode != SDLK_UNKNOWN && m_configurationSettings.GetControlsMap().AssignActionToKey((ControlAction)(m_menuItemSelected + 1), keyCode))
-        {
-            m_waitingForKeyToBind = false;
-        }
-        else
-        {
-            const uint8_t buttonCode = playerInput.GetFirstMouseButtonPressed();
-            if (buttonCode != 0 && m_configurationSettings.GetControlsMap().AssignActionToMouseButton((ControlAction)(m_menuItemSelected + 1), buttonCode))
-            {
-                m_waitingForKeyToBind = false;
-            }
-        }
-    }
-    else if (m_waitingForNewSaveGameName)
+    if (m_waitingForNewSaveGameName)
     {
         const uint16_t maxSaveGameNameLength = 20;
         // Check which key is pressed
@@ -208,6 +239,14 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             m_highScores.RemoveACharacterFromNameOfNewScore();
         }
     }
+    else if (m_subMenuSelected == subMenuVideo)
+    {
+        m_elementListVideo->ProcessInput();
+    }
+    else if (m_subMenuSelected == subMenuControls)
+    {
+        m_elementListControls->ProcessInput();
+    }
     else if (playerInput.IsKeyJustPressed(SDLK_UP))
     {
         MenuUp();
@@ -215,14 +254,6 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     else if (playerInput.IsKeyJustPressed(SDLK_DOWN))
     {
         MenuDown();
-    }
-    else if (playerInput.IsKeyJustPressed(SDLK_LEFT))
-    {
-        MenuLeft();
-    }
-    else if (playerInput.IsKeyJustPressed(SDLK_RIGHT))
-    {
-        MenuRight();
     }
     
     if (playerInput.IsKeyJustPressed(SDLK_ESCAPE))
@@ -290,38 +321,6 @@ void Catacomb3DMenu::MenuDown()
             else
             {
                 m_menuItemSelected++;
-            }
-        }
-        else if (m_subMenuSelected == subMenuVideo)
-        {
-            if (m_menuItemSelected == 8)
-            {
-                m_menuItemSelected = 0;
-                m_menuItemOffset = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 7)
-                {
-                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-                }
-            }
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
-            {
-                m_menuItemSelected = 0;
-                m_menuItemOffset = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 7)
-                {
-                    m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-                }
             }
         }
         else if (m_subMenuSelected == subMenuSound)
@@ -421,38 +420,6 @@ void Catacomb3DMenu::MenuUp()
                 m_menuItemSelected--;
             }
         }
-        else if (m_subMenuSelected == subMenuVideo)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = 8;
-                m_menuItemOffset = 1;
-            }
-            else
-            {
-                m_menuItemSelected--;
-                if (m_menuItemSelected < m_menuItemOffset)
-                {
-                    m_menuItemOffset = m_menuItemSelected;
-                }
-            }
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = (uint8_t)m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4;
-                m_menuItemOffset = (m_menuItemSelected > 7) ? m_menuItemSelected - 7 : 0;
-            }
-            else
-            {
-                m_menuItemSelected--;
-                if (m_menuItemSelected < m_menuItemOffset)
-                {
-                    m_menuItemOffset = m_menuItemSelected;
-                }
-            }
-        }
         else if (m_subMenuSelected == subMenuSound)
         {
             if (m_menuItemSelected > 0)
@@ -508,56 +475,6 @@ void Catacomb3DMenu::MenuUp()
                         m_menuItemOffset = m_menuItemSelected;
                     }
                 }
-            }
-        }
-    }
-}
-
-void Catacomb3DMenu::MenuLeft()
-{
-    if (m_menuActive)
-    {
-        if (m_subMenuSelected == subMenuVideo)
-        {
-            if (m_menuItemSelected == menuItemVideoFov)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Decrease();
-            }
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Decrease();
-            }
-            else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Decrease();
-            }
-        }
-    }
-}
-
-void Catacomb3DMenu::MenuRight()
-{
-    if (m_menuActive)
-    {
-        if (m_subMenuSelected == subMenuVideo)
-        {
-            if (m_menuItemSelected == menuItemVideoFov)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
-            }
-        }
-        else if (m_subMenuSelected == subMenuControls)
-        {
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Increase();
-            }
-            if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
-            {
-                m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Increase();
             }
         }
     }
@@ -627,86 +544,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
                 MenuCommandStartNewGameHard;
             m_subMenuSelected = subMenuMain;
             m_menuItemSelected = 0;
-        }
-    }
-    else if (m_subMenuSelected == subMenuVideo)
-    {
-        if (m_menuItemSelected == menuItemVideoScreenMode)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenMode).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoScreenResolution)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoAspectRatio)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoFov)
-        {
-            m_configurationSettings.GetCVarIntMutable(CVarIdFov).Increase();
-        }
-        else if (m_menuItemSelected == menuItemVideoTextureFilter)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoDepthShading)
-        {
-            m_configurationSettings.GetCVarBoolMutable(CVarIdDepthShading).Toggle();
-        }
-        else if (m_menuItemSelected == menuItemVideoShowFps)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode).Next();
-        }
-        else if (m_menuItemSelected == menuItemVideoVSync)
-        {
-            m_configurationSettings.GetCVarBoolMutable(CVarIdVSync).Toggle();
-        }
-        else if (m_menuItemSelected == menuItemVideoAutoMapMode)
-        {
-            m_configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode).Next();
-        }
-    }
-    else if (m_subMenuSelected == subMenuControls)
-    {
-        if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size())
-        {
-            // Mouse sensitivity
-            m_configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity).Increase();
-        }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
-        {
-            // Turn speed
-            m_configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed).Increase();
-        }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() - 1)
-        {
-            // Mouse look
-            m_configurationSettings.GetCVarBoolMutable(CVarIdMouseLook).Toggle();
-        }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
-        {
-            // Always run
-            m_configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun).Toggle();
-        }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
-        {
-            // Auto Fire
-            m_configurationSettings.GetCVarBoolMutable(CVarIdAutoFire).Toggle();
-        }
-        else if (m_menuItemSelected == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
-        {
-            // Mana Bar
-            m_configurationSettings.GetCVarBoolMutable(CVarIdManaBar).Toggle();
-        }
-        else if (m_menuItemSelected < m_configurationSettings.GetControlsMap().GetActionLabels().size() - 1)
-        {
-            // Any of the control options
-            if (!m_waitingForKeyToBind)
-            {
-                m_waitingForKeyToBind = true;
-            }
         }
     }
     else if (m_subMenuSelected == subMenuSound)
@@ -897,6 +734,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
 
     const bool flashIcon = ((timeStamp / 1000) % 2 == 0);
+    m_flashIcon = flashIcon;
     if (m_subMenuSelected == subMenuMain)
     {
         RenderableTiles renderableTiles(*egaGraph->GetTilesSize8());
@@ -987,8 +825,6 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        RenderableTiles renderableTiles(*egaGraph->GetTilesSize8());
-
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         
@@ -1001,121 +837,34 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_LOADMENUPIC), 105, 48, 10, 0, 7, 12); // O
         renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_MAINMENUPIC), 112, 48, 30, 0, 34, 12); // MENU
 
-        RenderableText renderableText(*egaGraph->GetFont(4));
+        m_renderableText.Reset();
+        m_renderableTiles.Reset();
+        m_elementListVideo->Draw(renderer, 76, 62, false);
+        renderer.RenderText(m_renderableText);
 
-        uint16_t index = 0;
-        while (index < 8)
-        {
-            const int16_t offsetY = 62 + (index * 8);
-            const bool selected = (m_menuItemSelected == index + m_menuItemOffset);
-            if (index + m_menuItemOffset == menuItemVideoScreenMode)
-            {
-                DrawMenuItemEnum(CVarIdScreenMode, selected, true, flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoScreenResolution)
-            {
-                DrawMenuItemEnum(CVarIdScreenResolution, selected, renderer.IsOriginalScreenResolutionSupported(), flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoAspectRatio)
-            {
-                DrawMenuItemEnum(CVarIdAspectRatio, selected, true, flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoFov)
-            {
-                DrawMenuItemInt(CVarIdFov, selected, true, flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoTextureFilter)
-            {
-                DrawMenuItemEnum(CVarIdTextureFilter, selected, true, flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoDepthShading)
-            {
-                DrawMenuItemBool(CVarIdDepthShading, selected, true, flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoShowFps)
-            {
-                DrawMenuItemEnum(CVarIdShowFpsMode, selected, true, flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoVSync)
-            {
-                DrawMenuItemBool(CVarIdVSync, selected, renderer.IsVSyncSupported(), flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == menuItemVideoAutoMapMode)
-            {
-                DrawMenuItemEnum(CVarIdAutoMapMode, selected, true, flashIcon, 76, 180, offsetY, renderableText, renderableTiles);
-            }
-            index++;
-        }
-
-        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
-        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
-        renderer.RenderTiles(renderableTiles);
-        renderer.RenderText(renderableText);
+        m_renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        m_renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        m_renderableText.Centered("Esc to back out", EgaRed, 154, 144);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuControls)
     {
-        RenderableTiles renderableTiles(*egaGraph->GetTilesSize8());
-
         renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
         renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
         renderer.Render2DPicture(egaGraph->GetPicture(CP_KEYBUTTONPIC), 80, 48);
-        RenderableText renderableText(*egaGraph->GetFont(4));
-        RenderableText renderableTextDefaultFont(*DefaultFont::Get(renderer, 7));
 
-        uint16_t index = 1;
-        while (index < 9)
-        {
-            const bool selected = (m_menuItemSelected == index + m_menuItemOffset - 1);
-            if (index + m_menuItemOffset < (uint16_t)m_configurationSettings.GetControlsMap().GetActionLabels().size())
-            {
-                renderableTiles.DrawListBullet(76, 62 + ((index - 1) * 8), true, selected && flashIcon);
-                const std::string& actionLabel = m_configurationSettings.GetControlsMap().GetActionLabels().at((ControlAction)(index + m_menuItemOffset));
-                const uint16_t yOffset = 63 + ((index - 1) * 8);
-                renderableText.LeftAligned(actionLabel, selected ? EgaBrightRed : EgaRed, 84, yOffset);
-                if (m_waitingForKeyToBind && selected)
-                {
-                    renderableText.LeftAligned("< Press key to bind >", EgaLightGray, 160, yOffset);
-                }
-                else
-                {
-                    // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-                    renderableTextDefaultFont.LeftAligned(m_configurationSettings.GetControlsMap().GetKeyStringFromAction((ControlAction)(index + m_menuItemOffset)), selected ? EgaLightGray : EgaDarkGray, 160, yOffset);
-                }
-            }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size())
-            {
-                DrawMenuItemBool(CVarIdMouseLook, selected, true, flashIcon, 76, 160, 55 + (index * 8), renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 1)
-            {
-                DrawMenuItemInt(CVarIdMouseSensitivity, selected, true, flashIcon, 76, 160, 55 + (index * 8), renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 2)
-            {
-                DrawMenuItemInt(CVarIdTurnSpeed, selected, true, flashIcon, 76, 160, 55 + (index * 8), renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 3)
-            {
-                DrawMenuItemBool(CVarIdAlwaysRun, selected, true, flashIcon, 76, 160, 55 + (index * 8), renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 4)
-            {
-                DrawMenuItemBool(CVarIdAutoFire, selected, true, flashIcon, 76, 160, 55 + (index * 8), renderableText, renderableTiles);
-            }
-            else if (index + m_menuItemOffset == m_configurationSettings.GetControlsMap().GetActionLabels().size() + 5)
-            {
-                DrawMenuItemBool(CVarIdManaBar, selected, true, flashIcon, 76, 160, 55 + (index * 8), renderableText, renderableTiles);
-            }
-            index++;
-        }
+        m_renderableText.Reset();
+        m_renderableTextDefaultFont.Reset();
+        m_renderableTiles.Reset();
+        m_elementListControls->Draw(renderer, 76, 62, false);
 
-        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
-        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
-        renderer.RenderTiles(renderableTiles);
-        renderer.RenderText(renderableText);
-        renderer.RenderText(renderableTextDefaultFont);
+        m_renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
+        m_renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
+        m_renderableText.Centered("Esc to back out", EgaRed, 154, 144);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderText(m_renderableTextDefaultFont);
     }
     else if (m_subMenuSelected == subMenuSound)
     {
@@ -1265,7 +1014,6 @@ void Catacomb3DMenu::OpenRestoreGameMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuRestoreGame;
     m_menuItemOffset = 0;
-    m_waitingForKeyToBind = false;
     m_waitingForNewSaveGameName = false;
 }
 
@@ -1275,7 +1023,6 @@ void Catacomb3DMenu::OpenSaveGameMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuSaveGame;
     m_menuItemOffset = 0;
-    m_waitingForKeyToBind = false;
     m_waitingForNewSaveGameName = false;
 }
 
@@ -1285,7 +1032,6 @@ void Catacomb3DMenu::OpenSoundMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuSound;
     m_menuItemOffset = 0;
-    m_waitingForKeyToBind = false;
     m_waitingForNewSaveGameName = false;
 }
 
@@ -1304,58 +1050,4 @@ void Catacomb3DMenu::CheckHighScore(const uint16_t level, const uint32_t score)
 {
     m_subMenuSelected = subMenuHighScores;
     m_highScores.TryToAddNewScore(score, level + 1);
-}
-
-void Catacomb3DMenu::DrawMenuItemBool(
-    const uint8_t cvarId,
-    const bool selected,
-    const bool supported,
-    const bool flashIcon,
-    const int16_t offsetXName,
-    const int16_t offsetXValue,
-    const int16_t offsetY,
-    RenderableText& renderableText,
-    RenderableTiles& renderableTiles)
-{
-    const ConsoleVariableBool& cvar = m_configurationSettings.GetCVarBool(cvarId);
-    renderableTiles.DrawListBullet(offsetXName, offsetY, supported, selected && flashIcon);
-    renderableText.LeftAligned(cvar.GetNameInMenu(), selected ? EgaBrightRed : EgaRed, offsetXName + 8, offsetY + 1);
-    const std::string& str = (!supported) ? "Not support." : cvar.GetValueInMenu();
-    renderableText.LeftAligned(str, selected ? EgaLightGray : EgaDarkGray, offsetXValue, offsetY + 1);
-}
-
-void Catacomb3DMenu::DrawMenuItemEnum(
-    const uint8_t cvarId,
-    const bool selected,
-    const bool supported,
-    const bool flashIcon,
-    const int16_t offsetXName,
-    const int16_t offsetXValue,
-    const int16_t offsetY,
-    RenderableText& renderableText,
-    RenderableTiles& renderableTiles)
-{
-    const ConsoleVariableEnum& cvar = m_configurationSettings.GetCVarEnum(cvarId);
-    renderableTiles.DrawListBullet(offsetXName, offsetY, supported, selected && flashIcon);
-    renderableText.LeftAligned(cvar.GetNameInMenu(), selected ? EgaBrightRed : EgaRed, offsetXName + 8, offsetY + 1);
-    const std::string& str = (!supported) ? "Not support." : cvar.GetValueInMenu();
-    renderableText.LeftAligned(str, selected ? EgaLightGray : EgaDarkGray, offsetXValue, offsetY + 1);
-}
-
-void Catacomb3DMenu::DrawMenuItemInt(
-    const uint8_t cvarId,
-    const bool selected,
-    const bool supported,
-    const bool flashIcon,
-    const int16_t offsetXName,
-    const int16_t offsetXValue,
-    const int16_t offsetY,
-    RenderableText& renderableText,
-    RenderableTiles& renderableTiles)
-{
-    const ConsoleVariableInt& cvar = m_configurationSettings.GetCVarInt(cvarId);
-    renderableTiles.DrawListBullet(offsetXName, offsetY, supported, selected && flashIcon);
-    renderableText.LeftAligned(cvar.GetNameInMenu(), selected ? EgaBrightRed : EgaRed, offsetXName + 8, offsetY + 1);
-    const std::string& str = (!supported) ? "Not support." : std::to_string(cvar.GetValue());
-    renderableText.LeftAligned(str, selected ? EgaLightGray : EgaDarkGray, offsetXValue, offsetY + 1);
 }
