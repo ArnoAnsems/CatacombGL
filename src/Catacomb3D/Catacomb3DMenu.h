@@ -29,7 +29,7 @@
 #include "..\Engine\IMenu.h"
 #include "..\Engine\HighScores.h"
 #include "SkullNBones.h"
-#include "..\Engine\GuiElementList.h"
+#include "..\Engine\GuiPage.h"
 
 class Catacomb3DMenu: public IMenu
 {
@@ -82,8 +82,8 @@ private:
     SkullNBones m_skullNBones;
     uint32_t m_menuActivatedTimestamp;
 
-    GuiElementList* m_elementListVideo;
-    GuiElementList* m_elementListControls;
+    GuiPage* m_guiPageVideo;
+    GuiPage* m_guiPageControls;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
     RenderableTiles m_renderableTiles;

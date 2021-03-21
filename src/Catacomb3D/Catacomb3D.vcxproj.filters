@@ -66,6 +66,9 @@
     <ClInclude Include="GuiElementBindKeyCat3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GuiPageFrameCat3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewCatacomb3D.cpp">
@@ -90,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GuiElementBindKeyCat3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiPageFrameCat3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

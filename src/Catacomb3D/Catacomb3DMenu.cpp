@@ -18,10 +18,12 @@
 #include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
 #include "..\Engine\DefaultFont.h"
 #include "..\Engine\IRenderer.h"
+#include "..\Engine\GuiElementList.h"
 #include "GuiElementBoolSelectionCat3D.h"
 #include "GuiElementEnumSelectionCat3D.h"
 #include "GuiElementIntSelectionCat3D.h"
 #include "GuiElementBindKeyCat3D.h"
+#include "GuiPageFrameCat3D.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -81,44 +83,56 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_highScores(highScores),
     m_skullNBones(audioPlayer),
     m_menuActivatedTimestamp(0u),
-    m_elementListVideo(nullptr),
-    m_elementListControls(nullptr),
+    m_guiPageVideo(nullptr),
+    m_guiPageControls(nullptr),
     m_renderableText(*egaGraph->GetFont(4)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
     m_renderableTiles(*egaGraph->GetTilesSize8()),
     m_flashIcon(false)
 {
-    m_elementListVideo = new GuiElementList(playerInput, 8, 76, 62, 8, nullptr, browseMenuSound);
-    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    // Video menu
+    m_guiPageVideo = new GuiPage(playerInput);
+    GuiPageFrameCat3D* pageFrameVideo = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderVideo, m_renderableText);
+    pageFrameVideo->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    m_guiPageVideo->AddChild(pageFrameVideo);
+    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 76, 62, 8, nullptr, browseMenuSound);
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
     GuiElementEnumSelectionCat3D* VScreenResolutionSelection = new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 104, m_renderableText, m_renderableTiles, m_flashIcon);
     VScreenResolutionSelection->SetId(selectScreenResolutionId);
-    m_elementListVideo->AddChild(VScreenResolutionSelection);
-    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListVideo->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListVideo->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(VScreenResolutionSelection);
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
     GuiElementBoolSelectionCat3D* VSyncSelection = new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), 104, m_renderableText, m_renderableTiles, m_flashIcon);
     VSyncSelection->SetId(selectVSyncId);
-    m_elementListVideo->AddChild(VSyncSelection);
-    m_elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(VSyncSelection);
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_guiPageVideo->AddChild(elementListVideo, 76, 62);
 
-    m_elementListControls = new GuiElementList(playerInput, 8, 76, 54, 8, nullptr, browseMenuSound);
+    // Controls menu
+    m_guiPageControls = new GuiPage(playerInput);
+    GuiPageFrameCat3D* pageFrameControls = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
+    pageFrameControls->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    m_guiPageControls->AddChild(pageFrameControls);
+    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 76, 54, 8, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            m_elementListControls->AddChild(new GuiElementBindKeyCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
+            elementListControls->AddChild(new GuiElementBindKeyCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
         }
     }
-    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_guiPageControls->AddChild(elementListControls, 76, 62);
 }
 
 bool Catacomb3DMenu::IsActive() const
@@ -241,11 +255,11 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        m_elementListVideo->ProcessInput();
+        m_guiPageVideo->ProcessInput();
     }
     else if (m_subMenuSelected == subMenuControls)
     {
-        m_elementListControls->ProcessInput();
+        m_guiPageControls->ProcessInput();
     }
     else if (playerInput.IsKeyJustPressed(SDLK_UP))
     {
@@ -825,43 +839,19 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuVideo)
     {
-        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-        
-        // The header for the Video Menu is composed out of letters from other menu headers, as it did not exist
-        // in the original game.
-        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_SAVEMENUPIC), 80, 48, 16, 0, 8, 12); // V
-        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_MAINMENUPIC), 88, 48, 19, 0, 3, 12); // I
-        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_LOADMENUPIC), 91, 48, 24, 0, 7, 12); // D
-        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_SAVEMENUPIC), 98, 48, 24, 0, 7, 12); // E
-        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_LOADMENUPIC), 105, 48, 10, 0, 7, 12); // O
-        renderer.Render2DPictureSegment(egaGraph->GetPicture(CP_MAINMENUPIC), 112, 48, 30, 0, 34, 12); // MENU
-
         m_renderableText.Reset();
         m_renderableTiles.Reset();
-        m_elementListVideo->Draw(renderer, 76, 62, false);
+        m_guiPageVideo->Draw(renderer, 0, 0, false);
         renderer.RenderText(m_renderableText);
-
-        m_renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        m_renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
-        m_renderableText.Centered("Esc to back out", EgaRed, 154, 144);
         renderer.RenderTiles(m_renderableTiles);
         renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuControls)
     {
-        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-        renderer.Render2DPicture(egaGraph->GetPicture(CP_KEYBUTTONPIC), 80, 48);
-
         m_renderableText.Reset();
         m_renderableTextDefaultFont.Reset();
         m_renderableTiles.Reset();
-        m_elementListControls->Draw(renderer, 76, 62, false);
-
-        m_renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        m_renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
-        m_renderableText.Centered("Esc to back out", EgaRed, 154, 144);
+        m_guiPageControls->Draw(renderer, 0, 0, false);
         renderer.RenderTiles(m_renderableTiles);
         renderer.RenderText(m_renderableText);
         renderer.RenderText(m_renderableTextDefaultFont);

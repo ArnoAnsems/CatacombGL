@@ -151,6 +151,7 @@
     <ClInclude Include="GuiElementBoolSelectionCat3D.h" />
     <ClInclude Include="GuiElementEnumSelectionCat3D.h" />
     <ClInclude Include="GuiElementIntSelectionCat3D.h" />
+    <ClInclude Include="GuiPageFrameCat3D.h" />
     <ClInclude Include="IntroViewCatacomb3D.h" />
     <ClInclude Include="SkullNBones.h" />
   </ItemGroup>
@@ -161,6 +162,7 @@
     <ClCompile Include="GuiElementBoolSelectionCat3D.cpp" />
     <ClCompile Include="GuiElementEnumSelectionCat3D.cpp" />
     <ClCompile Include="GuiElementIntSelectionCat3D.cpp" />
+    <ClCompile Include="GuiPageFrameCat3D.cpp" />
     <ClCompile Include="IntroViewCatacomb3D.cpp" />
     <ClCompile Include="SkullNBones.cpp" />
   </ItemGroup>
