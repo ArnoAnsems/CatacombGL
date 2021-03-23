@@ -59,7 +59,6 @@ private:
     MenuCommand EnterKeyPressed();
     static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
-    static void DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotPosition, const bool bright);
     static void DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3);
     void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
     void DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
@@ -68,7 +67,6 @@ private:
     uint8_t m_menuItemSelected;
     uint8_t m_subMenuSelected;
     uint8_t m_menuItemOffset;
-    bool m_waitingForNewSaveGameName;
     bool m_saveGameEnabled;
 
     ConfigurationSettings& m_configurationSettings;
@@ -84,6 +82,8 @@ private:
 
     GuiPage* m_guiPageVideo;
     GuiPage* m_guiPageControls;
+    GuiPage* m_guiPageSaveGame;
+    GuiPage* m_guiPageLoadGame;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
     RenderableTiles m_renderableTiles;

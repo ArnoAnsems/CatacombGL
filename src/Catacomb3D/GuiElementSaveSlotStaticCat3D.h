@@ -14,24 +14,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "GuiElementBase.h"
+#include "..\Engine\GuiElementButton.h"
 
-class GuiElementButton : public GuiElementBase
+class GuiElementSaveSlotStaticCat3D : public GuiElementButton
 {
 public:
-    GuiElementButton(
+    GuiElementSaveSlotStaticCat3D(
         const PlayerInput& playerInput,
         const std::string& buttonLabel,
         const GuiEvent& guiEventWhenActivated,
-        RenderableText& renderableText);
-    ~GuiElementButton() override;
+        RenderableText& renderableText,
+        bool& flashIcon);
 
-    virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
-protected:
-    const std::string m_buttonLabel;
-    const GuiEvent m_guiEventWhenActivated;
-    RenderableText& m_renderableText;
+private:
+    bool& m_flashIcon;
 };
-

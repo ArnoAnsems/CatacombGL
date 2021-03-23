@@ -69,6 +69,12 @@
     <ClInclude Include="GuiPageFrameCat3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GuiElementSaveSlotEditableCat3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiElementSaveSlotStaticCat3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewCatacomb3D.cpp">
@@ -96,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GuiPageFrameCat3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiElementSaveSlotStaticCat3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiElementSaveSlotEditableCat3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

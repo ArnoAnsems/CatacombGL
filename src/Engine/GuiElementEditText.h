@@ -35,6 +35,7 @@ public:
 private:
     static bool KeyIsSuitableForText(const SDL_Keycode keyCode);
 
+protected:
     std::string& m_outputText;
     const std::string m_initialText;
     RenderableText& m_renderableText;

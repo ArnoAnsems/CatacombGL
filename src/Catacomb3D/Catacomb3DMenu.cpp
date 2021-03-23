@@ -24,6 +24,8 @@
 #include "GuiElementIntSelectionCat3D.h"
 #include "GuiElementBindKeyCat3D.h"
 #include "GuiPageFrameCat3D.h"
+#include "GuiElementSaveSlotStaticCat3D.h"
+#include "GuiElementSaveSlotEditableCat3D.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -76,7 +78,6 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_audioPlayer (audioPlayer),
     m_savedGames (savedGames),
     m_newSaveGameName (""),
-    m_waitingForNewSaveGameName (false),
     m_askForOverwrite (false),
     m_askForEndGame (false),
     m_askForQuit (false),
@@ -85,6 +86,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_menuActivatedTimestamp(0u),
     m_guiPageVideo(nullptr),
     m_guiPageControls(nullptr),
+    m_guiPageSaveGame(nullptr),
+    m_guiPageLoadGame(nullptr),
     m_renderableText(*egaGraph->GetFont(4)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
     m_renderableTiles(*egaGraph->GetTilesSize8()),
@@ -116,7 +119,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPageFrameCat3D* pageFrameControls = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
     pageFrameControls->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageControls->AddChild(pageFrameControls);
-    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 76, 54, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListControls = new GuiElementList(playerInput, 7, 76, 54, 8, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
@@ -133,6 +136,51 @@ Catacomb3DMenu::Catacomb3DMenu(
     elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     m_guiPageControls->AddChild(elementListControls, 76, 62);
+
+    // Restore game menu
+    m_guiPageLoadGame = new GuiPage(playerInput);
+    m_guiPageLoadGame->SetId(pageRestoreGameId);
+
+    GuiPageFrameCat3D* pageFrameLoadGame = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderLoadGame, m_renderableText);
+    pageFrameLoadGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    m_guiPageLoadGame->AddChild(pageFrameLoadGame);
+
+    GuiElementList* elementListRestoreGame = new GuiElementList(playerInput, 6, 80, 60, 11, nullptr, browseMenuSound);
+    elementListRestoreGame->SetId(restoreGameListId);
+    if (savedGames.size() > 0)
+    {
+        int16_t savedGameIndex = 0;
+        for (const std::string& savedGame : savedGames)
+        {
+            elementListRestoreGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, { GuiActionRestoreGame, savedGameIndex }, m_renderableText, m_flashIcon));
+            savedGameIndex++;
+        }
+        m_guiPageLoadGame->AddChild(elementListRestoreGame, 80, 60);
+    }
+
+    // Save game menu
+    m_guiPageSaveGame = new GuiPage(playerInput);
+    m_guiPageSaveGame->SetId(pageSaveGameId);
+
+    GuiPageFrameCat3D* pageFrameSaveGame = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderSaveGame, m_renderableText);
+    pageFrameSaveGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    m_guiPageSaveGame->AddChild(pageFrameSaveGame);
+
+    GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 6, 80, 60, 11, nullptr, browseMenuSound);
+    GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, GuiEvent({ GuiActionSaveGame, -1 }), m_flashIcon);
+    elementListSaveGame->SetId(saveGameListId);
+    elementListSaveGame->AddChild(saveGameEditText);
+
+    if (savedGames.size() > 0)
+    {
+        int16_t savedGameIndex = 0;
+        for (const std::string& savedGame : savedGames)
+        {
+            elementListSaveGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, { GuiActionSaveGame, savedGameIndex }, m_renderableText, m_flashIcon));
+            savedGameIndex++;
+        }
+        m_guiPageSaveGame->AddChild(elementListSaveGame, 80, 60);
+    }
 }
 
 bool Catacomb3DMenu::IsActive() const
@@ -145,7 +193,6 @@ void Catacomb3DMenu::SetActive(bool active)
     m_menuActive = active;
     if (!active)
     {
-        m_waitingForNewSaveGameName = false;
         m_subMenuSelected = subMenuMain;
         m_menuItemSelected = 0;
         m_menuItemOffset = 0;
@@ -168,21 +215,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             m_askForOverwrite = false;
         }
     }
-    if (m_waitingForNewSaveGameName)
-    {
-        const uint16_t maxSaveGameNameLength = 20;
-        // Check which key is pressed
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (KeyIsSuitableForSaveGameName(keyCode) && m_newSaveGameName.length() < maxSaveGameNameLength)
-        {
-            m_newSaveGameName += std::string(SDL_GetKeyName(keyCode));
-        }
-        else if (keyCode == SDLK_BACKSPACE && !m_newSaveGameName.empty())
-        {
-            m_newSaveGameName.pop_back();
-        }
-    }
-    else if (m_askForQuit)
+    if (m_askForQuit)
     {
         const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
         if (keyCode == SDLK_y)
@@ -261,6 +294,43 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     {
         m_guiPageControls->ProcessInput();
     }
+    else if (m_subMenuSelected == subMenuSaveGame)
+    {
+        const GuiEvent& guiEvent = m_guiPageSaveGame->ProcessInput();
+        if (guiEvent.guiAction == GuiActionSaveGame)
+        {
+            m_newSaveGameName = (guiEvent.guiParameter == -1) ? m_newSaveGameName : m_savedGames.at(guiEvent.guiParameter);
+            if (IsNewSaveGameNameAlreadyInUse())
+            {
+                m_askForOverwrite = true;
+            }
+            else if (m_newSaveGameName.size() == 0)
+            {
+                // Not a valid name, do not store
+            }
+            else
+            {
+                command = MenuCommandSaveGame;
+            }
+        }
+    }
+    else if (m_subMenuSelected == subMenuRestoreGame)
+    {
+        const GuiEvent& guiEvent = m_guiPageLoadGame->ProcessInput();
+        if (guiEvent.guiAction == GuiActionRestoreGame)
+        {
+            m_newSaveGameName = m_savedGames.at(guiEvent.guiParameter);
+            if (m_saveGameEnabled)
+            {
+                m_askForOverwrite = false;
+                m_askForEndGame = true;
+            }
+            else
+            {
+                command = MenuCommandLoadGame;
+            }
+        }
+    }
     else if (playerInput.IsKeyJustPressed(SDLK_UP))
     {
         MenuUp();
@@ -292,7 +362,11 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         }
     }
 
-    if (playerInput.IsKeyJustPressed(SDLK_RETURN))
+    if (playerInput.IsKeyJustPressed(SDLK_RETURN) &&
+        m_subMenuSelected != subMenuRestoreGame &&
+        m_subMenuSelected != subMenuSaveGame &&
+        m_subMenuSelected != subMenuVideo &&
+        m_subMenuSelected != subMenuControls)
     {
         command = EnterKeyPressed();
     }
@@ -359,41 +433,6 @@ void Catacomb3DMenu::MenuDown()
                 m_menuItemSelected = 1;
             }
         }
-        else if (m_subMenuSelected == subMenuRestoreGame)
-        {
-            if (m_menuItemSelected == m_savedGames.size() - 1)
-            {
-                m_menuItemSelected = 0;
-                m_menuItemOffset = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-                if (m_menuItemSelected - m_menuItemOffset > 5)
-                {
-                    m_menuItemOffset = (m_menuItemSelected > 5) ? m_menuItemSelected - 5 : 0;
-                }
-            }
-        }
-        else if (m_subMenuSelected == subMenuSaveGame)
-        {
-            if (!m_askForOverwrite && !m_waitingForNewSaveGameName)  // Do not change the save game slot while typing
-            {
-                if (m_menuItemSelected == m_savedGames.size())
-                {
-                    m_menuItemSelected = 0;
-                    m_menuItemOffset = 0;
-                }
-                else
-                {
-                    m_menuItemSelected++;
-                    if (m_menuItemSelected - m_menuItemOffset > 5)
-                    {
-                        m_menuItemOffset = (m_menuItemSelected > 5) ? m_menuItemSelected - 5 : 0;
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -454,41 +493,6 @@ void Catacomb3DMenu::MenuUp()
             else
             {
                 m_menuItemSelected = 1;
-            }
-        }
-        else if (m_subMenuSelected == subMenuRestoreGame)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = (uint8_t)m_savedGames.size() - 1;
-                m_menuItemOffset = (m_menuItemSelected > 5) ? m_menuItemSelected - 5 : 0;
-            }
-            else
-            {
-                m_menuItemSelected--;
-                if (m_menuItemSelected < m_menuItemOffset)
-                {
-                    m_menuItemOffset = m_menuItemSelected;
-                }
-            }
-        }
-        else if (m_subMenuSelected == subMenuSaveGame)
-        {
-            if (!m_askForOverwrite && !m_waitingForNewSaveGameName)  // Do not change the save game slot while typing
-            {
-                if (m_menuItemSelected == 0)
-                {
-                    m_menuItemSelected = (uint8_t)m_savedGames.size();
-                    m_menuItemOffset = (m_menuItemSelected > 5) ? m_menuItemSelected - 5 : 0;
-                }
-                else
-                {
-                    m_menuItemSelected--;
-                    if (m_menuItemSelected < m_menuItemOffset)
-                    {
-                        m_menuItemOffset = m_menuItemSelected;
-                    }
-                }
             }
         }
     }
@@ -568,54 +572,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     {
         m_configurationSettings.GetCVarEnumMutable(CVarIdMusicMode).SetItemIndex(m_menuItemSelected);
     }
-    else if (m_subMenuSelected == subMenuRestoreGame)
-    {
-        m_newSaveGameName = m_savedGames.at(m_menuItemSelected);
-        if (m_saveGameEnabled)
-        {
-            m_askForEndGame = true;
-        }
-        else
-        {
-            m_subMenuSelected = subMenuMain;
-            m_menuItemSelected = 0;
-            return MenuCommandLoadGame;
-        }
-    }
-    else if (m_subMenuSelected == subMenuSaveGame)
-    {
-        if (m_menuItemSelected == 0)
-        {
-            if (!m_waitingForNewSaveGameName)
-            {
-                m_waitingForNewSaveGameName = true;
-                m_newSaveGameName = "";
-            }
-            else 
-            {
-                if (IsNewSaveGameNameAlreadyInUse())
-                {
-                    m_askForOverwrite = true;
-                }
-                else if (m_newSaveGameName.size() == 0)
-                {
-                    // Not a valid name, do not store
-                }
-                else
-                {
-                    command = MenuCommandSaveGame;
-                    m_menuItemSelected = 0;
-                }
-                
-                m_waitingForNewSaveGameName = false;
-            }
-        }
-        else
-        {
-            m_askForOverwrite = true;
-            m_newSaveGameName = m_savedGames.at(m_menuItemSelected - 1);
-        }
-    }
     else if (m_subMenuSelected == subMenuConfigure)
     {
         if (m_menuItemSelected == 0)
@@ -652,16 +608,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
     }
 
     return command;
-}
-
-void Catacomb3DMenu::DrawSavedGameSlot(IRenderer& renderer, const uint16_t slotPosition, const bool bright)
-{
-    const egaColor color = bright ? EgaBrightRed : EgaRed;
-    const int16_t offsetYInPixels = 62 + (slotPosition * 11);
-    renderer.Render2DBar(80, offsetYInPixels, 148, 1, color);
-    renderer.Render2DBar(80, offsetYInPixels + 9, 148, 1, color);
-    renderer.Render2DBar(80, offsetYInPixels + 1, 1, 8, color);
-    renderer.Render2DBar(227, offsetYInPixels + 1, 1, 8, color);
 }
 
 void Catacomb3DMenu::DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3)
@@ -900,27 +846,13 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {
-        const uint16_t maxSlotsVisible = 6;
-        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-        renderer.Render2DPicture(egaGraph->GetPicture(CP_LOADMENUPIC), 80, 48);
-        RenderableText renderableText(*egaGraph->GetFont(4));
-        uint8_t index = 0;
-        for (auto savedGameName : m_savedGames)
-        {
-            if (index >= m_menuItemOffset && index < m_menuItemOffset + maxSlotsVisible)
-            {
-                renderableText.LeftAligned(savedGameName, (m_menuItemSelected == index) ? EgaBrightRed : EgaRed, 82, 64 + ((index - m_menuItemOffset) * 11));
-                const bool bright = (index == m_menuItemSelected && flashIcon);
-                DrawSavedGameSlot(renderer, index - m_menuItemOffset, bright);
-            }
-            index++;
-        }
-
-        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        renderableText.LeftAligned("Enter accepts", EgaRed, 163, 135);
-        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
-        renderer.RenderText(renderableText);
+        m_renderableText.Reset();
+        m_renderableTextDefaultFont.Reset();
+        m_renderableTiles.Reset();
+        m_guiPageLoadGame->Draw(renderer, 0, 0, false);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderText(m_renderableTextDefaultFont);
 
         if (m_askForEndGame)
         {
@@ -929,47 +861,18 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuSaveGame)
     {
-        const uint16_t maxSlotsVisible = 6;
-        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-        renderer.Render2DPicture(egaGraph->GetPicture(CP_SAVEMENUPIC), 80, 48);
-        RenderableText renderableText(*egaGraph->GetFont(4));
-        if (m_menuItemOffset == 0)
-        {
-            if (!m_waitingForNewSaveGameName)
-            {
-                renderableText.Centered("Empty", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 154, 64);
-            }
-            else
-            {
-                const std::string saveGameName = m_newSaveGameName + "_";
-                renderableText.LeftAligned(saveGameName, EgaBrightRed, 82, 64);
-            }
-        }
+        m_renderableText.Reset();
+        m_renderableTextDefaultFont.Reset();
+        m_renderableTiles.Reset();
+        m_guiPageSaveGame->Draw(renderer, 0, 0, false);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderText(m_renderableTextDefaultFont);
 
-        uint8_t index = 1;
-        for (auto savedGameName : m_savedGames)
-        {
-            if (index >= m_menuItemOffset && index < m_menuItemOffset + maxSlotsVisible)
-            {
-                renderableText.LeftAligned(savedGameName, (m_menuItemSelected == index) ? EgaBrightRed : EgaRed, 82, 64 + ((index - m_menuItemOffset) * 11));
-            }
-            index++;
-        }
-
-        const uint16_t totalNumberOfSlots = (uint16_t)m_savedGames.size() + 1;
-        const uint16_t numberOfSlotsVisible = (totalNumberOfSlots < maxSlotsVisible) ? totalNumberOfSlots : maxSlotsVisible;
-        for (uint16_t slotPosition = 0; slotPosition < numberOfSlotsVisible; slotPosition++)
-        {
-            const bool bright = ((slotPosition + m_menuItemOffset) == m_menuItemSelected && (flashIcon || m_waitingForNewSaveGameName));
-            DrawSavedGameSlot(renderer, slotPosition, bright);
-        }
-
-        const char* instructionText = m_waitingForNewSaveGameName ? "Type name" : "Arrows move";
-        renderableText.LeftAligned(instructionText, EgaRed, 78, 135);
-        renderableText.LeftAligned("Enter accepts", EgaRed, 163, 135);
-        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
-        renderer.RenderText(renderableText);
+        //const char* instructionText = m_waitingForNewSaveGameName ? "Type name" : "Arrows move";
+        //renderableText.LeftAligned(instructionText, EgaRed, 78, 135);
+        //renderableText.LeftAligned("Enter accepts", EgaRed, 163, 135);
+        //renderableText.Centered("Esc to back out", EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuSkullNBones)
     {
@@ -989,7 +892,8 @@ const std::string& Catacomb3DMenu::GetNewSaveGameName() const
 
 void Catacomb3DMenu::AddNewSavedGame(const PlayerInput& playerInput, const std::string& name)
 {
-
+    m_guiPageLoadGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionRestoreGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, restoreGameListId);
+    m_guiPageSaveGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, saveGameListId);
 }
 
 bool Catacomb3DMenu::KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode)
@@ -1004,7 +908,6 @@ void Catacomb3DMenu::OpenRestoreGameMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuRestoreGame;
     m_menuItemOffset = 0;
-    m_waitingForNewSaveGameName = false;
 }
 
 void Catacomb3DMenu::OpenSaveGameMenu()
@@ -1013,7 +916,6 @@ void Catacomb3DMenu::OpenSaveGameMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuSaveGame;
     m_menuItemOffset = 0;
-    m_waitingForNewSaveGameName = false;
 }
 
 void Catacomb3DMenu::OpenSoundMenu()
@@ -1022,7 +924,6 @@ void Catacomb3DMenu::OpenSoundMenu()
     m_menuItemSelected = 0;
     m_subMenuSelected = subMenuSound;
     m_menuItemOffset = 0;
-    m_waitingForNewSaveGameName = false;
 }
 
 bool Catacomb3DMenu::IsNewSaveGameNameAlreadyInUse() const
