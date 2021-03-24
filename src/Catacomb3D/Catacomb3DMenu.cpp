@@ -167,7 +167,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_guiPageSaveGame->AddChild(pageFrameSaveGame);
 
     GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 6, 80, 60, 11, nullptr, browseMenuSound);
-    GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, GuiEvent({ GuiActionSaveGame, -1 }), m_flashIcon);
+    GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, GuiEvent({ GuiActionSaveGame, -1 }), m_flashIcon, pageFrameSaveGame);
     elementListSaveGame->SetId(saveGameListId);
     elementListSaveGame->AddChild(saveGameEditText);
 

@@ -149,6 +149,7 @@
     <ClInclude Include="GameMapsCatacomb3D.h" />
     <ClInclude Include="GuiElementBindKeyCat3D.h" />
     <ClInclude Include="GuiElementBoolSelectionCat3D.h" />
+    <ClInclude Include="GuiElementButtonCat3D.h" />
     <ClInclude Include="GuiElementEnumSelectionCat3D.h" />
     <ClInclude Include="GuiElementIntSelectionCat3D.h" />
     <ClInclude Include="GuiElementSaveSlotStaticCat3D.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="GameCatacomb3D.cpp" />
     <ClCompile Include="GuiElementBindKeyCat3D.cpp" />
     <ClCompile Include="GuiElementBoolSelectionCat3D.cpp" />
+    <ClCompile Include="GuiElementButtonCat3D.cpp" />
     <ClCompile Include="GuiElementEnumSelectionCat3D.cpp" />
     <ClCompile Include="GuiElementIntSelectionCat3D.cpp" />
     <ClCompile Include="GuiElementSaveSlotEditableCat3D.cpp" />

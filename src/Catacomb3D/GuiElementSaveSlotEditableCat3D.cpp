@@ -22,9 +22,11 @@ GuiElementSaveSlotEditableCat3D::GuiElementSaveSlotEditableCat3D(
     const uint16_t maxTextLength,
     RenderableText& renderableText,
     GuiEvent& textCompleteAction,
-    bool& flashIcon) :
+    bool& flashIcon,
+    GuiPageFrameCat3D* pageFrame) :
     GuiElementEditText(playerInput, outputText, initialText, maxTextLength, renderableText, textCompleteAction),
-    m_flashIcon(flashIcon)
+    m_flashIcon(flashIcon),
+    m_pageFrame(pageFrame)
 {
 
 }
@@ -47,4 +49,10 @@ void GuiElementSaveSlotEditableCat3D::Draw(IRenderer& renderer, const int16_t or
     renderer.Render2DBar(originX, originY + 9, 148, 1, color);
     renderer.Render2DBar(originX, originY + 1, 1, 8, color);
     renderer.Render2DBar(originX + 147, originY + 1, 1, 8, color);
+
+    if (m_pageFrame != nullptr)
+    {
+        const std::string firstInstruction = (m_enteringText) ? "Type name" : "Arrows move";
+        m_pageFrame->SetInstructions(firstInstruction, "Enter accepts", "Esc to back out");
+    }
 }
