@@ -80,10 +80,12 @@ private:
     SkullNBones m_skullNBones;
     uint32_t m_menuActivatedTimestamp;
 
+    GuiPage* m_guiPageNewGame;
     GuiPage* m_guiPageVideo;
     GuiPage* m_guiPageControls;
     GuiPage* m_guiPageSaveGame;
     GuiPage* m_guiPageLoadGame;
+    uint8_t m_askForEndGameGuiAction;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
     RenderableTiles m_renderableTiles;

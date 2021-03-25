@@ -26,6 +26,7 @@
 #include "GuiPageFrameCat3D.h"
 #include "GuiElementSaveSlotStaticCat3D.h"
 #include "GuiElementSaveSlotEditableCat3D.h"
+#include "GuiElementButtonCat3D.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -80,10 +81,12 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_newSaveGameName (""),
     m_askForOverwrite (false),
     m_askForEndGame (false),
+    m_askForEndGameGuiAction(GuiActionNone),
     m_askForQuit (false),
     m_highScores(highScores),
     m_skullNBones(audioPlayer),
     m_menuActivatedTimestamp(0u),
+    m_guiPageNewGame(nullptr),
     m_guiPageVideo(nullptr),
     m_guiPageControls(nullptr),
     m_guiPageSaveGame(nullptr),
@@ -93,11 +96,25 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_renderableTiles(*egaGraph->GetTilesSize8()),
     m_flashIcon(false)
 {
+    // New game menu
+    m_guiPageNewGame = new GuiPage(playerInput);
+    GuiPageFrameCat3D* pageFrameNewGame = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderNewGame, m_renderableText);
+    pageFrameNewGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    m_guiPageNewGame->AddChild(pageFrameNewGame);
+
+    GuiElementList* elementListNewGame = new GuiElementList(playerInput, 8, 88, 62, 8, nullptr, browseMenuSound);
+    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN EASY GAME", { GuiActionNewGameEasy, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN NORMAL GAME", { GuiActionNewGameNormal, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN HARD GAME", { GuiActionNewGameHard, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+
+    m_guiPageNewGame->AddChild(elementListNewGame, 88, 62);
+
     // Video menu
     m_guiPageVideo = new GuiPage(playerInput);
     GuiPageFrameCat3D* pageFrameVideo = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderVideo, m_renderableText);
     pageFrameVideo->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageVideo->AddChild(pageFrameVideo);
+
     GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 76, 62, 8, nullptr, browseMenuSound);
     elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
     GuiElementEnumSelectionCat3D* VScreenResolutionSelection = new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 104, m_renderableText, m_renderableTiles, m_flashIcon);
@@ -235,17 +252,19 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         if (keyCode == SDLK_y)
         {
             m_askForEndGame = false;
-            if (m_subMenuSelected == subMenuNewGame)
+            if (m_askForEndGameGuiAction == GuiActionNewGameEasy)
             {
-                command =
-                    (m_menuItemSelected == 0) ? MenuCommandStartNewGameEasy :
-                    (m_menuItemSelected == 1) ? MenuCommandStartNewGameNormal :
-                    MenuCommandStartNewGameHard;
-                m_subMenuSelected = subMenuMain;
-                m_menuItemSelected = 0;
-                return command;
+                return MenuCommandStartNewGameEasy;
             }
-            else if (m_subMenuSelected == subMenuRestoreGame)
+            else if (m_askForEndGameGuiAction == GuiActionNewGameNormal)
+            {
+                return MenuCommandStartNewGameNormal;
+            }
+            else if (m_askForEndGameGuiAction == GuiActionNewGameHard)
+            {
+                return MenuCommandStartNewGameHard;
+            }
+            else if (m_askForEndGameGuiAction == GuiActionRestoreGame)
             {
                 m_subMenuSelected = subMenuMain;
                 m_menuItemSelected = 0;
@@ -324,10 +343,32 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             {
                 m_askForOverwrite = false;
                 m_askForEndGame = true;
+                m_askForEndGameGuiAction = guiEvent.guiAction;
             }
             else
             {
                 command = MenuCommandLoadGame;
+            }
+        }
+    }
+    else if (m_subMenuSelected == subMenuNewGame)
+    {
+        const GuiEvent& guiEvent = m_guiPageNewGame->ProcessInput();
+        if (guiEvent.guiAction == GuiActionNewGameEasy ||
+            guiEvent.guiAction == GuiActionNewGameNormal ||
+            guiEvent.guiAction == GuiActionNewGameHard)
+        {
+            if (m_saveGameEnabled)
+            {
+                m_askForEndGame = true;
+                m_askForEndGameGuiAction = guiEvent.guiAction;
+            }
+            else
+            {
+                command =
+                    (guiEvent.guiAction == GuiActionNewGameEasy) ? MenuCommandStartNewGameEasy :
+                    (guiEvent.guiAction == GuiActionNewGameNormal) ? MenuCommandStartNewGameNormal :
+                    MenuCommandStartNewGameHard;
             }
         }
     }
@@ -363,6 +404,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     }
 
     if (playerInput.IsKeyJustPressed(SDLK_RETURN) &&
+        m_subMenuSelected != subMenuNewGame &&
         m_subMenuSelected != subMenuRestoreGame &&
         m_subMenuSelected != subMenuSaveGame &&
         m_subMenuSelected != subMenuVideo &&
@@ -381,17 +423,6 @@ void Catacomb3DMenu::MenuDown()
         if (m_subMenuSelected == subMenuMain)
         {
             if (m_menuItemSelected == 7)
-            {
-                m_menuItemSelected = 0;
-            }
-            else
-            {
-                m_menuItemSelected++;
-            }
-        }
-        else if (m_subMenuSelected == subMenuNewGame)
-        {
-            if (m_menuItemSelected == 2)
             {
                 m_menuItemSelected = 0;
             }
@@ -445,17 +476,6 @@ void Catacomb3DMenu::MenuUp()
             if (m_menuItemSelected == 0)
             {
                 m_menuItemSelected = 7;
-            }
-            else
-            {
-                m_menuItemSelected--;
-            }
-        }
-        else if (m_subMenuSelected == subMenuNewGame)
-        {
-            if (m_menuItemSelected == 0)
-            {
-                m_menuItemSelected = 2;
             }
             else
             {
@@ -535,6 +555,7 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         {
             // End game
             m_askForEndGame = true;
+            m_askForEndGameGuiAction = GuiActionEndGame;
         }
         else if (m_menuItemSelected == menuItemMainSkullNBones)
         {
@@ -546,22 +567,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         else if (m_menuItemSelected == menuItemMainQuit)
         {
             m_askForQuit = true;
-        }
-    }
-    else if (m_subMenuSelected == subMenuNewGame)
-    {
-        if (m_saveGameEnabled)
-        {
-            m_askForEndGame = true;
-        }
-        else
-        {
-            command =
-                (m_menuItemSelected == 0) ? MenuCommandStartNewGameEasy :
-                (m_menuItemSelected == 1) ? MenuCommandStartNewGameNormal :
-                MenuCommandStartNewGameHard;
-            m_subMenuSelected = subMenuMain;
-            m_menuItemSelected = 0;
         }
     }
     else if (m_subMenuSelected == subMenuSound)
@@ -738,23 +743,12 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuNewGame)
     {
-        RenderableTiles renderableTiles(*egaGraph->GetTilesSize8());
-        RenderableText renderableText(*egaGraph->GetFont(4));
-        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-        renderer.Render2DPicture(egaGraph->GetPicture(CP_NEWGAMEMENUPIC), 80, 48);
-        renderableTiles.DrawListBullet(88, 62, true, (m_menuItemSelected == 0) && flashIcon);
-        renderableText.LeftAligned("BEGIN EASY GAME", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
-        renderableTiles.DrawListBullet(88, 70, true, (m_menuItemSelected == 1) && flashIcon);
-        renderableText.LeftAligned("BEGIN NORMAL GAME", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
-        renderableTiles.DrawListBullet(88, 78, true, (m_menuItemSelected == 2) && flashIcon);
-        renderableText.LeftAligned("BEGIN HARD GAME", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
-
-        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
-        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
-        renderer.RenderTiles(renderableTiles);
-        renderer.RenderText(renderableText);
+        m_renderableText.Reset();
+        m_renderableTiles.Reset();
+        m_guiPageNewGame->Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
 
         if (m_askForEndGame)
         {
@@ -868,11 +862,6 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.RenderTiles(m_renderableTiles);
         renderer.RenderText(m_renderableText);
         renderer.RenderText(m_renderableTextDefaultFont);
-
-        //const char* instructionText = m_waitingForNewSaveGameName ? "Type name" : "Arrows move";
-        //renderableText.LeftAligned(instructionText, EgaRed, 78, 135);
-        //renderableText.LeftAligned("Enter accepts", EgaRed, 163, 135);
-        //renderableText.Centered("Esc to back out", EgaRed, 154, 144);
     }
     else if (m_subMenuSelected == subMenuSkullNBones)
     {
