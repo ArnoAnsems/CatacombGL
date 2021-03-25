@@ -23,8 +23,16 @@ const float SkullMinY = 62.0f;
 const float SkullMaxY = 137.0f;
 const uint16_t WinningScore = 21;
 
-SkullNBones::SkullNBones(AudioPlayer& audioPlayer) :
+SkullNBones::SkullNBones(
+    const PlayerInput& playerInput,
+    AudioPlayer& audioPlayer,
+    EgaGraph& egaGraph,
+    uint32_t& timeStamp,
+    RenderableText& renderableText) :
+    GuiElementBase(playerInput),
     m_audioPlayer(audioPlayer),
+    m_renderableText(renderableText),
+    m_timeStamp(timeStamp),
     m_playerScore(0),
     m_computerScore(0),
     m_playerX(148.0f),
@@ -41,27 +49,48 @@ SkullNBones::SkullNBones(AudioPlayer& audioPlayer) :
     m_playerMovesLeft(false),
     m_playerMovesRight(false),
     m_speedup(10),
-    m_lastScore(false)
+    m_lastScore(false),
+    m_paddleWarPic(egaGraph.GetPicture(CP_PADDLEWARPIC)),
+    m_paddleSprite(egaGraph.GetSprite(PADDLESPR)),
+    m_ballSprite(egaGraph.GetSprite(BALLSPR)),
+    m_menuMaskPic(egaGraph.GetMaskedPicture(CP_MENUMASKPICM))
 {
     ResetForNextSkull();
 }
 
-bool SkullNBones::ProcessInput(const PlayerInput& playerInput)
+const GuiEvent& SkullNBones::ProcessInput()
 {
+    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        Reset();
+        return m_closeEvent;
+    }
+
     if (m_playerScore == WinningScore || m_computerScore == WinningScore)
     {
-        if (playerInput.IsAnyKeyPressed())
+        if (m_playerInput.IsAnyKeyPressed())
         {
-            return true;
+            Reset();
+            return m_closeEvent;
         }
     }
     else
     {
-        m_playerMovesLeft = playerInput.IsKeyPressed(SDLK_LEFT);
-        m_playerMovesRight = playerInput.IsKeyPressed(SDLK_RIGHT);
+        m_playerMovesLeft = m_playerInput.IsKeyPressed(SDLK_LEFT);
+        m_playerMovesRight = m_playerInput.IsKeyPressed(SDLK_RIGHT);
     }
 
-    return false;
+    if (m_timeStampOfPreviousFrame == 0)
+    {
+        // First input, wait 1 sec for the skull appears
+        m_timeStampSkullGone = m_timeStamp + 1000;
+    }
+
+    m_timeStampOfPreviousFrame = m_timeStampOfCurrentFrame;
+    m_timeStampOfCurrentFrame = m_timeStamp;
+    UpdateFrame();
+
+    return GetEvent();
 }
 
 void SkullNBones::DrawScore(RenderableText& renderableText) const
@@ -74,37 +103,26 @@ void SkullNBones::DrawScore(RenderableText& renderableText) const
     renderableText.LeftAligned(computerScoreStr, EgaBrightRed, 218, 52);
 }
 
-void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp)
+void SkullNBones::Draw(IRenderer& renderer, const int16_t, const int16_t, const bool) const
 {
-    if (m_timeStampOfPreviousFrame == 0)
-    {
-        // First Draw action, wait 1 sec for the skull appears
-        m_timeStampSkullGone = timeStamp + 1000;
-    }
-
-    m_timeStampOfPreviousFrame = m_timeStampOfCurrentFrame;
-    m_timeStampOfCurrentFrame = timeStamp;
-    UpdateFrame();
-
     renderer.Render2DBar(77, 60, 154, 1, EgaBrightRed);
     renderer.Render2DBar(77, 143, 154, 1, EgaBrightRed);
-    renderer.Render2DPicture(egaGraph.GetPicture(CP_PADDLEWARPIC), 130, 48);
-    RenderableText renderableText(*egaGraph.GetFont(4));
-    DrawScore(renderableText);
+    renderer.Render2DPicture(m_paddleWarPic, 130, 48);
+    DrawScore(m_renderableText);
 
-    renderer.Render2DPicture(egaGraph.GetSprite(PADDLESPR), (uint16_t)m_computerX, 66);
-    renderer.Render2DPicture(egaGraph.GetSprite(PADDLESPR), (uint16_t)m_playerX, 135);
+    renderer.Render2DPicture(m_paddleSprite, (uint16_t)m_computerX, 66);
+    renderer.Render2DPicture(m_paddleSprite, (uint16_t)m_playerX, 135);
 
     if (!m_skullIsGone)
     {
-        renderer.Render2DPicture(egaGraph.GetSprite(BALLSPR), (uint16_t)m_skullX, (uint16_t)m_skullY);
+        renderer.Render2DPicture(m_ballSprite, (uint16_t)m_skullX, (uint16_t)m_skullY);
     }
 
     if (m_playerScore == WinningScore || m_computerScore == WinningScore)
     {
         const int width = 120;
         const int offsetX = 154 - (width / 2);
-        renderer.Render2DPicture(egaGraph.GetMaskedPicture(CP_MENUMASKPICM), 74, 48);
+        renderer.Render2DPicture(m_menuMaskPic, 74, 48);
         renderer.Render2DBar(offsetX + 1, 81, width - 2, 36, EgaBlack);
         renderer.Render2DBar(offsetX, 80, width, 1, EgaRed);
         renderer.Render2DBar(offsetX, 117, width, 1, EgaRed);
@@ -112,12 +130,11 @@ void SkullNBones::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t t
         renderer.Render2DBar(offsetX + width - 1, 81, 1, 36, EgaRed);
 
         const char* message = (m_playerScore == WinningScore) ? "You won!" : "You lost!";
-        renderableText.Centered(message, EgaBrightRed, 154, 89);
+        m_renderableText.Centered(message, EgaBrightRed, 154, 89);
 
         renderer.Render2DBar(offsetX + 4, 102, width - 8, 1, EgaRed);
-        renderableText.Centered("Press any key", EgaRed, 154, 104);
+        m_renderableText.Centered("Press any key", EgaRed, 154, 104);
     }
-    renderer.RenderText(renderableText);
 }
 
 void SkullNBones::UpdateFrame()

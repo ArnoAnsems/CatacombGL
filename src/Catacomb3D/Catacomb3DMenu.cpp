@@ -84,7 +84,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_askForEndGameGuiAction(GuiActionNone),
     m_askForQuit (false),
     m_highScores(highScores),
-    m_skullNBones(audioPlayer),
+    m_skullNBones(playerInput, audioPlayer, *egaGraph, m_timeStamp, m_renderableText),
     m_menuActivatedTimestamp(0u),
     m_guiPageNewGame(nullptr),
     m_guiPageVideo(nullptr),
@@ -94,7 +94,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_renderableText(*egaGraph->GetFont(4)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
     m_renderableTiles(*egaGraph->GetTilesSize8()),
-    m_flashIcon(false)
+    m_flashIcon(false),
+    m_timeStamp(0)
 {
     // New game menu
     m_guiPageNewGame = new GuiPage(playerInput);
@@ -281,9 +282,10 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             return MenuCommandNone;
         }
     }
-    else if (m_subMenuSelected == subMenuSkullNBones && !playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    else if (m_subMenuSelected == subMenuSkullNBones)
     {
-        if (m_skullNBones.ProcessInput(playerInput))
+        const GuiEvent& guiEvent = m_skullNBones.ProcessInput();
+        if (guiEvent.guiAction == GuiActionClose)
         {
             // Game over
             m_subMenuSelected = subMenuMain;
@@ -562,7 +564,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             // Skull 'n' Bones
             m_subMenuSelected = subMenuSkullNBones;
             m_menuItemSelected = 0;
-            m_skullNBones.Reset();
         }
         else if (m_menuItemSelected == menuItemMainQuit)
         {
@@ -700,6 +701,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
 
     const bool flashIcon = ((timeStamp / 1000) % 2 == 0);
     m_flashIcon = flashIcon;
+    m_timeStamp = timeStamp;
     if (m_subMenuSelected == subMenuMain)
     {
         RenderableTiles renderableTiles(*egaGraph->GetTilesSize8());
@@ -865,7 +867,9 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuSkullNBones)
     {
-        m_skullNBones.Draw(renderer, *egaGraph, timeStamp);
+        m_renderableText.Reset();
+        m_skullNBones.Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
     }
 }
 

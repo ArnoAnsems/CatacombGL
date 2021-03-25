@@ -22,23 +22,32 @@
 #include "..\Engine\EgaGraph.h"
 #include "..\Engine\PlayerInput.h"
 #include "..\Engine\AudioPlayer.h"
+#include "..\Engine\GuiElementBase.h"
 
-class SkullNBones
+class SkullNBones: public GuiElementBase
 {
 public:
-    SkullNBones(AudioPlayer& audioPlayer);
-    bool ProcessInput(const PlayerInput& playerInput);
-    void Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp);
-    void Reset();
+    SkullNBones(
+        const PlayerInput& playerInput,
+        AudioPlayer& audioPlayer,
+        EgaGraph& egaGraph,
+        uint32_t& timeStamp,
+        RenderableText& renderableText);
+    virtual const GuiEvent& ProcessInput() override;
+    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
 private:
     void DrawScore(RenderableText& renderableText) const;
     void UpdateFrame();
     void ResetForNextSkull();
+    void Reset();
 
     AudioPlayer& m_audioPlayer;
     uint16_t m_playerScore;
     uint16_t m_computerScore;
+    uint32_t& m_timeStamp;
+    const GuiEvent m_closeEvent = {GuiActionClose, 0 };
+    RenderableText& m_renderableText;
 
     float m_playerX;
     float m_computerX;
@@ -55,4 +64,9 @@ private:
     bool m_playerMovesRight;
     int16_t m_speedup;
     bool m_lastScore;
+
+    const Picture* m_paddleWarPic;
+    const Picture* m_paddleSprite;
+    const Picture* m_ballSprite;
+    const Picture* m_menuMaskPic;
 };

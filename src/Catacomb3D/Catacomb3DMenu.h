@@ -90,4 +90,5 @@ private:
     RenderableText m_renderableTextDefaultFont;
     RenderableTiles m_renderableTiles;
     bool m_flashIcon;
+    uint32_t m_timeStamp;
 };
