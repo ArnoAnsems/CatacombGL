@@ -14,25 +14,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "..\Engine\GuiElementEnumSelection.h"
-#include "..\Engine\RenderableTiles.h"
+#include "GuiElementEnumSelectionCat3D.h"
 
-class GuiElementEnumSelectionCat3D : public GuiElementEnumSelection
+class GuiElementEnumSelectionCat3DRadio : public GuiElementEnumSelectionCat3D
 {
 public:
-    GuiElementEnumSelectionCat3D(
+    GuiElementEnumSelectionCat3DRadio(
         const PlayerInput& playerInput,
         ConsoleVariableEnum& cvarEnum,
-        const int16_t offsetXValue,
         RenderableText& renderableText,
         RenderableTiles& renderableTiles,
-        bool& flashIcon);
+        bool& flashIcon,
+        const std::vector<std::string>& enumNames);
 
+    virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
 
-protected:
-    RenderableTiles& m_renderableTiles;
-    bool& m_flashIcon;
+private:
+    const std::vector<std::string>& m_enumNames;
+    uint8_t m_elementSelected;
 };
-
-

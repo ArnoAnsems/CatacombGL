@@ -85,6 +85,8 @@ private:
     GuiPage* m_guiPageControls;
     GuiPage* m_guiPageSaveGame;
     GuiPage* m_guiPageLoadGame;
+    GuiPage* m_guiPageSound;
+    GuiPage* m_guiPageMusic;
     uint8_t m_askForEndGameGuiAction;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;

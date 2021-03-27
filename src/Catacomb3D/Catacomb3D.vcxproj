@@ -151,6 +151,7 @@
     <ClInclude Include="GuiElementBoolSelectionCat3D.h" />
     <ClInclude Include="GuiElementButtonCat3D.h" />
     <ClInclude Include="GuiElementEnumSelectionCat3D.h" />
+    <ClInclude Include="GuiElementEnumSelectionCat3DRadio.h" />
     <ClInclude Include="GuiElementIntSelectionCat3D.h" />
     <ClInclude Include="GuiElementSaveSlotStaticCat3D.h" />
     <ClInclude Include="GuiElementSaveSlotEditableCat3D.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="GuiElementBoolSelectionCat3D.cpp" />
     <ClCompile Include="GuiElementButtonCat3D.cpp" />
     <ClCompile Include="GuiElementEnumSelectionCat3D.cpp" />
+    <ClCompile Include="GuiElementEnumSelectionCat3DRadio.cpp" />
     <ClCompile Include="GuiElementIntSelectionCat3D.cpp" />
     <ClCompile Include="GuiElementSaveSlotEditableCat3D.cpp" />
     <ClCompile Include="GuiElementSaveSlotStaticCat3D.cpp" />

@@ -27,6 +27,7 @@
 #include "GuiElementSaveSlotStaticCat3D.h"
 #include "GuiElementSaveSlotEditableCat3D.h"
 #include "GuiElementButtonCat3D.h"
+#include "GuiElementEnumSelectionCat3DRadio.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -63,6 +64,10 @@ const int16_t goToSaveGameId = 9;
 const int16_t selectVSyncId = 10;
 const int16_t selectScreenResolutionId = 11;
 
+const std::vector<std::string> enumNamesSound = { "NO SOUND EFFECTS", "PC SPEAKER", "ADLIB/SOUNDBLASTER" };
+
+const std::vector<std::string> enumNamesMusic = { "NO MUSIC", "ADLIB/SOUNDBLASTER" };
+
 Catacomb3DMenu::Catacomb3DMenu(
     ConfigurationSettings& configurationSettings,
     AudioPlayer& audioPlayer,
@@ -91,6 +96,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_guiPageControls(nullptr),
     m_guiPageSaveGame(nullptr),
     m_guiPageLoadGame(nullptr),
+    m_guiPageSound(nullptr),
+    m_guiPageMusic(nullptr),
     m_renderableText(*egaGraph->GetFont(4)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
     m_renderableTiles(*egaGraph->GetTilesSize8()),
@@ -137,7 +144,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPageFrameCat3D* pageFrameControls = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
     pageFrameControls->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageControls->AddChild(pageFrameControls);
-    GuiElementList* elementListControls = new GuiElementList(playerInput, 7, 76, 54, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 76, 54, 8, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
@@ -199,6 +206,22 @@ Catacomb3DMenu::Catacomb3DMenu(
         }
         m_guiPageSaveGame->AddChild(elementListSaveGame, 80, 60);
     }
+
+    // Sound menu
+    m_guiPageSound = new GuiPage(playerInput);
+    GuiPageFrameCat3D* pageFrameSound = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderSound, m_renderableText);
+    pageFrameSound->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    m_guiPageSound->AddChild(pageFrameSound);
+
+    m_guiPageSound->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), m_renderableText, m_renderableTiles, m_flashIcon, enumNamesSound), 88, 62);
+
+    // Music menu
+    m_guiPageMusic = new GuiPage(playerInput);
+    GuiPageFrameCat3D* pageFrameMusic = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMusic, m_renderableText);
+    pageFrameMusic->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    m_guiPageMusic->AddChild(pageFrameMusic);
+
+    m_guiPageMusic->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicMode), m_renderableText, m_renderableTiles, m_flashIcon, enumNamesMusic), 88, 62);
 }
 
 bool Catacomb3DMenu::IsActive() const
@@ -374,6 +397,14 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             }
         }
     }
+    else if (m_subMenuSelected == subMenuSound)
+    {
+        m_guiPageSound->ProcessInput();
+    }
+    else if (m_subMenuSelected == subMenuMusic)
+    {
+        m_guiPageMusic->ProcessInput();
+    }
     else if (playerInput.IsKeyJustPressed(SDLK_UP))
     {
         MenuUp();
@@ -410,7 +441,9 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         m_subMenuSelected != subMenuRestoreGame &&
         m_subMenuSelected != subMenuSaveGame &&
         m_subMenuSelected != subMenuVideo &&
-        m_subMenuSelected != subMenuControls)
+        m_subMenuSelected != subMenuControls &&
+        m_subMenuSelected != subMenuSound &&
+        m_subMenuSelected != subMenuMusic)
     {
         command = EnterKeyPressed();
     }
@@ -444,28 +477,6 @@ void Catacomb3DMenu::MenuDown()
                 m_menuItemSelected++;
             }
         }
-        else if (m_subMenuSelected == subMenuSound)
-        {
-            if (m_menuItemSelected < 2)
-            {
-                m_menuItemSelected++;
-            }
-            else
-            {
-                m_menuItemSelected = 0;
-            }
-        }
-        else if (m_subMenuSelected == subMenuMusic)
-        {
-            if (m_menuItemSelected == 1)
-            {
-                m_menuItemSelected = 0;
-            }
-            else
-            {
-                m_menuItemSelected = 1;
-            }
-        }
     }
 }
 
@@ -493,28 +504,6 @@ void Catacomb3DMenu::MenuUp()
             else
             {
                 m_menuItemSelected--;
-            }
-        }
-        else if (m_subMenuSelected == subMenuSound)
-        {
-            if (m_menuItemSelected > 0)
-            {
-                m_menuItemSelected--;
-            }
-            else
-            {
-                m_menuItemSelected = 2;
-            }
-        }
-        else if (m_subMenuSelected == subMenuMusic)
-        {
-            if (m_menuItemSelected == 1)
-            {
-                m_menuItemSelected = 0;
-            }
-            else
-            {
-                m_menuItemSelected = 1;
             }
         }
     }
@@ -569,14 +558,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
         {
             m_askForQuit = true;
         }
-    }
-    else if (m_subMenuSelected == subMenuSound)
-    {
-        m_configurationSettings.GetCVarEnumMutable(CVarIdSoundMode).SetItemIndex(m_menuItemSelected);
-    }
-    else if (m_subMenuSelected == subMenuMusic)
-    {
-        m_configurationSettings.GetCVarEnumMutable(CVarIdMusicMode).SetItemIndex(m_menuItemSelected);
     }
     else if (m_subMenuSelected == subMenuConfigure)
     {
@@ -800,45 +781,21 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     }
     else if (m_subMenuSelected == subMenuSound)
     {
-        RenderableTiles renderableTiles(*egaGraph->GetTilesSize8());
-        RenderableText renderableText(*egaGraph->GetFont(4));
-        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-        renderer.Render2DPicture(egaGraph->GetPicture(CP_SOUNDMENUPIC), 80, 48);
-
-        const uint8_t soundMode = m_configurationSettings.GetCVarEnum(CVarIdSoundMode).GetItemIndex();
-        renderableTiles.DrawRadioButton(88, 62, (soundMode == CVarItemIdSoundModeOff), (m_menuItemSelected == 0) && flashIcon);
-        renderableText.LeftAligned("NO SOUND EFFECTS", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
-        renderableTiles.DrawRadioButton(88, 70, (soundMode == CVarItemIdSoundModePCSpeaker), (m_menuItemSelected == 1) && flashIcon);
-        renderableText.LeftAligned("PC SPEAKER", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
-        renderableTiles.DrawRadioButton(88, 78, (soundMode == CVarItemIdSoundModeAdlib), (m_menuItemSelected == 2) && flashIcon);
-        renderableText.LeftAligned("ADLIB/SOUNDBLASTER", (m_menuItemSelected == 2) ? EgaBrightRed : EgaRed, 96, 79);
-
-        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
-        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
-        renderer.RenderTiles(renderableTiles);
-        renderer.RenderText(renderableText);
+        m_renderableText.Reset();
+        m_renderableTiles.Reset();
+        m_guiPageSound->Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuMusic)
     {
-        RenderableTiles renderableTiles(*egaGraph->GetTilesSize8());
-        RenderableText renderableText(*egaGraph->GetFont(4));
-        renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
-        renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);
-        renderer.Render2DPicture(egaGraph->GetPicture(CP_MUSICMENUPIC), 80, 48);
-
-        const bool musicOn = m_configurationSettings.GetCVarEnum(CVarIdMusicMode).GetItemIndex() == CVarItemIdMusicModeAdlib;
-        renderableTiles.DrawRadioButton(88, 62, !musicOn, (m_menuItemSelected == 0) && flashIcon);
-        renderableText.LeftAligned("NO MUSIC", (m_menuItemSelected == 0) ? EgaBrightRed : EgaRed, 96, 63);
-        renderableTiles.DrawRadioButton(88, 70, musicOn, (m_menuItemSelected == 1) && flashIcon);
-        renderableText.LeftAligned("ADLIB/SOUNDBLASTER", (m_menuItemSelected == 1) ? EgaBrightRed : EgaRed, 96, 71);
-
-        renderableText.LeftAligned("Arrows move", EgaRed, 78, 135);
-        renderableText.LeftAligned("Enter selects", EgaRed, 163, 135);
-        renderableText.Centered("Esc to back out", EgaRed, 154, 144);
-        renderer.RenderTiles(renderableTiles);
-        renderer.RenderText(renderableText);
+        m_renderableText.Reset();
+        m_renderableTiles.Reset();
+        m_guiPageMusic->Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
     }
     else if (m_subMenuSelected == subMenuRestoreGame)
     {

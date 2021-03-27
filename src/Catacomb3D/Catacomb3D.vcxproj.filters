@@ -78,6 +78,9 @@
     <ClInclude Include="GuiElementButtonCat3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GuiElementEnumSelectionCat3DRadio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewCatacomb3D.cpp">
@@ -114,6 +117,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GuiElementButtonCat3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiElementEnumSelectionCat3DRadio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
