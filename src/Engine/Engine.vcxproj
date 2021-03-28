@@ -170,6 +170,7 @@
     <ClCompile Include="GuiElementButton.cpp" />
     <ClCompile Include="GuiElementEditText.cpp" />
     <ClCompile Include="GuiElementEnumSelection.cpp" />
+    <ClCompile Include="GuiElementHighScores.cpp" />
     <ClCompile Include="GuiElementIntSelection.cpp" />
     <ClCompile Include="GuiElementList.cpp" />
     <ClCompile Include="GuiElementStaticText.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="GuiElementButton.h" />
     <ClInclude Include="GuiElementEditText.h" />
     <ClInclude Include="GuiElementEnumSelection.h" />
+    <ClInclude Include="GuiElementHighScores.h" />
     <ClInclude Include="GuiElementIntSelection.h" />
     <ClInclude Include="GuiElementBoolSelection.h" />
     <ClInclude Include="GuiElementList.h" />

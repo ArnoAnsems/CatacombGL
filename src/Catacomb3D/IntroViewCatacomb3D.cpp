@@ -59,7 +59,7 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
         }
         case 2:
         {
-            m_highScores.Draw(m_renderer, *m_egaGraph, timeStamp, HIGHSCORESPIC);
+            m_highScores.Draw(m_renderer, timeStamp);
             break;
         }
         }

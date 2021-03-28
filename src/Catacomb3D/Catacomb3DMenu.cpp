@@ -661,7 +661,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
 
     if (m_subMenuSelected == subMenuHighScores)
     {
-        m_highScores.Draw(renderer, *egaGraph, timeStamp, HIGHSCORESPIC);
+        m_highScores.Draw(renderer, timeStamp);
         return;
     }
 

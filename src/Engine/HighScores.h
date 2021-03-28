@@ -41,11 +41,12 @@ public:
     const std::vector<HighScore>& Get() const;
     bool LoadFromFile(const std::string& path);
     bool StoreToFile(const std::string& path);
+    void LoadGraphics(EgaGraph& egaGraph, const uint16_t backgroundPic);
     bool TryToAddNewScore(const uint32_t newScore, const uint16_t newLevel);
     void AddCharactersToNameOfNewScore(const std::string& characters);
     void RemoveACharacterFromNameOfNewScore();
     void FinishNameOfNewScore();
-    void Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp, const uint16_t backgroundPic) const;
+    void Draw(IRenderer& renderer, const uint32_t timeStamp) const;
 
 private:
     static void ApplyEqualSpacingToNumbers(std::string& str);
@@ -53,4 +54,6 @@ private:
     std::vector<HighScore> m_highscores;
     char m_remainingConfigData[20];
     uint8_t m_newScorePosition;
+    Picture* m_backgroundPicture;
+    Font* m_font;
 };

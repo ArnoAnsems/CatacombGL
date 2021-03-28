@@ -300,6 +300,7 @@ EgaGraph* GameCatacomb3D::GetEgaGraph()
     if (m_egaGraph == nullptr)
     {
         m_egaGraph = new EgaGraph(egaGraphCatacomb3D, m_gamePath, m_renderer);
+        m_highScores->LoadGraphics(*m_egaGraph, HIGHSCORESPIC);
     }
 
     return m_egaGraph;

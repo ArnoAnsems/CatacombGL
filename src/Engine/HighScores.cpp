@@ -30,7 +30,9 @@ static const std::vector<HighScores::HighScore> defaultHighScores =
 
 HighScores::HighScores() :
     m_highscores(defaultHighScores),
-    m_remainingConfigData()
+    m_remainingConfigData(),
+    m_backgroundPicture(nullptr),
+    m_font(nullptr)
 {
     m_newScorePosition = (uint8_t)m_highscores.size();
 }
@@ -156,6 +158,12 @@ bool HighScores::StoreToFile(const std::string& path)
     return true;
 }
 
+void HighScores::LoadGraphics(EgaGraph& egaGraph, const uint16_t backgroundPic)
+{
+    m_backgroundPicture = egaGraph.GetPicture(backgroundPic);
+    m_font = egaGraph.GetFont(3);
+}
+
 bool HighScores::TryToAddNewScore(const uint32_t newScore, const uint16_t newLevel)
 {
     uint8_t newPositionInList = 0;
@@ -228,11 +236,16 @@ void HighScores::ApplyEqualSpacingToNumbers(std::string& str)
     }
 }
 
-void HighScores::Draw(IRenderer& renderer, EgaGraph& egaGraph, const uint32_t timeStamp, const uint16_t backgroundPic) const
+void HighScores::Draw(IRenderer& renderer, const uint32_t timeStamp) const
 {
-    renderer.Render2DPicture(egaGraph.GetPicture(backgroundPic), 0, 0);
+    if (!m_backgroundPicture || !m_font)
+    {
+        return;
+    }
+
+    renderer.Render2DPicture(m_backgroundPicture, 0, 0);
     uint16_t y = 68;
-    RenderableText renderableText(*egaGraph.GetFont(3));
+    RenderableText renderableText(*m_font);
     for (uint16_t pos = 0; pos < m_highscores.size(); pos++)
     {
         const auto highScore = m_highscores.at(pos);
