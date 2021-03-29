@@ -28,6 +28,7 @@
 #include "GuiElementSaveSlotEditableCat3D.h"
 #include "GuiElementButtonCat3D.h"
 #include "GuiElementEnumSelectionCat3DRadio.h"
+#include "..\Engine\GuiElementHighScores.h"
 
 const uint8_t subMenuMain = 0;
 const uint8_t subMenuVideo = 1;
@@ -58,11 +59,15 @@ const int16_t pageMainId = 3;
 const int16_t pageVideoId = 4;
 const int16_t pageControlsId = 5;
 const int16_t pageSoundId = 6;
-const int16_t pageRestoreGameId = 7;
-const int16_t pageSaveGameId = 8;
-const int16_t goToSaveGameId = 9;
-const int16_t selectVSyncId = 10;
-const int16_t selectScreenResolutionId = 11;
+const int16_t pageMusicId = 7;
+const int16_t pageRestoreGameId = 8;
+const int16_t pageSaveGameId = 9;
+const int16_t pageHighScoresId = 10;
+const int16_t pageSkullNBonesId = 11;
+const int16_t pageNewGameId = 11;
+const int16_t goToSaveGameId = 12;
+const int16_t selectVSyncId = 13;
+const int16_t selectScreenResolutionId = 14;
 
 const std::vector<std::string> enumNamesSound = { "NO SOUND EFFECTS", "PC SPEAKER", "ADLIB/SOUNDBLASTER" };
 
@@ -98,6 +103,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_guiPageLoadGame(nullptr),
     m_guiPageSound(nullptr),
     m_guiPageMusic(nullptr),
+    m_guiPageHighScores(nullptr),
     m_renderableText(*egaGraph->GetFont(4)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
     m_renderableTiles(*egaGraph->GetTilesSize8()),
@@ -106,6 +112,7 @@ Catacomb3DMenu::Catacomb3DMenu(
 {
     // New game menu
     m_guiPageNewGame = new GuiPage(playerInput);
+    m_guiPageNewGame->SetId(pageNewGameId);
     GuiPageFrameCat3D* pageFrameNewGame = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderNewGame, m_renderableText);
     pageFrameNewGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageNewGame->AddChild(pageFrameNewGame);
@@ -119,6 +126,7 @@ Catacomb3DMenu::Catacomb3DMenu(
 
     // Video menu
     m_guiPageVideo = new GuiPage(playerInput);
+    m_guiPageVideo->SetId(pageVideoId);
     GuiPageFrameCat3D* pageFrameVideo = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderVideo, m_renderableText);
     pageFrameVideo->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageVideo->AddChild(pageFrameVideo);
@@ -141,6 +149,7 @@ Catacomb3DMenu::Catacomb3DMenu(
 
     // Controls menu
     m_guiPageControls = new GuiPage(playerInput);
+    m_guiPageControls->SetId(pageControlsId);
     GuiPageFrameCat3D* pageFrameControls = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
     pageFrameControls->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageControls->AddChild(pageFrameControls);
@@ -209,6 +218,7 @@ Catacomb3DMenu::Catacomb3DMenu(
 
     // Sound menu
     m_guiPageSound = new GuiPage(playerInput);
+    m_guiPageSound->SetId(pageSoundId);
     GuiPageFrameCat3D* pageFrameSound = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderSound, m_renderableText);
     pageFrameSound->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageSound->AddChild(pageFrameSound);
@@ -217,11 +227,20 @@ Catacomb3DMenu::Catacomb3DMenu(
 
     // Music menu
     m_guiPageMusic = new GuiPage(playerInput);
+    m_guiPageMusic->SetId(pageMusicId);
     GuiPageFrameCat3D* pageFrameMusic = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMusic, m_renderableText);
     pageFrameMusic->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     m_guiPageMusic->AddChild(pageFrameMusic);
 
     m_guiPageMusic->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicMode), m_renderableText, m_renderableTiles, m_flashIcon, enumNamesMusic), 88, 62);
+
+    // High scores
+    m_guiPageHighScores = new GuiPage(playerInput);
+    m_guiPageHighScores->SetId(pageHighScoresId);
+    GuiElementHighScores* guiElementHighScores = new GuiElementHighScores(playerInput, m_highScores, m_timeStamp);
+    m_guiPageHighScores->AddChild(guiElementHighScores);
+
+    m_skullNBones.SetId(pageSkullNBonesId);
 }
 
 bool Catacomb3DMenu::IsActive() const
@@ -319,15 +338,13 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
     }
     else if (m_subMenuSelected == subMenuHighScores)
     {
-        // Check if a name for a new high score is entered
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (KeyIsSuitableForSaveGameName(keyCode))
+        const GuiEvent& guiEvent = m_guiPageHighScores->ProcessInput();
+        if (guiEvent.guiAction == GuiActionEndGame)
         {
-            m_highScores.AddCharactersToNameOfNewScore(std::string(SDL_GetKeyName(keyCode)));
-        }
-        else if (keyCode == SDLK_BACKSPACE)
-        {
-            m_highScores.RemoveACharacterFromNameOfNewScore();
+            command = MenuCommandEndGame;
+            m_subMenuSelected = subMenuMain;
+            m_menuItemSelected = 0;
+            m_menuItemOffset = 0;
         }
     }
     else if (m_subMenuSelected == subMenuVideo)
@@ -443,7 +460,9 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         m_subMenuSelected != subMenuVideo &&
         m_subMenuSelected != subMenuControls &&
         m_subMenuSelected != subMenuSound &&
-        m_subMenuSelected != subMenuMusic)
+        m_subMenuSelected != subMenuMusic &&
+        m_subMenuSelected != subMenuHighScores &&
+        command != MenuCommandEndGame)
     {
         command = EnterKeyPressed();
     }
@@ -586,13 +605,6 @@ MenuCommand Catacomb3DMenu::EnterKeyPressed()
             m_menuItemSelected = 0;
         }
     }
-    else if (m_subMenuSelected == subMenuHighScores)
-    {
-        m_subMenuSelected = subMenuMain;
-        m_menuItemSelected = 0;
-        m_highScores.FinishNameOfNewScore();
-        command = MenuCommandEndGame;
-    }
 
     return command;
 }
@@ -659,13 +671,10 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         return;
     }
 
-    if (m_subMenuSelected == subMenuHighScores)
+    if (m_subMenuSelected != subMenuHighScores)
     {
-        m_highScores.Draw(renderer, timeStamp);
-        return;
+        renderer.Render2DPicture(egaGraph->GetPicture(CP_MENUSCREENPIC), 0, 0);
     }
-
-    renderer.Render2DPicture(egaGraph->GetPicture(CP_MENUSCREENPIC), 0, 0);
 
     if (m_askForOverwrite)
     {
@@ -828,6 +837,15 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         m_skullNBones.Draw(renderer, 0, 0, false);
         renderer.RenderText(m_renderableText);
     }
+    else if (m_subMenuSelected == subMenuHighScores)
+    {
+        m_renderableText.Reset();
+        m_renderableTiles.Reset();
+        m_guiPageHighScores->Draw(renderer, 0, 0, false);
+        renderer.RenderText(m_renderableText);
+        renderer.RenderTiles(m_renderableTiles);
+        renderer.RenderText(m_renderableText);
+    }
 }
 
 void Catacomb3DMenu::SetSaveGameEnabled(const bool enabled)
@@ -844,12 +862,6 @@ void Catacomb3DMenu::AddNewSavedGame(const PlayerInput& playerInput, const std::
 {
     m_guiPageLoadGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionRestoreGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, restoreGameListId);
     m_guiPageSaveGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, saveGameListId);
-}
-
-bool Catacomb3DMenu::KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode)
-{
-    return ((keyCode >= SDLK_a && keyCode <= SDLK_z) ||
-            (keyCode >= SDLK_0 && keyCode <= SDLK_9));
 }
 
 void Catacomb3DMenu::OpenRestoreGameMenu()

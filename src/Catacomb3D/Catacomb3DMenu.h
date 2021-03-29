@@ -57,7 +57,6 @@ private:
     void MenuDown();
     void MenuUp();
     MenuCommand EnterKeyPressed();
-    static bool KeyIsSuitableForSaveGameName(const SDL_Keycode keyCode);
     bool IsNewSaveGameNameAlreadyInUse() const;
     static void DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3);
     void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
@@ -87,6 +86,7 @@ private:
     GuiPage* m_guiPageLoadGame;
     GuiPage* m_guiPageSound;
     GuiPage* m_guiPageMusic;
+    GuiPage* m_guiPageHighScores;
     uint8_t m_askForEndGameGuiAction;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
