@@ -32,6 +32,7 @@ const uint8_t GuiActionClose = 10;
 const uint8_t GuiActionQuit = 11;
 const uint8_t GuiActionPlaySound = 12;
 const uint8_t GuiActionEndGame = 13;
+const uint8_t GuiActionHighScoreFinished = 14;
 
 struct GuiEvent
 {

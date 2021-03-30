@@ -117,6 +117,11 @@ void GuiMenu::Open(const int16_t id)
     {
         m_elementOpenIndex = index;
         m_previouslyOpen.clear();
+        if (index != 0)
+        {
+            // When this page is closed, return to the first (main) page
+            m_previouslyOpen.push_back(m_elements.at(0)->GetId());
+        }
     }
 }
 

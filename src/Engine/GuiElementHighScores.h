@@ -34,5 +34,5 @@ private:
 
     HighScores& m_highScores;
     uint32_t& m_timestamp;
-    const GuiEvent m_nameFinishedEvent = { GuiActionEndGame, 0 };
+    const GuiEvent m_nameFinishedEvent = { GuiActionHighScoreFinished, 0 };
 };

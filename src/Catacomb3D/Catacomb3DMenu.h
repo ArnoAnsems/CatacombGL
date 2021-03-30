@@ -29,7 +29,7 @@
 #include "..\Engine\IMenu.h"
 #include "..\Engine\HighScores.h"
 #include "SkullNBones.h"
-#include "..\Engine\GuiPage.h"
+#include "..\Engine\GuiMenu.h"
 
 class Catacomb3DMenu: public IMenu
 {
@@ -54,18 +54,12 @@ public:
     void CheckHighScore(const uint16_t level, const uint32_t score) override;
 
 private:
-    void MenuDown();
-    void MenuUp();
-    MenuCommand EnterKeyPressed();
     bool IsNewSaveGameNameAlreadyInUse() const;
     static void DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3);
     void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
     void DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
 
     bool m_menuActive;
-    uint8_t m_menuItemSelected;
-    uint8_t m_subMenuSelected;
-    uint8_t m_menuItemOffset;
     bool m_saveGameEnabled;
 
     ConfigurationSettings& m_configurationSettings;
@@ -76,17 +70,9 @@ private:
     bool m_askForEndGame;
     bool m_askForQuit;
     HighScores& m_highScores;
-    SkullNBones m_skullNBones;
     uint32_t m_menuActivatedTimestamp;
 
-    GuiPage* m_guiPageNewGame;
-    GuiPage* m_guiPageVideo;
-    GuiPage* m_guiPageControls;
-    GuiPage* m_guiPageSaveGame;
-    GuiPage* m_guiPageLoadGame;
-    GuiPage* m_guiPageSound;
-    GuiPage* m_guiPageMusic;
-    GuiPage* m_guiPageHighScores;
+    GuiMenu m_guiMenu;
     uint8_t m_askForEndGameGuiAction;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
