@@ -31,24 +31,24 @@ GuiElementSaveSlotEditableCat3D::GuiElementSaveSlotEditableCat3D(
 
 }
 
-void GuiElementSaveSlotEditableCat3D::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementSaveSlotEditableCat3D::Draw(IRenderer& renderer) const
 {
-    const bool bright = selected && m_flashIcon;
+    const bool bright = m_selected && m_flashIcon;
     const egaColor color = bright ? EgaBrightRed : EgaRed;
     if (m_enteringText)
     {
         const std::string text = m_outputText + "_";
-        m_renderableText.LeftAligned(text, color, originX + 2, originY + 2);
+        m_renderableText.LeftAligned(text, color, m_originX + 2, m_originY + 2);
     }
     else
     {
-        m_renderableText.LeftAligned(m_initialText, color, originX + 2, originY + 2);
+        m_renderableText.LeftAligned(m_initialText, color, m_originX + 2, m_originY + 2);
     }
 
-    renderer.Render2DBar(originX, originY, 148, 1, color);
-    renderer.Render2DBar(originX, originY + 9, 148, 1, color);
-    renderer.Render2DBar(originX, originY + 1, 1, 8, color);
-    renderer.Render2DBar(originX + 147, originY + 1, 1, 8, color);
+    renderer.Render2DBar(m_originX, m_originY, 148, 1, color);
+    renderer.Render2DBar(m_originX, m_originY + 9, 148, 1, color);
+    renderer.Render2DBar(m_originX, m_originY + 1, 1, 8, color);
+    renderer.Render2DBar(m_originX + 147, m_originY + 1, 1, 8, color);
 
     if (m_pageFrame != nullptr)
     {

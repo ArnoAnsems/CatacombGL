@@ -27,13 +27,13 @@ GuiElementSaveSlotStaticCat3D::GuiElementSaveSlotStaticCat3D(
 
 }
 
-void GuiElementSaveSlotStaticCat3D::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementSaveSlotStaticCat3D::Draw(IRenderer& renderer) const
 {
-    const bool bright = selected && m_flashIcon;
+    const bool bright = m_selected && m_flashIcon;
     const egaColor color = bright ? EgaBrightRed : EgaRed;
-    m_renderableText.LeftAligned(m_buttonLabel, color, originX + 2, originY + 2);
-    renderer.Render2DBar(originX, originY, 148, 1, color);
-    renderer.Render2DBar(originX, originY + 9, 148, 1, color);
-    renderer.Render2DBar(originX, originY + 1, 1, 8, color);
-    renderer.Render2DBar(originX + 147, originY + 1, 1, 8, color);
+    m_renderableText.LeftAligned(m_buttonLabel, color, m_originX + 2, m_originY + 2);
+    renderer.Render2DBar(m_originX, m_originY, 148, 1, color);
+    renderer.Render2DBar(m_originX, m_originY + 9, 148, 1, color);
+    renderer.Render2DBar(m_originX, m_originY + 1, 1, 8, color);
+    renderer.Render2DBar(m_originX + 147, m_originY + 1, 1, 8, color);
 }

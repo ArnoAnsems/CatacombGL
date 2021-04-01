@@ -23,8 +23,6 @@ public:
     GuiElementList(
         const PlayerInput& playerInput,
         const uint16_t maxElementsDrawn,
-        const int16_t originX,
-        const int16_t originY,
         const uint16_t elementHeight,
         const Picture* cursorPicture,
         const uint16_t soundWhenBrowsing);
@@ -32,13 +30,11 @@ public:
 
     virtual void AddChild(GuiElementBase* child, const int16_t offsetX = 0, const int16_t offsetY = 0, const int16_t parentId = 0) override;
     virtual const GuiEvent& ProcessInput() override;
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer) const override;
     virtual void SetEnabled(const bool enabled, const int16_t id = 0) override;
 
 private:
     std::vector<GuiElementBase*> m_elements;
-    const int16_t m_originX;
-    const int16_t m_originY;
     const uint16_t m_elementHeight;
     const uint16_t m_maxElementsDrawn;
     uint16_t m_elementSelected;

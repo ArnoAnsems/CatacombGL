@@ -30,18 +30,18 @@ GuiElementBindKeyCat3D::GuiElementBindKeyCat3D(
 
 }
 
-void GuiElementBindKeyCat3D::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementBindKeyCat3D::Draw(IRenderer& renderer) const
 {
-    m_renderableTiles.DrawListBullet(originX, originY, m_enabled, selected && m_flashIcon);
+    m_renderableTiles.DrawListBullet(m_originX, m_originY, m_enabled, m_selected && m_flashIcon);
     const std::string& actionLabel = m_controlsMap.GetActionLabels().at(m_controlAction);
-    m_renderableText.LeftAligned(actionLabel, selected ? EgaBrightRed : EgaRed, originX + 8, originY + 1);
-    if (m_waitingForKey && selected)
+    m_renderableText.LeftAligned(actionLabel, m_selected ? EgaBrightRed : EgaRed, m_originX + 8, m_originY + 1);
+    if (m_waitingForKey && m_selected)
     {
-        m_renderableText.LeftAligned("< Press key to bind >", EgaLightGray, originX + m_offsetXValue, originY + 1);
+        m_renderableText.LeftAligned("< Press key to bind >", EgaLightGray, m_originX + m_offsetXValue, m_originY + 1);
     }
     else
     {
         // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-        m_renderableText.LeftAligned(m_controlsMap.GetKeyStringFromAction(m_controlAction), selected ? EgaLightGray : EgaDarkGray, originX + m_offsetXValue, originY + 1);
+        m_renderableText.LeftAligned(m_controlsMap.GetKeyStringFromAction(m_controlAction), m_selected ? EgaLightGray : EgaDarkGray, m_originX + m_offsetXValue, m_originY + 1);
     }
 }

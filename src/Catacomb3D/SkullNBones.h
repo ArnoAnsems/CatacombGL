@@ -34,7 +34,7 @@ public:
         uint32_t& timeStamp,
         RenderableText& renderableText);
     virtual const GuiEvent& ProcessInput() override;
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer) const override;
 
 private:
     void DrawScore(RenderableText& renderableText) const;

@@ -38,7 +38,7 @@ const GuiEvent& GuiElementButton::ProcessInput()
     return (m_enabled && m_playerInput.IsKeyJustPressed(SDLK_RETURN)) ? m_guiEventWhenActivated : GetEvent();
 }
 
-void GuiElementButton::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementButton::Draw(IRenderer& renderer) const
 {
-    m_renderableText.LeftAligned(m_buttonLabel, GetMenuItemColor(selected, m_enabled), originX, originY);
+    m_renderableText.LeftAligned(m_buttonLabel, GetMenuItemColor(m_selected, m_enabled), m_originX, m_originY);
 }

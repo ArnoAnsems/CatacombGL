@@ -18,7 +18,10 @@
 GuiElementBase::GuiElementBase(const PlayerInput& playerInput) :
     m_playerInput(playerInput),
     m_guiEvent({GuiActionNone, 0}),
-    m_enabled(true)
+    m_enabled(true),
+    m_originX(0),
+    m_originY(0),
+    m_selected(false)
 {
 
 }
@@ -48,7 +51,7 @@ const GuiEvent& GuiElementBase::ProcessInput()
     return m_guiEvent;
 }
 
-void GuiElementBase::Draw(IRenderer& /*renderer*/, const int16_t /*originX*/, const int16_t /*originY*/, const bool /*selected*/) const
+void GuiElementBase::Draw(IRenderer& /*renderer*/) const
 {
 
 }
@@ -59,6 +62,17 @@ void GuiElementBase::SetEnabled(const bool enabled, const int16_t id)
     {
         m_enabled = enabled;
     }
+}
+
+void GuiElementBase::SetOrigin(const int16_t originX, const int16_t originY)
+{
+    m_originX = originX;
+    m_originY = originY;
+}
+
+void GuiElementBase::SetSelected(const bool selected)
+{
+    m_selected = selected;
 }
 
 void GuiElementBase::SetEvent(const uint8_t guiAction, const int16_t guiParameter)

@@ -79,18 +79,18 @@ const GuiEvent& GuiElementBindKey::ProcessInput()
     return GetEvent();
 }
 
-void GuiElementBindKey::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementBindKey::Draw(IRenderer& renderer) const
 {
     const std::string& actionLabel = m_controlsMap.GetActionLabels().at(m_controlAction);
-    const egaColor color = GetMenuItemColor(selected, m_enabled);
-    m_renderableText.LeftAligned(actionLabel, color, originX, originY);
-    if (m_waitingForKey && selected)
+    const egaColor color = GetMenuItemColor(m_selected, m_enabled);
+    m_renderableText.LeftAligned(actionLabel, color, m_originX, m_originY);
+    if (m_waitingForKey && m_selected)
     {
-        m_renderableText.LeftAligned("< Press key to bind >", EgaBrightCyan, originX + m_offsetXValue, originY);
+        m_renderableText.LeftAligned("< Press key to bind >", EgaBrightCyan, m_originX + m_offsetXValue, m_originY);
     }
     else
     {
         // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
-        m_renderableText.LeftAligned(m_controlsMap.GetKeyStringFromAction(m_controlAction), color, originX + m_offsetXValue, originY);
+        m_renderableText.LeftAligned(m_controlsMap.GetKeyStringFromAction(m_controlAction), color, m_originX + m_offsetXValue, m_originY);
     }
 }

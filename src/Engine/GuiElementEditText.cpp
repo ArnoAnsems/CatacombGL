@@ -85,17 +85,17 @@ const GuiEvent& GuiElementEditText::ProcessInput()
         GetEvent();
 }
 
-void GuiElementEditText::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementEditText::Draw(IRenderer& renderer) const
 {
-    const egaColor color = GetMenuItemColor(selected, true);
+    const egaColor color = GetMenuItemColor(m_selected, true);
     if (m_enteringText)
     {
         const std::string text = m_outputText + "_";
-        m_renderableText.LeftAligned(text, color, originX, originY);
+        m_renderableText.LeftAligned(text, color, m_originX, m_originY);
     }
     else
     {
-        m_renderableText.LeftAligned(m_initialText, color, originX, originY);
+        m_renderableText.LeftAligned(m_initialText, color, m_originX, m_originY);
     }
 }
 

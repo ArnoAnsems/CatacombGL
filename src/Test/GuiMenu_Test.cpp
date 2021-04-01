@@ -69,7 +69,7 @@ TEST(GuiMenu_Test, NavigateThroughPages)
 
     // Check that the first page is rendered.
     renderableText.Reset();
-    guiMenu.Draw(rendererStub, 0, 0, true);
+    guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on first page");
 
     // When ENTER is pressed, the menu navigates to the second page.
@@ -78,7 +78,7 @@ TEST(GuiMenu_Test, NavigateThroughPages)
 
     // Check that the second page is rendered.
     renderableText.Reset();
-    guiMenu.Draw(rendererStub, 0, 0, true);
+    guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on second page");
 
     // When ENTER is pressed, the menu navigates to the third page.
@@ -87,7 +87,7 @@ TEST(GuiMenu_Test, NavigateThroughPages)
 
     // Check that the third page is rendered.
     renderableText.Reset();
-    guiMenu.Draw(rendererStub, 0, 0, true);
+    guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on third page");
 
     // When ESC is pressed, the menu navigates back to the second page.
@@ -96,7 +96,7 @@ TEST(GuiMenu_Test, NavigateThroughPages)
 
     // Check that the second page is rendered.
     renderableText.Reset();
-    guiMenu.Draw(rendererStub, 0, 0, true);
+    guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on second page");
 
     // When ESC is pressed, the menu navigates back to the first page.
@@ -105,7 +105,7 @@ TEST(GuiMenu_Test, NavigateThroughPages)
 
     // Check that the first page is rendered.
     renderableText.Reset();
-    guiMenu.Draw(rendererStub, 0, 0, true);
+    guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on first page");
 
     // When ESC is pressed while on the first page, the menu returns the close action.
@@ -114,7 +114,7 @@ TEST(GuiMenu_Test, NavigateThroughPages)
 
     // Check that the first page is still rendered.
     renderableText.Reset();
-    guiMenu.Draw(rendererStub, 0, 0, true);
+    guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on first page");
 
     // Open the second page
@@ -122,7 +122,7 @@ TEST(GuiMenu_Test, NavigateThroughPages)
 
     // Check that the second page is rendered.
     renderableText.Reset();
-    guiMenu.Draw(rendererStub, 0, 0, true);
+    guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on second page");
 }
 

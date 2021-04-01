@@ -68,11 +68,11 @@ const GuiEvent& GuiMenu::ProcessInput()
     return guiEvent;
 }
 
-void GuiMenu::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiMenu::Draw(IRenderer& renderer) const
 {
     if (m_elementOpenIndex < m_elements.size())
     {
-        return m_elements.at(m_elementOpenIndex)->Draw(renderer, originX, originY, selected);
+        m_elements.at(m_elementOpenIndex)->Draw(renderer);
     }
 }
 

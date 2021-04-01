@@ -26,7 +26,7 @@ public:
 
     virtual void AddChild(GuiElementBase* child, const int16_t offsetX = 0, const int16_t offsetY = 0, const int16_t parentId = 0) override;
     virtual const GuiEvent& ProcessInput() override;
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer) const override;
     virtual void SetEnabled(const bool enabled, const int16_t id = 0) override;
 
 private:

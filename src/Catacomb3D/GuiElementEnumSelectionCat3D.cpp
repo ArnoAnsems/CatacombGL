@@ -29,10 +29,10 @@ GuiElementEnumSelectionCat3D::GuiElementEnumSelectionCat3D(
 
 }
 
-void GuiElementEnumSelectionCat3D::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementEnumSelectionCat3D::Draw(IRenderer& renderer) const
 {
-    m_renderableTiles.DrawListBullet(originX, originY, m_enabled, selected && m_flashIcon);
-    m_renderableText.LeftAligned(m_cvarEnum.GetNameInMenu(), selected ? EgaBrightRed : EgaRed, originX + 8, originY + 1);
+    m_renderableTiles.DrawListBullet(m_originX, m_originY, m_enabled, m_selected && m_flashIcon);
+    m_renderableText.LeftAligned(m_cvarEnum.GetNameInMenu(), m_selected ? EgaBrightRed : EgaRed, m_originX + 8, m_originY + 1);
     const std::string& str = (!m_enabled) ? "Not support." : m_cvarEnum.GetValueInMenu();
-    m_renderableText.LeftAligned(str, selected ? EgaLightGray : EgaDarkGray, originX + m_offsetXValue, originY + 1);
+    m_renderableText.LeftAligned(str, m_selected ? EgaLightGray : EgaDarkGray, m_originX + m_offsetXValue, m_originY + 1);
 }

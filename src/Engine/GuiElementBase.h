@@ -50,8 +50,10 @@ public:
 
     virtual void AddChild(GuiElementBase* child, const int16_t offsetX = 0, const int16_t offsetY = 0, const int16_t parentId = 0);
     virtual const GuiEvent& ProcessInput();
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const;
+    virtual void Draw(IRenderer& renderer) const;
     virtual void SetEnabled(const bool enabled, const int16_t id = 0);
+    virtual void SetOrigin(const int16_t originX, const int16_t originY);
+    virtual void SetSelected(const bool selected);
 
 protected:
     void SetEvent(const uint8_t guiAction, const int16_t guiParameter);
@@ -63,4 +65,7 @@ protected:
     GuiEvent m_guiEvent;
     int16_t m_id;
     bool m_enabled;
+    int16_t m_originX;
+    int16_t m_originY;
+    bool m_selected;
 };

@@ -88,7 +88,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameMain->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageMain->AddChild(pageFrameMain);
 
-    GuiElementList* elementListMain = new GuiElementList(playerInput, 8, 112, 62, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListMain = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "NEW GAME", { GuiActionNavigateTo, pageNewGameId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "LOAD GAME", { GuiActionNavigateTo, pageRestoreGameId }, m_renderableText, m_renderableTiles, m_flashIcon));
     GuiElementButton* goToSaveGameButton = new GuiElementButtonCat3D(playerInput, "SAVE GAME", { GuiActionNavigateTo, pageSaveGameId }, m_renderableText, m_renderableTiles, m_flashIcon);
@@ -111,7 +111,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameConfigure->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageConfigure->AddChild(pageFrameConfigure);
 
-    GuiElementList* elementListConfigure = new GuiElementList(playerInput, 8, 88, 62, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListConfigure = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     elementListConfigure->AddChild(new GuiElementButtonCat3D(playerInput, "SOUND", { GuiActionNavigateTo, pageSoundId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListConfigure->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC", { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListConfigure->AddChild(new GuiElementButtonCat3D(playerInput, "VIDEO", { GuiActionNavigateTo, pageVideoId }, m_renderableText, m_renderableTiles, m_flashIcon));
@@ -125,7 +125,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameNewGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageNewGame->AddChild(pageFrameNewGame);
 
-    GuiElementList* elementListNewGame = new GuiElementList(playerInput, 8, 88, 62, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListNewGame = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN EASY GAME", { GuiActionNewGameEasy, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN NORMAL GAME", { GuiActionNewGameNormal, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN HARD GAME", { GuiActionNewGameHard, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
@@ -139,7 +139,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameVideo->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageVideo->AddChild(pageFrameVideo);
 
-    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 76, 62, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
     GuiElementEnumSelectionCat3D* VScreenResolutionSelection = new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 104, m_renderableText, m_renderableTiles, m_flashIcon);
     VScreenResolutionSelection->SetId(selectScreenResolutionId);
@@ -161,7 +161,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPageFrameCat3D* pageFrameControls = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
     pageFrameControls->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageControls->AddChild(pageFrameControls);
-    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 76, 54, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
@@ -187,7 +187,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameLoadGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageLoadGame->AddChild(pageFrameLoadGame);
 
-    GuiElementList* elementListRestoreGame = new GuiElementList(playerInput, 6, 80, 60, 11, nullptr, browseMenuSound);
+    GuiElementList* elementListRestoreGame = new GuiElementList(playerInput, 6, 11, nullptr, browseMenuSound);
     elementListRestoreGame->SetId(restoreGameListId);
     if (savedGames.size() > 0)
     {
@@ -208,7 +208,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameSaveGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageSaveGame->AddChild(pageFrameSaveGame);
 
-    GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 6, 80, 60, 11, nullptr, browseMenuSound);
+    GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 6, 11, nullptr, browseMenuSound);
     GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, GuiEvent({ GuiActionSaveGame, -1 }), m_flashIcon, pageFrameSaveGame);
     elementListSaveGame->SetId(saveGameListId);
     elementListSaveGame->AddChild(saveGameEditText);
@@ -501,7 +501,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     m_renderableText.Reset();
     m_renderableTextDefaultFont.Reset();
     m_renderableTiles.Reset();
-    m_guiMenu.Draw(renderer, 0, 0, false);
+    m_guiMenu.Draw(renderer);
     renderer.RenderTiles(m_renderableTiles);
     renderer.RenderText(m_renderableText);
     renderer.RenderText(m_renderableTextDefaultFont);

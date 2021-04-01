@@ -64,7 +64,7 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
     return GetEvent();
 }
 
-void GuiElementEnumSelectionCat3DRadio::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementEnumSelectionCat3DRadio::Draw(IRenderer& renderer) const
 {
     const uint8_t settingActive = m_cvarEnum.GetItemIndex();
     for (uint8_t element = 0; element < m_enumNames.size(); element++)
@@ -72,7 +72,7 @@ void GuiElementEnumSelectionCat3DRadio::Draw(IRenderer& renderer, const int16_t 
         const bool elementIsSet = (settingActive == element);
         const bool elementIsSelected = (m_elementSelected == element);
         const bool elementIsFlashing = elementIsSelected && m_flashIcon;
-        m_renderableTiles.DrawRadioButton(originX, originY + (element * 8), elementIsSet, elementIsFlashing);
-        m_renderableText.LeftAligned(m_enumNames.at(element), elementIsSelected ? EgaBrightRed : EgaRed, originX + 8, originY + 1 + (element * 8));
+        m_renderableTiles.DrawRadioButton(m_originX, m_originY + (element * 8), elementIsSet, elementIsFlashing);
+        m_renderableText.LeftAligned(m_enumNames.at(element), elementIsSelected ? EgaBrightRed : EgaRed, m_originX + 8, m_originY + 1 + (element * 8));
     }
 }

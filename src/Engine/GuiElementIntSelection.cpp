@@ -49,10 +49,10 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
     return GetEvent();
 }
 
-void GuiElementIntSelection::Draw(IRenderer& /*renderer*/, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementIntSelection::Draw(IRenderer& /*renderer*/) const
 {
-    const egaColor color = GetMenuItemColor(selected, m_enabled);
-    m_renderableText.LeftAligned(m_cvarInt.GetNameInMenu(), color, originX, originY);
+    const egaColor color = GetMenuItemColor(m_selected, m_enabled);
+    m_renderableText.LeftAligned(m_cvarInt.GetNameInMenu(), color, m_originX, m_originY);
     const std::string& valueStr = (!m_enabled) ? "Not supported" : std::to_string(m_cvarInt.GetValue());
-    m_renderableText.LeftAligned(valueStr, color, originX + m_offsetXValue, originY);
+    m_renderableText.LeftAligned(valueStr, color, m_originX + m_offsetXValue, m_originY);
 }

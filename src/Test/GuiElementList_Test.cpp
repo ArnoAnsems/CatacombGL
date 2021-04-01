@@ -42,7 +42,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementList_Test::GetDefaultFont());
 
-    GuiElementList guiElementList(playerInput, 4, 10, 20, 16, nullptr, soundWhenBrowsing);
+    GuiElementList guiElementList(playerInput, 4, 16, nullptr, soundWhenBrowsing);
 
     GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(firstButton);
@@ -56,7 +56,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
 
     // Check that all three buttons are rendered.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
 
     // When ENTER is pressed, the first button is triggered.
@@ -83,7 +83,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
 
     // Check that all three buttons are rendered.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
 
     // Scroll down to go from the third back to the first button.
@@ -120,7 +120,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementList_Test::GetDefaultFont());
 
-    GuiElementList guiElementList(playerInput, 3, 10, 20, 16, nullptr, soundWhenBrowsing);
+    GuiElementList guiElementList(playerInput, 3, 16, nullptr, soundWhenBrowsing);
 
     GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(firstButton);
@@ -135,7 +135,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     EXPECT_EQ(guiElementList.ProcessInput().guiAction, GuiActionNone);
 
     // Check that the first three buttons are rendered.
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
 
     // When ENTER is pressed, the first button is triggered.
@@ -148,7 +148,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Check that the last three buttons are rendered.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second button\nThird button\nFourth button");
 
     // When ENTER is pressed, the last button is triggered.
@@ -161,7 +161,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Check that the first three buttons are rendered again.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
 
     // Scroll down to go from the first to the second button.
@@ -184,7 +184,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Check that still only the first three buttons are rendered.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
 
     // Scroll down to go from the third to the fourth button.
@@ -194,7 +194,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Check that the last three buttons are rendered.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second button\nThird button\nFourth button");
 
     // Scroll up to go from the fourth to the third button.
@@ -209,7 +209,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Check that still the last three buttons are rendered.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second button\nThird button\nFourth button");
 
     // Scroll up to go from the second to the first button.
@@ -219,7 +219,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Check that the first three buttons are rendered again.
     renderableText.Reset();
-    guiElementList.Draw(rendererStub, 0, 0, true);
+    guiElementList.Draw(rendererStub);
     EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
 }
 

@@ -48,7 +48,7 @@ const GuiEvent& GuiElementHighScores::ProcessInput()
     return GetEvent();
 }
 
-void GuiElementHighScores::Draw(IRenderer& renderer, const int16_t, const int16_t, const bool) const
+void GuiElementHighScores::Draw(IRenderer& renderer) const
 {
     m_highScores.Draw(renderer, m_timestamp);
 }

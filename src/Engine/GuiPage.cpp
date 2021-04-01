@@ -50,11 +50,11 @@ const GuiEvent& GuiPage::ProcessInput()
     return GetEvent();
 }
 
-void GuiPage::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiPage::Draw(IRenderer& renderer) const
 {
     for (const PageElement& pageElement : m_elements)
     {
-        pageElement.element->Draw(renderer, originX + pageElement.offsetX, originY + pageElement.offsetY, selected);
+        pageElement.element->Draw(renderer);
     }
 }
 
@@ -65,6 +65,7 @@ void GuiPage::AddChild(GuiElementBase* child, const int16_t offsetX, const int16
         // Add child to this page
         PageElement pageElement{ child, offsetX, offsetY };
         m_elements.push_back(pageElement);
+        child->SetOrigin(offsetX, offsetY);
     }
     else
     {

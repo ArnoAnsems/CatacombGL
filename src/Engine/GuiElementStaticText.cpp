@@ -39,7 +39,7 @@ const GuiEvent& GuiElementStaticText::ProcessInput()
     return GetEvent();
 }
 
-void GuiElementStaticText::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementStaticText::Draw(IRenderer& renderer) const
 {
-    m_renderableText.Centered(m_text, m_color, originX, originY);
+    m_renderableText.Centered(m_text, m_color, m_originX, m_originY);
 }

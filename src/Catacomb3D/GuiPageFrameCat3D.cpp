@@ -39,7 +39,7 @@ GuiPageFrameCat3D::GuiPageFrameCat3D(
 
 }
 
-void GuiPageFrameCat3D::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiPageFrameCat3D::Draw(IRenderer& renderer) const
 {
     renderer.Render2DBar(77, 55, 154, 1, EgaBrightRed);
     renderer.Render2DBar(77, 133, 154, 1, EgaBrightRed);

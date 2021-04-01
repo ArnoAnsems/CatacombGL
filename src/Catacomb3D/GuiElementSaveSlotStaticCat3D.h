@@ -26,7 +26,7 @@ public:
         RenderableText& renderableText,
         bool& flashIcon);
 
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer) const override;
 
 private:
     bool& m_flashIcon;

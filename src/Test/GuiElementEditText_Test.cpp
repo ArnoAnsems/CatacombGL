@@ -40,7 +40,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
 
     // Initially no key is pressed
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check initial state
     EXPECT_EQ(outputText, "");
@@ -50,7 +50,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that we're ready to receive key presses
     EXPECT_EQ(outputText, "");
@@ -60,7 +60,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_c);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that "C" is displayed
     EXPECT_EQ(outputText, "C");
@@ -70,7 +70,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_a);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // "Check that "CA" is displayed
     EXPECT_EQ(outputText, "CA");
@@ -80,7 +80,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_t);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // "Check that "CAT" is displayed
     EXPECT_EQ(outputText, "CAT");
@@ -90,7 +90,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
     const GuiEvent& finalEvent = guiElementEditText.ProcessInput();
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // "Check that "CAT" is still in the outputText
     EXPECT_EQ(outputText, "CAT");
@@ -116,7 +116,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that we're ready to receive key presses
     EXPECT_EQ(outputText, "");
@@ -126,7 +126,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_3);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that "3" is displayed
     EXPECT_EQ(outputText, "3");
@@ -136,7 +136,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_d);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that "3D" is displayed
     EXPECT_EQ(outputText, "3D");
@@ -146,7 +146,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_BACKSPACE);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that "3" is displayed
     EXPECT_EQ(outputText, "3");
@@ -156,7 +156,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_BACKSPACE);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that we're back to an empty output text, but still ready to receive key presses
     EXPECT_EQ(outputText, "");
@@ -166,7 +166,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_BACKSPACE);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that this has no effect, output text was already empty
     EXPECT_EQ(outputText, "");
@@ -186,7 +186,7 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that we're ready to receive key presses
     EXPECT_EQ(outputText, "");
@@ -196,7 +196,7 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_z);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that "Z" is displayed
     EXPECT_EQ(outputText, "Z");
@@ -206,7 +206,7 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_ESCAPE);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that we have returned to the initial state
     EXPECT_EQ(outputText, "");
@@ -226,7 +226,7 @@ TEST(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_UP);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that we are still in the initial state
     EXPECT_EQ(outputText, "");
@@ -236,13 +236,13 @@ TEST(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RETURN);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Press RIGHT
     renderableText.Reset();
     GuiElementEditText_Test::PressKey(playerInput, SDLK_RIGHT);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
 
     // Check that we're still ready to receive key presses
     EXPECT_EQ(outputText, "");
@@ -274,7 +274,7 @@ TEST(GuiElementEditText_Test, CheckMaxTextLength)
 
     // Check that output is at the maximum text length
     renderableText.Reset();
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
     EXPECT_EQ(outputText, "AAAAA");
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "AAAAA_");
 
@@ -284,7 +284,7 @@ TEST(GuiElementEditText_Test, CheckMaxTextLength)
 
     // Check that output did not change
     renderableText.Reset();
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
     EXPECT_EQ(outputText, "AAAAA");
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "AAAAA_");
 }
@@ -317,7 +317,7 @@ TEST(GuiElementEditText_Test, CheckDisabled)
 
     // Check that output is still at default
     renderableText.Reset();
-    guiElementEditText.Draw(rendererStub, 0, 0, true);
+    guiElementEditText.Draw(rendererStub);
     EXPECT_EQ(outputText, "");
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "Type text ...");
 }

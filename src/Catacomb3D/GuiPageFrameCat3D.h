@@ -39,7 +39,7 @@ public:
         const MenuHeader menuHeader,
         RenderableText& renderableText);
 
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer) const override;
 
     void SetInstructions(const std::string& firstLine, const std::string& secondLine, const std::string& thirdLine);
 

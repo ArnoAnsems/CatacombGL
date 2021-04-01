@@ -29,8 +29,8 @@ GuiElementButtonCat3D::GuiElementButtonCat3D(
 
 }
 
-void GuiElementButtonCat3D::Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const
+void GuiElementButtonCat3D::Draw(IRenderer& renderer) const
 {
-    m_renderableTiles.DrawListBullet(originX, originY, m_enabled, selected && m_flashIcon);
-    m_renderableText.LeftAligned(m_buttonLabel, selected ? EgaBrightRed : EgaRed, originX + 8, originY + 1);
+    m_renderableTiles.DrawListBullet(m_originX, m_originY, m_enabled, m_selected && m_flashIcon);
+    m_renderableText.LeftAligned(m_buttonLabel, m_selected ? EgaBrightRed : EgaRed, m_originX + 8, m_originY + 1);
 }

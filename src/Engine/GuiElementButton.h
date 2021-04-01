@@ -27,7 +27,7 @@ public:
     ~GuiElementButton() override;
 
     virtual const GuiEvent& ProcessInput() override;
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer) const override;
 
 protected:
     const std::string m_buttonLabel;

@@ -28,7 +28,7 @@ public:
         const std::vector<std::string>& enumNames);
 
     virtual const GuiEvent& ProcessInput() override;
-    virtual void Draw(IRenderer& renderer, const int16_t originX, const int16_t originY, const bool selected) const override;
+    virtual void Draw(IRenderer& renderer) const override;
 
 private:
     const std::vector<std::string>& m_enumNames;

@@ -103,7 +103,7 @@ void SkullNBones::DrawScore(RenderableText& renderableText) const
     renderableText.LeftAligned(computerScoreStr, EgaBrightRed, 218, 52);
 }
 
-void SkullNBones::Draw(IRenderer& renderer, const int16_t, const int16_t, const bool) const
+void SkullNBones::Draw(IRenderer& renderer) const
 {
     renderer.Render2DBar(77, 60, 154, 1, EgaBrightRed);
     renderer.Render2DBar(77, 143, 154, 1, EgaBrightRed);
