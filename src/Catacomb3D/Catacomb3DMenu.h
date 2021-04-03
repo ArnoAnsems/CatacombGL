@@ -30,6 +30,7 @@
 #include "..\Engine\HighScores.h"
 #include "SkullNBones.h"
 #include "..\Engine\GuiMenu.h"
+#include "GuiElementButtonCat3D.h"
 
 class Catacomb3DMenu: public IMenu
 {
@@ -79,4 +80,5 @@ private:
     RenderableTiles m_renderableTiles;
     bool m_flashIcon;
     uint32_t m_timeStamp;
+    GuiElementButtonCat3D* m_returnToGameButton;
 };

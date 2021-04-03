@@ -79,7 +79,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
     m_renderableTiles(*egaGraph->GetTilesSize8()),
     m_flashIcon(false),
-    m_timeStamp(0)
+    m_timeStamp(0),
+    m_returnToGameButton(nullptr)
 {
     // Main menu
     GuiPage* guiPageMain = new GuiPage(playerInput);
@@ -95,8 +96,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     goToSaveGameButton->SetId(goToSaveGameId);
     elementListMain->AddChild(goToSaveGameButton);
     elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "CONFIGURE", { GuiActionNavigateTo, pageConfigureId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    // TODO: Alternate between "RETURN TO GAME" and "RETURN TO DEMO"
-    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "RETURN TO GAME", { GuiActionClose, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_returnToGameButton = new GuiElementButtonCat3D(playerInput, "RETURN TO DEMO", { GuiActionClose, 0 }, m_renderableText, m_renderableTiles, m_flashIcon);
+    elementListMain->AddChild(m_returnToGameButton);
     GuiElementButton* endGameButton = new GuiElementButtonCat3D(playerInput, "END GAME", { GuiActionEndGame, pageNewGameId }, m_renderableText, m_renderableTiles, m_flashIcon);
     endGameButton->SetId(endGameId);
     elementListMain->AddChild(endGameButton);
@@ -535,6 +536,7 @@ void Catacomb3DMenu::SetSaveGameEnabled(const bool enabled)
     m_saveGameEnabled = enabled;
     m_guiMenu.SetEnabled(enabled, goToSaveGameId);
     m_guiMenu.SetEnabled(enabled, endGameId);
+    m_returnToGameButton->SetLabel(m_saveGameEnabled ? "RETURN TO GAME" : "RETURN TO DEMO");
 }
 
 const std::string& Catacomb3DMenu::GetNewSaveGameName() const

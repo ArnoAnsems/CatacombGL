@@ -42,3 +42,8 @@ void GuiElementButton::Draw(IRenderer& renderer) const
 {
     m_renderableText.LeftAligned(m_buttonLabel, GetMenuItemColor(m_selected, m_enabled), m_originX, m_originY);
 }
+
+void GuiElementButton::SetLabel(const std::string& buttonLabel)
+{
+    m_buttonLabel = buttonLabel;
+}

@@ -29,8 +29,10 @@ public:
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
 
+    void SetLabel(const std::string& buttonLabel);
+
 protected:
-    const std::string m_buttonLabel;
+    std::string m_buttonLabel;
     const GuiEvent m_guiEventWhenActivated;
     RenderableText& m_renderableText;
 };
