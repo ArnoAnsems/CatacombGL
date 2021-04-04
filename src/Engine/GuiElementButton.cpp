@@ -47,3 +47,8 @@ void GuiElementButton::SetLabel(const std::string& buttonLabel)
 {
     m_buttonLabel = buttonLabel;
 }
+
+const std::string& GuiElementButton::GetLabel() const
+{
+    return m_buttonLabel;
+}

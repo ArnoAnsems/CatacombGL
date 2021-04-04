@@ -48,6 +48,9 @@ const GuiEvent& GuiElementList::ProcessInput()
 
     if (guiEvent.guiAction == GuiActionNone)
     {
+        // The selected element didn't perform any action with the given input.
+        // Check if the list itself can do something with the input.
+
         if (m_playerInput.IsKeyJustPressed(SDLK_UP))
         {
             if (m_elementSelected == 0)
@@ -83,6 +86,42 @@ const GuiEvent& GuiElementList::ProcessInput()
             }
 
             makeBrowseSound = true;
+        }
+        else
+        {
+            const uint16_t numberOfElements = (uint16_t)m_elements.size();
+            if (numberOfElements > 1)
+            {
+                // Check keys a through z to select an element based on the first letter of the label
+                bool elementFound = false;
+                uint16_t elementToCheck = (m_elementSelected + 1) % numberOfElements;
+                while (elementToCheck != m_elementSelected && !elementFound)
+                {
+                    const std::string& label = m_elements.at(elementToCheck)->GetLabel();
+                    if (!label.empty())
+                    {
+                        const char firstLetter = label.at(0);
+                        const char firstLetterLowerCase = (firstLetter >= 'A' && firstLetter <= 'Z') ? firstLetter - 'A' + 'a' : firstLetter;
+                        const SDL_Keycode keyToCheck = firstLetterLowerCase - 'a' + SDLK_a;
+
+                        if (m_playerInput.IsKeyJustPressed(keyToCheck))
+                        {
+                            elementFound = true;
+                        }
+                    }
+
+                    if (!elementFound)
+                    {
+                        elementToCheck = (elementToCheck + 1) % numberOfElements;
+                    }
+                }
+
+                if (elementFound)
+                {
+                    m_elementSelected = elementToCheck;
+                    m_firstElementDrawn = (m_elementSelected >= m_maxElementsDrawn) ? m_elementSelected - m_maxElementsDrawn + 1 : 0;
+                }
+            }
         }
     }
 

@@ -30,6 +30,7 @@ public:
     virtual void Draw(IRenderer& renderer) const override;
 
     void SetLabel(const std::string& buttonLabel);
+    virtual const std::string& GetLabel() const override;
 
 protected:
     std::string m_buttonLabel;

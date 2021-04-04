@@ -56,3 +56,8 @@ void GuiElementIntSelection::Draw(IRenderer& /*renderer*/) const
     const std::string& valueStr = (!m_enabled) ? "Not supported" : std::to_string(m_cvarInt.GetValue());
     m_renderableText.LeftAligned(valueStr, color, m_originX + m_offsetXValue, m_originY);
 }
+
+const std::string& GuiElementIntSelection::GetLabel() const
+{
+    return m_cvarInt.GetNameInMenu();
+}

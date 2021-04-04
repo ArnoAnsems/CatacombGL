@@ -31,6 +31,7 @@ public:
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
+    virtual const std::string& GetLabel() const override;
 
 protected:
     ControlsMap& m_controlsMap;

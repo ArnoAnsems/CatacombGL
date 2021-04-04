@@ -54,6 +54,7 @@ public:
     virtual void SetEnabled(const bool enabled, const int16_t id = 0);
     virtual void SetOrigin(const int16_t originX, const int16_t originY);
     virtual void SetSelected(const bool selected);
+    virtual const std::string& GetLabel() const;
 
 protected:
     void SetEvent(const uint8_t guiAction, const int16_t guiParameter);
@@ -68,4 +69,7 @@ protected:
     int16_t m_originX;
     int16_t m_originY;
     bool m_selected;
+
+private:
+    const std::string m_emptyLabel = "";
 };

@@ -94,3 +94,8 @@ void GuiElementBindKey::Draw(IRenderer& renderer) const
         m_renderableText.LeftAligned(m_controlsMap.GetKeyStringFromAction(m_controlAction), color, m_originX + m_offsetXValue, m_originY);
     }
 }
+
+const std::string& GuiElementBindKey::GetLabel() const
+{
+    return m_controlsMap.GetActionLabels().at(m_controlAction);
+}

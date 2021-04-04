@@ -50,3 +50,8 @@ void GuiElementEnumSelection::Draw(IRenderer& /*renderer*/) const
     const std::string& valueStr = (!m_enabled) ? "Not supported" : m_cvarEnum.GetValueInMenu();
     m_renderableText.LeftAligned(valueStr, color, m_originX + m_offsetXValue, m_originY);
 }
+
+const std::string& GuiElementEnumSelection::GetLabel() const
+{
+    return m_cvarEnum.GetNameInMenu();
+}

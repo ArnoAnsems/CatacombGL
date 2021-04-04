@@ -90,3 +90,8 @@ egaColor GuiElementBase::GetMenuItemColor(const bool selected, const bool suppor
 {
     return !supported ? EgaDarkGray : selected ? EgaBrightCyan : EgaBrightWhite;
 }
+
+const std::string& GuiElementBase::GetLabel() const
+{
+    return m_emptyLabel;
+}
