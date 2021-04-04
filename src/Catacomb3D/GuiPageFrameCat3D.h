@@ -24,11 +24,12 @@ public:
     {
         MenuHeaderMain,
         MenuHeaderNewGame,
-        MenuHeaderConfig,
+        MenuHeaderOptions,
         MenuHeaderVideo,
         MenuHeaderControls,
         MenuHeaderSound,
         MenuHeaderMusic,
+        MenuHeaderGameplay,
         MenuHeaderLoadGame,
         MenuHeaderSaveGame
     };
@@ -48,12 +49,13 @@ private:
     RenderableText& m_renderableText;
     const Picture* m_pictureMainMenu;
     const Picture* m_pictureNewGame;
-    const Picture* m_pictureConfig;
+    const Picture* m_pictureOptions;
     const Picture* m_pictureControls;
     const Picture* m_pictureSound;
     const Picture* m_pictureMusic;
     const Picture* m_pictureLoadGame;
     const Picture* m_pictureSaveGame;
+    const Picture* m_pictureKeyboard;
     std::string m_instructionsFirstLine;
     std::string m_instructionsSecondLine;
     std::string m_instructionsThirdLine;

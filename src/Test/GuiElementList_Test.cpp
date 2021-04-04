@@ -116,7 +116,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     PlayerInput playerInput;
     std::string outputText;
-    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementList_Test::GetDefaultFont());
 

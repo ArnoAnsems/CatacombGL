@@ -26,12 +26,13 @@ GuiPageFrameCat3D::GuiPageFrameCat3D(
     m_renderableText(renderableText),
     m_pictureMainMenu(egaGraph.GetPicture(CP_MAINMENUPIC)),
     m_pictureNewGame(egaGraph.GetPicture(CP_NEWGAMEMENUPIC)),
-    m_pictureConfig(egaGraph.GetPicture(CP_CONFIGMENUPIC)),
+    m_pictureOptions(egaGraph.GetPicture(CP_OPTIONSMENUPIC)),
     m_pictureControls(egaGraph.GetPicture(CP_KEYBUTTONPIC)),
     m_pictureSound(egaGraph.GetPicture(CP_SOUNDMENUPIC)),
     m_pictureMusic(egaGraph.GetPicture(CP_MUSICMENUPIC)),
     m_pictureLoadGame(egaGraph.GetPicture(CP_LOADMENUPIC)),
     m_pictureSaveGame(egaGraph.GetPicture(CP_SAVEMENUPIC)),
+    m_pictureKeyboard(egaGraph.GetPicture(CP_KEYBOARDMENUPIC)),
     m_instructionsFirstLine(""),
     m_instructionsSecondLine(""),
     m_instructionsThirdLine("")
@@ -51,9 +52,9 @@ void GuiPageFrameCat3D::Draw(IRenderer& renderer) const
     {
         renderer.Render2DPicture(m_pictureNewGame, 80, 48);
     }
-    else if (m_menuHeader == MenuHeaderConfig)
+    else if (m_menuHeader == MenuHeaderOptions)
     {
-        renderer.Render2DPicture(m_pictureConfig, 80, 48);
+        renderer.Render2DPicture(m_pictureOptions, 80, 48);
     }
     else if (m_menuHeader == MenuHeaderVideo)
     {
@@ -85,6 +86,17 @@ void GuiPageFrameCat3D::Draw(IRenderer& renderer) const
     else if (m_menuHeader == MenuHeaderSaveGame)
     {
         renderer.Render2DPicture(m_pictureSaveGame, 80, 48);
+    }
+    else if (m_menuHeader == MenuHeaderGameplay)
+    {
+        // The header for the Gameplay Menu is composed out of letters from other menu headers, as it did not exist
+        // in the original game.
+        renderer.Render2DPictureSegment(m_pictureNewGame, 80, 48, 26, 0, 29, 12); // GAME
+        renderer.Render2DPictureSegment(m_pictureOptions, 109, 48, 9, 0, 8, 12); // P
+        renderer.Render2DPictureSegment(m_pictureLoadGame, 117, 48, 3, 0, 7, 12); // L
+        renderer.Render2DPictureSegment(m_pictureLoadGame, 124, 48, 17, 0, 7, 12); // A
+        renderer.Render2DPictureSegment(m_pictureKeyboard, 131, 48, 16, 0, 7, 12); // Y
+        renderer.Render2DPictureSegment(m_pictureMainMenu, 138, 48, 30, 0, 34, 12); // MENU
     }
 
     m_renderableText.LeftAligned(m_instructionsFirstLine, EgaRed, 78, 135);

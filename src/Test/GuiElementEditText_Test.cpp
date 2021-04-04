@@ -33,7 +33,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
 {
     PlayerInput playerInput;
     std::string outputText;
-    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
     GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
@@ -107,7 +107,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
 {
     PlayerInput playerInput;
     std::string outputText;
-    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
     GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
@@ -177,7 +177,7 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
 {
     PlayerInput playerInput;
     std::string outputText;
-    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
     GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
@@ -217,7 +217,7 @@ TEST(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
 {
     PlayerInput playerInput;
     std::string outputText;
-    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
     GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
@@ -254,7 +254,7 @@ TEST(GuiElementEditText_Test, CheckMaxTextLength)
     const uint16_t maxTextLength = 5;
     PlayerInput playerInput;
     std::string outputText = "";
-    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
     GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
@@ -294,7 +294,7 @@ TEST(GuiElementEditText_Test, CheckDisabled)
     const uint16_t maxTextLength = 5;
     PlayerInput playerInput;
     std::string outputText = "";
-    GuiEvent completeEvent{ GuiActionRestoreGame, 2 };
+    GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
     GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
