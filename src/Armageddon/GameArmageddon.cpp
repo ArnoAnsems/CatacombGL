@@ -531,7 +531,7 @@ IIntroView* GameArmageddon::GetIntroView()
 
 IMenu* GameArmageddon::CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames)
 {
-    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames);
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames, m_renderer, GetCatalogInfo(), m_gamePath);
 }
 
 
@@ -870,4 +870,36 @@ static const ManaBar::ManaBarConfig manaBarConfig = { original3DViewArea.width /
 const ManaBar::ManaBarConfig& GameArmageddon::GetManaBarConfig()
 {
     return manaBarConfig;
+}
+
+const CatalogInfo catalogInfo =
+{
+    "Hint Book"
+,
+{
+    "HINT01.HNT",
+    "HINT02.HNT",
+    "HINT03.HNT",
+    "HINT04.HNT",
+    "HINT05.HNT",
+    "HINT06.HNT",
+    "HINT07.HNT",
+    "HINT08.HNT",
+    "HINT09.HNT",
+    "HINT10.HNT",
+    "HINT11.HNT",
+    "HINT12.HNT",
+    "HINT13.HNT",
+    "HINT14.HNT",
+    "HINT15.HNT",
+    "HINT16.HNT",
+    "HINT17.HNT",
+    "HINT18.HNT",
+    "HINT19.HNT",
+    "HINT20.HNT"
+} };
+
+const CatalogInfo& GameArmageddon::GetCatalogInfo() const
+{
+    return catalogInfo;
 }

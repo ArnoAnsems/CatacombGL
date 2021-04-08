@@ -24,7 +24,7 @@
 #include "stdio.h"
 #include "IRenderer.h"
 
-Shape::Shape(IRenderer& renderer) :
+Shape::Shape(const IRenderer& renderer) :
     m_renderer (renderer)
 {
     m_offsetX = 0;

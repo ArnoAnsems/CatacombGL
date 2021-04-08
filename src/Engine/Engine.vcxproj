@@ -164,6 +164,7 @@
     <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="GameSelection.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GuiCatalog.cpp" />
     <ClCompile Include="GuiElementBase.cpp" />
     <ClCompile Include="GuiElementBindKey.cpp" />
     <ClCompile Include="GuiElementBoolSelection.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="FramesCounter.h" />
     <ClInclude Include="GameSelection.h" />
+    <ClInclude Include="GuiCatalog.h" />
     <ClInclude Include="GuiElementBase.h" />
     <ClInclude Include="GuiElementBindKey.h" />
     <ClInclude Include="GuiElementButton.h" />

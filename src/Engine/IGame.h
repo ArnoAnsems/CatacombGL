@@ -43,6 +43,12 @@ enum DifficultyLevel
     Hard
 };
 
+struct CatalogInfo
+{
+    const std::string label;
+    const std::vector<std::string> filenames;
+};
+
 class IGame
 {
 public:
@@ -99,6 +105,7 @@ public:
     virtual void PlaySoundPortal() = 0;
     virtual const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() = 0;
     virtual const ManaBar::ManaBarConfig& GetManaBarConfig() = 0;
+    virtual const CatalogInfo& GetCatalogInfo() const = 0;
 
 
 protected:

@@ -84,6 +84,7 @@ public:
     void PlaySoundPortal() override;
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
     const ManaBar::ManaBarConfig& GetManaBarConfig() override;
+    const CatalogInfo& GetCatalogInfo() const override;
 
 private:
     void DrawHealth(RenderableTiles& renderableTiles, const int16_t health);

@@ -613,7 +613,7 @@ IIntroView* GameAbyss::GetIntroView()
 
 IMenu* GameAbyss::CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames)
 {
-    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames);
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames, m_renderer, GetCatalogInfo(), m_gamePath);
 }
 
 void GameAbyss::DrawHelpPage()
@@ -899,4 +899,66 @@ static const ManaBar::ManaBarConfig manaBarConfig = { original3DViewArea.width /
 const ManaBar::ManaBarConfig& GameAbyss::GetManaBarConfig()
 {
     return manaBarConfig;
+}
+
+const CatalogInfo catalogInfoV113 =
+{
+    "Electronic Catalog"
+,
+{
+    "OPEN.CAT",
+    "TRILOGY.CAT",
+    "QUEST.CAT",
+    "INVITED.CAT",
+    "GROUPIC.CAT",
+    "LEGEND.CAT", // It's easy to explore the dark regions of THE CATACOMBS
+    "FOLLOW.CAT",
+    "CEMETRY.CAT",
+    "ORCMINE.CAT",
+    "GRATE.CAT",
+    "INFERNO.CAT",
+    "COOKIE.CAT",// Halls of the wretched pox
+    "DRAGONS.CAT",
+    "FLAME.CAT",
+    "CRYSTAL.CAT",
+    "ALTAR.CAT",
+    "REDHALL.CAT", // Sanctuary of the damned
+    "EGYPT.CAT",
+    "APC.CAT", // Citadel of the automations
+    "VAULT.CAT", // Are you up to it?
+    "LOUNGE.CAT", // Play ALL 3 of the Catacomb 3D Adventures
+    "HOMEBBS.CAT",
+    "VICTORY.CAT"
+}};
+
+const CatalogInfo catalogInfoV124 =
+{
+    "Hint Book"
+,
+{
+    "HINTGO1.HNT",
+    "HINTGO2.HNT",
+    "CEMETRY.HNT",
+    "GARDEN.HNT",
+    "MAUSGND.HNT",
+    "MAUSOL.HNT",
+    "CRYPT.HNT",
+    "DEN.HNT",
+    "SUBVALT.HNT",
+    "AQUDUCT.HNT",
+    "ORCMINE.HNT",
+    "TROLLS.HNT",
+    "INFERNO.HNT",
+    "TITANS.HNT",
+    "COVEN.HNT",
+    "SANCTUM.HNT",
+    "HAUNT.HNT",
+    "PASSAGE.HNT",
+    "VICTORY.HNT",
+    "HINTGO3.HNT"
+} };
+
+const CatalogInfo& GameAbyss::GetCatalogInfo() const
+{
+    return (m_gameId == 1) ? catalogInfoV113 : catalogInfoV124;
 }

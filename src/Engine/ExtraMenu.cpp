@@ -24,6 +24,7 @@
 #include "GuiElementBindKey.h"
 #include "GuiElementButton.h"
 #include "GuiElementEditText.h"
+#include "GuiCatalog.h"
 
 const uint16_t browseMenuSound = 0;
 
@@ -37,9 +38,10 @@ const int16_t pageSoundOptionsId = 7;
 const int16_t pageGameplayOptionsId = 8;
 const int16_t pageLoadGameId = 9;
 const int16_t pageSaveGameId = 10;
-const int16_t goToSaveGameId = 11;
-const int16_t selectVSyncId = 12;
-const int16_t selectScreenResolutionId = 13;
+const int16_t pageCatalogId = 11;
+const int16_t goToSaveGameId = 12;
+const int16_t selectVSyncId = 13;
+const int16_t selectScreenResolutionId = 14;
 
 ExtraMenu::ExtraMenu(
     ConfigurationSettings& configurationSettings,
@@ -47,7 +49,10 @@ ExtraMenu::ExtraMenu(
     PlayerInput& playerInput,
     EgaGraph* const egaGraph,
     const uint16_t menuCursorPic,
-    std::vector<std::string>& savedGames) :
+    std::vector<std::string>& savedGames,
+    const IRenderer& renderer,
+    const CatalogInfo& catalogInfo,
+    const std::string& gameFolder) :
     m_menuActive(false),
     m_configurationSettings(configurationSettings),
     m_audioPlayer(audioPlayer),
@@ -69,6 +74,7 @@ ExtraMenu::ExtraMenu(
     goToSaveGameButton->SetId(goToSaveGameId);
     elementListMain->AddChild(goToSaveGameButton);
     elementListMain->AddChild(new GuiElementButton(playerInput, "Options", { GuiActionNavigateTo, pageOptionsId }, m_renderableText));
+    elementListMain->AddChild(new GuiElementButton(playerInput, catalogInfo.label, { GuiActionNavigateTo, pageCatalogId }, m_renderableText));
     elementListMain->AddChild(new GuiElementButton(playerInput, "Quit", { GuiActionQuit, 0 }, m_renderableText));
     pageMain->AddChild(elementListMain, 140, 30);
 
@@ -203,6 +209,9 @@ ExtraMenu::ExtraMenu(
     GuiElementStaticText* pageLabelSaveGame = new GuiElementStaticText(playerInput, "Save Game", EgaBrightYellow, m_renderableText);
     pageSaveGame->AddChild(pageLabelSaveGame, 160, 12);
 
+    GuiCatalog* guiCatalog = new GuiCatalog(playerInput, renderer, catalogInfo.filenames, gameFolder);
+    guiCatalog->SetId(pageCatalogId);
+
     m_guiMenu.AddChild(pageMain);
     m_guiMenu.AddChild(pageOptions);
     m_guiMenu.AddChild(pageVideo);
@@ -211,6 +220,7 @@ ExtraMenu::ExtraMenu(
     m_guiMenu.AddChild(pageSound);
     m_guiMenu.AddChild(pageLoadGame);
     m_guiMenu.AddChild(pageSaveGame);
+    m_guiMenu.AddChild(guiCatalog);
 }
 
 bool ExtraMenu::IsActive() const

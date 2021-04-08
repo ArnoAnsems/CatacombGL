@@ -30,6 +30,7 @@
 #include "IMenu.h"
 #include "GuiPage.h"
 #include "GuiMenu.h"
+#include "IGame.h"
 
 class ExtraMenu: public IMenu
 {
@@ -40,7 +41,10 @@ public:
         PlayerInput& playerInput,
         EgaGraph* const egaGraph,
         const uint16_t menuCursorPic,
-        std::vector<std::string>& savedGames);
+        std::vector<std::string>& savedGames,
+        const IRenderer& renderer,
+        const CatalogInfo& catalogInfo,
+        const std::string& gameFolder);
     bool IsActive() const override;
     void SetActive(bool active) override;
     MenuCommand ProcessInput(const PlayerInput& playerInput) override;

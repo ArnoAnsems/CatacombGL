@@ -27,7 +27,7 @@
 class Shape
 {
 public:
-    Shape(IRenderer& renderer);
+    Shape(const IRenderer& renderer);
     ~Shape();
     bool LoadFromFile(const char* filename);
 
@@ -47,5 +47,5 @@ private:
     uint16_t m_offsetX;
     uint16_t m_offsetY;
     Picture* m_picture;
-    IRenderer& m_renderer;
+    const IRenderer& m_renderer;
 };

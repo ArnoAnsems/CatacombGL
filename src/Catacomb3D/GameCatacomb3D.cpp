@@ -684,3 +684,10 @@ const ManaBar::ManaBarConfig& GameCatacomb3D::GetManaBarConfig()
 {
     return manaBarConfig;
 }
+
+const CatalogInfo catalogInfo = { "", {"NotAvailable" } };
+
+const CatalogInfo& GameCatacomb3D::GetCatalogInfo() const
+{
+    return catalogInfo;
+}
