@@ -356,6 +356,12 @@ void ExtraMenu::OpenSoundMenu()
     m_guiMenu.Open(pageSoundOptionsId);
 }
 
+void ExtraMenu::OpenDemo()
+{
+    m_menuActive = true;
+    m_guiMenu.Open(pageCatalogId);
+}
+
 bool ExtraMenu::IsNewSaveGameNameAlreadyInUse() const
 {
     bool isInUse = false;

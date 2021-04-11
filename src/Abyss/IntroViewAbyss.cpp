@@ -69,14 +69,6 @@ IntroViewAbyss::IntroViewAbyss(IRenderer& renderer, const std::string& path) :
     // SHP09 = Warriors blood!
     // SHP10 = Back for more!
     // SHP11 = Trilogy
-
-    m_catalog = new Shape(renderer);
-    const std::string catalogFile = path + "OPEN.CAT";
-    if (!m_catalog->LoadFromFile(catalogFile.c_str()))
-    {
-        delete m_catalog;
-        m_catalog = nullptr;
-    }
 }
 
 IntroViewAbyss::~IntroViewAbyss()
@@ -113,9 +105,6 @@ IntroViewAbyss::~IntroViewAbyss()
 
     delete m_shapeStandBeforeGate;
     m_shapeStandBeforeGate = nullptr;
-
-    delete m_catalog;
-    m_catalog = nullptr;
 }
 
 void IntroViewAbyss::DrawIntroduction(const uint32_t timeStamp)
@@ -181,17 +170,4 @@ void IntroViewAbyss::DrawWarriorSelected()
 void IntroViewAbyss::DrawStandBeforeGate()
 {
     m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
-}
-
-void IntroViewAbyss::DrawCatalog()
-{
-    if (m_catalog != nullptr)
-    {
-        m_renderer.Render2DPicture(m_catalog->GetPicture(), 0, 0);
-    }
-}
-
-bool IntroViewAbyss::IsCatalogAvailable()
-{
-    return true;
 }

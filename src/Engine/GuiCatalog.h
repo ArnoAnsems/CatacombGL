@@ -34,6 +34,7 @@ private:
     const std::vector<std::string>& m_catalogFilenames;
     const GuiEvent m_closeEvent = { GuiActionClose, 0 };
     uint16_t m_currentPage;
+    uint16_t m_mostRecentPageWithFullscreenImage;
     const IRenderer& m_renderer;
     const std::string m_gameFolder;
 };

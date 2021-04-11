@@ -75,7 +75,6 @@ private:
         VerifyGateExit,
         ExitGame,
         Help,
-        Catalog,
         AutoMapDialog
     };
 

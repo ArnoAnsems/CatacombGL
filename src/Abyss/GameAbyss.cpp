@@ -903,7 +903,7 @@ const ManaBar::ManaBarConfig& GameAbyss::GetManaBarConfig()
 
 const CatalogInfo catalogInfoV113 =
 {
-    "Electronic Catalog"
+    "Demo"
 ,
 {
     "OPEN.CAT",

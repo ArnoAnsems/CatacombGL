@@ -34,8 +34,6 @@ public:
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();
-    void DrawCatalog();
-    bool IsCatalogAvailable();
 
 private:
     Shape* m_shapeEntering;

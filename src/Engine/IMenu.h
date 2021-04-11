@@ -53,5 +53,6 @@ public:
     virtual void OpenRestoreGameMenu() = 0;
     virtual void OpenSaveGameMenu() = 0;
     virtual void OpenSoundMenu() = 0;
+    virtual void OpenDemo() = 0;
     virtual void CheckHighScore(const uint16_t level, const uint32_t score) = 0;
 };

@@ -448,10 +448,6 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         m_game.GetIntroView()->DrawStandBeforeGate();
     }
-    if (m_state == Catalog)
-    {
-        m_game.GetIntroView()->DrawCatalog();
-    }
 
     if (m_state == InGame || m_state == EnteringLevel)
     {
@@ -548,10 +544,6 @@ void EngineCore::EnterKeyReleased()
             m_state = EnteringLevel;
             m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
             m_warpToLevel = 0;
-        }
-        else if (m_state == Catalog)
-        {
-            m_state = Introduction;
         }
         else if (m_state == WarpCheatDialog)
         {
@@ -766,16 +758,11 @@ bool EngineCore::Think()
         }
     }
 
-    /*
-    TODO: Catalog disabled for now
-    if (m_state == Introduction && !m_menu->IsActive())
+    if (m_playerInput.IsKeyPressed(SDLK_F10) && m_state == Introduction && m_game.GetId() == 1)
     {
-        if (m_playerInput.IsKeyJustPressed(SDLK_F10) && m_game.GetIntroView()->IsCatalogAvailable())
-        {
-            m_state = Catalog;
-        }
+        // Catacomb Abyss Shareware Demo
+        m_menu->OpenDemo();
     }
-    */
 
     if (!m_playerInput.HasFocus() && m_state == InGame && !m_menu->IsActive())
     {

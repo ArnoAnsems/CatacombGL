@@ -34,8 +34,6 @@ public:
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();
-    void DrawCatalog();
-    bool IsCatalogAvailable();
 
 private:
     Shape* m_shapeEntering;
@@ -49,7 +47,5 @@ private:
     Shape* m_shapeNovice;
     Shape* m_shapeWarrior;
     Shape* m_shapeStandBeforeGate;
-
-    Shape* m_catalog;
 };
 

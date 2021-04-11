@@ -582,6 +582,11 @@ void Catacomb3DMenu::OpenSoundMenu()
     m_guiMenu.Open(pageSoundId);
 }
 
+void Catacomb3DMenu::OpenDemo()
+{
+    // No demo in Catacomb 3D
+}
+
 bool Catacomb3DMenu::IsNewSaveGameNameAlreadyInUse() const
 {
     bool isInUse = false;
