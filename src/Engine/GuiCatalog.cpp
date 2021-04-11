@@ -50,7 +50,8 @@ const GuiEvent& GuiCatalog::ProcessInput()
     }
     else if (m_playerInput.IsKeyJustPressed(SDLK_LEFT) ||
              m_playerInput.IsKeyJustPressed(SDLK_UP) ||
-             m_playerInput.IsKeyJustPressed(SDLK_PAGEUP))
+             m_playerInput.IsKeyJustPressed(SDLK_PAGEUP) ||
+             m_playerInput.IsKeyJustPressed(SDLK_KP_9))
     {
         if (m_currentPage > 0)
         {
@@ -63,7 +64,8 @@ const GuiEvent& GuiCatalog::ProcessInput()
     }
     else if (m_playerInput.IsKeyJustPressed(SDLK_RIGHT) ||
              m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
-             m_playerInput.IsKeyJustPressed(SDLK_PAGEDOWN))
+             m_playerInput.IsKeyJustPressed(SDLK_PAGEDOWN) ||
+             m_playerInput.IsKeyJustPressed(SDLK_KP_3))
 
     {
         if (m_currentPage < lastPage)
@@ -75,11 +77,13 @@ const GuiEvent& GuiCatalog::ProcessInput()
             m_currentPage = 0;
         }
     }
-    else if (m_playerInput.IsKeyJustPressed(SDLK_HOME))
+    else if (m_playerInput.IsKeyJustPressed(SDLK_HOME) ||
+             m_playerInput.IsKeyJustPressed(SDLK_KP_7))
     {
         m_currentPage = 0;
     }
-    else if (m_playerInput.IsKeyJustPressed(SDLK_END))
+    else if (m_playerInput.IsKeyJustPressed(SDLK_END) ||
+             m_playerInput.IsKeyJustPressed(SDLK_KP_1))
     {
         m_currentPage = lastPage;
     }

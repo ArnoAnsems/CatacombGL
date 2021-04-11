@@ -2751,7 +2751,7 @@ void EngineCore::KeyYPressed()
         
 void EngineCore::PlayerUsesPotion()
 {
-    if (!m_level->GetPlayerActor()->IsDead())
+    if (!m_level->GetPlayerActor()->IsDead() && m_level->GetPlayerActor()->GetHealth() < 100)
     {
         if (m_playerInventory.UsePotion())
         {
