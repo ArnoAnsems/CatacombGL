@@ -25,7 +25,8 @@ ConsoleVariableInt::ConsoleVariableInt(
     ConsoleVariable(nameInMenu, nameInConfigFile),
     m_minValue(minValue),
     m_maxValue(maxValue),
-    m_value(defaultValue)
+    m_value(defaultValue),
+    m_defaultValue(defaultValue)
 {
 
 }
@@ -91,4 +92,9 @@ void ConsoleVariableInt::ClipValueToRange()
     {
         m_value = m_maxValue;
     }
+}
+
+void ConsoleVariableInt::SetToDefault()
+{
+    m_value = m_defaultValue;
 }

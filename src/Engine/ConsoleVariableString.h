@@ -24,11 +24,13 @@ public:
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;
+    void SetToDefault() override;
 
     const std::string& Get() const;
     void Set(const std::string& value);
 
 private:
     std::string m_value;
+    const std::string m_defaultValue;
 };
 

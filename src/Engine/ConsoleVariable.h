@@ -28,6 +28,7 @@ public:
 
     virtual const std::string Serialize() const;
     virtual void Deserialize(const std::string& str);
+    virtual void SetToDefault();
 
 protected:
     const std::string m_nameInMenu;

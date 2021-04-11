@@ -43,6 +43,8 @@ TEST(ConsoleVariableBool_Test, CheckAssignment)
     EXPECT_TRUE(var.IsEnabled());
     var.SetEnabled(false);
     EXPECT_FALSE(var.IsEnabled());
+    var.SetToDefault();
+    EXPECT_TRUE(var.IsEnabled());
 }
 
 TEST(ConsoleVariableBool_Test, CheckSerialization)

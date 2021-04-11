@@ -41,6 +41,8 @@ TEST(ConsoleVariableString_Test, CheckAssignment)
     const std::string newValue = "New value with \\ and spaces";
     var.Set(newValue);
     EXPECT_EQ(newValue, var.Get());
+    var.SetToDefault();
+    EXPECT_EQ("DefaultValue", var.Get());
 }
 
 TEST(ConsoleVariableString_Test, CheckSerialization)

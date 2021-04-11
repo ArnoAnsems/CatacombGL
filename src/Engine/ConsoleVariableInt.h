@@ -29,6 +29,7 @@ public:
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;
+    void SetToDefault() override;
 
     int32_t GetValue() const;
     void SetValue(const int32_t value);
@@ -41,5 +42,6 @@ private:
     const int32_t m_minValue;
     const int32_t m_maxValue;
     int32_t m_value;
+    const int32_t m_defaultValue;
 };
 

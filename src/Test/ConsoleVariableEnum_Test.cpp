@@ -59,6 +59,12 @@ TEST(ConsoleVariableEnum_Test, CheckAssignment)
     EXPECT_EQ(testItems.at(ItemIdThird).itemNameInMenu, var.GetValueInMenu());
     var.SetItemIndex(ItemIdThird + 1);
     EXPECT_EQ(ItemIdThird, var.GetItemIndex()); // Unchanged, due to provided index out-of-range.
+    var.SetItemIndex(ItemIdFirst);
+    EXPECT_EQ(ItemIdFirst, var.GetItemIndex());
+    EXPECT_EQ(testItems.at(ItemIdFirst).itemNameInMenu, var.GetValueInMenu());
+    var.SetToDefault();
+    EXPECT_EQ(ItemIdThird, var.GetItemIndex());
+    EXPECT_EQ(testItems.at(ItemIdThird).itemNameInMenu, var.GetValueInMenu());
 }
 
 TEST(ConsoleVariableEnum_Test, CheckSerialization)

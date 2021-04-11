@@ -36,6 +36,7 @@ public:
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;
+    void SetToDefault() override;
 
     uint8_t GetItemIndex() const;
     void SetItemIndex(const uint8_t index);
@@ -46,4 +47,5 @@ public:
 private:
     const std::vector<EnumItem> m_items;
     uint8_t m_itemIndex;
+    const uint8_t m_defaultItemIndex;
 };

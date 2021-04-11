@@ -52,3 +52,8 @@ void ConsoleVariable::Deserialize(const std::string& str)
 {
 
 }
+
+void ConsoleVariable::SetToDefault()
+{
+
+}

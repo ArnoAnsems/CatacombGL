@@ -17,7 +17,8 @@
 
 ConsoleVariableString::ConsoleVariableString(const std::string& nameInMenu, const std::string& nameInConfigFile, const std::string& defaultValue) :
     ConsoleVariable(nameInMenu, nameInConfigFile),
-    m_value(defaultValue)
+    m_value(defaultValue),
+    m_defaultValue(defaultValue)
 {
 
 }
@@ -45,4 +46,9 @@ const std::string& ConsoleVariableString::Get() const
 void ConsoleVariableString::Set(const std::string& value)
 {
     m_value = value;
+}
+
+void ConsoleVariableString::SetToDefault()
+{
+    m_value = m_defaultValue;
 }

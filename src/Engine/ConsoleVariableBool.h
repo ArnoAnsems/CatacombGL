@@ -24,6 +24,7 @@ public:
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;
+    void SetToDefault() override;
 
     bool IsEnabled() const;
     void SetEnabled(bool enabled);
@@ -33,4 +34,5 @@ public:
 
 private:
     bool m_enabled;
+    const bool m_defaultValue;
 };

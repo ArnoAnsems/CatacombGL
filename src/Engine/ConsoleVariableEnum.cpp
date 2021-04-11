@@ -22,7 +22,8 @@ ConsoleVariableEnum::ConsoleVariableEnum(
     const uint8_t defaultItemIndex) :
     ConsoleVariable(nameInMenu, nameInConfigFile),
     m_items(items),
-    m_itemIndex(defaultItemIndex)
+    m_itemIndex(defaultItemIndex),
+    m_defaultItemIndex(defaultItemIndex)
 {
 
 }
@@ -81,4 +82,9 @@ void ConsoleVariableEnum::Next()
 const std::string& ConsoleVariableEnum::GetValueInMenu() const
 {
     return m_items.at(m_itemIndex).itemNameInMenu;
+}
+
+void ConsoleVariableEnum::SetToDefault()
+{
+    m_itemIndex = m_defaultItemIndex;
 }

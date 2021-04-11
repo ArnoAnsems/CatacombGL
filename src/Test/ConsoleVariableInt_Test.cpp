@@ -49,6 +49,8 @@ TEST(ConsoleVariableInt_Test, CheckAssignment)
     EXPECT_EQ(-2, var.GetValue());
     var.SetValue(7);
     EXPECT_EQ(6, var.GetValue());
+    var.SetToDefault();
+    EXPECT_EQ(5, var.GetValue());
 }
 
 TEST(ConsoleVariableInt_Test, CheckSerialization)
