@@ -104,7 +104,7 @@ ConfigurationSettings::ConfigurationSettings() :
             {"Original (4:3)", "Classic", ""},
             {"Fit to window", "FitToScreen", ""}
         },
-        CVarItemIdAspectRatioOriginal),
+        CVarItemIdAspectRatioFitToWindow),
     m_cvarsEnum(
         {
             std::make_pair(CVarIdScreenMode, &m_screenMode),
@@ -413,4 +413,24 @@ void ConfigurationSettings::DeserializeCVar(const std::map<std::string, std::str
     {
         cvar.Deserialize(cvarPair->second);
     }
+}
+
+void ConfigurationSettings::ResetToDefaults()
+{
+    m_controlsMap.ResetToDefaults();
+
+    for each(auto cvarIntPair in m_cvarsInt)
+    {
+        cvarIntPair.second->SetToDefault();
+    }
+    for each (auto cvarBoolPair in m_cvarsBool)
+    {
+        cvarBoolPair.second->SetToDefault();
+    }
+    for each (auto cvarEnumPair in m_cvarsEnum)
+    {
+        cvarEnumPair.second->SetToDefault();
+    }
+
+    // Skip the reset of the string console variables; preserve the paths to the game data.
 }

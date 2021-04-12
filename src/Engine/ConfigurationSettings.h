@@ -101,6 +101,8 @@ public:
     const ConsoleVariableInt& GetCVarInt(const uint8_t cvarId) const;
     ConsoleVariableInt& GetCVarIntMutable(const uint8_t cvarId);
 
+    void ResetToDefaults();
+
 private:
     void SerializeCVar(std::ofstream& file, const uint8_t cvarId) const;
     void DeserializeCVar(const std::map<std::string, std::string>& keyValuePairs, const uint8_t cvarId);

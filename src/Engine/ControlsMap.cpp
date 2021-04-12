@@ -19,35 +19,7 @@
 
 ControlsMap::ControlsMap()
 {
-    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_LEFT, None));
-    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_MIDDLE, None));
-    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_RIGHT, None));
-    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_X1, None));
-    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_X2, None));
-
-    // Define default action to key map
-    AssignActionToKey(MoveForward, SDLK_UP);
-    AssignActionToKey(MoveBackward, SDLK_DOWN);
-    AssignActionToKey(TurnLeft, SDLK_LEFT);
-    AssignActionToKey(TurnRight, SDLK_RIGHT);
-    AssignActionToKey(Strafe, SDLK_RALT);
-    AssignActionToKey(StrafeLeft, SDLK_a);
-    AssignActionToKey(StrafeRight, SDLK_d);
-    AssignActionToKey(MoveForward, SDLK_w);
-    AssignActionToKey(MoveBackward, SDLK_s);
-    AssignActionToKey(QuickTurn, SDLK_v);
-    AssignActionToKey(QuickTurn, SDLK_TAB);
-    AssignActionToKey(Shoot, SDLK_RCTRL);
-    AssignActionToKey(ShootZappper, SDLK_z);
-    AssignActionToKey(ShootXterminator, SDLK_x);
-    AssignActionToKey(UsePotion, SDLK_c);
-    AssignActionToKey(UsePotion, SDLK_SPACE);
-    // Since the original game did not have a run action, by default no key is assigned to the run action.
-    AssignActionToKey(ShowAutoMap, SDLK_o);
-
-    AssignActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
-    AssignActionToMouseButton(ShootZappper, SDL_BUTTON_MIDDLE);
-    AssignActionToMouseButton(ShootXterminator, SDL_BUTTON_RIGHT);
+    ResetToDefaults();
 }
 
 ControlsMap::~ControlsMap()
@@ -234,4 +206,40 @@ const ControlAction ControlsMap::StringToAction(const std::string& str)
     }
 
     return None;
+}
+
+void ControlsMap::ResetToDefaults()
+{
+    m_mouseButtonToActionMap.clear();
+    m_KeyToActionMap.clear();
+
+    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_LEFT, None));
+    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_MIDDLE, None));
+    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_RIGHT, None));
+    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_X1, None));
+    m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_X2, None));
+
+    // Define default action to key map
+    AssignActionToKey(MoveForward, SDLK_UP);
+    AssignActionToKey(MoveBackward, SDLK_DOWN);
+    AssignActionToKey(TurnLeft, SDLK_LEFT);
+    AssignActionToKey(TurnRight, SDLK_RIGHT);
+    AssignActionToKey(Strafe, SDLK_RALT);
+    AssignActionToKey(StrafeLeft, SDLK_a);
+    AssignActionToKey(StrafeRight, SDLK_d);
+    AssignActionToKey(MoveForward, SDLK_w);
+    AssignActionToKey(MoveBackward, SDLK_s);
+    AssignActionToKey(QuickTurn, SDLK_v);
+    AssignActionToKey(QuickTurn, SDLK_TAB);
+    AssignActionToKey(Shoot, SDLK_RCTRL);
+    AssignActionToKey(ShootZappper, SDLK_z);
+    AssignActionToKey(ShootXterminator, SDLK_x);
+    AssignActionToKey(UsePotion, SDLK_c);
+    AssignActionToKey(UsePotion, SDLK_SPACE);
+    // Since the original game did not have a run action, by default no key is assigned to the run action.
+    AssignActionToKey(ShowAutoMap, SDLK_o);
+
+    AssignActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
+    AssignActionToMouseButton(ShootZappper, SDL_BUTTON_MIDDLE);
+    AssignActionToMouseButton(ShootXterminator, SDL_BUTTON_RIGHT);
 }

@@ -90,6 +90,7 @@ ExtraMenu::ExtraMenu(
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Video Options", { GuiActionNavigateTo, pageVideoOptionsId }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Sound Options", { GuiActionNavigateTo, pageSoundOptionsId }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Gameplay Options", { GuiActionNavigateTo, pageGameplayOptionsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Defaults", { GuiActionResetToDefaults, 0 }, m_renderableText));
     pageOptions->AddChild(elementListOptions, 120, 30);
 
     GuiElementStaticText* pageLabelOptions = new GuiElementStaticText(playerInput, "Options", EgaBrightYellow, m_renderableText);
@@ -291,6 +292,10 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     else if (guiEvent.guiAction == GuiActionPlaySound)
     {
         m_audioPlayer.Play((uint16_t)guiEvent.guiParameter);
+    }
+    else if (guiEvent.guiAction == GuiActionResetToDefaults)
+    {
+        m_configurationSettings.ResetToDefaults();
     }
 
     return command;

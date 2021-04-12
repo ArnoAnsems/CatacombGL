@@ -119,6 +119,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "SOUND OPTIONS", { GuiActionNavigateTo, pageSoundId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC OPTIONS", { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "GAMEPLAY OPTIONS", { GuiActionNavigateTo, pageGameplayId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO DEFAULTS", { GuiActionResetToDefaults, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
 
     guiPageOptions->AddChild(elementListOptions, 88, 62);
 
@@ -423,8 +424,11 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
                     MenuCommandStartNewGameHard;
             }
         }
+        else if (guiEvent.guiAction == GuiActionResetToDefaults)
+        {
+            m_configurationSettings.ResetToDefaults();
+        }
     }
-
     
     return command;
 }

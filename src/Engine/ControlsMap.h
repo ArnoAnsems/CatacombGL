@@ -85,6 +85,8 @@ public:
     static const std::vector<SDL_Keycode>& GetNotAllowedKeys();
     static const ControlAction StringToAction(const std::string& str);
 
+    void ResetToDefaults();
+
 private:
     std::map<SDL_Keycode, ControlAction> m_KeyToActionMap;
     std::map<uint8_t, ControlAction> m_mouseButtonToActionMap;
