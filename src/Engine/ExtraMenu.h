@@ -68,6 +68,7 @@ private:
     std::vector<std::string>& m_savedGames;
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
+    bool m_askForReset;
     GuiMenu m_guiMenu;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;

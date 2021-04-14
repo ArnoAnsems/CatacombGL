@@ -70,6 +70,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_savedGames (savedGames),
     m_newSaveGameName (""),
     m_askForOverwrite (false),
+    m_askForReset(false),
     m_askForEndGame (false),
     m_askForEndGameGuiAction(GuiActionNone),
     m_askForQuit (false),
@@ -310,7 +311,19 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             m_askForOverwrite = false;
         }
     }
-    if (m_askForQuit)
+    if (m_askForReset)
+    {
+        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+        if (keyCode != SDLK_UNKNOWN)
+        {
+            if (keyCode == SDLK_y)
+            {
+                m_configurationSettings.ResetToDefaults();
+            }
+            m_askForReset = false;
+        }
+    }
+    else if (m_askForQuit)
     {
         const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
         if (keyCode == SDLK_y)
@@ -426,7 +439,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         }
         else if (guiEvent.guiAction == GuiActionResetToDefaults)
         {
-            m_configurationSettings.ResetToDefaults();
+            m_askForReset = true;
         }
     }
     
@@ -546,6 +559,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     if (m_askForQuit)
     {
         DrawConfirmationDialog(renderer, *egaGraph, 90, "REALLY QUIT?", "PRESS Y TO QUIT", "ESC TO BACK OUT");
+    }
+
+    if (m_askForReset)
+    {
+        DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO DEFAULTS?", "PRESS Y TO CONFIRM", "ESC TO BACK OUT");
     }
 }
 

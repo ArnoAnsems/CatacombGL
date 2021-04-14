@@ -59,6 +59,7 @@ ExtraMenu::ExtraMenu(
     m_savedGames(savedGames),
     m_newSaveGameName(""),
     m_askForOverwrite(false),
+    m_askForReset(false),
     m_guiMenu(playerInput),
     m_renderableText(*egaGraph->GetFont(3)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10))
@@ -252,6 +253,18 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
         }
     }
 
+    if (m_askForReset)
+    {
+        if (keyCode != SDLK_UNKNOWN)
+        {
+            if (keyCode == SDLK_y)
+            {
+                m_configurationSettings.ResetToDefaults();
+            }
+            m_askForReset = false;
+        }
+    }
+
     const GuiEvent& guiEvent = m_guiMenu.ProcessInput();
  
     if (guiEvent.guiAction == GuiActionLoadGame)
@@ -295,7 +308,7 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     }
     else if (guiEvent.guiAction == GuiActionResetToDefaults)
     {
-        m_configurationSettings.ResetToDefaults();
+        m_askForReset = true;
     }
 
     return command;
@@ -312,6 +325,16 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
         renderableText.Centered("will be overwritten!", EgaBrightYellow, 160, 52);
         renderableText.Centered("Are you sure?", EgaBrightYellow, 160, 72);
         renderableText.Centered("Y / N", EgaBrightYellow, 160, 82);
+        renderer.RenderText(renderableText);
+        return;
+    }
+
+    if (m_askForReset)
+    {
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Reset To Defaults", EgaBrightYellow, 160, 32);
+        renderableText.Centered("Are you sure you want to do this?", EgaBrightWhite, 160, 52);
+        renderableText.Centered("Y / N", EgaBrightWhite, 160, 72);
         renderer.RenderText(renderableText);
         return;
     }

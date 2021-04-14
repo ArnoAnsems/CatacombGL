@@ -71,6 +71,7 @@ private:
     bool m_askForOverwrite;
     bool m_askForEndGame;
     bool m_askForQuit;
+    bool m_askForReset;
     HighScores& m_highScores;
     uint32_t m_menuActivatedTimestamp;
 
