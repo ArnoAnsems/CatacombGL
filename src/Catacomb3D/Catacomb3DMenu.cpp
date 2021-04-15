@@ -71,6 +71,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_newSaveGameName (""),
     m_askForOverwrite (false),
     m_askForReset(false),
+    m_askForResetClassic(false),
     m_askForEndGame (false),
     m_askForEndGameGuiAction(GuiActionNone),
     m_askForQuit (false),
@@ -121,6 +122,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC OPTIONS", { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "GAMEPLAY OPTIONS", { GuiActionNavigateTo, pageGameplayId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO DEFAULTS", { GuiActionResetToDefaults, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO CLASSIC LOOK", { GuiActionResetToClassic, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
 
     guiPageOptions->AddChild(elementListOptions, 88, 62);
 
@@ -323,6 +325,18 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             m_askForReset = false;
         }
     }
+    else if (m_askForResetClassic)
+    {
+        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+        if (keyCode != SDLK_UNKNOWN)
+        {
+            if (keyCode == SDLK_y)
+            {
+                m_configurationSettings.ResetToClassic();
+            }
+            m_askForResetClassic = false;
+        }
+    }
     else if (m_askForQuit)
     {
         const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
@@ -440,6 +454,10 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
         else if (guiEvent.guiAction == GuiActionResetToDefaults)
         {
             m_askForReset = true;
+        }
+        else if (guiEvent.guiAction == GuiActionResetToClassic)
+        {
+            m_askForResetClassic = true;
         }
     }
     
@@ -560,10 +578,13 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     {
         DrawConfirmationDialog(renderer, *egaGraph, 90, "REALLY QUIT?", "PRESS Y TO QUIT", "ESC TO BACK OUT");
     }
-
-    if (m_askForReset)
+    else if (m_askForReset)
     {
         DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO DEFAULTS?", "PRESS Y TO CONFIRM", "ESC TO BACK OUT");
+    }
+    else if (m_askForResetClassic)
+    {
+        DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO CLASSIC LOOK?", "PRESS Y TO CONFIRM", "ESC TO BACK OUT");
     }
 }
 

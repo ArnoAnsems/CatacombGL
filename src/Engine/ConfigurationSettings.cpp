@@ -434,3 +434,20 @@ void ConfigurationSettings::ResetToDefaults()
 
     // Skip the reset of the string console variables; preserve the paths to the game data.
 }
+
+void ConfigurationSettings::ResetToClassic()
+{
+    m_controlsMap.ResetToDefaults();
+
+    GetCVarBoolMutable(CVarIdDepthShading).SetEnabled(false);
+    GetCVarBoolMutable(CVarIdAlwaysRun).SetEnabled(false);
+    GetCVarBoolMutable(CVarIdAutoFire).SetEnabled(false);
+    GetCVarBoolMutable(CVarIdManaBar).SetEnabled(false);
+    GetCVarEnumMutable(CVarIdAutoMapMode).SetItemIndex(CVarItemIdAutoMapOriginal);
+    GetCVarEnumMutable(CVarIdShowFpsMode).SetItemIndex(CVarItemIdShowFpsOff);
+    GetCVarEnumMutable(CVarIdScreenResolution).SetItemIndex(CVarItemIdScreenResolutionOriginal);
+    GetCVarEnumMutable(CVarIdTextureFilter).SetItemIndex(CVarItemIdTextureFilterNearest);
+    GetCVarEnumMutable(CVarIdAspectRatio).SetItemIndex(CVarItemIdAspectRatioOriginal);
+    GetCVarIntMutable(CVarIdFov).SetToDefault();
+    GetCVarIntMutable(CVarIdTurnSpeed).SetToDefault();
+}

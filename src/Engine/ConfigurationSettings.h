@@ -102,6 +102,7 @@ public:
     ConsoleVariableInt& GetCVarIntMutable(const uint8_t cvarId);
 
     void ResetToDefaults();
+    void ResetToClassic();
 
 private:
     void SerializeCVar(std::ofstream& file, const uint8_t cvarId) const;

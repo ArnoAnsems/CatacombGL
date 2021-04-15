@@ -69,6 +69,7 @@ private:
     std::string m_newSaveGameName;
     bool m_askForOverwrite;
     bool m_askForReset;
+    bool m_askForResetClassic;
     GuiMenu m_guiMenu;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;

@@ -60,6 +60,7 @@ ExtraMenu::ExtraMenu(
     m_newSaveGameName(""),
     m_askForOverwrite(false),
     m_askForReset(false),
+    m_askForResetClassic(false),
     m_guiMenu(playerInput),
     m_renderableText(*egaGraph->GetFont(3)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10))
@@ -92,6 +93,7 @@ ExtraMenu::ExtraMenu(
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Sound Options", { GuiActionNavigateTo, pageSoundOptionsId }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Gameplay Options", { GuiActionNavigateTo, pageGameplayOptionsId }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Defaults", { GuiActionResetToDefaults, 0 }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Classic Look", { GuiActionResetToClassic, 0 }, m_renderableText));
     pageOptions->AddChild(elementListOptions, 120, 30);
 
     GuiElementStaticText* pageLabelOptions = new GuiElementStaticText(playerInput, "Options", EgaBrightYellow, m_renderableText);
@@ -265,6 +267,18 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
         }
     }
 
+    if (m_askForResetClassic)
+    {
+        if (keyCode != SDLK_UNKNOWN)
+        {
+            if (keyCode == SDLK_y)
+            {
+                m_configurationSettings.ResetToClassic();
+            }
+            m_askForResetClassic = false;
+        }
+    }
+
     const GuiEvent& guiEvent = m_guiMenu.ProcessInput();
  
     if (guiEvent.guiAction == GuiActionLoadGame)
@@ -310,6 +324,10 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     {
         m_askForReset = true;
     }
+    else if (guiEvent.guiAction == GuiActionResetToClassic)
+    {
+        m_askForResetClassic = true;
+    }
 
     return command;
 }
@@ -333,6 +351,16 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     {
         RenderableText renderableText(*egaGraph->GetFont(3));
         renderableText.Centered("Reset To Defaults", EgaBrightYellow, 160, 32);
+        renderableText.Centered("Are you sure you want to do this?", EgaBrightWhite, 160, 52);
+        renderableText.Centered("Y / N", EgaBrightWhite, 160, 72);
+        renderer.RenderText(renderableText);
+        return;
+    }
+
+    if (m_askForResetClassic)
+    {
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        renderableText.Centered("Reset To Classic Look", EgaBrightYellow, 160, 32);
         renderableText.Centered("Are you sure you want to do this?", EgaBrightWhite, 160, 52);
         renderableText.Centered("Y / N", EgaBrightWhite, 160, 72);
         renderer.RenderText(renderableText);

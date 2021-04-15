@@ -72,6 +72,7 @@ private:
     bool m_askForEndGame;
     bool m_askForQuit;
     bool m_askForReset;
+    bool m_askForResetClassic;
     HighScores& m_highScores;
     uint32_t m_menuActivatedTimestamp;
 
