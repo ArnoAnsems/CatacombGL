@@ -49,6 +49,7 @@ static const uint8_t CVarIdAspectRatio = 27;
 static const uint8_t CVarIdFov = 40;
 static const uint8_t CVarIdMouseSensitivity = 41;
 static const uint8_t CVarIdTurnSpeed = 42;
+static const uint8_t CVarIdFixBugsInLevels = 43;
 
 static const uint8_t CVarItemIdScreenModeWindowed = 0;
 static const uint8_t CVarItemIdScreenModeFullscreen = 1;
@@ -129,6 +130,7 @@ private:
     ConsoleVariableBool m_alwaysRun;
     ConsoleVariableBool m_autoFire;
     ConsoleVariableBool m_manaBar;
+    ConsoleVariableBool m_fixBugsInLevels;
 
     ConsoleVariableEnum m_dummyCvarEnum;
     ConsoleVariableEnum m_screenMode;

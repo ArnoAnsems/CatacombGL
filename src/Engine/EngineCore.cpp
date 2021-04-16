@@ -122,9 +122,25 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 
     m_level = m_game.GetGameMaps()->GetLevelFromStart(mapIndex);
 
+    // Fix bugs in levels by manipulating the tiles
+    if (m_configurationSettings.GetCVarBool(CVarIdFixBugsInLevels).IsEnabled())
+    {
+        // Prevent soft lock in The Town of Morbidity
+        if (m_game.GetId() == 3 && m_level->GetLevelIndex() == 0)
+        {
+            // Change yellow key to red key
+            m_level->SetFloorTile(29, 24, 8);
+
+            // Change yellow door to red door
+            m_level->SetFloorTile(2, 19, 256);
+        }
+    }
+
     m_game.SpawnActors(m_level, m_difficultyLevel);
     m_level->GetPlayerActor()->SetHealth(health);
     m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex());
+
+ 
 
     m_timeStampOfPlayerCurrentFrame = 0;
     m_timeStampOfPlayerPreviousFrame = 0;

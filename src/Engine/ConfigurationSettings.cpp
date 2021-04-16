@@ -28,6 +28,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_alwaysRun("Always Run", "alwaysRun", false),
     m_autoFire("Auto Fire", "autoFire", false),
     m_manaBar("Mana Bar", "manaBar", false),
+    m_fixBugsInLevels("Fix Bugs In Levels", "fixBugsInLevels", true),
     m_cvarsBool(
         {
             std::make_pair(CVarIdDepthShading, &m_depthShading),
@@ -35,7 +36,8 @@ ConfigurationSettings::ConfigurationSettings() :
             std::make_pair(CVarIdMouseLook, &m_mouseLook),
             std::make_pair(CVarIdAlwaysRun, &m_alwaysRun),
             std::make_pair(CVarIdAutoFire, &m_autoFire),
-            std::make_pair(CVarIdManaBar, &m_manaBar)
+            std::make_pair(CVarIdManaBar, &m_manaBar),
+            std::make_pair(CVarIdFixBugsInLevels, &m_fixBugsInLevels)
         }),
     m_dummyCvarString("Dummy", "Dummy", ""),
     m_pathAbyssv113("", "pathabyssv113", ""),
@@ -443,6 +445,7 @@ void ConfigurationSettings::ResetToClassic()
     GetCVarBoolMutable(CVarIdAlwaysRun).SetEnabled(false);
     GetCVarBoolMutable(CVarIdAutoFire).SetEnabled(false);
     GetCVarBoolMutable(CVarIdManaBar).SetEnabled(false);
+    GetCVarBoolMutable(CVarIdFixBugsInLevels).SetEnabled(false);
     GetCVarEnumMutable(CVarIdAutoMapMode).SetItemIndex(CVarItemIdAutoMapOriginal);
     GetCVarEnumMutable(CVarIdShowFpsMode).SetItemIndex(CVarItemIdShowFpsOff);
     GetCVarEnumMutable(CVarIdScreenResolution).SetItemIndex(CVarItemIdScreenResolutionOriginal);
