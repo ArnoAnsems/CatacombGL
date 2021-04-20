@@ -153,7 +153,7 @@ ExtraMenu::ExtraMenu(
 
     GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 120, m_renderableText));
-    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdFixBugsInLevels), 120, m_renderableText));
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdPreventSoftlock), 120, m_renderableText));
     pageGameplay->AddChild(elementListGameplay, 60, 30);
 
     GuiElementStaticText* pageLabelGameplay = new GuiElementStaticText(playerInput, "Gameplay Options", EgaBrightYellow, m_renderableText);

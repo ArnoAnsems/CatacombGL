@@ -22,13 +22,13 @@
 ConfigurationSettings::ConfigurationSettings() :
     m_controlsMap(),
     m_dummyCvarBool("Dummy", "Dummy", false),
-    m_depthShading("Depth shading", "depthshading", true),
+    m_depthShading("Depth Shading", "depthshading", true),
     m_vSync("VSync", "vsync", true),
     m_mouseLook("Mouse Look", "mlook", true),
     m_alwaysRun("Always Run", "alwaysRun", false),
     m_autoFire("Auto Fire", "autoFire", false),
     m_manaBar("Mana Bar", "manaBar", false),
-    m_fixBugsInLevels("Fix Bugs In Levels", "fixBugsInLevels", true),
+    m_preventSoftlock("Prevent Softlock", "preventSoftlock", true),
     m_cvarsBool(
         {
             std::make_pair(CVarIdDepthShading, &m_depthShading),
@@ -37,7 +37,7 @@ ConfigurationSettings::ConfigurationSettings() :
             std::make_pair(CVarIdAlwaysRun, &m_alwaysRun),
             std::make_pair(CVarIdAutoFire, &m_autoFire),
             std::make_pair(CVarIdManaBar, &m_manaBar),
-            std::make_pair(CVarIdFixBugsInLevels, &m_fixBugsInLevels)
+            std::make_pair(CVarIdPreventSoftlock, &m_preventSoftlock)
         }),
     m_dummyCvarString("Dummy", "Dummy", ""),
     m_pathAbyssv113("", "pathabyssv113", ""),
@@ -176,6 +176,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdAutoFire);
         DeserializeCVar(keyValuePairs, CVarIdAutoMapMode);
         DeserializeCVar(keyValuePairs, CVarIdManaBar);
+        DeserializeCVar(keyValuePairs, CVarIdPreventSoftlock);
 
         for (auto keyPair : keyValuePairs)
         {
@@ -232,7 +233,9 @@ void ConfigurationSettings::StoreToFile(const std::string& configurationFile) co
         SerializeCVar(file, CVarIdTurnSpeed);
         SerializeCVar(file, CVarIdAlwaysRun);
         SerializeCVar(file, CVarIdAutoFire);
+        file << "# Gameplay settings\n";
         SerializeCVar(file, CVarIdManaBar);
+        SerializeCVar(file, CVarIdPreventSoftlock);
         file << "# Key bindings\n";
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
 	    {
@@ -445,7 +448,7 @@ void ConfigurationSettings::ResetToClassic()
     GetCVarBoolMutable(CVarIdAlwaysRun).SetEnabled(false);
     GetCVarBoolMutable(CVarIdAutoFire).SetEnabled(false);
     GetCVarBoolMutable(CVarIdManaBar).SetEnabled(false);
-    GetCVarBoolMutable(CVarIdFixBugsInLevels).SetEnabled(false);
+    GetCVarBoolMutable(CVarIdPreventSoftlock).SetEnabled(false);
     GetCVarEnumMutable(CVarIdAutoMapMode).SetItemIndex(CVarItemIdAutoMapOriginal);
     GetCVarEnumMutable(CVarIdShowFpsMode).SetItemIndex(CVarItemIdShowFpsOff);
     GetCVarEnumMutable(CVarIdScreenResolution).SetItemIndex(CVarItemIdScreenResolutionOriginal);

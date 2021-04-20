@@ -123,7 +123,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     m_level = m_game.GetGameMaps()->GetLevelFromStart(mapIndex);
 
     // Fix bugs in levels by manipulating the tiles
-    if (m_configurationSettings.GetCVarBool(CVarIdFixBugsInLevels).IsEnabled())
+    if (m_configurationSettings.GetCVarBool(CVarIdPreventSoftlock).IsEnabled())
     {
         // Prevent soft lock in The Town of Morbidity
         if (m_game.GetId() == 3 && m_level->GetLevelIndex() == 0)

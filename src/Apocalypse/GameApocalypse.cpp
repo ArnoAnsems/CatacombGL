@@ -561,7 +561,7 @@ const std::string GameApocalypse::GetSavedGamesPath() const
 const std::vector<std::vector<uint16_t>> wallSkeletonAnimations = { { 0 } };
 const std::vector<std::vector<uint16_t>>& GameApocalypse::GetWallSkeletonAnimations() const
 {
-    // TODO
+    // Wall skeletons are not present in Catacomb Apocalypse
     return wallSkeletonAnimations;
 }
 
