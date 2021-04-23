@@ -603,8 +603,8 @@ const std::string& Catacomb3DMenu::GetNewSaveGameName() const
 
 void Catacomb3DMenu::AddNewSavedGame(const PlayerInput& playerInput, const std::string& name)
 {
-    m_guiMenu.AddChild(new GuiElementButton(playerInput, name, { GuiActionLoadGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText), 0, 0, restoreGameListId);
-    m_guiMenu.AddChild(new GuiElementButton(playerInput, name, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText), 0, 0, saveGameListId);
+    m_guiMenu.AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionLoadGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, restoreGameListId);
+    m_guiMenu.AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, saveGameListId);
 }
 
 void Catacomb3DMenu::OpenRestoreGameMenu()

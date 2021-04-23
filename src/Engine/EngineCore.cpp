@@ -841,13 +841,17 @@ bool EngineCore::Think()
         }
         else
         {
-            for (uint8_t i = 0x31; i < 0x39; i++)
+            if (m_state == InGame)
             {
-                if (m_playerInput.IsKeyJustPressed(i))
+                for (uint8_t i = 0x31; i < 0x39; i++)
                 {
-                    ReadScroll(i - 0x31);
+                    if (m_playerInput.IsKeyJustPressed(i))
+                    {
+                        ReadScroll(i - 0x31);
+                    }
                 }
             }
+
             if (m_playerInput.IsKeyJustPressed(SDLK_n)) // N
             {
                 KeyNPressed();
