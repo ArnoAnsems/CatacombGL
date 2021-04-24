@@ -78,7 +78,7 @@ ExtraMenu::ExtraMenu(
     elementListMain->AddChild(new GuiElementButton(playerInput, "Options", { GuiActionNavigateTo, pageOptionsId }, m_renderableText));
     elementListMain->AddChild(new GuiElementButton(playerInput, catalogInfo.label, { GuiActionNavigateTo, pageCatalogId }, m_renderableText));
     elementListMain->AddChild(new GuiElementButton(playerInput, "Quit", { GuiActionQuit, 0 }, m_renderableText));
-    pageMain->AddChild(elementListMain, 140, 30);
+    pageMain->AddChild(elementListMain, 120, 30);
 
     GuiElementStaticText* pageLabelMain = new GuiElementStaticText(playerInput, "Main Menu", EgaBrightYellow, m_renderableText);
     pageMain->AddChild(pageLabelMain, 160, 12);

@@ -9,10 +9,9 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.5.0: 
+Current limitations as of version 0.5.1: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
-* No "demo" functionality (preview slideshow of Catacomb Armageddon and Apocalypse in shareware version).
 
 # How to install
 CatacombGL does not run standalone, but requires the original game data (levels, pictures, sounds, etc) to be present on the system. The Catacomb Abyss game data can be obtained legitimately and free-of-charge by downloading the 1.13 shareware version. Various websites offer the shareware version for download, see for example https://archive.org/details/TheCatacombAbyss. Alternatively, the game data can also be obtained by buying the Catacombs Pack from gog.com, see https://www.gog.com/game/catacombs_pack. The differences between the shareware and commercial versions are purely cosmetic. The Catacombs Pack is required in order to run Catacomb 3D (The Descent), The Catacomb Armageddon or The Catacomb Apocalypse.
@@ -60,6 +59,24 @@ Special thanks goes to:
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
 
 # History
+* Version 0.5.1 (2021-04-24) New in this release:
+  * Added the "Demo" to the Catacomb Abyss shareware. The demo is a slideshow that originally served as a preview of the Catacomb Adventure series. It can be accessed via the menu or by pressing F10 in the opening screen.
+  * Added the "Hints & Solutions" to the Catacomb Adventure series. The Hints & Solutions is a slideshow with top down maps of each level. It is only available in the GOG Catacombs Pack, so not in the shareware version. It can be accessed via the menu.
+  * Adapted and improved the menu:
+   - In the Catacomb Adventure series, navigating to the previous menu page is done via ESC now, just like in Catacomb 3D. 
+   - A menu item can be selected by pressing its first letter. Suggested by NY00123.
+   - Added the option "Reset to defaults" to reset all settings to the defaults of the source port.
+   - Added the option "Reset to classic look" to reset settings in such a way that they resemble the original DOS game as closely as possible.
+  * Added the option "Prevent softlock", to work around design flaws that can prevent the player from completing a level. Currently this impacts only the first level of Catacomb Armageddon. When enabled, upon entering the level a key and a door will change color. 
+  * Fix: pause chest pickup when menu, automap or scroll is displayed. Reported by neonvortex.
+  * Fix: hide Catacomb 3D destructible walls on the top-down automap. Reported by NY00123.
+  * Fix: in the Catacomb 3D warp cheat, start level numbering at 1. Reported by NY00123.
+  * Fix: resume music when closing the menu on automap or cheat dialog. Reported by NY00123.
+  * Fix: in the Catacomb Adventure series, draw the statusbar numbers with tiles i.s.o. the regular font.
+  * Fix: moved the central dot of the crystal sphere (radar), such that it matches with the original DOS game.
+  * Fix: prevent mouse stutter when VSync is disabled. This bug was spotted in a recorded stream of Artyom Havok.
+  * Fix: do not use potions when player health is already at 100. Reported by coldner.
+
 * Version 0.5.0 (2020-12-19) New in this release:
   * Added an automap. The automap can be opened via a configurable key, with the default being the 'O' key. The automap can be visualized in four different styles, which is configurable via the Video menu. The automap feature was suggested by Master O, with additional feedback provided by SiFi270 and NY00123.
   * Added an option to simulate the original 320x200 screen resolution, which can be enabled via the Video menu. Suggested by Dinoaur.
@@ -113,7 +130,7 @@ Special thanks goes to:
   * Fix: the level warp dialog now also accepts input from the numerical keypad.
   * Fix: various memory leaks were resolved with help from the Dr. Memory tool.
   * Fix: some keyboard keys could not be mapped in the controls menu. Reported by DoomN00b.
-  * Fix: non-ASCII characters were not shown, as reported by DoomN00b. This was a limitation of the font from the original games. The font is now extended with many non-ASCII characters, like for example 'æ' and 'ß'.
+  * Fix: non-ASCII characters were not shown, as reported by DoomN00b. This was a limitation of the font from the original games. The font is now extended with many non-ASCII characters, like for example 'Ã¦' and 'ÃŸ'.
 
 * Version 0.2.1 (2019-05-14) New in this release:
   * The game now creates a log file at %appdata%\CatacombGL\CatacombGL_log.txt. The log file can also be viewed in-game via the tilde (~) key.

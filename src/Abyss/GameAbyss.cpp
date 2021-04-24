@@ -933,7 +933,7 @@ const CatalogInfo catalogInfoV113 =
 
 const CatalogInfo catalogInfoV124 =
 {
-    "Hint Book"
+    "Hints & Solutions"
 ,
 {
     "HINTGO1.HNT",

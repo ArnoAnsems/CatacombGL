@@ -739,7 +739,7 @@ const ManaBar::ManaBarConfig& GameApocalypse::GetManaBarConfig()
 
 const CatalogInfo catalogInfo =
 {
-    "Hint Book"
+    "Hints & Solutions"
 ,
 {
     "HINT01.HNT",

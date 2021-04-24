@@ -874,7 +874,7 @@ const ManaBar::ManaBarConfig& GameArmageddon::GetManaBarConfig()
 
 const CatalogInfo catalogInfo =
 {
-    "Hint Book"
+    "Hints & Solutions"
 ,
 {
     "HINT01.HNT",
