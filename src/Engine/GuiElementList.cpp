@@ -42,6 +42,11 @@ GuiElementList::~GuiElementList()
 
 const GuiEvent& GuiElementList::ProcessInput()
 {
+    if (m_elements.empty())
+    {
+        return GetEvent();
+    }
+
     GuiElementBase* element = m_elements.at(m_elementSelected);
     const GuiEvent& guiEvent = element->ProcessInput();
     bool makeBrowseSound = false;

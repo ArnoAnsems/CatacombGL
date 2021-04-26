@@ -184,8 +184,8 @@ ExtraMenu::ExtraMenu(
             elementListLoadGame->AddChild(new GuiElementButton(playerInput, savedGame, { GuiActionLoadGame, savedGameIndex }, m_renderableText));
             savedGameIndex++;
         }
-        pageLoadGame->AddChild(elementListLoadGame, 60, 30);
     }
+    pageLoadGame->AddChild(elementListLoadGame, 60, 30);
 
     GuiElementStaticText* pageLabelLoadGame = new GuiElementStaticText(playerInput, "Load Game", EgaBrightYellow, m_renderableText);
     pageLoadGame->AddChild(pageLabelLoadGame, 160, 12);
@@ -207,8 +207,8 @@ ExtraMenu::ExtraMenu(
             elementListSaveGame->AddChild(new GuiElementButton(playerInput, savedGame, { GuiActionSaveGame, savedGameIndex }, m_renderableText));
             savedGameIndex++;
         }
-        pageSaveGame->AddChild(elementListSaveGame, 60, 30);
     }
+    pageSaveGame->AddChild(elementListSaveGame, 60, 30);
 
     GuiElementStaticText* pageLabelSaveGame = new GuiElementStaticText(playerInput, "Save Game", EgaBrightYellow, m_renderableText);
     pageSaveGame->AddChild(pageLabelSaveGame, 160, 12);

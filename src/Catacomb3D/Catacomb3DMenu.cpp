@@ -215,8 +215,8 @@ Catacomb3DMenu::Catacomb3DMenu(
             elementListRestoreGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, { GuiActionLoadGame, savedGameIndex }, m_renderableText, m_flashIcon));
             savedGameIndex++;
         }
-        guiPageLoadGame->AddChild(elementListRestoreGame, 80, 60);
     }
+    guiPageLoadGame->AddChild(elementListRestoreGame, 80, 60);
 
     // Save game menu
     GuiPage* guiPageSaveGame = new GuiPage(playerInput);
@@ -239,8 +239,8 @@ Catacomb3DMenu::Catacomb3DMenu(
             elementListSaveGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, { GuiActionSaveGame, savedGameIndex }, m_renderableText, m_flashIcon));
             savedGameIndex++;
         }
-        guiPageSaveGame->AddChild(elementListSaveGame, 80, 60);
     }
+    guiPageSaveGame->AddChild(elementListSaveGame, 80, 60);
 
     // Sound menu
     GuiPage* guiPageSound = new GuiPage(playerInput);
