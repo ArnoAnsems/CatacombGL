@@ -9,7 +9,7 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.5.1: 
+Current limitations as of version 0.5.2: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 
@@ -59,6 +59,9 @@ Special thanks goes to:
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
 
 # History
+* Version 0.5.2 (2021-04-26) New in this release:
+  * Fix: prevent empty save and load menu when no saved games available. Reported by Azuris.
+
 * Version 0.5.1 (2021-04-24) New in this release:
   * Added the "Demo" to the Catacomb Abyss shareware. The demo is a slideshow that originally served as a preview of the Catacomb Adventure series. It can be accessed via the menu or by pressing F10 in the opening screen.
   * Added the "Hints & Solutions" to the Catacomb Adventure series. The Hints & Solutions is a slideshow with top down maps of each level. It is only available in the GOG Catacombs Pack, so not in the shareware version. It can be accessed via the menu.
