@@ -2713,20 +2713,19 @@ void EngineCore::WarpInsideLevel(const Actor* sourceWarp)
     {
         for (uint16_t x = 0; x < m_level->GetLevelWidth(); x++)
         {
-            Actor* actor = m_level->GetBlockingActor(x, y);
-            if (actor != nullptr && actor != sourceWarp && actor->GetDecorateActor().spawnOnAllDifficulties == sourceWarp->GetDecorateActor().spawnOnAllDifficulties)
+            const Actor* actor = m_level->GetBlockingActor(x, y);
+            if (actor != nullptr &&
+                actor != sourceWarp &&
+                actor->GetDecorateActor().spawnOnAllDifficulties == sourceWarp->GetDecorateActor().spawnOnAllDifficulties)
             {
                 m_level->GetPlayerActor()->SetX(actor->GetX());
                 m_level->GetPlayerActor()->SetY(actor->GetY());
-                Thrust(0, 1.5f);
-                if (abs(actor->GetX() - m_level->GetPlayerActor()->GetX()) < 0.1f && abs(actor->GetY() - m_level->GetPlayerActor()->GetY()) < 0.1f )
-                {
-                    Thrust(0, 1.0f);
-                    if (abs(actor->GetX() - m_level->GetPlayerActor()->GetX()) < 0.1f && abs(actor->GetY() - m_level->GetPlayerActor()->GetY()) < 0.1f )
-                    {
-                        Thrust(0, 0.5f);
-                    }
-                }
+                Thrust(0, 0.5f);
+                Thrust(0, 0.5f);
+                Thrust(0, 0.5f);
+
+                // Update visibility map based on new location of player
+                m_level->UpdateVisibilityMap();
             }
         }
     }
