@@ -60,6 +60,8 @@ public:
 
 private:
     bool IsNewSaveGameNameAlreadyInUse() const;
+    static bool RepliedWithYes(const SDL_Keycode keyCode);
+    static bool RepliedWithNo(const SDL_Keycode keyCode);
 
     bool m_menuActive;
 

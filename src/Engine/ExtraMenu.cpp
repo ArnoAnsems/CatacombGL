@@ -244,89 +244,91 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
     if (m_askForOverwrite)
     {
-        if (keyCode == SDLK_y)
+        if (RepliedWithYes(keyCode))
         {
             m_askForOverwrite = false;
             command = MenuCommandSaveGame;
         }
-        else if (keyCode != SDLK_UNKNOWN)
+        else if (RepliedWithNo(keyCode))
         {
             m_askForOverwrite = false;
         }
     }
-
-    if (m_askForReset)
+    else if (m_askForReset)
     {
-        if (keyCode != SDLK_UNKNOWN)
+        if (RepliedWithYes(keyCode))
         {
-            if (keyCode == SDLK_y)
-            {
-                m_configurationSettings.ResetToDefaults();
-            }
+            m_configurationSettings.ResetToDefaults();
+            m_askForReset = false;
+        }
+        else if (RepliedWithNo(keyCode))
+        {
             m_askForReset = false;
         }
     }
-
-    if (m_askForResetClassic)
+    else if (m_askForResetClassic)
     {
-        if (keyCode != SDLK_UNKNOWN)
+        if (RepliedWithYes(keyCode))
         {
-            if (keyCode == SDLK_y)
-            {
-                m_configurationSettings.ResetToClassic();
-            }
+            m_configurationSettings.ResetToClassic();
+            m_askForResetClassic = false;
+        }
+        else if (RepliedWithNo(keyCode))
+        {
             m_askForResetClassic = false;
         }
     }
+    else
+    {
+        const GuiEvent& guiEvent = m_guiMenu.ProcessInput();
 
-    const GuiEvent& guiEvent = m_guiMenu.ProcessInput();
- 
-    if (guiEvent.guiAction == GuiActionLoadGame)
-    {
-        command = MenuCommandLoadGame;
-        m_newSaveGameName = m_savedGames.at(guiEvent.guiParameter);
-    }
-    else if (guiEvent.guiAction == GuiActionSaveGame)
-    {
-        m_newSaveGameName = (guiEvent.guiParameter == -1) ? m_newSaveGameName : m_savedGames.at(guiEvent.guiParameter);
-        if (IsNewSaveGameNameAlreadyInUse())
+        if (guiEvent.guiAction == GuiActionLoadGame)
         {
-            m_askForOverwrite = true;
+            command = MenuCommandLoadGame;
+            m_newSaveGameName = m_savedGames.at(guiEvent.guiParameter);
         }
-        else if (m_newSaveGameName.size() == 0)
+        else if (guiEvent.guiAction == GuiActionSaveGame)
         {
-            // Not a valid name, do not store
+            m_newSaveGameName = (guiEvent.guiParameter == -1) ? m_newSaveGameName : m_savedGames.at(guiEvent.guiParameter);
+            if (IsNewSaveGameNameAlreadyInUse())
+            {
+                m_askForOverwrite = true;
+            }
+            else if (m_newSaveGameName.size() == 0)
+            {
+                // Not a valid name, do not store
+            }
+            else
+            {
+                command = MenuCommandSaveGame;
+            }
         }
-        else
+        else if (guiEvent.guiAction == GuiActionClose)
         {
-            command = MenuCommandSaveGame;
+            command = MenuCommandCloseMenu;
         }
-    }
-    else if (guiEvent.guiAction == GuiActionClose)
-    {
-        command = MenuCommandCloseMenu;
-    }
-    else if (guiEvent.guiAction == GuiActionNewGame)
-    {
-        // New game
-        command = MenuCommandStartNewGame;
-        m_menuActive = false;
-    }
-    else if (guiEvent.guiAction == GuiActionQuit)
-    {
-        command = MenuCommandExitGame;
-    }
-    else if (guiEvent.guiAction == GuiActionPlaySound)
-    {
-        m_audioPlayer.Play((uint16_t)guiEvent.guiParameter);
-    }
-    else if (guiEvent.guiAction == GuiActionResetToDefaults)
-    {
-        m_askForReset = true;
-    }
-    else if (guiEvent.guiAction == GuiActionResetToClassic)
-    {
-        m_askForResetClassic = true;
+        else if (guiEvent.guiAction == GuiActionNewGame)
+        {
+            // New game
+            command = MenuCommandStartNewGame;
+            m_menuActive = false;
+        }
+        else if (guiEvent.guiAction == GuiActionQuit)
+        {
+            command = MenuCommandExitGame;
+        }
+        else if (guiEvent.guiAction == GuiActionPlaySound)
+        {
+            m_audioPlayer.Play((uint16_t)guiEvent.guiParameter);
+        }
+        else if (guiEvent.guiAction == GuiActionResetToDefaults)
+        {
+            m_askForReset = true;
+        }
+        else if (guiEvent.guiAction == GuiActionResetToClassic)
+        {
+            m_askForResetClassic = true;
+        }
     }
 
     return command;
@@ -432,4 +434,17 @@ bool ExtraMenu::IsNewSaveGameNameAlreadyInUse() const
 void ExtraMenu::CheckHighScore(const uint16_t level, const uint32_t score)
 {
     // Not applicable
+}
+
+bool ExtraMenu::RepliedWithYes(const SDL_Keycode keyCode)
+{
+    return (keyCode == SDLK_y ||
+            keyCode == SDLK_RETURN ||
+            keyCode == SDLK_KP_ENTER);
+}
+
+bool ExtraMenu::RepliedWithNo(const SDL_Keycode keyCode)
+{
+    return (keyCode == SDLK_n ||
+            keyCode == SDLK_ESCAPE);
 }

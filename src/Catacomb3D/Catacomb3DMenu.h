@@ -60,6 +60,8 @@ private:
     static void DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3);
     void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
     void DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
+    static bool RepliedWithYes(const SDL_Keycode keyCode);
+    static bool RepliedWithNo(const SDL_Keycode keyCode);
 
     bool m_menuActive;
     bool m_saveGameEnabled;

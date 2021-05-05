@@ -300,88 +300,85 @@ void Catacomb3DMenu::SetActive(bool active)
 MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
 {
     MenuCommand command = MenuCommandNone;
+    const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
     if (m_askForOverwrite)
     {
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (keyCode == SDLK_y)
+        if (RepliedWithYes(keyCode))
         {
             m_askForOverwrite = false;
             command = MenuCommandSaveGame;
         }
-        else if (keyCode != SDLK_UNKNOWN)
+        else if (RepliedWithNo(keyCode))
         {
             m_askForOverwrite = false;
         }
     }
-    if (m_askForReset)
+    else if (m_askForReset)
     {
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (keyCode != SDLK_UNKNOWN)
+        if (RepliedWithYes(keyCode))
         {
-            if (keyCode == SDLK_y)
-            {
-                m_configurationSettings.ResetToDefaults();
-            }
+            m_configurationSettings.ResetToDefaults();
+            m_askForReset = false;
+        }
+        else if (RepliedWithNo(keyCode))
+        {
             m_askForReset = false;
         }
     }
     else if (m_askForResetClassic)
     {
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (keyCode != SDLK_UNKNOWN)
+        if (RepliedWithYes(keyCode))
         {
-            if (keyCode == SDLK_y)
-            {
-                m_configurationSettings.ResetToClassic();
-            }
+            m_configurationSettings.ResetToClassic();
+            m_askForResetClassic = false;
+        }
+        else if (RepliedWithNo(keyCode))
+        {
             m_askForResetClassic = false;
         }
     }
     else if (m_askForQuit)
     {
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (keyCode == SDLK_y)
+        if (RepliedWithYes(keyCode))
         {
+            command = MenuCommandExitGame;
             m_askForQuit = false;
-            return MenuCommandExitGame;
         }
-        else if (keyCode != SDLK_UNKNOWN)
+        else if (RepliedWithNo(keyCode))
         {
             m_askForQuit = false;
-            return MenuCommandNone;
         }
     }
     else if (m_askForEndGame)
     {
-        const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-        if (keyCode == SDLK_y)
+        if (RepliedWithYes(keyCode))
         {
             m_askForEndGame = false;
             if (m_askForEndGameGuiAction == GuiActionNewGameEasy)
             {
-                return MenuCommandStartNewGameEasy;
+                command = MenuCommandStartNewGameEasy;
             }
             else if (m_askForEndGameGuiAction == GuiActionNewGameNormal)
             {
-                return MenuCommandStartNewGameNormal;
+                command = MenuCommandStartNewGameNormal;
             }
             else if (m_askForEndGameGuiAction == GuiActionNewGameHard)
             {
-                return MenuCommandStartNewGameHard;
+                command = MenuCommandStartNewGameHard;
             }
             else if (m_askForEndGameGuiAction == GuiActionLoadGame)
             {
-                return MenuCommandLoadGame;
+                command = MenuCommandLoadGame;
             }
             else
             {
-                return MenuCommandEndGame;
+                command = MenuCommandEndGame;
             }
         }
-        else if (keyCode != SDLK_UNKNOWN)
+        else if (RepliedWithNo(keyCode))
         {
             m_askForEndGame = false;
-            return MenuCommandNone;
+            command = MenuCommandNone;
         }
     }
     else
@@ -645,4 +642,17 @@ void Catacomb3DMenu::CheckHighScore(const uint16_t level, const uint32_t score)
 {
     m_guiMenu.Open(pageHighScoresId);
     m_highScores.TryToAddNewScore(score, level + 1);
+}
+
+bool Catacomb3DMenu::RepliedWithYes(const SDL_Keycode keyCode)
+{
+    return (keyCode == SDLK_y ||
+        keyCode == SDLK_RETURN ||
+        keyCode == SDLK_KP_ENTER);
+}
+
+bool Catacomb3DMenu::RepliedWithNo(const SDL_Keycode keyCode)
+{
+    return (keyCode == SDLK_n ||
+        keyCode == SDLK_ESCAPE);
 }
