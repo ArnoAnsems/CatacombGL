@@ -55,4 +55,5 @@ public:
     virtual void OpenSoundMenu() = 0;
     virtual void OpenDemo() = 0;
     virtual void CheckHighScore(const uint16_t level, const uint32_t score) = 0;
+    virtual void ShowSavingPopup(const std::string& name, const uint32_t timeStamp) = 0;
 };

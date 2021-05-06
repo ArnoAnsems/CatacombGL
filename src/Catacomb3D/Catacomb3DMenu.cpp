@@ -77,6 +77,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_askForQuit (false),
     m_highScores(highScores),
     m_menuActivatedTimestamp(0u),
+    m_savingPopupTimestamp(0u),
+    m_savingPopupName(""),
     m_guiMenu(playerInput),
     m_renderableText(*egaGraph->GetFont(4)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(7)),
@@ -502,6 +504,11 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         m_menuActivatedTimestamp = timeStamp;
     }
 
+    if (!m_savingPopupName.empty() && m_savingPopupTimestamp + 1000 < m_timeStamp)
+    {
+        m_savingPopupName.clear();
+    }
+
     const uint32_t loadingDuration = 500;
     if (timeStamp < m_menuActivatedTimestamp + loadingDuration)
     {
@@ -583,6 +590,28 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     {
         DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO CLASSIC LOOK?", "PRESS Y TO CONFIRM", "ESC TO BACK OUT");
     }
+    
+    if (!m_savingPopupName.empty())
+    {
+        RenderableText renderableText(*egaGraph->GetFont(4));
+        const std::string nameToDisplay = "'" + m_savingPopupName + "'";
+        const uint16_t widthNeeded = renderableText.GetWidthInPixels(m_savingPopupName) + 18;
+        const int width = (widthNeeded < 80) ? 80 : widthNeeded;
+        const int height = 18;
+        const int offsetX = 154 - (width / 2);
+        const int offsetY = 88;
+        
+        renderer.Render2DPicture(egaGraph->GetMaskedPicture(CP_MENUMASKPICM), 74, 48);
+        renderer.Render2DBar(offsetX + 1, offsetY + 1, width - 2, height - 2, EgaBlack);
+        renderer.Render2DBar(offsetX, offsetY, width, 1, EgaRed);
+        renderer.Render2DBar(offsetX, offsetY + height, width, 1, EgaRed);
+        renderer.Render2DBar(offsetX, offsetY + 1, 1, height - 1, EgaRed);
+        renderer.Render2DBar(offsetX + width - 1, offsetY + 1, 1, height - 1, EgaRed);
+        renderableText.Centered("Saving", EgaBrightRed, 154, offsetY + 3);
+        renderableText.Centered(nameToDisplay, EgaBrightRed, 154, offsetY + 11);
+        
+        renderer.RenderText(renderableText);
+    }
 }
 
 void Catacomb3DMenu::SetSaveGameEnabled(const bool enabled)
@@ -655,4 +684,10 @@ bool Catacomb3DMenu::RepliedWithNo(const SDL_Keycode keyCode)
 {
     return (keyCode == SDLK_n ||
         keyCode == SDLK_ESCAPE);
+}
+
+void Catacomb3DMenu::ShowSavingPopup(const std::string& name, const uint32_t timeStamp)
+{
+    m_savingPopupName = name;
+    m_savingPopupTimestamp = timeStamp;
 }

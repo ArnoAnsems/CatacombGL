@@ -448,3 +448,8 @@ bool ExtraMenu::RepliedWithNo(const SDL_Keycode keyCode)
     return (keyCode == SDLK_n ||
             keyCode == SDLK_ESCAPE);
 }
+
+void ExtraMenu::ShowSavingPopup(const std::string& name, const uint32_t timeStamp)
+{
+
+}

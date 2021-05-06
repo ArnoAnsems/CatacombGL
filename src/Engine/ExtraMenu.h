@@ -57,6 +57,7 @@ public:
     void OpenSoundMenu() override;
     void OpenDemo() override;
     void CheckHighScore(const uint16_t level, const uint32_t score) override;
+    void ShowSavingPopup(const std::string& name, const uint32_t timeStamp) override;
 
 private:
     bool IsNewSaveGameNameAlreadyInUse() const;

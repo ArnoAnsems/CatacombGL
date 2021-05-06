@@ -675,6 +675,7 @@ bool EngineCore::Think()
             const std::string& saveGameName = m_menu->GetNewSaveGameName();
             if (StoreGameToFile(saveGameName))
             {
+                m_menu->ShowSavingPopup(saveGameName, m_gameTimer.GetActualTime());
                 bool existingSaveOverwritten = false;
                 uint16_t i = 0;
                 while (i < m_savedGames.size() && !existingSaveOverwritten)
