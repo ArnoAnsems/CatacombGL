@@ -61,6 +61,8 @@ ExtraMenu::ExtraMenu(
     m_askForOverwrite(false),
     m_askForReset(false),
     m_askForResetClassic(false),
+    m_savingPopupTimestamp(0u),
+    m_savingPopupName(""),
     m_guiMenu(playerInput),
     m_renderableText(*egaGraph->GetFont(3)),
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10))
@@ -336,6 +338,11 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
 
 void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t menuCursorPic, const uint32_t timeStamp)
 {
+    if (!m_savingPopupName.empty() && m_savingPopupTimestamp + 1000 < timeStamp)
+    {
+        m_savingPopupName.clear();
+    }
+
     if (m_askForOverwrite)
     {
         RenderableText renderableText(*egaGraph->GetFont(3));
@@ -378,6 +385,27 @@ void ExtraMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const uint16
     m_guiMenu.Draw(renderer);
     renderer.RenderText(m_renderableText);
     renderer.RenderText(m_renderableTextDefaultFont);
+
+    if (!m_savingPopupName.empty())
+    {
+        RenderableText renderableText(*egaGraph->GetFont(3));
+        const std::string nameToDisplay = "'" + m_savingPopupName + "'";
+        const uint16_t widthNeeded = renderableText.GetWidthInPixels(m_savingPopupName) + 18;
+        const int width = (widthNeeded < 80) ? 80 : widthNeeded;
+        const int height = 26;
+        const int offsetX = 160 - (width / 2);
+        const int offsetY = 48;
+
+        renderer.Render2DBar(offsetX + 1, offsetY + 1, width - 2, height - 2, EgaDarkGray);
+        renderer.Render2DBar(offsetX, offsetY, width, 1, EgaBrightCyan);
+        renderer.Render2DBar(offsetX, offsetY + height - 1, width, 1, EgaBrightCyan);
+        renderer.Render2DBar(offsetX, offsetY + 1, 1, height - 1, EgaBrightCyan);
+        renderer.Render2DBar(offsetX + width - 1, offsetY + 1, 1, height - 1, EgaBrightCyan);
+        renderableText.Centered("Saving", EgaBrightWhite, 160, offsetY + 3);
+        renderableText.Centered(nameToDisplay, EgaBrightWhite, 160, offsetY + 14);
+
+        renderer.RenderText(renderableText);
+    }
 }
 
 void ExtraMenu::SetSaveGameEnabled(const bool enabled)
@@ -451,5 +479,6 @@ bool ExtraMenu::RepliedWithNo(const SDL_Keycode keyCode)
 
 void ExtraMenu::ShowSavingPopup(const std::string& name, const uint32_t timeStamp)
 {
-
+    m_savingPopupName = name;
+    m_savingPopupTimestamp = timeStamp;
 }

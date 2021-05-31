@@ -73,6 +73,8 @@ private:
     bool m_askForOverwrite;
     bool m_askForReset;
     bool m_askForResetClassic;
+    uint32_t m_savingPopupTimestamp;
+    std::string m_savingPopupName;
     GuiMenu m_guiMenu;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;

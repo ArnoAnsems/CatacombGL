@@ -604,7 +604,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         renderer.Render2DPicture(egaGraph->GetMaskedPicture(CP_MENUMASKPICM), 74, 48);
         renderer.Render2DBar(offsetX + 1, offsetY + 1, width - 2, height - 2, EgaBlack);
         renderer.Render2DBar(offsetX, offsetY, width, 1, EgaRed);
-        renderer.Render2DBar(offsetX, offsetY + height, width, 1, EgaRed);
+        renderer.Render2DBar(offsetX, offsetY + height - 1, width, 1, EgaRed);
         renderer.Render2DBar(offsetX, offsetY + 1, 1, height - 1, EgaRed);
         renderer.Render2DBar(offsetX + width - 1, offsetY + 1, 1, height - 1, EgaRed);
         renderableText.Centered("Saving", EgaBrightRed, 154, offsetY + 3);
