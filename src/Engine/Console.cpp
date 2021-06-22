@@ -15,7 +15,7 @@
 
 #include "Console.h"
 #include "DefaultFont.h"
-#include "..\..\ThirdParty\SDL\include\SDL_timer.h"
+#include "../../ThirdParty/SDL/include/SDL_timer.h"
 
 Console::Console(const std::string& label) :
     m_active(false),

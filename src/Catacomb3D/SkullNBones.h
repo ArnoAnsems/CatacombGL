@@ -18,11 +18,11 @@
 //
 #pragma once
 
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\EgaGraph.h"
-#include "..\Engine\PlayerInput.h"
-#include "..\Engine\AudioPlayer.h"
-#include "..\Engine\GuiElementBase.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/EgaGraph.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/AudioPlayer.h"
+#include "../Engine/GuiElementBase.h"
 
 class SkullNBones: public GuiElementBase
 {

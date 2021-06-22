@@ -22,7 +22,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "..\..\ThirdParty\SDL\include\SDL_keycode.h"
+#include "../../ThirdParty/SDL/include/SDL_keycode.h"
 
 enum ControlAction
 {

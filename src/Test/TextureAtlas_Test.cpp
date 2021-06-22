@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "TextureAtlas_Test.h"
-#include "..\Engine\TextureAtlas.h"
+#include "../Engine/TextureAtlas.h"
 
 TextureAtlas_Test::TextureAtlas_Test()
 {

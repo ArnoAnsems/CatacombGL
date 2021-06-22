@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameApocalypse_Test.h"
-#include "..\Apocalypse\GameApocalypse.h"
+#include "../Apocalypse/GameApocalypse.h"
 #include "RendererStub.h"
 
 GameApocalypse_Test::GameApocalypse_Test()

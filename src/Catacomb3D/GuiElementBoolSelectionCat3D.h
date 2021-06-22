@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "..\Engine\GuiElementBoolSelection.h"
-#include "..\Engine\RenderableTiles.h"
+#include "../Engine/GuiElementBoolSelection.h"
+#include "../Engine/RenderableTiles.h"
 
 class GuiElementBoolSelectionCat3D : public GuiElementBoolSelection
 {

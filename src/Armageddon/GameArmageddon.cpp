@@ -19,8 +19,8 @@
 #include "IntroViewArmageddon.h"
 #include "AudioRepositoryArmageddon.h"
 #include "DecorateAll.h"
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\ExtraMenu.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/ExtraMenu.h"
 
 static const std::string ArmageddonName = "Catacomb Armageddon v1.02";
 

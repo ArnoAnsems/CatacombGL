@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ConsoleVariableInt_Test.h"
-#include "..\Engine\ConsoleVariableInt.h"
+#include "../Engine/ConsoleVariableInt.h"
 
 ConsoleVariableInt_Test::ConsoleVariableInt_Test()
 {

@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "..\Engine\GuiElementBase.h"
-#include "..\Engine\EgaGraph.h"
+#include "../Engine/GuiElementBase.h"
+#include "../Engine/EgaGraph.h"
 
 class GuiPageFrameCat3D : public GuiElementBase
 {

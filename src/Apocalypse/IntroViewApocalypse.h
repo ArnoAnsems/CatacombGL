@@ -20,8 +20,8 @@
 //
 #pragma once
 
-#include "..\Engine\IIntroView.h"
-#include "..\Engine\Shape.h"
+#include "../Engine/IIntroView.h"
+#include "../Engine/Shape.h"
 #include <string>
 
 class IntroViewApocalypse : public IIntroView

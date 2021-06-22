@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ControlsMap.h"
-#include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
-#include "..\..\ThirdParty\SDL\include\SDL_mouse.h"
+#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
+#include "../../ThirdParty/SDL/include/SDL_mouse.h"
 
 ControlsMap::ControlsMap()
 {

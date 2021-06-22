@@ -22,7 +22,7 @@
 
 #include <stdint.h>
 #include <map>
-#include "..\..\ThirdParty\SDL\include\SDL_keycode.h"
+#include "../../ThirdParty/SDL/include/SDL_keycode.h"
 
 class PlayerInput
 {

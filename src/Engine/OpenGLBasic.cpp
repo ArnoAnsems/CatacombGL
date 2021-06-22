@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/
 
 #include "OpenGLBasic.h"
-#include "..\..\ThirdParty\SDL\include\SDL_video.h"
-#include "..\Engine\Logging.h"
+#include "../../ThirdParty/SDL/include/SDL_video.h"
+#include "../Engine/Logging.h"
 
 OpenGLBasic::OpenGLBasic() :
     m_genTexturesFuncPtr(nullptr),

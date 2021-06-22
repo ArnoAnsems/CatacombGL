@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "HelpPages_Test.h"
-#include "..\Engine\HelpPages.h"
+#include "../Engine/HelpPages.h"
 
 HelpPages_Test::HelpPages_Test()
 {

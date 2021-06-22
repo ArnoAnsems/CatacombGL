@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ExtraMenu.h"
-#include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
+#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
 #include "DefaultFont.h"
 #include "GuiElementBoolSelection.h"
 #include "GuiElementEnumSelection.h"

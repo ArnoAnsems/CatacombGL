@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "IntroViewCatacomb3D.h"
-#include "..\Engine\DefaultFont.h"
+#include "../Engine/DefaultFont.h"
 #include "EgaGraphCatacomb3D.h"
 
 IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path, HighScores& highScores) :

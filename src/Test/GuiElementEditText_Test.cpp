@@ -15,8 +15,8 @@
 
 #include "GuiElementEditText_Test.h"
 
-#include "..\Engine\GuiElementEditText.h"
-#include "..\Engine\DefaultFont.h"
+#include "../Engine/GuiElementEditText.h"
+#include "../Engine/DefaultFont.h"
 #include "RendererStub.h"
 
 GuiElementEditText_Test::GuiElementEditText_Test()

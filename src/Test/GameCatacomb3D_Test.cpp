@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameCatacomb3D_Test.h"
-#include "..\Catacomb3D\GameCatacomb3D.h"
+#include "../Catacomb3D/GameCatacomb3D.h"
 #include "RendererStub.h"
 
 GameCatacomb3D_Test::GameCatacomb3D_Test()

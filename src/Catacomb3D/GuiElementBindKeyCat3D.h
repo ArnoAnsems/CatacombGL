@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "..\Engine\GuiElementBindKey.h"
-#include "..\Engine\RenderableTiles.h"
+#include "../Engine/GuiElementBindKey.h"
+#include "../Engine/RenderableTiles.h"
 
 class GuiElementBindKeyCat3D : public GuiElementBindKey
 {

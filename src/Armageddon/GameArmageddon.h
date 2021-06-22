@@ -20,9 +20,9 @@
 //
 #pragma once
 
-#include "..\Engine\IGame.h"
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\Logging.h"
+#include "../Engine/IGame.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/Logging.h"
 #include <map>
 
 class GameArmageddon: public IGame

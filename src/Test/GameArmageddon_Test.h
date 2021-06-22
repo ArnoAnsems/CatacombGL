@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <gtest\gtest.h>
+#include <gtest/gtest.h>
 
 class GameArmageddon_Test : public ::testing::Test
 {

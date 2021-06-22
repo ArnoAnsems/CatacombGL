@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameAbyss_Test.h"
-#include "..\Abyss\GameAbyss.h"
+#include "../Abyss/GameAbyss.h"
 #include "RendererStub.h"
 
 GameAbyss_Test::GameAbyss_Test()

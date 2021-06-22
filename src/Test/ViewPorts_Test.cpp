@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ViewPorts_Test.h"
-#include "..\Engine\ViewPorts.h"
+#include "../Engine/ViewPorts.h"
 
 static const float originalAspectRatio = 4.0f / 3.0f;
 static const float fitToWindowAspectRatio = 10.0f;

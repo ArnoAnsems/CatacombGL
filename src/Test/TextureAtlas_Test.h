@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <gtest\gtest.h>
+#include <gtest/gtest.h>
 
 class TextureAtlas_Test : public ::testing::Test
 {

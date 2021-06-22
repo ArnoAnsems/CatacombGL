@@ -14,16 +14,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "..\Engine\Picture.h"
-#include "..\Engine\Font.h"
-#include "..\Engine\FileChunk.h"
-#include "..\Engine\Decompressor.h"
-#include "..\Engine\EgaColor.h"
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\OpenGLFrameBuffer.h"
+#include "../Engine/Picture.h"
+#include "../Engine/Font.h"
+#include "../Engine/FileChunk.h"
+#include "../Engine/Decompressor.h"
+#include "../Engine/EgaColor.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/OpenGLFrameBuffer.h"
 
 #include <windows.h>		// Header File For Windows
-#include <gl\gl.h>			// Header File For The OpenGL32 Library
+#include <gl/gl.h>			// Header File For The OpenGL32 Library
 
 class RendererOpenGLWin32: public IRenderer
 {

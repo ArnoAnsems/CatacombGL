@@ -21,7 +21,7 @@
 //
 #pragma once
 
-#include "..\Engine\EgaGraph.h"
+#include "../Engine/EgaGraph.h"
 
 const huffmanTable egaDictionaryAbyssv113 =
 {

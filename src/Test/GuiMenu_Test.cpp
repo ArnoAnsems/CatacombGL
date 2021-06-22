@@ -15,10 +15,10 @@
 
 #include "GuiMenu_Test.h"
 
-#include "..\Engine\GuiMenu.h"
-#include "..\Engine\GuiElementButton.h"
-#include "..\Engine\GuiPage.h"
-#include "..\Engine\DefaultFont.h"
+#include "../Engine/GuiMenu.h"
+#include "../Engine/GuiElementButton.h"
+#include "../Engine/GuiPage.h"
+#include "../Engine/DefaultFont.h"
 #include "RendererStub.h"
 
 GuiMenu_Test::GuiMenu_Test()

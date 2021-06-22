@@ -19,8 +19,8 @@
 #include "IntroViewApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 #include "DecorateAll.h"
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\ExtraMenu.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/ExtraMenu.h"
 
 static const std::string ApocalypseName = "Catacomb Apocalypse v1.01";
 

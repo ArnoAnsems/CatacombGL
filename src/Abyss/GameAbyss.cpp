@@ -16,8 +16,8 @@
 #include "GameAbyss.h"
 #include "GameMapsAbyss.h"
 #include "IntroViewAbyss.h"
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\ExtraMenu.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/ExtraMenu.h"
 
 // Decorate
 #include "DecorateAll.h"
