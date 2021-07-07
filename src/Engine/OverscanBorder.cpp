@@ -1,0 +1,39 @@
+// Copyright (C) 2021 Arno Ansems
+// 
+// This program is free software: you can redistribute it and/or modify 
+// it under the terms of the GNU General Public License as published by 
+// the Free Software Foundation, either version 3 of the License, or 
+// (at your option) any later version. 
+// 
+// This program is distributed in the hope that it will be useful, 
+// but WITHOUT ANY WARRANTY; without even the implied warranty of 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+// GNU General Public License for more details. 
+// 
+// You should have received a copy of the GNU General Public License 
+// along with this program.  If not, see http://www.gnu.org/licenses/ 
+
+#include "OverscanBorder.h"
+
+OverscanBorder::OverscanBorder() :
+    m_color(EgaBlack),
+    m_timeStampWhenColorIsExpired(0)
+{
+
+}
+
+OverscanBorder::~OverscanBorder()
+{
+
+}
+
+void OverscanBorder::SetColor(const uint32_t timeStamp, const egaColor color, const uint32_t durationInMs)
+{
+    m_color = color;
+    m_timeStampWhenColorIsExpired = timeStamp + durationInMs;
+}
+
+egaColor OverscanBorder::GetActiveColor(const uint32_t timeStamp) const
+{
+    return (timeStamp > m_timeStampWhenColorIsExpired) ? EgaBlack : m_color;
+}

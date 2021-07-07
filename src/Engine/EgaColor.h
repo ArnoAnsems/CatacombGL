@@ -79,4 +79,4 @@ constexpr rgbColor EgaToRgb(const egaColor ega)
     {
         return egaToRgbMap[egaColor::EgaBlack];
     }
-}
+};
