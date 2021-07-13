@@ -476,7 +476,10 @@ uint16_t RendererOpenGLWin32::GetAdditionalMarginDueToWideScreen(const float asp
     }
     else
     {
-        return (uint16_t)(rect.right - rect.left - 320.0f + 1.0f) / 2;
+        const double marginIncludingOverscanBorder = (rect.right - rect.left - 320.0f + 1.0f) / 2;
+        const double overscanBorderWidth = 4.0f;
+        const double marginExcludingOverscanBorder = marginIncludingOverscanBorder - overscanBorderWidth;
+        return (marginExcludingOverscanBorder > 0.0) ? (uint16_t)(marginExcludingOverscanBorder) : 0;
     }
 }
 

@@ -24,25 +24,27 @@ ViewPorts::ViewPortRect2D ViewPorts::GetOrtho2D(const uint16_t windowWidth, cons
 
     const double originalWidthInPixels = helpWindow ? 640.0f : 320.0f;
     const double originalHeightInPixels = 200.0f;
+    const double overscanBorderWidth = 4.0f;
+    const double overscanBorderHeight = 3.0f;
     if (windowAspectRatio > originalAspectRatio)
     {
-        rect.top = 0.0;
-        rect.bottom = originalHeightInPixels;
-        double originalWidth = (double)windowWidth / windowAspectRatio * originalAspectRatio;
-        double windowWidthInClassicPixels = ((double)windowWidth / originalWidth) * originalWidthInPixels;
+        rect.top = -overscanBorderHeight;
+        rect.bottom = originalHeightInPixels + overscanBorderHeight;
+        double originalWidth = (float)windowHeight * originalAspectRatio;
+        double windowWidthInClassicPixels = ((double)windowWidth / originalWidth) * (originalWidthInPixels + 8);
         double borderWidth = (windowWidthInClassicPixels - originalWidthInPixels) * 0.5;
         rect.left = -borderWidth;
-        rect.right = windowWidthInClassicPixels - borderWidth;
+        rect.right = originalWidthInPixels + borderWidth;
     }
     else
     {
-        rect.left = 0.0;
-        rect.right = originalWidthInPixels;
+        rect.left = -overscanBorderWidth;
+        rect.right = originalWidthInPixels + overscanBorderWidth;
         double originalHeight = (double)windowHeight / (1.0 / windowAspectRatio) * (1.0 / originalAspectRatio);
-        double windowHeightInClassicPixels = ((double)windowHeight / originalHeight) * originalHeightInPixels;
+        double windowHeightInClassicPixels = ((double)windowHeight / originalHeight) * (originalHeightInPixels + 6);
         double borderHeight = (windowHeightInClassicPixels - originalHeightInPixels) * 0.5;
         rect.top = -borderHeight;
-        rect.bottom = windowHeightInClassicPixels - borderHeight;
+        rect.bottom = originalHeightInPixels + borderHeight;
     }
 
     return rect;
@@ -55,30 +57,32 @@ ViewPorts::ViewPortRect3D ViewPorts::Get3D(const uint16_t windowWidth, const uin
     const float configuredAspectRatio = aspectRatio; //1920.0 / 1080.0;
     const float windowAspectRatio = (float)windowWidth / (float)windowHeight;
 
-    const uint16_t originalScreenHeightInPixels = 200;   // Based on the classic EGA 320x200 screen resolution.
-    const uint16_t originalBottomBorderHeightInPixels = originalScreenHeightInPixels - original3DViewArea.bottom;
+    const uint16_t originalScreenHeightInPixels = 200 + 6;   // Based on the classic EGA 320x200 screen resolution.
+    const uint16_t originalBottomBorderHeightInPixels = originalScreenHeightInPixels - original3DViewArea.bottom - 3;
     const uint16_t original3DViewHeightInPixels = original3DViewArea.height;
     const float normalizedBottomBorderHeight = (float)originalBottomBorderHeightInPixels / (float)originalScreenHeightInPixels;
     const float normalized3DViewHeight = (float)original3DViewHeightInPixels / (float)originalScreenHeightInPixels;
 
-    const uint16_t originalScreenWidthInPixels = 320;   // Based on the classic EGA 320x200 screen resolution.
-    const uint16_t originalRightBorderWidthInPixels = originalScreenWidthInPixels - original3DViewArea.width - original3DViewArea.left;
-    const float normalizedRightBorderWidth = (float)originalRightBorderWidthInPixels / (float)originalScreenWidthInPixels;
+    const uint16_t originalScreenWidthInPixels = 320 + 8;   // Based on the classic EGA 320x200 screen resolution.
 
     if (originalAspectRatio > windowAspectRatio)
     {
         // The aspect ratio of the window is smaller than the classic aspect ratio, which means the view port cannot use the full height
         // of the window. Black borders will appear above and below the game view port.
 
-        // Use the full window width
-        rect.left = 0;
-        rect.width = (uint16_t)(windowWidth * (1.0f - normalizedRightBorderWidth));
+        const float originalPixelWidth = (float)windowWidth / originalScreenWidthInPixels;
+        const float originalPixelHeight = originalPixelWidth * 1.2f;
 
-        // Adjust the height of the game view port to match with the classic aspect ratio.
-        const float gameHeight = (float)windowWidth / originalAspectRatio;
-        rect.height = (uint16_t)(gameHeight * normalized3DViewHeight);
-        const uint16_t borderHeight = (uint16_t)((windowHeight - gameHeight) * 0.5);
-        rect.bottom = borderHeight + (uint16_t)(gameHeight * normalizedBottomBorderHeight);
+        // Use the full window width
+        rect.left = (uint16_t)(originalPixelWidth * 4.0f);
+        const uint16_t rightBorderWidthInOriginalPixels = 320 - original3DViewArea.width - original3DViewArea.left;
+        rect.width = (uint16_t)((original3DViewArea.width - original3DViewArea.left) * originalPixelWidth);
+
+        const uint16_t gameHeight = originalPixelHeight * 200.0f;
+        const uint16_t bottomBorder = (uint16_t)((windowHeight - gameHeight) * 0.5);
+        
+        rect.height = (uint16_t)(originalPixelHeight * original3DViewArea.height);
+        rect.bottom = bottomBorder + (uint16_t)(originalPixelHeight * (200 - original3DViewArea.bottom));
     }
     else
     {
@@ -93,10 +97,13 @@ ViewPorts::ViewPortRect3D ViewPorts::Get3D(const uint16_t windowWidth, const uin
         const float aspectRatio = (configuredAspectRatio < windowAspectRatio) ? configuredAspectRatio : windowAspectRatio;
 
         // Adjust the width of the game view port to match with the applied aspect ratio. 
-        const uint16_t gameWidth = (uint16_t)(windowHeight * aspectRatio);
-        const uint16_t borderWidth = (uint16_t)((windowWidth - gameWidth) * 0.5);
-        rect.left = borderWidth;
-        rect.width = gameWidth - (uint16_t)(windowHeight * originalAspectRatio * normalizedRightBorderWidth);
+        const float originalPixelHeight = (float)windowHeight / originalScreenHeightInPixels;
+        const float originalPixelWidth = originalPixelHeight * originalAspectRatio * (200.0f / 320.0f);
+        
+        const uint16_t rightBorderWidthInOriginalPixels = 320 - original3DViewArea.width - original3DViewArea.left;
+        const uint16_t gameWidth = (uint16_t)((float)windowHeight * aspectRatio);
+        rect.left = (uint16_t)((windowWidth - gameWidth) * 0.5) + (4.0f * originalPixelWidth);
+        rect.width = gameWidth - ((8 + rightBorderWidthInOriginalPixels) * originalPixelWidth);
     }
 
     return rect;
