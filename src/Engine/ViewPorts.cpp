@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ViewPorts.h"
+#include "OverscanBorder.h"
 
 static const float originalAspectRatio = 4.0f / 3.0f; // EGA monitors always had a 4:3 aspect ratio.
 
@@ -24,15 +25,15 @@ ViewPorts::ViewPortRect2D ViewPorts::GetOrtho2D(const uint16_t windowWidth, cons
 
     const double originalWidthInPixels = helpWindow ? 640.0f : 320.0f;
     const double originalHeightInPixels = 200.0f;
-    const double overscanBorderWidth = 4.0f;
-    const double overscanBorderHeight = 3.0f;
+    const double overscanBorderWidth = (double)(OverscanBorder::GetBorderWidth());
+    const double overscanBorderHeight = (double)(OverscanBorder::GetBorderHeight());
     if (windowAspectRatio > originalAspectRatio)
     {
         rect.top = -overscanBorderHeight;
         rect.bottom = originalHeightInPixels + overscanBorderHeight;
-        double originalWidth = (float)windowHeight * originalAspectRatio;
-        double windowWidthInClassicPixels = ((double)windowWidth / originalWidth) * (originalWidthInPixels + 8);
-        double borderWidth = (windowWidthInClassicPixels - originalWidthInPixels) * 0.5;
+        const double originalWidth = (float)windowHeight * originalAspectRatio;
+        const double windowWidthInClassicPixels = ((double)windowWidth / originalWidth) * (originalWidthInPixels + (2 * overscanBorderWidth));
+        const double borderWidth = (windowWidthInClassicPixels - originalWidthInPixels) * 0.5;
         rect.left = -borderWidth;
         rect.right = originalWidthInPixels + borderWidth;
     }
@@ -40,9 +41,9 @@ ViewPorts::ViewPortRect2D ViewPorts::GetOrtho2D(const uint16_t windowWidth, cons
     {
         rect.left = -overscanBorderWidth;
         rect.right = originalWidthInPixels + overscanBorderWidth;
-        double originalHeight = (double)windowHeight / (1.0 / windowAspectRatio) * (1.0 / originalAspectRatio);
-        double windowHeightInClassicPixels = ((double)windowHeight / originalHeight) * (originalHeightInPixels + 6);
-        double borderHeight = (windowHeightInClassicPixels - originalHeightInPixels) * 0.5;
+        const double originalHeight = (double)windowHeight / (1.0 / windowAspectRatio) * (1.0 / originalAspectRatio);
+        const double windowHeightInClassicPixels = ((double)windowHeight / originalHeight) * (originalHeightInPixels + (2 * overscanBorderHeight));
+        const double borderHeight = (windowHeightInClassicPixels - originalHeightInPixels) * 0.5;
         rect.top = -borderHeight;
         rect.bottom = originalHeightInPixels + borderHeight;
     }
@@ -56,14 +57,16 @@ ViewPorts::ViewPortRect3D ViewPorts::Get3D(const uint16_t windowWidth, const uin
 
     const float configuredAspectRatio = aspectRatio; //1920.0 / 1080.0;
     const float windowAspectRatio = (float)windowWidth / (float)windowHeight;
+    const uint16_t overscanBorderWidth = OverscanBorder::GetBorderWidth();
+    const uint16_t overscanBorderHeight = OverscanBorder::GetBorderHeight();
 
-    const uint16_t originalScreenHeightInPixels = 200 + 6;   // Based on the classic EGA 320x200 screen resolution.
-    const uint16_t originalBottomBorderHeightInPixels = originalScreenHeightInPixels - original3DViewArea.bottom - 3;
+    const uint16_t originalScreenHeightInPixels = 200 + (2 * overscanBorderHeight);   // Based on the classic EGA 320x200 screen resolution.
+    const uint16_t originalBottomBorderHeightInPixels = originalScreenHeightInPixels - original3DViewArea.bottom - overscanBorderHeight;
     const uint16_t original3DViewHeightInPixels = original3DViewArea.height;
     const float normalizedBottomBorderHeight = (float)originalBottomBorderHeightInPixels / (float)originalScreenHeightInPixels;
     const float normalized3DViewHeight = (float)original3DViewHeightInPixels / (float)originalScreenHeightInPixels;
 
-    const uint16_t originalScreenWidthInPixels = 320 + 8;   // Based on the classic EGA 320x200 screen resolution.
+    const uint16_t originalScreenWidthInPixels = 320 + (2 * overscanBorderWidth);   // Based on the classic EGA 320x200 screen resolution.
 
     if (originalAspectRatio > windowAspectRatio)
     {
@@ -74,7 +77,7 @@ ViewPorts::ViewPortRect3D ViewPorts::Get3D(const uint16_t windowWidth, const uin
         const float originalPixelHeight = originalPixelWidth * 1.2f;
 
         // Use the full window width
-        rect.left = (uint16_t)(originalPixelWidth * 4.0f);
+        rect.left = (uint16_t)(originalPixelWidth * (float)overscanBorderWidth);
         const uint16_t rightBorderWidthInOriginalPixels = 320 - original3DViewArea.width - original3DViewArea.left;
         rect.width = (uint16_t)((original3DViewArea.width - original3DViewArea.left) * originalPixelWidth);
 
@@ -102,8 +105,8 @@ ViewPorts::ViewPortRect3D ViewPorts::Get3D(const uint16_t windowWidth, const uin
         
         const uint16_t rightBorderWidthInOriginalPixels = 320 - original3DViewArea.width - original3DViewArea.left;
         const uint16_t gameWidth = (uint16_t)((float)windowHeight * aspectRatio);
-        rect.left = (uint16_t)((windowWidth - gameWidth) * 0.5) + (4.0f * originalPixelWidth);
-        rect.width = gameWidth - ((8 + rightBorderWidthInOriginalPixels) * originalPixelWidth);
+        rect.left = (uint16_t)((windowWidth - gameWidth) * 0.5) + ((float)overscanBorderWidth * originalPixelWidth);
+        rect.width = gameWidth - (((2 * overscanBorderWidth) + rightBorderWidthInOriginalPixels) * originalPixelWidth);
     }
 
     return rect;

@@ -37,3 +37,13 @@ egaColor OverscanBorder::GetActiveColor(const uint32_t timeStamp) const
 {
     return (timeStamp > m_timeStampWhenColorIsExpired) ? EgaBlack : m_color;
 }
+
+const uint16_t OverscanBorder::GetBorderWidth()
+{
+    return 4u;
+}
+
+const uint16_t OverscanBorder::GetBorderHeight()
+{
+    return 3u;
+}

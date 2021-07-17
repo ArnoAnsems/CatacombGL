@@ -32,6 +32,8 @@ public:
 
     void SetColor(const uint32_t timeStamp, const egaColor color, const uint32_t durationInMs);
     egaColor GetActiveColor(const uint32_t timeStamp) const;
+    static const uint16_t GetBorderWidth();
+    static const uint16_t GetBorderHeight();
 
 private:
     egaColor m_color;
