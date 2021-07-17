@@ -20,10 +20,10 @@
 //
 #pragma once
 
-#include "..\Engine\IGame.h"
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\Logging.h"
-#include "..\Engine\HighScores.h"
+#include "../Engine/IGame.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/Logging.h"
+#include "../Engine/HighScores.h"
 #include <map>
 
 class GameCatacomb3D : public IGame

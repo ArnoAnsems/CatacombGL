@@ -21,15 +21,15 @@
 #pragma once
 
 #include <stdint.h>
-#include "..\Engine\PlayerInput.h"
-#include "..\Engine\AudioPlayer.h"
-#include "..\Engine\ConfigurationSettings.h"
-#include "..\Engine\IRenderer.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/AudioPlayer.h"
+#include "../Engine/ConfigurationSettings.h"
+#include "../Engine/IRenderer.h"
 #include "EgaGraphCatacomb3D.h"
-#include "..\Engine\IMenu.h"
-#include "..\Engine\HighScores.h"
+#include "../Engine/IMenu.h"
+#include "../Engine/HighScores.h"
 #include "SkullNBones.h"
-#include "..\Engine\GuiMenu.h"
+#include "../Engine/GuiMenu.h"
 #include "GuiElementButtonCat3D.h"
 
 class Catacomb3DMenu: public IMenu

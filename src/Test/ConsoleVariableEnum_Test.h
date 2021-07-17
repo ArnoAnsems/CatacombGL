@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <gtest\gtest.h>
+#include <gtest/gtest.h>
 
 class ConsoleVariableEnum_Test : public ::testing::Test
 {

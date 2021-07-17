@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/
 
 #include "OpenGLFrameBuffer.h"
-#include "..\..\ThirdParty\SDL\include\SDL_video.h"
-#include "..\Engine\Logging.h"
+#include "../../ThirdParty/SDL/include/SDL_video.h"
+#include "../Engine/Logging.h"
 
 static const unsigned int GL_DRAW_FRAMEBUFFER = 0x8CA9;
 static const unsigned int GL_FRAMEBUFFER_COMPLETE = 0x8CD5;

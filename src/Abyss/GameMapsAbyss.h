@@ -21,7 +21,7 @@
 //
 #pragma once
 
-#include "..\Engine\GameMaps.h"
+#include "../Engine/GameMaps.h"
 #include "EgaGraphAbyss.h"
 
 const std::vector<int32_t> gameMapsOffsetsAbyss =

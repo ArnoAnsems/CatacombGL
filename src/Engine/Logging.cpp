@@ -17,7 +17,7 @@
 #include "Logging.h"
 #include <fstream>
 #include <iostream>
-#include "..\..\ThirdParty\SDL\include\SDL_messagebox.h"
+#include "../../ThirdParty/SDL/include/SDL_messagebox.h"
 
 static Logging* m_instance = nullptr;
 

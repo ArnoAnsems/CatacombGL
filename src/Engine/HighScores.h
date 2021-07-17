@@ -22,8 +22,8 @@
 
 #include <string>
 #include <vector>
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\EgaGraph.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/EgaGraph.h"
 
 class HighScores
 {

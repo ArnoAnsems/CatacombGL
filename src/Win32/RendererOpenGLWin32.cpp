@@ -14,11 +14,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "RendererOpenGLWin32.h"
-#include <gl\gl.h>
-#include <gl\glu.h>
-#include "..\..\ThirdParty\SDL\include\SDL_video.h"
-#include "..\Engine\Logging.h"
-#include "..\Engine\ViewPorts.h"
+#include <gl/gl.h>
+#include <gl/glu.h>
+#include "../../ThirdParty/SDL/include/SDL_video.h"
+#include "../Engine/Logging.h"
+#include "../Engine/ViewPorts.h"
 
 const float FloorZ = 2.2f;
 const float CeilingZ = 1.0f;

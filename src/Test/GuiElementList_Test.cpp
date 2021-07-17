@@ -15,9 +15,9 @@
 
 #include "GuiElementList_Test.h"
 
-#include "..\Engine\GuiElementList.h"
-#include "..\Engine\GuiElementButton.h"
-#include "..\Engine\DefaultFont.h"
+#include "../Engine/GuiElementList.h"
+#include "../Engine/GuiElementButton.h"
+#include "../Engine/DefaultFont.h"
 #include "RendererStub.h"
 
 GuiElementList_Test::GuiElementList_Test()

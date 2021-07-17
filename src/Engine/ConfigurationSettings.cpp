@@ -17,7 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
+#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
 
 ConfigurationSettings::ConfigurationSettings() :
     m_controlsMap(),

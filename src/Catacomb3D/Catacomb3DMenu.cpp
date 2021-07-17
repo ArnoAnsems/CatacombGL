@@ -15,10 +15,10 @@
 
 #include "Catacomb3DMenu.h"
 #include "AudioRepositoryCatacomb3D.h"
-#include "..\..\ThirdParty\SDL\include\SDL_keyboard.h"
-#include "..\Engine\DefaultFont.h"
-#include "..\Engine\IRenderer.h"
-#include "..\Engine\GuiElementList.h"
+#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
+#include "../Engine/DefaultFont.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/GuiElementList.h"
 #include "GuiElementBoolSelectionCat3D.h"
 #include "GuiElementEnumSelectionCat3D.h"
 #include "GuiElementIntSelectionCat3D.h"
@@ -28,8 +28,8 @@
 #include "GuiElementSaveSlotEditableCat3D.h"
 #include "GuiElementButtonCat3D.h"
 #include "GuiElementEnumSelectionCat3DRadio.h"
-#include "..\Engine\GuiElementHighScores.h"
-#include "..\Engine\GuiPage.h"
+#include "../Engine/GuiElementHighScores.h"
+#include "../Engine/GuiPage.h"
 
 const uint16_t browseMenuSound = 0;
 

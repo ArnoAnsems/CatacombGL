@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ConsoleVariableEnum_Test.h"
-#include "..\Engine\ConsoleVariableEnum.h"
+#include "../Engine/ConsoleVariableEnum.h"
 
 const uint8_t ItemIdFirst = 0;
 const uint8_t ItemIdSecond = 1;

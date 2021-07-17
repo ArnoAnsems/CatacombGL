@@ -19,7 +19,7 @@
 #include "IntroViewCatacomb3D.h"
 #include "AudioRepositoryCatacomb3D.h"
 #include "DecorateAll.h"
-#include "..\Engine\IRenderer.h"
+#include "../Engine/IRenderer.h"
 #include "Catacomb3DMenu.h"
 
 static const std::string Catacomb3DName = "Catacomb 3-D v1.22";

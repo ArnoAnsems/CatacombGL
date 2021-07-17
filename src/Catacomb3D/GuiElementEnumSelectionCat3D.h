@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "..\Engine\GuiElementEnumSelection.h"
-#include "..\Engine\RenderableTiles.h"
+#include "../Engine/GuiElementEnumSelection.h"
+#include "../Engine/RenderableTiles.h"
 
 class GuiElementEnumSelectionCat3D : public GuiElementEnumSelection
 {

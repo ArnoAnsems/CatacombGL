@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameArmageddon_Test.h"
-#include "..\Armageddon\GameArmageddon.h"
+#include "../Armageddon/GameArmageddon.h"
 #include "RendererStub.h"
 
 GameArmageddon_Test::GameArmageddon_Test()

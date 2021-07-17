@@ -15,7 +15,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "EngineCore.h"
-#include "..\..\ThirdParty\RefKeen\id_sd.h"
+#include "../../ThirdParty/RefKeen/id_sd.h"
 #include "LevelLocationNames.h"
 #include "DefaultFont.h"
 #include "RenderableTiles.h"

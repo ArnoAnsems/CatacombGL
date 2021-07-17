@@ -19,8 +19,8 @@
 
 #include <stdint.h>
 
-#include "..\..\src\Engine\PCSound.h"
-#include "..\..\src\Engine\AdlibSound.h"
+#include "../../src/Engine/PCSound.h"
+#include "../../src/Engine/AdlibSound.h"
 
 
 #ifndef	__ID_SD__

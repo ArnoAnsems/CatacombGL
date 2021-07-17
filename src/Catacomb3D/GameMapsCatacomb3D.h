@@ -20,7 +20,7 @@
 //
 #pragma once
 
-#include "..\Engine\GameMaps.h"
+#include "../Engine/GameMaps.h"
 #include "EgaGraphCatacomb3D.h"
 
 const std::vector<int32_t> gameMapsOffsetsCatacomb3D =

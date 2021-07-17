@@ -20,10 +20,10 @@
 //
 #pragma once
 
-#include "..\Engine\IIntroView.h"
-#include "..\Engine\EgaGraph.h"
-#include "..\Engine\HighScores.h"
-#include "..\Engine\FadeEffect.h"
+#include "../Engine/IIntroView.h"
+#include "../Engine/EgaGraph.h"
+#include "../Engine/HighScores.h"
+#include "../Engine/FadeEffect.h"
 #include <string>
 
 class IntroViewCatacomb3D : public IIntroView

@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "..\SDL\include\SDL.h"
+#include "../SDL/include/SDL.h"
 #include "be_st.h"
 #include "../opl/dbopl.h"
 

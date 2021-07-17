@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <gtest\gtest.h>
+#include <gtest/gtest.h>
 #include "../Engine/Font.h"
 #include "../Engine/RenderableText.h"
 #include "../Engine/PlayerInput.h"
