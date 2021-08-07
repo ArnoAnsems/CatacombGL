@@ -37,6 +37,7 @@
 #include "FadeEffect.h"
 #include "AutoMap.h"
 #include "ManaBar.h"
+#include "RenderableOverscanBorder.h"
 
 class EngineCore
 {
@@ -186,4 +187,6 @@ private:
     RenderableAutoMapIso m_renderableAutoMapIso;
     RenderableAutoMapTopDown m_renderableAutoMapTopDown;
     ManaBar m_manaBar;
+    OverscanBorder m_overscanBorder;
+    RenderableOverscanBorder m_renderableOverscanBorder;
 };

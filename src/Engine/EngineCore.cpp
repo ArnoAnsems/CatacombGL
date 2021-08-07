@@ -83,7 +83,9 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_renderable3DScene(m_game.GetOriginal3DViewArea()),
     m_renderableAutoMapIso(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea()),
     m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea(), *m_game.GetEgaGraph()->GetTilesSize16(), *m_game.GetEgaGraph()->GetTilesSize16Masked()),
-    m_manaBar(m_game.GetManaBarConfig())
+    m_manaBar(m_game.GetManaBarConfig()),
+    m_overscanBorder(),
+    m_renderableOverscanBorder(m_overscanBorder)
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -508,6 +510,9 @@ void EngineCore::DrawScene(IRenderer& renderer)
             renderer.RenderText(renderableTextFont7);
         }
     }
+
+    const int16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]);
+    m_renderableOverscanBorder.Draw(renderer, margin, m_gameTimer.GetActualTime());
     
     renderer.Unprepare2DRendering();
 }
@@ -1475,6 +1480,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
                     m_level->GetPlayerActor()->Damage(damage);
                     m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                    const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
                 }
             }
         }
@@ -1614,6 +1621,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             DisplayStatusMessage("Item destroyed", 80 * 14);
         }
         m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
+        const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightYellow, borderFlashTime);
         actor->SetActionPerformed(true);
         break;
     }
@@ -1798,6 +1807,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? baseDamage / 2 : baseDamage;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
             }
         }
         actor->SetActionPerformed(true);
@@ -1936,6 +1947,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5 && baseDamage > 1) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
                         m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                        const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
                     }
                     moveOk = false;
                 }
@@ -2006,6 +2019,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 const int16_t damage = 1;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
             }
         }
         actor->SetActionPerformed(true);
