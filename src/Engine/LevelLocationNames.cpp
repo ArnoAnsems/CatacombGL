@@ -29,29 +29,31 @@ LevelLocationNames::LevelLocationNames(const FileChunk* decompressedChunk)
         const char currentChar = decompressedChunk->GetChunk()[charIndex];
         if (currentChar == '\r')
         {
+            LocationName locationName = { UnnamedLocation, false };
             // In Apocalypse, some names start with '@' to indicate that the borders should flash.
-            // Just skip the character.
             if (decompressedChunk->GetChunk()[startOfName] == '@')
             {
+                locationName.borderShouldFlash = true;
                 startOfName++;
             }
             const uint16_t nameLength = charIndex - startOfName;
             if (nameLength > 0)
             {
-                char* locationName = new char[nameLength + 1];
+                char* name = new char[nameLength + 1];
 
                 for (int i = 0; i < nameLength; i++)
                 {
-                    locationName[i] = decompressedChunk->GetChunk()[startOfName + i];
+                    name[i] = decompressedChunk->GetChunk()[startOfName + i];
                 }
-                locationName[nameLength] = 0;
+                name[nameLength] = 0;
+                locationName.name = name;
                 m_LocationNames.push_back(locationName);
 
-                delete[] locationName;
+                delete[] name;
             }
             else
             {
-                m_LocationNames.push_back(UnnamedLocation);
+                m_LocationNames.push_back(locationName);
             }
             startOfName = charIndex + 2;
         }
@@ -69,8 +71,18 @@ const std::string& LevelLocationNames::GetLocationName(const uint8_t index) cons
 {
     if (index < m_LocationNames.size())
     {
-        return m_LocationNames.at(index);
+        return m_LocationNames.at(index).name;
     }
 
     return UnnamedLocation;
+}
+
+const bool LevelLocationNames::BorderShouldFlash(const uint8_t index) const
+{
+    if (index < m_LocationNames.size())
+    {
+        return m_LocationNames.at(index).borderShouldFlash;
+    }
+
+    return false;
 }

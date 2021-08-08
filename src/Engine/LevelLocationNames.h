@@ -32,8 +32,15 @@ public:
     ~LevelLocationNames();
 
     const std::string& GetLocationName(const uint8_t index) const;
+    const bool BorderShouldFlash(const uint8_t index) const;
 
 private:
-    std::vector<std::string> m_LocationNames;
+    typedef struct
+    {
+        std::string name;
+        bool borderShouldFlash;
+    } LocationName;
+
+    std::vector<LocationName> m_LocationNames;
 };
 

@@ -189,4 +189,5 @@ private:
     ManaBar m_manaBar;
     OverscanBorder m_overscanBorder;
     RenderableOverscanBorder m_renderableOverscanBorder;
+    bool m_insideBorderFlashLocation;
 };

@@ -85,7 +85,8 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_renderableAutoMapTopDown(*m_game.GetEgaGraph()->GetFont(3), m_game.GetOriginal3DViewArea(), *m_game.GetEgaGraph()->GetTilesSize16(), *m_game.GetEgaGraph()->GetTilesSize16Masked()),
     m_manaBar(m_game.GetManaBarConfig()),
     m_overscanBorder(),
-    m_renderableOverscanBorder(m_overscanBorder)
+    m_renderableOverscanBorder(m_overscanBorder),
+    m_insideBorderFlashLocation(false)
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -294,6 +295,18 @@ void EngineCore::DrawScene(IRenderer& renderer)
             if (floorTile > 180 && m_level->GetLevelIndex() < m_game.GetEgaGraph()->GetNumberOfWorldLocationNames())
             {
                 locationMessage = m_game.GetEgaGraph()->GetWorldLocationNames(m_level->GetLevelIndex())->GetLocationName(floorTile - 180);
+                const bool borderShouldFlash = m_game.GetEgaGraph()->GetWorldLocationNames(m_level->GetLevelIndex())->BorderShouldFlash(floorTile - 180);
+                if (!m_insideBorderFlashLocation && borderShouldFlash)
+                {
+                    m_insideBorderFlashLocation = true;
+                    const uint32_t borderFlashTime = (uint32_t)(20 * (1000.0 / 70.0));
+                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightWhite, borderFlashTime);
+
+                }
+                else if (m_insideBorderFlashLocation && !borderShouldFlash)
+                {
+                    m_insideBorderFlashLocation = false;
+                }
             }
         }
     }
