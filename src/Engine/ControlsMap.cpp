@@ -236,7 +236,7 @@ void ControlsMap::ResetToDefaults()
     AssignActionToKey(ShootXterminator, SDLK_x);
     AssignActionToKey(UsePotion, SDLK_c);
     AssignActionToKey(UsePotion, SDLK_SPACE);
-    // Since the original game did not have a run action, by default no key is assigned to the run action.
+    AssignActionToKey(Run, SDLK_RSHIFT);
     AssignActionToKey(ShowAutoMap, SDLK_o);
 
     AssignActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
