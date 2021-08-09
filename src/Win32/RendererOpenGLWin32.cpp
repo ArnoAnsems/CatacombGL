@@ -389,7 +389,7 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
 
         // Calculate The Aspect Ratio Of The Window
         const double aspect = (double)bufferWidth / ((double)rect3D.height * 1.2);
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.1, 100.0);
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.2, 100.0);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
@@ -446,7 +446,7 @@ void RendererOpenGLWin32::Render3DScene(const Renderable3DScene& renderable3DSce
 
         // Calculate The Aspect Ratio Of The Window
         const double aspect = (double)rect.width / (double)rect.height;
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.1, 100.0);
+        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.2, 100.0);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);

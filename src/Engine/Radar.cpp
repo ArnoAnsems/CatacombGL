@@ -46,7 +46,7 @@ void Radar::ResetRadar(const Actor* player, const PlayerInventory& playerInvento
     m_playerAngle = player->GetAngle();
     m_numberOfBlips = 0;
     const egaColor flickeringColors[3] = {EgaRed, EgaBrightBlue, EgaBrightYellow};
-    const int8_t flickeringColorIndex = (uint32_t)((timeStamp % 1000) / 14.2) % 3;
+    const int8_t flickeringColorIndex = (uint32_t)((timeStamp % 1000) / 14.3) % 3;
     m_flickeringColor = flickeringColors[flickeringColorIndex];
     m_gemPresent[BlueGem] = playerInventory.GetGem(BlueGem);
     m_gemPresent[RedGem] = playerInventory.GetGem(RedGem);

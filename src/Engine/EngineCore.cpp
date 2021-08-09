@@ -1831,11 +1831,11 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionMonsterProjectile:
     {
         const float speed =  actor->GetDecorateActor().speed;
-        if (speed > 0)
+        if (speed > 0.0f)
         {
             const uint32_t deltaTime = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
             const uint32_t truncatedDeltaTime = (deltaTime < 50) ? deltaTime : 50;
-            float distance = (float)speed * ((float)(truncatedDeltaTime) / 14.2f) / 65536.0f;
+            float distance = speed * ((float)(truncatedDeltaTime) / 14.3f) / 65536.0f;
             if (distance > 1.0)
             {
                 distance = 1.0;
@@ -2396,7 +2396,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
 
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.3f) / 65536.0f;
 
     while (move > 0.0f)
     {
@@ -2465,7 +2465,7 @@ void EngineCore::RunAway(Actor* actor)
 
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.3f) / 65536.0f;
 
     while (move > 0.0f)
     {
@@ -2506,7 +2506,7 @@ void EngineCore::Bounce(Actor* actor)
 
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.3f) / 65536.0f;
 
     while (move > 0.0f)
     {
@@ -2558,7 +2558,7 @@ void EngineCore::ChaseLikeRunningEye(Actor* actor)
 
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+    float move = (float)speed * ((float)(truncatedDeltaTimeInMs) / 14.3f) / 65536.0f;
 
     while (move > 0.0f)
     {
@@ -2669,7 +2669,7 @@ void EngineCore::BunnyHopping(Actor* actor)
     const float harmlessBunnySpeed = 300.0f;
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-    float move = harmlessBunnySpeed * ((float)(truncatedDeltaTimeInMs) / 14.2f) / 65536.0f;
+    float move = harmlessBunnySpeed * ((float)(truncatedDeltaTimeInMs) / 14.3f) / 65536.0f;
 
     // Calculate new (x,y) coordinates based on the direction of the bunny and the distance to travel.
     float x = actor->GetX();
