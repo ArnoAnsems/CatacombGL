@@ -1943,8 +1943,13 @@ void Level::SetupAutoMapTopDown(
             }
         }
     }
-    floorTiles.SetFloorColor(GetGroundColor());
-    borderTiles.SetFloorColor(EgaBlack);
+    const egaColor floorColor = GetGroundColor();
+    floorTiles.SetFloorColor(floorColor);
+    // The border color is black by default.
+    // Dark gray is chosen in case the floor color is already black.
+    const egaColor borderColor = (floorColor == EgaBlack) ? EgaDarkGray : EgaBlack;
+    borderTiles.SetFloorColor(borderColor);
+
     const float actorMinX = (float)(firstTileX - 1);
     const float actorMaxX = (float(lastTileX + 1));
     const float actorMinY = (float)(firstTileY - 1);
