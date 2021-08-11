@@ -38,6 +38,7 @@
 #include "AutoMap.h"
 #include "ManaBar.h"
 #include "RenderableOverscanBorder.h"
+#include "RenderableLevelStatistics.h"
 
 class EngineCore
 {
@@ -190,4 +191,6 @@ private:
     OverscanBorder m_overscanBorder;
     RenderableOverscanBorder m_renderableOverscanBorder;
     bool m_insideBorderFlashLocation;
+    LevelStatistics m_levelStatistics;
+    RenderableLevelStatistics m_renderableLevelStatistics;
 };

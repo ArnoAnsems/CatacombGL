@@ -86,7 +86,9 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_manaBar(m_game.GetManaBarConfig()),
     m_overscanBorder(),
     m_renderableOverscanBorder(m_overscanBorder),
-    m_insideBorderFlashLocation(false)
+    m_insideBorderFlashLocation(false),
+    m_levelStatistics(),
+    m_renderableLevelStatistics(m_levelStatistics)
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
@@ -427,6 +429,16 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_state == AutoMapDialog && m_level != nullptr && m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex() == CVarItemIdAutoMapOriginal)
     {
         m_autoMap.DrawClassic(renderer, *m_game.GetEgaGraph(), *m_level, renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]));
+    }
+
+    if (m_state == AutoMapDialog && m_level != nullptr)
+    {
+        const uint8_t autoMapMode = m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex();
+        if (autoMapMode != CVarItemIdAutoMapOriginal)
+        {
+            const float aspectRatio = aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()];
+            m_renderableLevelStatistics.Draw(renderer, *m_game.GetEgaGraph()->GetFont(3), renderer.GetAdditionalMarginDueToWideScreen(aspectRatio), m_gameTimer.GetMillisecondsForPlayer());
+        }
     }
 
     if (m_state == GodModeCheatDialog)
