@@ -76,6 +76,9 @@ public:
     const DecorateActor& GetDecorateActor() const;
     void StoreToFile(std::ofstream& file) const;
 
+    bool IsMonsterAndAlive() const;
+    bool IsItem() const;
+
 protected:
     float m_x;
     float m_y;

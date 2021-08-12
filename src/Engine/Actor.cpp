@@ -342,3 +342,59 @@ void Actor::StoreToFile(std::ofstream& file) const
     file.write((const char*)&m_timeToNextAction, sizeof(m_timeToNextAction));
     file.write((const char*)&m_angle, sizeof(m_angle));
 }
+
+bool Actor::IsMonsterAndAlive() const
+{
+    bool isMonster = false;
+    const auto& attackState = m_decorateActor.states.find(StateIdAttack);
+    if (attackState != m_decorateActor.states.end() && m_health > 0)
+    {
+        // This actor has an attack state, which means it is a monster.
+        isMonster = true;
+    }
+    else
+    {
+        // Check if this actor can spawn a skeleton, in which case it should also add up
+        // to the monster count.
+        const auto& riseState = m_decorateActor.states.find(StateIdRise);
+        if (riseState != m_decorateActor.states.end())
+        {
+            const DecorateState& decorateState = riseState->second;
+            if (decorateState.animation.front().action == ActionSpawnSkeleton)
+            {
+                isMonster = true;
+            }
+        }
+
+    }
+
+    return isMonster;
+}
+
+bool Actor::IsItem() const
+{
+    bool isItem = false;
+    const auto& pickupState = m_decorateActor.states.find(StateIdPickup);
+    if (pickupState != m_decorateActor.states.end())
+    {
+        // This actor has a pickup state.
+        // Check if it gets removed with the last action in this state.
+        const DecorateState& decorateState = pickupState->second;
+        const actorAction lastAction = decorateState.animation.back().action;
+        isItem = (lastAction == ActionRemove);
+    }
+    else
+    {
+        // Check if this actor is a monster that drops an item when dying,
+        // in which case it should also add up to the item count.
+        const auto& dyingState = m_decorateActor.states.find(StateIdDying);
+        if (dyingState != m_decorateActor.states.end())
+        {
+            const DecorateState& decorateState = dyingState->second;
+            const actorAction lastAction = decorateState.animation.back().action;
+            isItem = ((lastAction == ActionDropItem) && (m_temp1 != 0));
+        }
+    }
+
+    return isItem;
+}

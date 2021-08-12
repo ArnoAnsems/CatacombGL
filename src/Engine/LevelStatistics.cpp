@@ -31,6 +31,33 @@ LevelStatistics::~LevelStatistics()
 
 }
 
+void LevelStatistics::SetCountersAtStartOfLevel(const Level& level)
+{
+    m_totalMonsters = 0;
+    m_totalItems = 0;
+    for (uint16_t y = 1; y < level.GetLevelHeight() - 1; y++)
+    {
+        for (uint16_t x = 1; x < level.GetLevelWidth() - 1; x++)
+        {
+            const Actor* actor = level.GetBlockingActor(x, y);
+            if (actor != nullptr)
+            {
+                if (actor->IsMonsterAndAlive())
+                {
+                    m_totalMonsters++;
+                }
+                if (actor->IsItem())
+                {
+                    m_totalItems++;
+                }
+            }
+        }
+    }
+
+    m_remainingMonsters = m_totalMonsters;
+    m_remainingItems = m_totalItems;
+}
+
 uint32_t LevelStatistics::GetTotalMonsters() const
 {
     return m_totalMonsters;

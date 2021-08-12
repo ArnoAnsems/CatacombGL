@@ -29,6 +29,8 @@ public:
     LevelStatistics();
     ~LevelStatistics();
 
+    void SetCountersAtStartOfLevel(const Level& level);
+
     uint32_t GetTotalMonsters() const;
     uint32_t GetTotalSecrets() const;
     uint32_t GetTotalItems() const;

@@ -144,8 +144,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     m_game.SpawnActors(m_level, m_difficultyLevel);
     m_level->GetPlayerActor()->SetHealth(health);
     m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex());
-
- 
+    m_levelStatistics.SetCountersAtStartOfLevel(*m_level);
 
     m_timeStampOfPlayerCurrentFrame = 0;
     m_timeStampOfPlayerPreviousFrame = 0;
