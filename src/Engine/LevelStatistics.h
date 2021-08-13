@@ -39,6 +39,8 @@ public:
     uint32_t GetItemsTaken() const;
 
 private:
+    static void FloodFillSecret(const Level& level, bool* secretsMap, const uint16_t x, const uint16_t y);
+
     uint32_t m_totalMonsters;
     uint32_t m_totalSecrets;
     uint32_t m_totalItems;
