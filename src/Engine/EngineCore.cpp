@@ -1552,6 +1552,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
 
         m_game.PlaySoundBossDeath();
+        m_levelStatistics.UpdateItems(*m_level);
         
         break;
     }
@@ -1625,6 +1626,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionRemove:
     {
         m_level->RemoveActor(actor);
+        m_levelStatistics.UpdateItems(*m_level);
         break;
     }
     case ActionWaitForPickup:
@@ -1648,6 +1650,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
         m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightYellow, borderFlashTime);
         actor->SetActionPerformed(true);
+        m_levelStatistics.UpdateItems(*m_level);
         break;
     }
     case ActionFreezeTime:
@@ -1777,6 +1780,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         m_level->SetFloorTile(x, y, 0);
 
         actor->SetActionPerformed(true);
+        m_levelStatistics.UpdateSecrets(*m_level);
         break;
     }
     case ActionWarpToOtherLevel:
@@ -1927,6 +1931,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                             m_level->AddNonBlockingActor(otherActor);
                                             m_level->SetBlockingActor(x, y, nullptr);
                                         }
+                                        m_levelStatistics.UpdateMonstersKilled(*m_level);
                                     }
                                     else
                                     {

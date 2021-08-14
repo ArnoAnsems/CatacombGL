@@ -30,6 +30,9 @@ public:
     ~LevelStatistics();
 
     void SetCountersAtStartOfLevel(const Level& level);
+    void UpdateMonstersKilled(const Level& level);
+    void UpdateSecrets(const Level& level);
+    void UpdateItems(const Level& level);
 
     uint32_t GetTotalMonsters() const;
     uint32_t GetTotalSecrets() const;
@@ -40,6 +43,9 @@ public:
 
 private:
     static void FloodFillSecret(const Level& level, bool* secretsMap, const uint16_t x, const uint16_t y);
+    static uint32_t CountMonstersOnLevel(const Level& level);
+    static uint32_t CountSecretsOnLevel(const Level& level);
+    static uint32_t CountItemsOnLevel(const Level& level);
 
     uint32_t m_totalMonsters;
     uint32_t m_totalSecrets;
