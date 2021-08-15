@@ -79,7 +79,7 @@ ViewPorts::ViewPortRect3D ViewPorts::Get3D(const uint16_t windowWidth, const uin
         // Use the full window width
         rect.left = (uint16_t)(originalPixelWidth * (float)overscanBorderWidth);
         const uint16_t rightBorderWidthInOriginalPixels = 320 - original3DViewArea.width - original3DViewArea.left;
-        rect.width = (uint16_t)((original3DViewArea.width - original3DViewArea.left) * originalPixelWidth);
+        rect.width = (uint16_t)((original3DViewArea.width - original3DViewArea.left) * originalPixelWidth) + 1;
 
         const uint16_t gameHeight = originalPixelHeight * 200.0f;
         const uint16_t bottomBorder = (uint16_t)((windowHeight - gameHeight) * 0.5);
@@ -106,7 +106,7 @@ ViewPorts::ViewPortRect3D ViewPorts::Get3D(const uint16_t windowWidth, const uin
         const uint16_t rightBorderWidthInOriginalPixels = 320 - original3DViewArea.width - original3DViewArea.left;
         const uint16_t gameWidth = (uint16_t)((float)windowHeight * aspectRatio);
         rect.left = (uint16_t)((windowWidth - gameWidth) * 0.5) + ((float)overscanBorderWidth * originalPixelWidth);
-        rect.width = gameWidth - (((2 * overscanBorderWidth) + rightBorderWidthInOriginalPixels) * originalPixelWidth);
+        rect.width = gameWidth - (((2 * overscanBorderWidth) + rightBorderWidthInOriginalPixels) * originalPixelWidth) + 1;
     }
 
     return rect;

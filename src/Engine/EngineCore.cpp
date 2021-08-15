@@ -1506,6 +1506,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                     const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
                     m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
+                    DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
                 }
             }
         }
@@ -1837,6 +1838,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                 const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
                 m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
+                DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
             }
         }
         actor->SetActionPerformed(true);
@@ -1978,6 +1980,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                         const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
                         m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
+                        DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
                     }
                     moveOk = false;
                 }
@@ -2820,6 +2823,7 @@ void EngineCore::PlayerUsesPotion()
         if (m_playerInventory.UsePotion())
         {
             m_level->GetPlayerActor()->SetHealth(100);
+            DisplayStatusMessage("Curing", (uint16_t)(30 * (1000.0 / 70.0)));
         }
     }
 }
@@ -3156,7 +3160,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         }
         file.close();
 
-        // Temporarily oad the same level from scratch to setup the level statistics correctly.
+        // Temporarily load the same level from scratch to setup the level statistics correctly.
         Level* levelFromScratch = m_game.GetGameMaps()->GetLevelFromStart(m_level->GetLevelIndex());
         m_game.SpawnActors(levelFromScratch, m_difficultyLevel);
         m_levelStatistics.SetCountersAtStartOfLevel(*levelFromScratch);
