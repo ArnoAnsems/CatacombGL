@@ -3156,6 +3156,17 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
         }
         file.close();
 
+        // Temporarily oad the same level from scratch to setup the level statistics correctly.
+        Level* levelFromScratch = m_game.GetGameMaps()->GetLevelFromStart(m_level->GetLevelIndex());
+        m_game.SpawnActors(levelFromScratch, m_difficultyLevel);
+        m_levelStatistics.SetCountersAtStartOfLevel(*levelFromScratch);
+        delete levelFromScratch;
+
+        // Now count how many monsters/secrets/items are remaining
+        m_levelStatistics.UpdateMonstersKilled(*m_level);
+        m_levelStatistics.UpdateSecrets(*m_level);
+        m_levelStatistics.UpdateItems(*m_level);
+
         m_playerActions.ResetForNewLevel();
         m_manaBar.Reset(m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled());
         m_warpToLevel = m_level->GetLevelIndex();
