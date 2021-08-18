@@ -40,7 +40,7 @@ public:
         const Picture* picture;
         float offsetX;
         float offsetY;
-        int32_t squaredDistance;
+        float distanceToPlayerViewScreen;
         SpriteOrientation orientation;
     } RenderableSprite;
 
@@ -61,4 +61,6 @@ private:
     float m_playerPosX;
     float m_playerPosY;
     float m_angle;
+    float m_pointInPlayerViewScreenX;
+    float m_pointInPlayerViewScreenY;
 };

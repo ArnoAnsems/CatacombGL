@@ -31,6 +31,12 @@ void RenderableSprites::Reset(const float playerPosX, const float playerPosY, co
     m_playerPosX = playerPosX;
     m_playerPosY = playerPosY;
     m_angle = angle;
+
+    // Determine a second point inside the player view screen, at a distance of 1.0 from the player position.
+    // This helps later on in calculating the distance between the player view screen and each of the sprites.
+    m_pointInPlayerViewScreenX = m_playerPosX - (float)sin((m_angle + 90.f) * 3.14159265f / 180.0f);
+    m_pointInPlayerViewScreenY = m_playerPosY + (float)cos((m_angle + 90.f) * 3.14159265f / 180.0f);
+
     m_sprites.clear();
 }
 
@@ -41,9 +47,12 @@ void RenderableSprites::AddSprite(const Picture* picture, const float offsetX, c
         return;
     }
 
-    const int16_t squaredDistance = (int32_t)(((offsetX - m_playerPosX) * (offsetX - m_playerPosX)) + ((offsetY - m_playerPosY) * (offsetY - m_playerPosY)));
-
-    m_sprites.push_back({ picture, offsetX, offsetY, squaredDistance, orientation });
+    const float distance =
+        abs(
+            ((m_pointInPlayerViewScreenX - m_playerPosX) * (m_playerPosY - offsetY)) -
+            ((m_playerPosX - offsetX) * (m_pointInPlayerViewScreenY - m_playerPosY))
+        );
+    m_sprites.push_back({ picture, offsetX, offsetY, distance, orientation });
 }
 
 void RenderableSprites::SortSpritesBackToFront()
@@ -74,12 +83,12 @@ void RenderableSprites::QuickSort(uint16_t p, uint16_t q)
 
 uint16_t RenderableSprites::Partition(uint16_t p, uint16_t q)
 {
-    const int32_t x = m_sprites.at(p).squaredDistance;
+    const float x = m_sprites.at(p).distanceToPlayerViewScreen;
     uint16_t i = p;
 
     for (uint16_t j = p + 1; j < q; j++)
     {
-        if (m_sprites.at(j).squaredDistance >= x)
+        if (m_sprites.at(j).distanceToPlayerViewScreen >= x)
         {
             i = i + 1;
             Swap(i, j);
@@ -95,6 +104,6 @@ void RenderableSprites::Swap(uint16_t p, uint16_t q)
     std::swap(m_sprites.at(p).picture, m_sprites.at(q).picture);
     std::swap(m_sprites.at(p).offsetX, m_sprites.at(q).offsetX);
     std::swap(m_sprites.at(p).offsetY, m_sprites.at(q).offsetY);
-    std::swap(m_sprites.at(p).squaredDistance, m_sprites.at(q).squaredDistance);
+    std::swap(m_sprites.at(p).distanceToPlayerViewScreen, m_sprites.at(q).distanceToPlayerViewScreen);
     std::swap(m_sprites.at(p).orientation, m_sprites.at(q).orientation);
 }
