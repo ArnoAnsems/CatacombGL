@@ -337,7 +337,6 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 52:
                 {
-
                     int16_t zombie_delay;
                     unsigned int tile = level->GetFloorTile(x, y + 1);
                     if (tile != 0)
@@ -399,12 +398,12 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 69:
                 {
-                    int16_t xofs[] = {0,0,-1,+1};
-                    int16_t yofs[] = {-1,+1,0,0};
+                    int16_t xofs[] = { 0,0,-1,+1 };
+                    int16_t yofs[] = { -1,+1,0,0 };
                     uint16_t floorTile = 0;
                     int16_t loop = 0;
                     bool tileFound = false;
-                    while (loop<4 && !tileFound)
+                    while (loop < 4 && !tileFound)
                     {
                         const uint16_t wallTile = level->GetWallTile(x + xofs[loop], y + yofs[loop]);
                         if (wallTile == 6 || wallTile == 7 || wallTile == 8 || wallTile == 41 || wallTile == 42 || wallTile == 43 || wallTile == 44)
@@ -414,22 +413,27 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                         }
                         loop++;
                     }
-                    int16_t zombie_delay;
-                    if (floorTile > 0)
+
+                    // Only spawn a wall skeleton when an appropriate nearby wall tile was found!
+                    if (tileFound)
                     {
-                        zombie_delay = (floorTile>>8)*30;
+                        int16_t zombie_delay;
+                        if (floorTile > 0)
+                        {
+                            zombie_delay = (floorTile >> 8) * 30;
+                        }
+                        else
+                        {
+                            const int16_t current_zombie_delay = (2 * 60) + rand() % (4 * 60);
+                            zombie_delay = m_zombie_base_delay + current_zombie_delay;
+                            m_zombie_base_delay += current_zombie_delay;
+                            if (m_zombie_base_delay > 8 * 60)
+                                m_zombie_base_delay = 0;
+                        }
+                        Actor* wallSkeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWallSkeleton);
+                        wallSkeletonActor->SetTemp2(zombie_delay);
+                        actors[(y * level->GetLevelWidth()) + x] = wallSkeletonActor;
                     }
-                    else
-                    {
-                        const int16_t current_zombie_delay = (2*60)+ rand() % (4*60);
-                        zombie_delay = m_zombie_base_delay+current_zombie_delay;
-                        m_zombie_base_delay += current_zombie_delay;
-                        if (m_zombie_base_delay > 8*60)
-                            m_zombie_base_delay = 0;
-                    }
-                    Actor* wallSkeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWallSkeleton);
-                    wallSkeletonActor->SetTemp2(zombie_delay);
-                    actors[(y * level->GetLevelWidth()) + x] = wallSkeletonActor;
                     break;
                 }
             default:
