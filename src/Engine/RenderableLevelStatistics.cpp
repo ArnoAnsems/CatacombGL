@@ -25,19 +25,20 @@ RenderableLevelStatistics::~RenderableLevelStatistics()
 {
 }
 
-void RenderableLevelStatistics::Draw(IRenderer& renderer, const Font& font, const uint16_t additionalMargin, const uint32_t timeStamp)
+void RenderableLevelStatistics::Draw(IRenderer& renderer, const Font& font, const uint16_t additionalMargin, const uint32_t timeStamp, const egaColor floorColor)
 {
     const int16_t offsetX = 6 - additionalMargin;
-
+    const egaColor labelColor = (floorColor == EgaRed) ? EgaBrightRed : EgaRed;
+    const egaColor countColor = (floorColor == EgaBrightWhite) ? EgaDarkGray : EgaBrightWhite;
     RenderableText renderableText(font);
     const std::string monsterStr = std::to_string(m_levelStatistics.GetMonstersKilled()) + "/" + std::to_string(m_levelStatistics.GetTotalMonsters());
-    renderableText.LeftAligned("MONSTERS: ", EgaRed, offsetX, 12);
-    renderableText.LeftAligned(monsterStr, EgaBrightWhite, offsetX + renderableText.GetWidthInPixels("MONSTERS: "), 12);
+    renderableText.LeftAligned("MONSTERS: ", labelColor, offsetX, 12);
+    renderableText.LeftAligned(monsterStr, countColor, offsetX + renderableText.GetWidthInPixels("MONSTERS: "), 12);
     const std::string secretStr = std::to_string(m_levelStatistics.GetSecretsRevealed()) + "/" + std::to_string(m_levelStatistics.GetTotalSecrets());
-    renderableText.LeftAligned("SECRETS: ", EgaRed, offsetX, 21);
-    renderableText.LeftAligned(secretStr, EgaBrightWhite, offsetX + renderableText.GetWidthInPixels("SECRETS: "), 21);
+    renderableText.LeftAligned("SECRETS: ", labelColor, offsetX, 21);
+    renderableText.LeftAligned(secretStr, countColor, offsetX + renderableText.GetWidthInPixels("SECRETS: "), 21);
     const std::string itemStr = std::to_string(m_levelStatistics.GetItemsTaken()) + "/" + std::to_string(m_levelStatistics.GetTotalItems());
-    renderableText.LeftAligned("ITEMS: ", EgaRed, offsetX, 30);
-    renderableText.LeftAligned(itemStr, EgaBrightWhite, offsetX + renderableText.GetWidthInPixels("ITEMS: "), 30);
+    renderableText.LeftAligned("ITEMS: ", labelColor, offsetX, 30);
+    renderableText.LeftAligned(itemStr, countColor, offsetX + renderableText.GetWidthInPixels("ITEMS: "), 30);
     renderer.RenderText(renderableText);
 }

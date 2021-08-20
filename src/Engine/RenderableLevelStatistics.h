@@ -30,7 +30,7 @@ public:
     RenderableLevelStatistics(const LevelStatistics& levelStatistics);
     ~RenderableLevelStatistics();
 
-    void Draw(IRenderer& renderer, const Font& font, const uint16_t additionalMargin, const uint32_t timeStamp);
+    void Draw(IRenderer& renderer, const Font& font, const uint16_t additionalMargin, const uint32_t timeStamp, const egaColor floorColor);
 
 private:
     const LevelStatistics& m_levelStatistics;

@@ -436,7 +436,12 @@ void EngineCore::DrawScene(IRenderer& renderer)
         if (autoMapMode != CVarItemIdAutoMapOriginal)
         {
             const float aspectRatio = aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()];
-            m_renderableLevelStatistics.Draw(renderer, *m_game.GetEgaGraph()->GetFont(3), renderer.GetAdditionalMarginDueToWideScreen(aspectRatio), m_gameTimer.GetMillisecondsForPlayer());
+            m_renderableLevelStatistics.Draw(
+                renderer,
+                *m_game.GetEgaGraph()->GetFont(3),
+                renderer.GetAdditionalMarginDueToWideScreen(aspectRatio),
+                m_gameTimer.GetMillisecondsForPlayer(),
+                m_level->GetGroundColor());
         }
     }
 
