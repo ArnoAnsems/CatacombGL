@@ -141,6 +141,12 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
         }
     }
 
+    // Remove unreachable skeleton in Mike's Blastable Passage
+    if ((m_game.GetId() == 1 || m_game.GetId() == 2) && m_level->GetLevelIndex() == 5)
+    {
+        m_level->SetFloorTile(7, 17, 0);
+    }
+
     m_game.SpawnActors(m_level, m_difficultyLevel);
     m_level->GetPlayerActor()->SetHealth(health);
     m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex());
