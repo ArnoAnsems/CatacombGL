@@ -388,7 +388,7 @@ bool Actor::IsItem() const
         // Check if this actor is a monster that drops an item when dying,
         // in which case it should also add up to the item count.
         const auto& dyingState = m_decorateActor.states.find(StateIdDying);
-        if (dyingState != m_decorateActor.states.end())
+        if (dyingState != m_decorateActor.states.end() && m_stateId != StateIdDead)
         {
             const DecorateState& decorateState = dyingState->second;
             const actorAction lastAction = decorateState.animation.back().action;

@@ -33,5 +33,8 @@ public:
     void Draw(IRenderer& renderer, const Font& font, const uint16_t additionalMargin, const uint32_t timeStamp, const egaColor floorColor);
 
 private:
+    static const std::string ConvertTimeStampToString(const uint32_t timeStamp);
+    static const std::string NumberToTwoDigitString(const uint32_t number);
+
     const LevelStatistics& m_levelStatistics;
 };

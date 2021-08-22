@@ -146,6 +146,18 @@ uint32_t LevelStatistics::CountItemsOnLevel(const Level& level)
         }
     }
 
+    for (uint16_t i = 1; i < level.GetMaxNonBlockingActors(); i++)
+    {
+        const Actor* actor = level.GetNonBlockingActor(i);
+        if (actor != nullptr)
+        {
+            if (actor->IsItem())
+            {
+                itemCount++;
+            }
+        }
+    }
+
     return itemCount;
 }
 
