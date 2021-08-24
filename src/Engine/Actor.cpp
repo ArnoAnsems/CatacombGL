@@ -347,9 +347,11 @@ bool Actor::IsMonsterAndAlive() const
 {
     bool isMonster = false;
     const auto& attackState = m_decorateActor.states.find(StateIdAttack);
-    if (attackState != m_decorateActor.states.end() && m_health > 0)
+    const auto& dyingState = m_decorateActor.states.find(StateIdDying);
+    if (attackState != m_decorateActor.states.end() &&  // Only monsters can attack the player.
+        dyingState != m_decorateActor.states.end() &&   // The player should be able to kill the monster.
+        m_health > 0)                                   // The monster is not dead yet.
     {
-        // This actor has an attack state, which means it is a monster.
         isMonster = true;
     }
     else
