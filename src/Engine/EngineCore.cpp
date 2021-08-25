@@ -982,11 +982,11 @@ bool EngineCore::Think()
     if (m_timeStampOfPlayerCurrentFrame > m_timeStampEndOfStatusMessage)
     {
         m_statusMessage = nullptr;
+    }
 
-        if (m_state == ExitGame)
-        {
-            return true;
-        }
+    if (m_state == ExitGame && m_statusMessage == nullptr)
+    {
+        return true;
     }
 
     if (m_state == EnteringLevel)
