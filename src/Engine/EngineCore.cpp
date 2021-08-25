@@ -2277,7 +2277,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 if (requiredKey != NoKey)
                 {
                     uint16_t x = tileX - 1;
-                    while (x > 1 && m_level->GetRequiredKeyForDoor(x, tileY) == requiredKey)
+                    while (x > 0 && m_level->GetRequiredKeyForDoor(x, tileY) == requiredKey)
                     {
                         m_level->SetWallTile(x, tileY, 0);
                         m_level->SetFloorTile(x, tileY, 0);
@@ -2291,7 +2291,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                         x++;
                     }
                     uint16_t y = tileY - 1;
-                    while (y > 1 && m_level->GetRequiredKeyForDoor(tileX, y) == requiredKey)
+                    while (y > 0 && m_level->GetRequiredKeyForDoor(tileX, y) == requiredKey)
                     {
                         m_level->SetWallTile(tileX, y, 0);
                         m_level->SetFloorTile(tileX, y, 0);
