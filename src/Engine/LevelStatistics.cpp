@@ -55,6 +55,11 @@ void LevelStatistics::FloodFillSecret(const Level& level, bool* secretsMap, cons
         FloodFillSecret(level, secretsMap, x + 1, y);
     }
 
+    if (y > 1 && !secretsMap[(y - 1) * level.GetLevelWidth() + x] && level.IsExplosiveWall(x, y - 1))
+    {
+        FloodFillSecret(level, secretsMap, x, y - 1);
+    }
+
     if (y < level.GetLevelHeight() - 2 && !secretsMap[(y + 1) * level.GetLevelWidth() + x] && level.IsExplosiveWall(x, y + 1))
     {
         FloodFillSecret(level, secretsMap, x, y + 1);
