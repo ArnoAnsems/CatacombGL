@@ -9,7 +9,7 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.5.2: 
+Current limitations as of version 0.5.3: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 
@@ -59,6 +59,22 @@ Special thanks goes to:
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
 
 # History
+* Version 0.5.3 (2021-08-28) New in this release:
+  * Added emulation of the CRT overscan border. This border can flash when the player gets hit, when destroying an item or when approaching a fake wall. Suggested by NY00123, dosnostalgic and DiscussMetalDan.
+  * Added monster, secret and item statistics to the automap (excluding legacy mode). Suggested by yasagani and Mech4Gaming.
+  * By default the automap has a black background color. However, when the floor color is also black, the automap will now use dark gray as the background color. This helps in making a distinction between explored and unexplored areas. Suggested by Mech4Gaming.
+  * Added the status messages "Damaging blows" and "Curing".
+  * A popup is now shown briefly when a game is saved.
+  * Fix: magic missiles now appear from the hand instead of the face. Reported by downmythroat753.
+  * Fix: prevent getting stuck in portals. Reported by kylesgamesquest.
+  * Fix: only accept Y, N, Enter and ESC in confirmation dialogs. Reported by Azuris and Gez.
+  * Fix: the Run action is now by default assigned to the Right Shift, as seen in the original Catacomb 3D.
+  * Fix: sort sprites more accurately from back to front. This prevents z-fighting when for example some corpses are positioned close to eachother.
+  * Fix: remove hidden obstacle in The Subterranean Vault. This was a wall skeleton spawner without an appropriate wall nearby.
+  * Fix: remove unreachable skeleton from Mike's Blastable Passage.
+  * Fix: remove all yellow blocks when opening the yellow door in the Secret Halls.
+  * Fix: allow player to quit Catacomb 3D while demo is running.
+
 * Version 0.5.2 (2021-04-26) New in this release:
   * Fix: prevent empty save and load menu when no saved games available. Reported by Azuris.
 
