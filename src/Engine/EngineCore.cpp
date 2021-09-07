@@ -1515,8 +1515,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
                     m_level->GetPlayerActor()->Damage(damage);
                     m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                    const egaColor borderColor = (m_game.GetId() != 5) ? EgaBrightRed : EgaMagenta;
                     const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
+                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderColor, borderFlashTime);
                     DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
                 }
             }
@@ -1847,8 +1848,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? baseDamage / 2 : baseDamage;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                const egaColor borderColor = (m_game.GetId() != 5) ? EgaBrightRed : EgaMagenta;
                 const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
+                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderColor, borderFlashTime);
                 DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
             }
         }
@@ -1989,8 +1991,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5 && baseDamage > 1) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
                         m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                        const egaColor borderColor = (m_game.GetId() != 5) ? EgaBrightRed : EgaMagenta;
                         const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-                        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
+                        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderColor, borderFlashTime);
                         DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
                     }
                     moveOk = false;
