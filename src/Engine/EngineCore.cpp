@@ -943,7 +943,12 @@ bool EngineCore::Think()
         }
     }
 
-    if (m_state != Help && !m_menu->IsActive() && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
+    if (m_state != Help &&
+        m_state != WarpCheatDialog &&
+        m_state != GodModeCheatDialog &&
+        m_state != FreeItemsCheatDialog &&
+        !m_menu->IsActive() &&
+        m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
     {
         OpenMenu();
         m_game.GetAudioPlayer()->StopMusic();
@@ -976,6 +981,17 @@ bool EngineCore::Think()
         m_score.UpdateAll();
         m_menu->SetActive(true);
         m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
+    }
+    else if ((m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog)
+             && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    {
+        // Close the dialog and erase the input
+        m_state = InGame;
+        m_warpCheatTextField.clear();
+        if (!m_takingChest)
+        {
+            m_gameTimer.Resume();
+        }
     }
 
     // Status message
