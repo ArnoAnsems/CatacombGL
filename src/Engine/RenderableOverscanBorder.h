@@ -29,7 +29,7 @@ public:
     RenderableOverscanBorder(const OverscanBorder& overscanBorder);
     ~RenderableOverscanBorder();
 
-    void Draw(IRenderer& renderer, const uint16_t additionalMargin, const uint32_t timeStamp);
+    void Draw(IRenderer& renderer, const uint16_t additionalMargin, const uint32_t timeStamp, const bool helpWindow);
 
 private:
     const OverscanBorder& m_overscanBorder;

@@ -25,14 +25,15 @@ RenderableOverscanBorder::~RenderableOverscanBorder()
 {
 }
 
-void RenderableOverscanBorder::Draw(IRenderer& renderer, const uint16_t additionalMargin, const uint32_t timeStamp)
+void RenderableOverscanBorder::Draw(IRenderer& renderer, const uint16_t additionalMargin, const uint32_t timeStamp, const bool helpWindow)
 {
     const egaColor color = m_overscanBorder.GetActiveColor(timeStamp);
     const uint16_t borderWidth = m_overscanBorder.GetBorderWidth();
     const uint16_t borderHeight = m_overscanBorder.GetBorderHeight();
     const int16_t offsetX = 0 - borderWidth - additionalMargin;
     const int16_t offsetY = 0 - borderHeight;
-    const uint16_t totalWidth = 320 + (2 * (borderWidth + additionalMargin));
+    const uint16_t screenWidth = helpWindow ? 640 : 320;
+    const uint16_t totalWidth = screenWidth + (2 * (borderWidth + additionalMargin));
 
     // Top border
     renderer.Render2DBar(offsetX, offsetY, totalWidth, borderHeight, color);
@@ -41,5 +42,5 @@ void RenderableOverscanBorder::Draw(IRenderer& renderer, const uint16_t addition
     // Left border
     renderer.Render2DBar(offsetX, 0, borderWidth, 200, color);
     // Right border
-    renderer.Render2DBar(320 + additionalMargin, 0, borderWidth, 200, color);
+    renderer.Render2DBar(screenWidth + additionalMargin, 0, borderWidth, 200, color);
 }

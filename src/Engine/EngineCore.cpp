@@ -547,7 +547,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
 
     const int16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]);
-    m_renderableOverscanBorder.Draw(renderer, margin, m_gameTimer.GetActualTime());
+    m_renderableOverscanBorder.Draw(renderer, margin, m_gameTimer.GetActualTime(), m_state == Help);
     
     renderer.Unprepare2DRendering();
 }
