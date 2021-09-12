@@ -27,9 +27,9 @@ OverscanBorder::~OverscanBorder()
 
 }
 
-void OverscanBorder::SetColor(const uint32_t timeStamp, const egaColor color, const uint32_t durationInMs)
+void OverscanBorder::SetColor(const uint32_t timeStamp, const uint8_t egaSignal, const uint32_t durationInMs)
 {
-    m_color = color;
+    m_color = ConvertEgaSignalToEgaColor(egaSignal);
     m_timeStampWhenColorIsExpired = timeStamp + durationInMs;
 }
 
@@ -46,4 +46,12 @@ const uint16_t OverscanBorder::GetBorderWidth()
 const uint16_t OverscanBorder::GetBorderHeight()
 {
     return 3u;
+}
+
+// This function is taken from BEL_ST_ConvertEGASignalToEGAEntry in Reflection Keen.
+// It gets a value representing a 6 bit EGA signal and converts it into the 
+// regular "Blue Green Red Intensity" 4 bit format.
+egaColor OverscanBorder::ConvertEgaSignalToEgaColor(const uint8_t egaSignal)
+{
+    return (egaColor)((egaSignal & 7) | ((egaSignal & 16) >> 1));
 }

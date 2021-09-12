@@ -30,12 +30,14 @@ public:
     OverscanBorder();
     ~OverscanBorder();
 
-    void SetColor(const uint32_t timeStamp, const egaColor color, const uint32_t durationInMs);
+    void SetColor(const uint32_t timeStamp, const uint8_t egaSignal, const uint32_t durationInMs);
     egaColor GetActiveColor(const uint32_t timeStamp) const;
     static const uint16_t GetBorderWidth();
     static const uint16_t GetBorderHeight();
 
 private:
+    static egaColor ConvertEgaSignalToEgaColor(const uint8_t egaSignal);
+
     egaColor m_color;
     uint32_t m_timeStampWhenColorIsExpired;
 };

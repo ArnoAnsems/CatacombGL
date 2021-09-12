@@ -307,7 +307,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 {
                     m_insideBorderFlashLocation = true;
                     const uint32_t borderFlashTime = (uint32_t)(20 * (1000.0 / 70.0));
-                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightWhite, borderFlashTime);
+                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 15 | 56, borderFlashTime);
 
                 }
                 else if (m_insideBorderFlashLocation && !borderShouldFlash)
@@ -1531,9 +1531,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
                     m_level->GetPlayerActor()->Damage(damage);
                     m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
-                    const egaColor borderColor = (m_game.GetId() != 5) ? EgaBrightRed : EgaMagenta;
+                    const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
                     const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderColor, borderFlashTime);
+                    m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
                     DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
                 }
             }
@@ -1677,7 +1677,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
         m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
         const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightYellow, borderFlashTime);
+        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 14 | 56, borderFlashTime);
         actor->SetActionPerformed(true);
         m_levelStatistics.UpdateItems(*m_level);
         break;
@@ -1864,9 +1864,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? baseDamage / 2 : baseDamage;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
-                const egaColor borderColor = (m_game.GetId() != 5) ? EgaBrightRed : EgaMagenta;
+                const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
                 const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderColor, borderFlashTime);
+                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
                 DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
             }
         }
@@ -2007,9 +2007,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5 && baseDamage > 1) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
                         m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
-                        const egaColor borderColor = (m_game.GetId() != 5) ? EgaBrightRed : EgaMagenta;
+                        const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
                         const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-                        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderColor, borderFlashTime);
+                        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
                         DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
                     }
                     moveOk = false;
@@ -2081,8 +2081,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 const int16_t damage = 1;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
+                const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
                 const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), EgaBrightRed, borderFlashTime);
+                m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
             }
         }
         actor->SetActionPerformed(true);
