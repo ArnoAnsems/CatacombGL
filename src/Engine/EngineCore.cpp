@@ -1674,10 +1674,11 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         if (isBonusItem)
         {
             DisplayStatusMessage("Item destroyed", 80 * 14);
+            const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+            m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 14 | 56, borderFlashTime);
         }
         m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
-        const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
-        m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 14 | 56, borderFlashTime);
+
         actor->SetActionPerformed(true);
         m_levelStatistics.UpdateItems(*m_level);
         break;
