@@ -166,6 +166,7 @@
     <ClCompile Include="LevelLocationNames_Test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RendererStub.cpp" />
+    <ClCompile Include="SavedGameInDosFormat_Test.cpp" />
     <ClCompile Include="TextureAtlas_Test.cpp" />
     <ClCompile Include="ViewPorts_Test.cpp" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClInclude Include="HelpPages_Test.h" />
     <ClInclude Include="LevelLocationNames_Test.h" />
     <ClInclude Include="RendererStub.h" />
+    <ClInclude Include="SavedGameInDosFormat_Test.h" />
     <ClInclude Include="TextureAtlas_Test.h" />
     <ClInclude Include="ViewPorts_Test.h" />
   </ItemGroup>
