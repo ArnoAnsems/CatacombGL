@@ -194,4 +194,11 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     FileChunk* fileChunk = new FileChunk(3166);
     std::memcpy(fileChunk->GetChunk(), rawSavedGameData, 3166);
     SavedGameInDosFormat savedGame(fileChunk);
+    EXPECT_TRUE(savedGame.Load());
+
+    EXPECT_EQ(savedGame.GetSignature(), "C3D");
+    EXPECT_TRUE(savedGame.GetPresent());
+    EXPECT_EQ(savedGame.GetName(), "level3");
+    EXPECT_EQ(savedGame.GetDifficulty(), 2);
+    EXPECT_EQ(savedGame.GetMapOn(), 2);
 }

@@ -25,3 +25,51 @@ SavedGameInDosFormat::~SavedGameInDosFormat()
 {
 
 }
+
+bool SavedGameInDosFormat::Load()
+{
+    char tempSignature[4];
+    std::memcpy(tempSignature, m_fileChunk->GetChunk(), sizeof(tempSignature));
+    m_signature = std::string(tempSignature);
+
+    m_present = (ReadInt(6) == 0);
+
+    char tempName[33];
+    std::memcpy(tempName, m_fileChunk->GetChunk() + 8, sizeof(tempName));
+    m_name = std::string(tempName);
+
+    m_difficulty = ReadInt(41);
+    m_mapOn = ReadInt(43);
+
+    return true;
+}
+
+const std::string& SavedGameInDosFormat::GetSignature() const
+{
+    return m_signature;
+}
+
+bool SavedGameInDosFormat::GetPresent() const
+{
+    return m_present;
+}
+
+const std::string& SavedGameInDosFormat::GetName() const
+{
+    return m_name;
+}
+
+int16_t SavedGameInDosFormat::GetDifficulty() const
+{
+    return m_difficulty;
+}
+
+int16_t SavedGameInDosFormat::GetMapOn() const
+{
+    return m_mapOn;
+}
+
+int16_t SavedGameInDosFormat::ReadInt(const uint32_t offset)
+{
+    return ((int16_t)(m_fileChunk->GetChunk()[offset]) << 8) + m_fileChunk->GetChunk()[offset + 1];
+}

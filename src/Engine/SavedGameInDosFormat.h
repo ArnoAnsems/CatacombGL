@@ -21,6 +21,7 @@
 #pragma once
 
 #include "FileChunk.h"
+#include <string>
 
 class SavedGameInDosFormat
 {
@@ -28,6 +29,21 @@ public:
     SavedGameInDosFormat(const FileChunk* fileChunk);
     ~SavedGameInDosFormat();
 
+    bool Load();
+
+    const std::string& GetSignature() const;
+    bool GetPresent() const;
+    const std::string& GetName() const;
+    int16_t GetDifficulty() const;
+    int16_t GetMapOn() const;
+
 private:
+    int16_t ReadInt(const uint32_t offset);
+
     const FileChunk* m_fileChunk;
+    std::string m_signature;
+    bool m_present;
+    std::string m_name;
+    int16_t m_difficulty;
+    int16_t m_mapOn;
 };
