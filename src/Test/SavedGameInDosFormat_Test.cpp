@@ -201,4 +201,16 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     EXPECT_EQ(savedGame.GetName(), "level3");
     EXPECT_EQ(savedGame.GetDifficulty(), 2);
     EXPECT_EQ(savedGame.GetMapOn(), 2);
+    EXPECT_EQ(savedGame.GetBolts(), 5);
+    EXPECT_EQ(savedGame.GetNukes(), 2);
+    EXPECT_EQ(savedGame.GetPotions(), 21);
+    EXPECT_EQ(savedGame.GetKeys(0), 0);
+    EXPECT_EQ(savedGame.GetKeys(1), 0);
+    EXPECT_EQ(savedGame.GetKeys(2), 0);
+    EXPECT_EQ(savedGame.GetKeys(3), 1);
+    EXPECT_EQ(savedGame.GetScrolls(0), 0);
+    EXPECT_EQ(savedGame.GetScrolls(7), 0);
+    EXPECT_EQ(savedGame.GetScore(), 12700);
+    EXPECT_EQ(savedGame.GetBody(), 32);
+    EXPECT_EQ(savedGame.GetShotpower(), 0);
 }

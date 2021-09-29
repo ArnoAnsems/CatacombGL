@@ -40,6 +40,20 @@ bool SavedGameInDosFormat::Load()
 
     m_difficulty = ReadInt(41);
     m_mapOn = ReadInt(43);
+    m_bolts = ReadInt(45);
+    m_nukes = ReadInt(47);
+    m_potions = ReadInt(49);
+    for (uint8_t i = 0; i < 4; i++)
+    {
+        m_keys[i] = ReadInt(51 + (i * 2));
+    }
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        m_scrolls[i] = ReadInt(59 + (i * 2));
+    }
+    m_score = ReadLong(75);
+    m_body = ReadInt(79);
+    m_shotpower = ReadInt(81);
 
     return true;
 }
@@ -69,7 +83,52 @@ int16_t SavedGameInDosFormat::GetMapOn() const
     return m_mapOn;
 }
 
+int16_t SavedGameInDosFormat::GetBolts() const
+{
+    return m_bolts;
+}
+
+int16_t SavedGameInDosFormat::GetNukes() const
+{
+    return m_nukes;
+}
+
+int16_t SavedGameInDosFormat::GetPotions() const
+{
+    return m_potions;
+}
+
+int16_t SavedGameInDosFormat::GetKeys(uint8_t index) const
+{
+    return (index < 4) ? m_keys[index] : 0;
+}
+
+int16_t SavedGameInDosFormat::GetScrolls(uint8_t index) const
+{
+    return (index < 8) ? m_scrolls[8] : 0;
+}
+
+int32_t SavedGameInDosFormat::GetScore() const
+{
+    return m_score;
+}
+
+int16_t SavedGameInDosFormat::GetBody() const
+{
+    return m_body;
+}
+
+int16_t SavedGameInDosFormat::GetShotpower() const
+{
+    return m_shotpower;
+}
+
 int16_t SavedGameInDosFormat::ReadInt(const uint32_t offset)
 {
     return ((int16_t)(m_fileChunk->GetChunk()[offset]) << 8) + m_fileChunk->GetChunk()[offset + 1];
+}
+
+int32_t SavedGameInDosFormat::ReadLong(const uint32_t offset)
+{
+    return ((int32_t)(m_fileChunk->GetChunk()[offset + 2]) << 8) + m_fileChunk->GetChunk()[offset + 1];
 }

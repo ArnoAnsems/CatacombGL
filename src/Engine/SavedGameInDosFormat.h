@@ -36,9 +36,18 @@ public:
     const std::string& GetName() const;
     int16_t GetDifficulty() const;
     int16_t GetMapOn() const;
+    int16_t GetBolts() const;
+    int16_t GetNukes() const;
+    int16_t GetPotions() const;
+    int16_t GetKeys(uint8_t index) const;
+    int16_t GetScrolls(uint8_t index) const;
+    int32_t GetScore() const;
+    int16_t GetBody() const;
+    int16_t GetShotpower() const;
 
 private:
     int16_t ReadInt(const uint32_t offset);
+    int32_t ReadLong(const uint32_t offset);
 
     const FileChunk* m_fileChunk;
     std::string m_signature;
@@ -46,4 +55,12 @@ private:
     std::string m_name;
     int16_t m_difficulty;
     int16_t m_mapOn;
+    int16_t m_bolts;
+    int16_t m_nukes;
+    int16_t m_potions;
+    int16_t m_keys[4];
+    int16_t m_scrolls[8];
+    int32_t m_score;
+    int16_t m_body;
+    int16_t m_shotpower;
 };
