@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SavedGameInDosFormat.h"
+#include "Decompressor.h"
 
 SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk) :
     m_fileChunk(fileChunk)
@@ -54,6 +55,11 @@ bool SavedGameInDosFormat::Load()
     m_score = ReadLong(75);
     m_body = ReadInt(79);
     m_shotpower = ReadInt(81);
+
+    uint16_t plane0CompressedSize = 0;
+    m_plane0 = Decompressor::RLEW_DecompressFromSavedGame(&(m_fileChunk->GetChunk()[84]), 0xABCD, plane0CompressedSize);
+    uint16_t plane2CompressedSize = 0;
+    m_plane2 = Decompressor::RLEW_DecompressFromSavedGame(&(m_fileChunk->GetChunk()[86 + plane0CompressedSize]), 0xABCD, plane0CompressedSize);
 
     return true;
 }
@@ -121,6 +127,16 @@ int16_t SavedGameInDosFormat::GetBody() const
 int16_t SavedGameInDosFormat::GetShotpower() const
 {
     return m_shotpower;
+}
+
+FileChunk* SavedGameInDosFormat::GetPlane0() const
+{
+    return m_plane0;
+}
+
+FileChunk* SavedGameInDosFormat::GetPlane2() const
+{
+    return m_plane2;
 }
 
 int16_t SavedGameInDosFormat::ReadInt(const uint32_t offset)

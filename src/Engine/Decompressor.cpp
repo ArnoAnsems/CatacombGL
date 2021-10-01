@@ -19,6 +19,7 @@
 
 #include "Decompressor.h"
 #include <string.h>
+#include <cstring>
 
 //===========================================================================
 //
@@ -438,6 +439,41 @@ FileChunk* Decompressor::RLEW_Decompress(const uint8_t* compressedChunk, const u
                 *destination++ = value;
         }
     } while (destination < end);
+
+    return decompressedChunk;
+}
+
+FileChunk* Decompressor::RLEW_DecompressFromSavedGame(const uint8_t* compressedChunk, const uint16_t rlewtag, uint16_t& compressedSize)
+{
+    uint16_t* source = (uint16_t*)compressedChunk;
+    compressedSize = *source++;
+    uint16_t tempDecompressedData[64 * 64];
+    uint16_t* destination = tempDecompressedData;
+    uint16_t* end = source + (compressedSize / sizeof(uint16_t));
+
+    uint16_t value, count;
+
+    do
+    {
+        value = *source++;
+        if (value != rlewtag)
+        {
+            // Uncompressed
+            *destination++ = value;
+        }
+        else
+        {
+            // Compressed string
+            count = *source++;
+            value = *source++;
+            for (uint16_t i = 0; i < count; i++)
+                *destination++ = value;
+        }
+    } while (source < end);
+
+    uint16_t decompressedSize = (destination - tempDecompressedData) * sizeof(uint16_t);
+    FileChunk* decompressedChunk = new FileChunk(decompressedSize);
+    std::memcpy(decompressedChunk->GetChunk(), tempDecompressedData, decompressedSize);
 
     return decompressedChunk;
 }

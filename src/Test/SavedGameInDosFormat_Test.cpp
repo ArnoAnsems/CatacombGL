@@ -213,4 +213,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     EXPECT_EQ(savedGame.GetScore(), 12700);
     EXPECT_EQ(savedGame.GetBody(), 32);
     EXPECT_EQ(savedGame.GetShotpower(), 0);
+    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
+    EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
 }

@@ -44,6 +44,8 @@ public:
     int32_t GetScore() const;
     int16_t GetBody() const;
     int16_t GetShotpower() const;
+    FileChunk* GetPlane0() const;
+    FileChunk* GetPlane2() const;
 
 private:
     int16_t ReadInt(const uint32_t offset);
@@ -63,4 +65,6 @@ private:
     int32_t m_score;
     int16_t m_body;
     int16_t m_shotpower;
+    FileChunk* m_plane0;
+    FileChunk* m_plane2;
 };

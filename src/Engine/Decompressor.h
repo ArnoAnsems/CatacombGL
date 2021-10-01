@@ -27,6 +27,7 @@ class Decompressor
 public:
     static uint32_t lzhDecompress(uint8_t* infile, uint8_t* outfile, uint32_t OrginalLength, uint32_t CompressLength);
     static FileChunk* RLEW_Decompress(const uint8_t* compressedChunk, const uint16_t rlewtag);
+    static FileChunk* RLEW_DecompressFromSavedGame(const uint8_t* compressedChunk, const uint16_t rlewtag, uint16_t& compressedSize);
     static FileChunk* CarmackExpand (const uint8_t* compressedChunk);
 
 private:
