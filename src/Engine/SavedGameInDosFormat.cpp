@@ -59,7 +59,11 @@ bool SavedGameInDosFormat::Load()
     uint16_t plane0CompressedSize = 0;
     m_plane0 = Decompressor::RLEW_DecompressFromSavedGame(&(m_fileChunk->GetChunk()[84]), 0xABCD, plane0CompressedSize);
     uint16_t plane2CompressedSize = 0;
-    m_plane2 = Decompressor::RLEW_DecompressFromSavedGame(&(m_fileChunk->GetChunk()[86 + plane0CompressedSize]), 0xABCD, plane0CompressedSize);
+    m_plane2 = Decompressor::RLEW_DecompressFromSavedGame(&(m_fileChunk->GetChunk()[86 + plane0CompressedSize]), 0xABCD, plane2CompressedSize);
+
+    const uint16_t offsetToFirstObject = 88 + plane0CompressedSize + plane2CompressedSize;
+    const uint16_t sizeOfSingleObject = 68u;
+    m_numberOfObjects = (m_fileChunk->GetSize() - offsetToFirstObject) / sizeOfSingleObject;
 
     return true;
 }
@@ -137,6 +141,11 @@ FileChunk* SavedGameInDosFormat::GetPlane0() const
 FileChunk* SavedGameInDosFormat::GetPlane2() const
 {
     return m_plane2;
+}
+
+uint16_t SavedGameInDosFormat::GetNumberOfObjects() const
+{
+    return m_numberOfObjects;
 }
 
 int16_t SavedGameInDosFormat::ReadInt(const uint32_t offset)

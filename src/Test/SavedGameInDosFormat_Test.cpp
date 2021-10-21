@@ -216,4 +216,5 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
+    EXPECT_EQ(savedGame.GetNumberOfObjects(), 24);
 }

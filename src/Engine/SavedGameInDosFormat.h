@@ -26,6 +26,36 @@
 class SavedGameInDosFormat
 {
 public:
+    typedef struct
+    {
+        uint16_t active;
+        int16_t ticcount;
+        uint16_t obclass;
+        int16_t stateOffset;
+        uint16_t shootable;
+        uint16_t tileObject;
+        int32_t distance;
+        uint16_t dir;
+        int32_t x;
+        int32_t y;
+        int16_t tilex;
+        int16_t tiley;
+        int16_t viewx;
+        int16_t viewheight;
+        int16_t angle;
+        int16_t hitpoints;
+        int32_t speed;
+        int16_t size;
+        int32_t xl;
+        int32_t xh;
+        int32_t yl;
+        int32_t yh;
+        int16_t temp1;
+        int16_t temp2;
+        int16_t prev;
+        int16_t next;
+    } ObjectInDosFormat;
+
     SavedGameInDosFormat(const FileChunk* fileChunk);
     ~SavedGameInDosFormat();
 
@@ -46,6 +76,7 @@ public:
     int16_t GetShotpower() const;
     FileChunk* GetPlane0() const;
     FileChunk* GetPlane2() const;
+    uint16_t GetNumberOfObjects() const;
 
 private:
     int16_t ReadInt(const uint32_t offset);
@@ -67,4 +98,5 @@ private:
     int16_t m_shotpower;
     FileChunk* m_plane0;
     FileChunk* m_plane2;
+    uint16_t m_numberOfObjects;
 };
