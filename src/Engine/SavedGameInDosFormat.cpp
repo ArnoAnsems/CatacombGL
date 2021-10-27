@@ -17,14 +17,19 @@
 #include "Decompressor.h"
 
 SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk) :
-    m_fileChunk(fileChunk)
+    m_fileChunk(fileChunk),
+    m_plane0(nullptr),
+    m_plane2(nullptr),
+    m_objects(nullptr)
 {
 
 }
 
 SavedGameInDosFormat::~SavedGameInDosFormat()
 {
-
+    delete m_plane0;
+    delete m_plane2;
+    delete[] m_objects;
 }
 
 bool SavedGameInDosFormat::Load()
@@ -64,6 +69,24 @@ bool SavedGameInDosFormat::Load()
     const uint16_t offsetToFirstObject = 88 + plane0CompressedSize + plane2CompressedSize;
     const uint16_t sizeOfSingleObject = 68u;
     m_numberOfObjects = (m_fileChunk->GetSize() - offsetToFirstObject) / sizeOfSingleObject;
+
+    if (m_objects)
+    {
+        delete[] m_objects;
+    }
+    m_objects = new ObjectInDosFormat[m_numberOfObjects];
+    for (uint16_t i = 0; i < m_numberOfObjects; i++)
+    {
+        // The ObjectInDosFormat struct has to be filled element by element, due to the different alignment under Windows.
+        std::memcpy(&m_objects[i].active, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject), 2);
+        std::memcpy(&m_objects[i].ticcount, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject) + 2, 2);
+        std::memcpy(&m_objects[i].obclass, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject) + 4, 2);
+        std::memcpy(&m_objects[i].stateOffset, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject) + 6, 2);
+        std::memcpy(&m_objects[i].shootable, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject) + 8, 2);
+        std::memcpy(&m_objects[i].tileObject, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject) + 10, 2);
+        std::memcpy(&m_objects[i].distance, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject) + 12, 4);
+        std::memcpy(&m_objects[i].dir, m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject) + 16, 2);
+    }
 
     return true;
 }
@@ -156,4 +179,9 @@ int16_t SavedGameInDosFormat::ReadInt(const uint32_t offset)
 int32_t SavedGameInDosFormat::ReadLong(const uint32_t offset)
 {
     return ((int32_t)(m_fileChunk->GetChunk()[offset + 2]) << 8) + m_fileChunk->GetChunk()[offset + 1];
+}
+
+SavedGameInDosFormat::ObjectInDosFormat& SavedGameInDosFormat::GetObject(const uint16_t objectIndex) const
+{
+    return m_objects[objectIndex];
 }

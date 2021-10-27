@@ -77,6 +77,7 @@ public:
     FileChunk* GetPlane0() const;
     FileChunk* GetPlane2() const;
     uint16_t GetNumberOfObjects() const;
+    ObjectInDosFormat& GetObject(const uint16_t objectIndex) const;
 
 private:
     int16_t ReadInt(const uint32_t offset);
@@ -99,4 +100,5 @@ private:
     FileChunk* m_plane0;
     FileChunk* m_plane2;
     uint16_t m_numberOfObjects;
+    ObjectInDosFormat* m_objects;
 };

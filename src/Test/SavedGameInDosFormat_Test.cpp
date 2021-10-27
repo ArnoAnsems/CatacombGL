@@ -217,4 +217,29 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetNumberOfObjects(), 24);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
+    EXPECT_EQ(firstObject.active, 1);
+    EXPECT_EQ(firstObject.obclass, 1);  // playerobj
+    EXPECT_EQ(firstObject.stateOffset, 6056);
+    EXPECT_EQ(firstObject.shootable , 0);
+    EXPECT_EQ(firstObject.tileObject, 0);
+    EXPECT_EQ(firstObject.distance, 0);
+    EXPECT_EQ(firstObject.dir, 0);
+    const SavedGameInDosFormat::ObjectInDosFormat& secondObject = savedGame.GetObject(1);
+    EXPECT_EQ(secondObject.active, 1);
+    EXPECT_EQ(secondObject.obclass, 12);  // inertobj
+    EXPECT_EQ(secondObject.stateOffset, 6574);
+    EXPECT_EQ(secondObject.shootable, 0);
+    EXPECT_EQ(secondObject.tileObject, 0);
+    EXPECT_EQ(secondObject.distance, 14336);
+    EXPECT_EQ(secondObject.dir, 3);  // west
+    const SavedGameInDosFormat::ObjectInDosFormat& lastObject = savedGame.GetObject(23);
+    EXPECT_EQ(firstObject.active, 1);
+    EXPECT_EQ(lastObject.obclass, 15);  // gateobj
+    EXPECT_EQ(lastObject.stateOffset, 6264);
+    EXPECT_EQ(lastObject.shootable, 0);
+    EXPECT_EQ(lastObject.tileObject, 0);
+    EXPECT_EQ(lastObject.distance, 0);
+    EXPECT_EQ(lastObject.dir, 8); // nodir
 }
