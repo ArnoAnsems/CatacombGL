@@ -52,8 +52,8 @@ public:
         int32_t yh;
         int16_t temp1;
         int16_t temp2;
-        int16_t prev;
         int16_t next;
+        int16_t prev;
     } ObjectInDosFormat;
 
     SavedGameInDosFormat(const FileChunk* fileChunk);

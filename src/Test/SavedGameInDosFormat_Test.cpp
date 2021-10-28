@@ -226,6 +226,24 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     EXPECT_EQ(firstObject.tileObject, 0);
     EXPECT_EQ(firstObject.distance, 0);
     EXPECT_EQ(firstObject.dir, 0);
+    EXPECT_EQ(firstObject.x, 2290820);
+    EXPECT_EQ(firstObject.y, 1554326);
+    EXPECT_EQ(firstObject.tilex, 34);
+    EXPECT_EQ(firstObject.tiley, 23);
+    EXPECT_EQ(firstObject.viewx, 0);
+    EXPECT_EQ(firstObject.viewheight, 0);
+    EXPECT_EQ(firstObject.angle, 208);
+    EXPECT_EQ(firstObject.hitpoints, 0);
+    EXPECT_EQ(firstObject.speed, 0);
+    EXPECT_EQ(firstObject.size, 26214);
+    EXPECT_EQ(firstObject.xl, 2264606);
+    EXPECT_EQ(firstObject.xh, 2317034);
+    EXPECT_EQ(firstObject.yl, 1528112);
+    EXPECT_EQ(firstObject.yh, 1580540);
+    EXPECT_EQ(firstObject.temp1, 0);
+    EXPECT_EQ(firstObject.temp2, 0);
+    EXPECT_EQ(firstObject.next, -21001);
+    EXPECT_EQ(firstObject.prev, 0);
     const SavedGameInDosFormat::ObjectInDosFormat& secondObject = savedGame.GetObject(1);
     EXPECT_EQ(secondObject.active, 1);
     EXPECT_EQ(secondObject.obclass, 12);  // inertobj
@@ -234,6 +252,24 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     EXPECT_EQ(secondObject.tileObject, 0);
     EXPECT_EQ(secondObject.distance, 14336);
     EXPECT_EQ(secondObject.dir, 3);  // west
+    EXPECT_EQ(secondObject.x, 964608);
+    EXPECT_EQ(secondObject.y, 163840);
+    EXPECT_EQ(secondObject.tilex, 14);
+    EXPECT_EQ(secondObject.tiley, 2);
+    EXPECT_EQ(secondObject.viewx, -28);
+    EXPECT_EQ(secondObject.viewheight, 32000);
+    EXPECT_EQ(secondObject.angle, 0);
+    EXPECT_EQ(secondObject.hitpoints, 0);
+    EXPECT_EQ(secondObject.speed, 1536);
+    EXPECT_EQ(secondObject.size, 16384);
+    EXPECT_EQ(secondObject.xl, 948224);
+    EXPECT_EQ(secondObject.xh, 980992);
+    EXPECT_EQ(secondObject.yl, 147456);
+    EXPECT_EQ(secondObject.yh, 180224);
+    EXPECT_EQ(secondObject.temp1, 0);
+    EXPECT_EQ(secondObject.temp2, 0);
+    EXPECT_EQ(secondObject.next, -20933);
+    EXPECT_EQ(secondObject.prev, -21069);
     const SavedGameInDosFormat::ObjectInDosFormat& lastObject = savedGame.GetObject(23);
     EXPECT_EQ(firstObject.active, 1);
     EXPECT_EQ(lastObject.obclass, 15);  // gateobj
@@ -242,4 +278,22 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     EXPECT_EQ(lastObject.tileObject, 0);
     EXPECT_EQ(lastObject.distance, 0);
     EXPECT_EQ(lastObject.dir, 8); // nodir
+    EXPECT_EQ(lastObject.x, 2457600);
+    EXPECT_EQ(lastObject.y, 1736704);
+    EXPECT_EQ(lastObject.tilex, 37);
+    EXPECT_EQ(lastObject.tiley, 26);
+    EXPECT_EQ(lastObject.viewx, 0);
+    EXPECT_EQ(lastObject.viewheight, 0);
+    EXPECT_EQ(lastObject.angle, 0);
+    EXPECT_EQ(lastObject.hitpoints, 0);
+    EXPECT_EQ(lastObject.speed, 0);
+    EXPECT_EQ(lastObject.size, 21845);
+    EXPECT_EQ(lastObject.xl, 2435755);
+    EXPECT_EQ(lastObject.xh, 2479445);
+    EXPECT_EQ(lastObject.yl, 1714859);
+    EXPECT_EQ(lastObject.yh, 1758549);
+    EXPECT_EQ(lastObject.temp1, 0);
+    EXPECT_EQ(lastObject.temp2, 0);
+    EXPECT_EQ(lastObject.next, 0);
+    EXPECT_EQ(lastObject.prev, -16785);
 }
