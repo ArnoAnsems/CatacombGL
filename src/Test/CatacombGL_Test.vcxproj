@@ -186,6 +186,7 @@
     <ClInclude Include="HelpPages_Test.h" />
     <ClInclude Include="LevelLocationNames_Test.h" />
     <ClInclude Include="RendererStub.h" />
+    <ClInclude Include="SavedGameInDosFormat_Data.h" />
     <ClInclude Include="SavedGameInDosFormat_Test.h" />
     <ClInclude Include="TextureAtlas_Test.h" />
     <ClInclude Include="ViewPorts_Test.h" />

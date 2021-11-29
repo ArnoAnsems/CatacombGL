@@ -134,5 +134,8 @@
     <ClInclude Include="SavedGameInDosFormat_Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavedGameInDosFormat_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
