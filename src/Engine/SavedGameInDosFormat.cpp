@@ -34,6 +34,18 @@ SavedGameInDosFormat::~SavedGameInDosFormat()
 
 bool SavedGameInDosFormat::Load()
 {
+    if (m_fileChunk == nullptr)
+    {
+        // No data to load
+        return false;
+    }
+
+    if (m_fileChunk->GetSize() < 88)
+    {
+        // Too small to contain header
+        return false;
+    }
+
     char tempSignature[4];
     std::memcpy(tempSignature, m_fileChunk->GetChunk(), sizeof(tempSignature));
     m_signature = std::string(tempSignature);

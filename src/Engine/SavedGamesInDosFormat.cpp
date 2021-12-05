@@ -31,16 +31,19 @@ SavedGamesInDosFormat::~SavedGamesInDosFormat()
 
 void SavedGamesInDosFormat::AddSavedGame(const FileChunk* fileChunk)
 {
-    SavedGameInDosFormat* savedGame = new SavedGameInDosFormat(fileChunk);
-    const bool savedGameIsLoaded = savedGame->Load();
+    if (fileChunk != nullptr)
+    {
+        SavedGameInDosFormat* savedGame = new SavedGameInDosFormat(fileChunk);
+        const bool savedGameIsLoaded = savedGame->Load();
 
-    if (savedGameIsLoaded)
-    {
-        m_savedGames.push_back(savedGame);
-    }
-    else
-    {
-        delete savedGame;
+        if (savedGameIsLoaded)
+        {
+            m_savedGames.push_back(savedGame);
+        }
+        else
+        {
+            delete savedGame;
+        }
     }
 }
 

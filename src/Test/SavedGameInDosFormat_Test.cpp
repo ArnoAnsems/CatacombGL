@@ -135,3 +135,18 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGame)
     EXPECT_EQ(lastObject.next, 0);
     EXPECT_EQ(lastObject.prev, -16785);
 }
+
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameNullptr)
+{
+    SavedGameInDosFormat savedGame(nullptr);
+    EXPECT_FALSE(savedGame.Load());
+}
+
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
+{
+    // Load saved game data that is too small to contain the header.
+    FileChunk* fileChunk = new FileChunk(87);
+    std::memset(fileChunk->GetChunk(), 0, 87);
+    SavedGameInDosFormat savedGame(fileChunk);
+    EXPECT_FALSE(savedGame.Load());
+}
