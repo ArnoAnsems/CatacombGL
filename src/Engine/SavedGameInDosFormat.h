@@ -60,6 +60,7 @@ public:
     ~SavedGameInDosFormat();
 
     bool Load();
+    const std::string& GetErrorMessage() const;
 
     const std::string& GetSignature() const;
     bool GetPresent() const;
@@ -84,6 +85,7 @@ private:
     int32_t ReadLong(const uint32_t offset);
 
     const FileChunk* m_fileChunk;
+    std::string m_errorMessage;
     std::string m_signature;
     bool m_present;
     std::string m_name;

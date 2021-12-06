@@ -140,6 +140,7 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameNullptr)
 {
     SavedGameInDosFormat savedGame(nullptr);
     EXPECT_FALSE(savedGame.Load());
+    EXPECT_EQ(savedGame.GetErrorMessage(), "data is null");
 }
 
 TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
@@ -149,4 +150,27 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
     std::memset(fileChunk->GetChunk(), 0, 87);
     SavedGameInDosFormat savedGame(fileChunk);
     EXPECT_FALSE(savedGame.Load());
+    EXPECT_EQ(savedGame.GetErrorMessage(), "too small to contain header");
+}
+
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameUnableToDecompressPlane0)
+{
+    FileChunk* fileChunk = new FileChunk(3166);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, 3166);
+    // Set the compressed size of plane 0 too large
+    *(uint16_t*)&(fileChunk->GetChunk()[84]) = 4000u;
+    SavedGameInDosFormat savedGame(fileChunk);
+    EXPECT_FALSE(savedGame.Load());
+    EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 0");
+}
+
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameUnableToDecompressPlane2)
+{
+    FileChunk* fileChunk = new FileChunk(3166);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, 3166);
+    // Set the compressed size of plane 2 too large
+    *(uint16_t*)& (fileChunk->GetChunk()[1172]) = 3000u;
+    SavedGameInDosFormat savedGame(fileChunk);
+    EXPECT_FALSE(savedGame.Load());
+    EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 2");
 }
