@@ -174,3 +174,14 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameUnableToDecompressPlane2)
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 2");
 }
+
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameNoObjectFound)
+{
+    // Copy the raw saved game data to a fileChunk, but without the object data.
+    const uint32_t sizeOfRawSavedGameDataWithoutObjects = 3166 - (24 * 68);
+    FileChunk* fileChunk = new FileChunk(sizeOfRawSavedGameDataWithoutObjects);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, sizeOfRawSavedGameDataWithoutObjects);
+    SavedGameInDosFormat savedGame(fileChunk);
+    EXPECT_FALSE(savedGame.Load());
+    EXPECT_EQ(savedGame.GetErrorMessage(), "no objects found");
+}
