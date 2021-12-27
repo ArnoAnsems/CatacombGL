@@ -88,15 +88,39 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_renderableOverscanBorder(m_overscanBorder),
     m_insideBorderFlashLocation(false),
     m_levelStatistics(),
-    m_renderableLevelStatistics(m_levelStatistics)
+    m_renderableLevelStatistics(m_levelStatistics),
+    m_savedGamesInDosFormat()
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
 
     const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string savedGamesAbyssPath = filenamePath + m_game.GetSavedGamesPath();
-    m_system.GetSavedGameNamesFromFolder(savedGamesAbyssPath, m_savedGames);
+    const std::string savedGamesPath = filenamePath + m_game.GetSavedGamesPath();
+    m_system.GetSavedGameNamesFromFolder(savedGamesPath, m_savedGames);
     m_menu = game.CreateMenu(configurationSettings, keyboardInput, m_savedGames);
+
+    if (game.GetId() == 5)
+    {
+        const std::string& gameDataPath = configurationSettings.GetCVarString(CVarIdPathCatacomb3Dv122).Get();
+        for (uint8_t index = 0; index < 10; index++)
+        {
+            const std::string fullFilename = gameDataPath + "SAVEGAM" + std::to_string(index) + ".C3D";
+            std::ifstream file;
+            file.open(fullFilename, std::ifstream::binary);
+            if (file.is_open())
+            {
+                const std::streampos beginPos = file.tellg();
+                file.seekg(0, std::ios::end);
+                const int32_t fileSize = (int32_t)(file.tellg() - beginPos);
+                FileChunk* fileChunk = new FileChunk(fileSize);
+                file.seekg(0, std::ios::beg);
+                file.read((char*)fileChunk->GetChunk(), fileSize);
+                file.close();
+                m_savedGamesInDosFormat.AddSavedGame(fileChunk);
+                delete fileChunk;
+            }
+        }
+    }
 
     // Pre-load game data from disk
     m_game.GetAudioRepository();

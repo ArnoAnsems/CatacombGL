@@ -39,6 +39,7 @@
 #include "ManaBar.h"
 #include "RenderableOverscanBorder.h"
 #include "RenderableLevelStatistics.h"
+#include "SavedGamesInDosFormat.h"
 
 class EngineCore
 {
@@ -193,4 +194,5 @@ private:
     bool m_insideBorderFlashLocation;
     LevelStatistics m_levelStatistics;
     RenderableLevelStatistics m_renderableLevelStatistics;
+    SavedGamesInDosFormat m_savedGamesInDosFormat;
 };
