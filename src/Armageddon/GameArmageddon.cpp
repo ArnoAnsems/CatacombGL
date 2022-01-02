@@ -529,7 +529,11 @@ IIntroView* GameArmageddon::GetIntroView()
     return m_introView;
 }
 
-IMenu* GameArmageddon::CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames)
+IMenu* GameArmageddon::CreateMenu(
+    ConfigurationSettings& configurationSettings,
+    PlayerInput& playerInput,
+    std::vector<std::string>& savedGames,
+    SavedGamesInDosFormat& savedGamesInDosFormat)
 {
     return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames, m_renderer, GetCatalogInfo(), m_gamePath);
 }

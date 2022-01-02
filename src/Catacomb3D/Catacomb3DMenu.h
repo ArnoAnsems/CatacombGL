@@ -31,6 +31,7 @@
 #include "SkullNBones.h"
 #include "../Engine/GuiMenu.h"
 #include "GuiElementButtonCat3D.h"
+#include "../Engine/SavedGamesInDosFormat.h"
 
 class Catacomb3DMenu: public IMenu
 {
@@ -41,7 +42,8 @@ public:
         PlayerInput& playerInput,
         EgaGraph* const egaGraph,
         std::vector<std::string>& savedGames,
-        HighScores& highScores);
+        HighScores& highScores,
+        SavedGamesInDosFormat& savedGamesInDosFormat);
     bool IsActive() const override;
     void SetActive(bool active) override;
     MenuCommand ProcessInput(const PlayerInput& playerInput) override;
@@ -89,4 +91,5 @@ private:
     bool m_flashIcon;
     uint32_t m_timeStamp;
     GuiElementButtonCat3D* m_returnToGameButton;
+    SavedGamesInDosFormat& m_savedGamesInDosFormat;
 };

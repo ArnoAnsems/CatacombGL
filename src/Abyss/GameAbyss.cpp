@@ -615,7 +615,11 @@ IIntroView* GameAbyss::GetIntroView()
     return m_introView;
 }
 
-IMenu* GameAbyss::CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames)
+IMenu* GameAbyss::CreateMenu(
+    ConfigurationSettings& configurationSettings,
+    PlayerInput& playerInput,
+    std::vector<std::string>& savedGames,
+    SavedGamesInDosFormat& savedGamesInDosFormat)
 {
     return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames, m_renderer, GetCatalogInfo(), m_gamePath);
 }

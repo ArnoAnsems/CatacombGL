@@ -62,7 +62,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     PlayerInput& playerInput,
     EgaGraph* const egaGraph,
     std::vector<std::string>& savedGames,
-    HighScores& highScores) :
+    HighScores& highScores,
+    SavedGamesInDosFormat& savedGamesInDosFormat) :
     m_menuActive (false),
     m_saveGameEnabled (false),
     m_configurationSettings (configurationSettings),
@@ -85,7 +86,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_renderableTiles(*egaGraph->GetTilesSize8()),
     m_flashIcon(false),
     m_timeStamp(0),
-    m_returnToGameButton(nullptr)
+    m_returnToGameButton(nullptr),
+    m_savedGamesInDosFormat(savedGamesInDosFormat)
 {
     // Main menu
     GuiPage* guiPageMain = new GuiPage(playerInput);
@@ -218,6 +220,17 @@ Catacomb3DMenu::Catacomb3DMenu(
             savedGameIndex++;
         }
     }
+    if (m_savedGamesInDosFormat.GetSavedGameInDosFormat().size() > 0)
+    {
+        int16_t savedGameIndex = 0;
+        for (const SavedGameInDosFormat* savedGameInDosFormat : m_savedGamesInDosFormat.GetSavedGameInDosFormat())
+        {
+            const std::string savedGameName = savedGameInDosFormat->GetName() + " [DOS]";
+            elementListRestoreGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGameName, { GuiActionLoadDosGame, savedGameIndex }, m_renderableText, m_flashIcon));
+            savedGameIndex++;
+        }
+    }
+
     guiPageLoadGame->AddChild(elementListRestoreGame, 80, 60);
 
     // Save game menu
@@ -372,6 +385,10 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             {
                 command = MenuCommandLoadGame;
             }
+            else if (m_askForEndGameGuiAction == GuiActionLoadDosGame)
+            {
+                command = MenuCommandLoadDosGame;
+            }
             else
             {
                 command = MenuCommandEndGame;
@@ -431,6 +448,20 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
             else
             {
                 command = MenuCommandLoadGame;
+            }
+        }
+        else if (guiEvent.guiAction == GuiActionLoadDosGame)
+        {
+            m_newSaveGameName = m_savedGamesInDosFormat.GetSavedGameInDosFormat().at(guiEvent.guiParameter)->GetName();
+            if (m_saveGameEnabled)
+            {
+                m_askForOverwrite = false;
+                m_askForEndGame = true;
+                m_askForEndGameGuiAction = guiEvent.guiAction;
+            }
+            else
+            {
+                command = MenuCommandLoadDosGame;
             }
         }
         else if (guiEvent.guiAction == GuiActionNewGameEasy ||
@@ -572,7 +603,7 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
         {
             DrawConfirmationDialog(renderer, *egaGraph, 142, "REALLY END CURRENT GAME?", "PRESS Y TO END IT", "ESC TO BACK OUT");
         }
-        else if (m_askForEndGameGuiAction == GuiActionLoadGame)
+        else if (m_askForEndGameGuiAction == GuiActionLoadGame || m_askForEndGameGuiAction == GuiActionLoadDosGame)
         {
             DrawConfirmationDialog(renderer, *egaGraph, 142, "YOU'RE IN A GAME", "PRESS Y TO LOAD GAME", "ESC TO BACK OUT");
         }

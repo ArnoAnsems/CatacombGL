@@ -35,6 +35,7 @@ enum MenuCommand
     MenuCommandExitGame,
     MenuCommandSaveGame,
     MenuCommandLoadGame,
+    MenuCommandLoadDosGame,
     MenuCommandEndGame,
     MenuCommandCloseMenu
 };

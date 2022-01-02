@@ -34,6 +34,7 @@
 #include "ViewPorts.h"
 #include "ConfigurationSettings.h"
 #include "ManaBar.h"
+#include "SavedGamesInDosFormat.h"
 #include "../../ThirdParty//SDL/include/SDL_keycode.h"
 
 enum DifficultyLevel
@@ -65,7 +66,11 @@ public:
     virtual AudioRepository* GetAudioRepository() = 0;
     virtual AudioPlayer* GetAudioPlayer() = 0;
     virtual IIntroView* GetIntroView() = 0;
-    virtual IMenu* CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames) = 0;
+    virtual IMenu* CreateMenu(
+        ConfigurationSettings& configurationSettings,
+        PlayerInput& playerInput,
+        std::vector<std::string>& savedGames,
+        SavedGamesInDosFormat& savedGamesInDosFormat) = 0;
     virtual void DrawHelpPage() = 0;
     virtual bool ProcessInputOnHelpPage(PlayerInput& playerInput) = 0;
     virtual const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const = 0;

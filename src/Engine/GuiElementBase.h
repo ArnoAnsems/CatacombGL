@@ -35,6 +35,7 @@ const uint8_t GuiActionEndGame = 13;
 const uint8_t GuiActionHighScoreFinished = 14;
 const uint8_t GuiActionResetToDefaults = 15;
 const uint8_t GuiActionResetToClassic = 16;
+const uint8_t GuiActionLoadDosGame = 17;
 
 struct GuiEvent
 {

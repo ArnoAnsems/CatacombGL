@@ -336,9 +336,13 @@ IIntroView* GameCatacomb3D::GetIntroView()
     return m_introView;
 }
 
-IMenu* GameCatacomb3D::CreateMenu(ConfigurationSettings& configurationSettings, PlayerInput& playerInput, std::vector<std::string>& savedGames)
+IMenu* GameCatacomb3D::CreateMenu(
+    ConfigurationSettings& configurationSettings,
+    PlayerInput& playerInput,
+    std::vector<std::string>& savedGames,
+    SavedGamesInDosFormat& savedGamesInDosFormat)
 {
-    return new Catacomb3DMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), savedGames, *m_highScores);
+    return new Catacomb3DMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), savedGames, *m_highScores, savedGamesInDosFormat);
 }
 
 void GameCatacomb3D::DrawHelpPage()

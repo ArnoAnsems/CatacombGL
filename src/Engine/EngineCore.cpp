@@ -97,7 +97,6 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     const std::string filenamePath = m_system.GetConfigurationFilePath();
     const std::string savedGamesPath = filenamePath + m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesPath, m_savedGames);
-    m_menu = game.CreateMenu(configurationSettings, keyboardInput, m_savedGames);
 
     if (game.GetId() == 5)
     {
@@ -121,6 +120,8 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
             }
         }
     }
+
+    m_menu = game.CreateMenu(configurationSettings, keyboardInput, m_savedGames, m_savedGamesInDosFormat);
 
     // Pre-load game data from disk
     m_game.GetAudioRepository();
