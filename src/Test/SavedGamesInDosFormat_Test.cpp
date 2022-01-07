@@ -39,7 +39,7 @@ TEST(SavedGamesInDosFormat_Test, LoadSavedGames)
 
     // Add first saved game data
     FileChunk* fileChunk = new FileChunk(3166);
-    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, 3166);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
     savedGames.AddSavedGame(fileChunk);
     EXPECT_EQ(1, savedGames.GetSavedGameInDosFormat().size());
     EXPECT_EQ("level3", savedGames.GetSavedGameInDosFormat().at(0)->GetName());

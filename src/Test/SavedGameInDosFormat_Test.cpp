@@ -27,10 +27,10 @@ SavedGameInDosFormat_Test::~SavedGameInDosFormat_Test()
 
 }
 
-TEST(SavedGameInDosFormat_Test, LoadSavedGame)
+TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
 {
     FileChunk* fileChunk = new FileChunk(3166);
-    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, 3166);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
     SavedGameInDosFormat savedGame(fileChunk);
     EXPECT_TRUE(savedGame.Load());
 
@@ -153,10 +153,10 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
     EXPECT_EQ(savedGame.GetErrorMessage(), "too small to contain header");
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameUnableToDecompressPlane0)
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane0)
 {
     FileChunk* fileChunk = new FileChunk(3166);
-    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, 3166);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
     // Set the compressed size of plane 0 too large
     *(uint16_t*)&(fileChunk->GetChunk()[84]) = 4000u;
     SavedGameInDosFormat savedGame(fileChunk);
@@ -164,10 +164,10 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameUnableToDecompressPlane0)
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 0");
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameUnableToDecompressPlane2)
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane2)
 {
     FileChunk* fileChunk = new FileChunk(3166);
-    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, 3166);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
     // Set the compressed size of plane 2 too large
     *(uint16_t*)& (fileChunk->GetChunk()[1172]) = 3000u;
     SavedGameInDosFormat savedGame(fileChunk);
@@ -175,12 +175,12 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameUnableToDecompressPlane2)
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 2");
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameNoObjectFound)
+TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
 {
     // Copy the raw saved game data to a fileChunk, but without the object data.
     const uint32_t sizeOfRawSavedGameDataWithoutObjects = 3166 - (24 * 68);
     FileChunk* fileChunk = new FileChunk(sizeOfRawSavedGameDataWithoutObjects);
-    std::memcpy(fileChunk->GetChunk(), rawSavedGameData, sizeOfRawSavedGameDataWithoutObjects);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, sizeOfRawSavedGameDataWithoutObjects);
     SavedGameInDosFormat savedGame(fileChunk);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "no objects found");
