@@ -50,34 +50,50 @@ bool SavedGameInDosFormat::Load()
 
     if (dataIsValid)
     {
-        char tempSignature[4];
+        constexpr uint32_t signatureSize = 4;
+        char tempSignature[signatureSize];
         std::memcpy(tempSignature, m_fileChunk->GetChunk(), sizeof(tempSignature));
         m_signature = std::string(tempSignature);
-
-        m_present = (ReadInt(6) == 0);
-
-        char tempName[33];
-        std::memcpy(tempName, m_fileChunk->GetChunk() + 8, sizeof(tempName));
+        const uint32_t offsetToOldTest = signatureSize;
+        m_oldTest = ReadInt(offsetToOldTest);
+        const uint32_t offsetToPresent = offsetToOldTest + sizeof(m_oldTest);
+        m_present = (ReadInt(offsetToPresent) == 0);
+        const uint32_t offsetToName = offsetToPresent + 2;
+        constexpr uint32_t nameSize = 33;
+        char tempName[nameSize];
+        std::memcpy(tempName, m_fileChunk->GetChunk() + offsetToName, sizeof(tempName));
         m_name = std::string(tempName);
-
-        m_difficulty = ReadInt(42);
-        m_mapOn = ReadInt(44);
-        m_bolts = ReadInt(46);
-        m_nukes = ReadInt(48);
-        m_potions = ReadInt(50);
-        for (uint8_t i = 0; i < 4; i++)
+        const uint32_t offsetToDifficulty = 42;
+        m_difficulty = ReadInt(offsetToDifficulty);
+        const uint32_t offsetToMapOn = offsetToDifficulty + sizeof(m_difficulty);
+        m_mapOn = ReadInt(offsetToMapOn);
+        const uint32_t offsetToBolts = offsetToMapOn + sizeof(m_mapOn);
+        m_bolts = ReadInt(offsetToBolts);
+        const uint32_t offsetToNukes = offsetToBolts + sizeof(m_bolts);
+        m_nukes = ReadInt(offsetToNukes);
+        const uint32_t offsetToPotions = offsetToNukes + sizeof(m_nukes);
+        m_potions = ReadInt(offsetToPotions);
+        const uint32_t offsetToKeys = offsetToPotions + sizeof(m_potions);
+        const uint32_t keySize = sizeof(m_keys[0]);
+        constexpr uint8_t numberOfKeys = 4;
+        for (uint8_t i = 0; i < numberOfKeys; i++)
         {
-            m_keys[i] = ReadInt(52 + (i * 2));
+            m_keys[i] = ReadInt(offsetToKeys + (i * keySize));
         }
-        for (uint8_t i = 0; i < 8; i++)
+        const uint32_t offsetToScrolls = offsetToKeys + (keySize * numberOfKeys);
+        const uint32_t scrollSize = sizeof(m_scrolls[0]);
+        constexpr uint8_t numberOfScrolls = 8;
+        for (uint8_t i = 0; i < numberOfScrolls; i++)
         {
-            m_scrolls[i] = ReadInt(60 + (i * 2));
+            m_scrolls[i] = ReadInt(offsetToScrolls + (i * scrollSize));
         }
-        m_score = ReadLong(76);
-        m_body = ReadInt(80);
-        m_shotpower = ReadInt(82);
+        const uint32_t offsetToScore = offsetToScrolls + (scrollSize * numberOfScrolls);
+        m_score = ReadLong(offsetToScore);
+        const uint32_t offsetToBody = offsetToScore + sizeof(m_score);
+        m_body = ReadInt(offsetToBody);
+        const uint32_t offsetToShotpower = offsetToBody + sizeof(m_body);
+        m_shotpower = ReadInt(offsetToShotpower);
     }
-
 
     uint16_t plane0CompressedSize = 0;
     if (dataIsValid)

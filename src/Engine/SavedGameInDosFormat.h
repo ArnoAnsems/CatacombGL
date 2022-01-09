@@ -87,6 +87,7 @@ private:
     const FileChunk* m_fileChunk;
     std::string m_errorMessage;
     std::string m_signature;
+    int16_t m_oldTest;
     bool m_present;
     std::string m_name;
     int16_t m_difficulty;
