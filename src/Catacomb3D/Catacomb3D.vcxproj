@@ -157,6 +157,7 @@
     <ClInclude Include="GuiElementSaveSlotEditableCat3D.h" />
     <ClInclude Include="GuiPageFrameCat3D.h" />
     <ClInclude Include="IntroViewCatacomb3D.h" />
+    <ClInclude Include="SavedGameConverterCatacomb3D.h" />
     <ClInclude Include="SkullNBones.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClCompile Include="GuiElementSaveSlotStaticCat3D.cpp" />
     <ClCompile Include="GuiPageFrameCat3D.cpp" />
     <ClCompile Include="IntroViewCatacomb3D.cpp" />
+    <ClCompile Include="SavedGameConverterCatacomb3D.cpp" />
     <ClCompile Include="SkullNBones.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

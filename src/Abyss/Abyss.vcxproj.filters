@@ -48,12 +48,18 @@
     <ClInclude Include="IntroViewAbyss.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavedGameConverterAbyss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameAbyss.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntroViewAbyss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SavedGameConverterAbyss.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

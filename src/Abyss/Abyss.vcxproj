@@ -147,10 +147,12 @@
     <ClInclude Include="GameDetectionAbyss.h" />
     <ClInclude Include="GameMapsAbyss.h" />
     <ClInclude Include="IntroViewAbyss.h" />
+    <ClInclude Include="SavedGameConverterAbyss.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameAbyss.cpp" />
     <ClCompile Include="IntroViewAbyss.cpp" />
+    <ClCompile Include="SavedGameConverterAbyss.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

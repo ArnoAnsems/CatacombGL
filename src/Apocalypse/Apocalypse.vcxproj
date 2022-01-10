@@ -147,10 +147,12 @@
     <ClInclude Include="GameDetectionApocalypse.h" />
     <ClInclude Include="GameMapsApocalypse.h" />
     <ClInclude Include="IntroViewApocalypse.h" />
+    <ClInclude Include="SavedGameConverterApocalypse.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApocalypse.cpp" />
     <ClCompile Include="IntroViewApocalypse.cpp" />
+    <ClCompile Include="SavedGameConverterApocalypse.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

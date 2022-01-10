@@ -265,6 +265,7 @@
     <ClInclude Include="Huffman.h" />
     <ClInclude Include="IMenu.h" />
     <ClInclude Include="IRenderer.h" />
+    <ClInclude Include="ISavedGameConverter.h" />
     <ClInclude Include="ISystem.h" />
     <ClInclude Include="IIntroView.h" />
     <ClInclude Include="LevelStatistics.h" />

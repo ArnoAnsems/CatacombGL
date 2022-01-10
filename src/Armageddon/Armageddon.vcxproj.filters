@@ -48,12 +48,18 @@
     <ClInclude Include="DecorateMonsters.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavedGameConverterArmageddon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameArmageddon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntroViewArmageddon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SavedGameConverterArmageddon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

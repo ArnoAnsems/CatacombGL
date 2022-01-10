@@ -521,5 +521,8 @@
     <ClInclude Include="SavedGamesInDosFormat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ISavedGameConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
