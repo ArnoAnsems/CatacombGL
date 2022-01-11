@@ -24,6 +24,7 @@
 #include "../Engine/IRenderer.h"
 #include "../Engine/Logging.h"
 #include <map>
+#include "SavedGameConverterApocalypse.h"
 
 class GameApocalypse : public IGame
 {
@@ -88,6 +89,7 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
     const ManaBar::ManaBarConfig& GetManaBarConfig() override;
     const CatalogInfo& GetCatalogInfo() const override;
+    const ISavedGameConverter& GetSavedGameConverter() const override;
 
 private:
     void DrawHealth(RenderableTiles& renderableTiles, const int16_t health);
@@ -100,5 +102,6 @@ private:
     const std::string m_gamePath;
     IRenderer& m_renderer;
     short m_zombie_base_delay;
+    const SavedGameConverterApocalypse m_savedGameConverter;
 };
 

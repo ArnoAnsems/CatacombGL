@@ -28,6 +28,7 @@
 #include "AudioPlayer.h"
 #include "IIntroView.h"
 #include "IMenu.h"
+#include "ISavedGameConverter.h"
 #include <map>
 #include "Actor.h"
 #include "PlayerInput.h"
@@ -111,7 +112,7 @@ public:
     virtual const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() = 0;
     virtual const ManaBar::ManaBarConfig& GetManaBarConfig() = 0;
     virtual const CatalogInfo& GetCatalogInfo() const = 0;
-
+    virtual const ISavedGameConverter& GetSavedGameConverter() const = 0;
 
 protected:
     GameMaps* m_gameMaps = nullptr;

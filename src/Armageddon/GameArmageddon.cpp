@@ -29,7 +29,8 @@ GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) 
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_introView (nullptr),
-    m_zombie_base_delay(0)
+    m_zombie_base_delay(0),
+    m_savedGameConverter()
 {
     m_gameMaps = nullptr;
     m_egaGraph = nullptr;
@@ -906,4 +907,9 @@ const CatalogInfo catalogInfo =
 const CatalogInfo& GameArmageddon::GetCatalogInfo() const
 {
     return catalogInfo;
+}
+
+const ISavedGameConverter& GameArmageddon::GetSavedGameConverter() const
+{
+    return m_savedGameConverter;
 }

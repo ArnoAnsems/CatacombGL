@@ -25,6 +25,7 @@
 #include "../Engine/HelpPages.h"
 #include "../Engine/Logging.h"
 #include <map>
+#include "SavedGameConverterAbyss.h"
 
 class GameAbyss: public IGame
 {
@@ -89,6 +90,7 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
     const ManaBar::ManaBarConfig& GetManaBarConfig() override;
     const CatalogInfo& GetCatalogInfo() const override;
+    const ISavedGameConverter& GetSavedGameConverter() const override;
 
 private:
     void DrawHealth(RenderableTiles& renderableTiles, const int16_t health);
@@ -105,4 +107,5 @@ private:
     IRenderer& m_renderer;
     HelpPages* m_helpPages;
     uint8_t m_helpPageIndex;
+    const SavedGameConverterAbyss m_savedGameConverter;
 };

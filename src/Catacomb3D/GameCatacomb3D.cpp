@@ -30,7 +30,8 @@ GameCatacomb3D::GameCatacomb3D(const std::string gamePath, const std::string con
     m_configPath(configPath),
     m_renderer(renderer),
     m_introView(nullptr),
-    m_highScores(std::make_unique<HighScores>())
+    m_highScores(std::make_unique<HighScores>()),
+    m_savedGameConverter()
 {
     m_gameMaps = nullptr;
     m_egaGraph = nullptr;
@@ -694,4 +695,9 @@ const CatalogInfo catalogInfo = { "", {"NotAvailable" } };
 const CatalogInfo& GameCatacomb3D::GetCatalogInfo() const
 {
     return catalogInfo;
+}
+
+const ISavedGameConverter& GameCatacomb3D::GetSavedGameConverter() const
+{
+    return m_savedGameConverter;
 }
