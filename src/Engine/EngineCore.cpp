@@ -89,7 +89,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_insideBorderFlashLocation(false),
     m_levelStatistics(),
     m_renderableLevelStatistics(m_levelStatistics),
-    m_savedGamesInDosFormat()
+    m_savedGamesInDosFormat(m_game.GetSavedGameConverter().GetDosFormatConfig())
 {
     _sprintf_p(m_messageInPopup, 256, "");
     m_gameTimer.Reset();

@@ -16,8 +16,9 @@
 #include "SavedGameInDosFormat.h"
 #include "Decompressor.h"
 
-SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk) :
+SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk, const DosFormatConfig& config) :
     m_fileChunk(fileChunk),
+    m_config(config),
     m_plane0(nullptr),
     m_plane2(nullptr),
     m_objects(nullptr)
@@ -48,20 +49,15 @@ bool SavedGameInDosFormat::Load()
         dataIsValid = false;
     }
 
+    uint32_t offset = 0;
     if (dataIsValid)
     {
-        constexpr uint32_t signatureSize = 4;
-        char tempSignature[signatureSize];
-        std::memcpy(tempSignature, m_fileChunk->GetChunk(), sizeof(tempSignature));
-        m_signature = std::string(tempSignature);
-        const uint32_t offsetToOldTest = signatureSize;
-        m_oldTest = ReadInt(offsetToOldTest);
-        const uint32_t offsetToPresent = offsetToOldTest + sizeof(m_oldTest);
-        m_present = (ReadInt(offsetToPresent) == 0);
-        const uint32_t offsetToName = offsetToPresent + 2;
+        ReadSignature(offset);
+        ReadOldTest(offset);
+        ReadPresent(offset);
         constexpr uint32_t nameSize = 33;
         char tempName[nameSize];
-        std::memcpy(tempName, m_fileChunk->GetChunk() + offsetToName, sizeof(tempName));
+        std::memcpy(tempName, m_fileChunk->GetChunk() + offset, sizeof(tempName));
         m_name = std::string(tempName);
         const uint32_t offsetToDifficulty = 42;
         m_difficulty = ReadInt(offsetToDifficulty);
@@ -287,4 +283,26 @@ int32_t SavedGameInDosFormat::ReadLong(const uint32_t offset)
 SavedGameInDosFormat::ObjectInDosFormat& SavedGameInDosFormat::GetObject(const uint16_t objectIndex) const
 {
     return m_objects[objectIndex];
+}
+
+void SavedGameInDosFormat::ReadSignature(uint32_t& offset)
+{
+    constexpr uint32_t signatureSize = 4;
+    char tempSignature[signatureSize];
+    std::memcpy(tempSignature, m_fileChunk->GetChunk() + offset, sizeof(tempSignature));
+    m_signature = std::string(tempSignature);
+    offset += signatureSize;
+}
+
+void SavedGameInDosFormat::ReadOldTest(uint32_t& offset)
+{
+    m_oldTest = ReadInt(offset);
+    offset += sizeof(m_oldTest);
+}
+
+void SavedGameInDosFormat::ReadPresent(uint32_t& offset)
+{
+    const int16_t presentAsInt = ReadInt(offset);
+    m_present = (presentAsInt == 0);
+    offset += sizeof(presentAsInt);
 }

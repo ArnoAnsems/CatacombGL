@@ -15,7 +15,8 @@
 
 #include "SavedGamesInDosFormat.h"
 
-SavedGamesInDosFormat::SavedGamesInDosFormat() :
+SavedGamesInDosFormat::SavedGamesInDosFormat(const DosFormatConfig& config) :
+    m_config(config),
     m_savedGames()
 {
 
@@ -33,7 +34,7 @@ void SavedGamesInDosFormat::AddSavedGame(const FileChunk* fileChunk)
 {
     if (fileChunk != nullptr)
     {
-        SavedGameInDosFormat* savedGame = new SavedGameInDosFormat(fileChunk);
+        SavedGameInDosFormat* savedGame = new SavedGameInDosFormat(fileChunk, m_config);
         const bool savedGameIsLoaded = savedGame->Load();
 
         if (savedGameIsLoaded)

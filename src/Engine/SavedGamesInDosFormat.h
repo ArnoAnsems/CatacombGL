@@ -20,12 +20,14 @@
 class SavedGamesInDosFormat
 {
 public:
-    SavedGamesInDosFormat();
+    SavedGamesInDosFormat(const DosFormatConfig& config);
     ~SavedGamesInDosFormat();
 
     void AddSavedGame(const FileChunk* fileChunk);
 
     const std::vector<SavedGameInDosFormat*>& GetSavedGameInDosFormat() const;
+
 private:
     std::vector<SavedGameInDosFormat*> m_savedGames;
+    const DosFormatConfig& m_config;
 };

@@ -16,6 +16,7 @@
 #include "SavedGamesInDosFormat_Test.h"
 #include "SavedGameInDosFormat_Data.h"
 #include "../Engine/SavedGamesInDosFormat.h"
+#include "../Catacomb3D/SavedGameConverterCatacomb3D.h"
 
 SavedGamesInDosFormat_Test::SavedGamesInDosFormat_Test()
 {
@@ -30,7 +31,8 @@ SavedGamesInDosFormat_Test::~SavedGamesInDosFormat_Test()
 TEST(SavedGamesInDosFormat_Test, LoadSavedGames)
 {
     // Initially no games are saved
-    SavedGamesInDosFormat savedGames;
+    SavedGameConverterCatacomb3D converter;
+    SavedGamesInDosFormat savedGames(converter.GetDosFormatConfig());
     EXPECT_EQ(0, savedGames.GetSavedGameInDosFormat().size());
 
     // Add nullptr. No saved game will be loaded.
