@@ -21,7 +21,8 @@ SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk, const Dos
     m_config(config),
     m_plane0(nullptr),
     m_plane2(nullptr),
-    m_objects(nullptr)
+    m_objects(nullptr),
+    m_dataIsValid(false)
 {
 
 }
@@ -35,110 +36,63 @@ SavedGameInDosFormat::~SavedGameInDosFormat()
 
 bool SavedGameInDosFormat::Load()
 {
-    bool dataIsValid = true;
+    m_dataIsValid = true;
 
     if (m_fileChunk == nullptr)
     {
         m_errorMessage = "data is null";
-        dataIsValid = false;
+        m_dataIsValid = false;
     }
 
-    if (dataIsValid && m_fileChunk->GetSize() < 88)
+    if (m_dataIsValid && m_fileChunk->GetSize() < 88)
     {
         m_errorMessage = "too small to contain header";
-        dataIsValid = false;
+        m_dataIsValid = false;
     }
 
     uint32_t offset = 0;
-    if (dataIsValid)
+    if (m_dataIsValid)
     {
         ReadSignature(offset);
         ReadOldTest(offset);
         ReadPresent(offset);
-        constexpr uint32_t nameSize = 33;
-        char tempName[nameSize];
-        std::memcpy(tempName, m_fileChunk->GetChunk() + offset, sizeof(tempName));
-        m_name = std::string(tempName);
-        const uint32_t offsetToDifficulty = 42;
-        m_difficulty = ReadInt(offsetToDifficulty);
-        const uint32_t offsetToMapOn = offsetToDifficulty + sizeof(m_difficulty);
-        m_mapOn = ReadInt(offsetToMapOn);
-        const uint32_t offsetToBolts = offsetToMapOn + sizeof(m_mapOn);
-        m_bolts = ReadInt(offsetToBolts);
-        const uint32_t offsetToNukes = offsetToBolts + sizeof(m_bolts);
-        m_nukes = ReadInt(offsetToNukes);
-        const uint32_t offsetToPotions = offsetToNukes + sizeof(m_nukes);
-        m_potions = ReadInt(offsetToPotions);
-        const uint32_t offsetToKeys = offsetToPotions + sizeof(m_potions);
-        const uint32_t keySize = sizeof(m_keys[0]);
-        constexpr uint8_t numberOfKeys = 4;
-        for (uint8_t i = 0; i < numberOfKeys; i++)
-        {
-            m_keys[i] = ReadInt(offsetToKeys + (i * keySize));
-        }
-        const uint32_t offsetToScrolls = offsetToKeys + (keySize * numberOfKeys);
-        const uint32_t scrollSize = sizeof(m_scrolls[0]);
-        constexpr uint8_t numberOfScrolls = 8;
-        for (uint8_t i = 0; i < numberOfScrolls; i++)
-        {
-            m_scrolls[i] = ReadInt(offsetToScrolls + (i * scrollSize));
-        }
-        const uint32_t offsetToScore = offsetToScrolls + (scrollSize * numberOfScrolls);
-        m_score = ReadLong(offsetToScore);
-        const uint32_t offsetToBody = offsetToScore + sizeof(m_score);
-        m_body = ReadInt(offsetToBody);
-        const uint32_t offsetToShotpower = offsetToBody + sizeof(m_body);
-        m_shotpower = ReadInt(offsetToShotpower);
+        ReadName(offset);
+        ReadDifficulty(offset);
+        ReadMapOn(offset);
+        ReadBolts(offset);
+        ReadNukes(offset);
+        ReadPotions(offset);
+        ReadKeys(offset);
+        ReadScrolls(offset);
+        ReadScore(offset);
+        ReadBody(offset);
+        ReadShotpower(offset);
     }
 
-    uint16_t plane0CompressedSize = 0;
-    if (dataIsValid)
+    if (m_dataIsValid)
     {
-        const uint16_t plane0MaxCompressedSize = m_fileChunk->GetSize() - 86;
-        m_plane0 = Decompressor::RLEW_DecompressFromSavedGame(
-            &(m_fileChunk->GetChunk()[84]),
-            0xABCD,
-            plane0MaxCompressedSize,
-            plane0CompressedSize);
-
-        if (m_plane0 == nullptr)
-        {
-            m_errorMessage = "unable to decompress plane 0";
-            dataIsValid = false;
-        }
+        ReadPlane0(offset);
     }
         
-    uint16_t plane2CompressedSize = 0;
-    if (dataIsValid)
+    if (m_dataIsValid)
     {
-        const uint16_t plane2MaxCompressedSize = m_fileChunk->GetSize() - 86 - plane0CompressedSize;
-        m_plane2 = Decompressor::RLEW_DecompressFromSavedGame(
-            &(m_fileChunk->GetChunk()[86 + plane0CompressedSize]),
-            0xABCD,
-            plane2MaxCompressedSize,
-            plane2CompressedSize);
-
-        if (m_plane2 == nullptr)
-        {
-            m_errorMessage = "unable to decompress plane 2";
-            dataIsValid = false;
-        }
+        ReadPlane2(offset);
     }
 
-    const uint16_t offsetToFirstObject = 88 + plane0CompressedSize + plane2CompressedSize;
+    const uint16_t offsetToFirstObject = offset;
     const uint16_t sizeOfSingleObject = 68u;
-    if (dataIsValid)
+    if (m_dataIsValid)
     {
         m_numberOfObjects = (m_fileChunk->GetSize() - offsetToFirstObject) / sizeOfSingleObject;
 
         if (m_numberOfObjects == 0)
         {
             m_errorMessage = "no objects found";
-            dataIsValid = false;
+            m_dataIsValid = false;
         }
     }
 
-    if (dataIsValid)
+    if (m_dataIsValid)
     {
         if (m_objects)
         {
@@ -178,7 +132,7 @@ bool SavedGameInDosFormat::Load()
         }
     }
 
-    return dataIsValid;
+    return m_dataIsValid;
 }
 
 const std::string& SavedGameInDosFormat::GetErrorMessage() const
@@ -305,4 +259,126 @@ void SavedGameInDosFormat::ReadPresent(uint32_t& offset)
     const int16_t presentAsInt = ReadInt(offset);
     m_present = (presentAsInt == 0);
     offset += sizeof(presentAsInt);
+}
+
+void SavedGameInDosFormat::ReadName(uint32_t& offset)
+{
+    constexpr uint32_t nameSize = 33;
+    char tempName[nameSize];
+    std::memcpy(tempName, m_fileChunk->GetChunk() + offset, sizeof(tempName));
+    m_name = std::string(tempName);
+    // +1 due to byte alignment
+    offset += (nameSize + 1);
+}
+
+void SavedGameInDosFormat::ReadDifficulty(uint32_t& offset)
+{
+    m_difficulty = ReadInt(offset);
+    offset += sizeof(m_difficulty);
+}
+
+void SavedGameInDosFormat::ReadMapOn(uint32_t& offset)
+{
+    m_mapOn = ReadInt(offset);
+    offset += sizeof(m_mapOn);
+}
+
+void SavedGameInDosFormat::ReadBolts(uint32_t& offset)
+{
+    m_bolts = ReadInt(offset);
+    offset += sizeof(m_bolts);
+}
+
+void SavedGameInDosFormat::ReadNukes(uint32_t& offset)
+{
+    m_nukes = ReadInt(offset);
+    offset += sizeof(m_nukes);
+}
+
+void SavedGameInDosFormat::ReadPotions(uint32_t& offset)
+{
+    m_potions = ReadInt(offset);
+    offset += sizeof(m_potions);
+}
+
+void SavedGameInDosFormat::ReadKeys(uint32_t& offset)
+{
+    const uint32_t keySize = sizeof(m_keys[0]);
+    constexpr uint8_t numberOfKeys = 4;
+    for (uint8_t i = 0; i < numberOfKeys; i++)
+    {
+        m_keys[i] = ReadInt(offset);
+        offset += keySize;
+    }
+}
+
+void SavedGameInDosFormat::ReadScrolls(uint32_t& offset)
+{
+    const uint32_t scrollSize = sizeof(m_scrolls[0]);
+    constexpr uint8_t numberOfScrolls = 8;
+    for (uint8_t i = 0; i < numberOfScrolls; i++)
+    {
+        m_scrolls[i] = ReadInt(offset);
+        offset += scrollSize;
+    }
+}
+
+void SavedGameInDosFormat::ReadScore(uint32_t& offset)
+{
+    m_score = ReadLong(offset);
+    offset += sizeof(m_score);
+}
+
+void SavedGameInDosFormat::ReadBody(uint32_t& offset)
+{
+    m_body = ReadInt(offset);
+    offset += sizeof(m_body);
+}
+
+void SavedGameInDosFormat::ReadShotpower(uint32_t& offset)
+{
+    m_shotpower = ReadInt(offset);
+    offset += sizeof(m_shotpower);
+}
+
+void SavedGameInDosFormat::ReadPlane0(uint32_t& offset)
+{
+    uint16_t plane0CompressedSize = 0;
+    const uint16_t plane0MaxCompressedSize = m_fileChunk->GetSize() - offset - sizeof(plane0CompressedSize);
+    m_plane0 = Decompressor::RLEW_DecompressFromSavedGame(
+        &(m_fileChunk->GetChunk()[offset]),
+        0xABCD,
+        plane0MaxCompressedSize,
+        plane0CompressedSize);
+
+    if (m_plane0 == nullptr)
+    {
+        m_errorMessage = "unable to decompress plane 0";
+        m_dataIsValid = false;
+    }
+    else
+    {
+        offset += (plane0CompressedSize + sizeof(plane0CompressedSize));
+    }
+}
+
+void SavedGameInDosFormat::ReadPlane2(uint32_t& offset)
+{
+    uint16_t plane2CompressedSize = 0;
+    const uint16_t plane2MaxCompressedSize = m_fileChunk->GetSize() - offset - sizeof(plane2CompressedSize);
+    m_plane2 = Decompressor::RLEW_DecompressFromSavedGame(
+        &(m_fileChunk->GetChunk()[offset]),
+        0xABCD,
+        plane2MaxCompressedSize,
+        plane2CompressedSize);
+
+    if (m_plane2 == nullptr)
+    {
+        m_errorMessage = "unable to decompress plane 2";
+        m_dataIsValid = false;
+    }
+    else
+    {
+        offset += (plane2CompressedSize + sizeof(plane2CompressedSize));
+    }
 }

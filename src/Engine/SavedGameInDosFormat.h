@@ -87,6 +87,19 @@ private:
     void ReadSignature(uint32_t& offset);
     void ReadOldTest(uint32_t& offset);
     void ReadPresent(uint32_t& offset);
+    void ReadName(uint32_t& offset);
+    void ReadDifficulty(uint32_t& offset);
+    void ReadMapOn(uint32_t& offset);
+    void ReadBolts(uint32_t& offset);
+    void ReadNukes(uint32_t& offset);
+    void ReadPotions(uint32_t& offset);
+    void ReadKeys(uint32_t& offset);
+    void ReadScrolls(uint32_t& offset);
+    void ReadScore(uint32_t& offset);
+    void ReadBody(uint32_t& offset);
+    void ReadShotpower(uint32_t& offset);
+    void ReadPlane0(uint32_t& offset);
+    void ReadPlane2(uint32_t& offset);
     const FileChunk* m_fileChunk;
     const DosFormatConfig& m_config;
     std::string m_errorMessage;
@@ -108,4 +121,5 @@ private:
     FileChunk* m_plane2;
     uint16_t m_numberOfObjects;
     ObjectInDosFormat* m_objects;
+    bool m_dataIsValid;
 };
