@@ -101,34 +101,7 @@ bool SavedGameInDosFormat::Load()
         m_objects = new ObjectInDosFormat[m_numberOfObjects];
         for (uint16_t i = 0; i < m_numberOfObjects; i++)
         {
-            const uint8_t* pointerToObject = m_fileChunk->GetChunk() + offsetToFirstObject + (i * sizeOfSingleObject);
-            // The ObjectInDosFormat struct has to be filled element by element, due to the different alignment under Windows.
-            std::memcpy(&m_objects[i].active, pointerToObject, 2);
-            std::memcpy(&m_objects[i].ticcount, pointerToObject + 2, 2);
-            std::memcpy(&m_objects[i].obclass, pointerToObject + 4, 2);
-            std::memcpy(&m_objects[i].stateOffset, pointerToObject + 6, 2);
-            std::memcpy(&m_objects[i].shootable, pointerToObject + 8, 2);
-            std::memcpy(&m_objects[i].tileObject, pointerToObject + 10, 2);
-            std::memcpy(&m_objects[i].distance, pointerToObject + 12, 4);
-            std::memcpy(&m_objects[i].dir, pointerToObject + 16, 2);
-            std::memcpy(&m_objects[i].x, pointerToObject + 18, 4);
-            std::memcpy(&m_objects[i].y, pointerToObject + 22, 4);
-            std::memcpy(&m_objects[i].tilex, pointerToObject + 26, 2);
-            std::memcpy(&m_objects[i].tiley, pointerToObject + 28, 2);
-            std::memcpy(&m_objects[i].viewx, pointerToObject + 30, 2);
-            std::memcpy(&m_objects[i].viewheight, pointerToObject + 32, 2);
-            std::memcpy(&m_objects[i].angle, pointerToObject + 34, 2);
-            std::memcpy(&m_objects[i].hitpoints, pointerToObject + 36, 2);
-            std::memcpy(&m_objects[i].speed, pointerToObject + 38, 4);
-            std::memcpy(&m_objects[i].size, pointerToObject + 42, 2);
-            std::memcpy(&m_objects[i].xl, pointerToObject + 44, 4);
-            std::memcpy(&m_objects[i].xh, pointerToObject + 48, 4);
-            std::memcpy(&m_objects[i].yl, pointerToObject + 52, 4);
-            std::memcpy(&m_objects[i].yh, pointerToObject + 56, 4);
-            std::memcpy(&m_objects[i].temp1, pointerToObject + 60, 2);
-            std::memcpy(&m_objects[i].temp2, pointerToObject + 62, 2);
-            std::memcpy(&m_objects[i].next, pointerToObject + 64, 2);
-            std::memcpy(&m_objects[i].prev, pointerToObject + 66, 2);
+            ReadObject(i, offset);
         }
     }
 
@@ -381,4 +354,40 @@ void SavedGameInDosFormat::ReadPlane2(uint32_t& offset)
     {
         offset += (plane2CompressedSize + sizeof(plane2CompressedSize));
     }
+}
+
+void SavedGameInDosFormat::ReadObject(uint16_t objectIndex, uint32_t& offset)
+{
+    const uint16_t sizeOfSingleObject = 68u;
+    const uint8_t* pointerToObject = m_fileChunk->GetChunk() + offset;
+    // The ObjectInDosFormat struct has to be filled element by element, due to the different alignment under Windows.
+    ObjectInDosFormat& targetObject = m_objects[objectIndex];
+    std::memcpy(&targetObject.active, pointerToObject, 2);
+    std::memcpy(&targetObject.ticcount, pointerToObject + 2, 2);
+    std::memcpy(&targetObject.obclass, pointerToObject + 4, 2);
+    std::memcpy(&targetObject.stateOffset, pointerToObject + 6, 2);
+    std::memcpy(&targetObject.shootable, pointerToObject + 8, 2);
+    std::memcpy(&targetObject.tileObject, pointerToObject + 10, 2);
+    std::memcpy(&targetObject.distance, pointerToObject + 12, 4);
+    std::memcpy(&targetObject.dir, pointerToObject + 16, 2);
+    std::memcpy(&targetObject.x, pointerToObject + 18, 4);
+    std::memcpy(&targetObject.y, pointerToObject + 22, 4);
+    std::memcpy(&targetObject.tilex, pointerToObject + 26, 2);
+    std::memcpy(&targetObject.tiley, pointerToObject + 28, 2);
+    std::memcpy(&targetObject.viewx, pointerToObject + 30, 2);
+    std::memcpy(&targetObject.viewheight, pointerToObject + 32, 2);
+    std::memcpy(&targetObject.angle, pointerToObject + 34, 2);
+    std::memcpy(&targetObject.hitpoints, pointerToObject + 36, 2);
+    std::memcpy(&targetObject.speed, pointerToObject + 38, 4);
+    std::memcpy(&targetObject.size, pointerToObject + 42, 2);
+    std::memcpy(&targetObject.xl, pointerToObject + 44, 4);
+    std::memcpy(&targetObject.xh, pointerToObject + 48, 4);
+    std::memcpy(&targetObject.yl, pointerToObject + 52, 4);
+    std::memcpy(&targetObject.yh, pointerToObject + 56, 4);
+    std::memcpy(&targetObject.temp1, pointerToObject + 60, 2);
+    std::memcpy(&targetObject.temp2, pointerToObject + 62, 2);
+    std::memcpy(&targetObject.next, pointerToObject + 64, 2);
+    std::memcpy(&targetObject.prev, pointerToObject + 66, 2);
+
+    offset += sizeOfSingleObject;
 }
