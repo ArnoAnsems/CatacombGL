@@ -15,8 +15,10 @@
 
 #include "SavedGameConverterApocalypse.h"
 
-DosFormatConfig dosFormatConfigApocalypse =
+static const DosFormatConfig dosFormatConfigApocalypse =
 {
+    "CATACOMB  APOCALYPSE 3-D", // gameName
+    "0.01", // saveVersion
     true, // headerContainsGems
     true, // headerContainsMapWidthAndHeight
     true, // headerContainsFreezeTime
@@ -32,7 +34,7 @@ SavedGameConverterApocalypse::~SavedGameConverterApocalypse()
 {
 }
 
-DosFormatConfig SavedGameConverterApocalypse::GetDosFormatConfig() const
+const DosFormatConfig& SavedGameConverterApocalypse::GetDosFormatConfig() const
 {
     return dosFormatConfigApocalypse;
 }

@@ -27,7 +27,7 @@ class SavedGameConverterApocalypse : public ISavedGameConverter
 public:
     SavedGameConverterApocalypse();
     ~SavedGameConverterApocalypse();
-    DosFormatConfig GetDosFormatConfig() const override;
+    const DosFormatConfig& GetDosFormatConfig() const override;
 };
 
 

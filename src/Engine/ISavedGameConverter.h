@@ -21,9 +21,12 @@
 #pragma once
 
 #include <stdint.h>
+#include <string>
 
 typedef struct
 {
+    std::string gameName;
+    std::string saveVersion;
     bool headerContainsGems;
     bool headerContainsMapWidthAndHeight;
     bool headerContainsFreezeTime;
@@ -35,5 +38,5 @@ class ISavedGameConverter
 {
 public:
     virtual ~ISavedGameConverter() {};
-    virtual DosFormatConfig GetDosFormatConfig() const = 0;
+    virtual const DosFormatConfig& GetDosFormatConfig() const = 0;
 };

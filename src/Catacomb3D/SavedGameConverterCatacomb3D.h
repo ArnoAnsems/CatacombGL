@@ -27,6 +27,6 @@ class SavedGameConverterCatacomb3D : public ISavedGameConverter
 public:
     SavedGameConverterCatacomb3D();
     ~SavedGameConverterCatacomb3D();
-    DosFormatConfig GetDosFormatConfig() const override;
+    const DosFormatConfig& GetDosFormatConfig() const override;
 };
 

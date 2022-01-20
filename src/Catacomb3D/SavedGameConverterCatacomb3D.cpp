@@ -15,8 +15,10 @@
 
 #include "SavedGameConverterCatacomb3D.h"
 
-DosFormatConfig dosFormatConfigCatacomb3D =
+static const DosFormatConfig dosFormatConfigCatacomb3D =
 {
+    "", // gameName
+    "", // saveVersion
     false, // headerContainsGems
     false, // headerContainsMapWidthAndHeight
     false, // headerContainsFreezeTime
@@ -32,7 +34,7 @@ SavedGameConverterCatacomb3D::~SavedGameConverterCatacomb3D()
 {
 }
 
-DosFormatConfig SavedGameConverterCatacomb3D::GetDosFormatConfig() const
+const DosFormatConfig& SavedGameConverterCatacomb3D::GetDosFormatConfig() const
 {
     return dosFormatConfigCatacomb3D;
 }

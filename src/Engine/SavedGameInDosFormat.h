@@ -66,6 +66,7 @@ public:
     const std::string& GetSignature() const;
     bool GetPresent() const;
     const std::string& GetName() const;
+    int16_t GetFreezeTime() const;
     int16_t GetDifficulty() const;
     int16_t GetMapOn() const;
     int16_t GetBolts() const;
@@ -73,9 +74,11 @@ public:
     int16_t GetPotions() const;
     int16_t GetKeys(uint8_t index) const;
     int16_t GetScrolls(uint8_t index) const;
+    int16_t GetGems(uint8_t index) const;
     int32_t GetScore() const;
     int16_t GetBody() const;
     int16_t GetShotpower() const;
+    bool GetEasyModeOn() const;
     FileChunk* GetPlane0() const;
     FileChunk* GetPlane2() const;
     uint16_t GetNumberOfObjects() const;
@@ -88,6 +91,7 @@ private:
     void ReadOldTest(uint32_t& offset);
     void ReadPresent(uint32_t& offset);
     void ReadName(uint32_t& offset);
+    void ReadFreezeTime(uint32_t& offset);
     void ReadDifficulty(uint32_t& offset);
     void ReadMapOn(uint32_t& offset);
     void ReadBolts(uint32_t& offset);
@@ -95,9 +99,11 @@ private:
     void ReadPotions(uint32_t& offset);
     void ReadKeys(uint32_t& offset);
     void ReadScrolls(uint32_t& offset);
+    void ReadGems(uint32_t& offset);
     void ReadScore(uint32_t& offset);
     void ReadBody(uint32_t& offset);
     void ReadShotpower(uint32_t& offset);
+    void ReadEasyModeOn(uint32_t& offset);
     void ReadPlane0(uint32_t& offset);
     void ReadPlane2(uint32_t& offset);
     void ReadObject(uint16_t objectIndex, uint32_t& offset);
@@ -108,6 +114,7 @@ private:
     int16_t m_oldTest;
     bool m_present;
     std::string m_name;
+    int16_t m_freezeTime;
     int16_t m_difficulty;
     int16_t m_mapOn;
     int16_t m_bolts;
@@ -115,9 +122,11 @@ private:
     int16_t m_potions;
     int16_t m_keys[4];
     int16_t m_scrolls[8];
+    int16_t m_gems[5];
     int32_t m_score;
     int16_t m_body;
     int16_t m_shotpower;
+    bool m_easyModeOn;
     FileChunk* m_plane0;
     FileChunk* m_plane2;
     uint16_t m_numberOfObjects;

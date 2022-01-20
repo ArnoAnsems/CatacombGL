@@ -53,10 +53,27 @@ bool SavedGameInDosFormat::Load()
     uint32_t offset = 0;
     if (m_dataIsValid)
     {
-        ReadSignature(offset);
-        ReadOldTest(offset);
-        ReadPresent(offset);
-        ReadName(offset);
+        if (!m_config.gameName.empty())
+        {
+            // Skip the gameName
+            offset += (m_config.gameName.length());
+        }
+        if (!m_config.saveVersion.empty())
+        {
+            // Skip the saveVersion
+            offset += (m_config.saveVersion.length());
+        }
+        else
+        {
+            ReadSignature(offset);
+            ReadOldTest(offset);
+            ReadPresent(offset);
+            ReadName(offset);
+        }
+        if (m_config.headerContainsFreezeTime)
+        {
+            ReadFreezeTime(offset);
+        }
         ReadDifficulty(offset);
         ReadMapOn(offset);
         ReadBolts(offset);
@@ -64,9 +81,17 @@ bool SavedGameInDosFormat::Load()
         ReadPotions(offset);
         ReadKeys(offset);
         ReadScrolls(offset);
+        if (m_config.headerContainsGems)
+        {
+            ReadGems(offset);
+        }
         ReadScore(offset);
         ReadBody(offset);
         ReadShotpower(offset);
+        if (m_config.headerContainsEasyModeOn)
+        {
+            ReadEasyModeOn(offset);
+        }
     }
 
     if (m_dataIsValid)
@@ -128,6 +153,11 @@ const std::string& SavedGameInDosFormat::GetName() const
     return m_name;
 }
 
+int16_t SavedGameInDosFormat::GetFreezeTime() const
+{
+    return m_freezeTime;
+}
+
 int16_t SavedGameInDosFormat::GetDifficulty() const
 {
     return m_difficulty;
@@ -163,6 +193,11 @@ int16_t SavedGameInDosFormat::GetScrolls(uint8_t index) const
     return (index < 8) ? m_scrolls[8] : 0;
 }
 
+int16_t SavedGameInDosFormat::GetGems(uint8_t index) const
+{
+    return (index < 5) ? m_gems[index] : 0;
+}
+
 int32_t SavedGameInDosFormat::GetScore() const
 {
     return m_score;
@@ -176,6 +211,11 @@ int16_t SavedGameInDosFormat::GetBody() const
 int16_t SavedGameInDosFormat::GetShotpower() const
 {
     return m_shotpower;
+}
+
+bool SavedGameInDosFormat::GetEasyModeOn() const
+{
+    return m_easyModeOn;
 }
 
 FileChunk* SavedGameInDosFormat::GetPlane0() const
@@ -215,8 +255,9 @@ SavedGameInDosFormat::ObjectInDosFormat& SavedGameInDosFormat::GetObject(const u
 void SavedGameInDosFormat::ReadSignature(uint32_t& offset)
 {
     constexpr uint32_t signatureSize = 4;
-    char tempSignature[signatureSize];
+    char tempSignature[signatureSize + 1];
     std::memcpy(tempSignature, m_fileChunk->GetChunk() + offset, sizeof(tempSignature));
+    tempSignature[signatureSize] = 0;
     m_signature = std::string(tempSignature);
     offset += signatureSize;
 }
@@ -242,6 +283,12 @@ void SavedGameInDosFormat::ReadName(uint32_t& offset)
     m_name = std::string(tempName);
     // +1 due to byte alignment
     offset += (nameSize + 1);
+}
+
+void SavedGameInDosFormat::ReadFreezeTime(uint32_t& offset)
+{
+    m_freezeTime = ReadInt(offset);
+    offset += sizeof(m_freezeTime);
 }
 
 void SavedGameInDosFormat::ReadDifficulty(uint32_t& offset)
@@ -296,6 +343,17 @@ void SavedGameInDosFormat::ReadScrolls(uint32_t& offset)
     }
 }
 
+void SavedGameInDosFormat::ReadGems(uint32_t& offset)
+{
+    const uint32_t gemSize = sizeof(m_gems[0]);
+    constexpr uint8_t numberOfGems = 5;
+    for (uint8_t i = 0; i < numberOfGems; i++)
+    {
+        m_gems[i] = ReadInt(offset);
+        offset += gemSize;
+    }
+}
+
 void SavedGameInDosFormat::ReadScore(uint32_t& offset)
 {
     m_score = ReadLong(offset);
@@ -312,6 +370,13 @@ void SavedGameInDosFormat::ReadShotpower(uint32_t& offset)
 {
     m_shotpower = ReadInt(offset);
     offset += sizeof(m_shotpower);
+}
+
+void SavedGameInDosFormat::ReadEasyModeOn(uint32_t& offset)
+{
+    const int16_t easyModeOnAsInt = ReadInt(offset);
+    m_easyModeOn = (easyModeOnAsInt == 0);
+    offset += sizeof(easyModeOnAsInt);
 }
 
 void SavedGameInDosFormat::ReadPlane0(uint32_t& offset)

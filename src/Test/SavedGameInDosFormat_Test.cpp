@@ -16,6 +16,7 @@
 #include "SavedGameInDosFormat_Test.h"
 #include "../Engine/SavedGameInDosFormat.h"
 #include "../Catacomb3D/SavedGameConverterCatacomb3D.h"
+#include "../Abyss/SavedGameConverterAbyss.h"
 #include "SavedGameInDosFormat_Data.h"
 
 SavedGameInDosFormat_Test::SavedGameInDosFormat_Test()
@@ -191,4 +192,18 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
     SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "no objects found");
+}
+
+TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
+{
+    FileChunk* fileChunk = new FileChunk(5504);
+    SavedGameConverterAbyss converter;
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombAbyss, 5504);
+    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    EXPECT_TRUE(savedGame.Load());
+
+    EXPECT_EQ(savedGame.GetMapOn(), 0);
+    EXPECT_EQ(savedGame.GetBolts(), 2);
+    EXPECT_EQ(savedGame.GetNukes(), 0);
+    EXPECT_EQ(savedGame.GetPotions(), 4);
 }

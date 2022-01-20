@@ -15,8 +15,10 @@
 
 #include "SavedGameConverterAbyss.h"
 
-DosFormatConfig dosFormatConfigAbyss =
+static const DosFormatConfig dosFormatConfigAbyss =
 {
+    "CATACOMB ABYSS 3-D", // gameName
+    "0.93", // saveVersion
     true, // headerContainsGems
     false, // headerContainsMapWidthAndHeight
     false, // headerContainsFreezeTime
@@ -32,7 +34,7 @@ SavedGameConverterAbyss::~SavedGameConverterAbyss()
 {
 }
 
-DosFormatConfig SavedGameConverterAbyss::GetDosFormatConfig() const
+const DosFormatConfig& SavedGameConverterAbyss::GetDosFormatConfig() const
 {
     return dosFormatConfigAbyss;
 }

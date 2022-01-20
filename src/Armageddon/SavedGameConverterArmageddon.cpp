@@ -15,8 +15,10 @@
 
 #include "SavedGameConverterArmageddon.h"
 
-DosFormatConfig dosFormatConfigArmageddon =
+static const DosFormatConfig dosFormatConfigArmageddon =
 {
+    "CATACOMB ARMAGEDDON 3-D", // gameName
+    "0.01", // saveVersion
     true, // headerContainsGems
     true, // headerContainsMapWidthAndHeight
     true, // headerContainsFreezeTime
@@ -32,7 +34,7 @@ SavedGameConverterArmageddon::~SavedGameConverterArmageddon()
 {
 }
 
-DosFormatConfig SavedGameConverterArmageddon::GetDosFormatConfig() const
+const DosFormatConfig& SavedGameConverterArmageddon::GetDosFormatConfig() const
 {
     return dosFormatConfigArmageddon;
 }

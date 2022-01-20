@@ -27,7 +27,7 @@ class SavedGameConverterAbyss : public ISavedGameConverter
 public:
     SavedGameConverterAbyss();
     ~SavedGameConverterAbyss();
-    DosFormatConfig GetDosFormatConfig() const override;
+    const DosFormatConfig& GetDosFormatConfig() const override;
 };
 
 
