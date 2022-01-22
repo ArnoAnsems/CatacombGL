@@ -21,7 +21,7 @@ static const DosFormatConfig dosFormatConfigAbyss =
     "0.93", // saveVersion
     true, // headerContainsGems
     false, // headerContainsMapWidthAndHeight
-    false, // headerContainsFreezeTime
+    true, // headerContainsFreezeTime
     true, // headerContainsEasyModeOn
     false  // headerContainsSkyAndGroundColor
 };

@@ -56,12 +56,12 @@ bool SavedGameInDosFormat::Load()
         if (!m_config.gameName.empty())
         {
             // Skip the gameName
-            offset += (m_config.gameName.length());
+            offset += (m_config.gameName.length() + 1);
         }
         if (!m_config.saveVersion.empty())
         {
             // Skip the saveVersion
-            offset += (m_config.saveVersion.length());
+            offset += (m_config.saveVersion.length() + 1);
         }
         else
         {
@@ -190,7 +190,7 @@ int16_t SavedGameInDosFormat::GetKeys(uint8_t index) const
 
 int16_t SavedGameInDosFormat::GetScrolls(uint8_t index) const
 {
-    return (index < 8) ? m_scrolls[8] : 0;
+    return (index < 8) ? m_scrolls[index] : 0;
 }
 
 int16_t SavedGameInDosFormat::GetGems(uint8_t index) const

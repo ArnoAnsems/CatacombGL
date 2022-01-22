@@ -202,8 +202,21 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
     EXPECT_TRUE(savedGame.Load());
 
+    EXPECT_EQ(savedGame.GetFreezeTime(), 0);
     EXPECT_EQ(savedGame.GetMapOn(), 0);
-    EXPECT_EQ(savedGame.GetBolts(), 2);
-    EXPECT_EQ(savedGame.GetNukes(), 0);
-    EXPECT_EQ(savedGame.GetPotions(), 4);
+    EXPECT_EQ(savedGame.GetBolts(), 4);
+    EXPECT_EQ(savedGame.GetNukes(), 3);
+    EXPECT_EQ(savedGame.GetPotions(), 2);
+    EXPECT_EQ(savedGame.GetKeys(0), 1);
+    EXPECT_EQ(savedGame.GetKeys(1), 0);
+    EXPECT_EQ(savedGame.GetKeys(2), 1);
+    EXPECT_EQ(savedGame.GetKeys(3), 0);
+    EXPECT_EQ(savedGame.GetScrolls(0), 1);
+    EXPECT_EQ(savedGame.GetScrolls(1), 0);
+    EXPECT_EQ(savedGame.GetBody(), 36);
+    EXPECT_EQ(savedGame.GetEasyModeOn(), true);
+
+    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
+    EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
 }
