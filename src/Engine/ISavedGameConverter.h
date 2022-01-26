@@ -22,16 +22,34 @@
 
 #include <stdint.h>
 #include <string>
+#include <vector>
+
+typedef enum
+{
+    HeaderItemSignature,
+    HeaderItemOldTest,
+    HeaderItemPresent,
+    HeaderItemName,
+    HeaderItemFreezeTime,
+    HeaderItemDifficulty,
+    HeaderItemMapOn,
+    HeaderItemBolts,
+    HeaderItemNukes,
+    HeaderItemPotions,
+    HeaderItemKeys,
+    HeaderItemScrolls,
+    HeaderItemGems,
+    HeaderItemScore,
+    HeaderItemBody,
+    HeaderItemShotpower,
+    HeaderItemEasyModeOn
+} HeaderItem;
 
 typedef struct
 {
     std::string gameName;
     std::string saveVersion;
-    bool headerContainsGems;
-    bool headerContainsMapWidthAndHeight;
-    bool headerContainsFreezeTime;
-    bool headerContainsEasyModeOn;
-    bool headerContainsSkyAndGroundColor;
+    std::vector<HeaderItem> headerItems;
 } DosFormatConfig;
 
 class ISavedGameConverter

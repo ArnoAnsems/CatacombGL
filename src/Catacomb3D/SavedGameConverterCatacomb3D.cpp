@@ -19,11 +19,11 @@ static const DosFormatConfig dosFormatConfigCatacomb3D =
 {
     "", // gameName
     "", // saveVersion
-    false, // headerContainsGems
-    false, // headerContainsMapWidthAndHeight
-    false, // headerContainsFreezeTime
-    false, // headerContainsEasyModeOn
-    false  // headerContainsSkyAndGroundColor
+    {
+        HeaderItemSignature, HeaderItemOldTest, HeaderItemPresent, HeaderItemName,
+        HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemKeys, HeaderItemScrolls, HeaderItemScore, HeaderItemBody, HeaderItemShotpower
+    }   // headerItems
 };
 
 SavedGameConverterCatacomb3D::SavedGameConverterCatacomb3D()

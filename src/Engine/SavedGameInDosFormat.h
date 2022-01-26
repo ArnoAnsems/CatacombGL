@@ -107,6 +107,7 @@ private:
     void ReadPlane0(uint32_t& offset);
     void ReadPlane2(uint32_t& offset);
     void ReadObject(uint16_t objectIndex, uint32_t& offset);
+    void ReadHeaderItem(const HeaderItem item, uint32_t& offset);
     const FileChunk* m_fileChunk;
     const DosFormatConfig& m_config;
     std::string m_errorMessage;

@@ -19,11 +19,11 @@ static const DosFormatConfig dosFormatConfigAbyss =
 {
     "CATACOMB ABYSS 3-D", // gameName
     "0.93", // saveVersion
-    true, // headerContainsGems
-    false, // headerContainsMapWidthAndHeight
-    true, // headerContainsFreezeTime
-    true, // headerContainsEasyModeOn
-    false  // headerContainsSkyAndGroundColor
+    {
+        HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
+        HeaderItemEasyModeOn
+    }   // headerItems
 };
 
 SavedGameConverterAbyss::SavedGameConverterAbyss()

@@ -19,11 +19,11 @@ static const DosFormatConfig dosFormatConfigApocalypse =
 {
     "CATACOMB  APOCALYPSE 3-D", // gameName
     "0.01", // saveVersion
-    true, // headerContainsGems
-    true, // headerContainsMapWidthAndHeight
-    true, // headerContainsFreezeTime
-    true, // headerContainsEasyModeOn
-    true  // headerContainsSkyAndGroundColor
+    {
+        HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
+        HeaderItemEasyModeOn
+    }   // headerItems
 };
 
 SavedGameConverterApocalypse::SavedGameConverterApocalypse()

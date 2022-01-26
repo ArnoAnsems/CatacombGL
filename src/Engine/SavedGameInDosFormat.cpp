@@ -63,34 +63,9 @@ bool SavedGameInDosFormat::Load()
             // Skip the saveVersion
             offset += (m_config.saveVersion.length() + 1);
         }
-        else
+        for (HeaderItem item : m_config.headerItems)
         {
-            ReadSignature(offset);
-            ReadOldTest(offset);
-            ReadPresent(offset);
-            ReadName(offset);
-        }
-        if (m_config.headerContainsFreezeTime)
-        {
-            ReadFreezeTime(offset);
-        }
-        ReadDifficulty(offset);
-        ReadMapOn(offset);
-        ReadBolts(offset);
-        ReadNukes(offset);
-        ReadPotions(offset);
-        ReadKeys(offset);
-        ReadScrolls(offset);
-        if (m_config.headerContainsGems)
-        {
-            ReadGems(offset);
-        }
-        ReadScore(offset);
-        ReadBody(offset);
-        ReadShotpower(offset);
-        if (m_config.headerContainsEasyModeOn)
-        {
-            ReadEasyModeOn(offset);
+            ReadHeaderItem(item, offset);
         }
     }
 
@@ -455,4 +430,64 @@ void SavedGameInDosFormat::ReadObject(uint16_t objectIndex, uint32_t& offset)
     std::memcpy(&targetObject.prev, pointerToObject + 66, 2);
 
     offset += sizeOfSingleObject;
+}
+
+void SavedGameInDosFormat::ReadHeaderItem(const HeaderItem item, uint32_t& offset)
+{
+    switch (item)
+    {
+    case HeaderItemSignature:
+        ReadSignature(offset);
+        break;
+    case HeaderItemOldTest:
+        ReadOldTest(offset);
+        break;
+    case HeaderItemPresent:
+        ReadPresent(offset);
+        break;
+    case HeaderItemName:
+        ReadName(offset);
+        break;
+    case HeaderItemFreezeTime:
+        ReadFreezeTime(offset);
+        break;
+    case HeaderItemDifficulty:
+        ReadDifficulty(offset);
+        break;
+    case HeaderItemMapOn:
+        ReadMapOn(offset);
+        break;
+    case HeaderItemBolts:
+        ReadBolts(offset);
+        break;
+    case HeaderItemNukes:
+        ReadNukes(offset);
+        break;
+    case HeaderItemPotions:
+        ReadPotions(offset);
+        break;
+    case HeaderItemKeys:
+        ReadKeys(offset);
+        break;
+    case HeaderItemScrolls:
+        ReadScrolls(offset);
+        break;
+    case HeaderItemGems:
+        ReadGems(offset);
+        break;
+    case HeaderItemScore:
+        ReadScore(offset);
+        break;
+    case HeaderItemBody:
+        ReadBody(offset);
+        break;
+    case HeaderItemShotpower:
+        ReadShotpower(offset);
+        break;
+    case HeaderItemEasyModeOn:
+        ReadEasyModeOn(offset);
+        break;
+    default:
+        break;
+    }
 }
