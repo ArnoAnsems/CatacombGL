@@ -23,7 +23,13 @@ static const DosFormatConfig dosFormatConfigCatacomb3D =
         HeaderItemSignature, HeaderItemOldTest, HeaderItemPresent, HeaderItemName,
         HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
         HeaderItemKeys, HeaderItemScrolls, HeaderItemScore, HeaderItemBody, HeaderItemShotpower
-    }   // headerItems
+    },   // headerItems
+    {
+        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState, ObjectShootable, ObjectTileObject,
+        ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
+        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
+        ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev
+    }   // objectItems
 };
 
 SavedGameConverterCatacomb3D::SavedGameConverterCatacomb3D()

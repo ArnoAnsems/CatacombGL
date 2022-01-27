@@ -23,7 +23,13 @@ static const DosFormatConfig dosFormatConfigAbyss =
         HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
         HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
         HeaderItemEasyModeOn
-    }   // headerItems
+    },   // headerItems
+    {
+        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState, ObjectFlags,
+        ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
+        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
+        ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev
+    }   // objectItems
 };
 
 SavedGameConverterAbyss::SavedGameConverterAbyss()

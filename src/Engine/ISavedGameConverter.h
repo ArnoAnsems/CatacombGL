@@ -45,11 +45,43 @@ typedef enum
     HeaderItemEasyModeOn
 } HeaderItem;
 
+typedef enum
+{
+    ObjectActive,
+    ObjectTiccount,
+    ObjectObclass,
+    ObjectState,
+    ObjectShootable,
+    ObjectFlags,
+    ObjectTileObject,
+    ObjectDistance,
+    ObjectDir,
+    ObjectX,
+    ObjectY,
+    ObjectTileX,
+    ObjectTileY,
+    ObjectViewX,
+    ObjectViewHeight,
+    ObjectAngle,
+    ObjectHitpoints,
+    ObjectSpeed,
+    ObjectSize,
+    ObjectXL,
+    ObjectXH,
+    ObjectYL,
+    ObjectYH,
+    ObjectTemp1,
+    ObjectTemp2,
+    ObjectNext,
+    ObjectPrev
+} ObjectItem;
+
 typedef struct
 {
     std::string gameName;
     std::string saveVersion;
     std::vector<HeaderItem> headerItems;
+    std::vector<ObjectItem> objectItems;
 } DosFormatConfig;
 
 class ISavedGameConverter

@@ -23,7 +23,14 @@ static const DosFormatConfig dosFormatConfigApocalypse =
         HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
         HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
         HeaderItemEasyModeOn
-    }   // headerItems
+    },   // headerItems
+    {
+        ObjectTiccount, ObjectState,
+        ObjectX, ObjectY, ObjectViewX, ObjectTileX, ObjectTileY, ObjectViewHeight, ObjectSize,
+        ObjectNext, ObjectPrev, ObjectActive, ObjectObclass, ObjectFlags, ObjectDistance, ObjectDir,
+        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
+        ObjectTemp1, ObjectTemp2,
+    }   // objectItems
 };
 
 SavedGameConverterApocalypse::SavedGameConverterApocalypse()
