@@ -34,6 +34,7 @@ public:
         uint16_t obclass;
         int16_t stateOffset;
         uint16_t shootable;
+        uint8_t flags;
         uint16_t tileObject;
         int32_t distance;
         uint16_t dir;
@@ -108,6 +109,7 @@ private:
     void ReadPlane2(uint32_t& offset);
     void ReadObject(uint16_t objectIndex, uint32_t& offset);
     void ReadHeaderItem(const HeaderItem item, uint32_t& offset);
+    void ReadObjectItem(ObjectInDosFormat& object, const ObjectItem item, uint32_t& offset);
     const FileChunk* m_fileChunk;
     const DosFormatConfig& m_config;
     std::string m_errorMessage;

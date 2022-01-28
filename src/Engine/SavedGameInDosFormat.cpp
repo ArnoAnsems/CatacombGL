@@ -398,38 +398,11 @@ void SavedGameInDosFormat::ReadPlane2(uint32_t& offset)
 
 void SavedGameInDosFormat::ReadObject(uint16_t objectIndex, uint32_t& offset)
 {
-    const uint16_t sizeOfSingleObject = 68u;
-    const uint8_t* pointerToObject = m_fileChunk->GetChunk() + offset;
-    // The ObjectInDosFormat struct has to be filled element by element, due to the different alignment under Windows.
     ObjectInDosFormat& targetObject = m_objects[objectIndex];
-    std::memcpy(&targetObject.active, pointerToObject, 2);
-    std::memcpy(&targetObject.ticcount, pointerToObject + 2, 2);
-    std::memcpy(&targetObject.obclass, pointerToObject + 4, 2);
-    std::memcpy(&targetObject.stateOffset, pointerToObject + 6, 2);
-    std::memcpy(&targetObject.shootable, pointerToObject + 8, 2);
-    std::memcpy(&targetObject.tileObject, pointerToObject + 10, 2);
-    std::memcpy(&targetObject.distance, pointerToObject + 12, 4);
-    std::memcpy(&targetObject.dir, pointerToObject + 16, 2);
-    std::memcpy(&targetObject.x, pointerToObject + 18, 4);
-    std::memcpy(&targetObject.y, pointerToObject + 22, 4);
-    std::memcpy(&targetObject.tilex, pointerToObject + 26, 2);
-    std::memcpy(&targetObject.tiley, pointerToObject + 28, 2);
-    std::memcpy(&targetObject.viewx, pointerToObject + 30, 2);
-    std::memcpy(&targetObject.viewheight, pointerToObject + 32, 2);
-    std::memcpy(&targetObject.angle, pointerToObject + 34, 2);
-    std::memcpy(&targetObject.hitpoints, pointerToObject + 36, 2);
-    std::memcpy(&targetObject.speed, pointerToObject + 38, 4);
-    std::memcpy(&targetObject.size, pointerToObject + 42, 2);
-    std::memcpy(&targetObject.xl, pointerToObject + 44, 4);
-    std::memcpy(&targetObject.xh, pointerToObject + 48, 4);
-    std::memcpy(&targetObject.yl, pointerToObject + 52, 4);
-    std::memcpy(&targetObject.yh, pointerToObject + 56, 4);
-    std::memcpy(&targetObject.temp1, pointerToObject + 60, 2);
-    std::memcpy(&targetObject.temp2, pointerToObject + 62, 2);
-    std::memcpy(&targetObject.next, pointerToObject + 64, 2);
-    std::memcpy(&targetObject.prev, pointerToObject + 66, 2);
-
-    offset += sizeOfSingleObject;
+    for (const ObjectItem item : m_config.objectItems)
+    {
+        ReadObjectItem(targetObject, item, offset);
+    }
 }
 
 void SavedGameInDosFormat::ReadHeaderItem(const HeaderItem item, uint32_t& offset)
@@ -489,5 +462,206 @@ void SavedGameInDosFormat::ReadHeaderItem(const HeaderItem item, uint32_t& offse
         break;
     default:
         break;
+    }
+}
+
+void SavedGameInDosFormat::ReadObjectItem(ObjectInDosFormat& object, const ObjectItem item, uint32_t& offset)
+{
+    const uint8_t* pointerToItem = m_fileChunk->GetChunk() + offset;
+    switch (item)
+    {
+    case ObjectActive:
+    {
+        const uint32_t itemSize = sizeof(object.active);
+        std::memcpy(&object.active, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectTiccount:
+    {
+        const uint32_t itemSize = sizeof(object.ticcount);
+        std::memcpy(&object.ticcount, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectObclass:
+    {
+        const uint32_t itemSize = sizeof(object.obclass);
+        std::memcpy(&object.obclass, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectState:
+    {
+        const uint32_t itemSize = sizeof(object.stateOffset);
+        std::memcpy(&object.stateOffset, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectShootable:
+    {
+        const uint32_t itemSize = sizeof(object.shootable);
+        std::memcpy(&object.shootable, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectFlags:
+    {
+        const uint32_t itemSize = sizeof(object.flags);
+        std::memcpy(&object.flags, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectTileObject:
+    {
+        const uint32_t itemSize = sizeof(object.tileObject);
+        std::memcpy(&object.tileObject, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectDistance:
+    {
+        const uint32_t itemSize = sizeof(object.distance);
+        std::memcpy(&object.distance, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectDir:
+    {
+        const uint32_t itemSize = sizeof(object.dir);
+        std::memcpy(&object.dir, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectX:
+    {
+        const uint32_t itemSize = sizeof(object.x);
+        std::memcpy(&object.x, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectY:
+    {
+        const uint32_t itemSize = sizeof(object.y);
+        std::memcpy(&object.y, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectTileX:
+    {
+        const uint32_t itemSize = sizeof(object.tilex);
+        std::memcpy(&object.tilex, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectTileY:
+    {
+        const uint32_t itemSize = sizeof(object.tiley);
+        std::memcpy(&object.tiley, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectViewX:
+    {
+        const uint32_t itemSize = sizeof(object.viewx);
+        std::memcpy(&object.viewx, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectViewHeight:
+    {
+        const uint32_t itemSize = sizeof(object.viewheight);
+        std::memcpy(&object.viewheight, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectAngle:
+    {
+        const uint32_t itemSize = sizeof(object.angle);
+        std::memcpy(&object.angle, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectHitpoints:
+    {
+        const uint32_t itemSize = sizeof(object.hitpoints);
+        std::memcpy(&object.hitpoints, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectSpeed:
+    {
+        const uint32_t itemSize = sizeof(object.speed);
+        std::memcpy(&object.speed, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectSize:
+    {
+        const uint32_t itemSize = sizeof(object.size);
+        std::memcpy(&object.size, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectXL:
+    {
+        const uint32_t itemSize = sizeof(object.xl);
+        std::memcpy(&object.xl, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectXH:
+    {
+        const uint32_t itemSize = sizeof(object.xh);
+        std::memcpy(&object.xh, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectYL:
+    {
+        const uint32_t itemSize = sizeof(object.yl);
+        std::memcpy(&object.yl, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectYH:
+    {
+        const uint32_t itemSize = sizeof(object.yh);
+        std::memcpy(&object.yh, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectTemp1:
+    {
+        const uint32_t itemSize = sizeof(object.temp1);
+        std::memcpy(&object.temp1, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectTemp2:
+    {
+        const uint32_t itemSize = sizeof(object.temp2);
+        std::memcpy(&object.temp2, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectNext:
+    {
+        const uint32_t itemSize = sizeof(object.next);
+        std::memcpy(&object.next, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    case ObjectPrev:
+    {
+        const uint32_t itemSize = sizeof(object.prev);
+        std::memcpy(&object.prev, pointerToItem, itemSize);
+        offset += itemSize;
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 }
