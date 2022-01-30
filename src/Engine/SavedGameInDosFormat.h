@@ -110,6 +110,8 @@ private:
     void ReadObject(uint16_t objectIndex, uint32_t& offset);
     void ReadHeaderItem(const HeaderItem item, uint32_t& offset);
     void ReadObjectItem(ObjectInDosFormat& object, const ObjectItem item, uint32_t& offset);
+    uint32_t GetSizeOfObjectItem(const ObjectItem item) const;
+    uint32_t GetSizeOfObject() const;
     const FileChunk* m_fileChunk;
     const DosFormatConfig& m_config;
     std::string m_errorMessage;

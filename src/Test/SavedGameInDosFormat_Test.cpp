@@ -219,4 +219,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
+    EXPECT_EQ(firstObject.active, 3);  // always
+    EXPECT_EQ(firstObject.obclass, 1);  // playerobj
 }
