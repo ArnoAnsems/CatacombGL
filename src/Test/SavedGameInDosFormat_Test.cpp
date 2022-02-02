@@ -220,7 +220,39 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
 
+    EXPECT_EQ(savedGame.GetNumberOfObjects(), 54);
+
     const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
     EXPECT_EQ(firstObject.active, 3);  // always
     EXPECT_EQ(firstObject.obclass, 1);  // playerobj
+    EXPECT_EQ(firstObject.flags, 0);
+    EXPECT_EQ(firstObject.distance, 0);
+    EXPECT_EQ(firstObject.dir, 0); // north
+    EXPECT_EQ(firstObject.x, 2529484);
+    EXPECT_EQ(firstObject.y, 117834);
+    EXPECT_EQ(firstObject.tilex, 38);
+    EXPECT_EQ(firstObject.tiley, 1);
+    EXPECT_EQ(firstObject.viewx, 0);
+    EXPECT_EQ(firstObject.viewheight, 0);
+    EXPECT_EQ(firstObject.angle, 197);
+    EXPECT_EQ(firstObject.hitpoints, 0);
+    EXPECT_EQ(firstObject.speed, 0);
+    EXPECT_EQ(firstObject.size, 26214);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& lastObject = savedGame.GetObject(53);
+    EXPECT_EQ(lastObject.active, 1);  // noalways
+    EXPECT_EQ(lastObject.obclass, 4);  // batobj
+    EXPECT_EQ(lastObject.flags, 1);  // of_shootable
+    EXPECT_EQ(lastObject.distance, 0);
+    EXPECT_EQ(lastObject.dir, 8); // nodir
+    EXPECT_EQ(lastObject.x, 2326528);
+    EXPECT_EQ(lastObject.y, 1671168);
+    EXPECT_EQ(lastObject.tilex, 35);
+    EXPECT_EQ(lastObject.tiley, 25);
+    EXPECT_EQ(lastObject.viewx, 0);
+    EXPECT_EQ(lastObject.viewheight, 0);
+    EXPECT_EQ(lastObject.angle, 0);
+    EXPECT_EQ(lastObject.hitpoints, 1);
+    EXPECT_EQ(lastObject.speed, 2000);
+    EXPECT_EQ(lastObject.size, 17920);
 }

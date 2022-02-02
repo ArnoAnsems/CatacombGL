@@ -34,7 +34,7 @@ public:
         uint16_t obclass;
         int16_t stateOffset;
         uint16_t shootable;
-        uint8_t flags;
+        uint16_t flags;
         uint16_t tileObject;
         int32_t distance;
         uint16_t dir;
