@@ -42,7 +42,11 @@ typedef enum
     HeaderItemScore,
     HeaderItemBody,
     HeaderItemShotpower,
-    HeaderItemEasyModeOn
+    HeaderItemEasyModeOn,
+    HeaderTtemSkyColor,
+    HeaderItemGroundColor,
+    HeaderItemMapWidth,
+    HeaderItemMapHeight
 } HeaderItem;
 
 typedef enum

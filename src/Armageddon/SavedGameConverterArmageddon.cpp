@@ -20,9 +20,9 @@ static const DosFormatConfig dosFormatConfigArmageddon =
     "CATACOMB ARMAGEDDON 3-D", // gameName
     "0.01", // saveVersion
     {
-        HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderTtemSkyColor, HeaderItemGroundColor, HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
         HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
-        HeaderItemEasyModeOn
+        HeaderItemMapWidth, HeaderItemMapHeight, HeaderItemEasyModeOn
     },   // headerItems
     {
         ObjectTiccount, ObjectState,

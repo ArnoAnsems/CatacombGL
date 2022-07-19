@@ -17,6 +17,7 @@
 #include "../Engine/SavedGameInDosFormat.h"
 #include "../Catacomb3D/SavedGameConverterCatacomb3D.h"
 #include "../Abyss/SavedGameConverterAbyss.h"
+#include "../Armageddon/SavedGameConverterArmageddon.h"
 #include "SavedGameInDosFormat_Data.h"
 
 SavedGameInDosFormat_Test::SavedGameInDosFormat_Test()
@@ -255,4 +256,35 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     EXPECT_EQ(lastObject.hitpoints, 1);
     EXPECT_EQ(lastObject.speed, 2000);
     EXPECT_EQ(lastObject.size, 17920);
+}
+
+TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
+{
+    FileChunk* fileChunk = new FileChunk(6769);
+    SavedGameConverterArmageddon converter;
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombArmageddon, 6769);
+    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    EXPECT_TRUE(savedGame.Load());
+
+    EXPECT_EQ(savedGame.GetFreezeTime(), 0);
+    EXPECT_EQ(savedGame.GetMapOn(), 2);
+    EXPECT_EQ(savedGame.GetBolts(), 0);
+    EXPECT_EQ(savedGame.GetNukes(), 0);
+    EXPECT_EQ(savedGame.GetPotions(), 0);
+    EXPECT_EQ(savedGame.GetKeys(0), 0);
+    EXPECT_EQ(savedGame.GetKeys(1), 1);
+    EXPECT_EQ(savedGame.GetKeys(2), 0);
+    EXPECT_EQ(savedGame.GetKeys(3), 0);
+    EXPECT_EQ(savedGame.GetScrolls(0), 0);
+    EXPECT_EQ(savedGame.GetScrolls(1), 0);
+    EXPECT_EQ(savedGame.GetBody(), 96);
+    EXPECT_EQ(savedGame.GetEasyModeOn(), true);
+    EXPECT_EQ(savedGame.GetSkyColor(), 45081u);
+    EXPECT_EQ(savedGame.GetGroundColor(), 45083u);
+    EXPECT_EQ(savedGame.GetMapWidth(), 0);
+    EXPECT_EQ(savedGame.GetMapHeight(), 0);
+
+    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
+    EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
 }

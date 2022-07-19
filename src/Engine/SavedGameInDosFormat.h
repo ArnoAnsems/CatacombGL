@@ -80,6 +80,10 @@ public:
     int16_t GetBody() const;
     int16_t GetShotpower() const;
     bool GetEasyModeOn() const;
+    uint16_t GetSkyColor() const;
+    uint16_t GetGroundColor() const;
+    int16_t GetMapHeight() const;
+    int16_t GetMapWidth() const;
     FileChunk* GetPlane0() const;
     FileChunk* GetPlane2() const;
     uint16_t GetNumberOfObjects() const;
@@ -87,6 +91,7 @@ public:
 
 private:
     int16_t ReadInt(const uint32_t offset);
+    uint16_t ReadUInt(const uint32_t offset);
     int32_t ReadLong(const uint32_t offset);
     void ReadSignature(uint32_t& offset);
     void ReadOldTest(uint32_t& offset);
@@ -105,6 +110,10 @@ private:
     void ReadBody(uint32_t& offset);
     void ReadShotpower(uint32_t& offset);
     void ReadEasyModeOn(uint32_t& offset);
+    void ReadSkyColor(uint32_t& offset);
+    void ReadGroundColor(uint32_t& offset);
+    void ReadMapWidth(uint32_t& offset);
+    void ReadMapHeight(uint32_t& offset);
     void ReadPlane0(uint32_t& offset);
     void ReadPlane2(uint32_t& offset);
     void ReadObject(uint16_t objectIndex, uint32_t& offset);
@@ -132,6 +141,10 @@ private:
     int16_t m_body;
     int16_t m_shotpower;
     bool m_easyModeOn;
+    uint16_t m_skycolor;
+    uint16_t m_groundcolor;
+    int16_t m_mapWidth;
+    int16_t m_mapHeight;
     FileChunk* m_plane0;
     FileChunk* m_plane2;
     uint16_t m_numberOfObjects;

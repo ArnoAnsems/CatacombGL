@@ -33,20 +33,20 @@ TEST(SavedGamesInDosFormat_Test, LoadSavedGames)
     // Initially no games are saved
     SavedGameConverterCatacomb3D converter;
     SavedGamesInDosFormat savedGames(converter.GetDosFormatConfig());
-    EXPECT_EQ(0, savedGames.GetSavedGameInDosFormat().size());
+    EXPECT_EQ(0u, savedGames.GetSavedGameInDosFormat().size());
 
     // Add nullptr. No saved game will be loaded.
     savedGames.AddSavedGame(nullptr);
-    EXPECT_EQ(0, savedGames.GetSavedGameInDosFormat().size());
+    EXPECT_EQ(0u, savedGames.GetSavedGameInDosFormat().size());
 
     // Add first saved game data
     FileChunk* fileChunk = new FileChunk(3166);
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
     savedGames.AddSavedGame(fileChunk);
-    EXPECT_EQ(1, savedGames.GetSavedGameInDosFormat().size());
+    EXPECT_EQ(1u, savedGames.GetSavedGameInDosFormat().size());
     EXPECT_EQ("level3", savedGames.GetSavedGameInDosFormat().at(0)->GetName());
 
     // Add second saved game data
     savedGames.AddSavedGame(fileChunk);
-    EXPECT_EQ(2, savedGames.GetSavedGameInDosFormat().size());
+    EXPECT_EQ(2u, savedGames.GetSavedGameInDosFormat().size());
 }

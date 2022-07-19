@@ -193,6 +193,26 @@ bool SavedGameInDosFormat::GetEasyModeOn() const
     return m_easyModeOn;
 }
 
+uint16_t SavedGameInDosFormat::GetSkyColor() const
+{
+    return m_skycolor;
+}
+
+uint16_t SavedGameInDosFormat::GetGroundColor() const
+{
+    return m_groundcolor;
+}
+
+int16_t SavedGameInDosFormat::GetMapHeight() const
+{
+    return m_mapHeight;
+}
+
+int16_t SavedGameInDosFormat::GetMapWidth() const
+{
+    return m_mapWidth;
+}
+
 FileChunk* SavedGameInDosFormat::GetPlane0() const
 {
     return m_plane0;
@@ -211,6 +231,13 @@ uint16_t SavedGameInDosFormat::GetNumberOfObjects() const
 int16_t SavedGameInDosFormat::ReadInt(const uint32_t offset)
 {
     int16_t dest;
+    std::memcpy(&dest, m_fileChunk->GetChunk() + offset, 2);
+    return dest;
+}
+
+uint16_t SavedGameInDosFormat::ReadUInt(const uint32_t offset)
+{
+    uint16_t dest;
     std::memcpy(&dest, m_fileChunk->GetChunk() + offset, 2);
     return dest;
 }
@@ -354,6 +381,29 @@ void SavedGameInDosFormat::ReadEasyModeOn(uint32_t& offset)
     offset += sizeof(easyModeOnAsInt);
 }
 
+void SavedGameInDosFormat::ReadSkyColor(uint32_t& offset)
+{
+    m_skycolor = ReadUInt(offset);
+    offset += sizeof(m_skycolor);
+}
+
+void SavedGameInDosFormat::ReadGroundColor(uint32_t& offset)
+{
+    m_groundcolor = ReadUInt(offset);
+    offset += sizeof(m_groundcolor);
+}
+
+void SavedGameInDosFormat::ReadMapWidth(uint32_t& offset)
+{
+    m_mapWidth = ReadInt(offset);
+    offset += sizeof(m_mapWidth);
+}
+void SavedGameInDosFormat::ReadMapHeight(uint32_t& offset)
+{
+    m_mapHeight = ReadInt(offset);
+    offset += sizeof(m_mapHeight);
+}
+
 void SavedGameInDosFormat::ReadPlane0(uint32_t& offset)
 {
     uint16_t plane0CompressedSize = 0;
@@ -459,6 +509,18 @@ void SavedGameInDosFormat::ReadHeaderItem(const HeaderItem item, uint32_t& offse
         break;
     case HeaderItemEasyModeOn:
         ReadEasyModeOn(offset);
+        break;
+    case HeaderTtemSkyColor:
+        ReadSkyColor(offset);
+        break;
+    case HeaderItemGroundColor:
+        ReadGroundColor(offset);
+        break;
+    case HeaderItemMapHeight:
+        ReadMapHeight(offset);
+        break;
+    case HeaderItemMapWidth:
+        ReadMapWidth(offset);
         break;
     default:
         break;
