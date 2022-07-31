@@ -25,7 +25,7 @@ static const DosFormatConfig dosFormatConfigApocalypse =
         HeaderItemEasyModeOn
     },   // headerItems
     {
-        ObjectTiccount, ObjectState,
+        ObjectTiccount, ObjectState32,
         ObjectX, ObjectY, ObjectViewX, ObjectTileX, ObjectTileY, ObjectViewHeight, ObjectSize,
         ObjectNext, ObjectPrev, ObjectActive, ObjectObclass, ObjectFlags, ObjectDistance, ObjectDir,
         ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectXL, ObjectXH, ObjectYL, ObjectYH,

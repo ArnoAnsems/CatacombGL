@@ -25,7 +25,7 @@ static const DosFormatConfig dosFormatConfigCatacomb3D =
         HeaderItemKeys, HeaderItemScrolls, HeaderItemScore, HeaderItemBody, HeaderItemShotpower
     },   // headerItems
     {
-        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState, ObjectShootable, ObjectTileObject,
+        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState16, ObjectShootable, ObjectTileObject,
         ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
         ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
         ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev

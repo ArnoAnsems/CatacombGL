@@ -448,7 +448,7 @@ void SavedGameInDosFormat::ReadPlane2(uint32_t& offset)
 
 void SavedGameInDosFormat::ReadObject(uint16_t objectIndex, uint32_t& offset)
 {
-    ObjectInDosFormat& targetObject = m_objects[objectIndex];
+    ObjectInDosFormat* const targetObject = &m_objects[objectIndex];
     for (const ObjectItem item : m_config.objectItems)
     {
         ReadObjectItem(targetObject, item, offset);
@@ -527,7 +527,7 @@ void SavedGameInDosFormat::ReadHeaderItem(const HeaderItem item, uint32_t& offse
     }
 }
 
-void SavedGameInDosFormat::ReadObjectItem(ObjectInDosFormat& object, const ObjectItem item, uint32_t& offset)
+void SavedGameInDosFormat::ReadObjectItem(ObjectInDosFormat* const object, const ObjectItem item, uint32_t& offset)
 {
     const uint8_t* pointerToItem = m_fileChunk->GetChunk() + offset;
     const uint32_t itemSize = GetSizeOfObjectItem(item);
@@ -536,137 +536,142 @@ void SavedGameInDosFormat::ReadObjectItem(ObjectInDosFormat& object, const Objec
     {
     case ObjectActive:
     {
-        std::memcpy(&object.active, pointerToItem, itemSize);
+        std::memcpy(&(object->active), pointerToItem, itemSize);
         break;
     }
     case ObjectTiccount:
     {
-        std::memcpy(&object.ticcount, pointerToItem, itemSize);
+        std::memcpy(&(object->ticcount), pointerToItem, itemSize);
         break;
     }
     case ObjectObclass:
     {
-        std::memcpy(&object.obclass, pointerToItem, itemSize);
+        std::memcpy(&(object->obclass), pointerToItem, itemSize);
         break;
     }
-    case ObjectState:
+    case ObjectState16:
     {
-        std::memcpy(&object.stateOffset, pointerToItem, itemSize);
+        std::memcpy(&(object->state16), pointerToItem, itemSize);
+        break;
+    }
+    case ObjectState32:
+    {
+        std::memcpy(&(object->state32), pointerToItem, itemSize);
         break;
     }
     case ObjectShootable:
     {
-        std::memcpy(&object.shootable, pointerToItem, itemSize);
+        std::memcpy(&(object->shootable), pointerToItem, itemSize);
         break;
     }
     case ObjectFlags:
     {
-        std::memcpy(&object.flags, pointerToItem, itemSize);
+        std::memcpy(&(object->flags), pointerToItem, itemSize);
         break;
     }
     case ObjectTileObject:
     {
-        std::memcpy(&object.tileObject, pointerToItem, itemSize);
+        std::memcpy(&(object->tileObject), pointerToItem, itemSize);
         break;
     }
     case ObjectDistance:
     {
-        std::memcpy(&object.distance, pointerToItem, itemSize);
+        std::memcpy(&(object->distance), pointerToItem, itemSize);
         break;
     }
     case ObjectDir:
     {
-        std::memcpy(&object.dir, pointerToItem, itemSize);
+        std::memcpy(&(object->dir), pointerToItem, itemSize);
         break;
     }
     case ObjectX:
     {
-        std::memcpy(&object.x, pointerToItem, itemSize);
+        std::memcpy(&(object->x), pointerToItem, itemSize);
         break;
     }
     case ObjectY:
     {
-        std::memcpy(&object.y, pointerToItem, itemSize);
+        std::memcpy(&(object->y), pointerToItem, itemSize);
         break;
     }
     case ObjectTileX:
     {
-        std::memcpy(&object.tilex, pointerToItem, itemSize);
+        std::memcpy(&(object->tilex), pointerToItem, itemSize);
         break;
     }
     case ObjectTileY:
     {
-        std::memcpy(&object.tiley, pointerToItem, itemSize);
+        std::memcpy(&(object->tiley), pointerToItem, itemSize);
         break;
     }
     case ObjectViewX:
     {
-        std::memcpy(&object.viewx, pointerToItem, itemSize);
+        std::memcpy(&(object->viewx), pointerToItem, itemSize);
         break;
     }
     case ObjectViewHeight:
     {
-        std::memcpy(&object.viewheight, pointerToItem, itemSize);
+        std::memcpy(&(object->viewheight), pointerToItem, itemSize);
         break;
     }
     case ObjectAngle:
     {
-        std::memcpy(&object.angle, pointerToItem, itemSize);
+        std::memcpy(&(object->angle), pointerToItem, itemSize);
         break;
     }
     case ObjectHitpoints:
     {
-        std::memcpy(&object.hitpoints, pointerToItem, itemSize);
+        std::memcpy(&(object->hitpoints), pointerToItem, itemSize);
         break;
     }
     case ObjectSpeed:
     {
-        std::memcpy(&object.speed, pointerToItem, itemSize);
+        std::memcpy(&(object->speed), pointerToItem, itemSize);
         break;
     }
     case ObjectSize:
     {
-        std::memcpy(&object.size, pointerToItem, itemSize);
+        std::memcpy(&(object->size), pointerToItem, itemSize);
         break;
     }
     case ObjectXL:
     {
-        std::memcpy(&object.xl, pointerToItem, itemSize);
+        std::memcpy(&(object->xl), pointerToItem, itemSize);
         break;
     }
     case ObjectXH:
     {
-        std::memcpy(&object.xh, pointerToItem, itemSize);
+        std::memcpy(&(object->xh), pointerToItem, itemSize);
         break;
     }
     case ObjectYL:
     {
-        std::memcpy(&object.yl, pointerToItem, itemSize);
+        std::memcpy(&(object->yl), pointerToItem, itemSize);
         break;
     }
     case ObjectYH:
     {
-        std::memcpy(&object.yh, pointerToItem, itemSize);
+        std::memcpy(&(object->yh), pointerToItem, itemSize);
         break;
     }
     case ObjectTemp1:
     {
-        std::memcpy(&object.temp1, pointerToItem, itemSize);
+        std::memcpy(&(object->temp1), pointerToItem, itemSize);
         break;
     }
     case ObjectTemp2:
     {
-        std::memcpy(&object.temp2, pointerToItem, itemSize);
+        std::memcpy(&(object->temp2), pointerToItem, itemSize);
         break;
     }
     case ObjectNext:
     {
-        std::memcpy(&object.next, pointerToItem, itemSize);
+        std::memcpy(&(object->next), pointerToItem, itemSize);
         break;
     }
     case ObjectPrev:
     {
-        std::memcpy(&object.prev, pointerToItem, itemSize);
+        std::memcpy(&(object->prev), pointerToItem, itemSize);
         break;
     }
     default:
@@ -699,9 +704,14 @@ uint32_t SavedGameInDosFormat::GetSizeOfObjectItem(const ObjectItem item) const
         itemSize = sizeof(ObjectInDosFormat::obclass);
         break;
     }
-    case ObjectState:
+    case ObjectState16:
     {
-        itemSize = sizeof(ObjectInDosFormat::stateOffset);
+        itemSize = sizeof(ObjectInDosFormat::state16);
+        break;
+    }
+    case ObjectState32:
+    {
+        itemSize = sizeof(ObjectInDosFormat::state32);
         break;
     }
     case ObjectShootable:

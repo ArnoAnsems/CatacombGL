@@ -25,7 +25,7 @@ static const DosFormatConfig dosFormatConfigAbyss =
         HeaderItemEasyModeOn
     },   // headerItems
     {
-        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState, ObjectFlags,
+        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState16, ObjectFlags,
         ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
         ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
         ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev

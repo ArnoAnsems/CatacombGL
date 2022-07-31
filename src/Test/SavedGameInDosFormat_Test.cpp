@@ -63,7 +63,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
     const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
     EXPECT_EQ(firstObject.active, 1);
     EXPECT_EQ(firstObject.obclass, 1);  // playerobj
-    EXPECT_EQ(firstObject.stateOffset, 6056);
+    EXPECT_EQ(firstObject.state16, 6056);
     EXPECT_EQ(firstObject.shootable , 0);
     EXPECT_EQ(firstObject.tileObject, 0);
     EXPECT_EQ(firstObject.distance, 0);
@@ -89,7 +89,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
     const SavedGameInDosFormat::ObjectInDosFormat& secondObject = savedGame.GetObject(1);
     EXPECT_EQ(secondObject.active, 1);
     EXPECT_EQ(secondObject.obclass, 12);  // inertobj
-    EXPECT_EQ(secondObject.stateOffset, 6574);
+    EXPECT_EQ(secondObject.state16, 6574);
     EXPECT_EQ(secondObject.shootable, 0);
     EXPECT_EQ(secondObject.tileObject, 0);
     EXPECT_EQ(secondObject.distance, 14336);
@@ -115,7 +115,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
     const SavedGameInDosFormat::ObjectInDosFormat& lastObject = savedGame.GetObject(23);
     EXPECT_EQ(firstObject.active, 1);
     EXPECT_EQ(lastObject.obclass, 15);  // gateobj
-    EXPECT_EQ(lastObject.stateOffset, 6264);
+    EXPECT_EQ(lastObject.state16, 6264);
     EXPECT_EQ(lastObject.shootable, 0);
     EXPECT_EQ(lastObject.tileObject, 0);
     EXPECT_EQ(lastObject.distance, 0);
@@ -271,20 +271,53 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
     EXPECT_EQ(savedGame.GetBolts(), 0);
     EXPECT_EQ(savedGame.GetNukes(), 0);
     EXPECT_EQ(savedGame.GetPotions(), 0);
-    EXPECT_EQ(savedGame.GetKeys(0), 0);
-    EXPECT_EQ(savedGame.GetKeys(1), 1);
-    EXPECT_EQ(savedGame.GetKeys(2), 0);
-    EXPECT_EQ(savedGame.GetKeys(3), 0);
+    EXPECT_EQ(savedGame.GetKeys(0), 0); // No red key
+    EXPECT_EQ(savedGame.GetKeys(1), 1); // One yellow key
+    EXPECT_EQ(savedGame.GetKeys(2), 0); // No green key
+    EXPECT_EQ(savedGame.GetKeys(3), 0); // No blue key
     EXPECT_EQ(savedGame.GetScrolls(0), 0);
     EXPECT_EQ(savedGame.GetScrolls(1), 0);
-    EXPECT_EQ(savedGame.GetBody(), 96);
+    EXPECT_EQ(savedGame.GetBody(), 96); // health is at 96%
     EXPECT_EQ(savedGame.GetEasyModeOn(), true);
-    EXPECT_EQ(savedGame.GetSkyColor(), 45081u);
-    EXPECT_EQ(savedGame.GetGroundColor(), 45083u);
+    EXPECT_EQ(savedGame.GetSkyColor(), 45081u); // 16-bit memory location of the sky color
+    EXPECT_EQ(savedGame.GetGroundColor(), 45083u); // 16-bit memory location of the ground color
     EXPECT_EQ(savedGame.GetMapWidth(), 0);
     EXPECT_EQ(savedGame.GetMapHeight(), 0);
 
     constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
+
+    EXPECT_EQ(savedGame.GetNumberOfObjects(), 70);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
+    EXPECT_EQ(firstObject.active, 3);  // always
+    EXPECT_EQ(firstObject.obclass, 1);  // playerobj
+    EXPECT_EQ(firstObject.tilex, 2);
+    EXPECT_EQ(firstObject.tiley, 26);
+    EXPECT_EQ(firstObject.flags, 0);
+    EXPECT_EQ(firstObject.distance, 0);
+    EXPECT_EQ(firstObject.dir, 0); // north
+    EXPECT_EQ(firstObject.x, 133470);
+    EXPECT_EQ(firstObject.y, 1741847);
+    EXPECT_EQ(firstObject.viewx, 0);
+    EXPECT_EQ(firstObject.viewheight, 0);
+    EXPECT_EQ(firstObject.angle, 6);
+    EXPECT_EQ(firstObject.hitpoints, 0);
+    EXPECT_EQ(firstObject.speed, 0);
+    EXPECT_EQ(firstObject.size, 26214);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& secondObject = savedGame.GetObject(1);
+    EXPECT_EQ(secondObject.active, 0);  // no
+    EXPECT_EQ(secondObject.obclass, 17);  // zombieobj
+    EXPECT_EQ(secondObject.tilex, 5);
+    EXPECT_EQ(secondObject.tiley, 1);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& lastObject = savedGame.GetObject(69);
+    EXPECT_EQ(lastObject.active, 1);  // noalways
+    EXPECT_EQ(lastObject.obclass, 31);  // hbunnyobj
+    EXPECT_EQ(lastObject.tilex, 31);
+    EXPECT_EQ(lastObject.tiley, 26);
+    EXPECT_EQ(lastObject.speed, 1947); // bunny speed
+    EXPECT_EQ(lastObject.dir, 8); // nodir
 }

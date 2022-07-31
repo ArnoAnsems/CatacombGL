@@ -32,7 +32,8 @@ public:
         uint16_t active;
         int16_t ticcount;
         uint16_t obclass;
-        int16_t stateOffset;
+        int16_t state16;
+        int32_t state32;
         uint16_t shootable;
         uint16_t flags;
         uint16_t tileObject;
@@ -40,14 +41,14 @@ public:
         uint16_t dir;
         int32_t x;
         int32_t y;
-        int16_t tilex;
-        int16_t tiley;
+        uint16_t tilex;
+        uint16_t tiley;
         int16_t viewx;
-        int16_t viewheight;
+        uint16_t viewheight;
         int16_t angle;
         int16_t hitpoints;
         int32_t speed;
-        int16_t size;
+        uint16_t size;
         int32_t xl;
         int32_t xh;
         int32_t yl;
@@ -118,7 +119,7 @@ private:
     void ReadPlane2(uint32_t& offset);
     void ReadObject(uint16_t objectIndex, uint32_t& offset);
     void ReadHeaderItem(const HeaderItem item, uint32_t& offset);
-    void ReadObjectItem(ObjectInDosFormat& object, const ObjectItem item, uint32_t& offset);
+    void ReadObjectItem(ObjectInDosFormat* const object, const ObjectItem item, uint32_t& offset);
     uint32_t GetSizeOfObjectItem(const ObjectItem item) const;
     uint32_t GetSizeOfObject() const;
     const FileChunk* m_fileChunk;
