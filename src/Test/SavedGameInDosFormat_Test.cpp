@@ -31,8 +31,29 @@ SavedGameInDosFormat_Test::~SavedGameInDosFormat_Test()
 
 }
 
+static void CheckObjectCoordinates(
+    const SavedGameInDosFormat::ObjectInDosFormat& object,
+    const uint16_t mapWidth,
+    const uint16_t mapHeight)
+{
+    // tilex and tiley should fit within the dimensions of the map
+    EXPECT_GE(object.tilex, 1);
+    EXPECT_GE(object.tiley, 1);
+    EXPECT_LE(object.tilex, mapWidth - 1);
+    EXPECT_LE(object.tiley, mapHeight - 1);
+
+    // Coordinates x and y should be located near tilex and tiley
+    constexpr int32_t tileScaleFactor = 65536;
+    EXPECT_GE(object.x, (object.tilex - 0.5) * tileScaleFactor);
+    EXPECT_LE(object.x, (object.tilex + 1.5) * tileScaleFactor);
+    EXPECT_GE(object.y, (object.tiley - 0.5) * tileScaleFactor);
+    EXPECT_LE(object.y, (object.tiley + 1.5) * tileScaleFactor);
+}
+
 TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
 {
+    constexpr uint16_t mapWidth = 40u;
+    constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(3166);
     SavedGameConverterCatacomb3D converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
@@ -56,7 +77,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
     EXPECT_EQ(savedGame.GetScore(), 12700);
     EXPECT_EQ(savedGame.GetBody(), 32);
     EXPECT_EQ(savedGame.GetShotpower(), 0);
-    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    constexpr uint16_t planeSize = mapWidth * mapHeight * sizeof(uint16_t);
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetNumberOfObjects(), 24);
@@ -139,9 +160,15 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
     EXPECT_EQ(lastObject.temp2, 0);
     EXPECT_EQ(lastObject.next, 0);
     EXPECT_EQ(lastObject.prev, -16785);
+
+    for (uint16_t i = 0; i < savedGame.GetNumberOfObjects(); i++)
+    {
+        const SavedGameInDosFormat::ObjectInDosFormat& object = savedGame.GetObject(i);
+        CheckObjectCoordinates(object, mapWidth, mapHeight);
+    }
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameNullptr)
+TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameNullptr)
 {
     SavedGameConverterCatacomb3D converter;
     SavedGameInDosFormat savedGame(nullptr, converter.GetDosFormatConfig());
@@ -149,7 +176,7 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameNullptr)
     EXPECT_EQ(savedGame.GetErrorMessage(), "data is null");
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
+TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
 {
     // Load saved game data that is too small to contain the header.
     FileChunk* fileChunk = new FileChunk(87);
@@ -160,7 +187,7 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
     EXPECT_EQ(savedGame.GetErrorMessage(), "too small to contain header");
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane0)
+TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane0)
 {
     FileChunk* fileChunk = new FileChunk(3166);
     SavedGameConverterCatacomb3D converter;
@@ -172,7 +199,7 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompres
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 0");
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane2)
+TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane2)
 {
     FileChunk* fileChunk = new FileChunk(3166);
     SavedGameConverterCatacomb3D converter;
@@ -184,7 +211,7 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompres
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 2");
 }
 
-TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
+TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
 {
     // Copy the raw saved game data to a fileChunk, but without the object data.
     const uint32_t sizeOfRawSavedGameDataWithoutObjects = 3166 - (24 * 68);
@@ -198,6 +225,8 @@ TEST(SavedGamesInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
 
 TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
 {
+    constexpr uint16_t mapWidth = 40u;
+    constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(5504);
     SavedGameConverterAbyss converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombAbyss, 5504);
@@ -218,7 +247,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     EXPECT_EQ(savedGame.GetBody(), 36);
     EXPECT_EQ(savedGame.GetEasyModeOn(), true);
 
-    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    constexpr uint16_t planeSize = mapWidth * mapHeight * sizeof(uint16_t);
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
 
@@ -257,10 +286,18 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     EXPECT_EQ(lastObject.hitpoints, 1);
     EXPECT_EQ(lastObject.speed, 2000);
     EXPECT_EQ(lastObject.size, 17920);
+
+    for (uint16_t i = 0; i < savedGame.GetNumberOfObjects(); i++)
+    {
+        const SavedGameInDosFormat::ObjectInDosFormat& object = savedGame.GetObject(i);
+        CheckObjectCoordinates(object, mapWidth, mapHeight);
+    }
 }
 
 TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
 {
+    constexpr uint16_t mapWidth = 40u;
+    constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(6769);
     SavedGameConverterArmageddon converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombArmageddon, 6769);
@@ -285,7 +322,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
     EXPECT_EQ(savedGame.GetMapWidth(), 0);
     EXPECT_EQ(savedGame.GetMapHeight(), 0);
 
-    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    constexpr uint16_t planeSize = mapWidth * mapHeight * sizeof(uint16_t);
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
 
@@ -321,10 +358,18 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
     EXPECT_EQ(lastObject.tiley, 26);
     EXPECT_EQ(lastObject.speed, 1947); // bunny speed
     EXPECT_EQ(lastObject.dir, 8); // nodir
+
+    for (uint16_t i = 0; i < savedGame.GetNumberOfObjects(); i++)
+    {
+        const SavedGameInDosFormat::ObjectInDosFormat& object = savedGame.GetObject(i);
+        CheckObjectCoordinates(object, mapWidth, mapHeight);
+    }
 }
 
 TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
 {
+    constexpr uint16_t mapWidth = 40u;
+    constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(6962);
     SavedGameConverterApocalypse converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombApocalypse, 6962);
@@ -349,7 +394,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
     EXPECT_EQ(savedGame.GetMapWidth(), 0);
     EXPECT_EQ(savedGame.GetMapHeight(), 0);
 
-    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    constexpr uint16_t planeSize = mapWidth * mapHeight * sizeof(uint16_t);
     EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
     EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
 
@@ -379,4 +424,10 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
     EXPECT_EQ(lastObject.tiley, 26);
     EXPECT_EQ(lastObject.speed, 0);
     EXPECT_EQ(lastObject.dir, 8); // nodir
+
+    for (uint16_t i = 0; i < savedGame.GetNumberOfObjects(); i++)
+    {
+        const SavedGameInDosFormat::ObjectInDosFormat& object = savedGame.GetObject(i);
+        CheckObjectCoordinates(object, mapWidth, mapHeight);
+    }
 }
