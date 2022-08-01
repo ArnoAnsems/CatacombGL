@@ -18,6 +18,7 @@
 #include "../Catacomb3D/SavedGameConverterCatacomb3D.h"
 #include "../Abyss/SavedGameConverterAbyss.h"
 #include "../Armageddon/SavedGameConverterArmageddon.h"
+#include "../Apocalypse/SavedGameConverterApocalypse.h"
 #include "SavedGameInDosFormat_Data.h"
 
 SavedGameInDosFormat_Test::SavedGameInDosFormat_Test()
@@ -319,5 +320,63 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
     EXPECT_EQ(lastObject.tilex, 31);
     EXPECT_EQ(lastObject.tiley, 26);
     EXPECT_EQ(lastObject.speed, 1947); // bunny speed
+    EXPECT_EQ(lastObject.dir, 8); // nodir
+}
+
+TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
+{
+    FileChunk* fileChunk = new FileChunk(6962);
+    SavedGameConverterApocalypse converter;
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombApocalypse, 6962);
+    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    EXPECT_TRUE(savedGame.Load());
+
+    EXPECT_EQ(savedGame.GetFreezeTime(), 0);
+    EXPECT_EQ(savedGame.GetMapOn(), 16);
+    EXPECT_EQ(savedGame.GetBolts(), 0);
+    EXPECT_EQ(savedGame.GetNukes(), 0);
+    EXPECT_EQ(savedGame.GetPotions(), 0);
+    EXPECT_EQ(savedGame.GetKeys(0), 1);
+    EXPECT_EQ(savedGame.GetKeys(1), 0);
+    EXPECT_EQ(savedGame.GetKeys(2), 0);
+    EXPECT_EQ(savedGame.GetKeys(3), 0);
+    EXPECT_EQ(savedGame.GetScrolls(0), 0);
+    EXPECT_EQ(savedGame.GetScrolls(1), 0);
+    EXPECT_EQ(savedGame.GetBody(), 15);
+    EXPECT_EQ(savedGame.GetEasyModeOn(), true);
+    EXPECT_EQ(savedGame.GetSkyColor(), 47003u); // 16-bit memory location of the sky color
+    EXPECT_EQ(savedGame.GetGroundColor(), 47005u); // 16-bit memory location of the ground color
+    EXPECT_EQ(savedGame.GetMapWidth(), 0);
+    EXPECT_EQ(savedGame.GetMapHeight(), 0);
+
+    constexpr uint16_t planeSize = 40u * 28u * sizeof(uint16_t);
+    EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
+    EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
+
+    EXPECT_EQ(savedGame.GetNumberOfObjects(), 77);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
+    EXPECT_EQ(firstObject.active, 3);  // always
+    EXPECT_EQ(firstObject.obclass, 1);  // playerobj
+    EXPECT_EQ(firstObject.tilex, 20);
+    EXPECT_EQ(firstObject.tiley, 12);
+    EXPECT_EQ(firstObject.flags, 0);
+    EXPECT_EQ(firstObject.distance, 0);
+    EXPECT_EQ(firstObject.dir, 0); // north
+    EXPECT_EQ(firstObject.x, 1319066);
+    EXPECT_EQ(firstObject.y, 808712);
+    EXPECT_EQ(firstObject.viewx, 0);
+    EXPECT_EQ(firstObject.viewheight, 0);
+    EXPECT_EQ(firstObject.angle, 91);
+    EXPECT_EQ(firstObject.hitpoints, 0);
+    EXPECT_EQ(firstObject.speed, 0);
+    EXPECT_EQ(firstObject.size, 26214);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& lastObject = savedGame.GetObject(76);
+    EXPECT_EQ(lastObject.active, 1);  // noalways
+    EXPECT_EQ(lastObject.obclass, 2);  // bonusobj
+    EXPECT_EQ(lastObject.tilex, 38);
+    EXPECT_EQ(lastObject.tiley, 26);
+    EXPECT_EQ(lastObject.speed, 0);
     EXPECT_EQ(lastObject.dir, 8); // nodir
 }
