@@ -765,6 +765,14 @@ bool EngineCore::Think()
             m_playerInput.ClearJustPressed();
             return false;
         }
+        else if (command == MenuCommandLoadDosGame)
+        {
+            const std::string& saveGameName = m_menu->GetNewSaveGameName();
+            LoadDosGameFromFile(saveGameName);
+            StartMusicIfNeeded();
+            m_playerInput.ClearJustPressed();
+            return false;
+        }
         else if (command == MenuCommandCloseMenu)
         {
             CloseMenu();
@@ -3255,6 +3263,11 @@ void EngineCore::LoadGameFromFile(const std::string filename)
     const std::string filenamePathAbyss = filenamePath + m_game.GetSavedGamesPath();
     const std::string fullPath = filenamePathAbyss + "\\" + filename + ".sav";
     LoadGameFromFileWithFullPath(fullPath);
+}
+
+void EngineCore::LoadDosGameFromFile(const std::string filename)
+{
+
 }
 
 uint8_t EngineCore::GetScreenMode() const

@@ -137,6 +137,7 @@ private:
     bool StoreGameToFile(const std::string filename);
     void LoadGameFromFileWithFullPath(const std::string filename);
     void LoadGameFromFile(const std::string filename);
+    void LoadDosGameFromFile(const std::string filename);
     bool AreScrollsPresent() const;
     void StartMusicIfNeeded();
 

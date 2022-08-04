@@ -34,6 +34,7 @@ enum KeyId
 };
 
 class IGame;
+class SavedGameInDosFormat;
 
 class PlayerInventory
 {
@@ -65,6 +66,8 @@ public:
 
     void StoreToFile(std::ofstream& file) const;
     bool LoadFromFile(std::ifstream& file);
+
+    void LoadFromDosGame(const SavedGameInDosFormat& savedGameInDosFormat);
 
 private:
     static const uint8_t maxKeys = 4;

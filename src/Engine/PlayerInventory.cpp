@@ -266,3 +266,22 @@ bool PlayerInventory::LoadFromFile(std::ifstream& file)
 
     return true;
 }
+
+void PlayerInventory::LoadFromDosGame(const SavedGameInDosFormat& savedGameInDosFormat)
+{
+    m_bolts = (uint8_t)savedGameInDosFormat.GetBolts();
+    m_nukes = (uint8_t)savedGameInDosFormat.GetNukes();
+    m_potions = (uint8_t)savedGameInDosFormat.GetPotions();
+    for (uint8_t i = 0; i < maxKeys; i++)
+    {
+        m_keys[i] = (uint8_t)savedGameInDosFormat.GetKeys(i);
+    }
+    for (uint8_t i = 0; i < maxScrolls; i++)
+    {
+        m_scrolls[i] = (savedGameInDosFormat.GetScrolls(i) != 0);
+    }
+    for (uint8_t i = 0; i < maxGems; i++)
+    {
+        m_gems[i] = (savedGameInDosFormat.GetGems(i) != 0);
+    }
+}
