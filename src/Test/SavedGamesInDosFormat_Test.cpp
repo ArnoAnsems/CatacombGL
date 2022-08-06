@@ -49,4 +49,13 @@ TEST(SavedGamesInDosFormat_Test, LoadSavedGames)
     // Add second saved game data
     savedGames.AddSavedGame(fileChunk);
     EXPECT_EQ(2u, savedGames.GetSavedGameInDosFormat().size());
+
+    // Check that a saved game can be retrieved by specifying its name
+    const SavedGameInDosFormat* const firstSavedGame = savedGames.GetSavedGameInDosFormat().at(0);
+    ASSERT_TRUE(firstSavedGame != nullptr);
+    const std::string nameOfFirstSavedGame = firstSavedGame->GetName();
+    EXPECT_EQ(firstSavedGame, savedGames.GetSavedGameInDosFormat(nameOfFirstSavedGame));
+
+    // Requesting a saved game with the wrong name results in a nullptr
+    EXPECT_EQ(nullptr, savedGames.GetSavedGameInDosFormat("WrongName"));
 }

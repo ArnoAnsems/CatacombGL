@@ -26,6 +26,7 @@ public:
     void AddSavedGame(const FileChunk* fileChunk);
 
     const std::vector<SavedGameInDosFormat*>& GetSavedGameInDosFormat() const;
+    const SavedGameInDosFormat* const GetSavedGameInDosFormat(const std::string name) const;
 
 private:
     std::vector<SavedGameInDosFormat*> m_savedGames;

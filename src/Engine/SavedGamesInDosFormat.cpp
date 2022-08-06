@@ -52,3 +52,18 @@ const std::vector<SavedGameInDosFormat*>& SavedGamesInDosFormat::GetSavedGameInD
 {
     return m_savedGames;
 }
+
+const SavedGameInDosFormat* const SavedGamesInDosFormat::GetSavedGameInDosFormat(const std::string name) const
+{
+    SavedGameInDosFormat* matchingSavedGame = nullptr;
+    for each (SavedGameInDosFormat * savedGame in m_savedGames)
+    {
+        if (savedGame->GetName() == name)
+        {
+            matchingSavedGame = savedGame;
+            break;
+        }
+    }
+
+    return matchingSavedGame;
+}

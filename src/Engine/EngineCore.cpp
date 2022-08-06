@@ -3267,7 +3267,54 @@ void EngineCore::LoadGameFromFile(const std::string filename)
 
 void EngineCore::LoadDosGameFromFile(const std::string filename)
 {
+    const SavedGameInDosFormat* const savedGame = m_savedGamesInDosFormat.GetSavedGameInDosFormat(filename);
 
+    if (savedGame == nullptr)
+    {
+        Logging::Instance().AddLogMessage("ERROR: Unable to load DOS saved game " + filename);
+    }
+    else
+    {
+        m_playerInventory.LoadFromDosGame(*savedGame);
+        UnloadLevel();
+        m_level = m_game.GetGameMaps()->GetLevelFromStart((uint8_t)savedGame->GetMapOn());
+        m_score.SetPoints(savedGame->GetScore());
+
+        // Information that is not stored in the DOS format is set to default values.
+        m_godModeIsOn = false;
+
+        // TODO
+        // m_difficultyLevel
+        // m_level->LoadActors
+        // m_level->LoadFogOfWarFromFile
+        // m_gameTimer.LoadFromFile(file)
+
+        // Temporarily load the same level from scratch to setup the level statistics correctly.
+        Level* levelFromScratch = m_game.GetGameMaps()->GetLevelFromStart(m_level->GetLevelIndex());
+        m_game.SpawnActors(levelFromScratch, m_difficultyLevel);
+        m_levelStatistics.SetCountersAtStartOfLevel(*levelFromScratch);
+        delete levelFromScratch;
+
+        // Now count how many monsters/secrets/items are remaining
+        m_levelStatistics.UpdateMonstersKilled(*m_level);
+        m_levelStatistics.UpdateSecrets(*m_level);
+        m_levelStatistics.UpdateItems(*m_level);
+
+        m_playerActions.ResetForNewLevel();
+        m_manaBar.Reset(m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled());
+        m_warpToLevel = m_level->GetLevelIndex();
+        m_menu->SetActive(false);
+        m_state = InGame;
+
+        const uint32_t currentTimestampOfPlayer = m_gameTimer.GetMillisecondsForPlayer();
+        const uint32_t currentTimestampOfWorld = m_gameTimer.GetMilliSecondsForWorld();
+
+        m_timeStampOfPlayerPreviousFrame = m_timeStampOfPlayerCurrentFrame;
+        m_timeStampOfPlayerCurrentFrame = currentTimestampOfPlayer;
+        m_timeStampOfWorldPreviousFrame = m_timeStampOfWorldCurrentFrame;
+        m_timeStampOfWorldCurrentFrame = currentTimestampOfWorld;
+        m_timeStampFadeEffect = 0;
+    }
 }
 
 uint8_t EngineCore::GetScreenMode() const
