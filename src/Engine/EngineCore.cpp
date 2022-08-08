@@ -3277,7 +3277,8 @@ void EngineCore::LoadDosGameFromFile(const std::string filename)
     {
         m_playerInventory.LoadFromDosGame(*savedGame);
         UnloadLevel();
-        m_level = m_game.GetGameMaps()->GetLevelFromStart((uint8_t)savedGame->GetMapOn());
+        m_level = m_game.GetGameMaps()->GetLevelFromDosSavedGame(savedGame);
+        m_level->LoadActorsFromDosSavedGame(*savedGame, m_game.GetDecorateActors());
         m_score.SetPoints(savedGame->GetScore());
 
         // Information that is not stored in the DOS format is set to default values.

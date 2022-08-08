@@ -16,6 +16,7 @@
 #include "GameMaps.h"
 #include <fstream>
 #include "Decompressor.h"
+#include "SavedGameInDosFormat.h"
 
 static const uint16_t MaxMapWidth = 128;
 static const uint16_t MaxMapHeight = 128;
@@ -186,6 +187,25 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
     Level* level = new Level(mapIndex, mapWidth, mapHeight, plane0, plane2, m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
     delete[] plane0;
     delete[] plane2;
+
+    return level;
+}
+
+Level* GameMaps::GetLevelFromDosSavedGame(const SavedGameInDosFormat* savedGameInDosFormat) const
+{
+    Logging::Instance().AddLogMessage("Loading map " + savedGameInDosFormat->GetName() + " from DOS saved game");
+
+    const uint8_t mapIndex = (uint8_t)savedGameInDosFormat->GetMapOn();
+
+    // The dimensions of the map are retrieved from the GameMaps data
+    const uint8_t* headerStart = m_rawData->GetChunk() + m_staticData.offsets.at(mapIndex);
+    const uint16_t mapWidth = *(uint16_t*)(&(headerStart[18]));
+    const uint16_t mapHeight = *(uint16_t*)(&(headerStart[20]));
+
+    const uint16_t* plane0 = (const uint16_t*)savedGameInDosFormat->GetPlane0()->GetChunk();
+    const uint16_t* plane2 = (const uint16_t*)savedGameInDosFormat->GetPlane2()->GetChunk();
+
+    Level* level = new Level(mapIndex, mapWidth, mapHeight, plane0, plane2, m_staticData.mapsInfo.at(mapIndex), m_staticData.wallsInfo);
 
     return level;
 }

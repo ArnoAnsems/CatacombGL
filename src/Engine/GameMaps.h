@@ -26,6 +26,8 @@
 #include "Level.h"
 #include "Logging.h"
 
+class SavedGameInDosFormat;
+
 const uint16_t wallSolid = 1;
 const uint16_t wallSpecial = 2;
 const uint16_t wallRequiresKey = 4;
@@ -48,6 +50,7 @@ public:
 
     Level* GetLevelFromStart(const uint8_t mapIndex) const;
     Level* GetLevelFromSavedGame(std::ifstream& file) const;
+    Level* GetLevelFromDosSavedGame(const SavedGameInDosFormat* savedGameInDosFormat) const;
     uint8_t GetNumberOfLevels() const;
     uint16_t GetTileWallExplosion(const bool isWaterLevel) const;
 

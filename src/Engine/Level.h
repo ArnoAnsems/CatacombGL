@@ -32,6 +32,7 @@
 #include "RenderableAutoMapIso.h"
 
 class EgaGraph;
+class SavedGameInDosFormat;
 
 struct LevelInfo
 {
@@ -106,6 +107,7 @@ public:
         const LevelInfo& mapInfo,
         const std::vector<WallInfo>& wallsInfo);
     bool LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
+    bool LoadActorsFromDosSavedGame(const SavedGameInDosFormat& savedGameInDosFormat, const std::map<uint16_t, const DecorateActor>& decorateActors);
     bool LoadFogOfWarFromFile(std::ifstream& file);
     ~Level();
 

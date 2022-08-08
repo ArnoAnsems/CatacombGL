@@ -22,6 +22,7 @@
 #include "RenderableAutoMapIso.h"
 #include "Renderable3DScene.h"
 #include "LevelLocationNames.h"
+#include "SavedGameInDosFormat.h"
 
 Level::Level(
     const uint8_t mapIndex,
@@ -113,6 +114,19 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
         Actor* nonBlockingActor = new Actor(file, decorateActors);
         AddNonBlockingActor(nonBlockingActor);
     }
+
+    return true;
+}
+
+bool Level::LoadActorsFromDosSavedGame(const SavedGameInDosFormat& savedGameInDosFormat, const std::map<uint16_t, const DecorateActor>& decorateActors)
+{
+    const SavedGameInDosFormat::ObjectInDosFormat& playerObject = savedGameInDosFormat.GetObject(0);
+    const float playerX = (float)playerObject.x / 65536.0f;
+    const float playerY = (float)playerObject.y / 65536.0f;
+    m_playerActor = new Actor(playerX, playerY, 0, decorateActors.at(11));
+    m_playerActor->SetAngle(playerObject.angle);
+    m_playerActor->SetHealth(savedGameInDosFormat.GetBody());
+    m_playerActor->SetTile(playerObject.tilex, playerObject.tiley);
 
     return true;
 }
