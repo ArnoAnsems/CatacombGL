@@ -3281,14 +3281,18 @@ void EngineCore::LoadDosGameFromFile(const std::string filename)
         m_level->LoadActorsFromDosSavedGame(*savedGame, m_game.GetDecorateActors());
         m_score.SetPoints(savedGame->GetScore());
 
+        m_difficultyLevel =
+            (savedGame->GetDifficulty() == 1) ? DifficultyLevel::Easy :
+            (savedGame->GetDifficulty() == 2) ? DifficultyLevel::Normal :
+            DifficultyLevel::Hard;
+
         // Information that is not stored in the DOS format is set to default values.
         m_godModeIsOn = false;
 
         // TODO
-        // m_difficultyLevel
         // m_level->LoadActors
-        // m_level->LoadFogOfWarFromFile
         // m_gameTimer.LoadFromFile(file)
+        m_gameTimer.Reset();
 
         // Temporarily load the same level from scratch to setup the level statistics correctly.
         Level* levelFromScratch = m_game.GetGameMaps()->GetLevelFromStart(m_level->GetLevelIndex());
