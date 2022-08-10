@@ -204,6 +204,7 @@
     <ClCompile Include="RenderableOverscanBorder.cpp" />
     <ClCompile Include="RenderableSprites.cpp" />
     <ClCompile Include="SavedGameInDosFormat.cpp" />
+    <ClCompile Include="SavedGameInDosFormatLoader.cpp" />
     <ClCompile Include="SavedGamesInDosFormat.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Shape.cpp" />
@@ -291,6 +292,7 @@
     <ClInclude Include="RenderableOverscanBorder.h" />
     <ClInclude Include="RenderableSprites.h" />
     <ClInclude Include="SavedGameInDosFormat.h" />
+    <ClInclude Include="SavedGameInDosFormatLoader.h" />
     <ClInclude Include="SavedGamesInDosFormat.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Shape.h" />

@@ -81,6 +81,9 @@
     <ClCompile Include="SavedGamesInDosFormat_Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SavedGameInDosFormatLoader_Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FramesCounter_Test.h">
@@ -141,6 +144,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SavedGamesInDosFormat_Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SavedGameInDosFormatLoader_Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

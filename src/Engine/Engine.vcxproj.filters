@@ -267,6 +267,9 @@
     <ClCompile Include="SavedGamesInDosFormat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SavedGameInDosFormatLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ThirdParty\opl\dbopl.h">
@@ -522,6 +525,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ISavedGameConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SavedGameInDosFormatLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
