@@ -44,3 +44,9 @@ const DosFormatConfig& SavedGameConverterAbyss::GetDosFormatConfig() const
 {
     return dosFormatConfigAbyss;
 }
+
+const uint16_t SavedGameConverterAbyss::GetActorId(const uint16_t /*obclass*/, const uint16_t /*state16*/, const uint32_t /*state32*/) const
+{
+    // TODO
+    return 0;
+}

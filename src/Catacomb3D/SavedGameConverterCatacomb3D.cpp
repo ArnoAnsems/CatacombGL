@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SavedGameConverterCatacomb3D.h"
+#include "DecorateAll.h"
 
 static const DosFormatConfig dosFormatConfigCatacomb3D =
 {
@@ -43,4 +44,58 @@ SavedGameConverterCatacomb3D::~SavedGameConverterCatacomb3D()
 const DosFormatConfig& SavedGameConverterCatacomb3D::GetDosFormatConfig() const
 {
     return dosFormatConfigCatacomb3D;
+}
+
+const uint16_t SavedGameConverterCatacomb3D::GetActorId(const uint16_t obclass, const uint16_t state16, const uint32_t state32) const
+{
+    uint16_t actorId = 0;
+    switch (obclass)
+    {
+    case 1:
+        actorId = actorIdPlayer;
+        break;
+    case 2:
+        // Bonus
+        break;
+    case 3:
+        actorId = actorIdMonsterOrc;
+        break;
+    case 4:
+        actorId = actorIdMonsterBat;
+        break;
+    case 5:
+        // Skeleton
+        break;
+    case 6:
+        actorId = actorIdMonsterTroll;
+        break;
+    case 7:
+        actorId = actorIdMonsterDemon;
+        break;
+    case 8:
+        actorId = actorIdMonsterMage;
+        break;
+    case 9:
+        actorId = actorIdProjectilePlayerShot;
+        break;
+    case 10:
+        actorId = actorIdProjectilePlayerBigShot;
+        break;
+    case 11:
+        actorId = actorIdProjectileMageShot;
+        break;
+    case 12:
+        // inertobj
+        break;
+    case 13:
+        actorId = actorIdMonsterBounce;
+        break;
+    case 14:
+        actorId = actorIdMonsterNemesis;
+        break;
+    case 15:
+        // gateobj
+        break;
+    }
+    return actorId;
 }

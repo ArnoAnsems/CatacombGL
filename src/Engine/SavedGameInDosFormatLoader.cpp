@@ -31,12 +31,18 @@ SavedGameInDosFormatLoader::SavedGameInDosFormatLoader(
 Actor* SavedGameInDosFormatLoader::LoadPlayerActor() const
 {
     const SavedGameInDosFormat::ObjectInDosFormat& playerObject = m_savedGameInDosFormat.GetObject(0);
-    const float playerX = (float)playerObject.x / 65536.0f;
-    const float playerY = (float)playerObject.y / 65536.0f;
+    const float playerX = DosToGLCoordinate(playerObject.x);
+    const float playerY = DosToGLCoordinate(playerObject.y);
     Actor* playerActor = new Actor(playerX, playerY, 0, m_decorateActors.at(11));
     playerActor->SetAngle(playerObject.angle);
     playerActor->SetHealth(m_savedGameInDosFormat.GetBody());
-    playerActor->SetTile(playerObject.tilex, playerObject.tiley);
+    playerActor->SetTile((const uint8_t)playerObject.tilex, (const uint8_t)playerObject.tiley);
 
     return playerActor;
+}
+
+const float SavedGameInDosFormatLoader::DosToGLCoordinate(const int32_t dosCoordinate)
+{
+    const float dosToGLScaleFactor = 65536.0f;
+    return (float)dosCoordinate / dosToGLScaleFactor;
 }

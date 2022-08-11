@@ -28,5 +28,6 @@ public:
     SavedGameConverterCatacomb3D();
     ~SavedGameConverterCatacomb3D();
     const DosFormatConfig& GetDosFormatConfig() const override;
+    const uint16_t GetActorId(const uint16_t obclass, const uint16_t state16, const uint32_t state32) const override;
 };
 

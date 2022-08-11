@@ -34,6 +34,8 @@ public:
     Actor* LoadPlayerActor() const;
 
 private:
+    static const float DosToGLCoordinate(const int32_t dosCoordinate);
+
     const SavedGameInDosFormat& m_savedGameInDosFormat;
     const ISavedGameConverter& m_savedGameConverter;
     const std::map<uint16_t, const DecorateActor>& m_decorateActors;

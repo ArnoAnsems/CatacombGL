@@ -45,3 +45,9 @@ const DosFormatConfig& SavedGameConverterArmageddon::GetDosFormatConfig() const
 {
     return dosFormatConfigArmageddon;
 }
+
+const uint16_t SavedGameConverterArmageddon::GetActorId(const uint16_t obclass, const uint16_t state16, const uint32_t state32) const
+{
+    // TODO
+    return 0;
+}
