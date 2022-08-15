@@ -54,3 +54,9 @@ const uint16_t SavedGameConverterAbyss::GetActorId(
     // TODO
     return 0;
 }
+
+const bool SavedGameConverterAbyss::IsInertObject(const uint16_t obclass) const
+{
+    // TODO
+    return false;
+}

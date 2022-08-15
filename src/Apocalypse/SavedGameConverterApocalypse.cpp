@@ -55,3 +55,9 @@ const uint16_t SavedGameConverterApocalypse::GetActorId(
     // TODO
     return 0;
 }
+
+const bool SavedGameConverterApocalypse::IsInertObject(const uint16_t obclass) const
+{
+    // TODO
+    return false;
+}

@@ -23,6 +23,7 @@
 #include "Renderable3DScene.h"
 #include "LevelLocationNames.h"
 #include "SavedGameInDosFormat.h"
+#include "SavedGameInDosFormatLoader.h"
 
 Level::Level(
     const uint8_t mapIndex,
@@ -118,8 +119,15 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
     return true;
 }
 
-bool Level::LoadActorsFromDosSavedGame(const SavedGameInDosFormat& savedGameInDosFormat, const std::map<uint16_t, const DecorateActor>& decorateActors)
+bool Level::LoadActorsFromDosSavedGame(
+    const SavedGameInDosFormat& savedGameInDosFormat,
+    const ISavedGameConverter& savedGameConverter,
+    const std::map<uint16_t, const DecorateActor>& decorateActors)
 {
+    SavedGameInDosFormatLoader loader(savedGameInDosFormat, savedGameConverter, decorateActors);
+    m_playerActor = loader.LoadPlayerActor();
+    loader.LoadActors(m_blockingActors, m_nonBlockingActors, m_levelWidth, m_levelHeight);
+    /*
     const SavedGameInDosFormat::ObjectInDosFormat& playerObject = savedGameInDosFormat.GetObject(0);
     const float playerX = (float)playerObject.x / 65536.0f;
     const float playerY = (float)playerObject.y / 65536.0f;
@@ -127,7 +135,7 @@ bool Level::LoadActorsFromDosSavedGame(const SavedGameInDosFormat& savedGameInDo
     m_playerActor->SetAngle(playerObject.angle);
     m_playerActor->SetHealth(savedGameInDosFormat.GetBody());
     m_playerActor->SetTile(playerObject.tilex, playerObject.tiley);
-
+    */
     return true;
 }
 

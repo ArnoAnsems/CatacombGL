@@ -291,7 +291,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(
         actorId = actorIdProjectileMageShot;
         break;
     case obclassInert:
-        actorId = actorIdExplodingWall;
+        // TODO
         break;
     case obclassBounce:
         actorId = actorIdMonsterBounce;
@@ -304,4 +304,9 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(
         break;
     }
     return actorId;
+}
+
+const bool SavedGameConverterCatacomb3D::IsInertObject(const uint16_t obclass) const
+{
+    return obclass == obclassInert;
 }

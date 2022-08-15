@@ -55,3 +55,9 @@ const uint16_t SavedGameConverterArmageddon::GetActorId(
     // TODO
     return 0;
 }
+
+const bool SavedGameConverterArmageddon::IsInertObject(const uint16_t obclass) const
+{
+    // TODO
+    return false;
+}

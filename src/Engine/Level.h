@@ -33,6 +33,7 @@
 
 class EgaGraph;
 class SavedGameInDosFormat;
+class ISavedGameConverter;
 
 struct LevelInfo
 {
@@ -107,7 +108,10 @@ public:
         const LevelInfo& mapInfo,
         const std::vector<WallInfo>& wallsInfo);
     bool LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
-    bool LoadActorsFromDosSavedGame(const SavedGameInDosFormat& savedGameInDosFormat, const std::map<uint16_t, const DecorateActor>& decorateActors);
+    bool LoadActorsFromDosSavedGame(
+        const SavedGameInDosFormat& savedGameInDosFormat,
+        const ISavedGameConverter& savedGameConverter,
+        const std::map<uint16_t, const DecorateActor>& decorateActors);
     bool LoadFogOfWarFromFile(std::ifstream& file);
     ~Level();
 

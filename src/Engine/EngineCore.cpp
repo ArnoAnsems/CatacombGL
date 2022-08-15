@@ -3278,7 +3278,7 @@ void EngineCore::LoadDosGameFromFile(const std::string filename)
         m_playerInventory.LoadFromDosGame(*savedGame);
         UnloadLevel();
         m_level = m_game.GetGameMaps()->GetLevelFromDosSavedGame(savedGame);
-        m_level->LoadActorsFromDosSavedGame(*savedGame, m_game.GetDecorateActors());
+        m_level->LoadActorsFromDosSavedGame(*savedGame, m_game.GetSavedGameConverter(), m_game.GetDecorateActors());
         m_score.SetPoints(savedGame->GetScore());
 
         m_difficultyLevel =

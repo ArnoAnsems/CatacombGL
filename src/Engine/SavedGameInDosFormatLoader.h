@@ -32,8 +32,9 @@ public:
     ~SavedGameInDosFormatLoader() = default;
 
     Actor* LoadPlayerActor() const;
-    void LoadBlockingActors(
+    void LoadActors(
         Actor** blockingActors,
+        Actor** nonBlockingActors,
         const uint16_t levelWidth,
         const uint16_t levelHeight);
 

@@ -41,12 +41,43 @@ Actor* SavedGameInDosFormatLoader::LoadPlayerActor() const
     return playerActor;
 }
 
-void SavedGameInDosFormatLoader::LoadBlockingActors(
+void SavedGameInDosFormatLoader::LoadActors(
     Actor** blockingActors,
+    Actor** nonBlockingActors,
     const uint16_t levelWidth,
     const uint16_t levelHeight)
 {
-
+    uint16_t nonBlockingIndex = 0;
+    for (uint16_t i = 1; i < m_savedGameInDosFormat.GetNumberOfObjects(); i++)
+    {
+        const SavedGameInDosFormat::ObjectInDosFormat& dosObject = m_savedGameInDosFormat.GetObject(i);
+        const uint16_t actorId = m_savedGameConverter.GetActorId(dosObject.obclass, dosObject.state16, dosObject.state32, dosObject.temp1);
+        const auto it = m_decorateActors.find(actorId);
+        if (it != m_decorateActors.end())
+        {
+            const DecorateActor& decorateActor = it->second;
+            const float x = DosToGLCoordinate(dosObject.x);
+            const float y = DosToGLCoordinate(dosObject.y);
+            Actor* actor = new Actor(x, y, 0, decorateActor);
+            actor->SetTile((uint8_t)dosObject.tilex, (uint8_t)dosObject.tiley);
+            actor->SetAngle(dosObject.angle);
+            actor->SetActive(dosObject.active != 0);
+            actor->SetHealth(dosObject.hitpoints);
+            actor->SetTemp1(dosObject.temp1);
+            actor->SetTemp2(dosObject.temp2);
+            actor->SetState(decorateActor.initialState, 0);
+            actor->SetTimeToNextAction(0);
+            if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
+            {
+                nonBlockingActors[nonBlockingIndex] = actor;
+                nonBlockingIndex++;
+            }
+            else
+            {
+                blockingActors[(dosObject.tiley * levelWidth) + dosObject.tilex] = actor;
+            }
+        }
+    }
 }
 
 const float SavedGameInDosFormatLoader::DosToGLCoordinate(const int32_t dosCoordinate)
