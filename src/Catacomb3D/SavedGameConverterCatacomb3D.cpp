@@ -167,7 +167,92 @@ const DosFormatConfig& SavedGameConverterCatacomb3D::GetDosFormatConfig() const
     return dosFormatConfigCatacomb3D;
 }
 
-const uint16_t SavedGameConverterCatacomb3D::GetActorId(const uint16_t obclass, const uint16_t state16, const uint32_t state32) const
+const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfBonus(const uint16_t state16, const int16_t temp1) const
+{
+    uint16_t actorId = 0;
+    switch (state16)
+    {
+    case s_boltbonus:
+    case s_boltbonus2:
+        actorId = actorIdBonusBolt;
+        break;
+    case s_nukebonus:
+    case s_nukebonus2:
+        actorId = actorIdBonusNuke;
+        break;
+    case s_potionbonus:
+        actorId = actorIdBonusPotion;
+        break;
+    case s_rkeybonus:
+        actorId = actorIdBonusKeyRed;
+        break;
+    case s_ykeybonus:
+        actorId = actorIdBonusKeyYellow;
+        break;
+    case s_gkeybonus:
+        actorId = actorIdBonusKeyGreen;
+        break;
+    case s_bkeybonus:
+        actorId = actorIdBonusKeyBlue;
+        break;
+    case s_scrollbonus:
+        actorId =
+            (temp1 == 7) ? actorIdBonusScroll1 :
+            (temp1 == 8) ? actorIdBonusScroll2 :
+            (temp1 == 9) ? actorIdBonusScroll3 :
+            (temp1 == 10) ? actorIdBonusScroll4 :
+            (temp1 == 11) ? actorIdBonusScroll5 :
+            (temp1 == 12) ? actorIdBonusScroll6 :
+            (temp1 == 13) ? actorIdBonusScroll7 :
+            actorIdBonusScroll8;
+        break;
+    case s_chestbonus:
+        actorId = actorIdBonusChest;
+        break;
+    case s_goalbonus:
+        actorId = actorIdGrelminar;
+        break;
+    }
+    return actorId;
+}
+
+const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfGate(const uint16_t state16, const int16_t temp1) const
+{
+    uint16_t actorId = 0;
+    if (temp1 == 0)
+    {
+        actorId = actorIdWarpToLevel;
+    }
+    else
+    {
+        switch (state16)
+        {
+        case s_gate1:
+        case s_fgate1:
+            actorId = actorIdWarpPortal1;
+            break;
+        case s_gate2:
+        case s_fgate2:
+            actorId = actorIdWarpPortal2;
+            break;
+        case s_gate3:
+        case s_fgate3:
+            actorId = actorIdWarpPortal3;
+            break;
+        case s_gate4:
+        case s_fgate4:
+            actorId = actorIdWarpPortal4;
+            break;
+        }
+    }
+    return actorId;
+}
+
+const uint16_t SavedGameConverterCatacomb3D::GetActorId(
+    const uint16_t obclass,
+    const uint16_t state16,
+    const uint32_t state32,
+    const int16_t temp1) const
 {
     uint16_t actorId = 0;
     switch (obclass)
@@ -176,7 +261,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(const uint16_t obclass, 
         actorId = actorIdPlayer;
         break;
     case obclassBonus:
-        // TODO
+        actorId = GetActorIdOfBonus(state16, temp1);
         break;
     case obclassOrc:
         actorId = actorIdMonsterOrc;
@@ -215,7 +300,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(const uint16_t obclass, 
         actorId = actorIdMonsterNemesis;
         break;
     case obclassGate:
-        // TODO
+        actorId = GetActorIdOfGate(state16, temp1);
         break;
     }
     return actorId;

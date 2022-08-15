@@ -32,6 +32,10 @@ public:
     ~SavedGameInDosFormatLoader() = default;
 
     Actor* LoadPlayerActor() const;
+    void LoadBlockingActors(
+        Actor** blockingActors,
+        const uint16_t levelWidth,
+        const uint16_t levelHeight);
 
 private:
     static const float DosToGLCoordinate(const int32_t dosCoordinate);

@@ -41,6 +41,14 @@ Actor* SavedGameInDosFormatLoader::LoadPlayerActor() const
     return playerActor;
 }
 
+void SavedGameInDosFormatLoader::LoadBlockingActors(
+    Actor** blockingActors,
+    const uint16_t levelWidth,
+    const uint16_t levelHeight)
+{
+
+}
+
 const float SavedGameInDosFormatLoader::DosToGLCoordinate(const int32_t dosCoordinate)
 {
     const float dosToGLScaleFactor = 65536.0f;
