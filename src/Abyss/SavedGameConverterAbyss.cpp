@@ -15,34 +15,12 @@
 
 #include "SavedGameConverterAbyss.h"
 
-static const DosFormatConfig dosFormatConfigAbyss =
-{
-    "CATACOMB ABYSS 3-D", // gameName
-    "0.93", // saveVersion
-    {
-        HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
-        HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
-        HeaderItemEasyModeOn
-    },   // headerItems
-    {
-        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState16, ObjectFlags,
-        ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
-        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
-        ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev
-    }   // objectItems
-};
-
 SavedGameConverterAbyss::SavedGameConverterAbyss()
 {
 }
 
 SavedGameConverterAbyss::~SavedGameConverterAbyss()
 {
-}
-
-const DosFormatConfig& SavedGameConverterAbyss::GetDosFormatConfig() const
-{
-    return dosFormatConfigAbyss;
 }
 
 const uint16_t SavedGameConverterAbyss::GetActorId(

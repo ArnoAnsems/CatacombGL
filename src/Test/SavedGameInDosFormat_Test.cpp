@@ -15,10 +15,10 @@
 
 #include "SavedGameInDosFormat_Test.h"
 #include "../Engine/SavedGameInDosFormat.h"
-#include "../Catacomb3D/SavedGameConverterCatacomb3D.h"
-#include "../Abyss/SavedGameConverterAbyss.h"
-#include "../Armageddon/SavedGameConverterArmageddon.h"
-#include "../Apocalypse/SavedGameConverterApocalypse.h"
+#include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
+#include "../Abyss/SavedGameInDosFormatConfigAbyss.h"
+#include "../Armageddon/SavesGameInDosFormatConfigArmageddon.h"
+#include "../Apocalypse/SavedGameInDosFormatConfigApocalypse.h"
 #include "SavedGameInDosFormat_Data.h"
 
 SavedGameInDosFormat_Test::SavedGameInDosFormat_Test()
@@ -73,9 +73,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(3166);
-    SavedGameConverterCatacomb3D converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_TRUE(savedGame.Load());
 
     EXPECT_EQ(savedGame.GetSignature(), "C3D");
@@ -160,8 +159,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
 
 TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameNullptr)
 {
-    SavedGameConverterCatacomb3D converter;
-    SavedGameInDosFormat savedGame(nullptr, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(nullptr, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "data is null");
 }
@@ -170,9 +168,8 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
 {
     // Load saved game data that is too small to contain the header.
     FileChunk* fileChunk = new FileChunk(87);
-    SavedGameConverterCatacomb3D converter;
     std::memset(fileChunk->GetChunk(), 0, 87);
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "too small to contain header");
 }
@@ -180,11 +177,10 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
 TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane0)
 {
     FileChunk* fileChunk = new FileChunk(3166);
-    SavedGameConverterCatacomb3D converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
     // Set the compressed size of plane 0 too large
     *(uint16_t*)&(fileChunk->GetChunk()[84]) = 4000u;
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 0");
 }
@@ -192,11 +188,10 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompress
 TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane2)
 {
     FileChunk* fileChunk = new FileChunk(3166);
-    SavedGameConverterCatacomb3D converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
     // Set the compressed size of plane 2 too large
     *(uint16_t*)& (fileChunk->GetChunk()[1172]) = 3000u;
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 2");
 }
@@ -206,9 +201,8 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
     // Copy the raw saved game data to a fileChunk, but without the object data.
     const uint32_t sizeOfRawSavedGameDataWithoutObjects = 3166 - (24 * 68);
     FileChunk* fileChunk = new FileChunk(sizeOfRawSavedGameDataWithoutObjects);
-    SavedGameConverterCatacomb3D converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, sizeOfRawSavedGameDataWithoutObjects);
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "no objects found");
 }
@@ -218,9 +212,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(5504);
-    SavedGameConverterAbyss converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombAbyss, 5504);
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigAbyss);
     EXPECT_TRUE(savedGame.Load());
 
     EXPECT_EQ(savedGame.GetFreezeTime(), 0);
@@ -272,9 +265,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(6769);
-    SavedGameConverterArmageddon converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombArmageddon, 6769);
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigArmageddon);
     EXPECT_TRUE(savedGame.Load());
 
     EXPECT_EQ(savedGame.GetFreezeTime(), 0);
@@ -324,9 +316,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
     FileChunk* fileChunk = new FileChunk(6962);
-    SavedGameConverterApocalypse converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombApocalypse, 6962);
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigApocalypse);
     EXPECT_TRUE(savedGame.Load());
 
     EXPECT_EQ(savedGame.GetFreezeTime(), 0);

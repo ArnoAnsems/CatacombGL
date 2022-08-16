@@ -148,6 +148,7 @@
     <ClInclude Include="GameMapsAbyss.h" />
     <ClInclude Include="IntroViewAbyss.h" />
     <ClInclude Include="SavedGameConverterAbyss.h" />
+    <ClInclude Include="SavedGameInDosFormatConfigAbyss.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameAbyss.cpp" />

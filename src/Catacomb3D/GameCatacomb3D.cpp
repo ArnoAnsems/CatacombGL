@@ -19,6 +19,7 @@
 #include "IntroViewCatacomb3D.h"
 #include "AudioRepositoryCatacomb3D.h"
 #include "DecorateAll.h"
+#include "SavedInGameInDosFormatConfigCatacomb3D.h"
 #include "../Engine/IRenderer.h"
 #include "Catacomb3DMenu.h"
 
@@ -695,6 +696,11 @@ const CatalogInfo catalogInfo = { "", {"NotAvailable" } };
 const CatalogInfo& GameCatacomb3D::GetCatalogInfo() const
 {
     return catalogInfo;
+}
+
+const SavedGameInDosFormatConfig& GameCatacomb3D::GetSavedGameInDosFormatConfig() const
+{
+    return savedGameInDosFormatConfigCatacomb3D;
 }
 
 const ISavedGameConverter& GameCatacomb3D::GetSavedGameConverter() const

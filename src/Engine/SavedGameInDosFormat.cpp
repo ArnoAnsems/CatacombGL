@@ -14,9 +14,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SavedGameInDosFormat.h"
+#include "SavedGameInDosFormatConfig.h"
 #include "Decompressor.h"
 
-SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk, const DosFormatConfig& config) :
+SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config) :
     m_fileChunk(fileChunk),
     m_config(config),
     m_plane0(nullptr),

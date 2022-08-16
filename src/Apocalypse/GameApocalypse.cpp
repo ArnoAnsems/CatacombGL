@@ -19,6 +19,7 @@
 #include "IntroViewApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 #include "DecorateAll.h"
+#include "SavedGameInDosFormatConfigApocalypse.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
 
@@ -771,6 +772,11 @@ const CatalogInfo catalogInfo =
 const CatalogInfo& GameApocalypse::GetCatalogInfo() const
 {
     return catalogInfo;
+}
+
+const SavedGameInDosFormatConfig& GameApocalypse::GetSavedGameInDosFormatConfig() const
+{
+    return savedGameInDosFormatConfigApocalypse;
 }
 
 const ISavedGameConverter& GameApocalypse::GetSavedGameConverter() const

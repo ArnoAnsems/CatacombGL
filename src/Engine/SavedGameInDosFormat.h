@@ -21,8 +21,8 @@
 #pragma once
 
 #include "FileChunk.h"
-#include "ISavedGameConverter.h"
 #include <string>
+#include "SavedGameInDosFormatConfig.h"
 
 class SavedGameInDosFormat
 {
@@ -59,7 +59,7 @@ public:
         int16_t prev;
     } ObjectInDosFormat;
 
-    SavedGameInDosFormat(const FileChunk* fileChunk, const DosFormatConfig& config);
+    SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config);
     ~SavedGameInDosFormat();
 
     bool Load();
@@ -123,7 +123,7 @@ private:
     uint32_t GetSizeOfObjectItem(const ObjectItem item) const;
     uint32_t GetSizeOfObject() const;
     const FileChunk* m_fileChunk;
-    const DosFormatConfig& m_config;
+    const SavedGameInDosFormatConfig& m_config;
     std::string m_errorMessage;
     std::string m_signature;
     int16_t m_oldTest;

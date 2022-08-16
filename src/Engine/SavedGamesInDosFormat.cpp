@@ -15,7 +15,7 @@
 
 #include "SavedGamesInDosFormat.h"
 
-SavedGamesInDosFormat::SavedGamesInDosFormat(const DosFormatConfig& config) :
+SavedGamesInDosFormat::SavedGamesInDosFormat(const SavedGameInDosFormatConfig& config) :
     m_config(config),
     m_savedGames()
 {

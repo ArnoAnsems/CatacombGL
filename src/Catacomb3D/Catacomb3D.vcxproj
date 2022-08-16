@@ -158,6 +158,7 @@
     <ClInclude Include="GuiPageFrameCat3D.h" />
     <ClInclude Include="IntroViewCatacomb3D.h" />
     <ClInclude Include="SavedGameConverterCatacomb3D.h" />
+    <ClInclude Include="SavedInGameInDosFormatConfigCatacomb3D.h" />
     <ClInclude Include="SkullNBones.h" />
   </ItemGroup>
   <ItemGroup>

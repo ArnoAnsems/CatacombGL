@@ -51,6 +51,9 @@
     <ClInclude Include="SavedGameConverterArmageddon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavesGameInDosFormatConfigArmageddon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameArmageddon.cpp">

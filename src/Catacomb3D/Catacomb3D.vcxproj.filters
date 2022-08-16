@@ -84,6 +84,9 @@
     <ClInclude Include="SavedGameConverterCatacomb3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavedInGameInDosFormatConfigCatacomb3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewCatacomb3D.cpp">

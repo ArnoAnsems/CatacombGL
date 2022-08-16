@@ -20,6 +20,7 @@
 #include "../Engine/SavedGameInDosFormat.h"
 #include "../Engine/Actor.h"
 #include "../Catacomb3D/SavedGameConverterCatacomb3D.h"
+#include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
 #include "../Catacomb3D/DecorateAll.h"
 
 SavedGameInDosFormatLoader_Test::SavedGameInDosFormatLoader_Test()
@@ -33,11 +34,11 @@ SavedGameInDosFormatLoader_Test::~SavedGameInDosFormatLoader_Test()
 TEST(SavedGameInDosFormatLoader_Test, LoadPlayerActor)
 {
     FileChunk* fileChunk = new FileChunk(3166);
-    SavedGameConverterCatacomb3D converter;
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
-    SavedGameInDosFormat savedGame(fileChunk, converter.GetDosFormatConfig());
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_TRUE(savedGame.Load());
 
+    SavedGameConverterCatacomb3D converter;
     SavedGameInDosFormatLoader loader(savedGame, converter, decorateCatacomb3DAll);
 
     Actor* playerActor = loader.LoadPlayerActor();

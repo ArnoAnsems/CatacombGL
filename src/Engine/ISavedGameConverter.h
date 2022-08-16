@@ -21,79 +21,11 @@
 #pragma once
 
 #include <stdint.h>
-#include <string>
-#include <vector>
-
-typedef enum
-{
-    HeaderItemSignature,
-    HeaderItemOldTest,
-    HeaderItemPresent,
-    HeaderItemName,
-    HeaderItemFreezeTime,
-    HeaderItemDifficulty,
-    HeaderItemMapOn,
-    HeaderItemBolts,
-    HeaderItemNukes,
-    HeaderItemPotions,
-    HeaderItemKeys,
-    HeaderItemScrolls,
-    HeaderItemGems,
-    HeaderItemScore,
-    HeaderItemBody,
-    HeaderItemShotpower,
-    HeaderItemEasyModeOn,
-    HeaderTtemSkyColor,
-    HeaderItemGroundColor,
-    HeaderItemMapWidth,
-    HeaderItemMapHeight
-} HeaderItem;
-
-typedef enum
-{
-    ObjectActive,
-    ObjectTiccount,
-    ObjectObclass,
-    ObjectState16,
-    ObjectState32,
-    ObjectShootable,
-    ObjectFlags,
-    ObjectTileObject,
-    ObjectDistance,
-    ObjectDir,
-    ObjectX,
-    ObjectY,
-    ObjectTileX,
-    ObjectTileY,
-    ObjectViewX,
-    ObjectViewHeight,
-    ObjectAngle,
-    ObjectHitpoints,
-    ObjectSpeed,
-    ObjectSize,
-    ObjectXL,
-    ObjectXH,
-    ObjectYL,
-    ObjectYH,
-    ObjectTemp1,
-    ObjectTemp2,
-    ObjectNext,
-    ObjectPrev
-} ObjectItem;
-
-typedef struct
-{
-    std::string gameName;
-    std::string saveVersion;
-    std::vector<HeaderItem> headerItems;
-    std::vector<ObjectItem> objectItems;
-} DosFormatConfig;
 
 class ISavedGameConverter
 {
 public:
     virtual ~ISavedGameConverter() {};
-    virtual const DosFormatConfig& GetDosFormatConfig() const = 0;
     virtual const uint16_t GetActorId(
         const uint16_t obclass,
         const uint16_t state16,

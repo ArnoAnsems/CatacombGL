@@ -112,6 +112,7 @@ public:
     virtual const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() = 0;
     virtual const ManaBar::ManaBarConfig& GetManaBarConfig() = 0;
     virtual const CatalogInfo& GetCatalogInfo() const = 0;
+    virtual const SavedGameInDosFormatConfig& GetSavedGameInDosFormatConfig() const = 0;
     virtual const ISavedGameConverter& GetSavedGameConverter() const = 0;
 
 protected:

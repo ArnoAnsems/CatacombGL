@@ -51,6 +51,9 @@
     <ClInclude Include="SavedGameConverterApocalypse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavedGameInDosFormatConfigApocalypse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntroViewApocalypse.cpp">

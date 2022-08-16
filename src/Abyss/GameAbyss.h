@@ -90,6 +90,7 @@ public:
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() override;
     const ManaBar::ManaBarConfig& GetManaBarConfig() override;
     const CatalogInfo& GetCatalogInfo() const override;
+    const SavedGameInDosFormatConfig& GetSavedGameInDosFormatConfig() const override;
     const ISavedGameConverter& GetSavedGameConverter() const override;
 
 private:

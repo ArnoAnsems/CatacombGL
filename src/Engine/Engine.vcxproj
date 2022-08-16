@@ -292,6 +292,7 @@
     <ClInclude Include="RenderableOverscanBorder.h" />
     <ClInclude Include="RenderableSprites.h" />
     <ClInclude Include="SavedGameInDosFormat.h" />
+    <ClInclude Include="SavedGameInDosFormatConfig.h" />
     <ClInclude Include="SavedGameInDosFormatLoader.h" />
     <ClInclude Include="SavedGamesInDosFormat.h" />
     <ClInclude Include="Score.h" />

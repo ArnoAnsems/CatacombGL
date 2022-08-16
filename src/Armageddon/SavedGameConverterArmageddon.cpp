@@ -15,35 +15,12 @@
 
 #include "SavedGameConverterArmageddon.h"
 
-static const DosFormatConfig dosFormatConfigArmageddon =
-{
-    "CATACOMB ARMAGEDDON 3-D", // gameName
-    "0.01", // saveVersion
-    {
-        HeaderTtemSkyColor, HeaderItemGroundColor, HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
-        HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
-        HeaderItemMapWidth, HeaderItemMapHeight, HeaderItemEasyModeOn
-    },   // headerItems
-    {
-        ObjectTiccount, ObjectState32,
-        ObjectX, ObjectY, ObjectViewX, ObjectTileX, ObjectTileY, ObjectViewHeight, ObjectSize,
-        ObjectNext, ObjectPrev, ObjectActive, ObjectObclass, ObjectFlags, ObjectDistance, ObjectDir,
-        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
-        ObjectTemp1, ObjectTemp2,
-    }   // objectItems
-};
-
 SavedGameConverterArmageddon::SavedGameConverterArmageddon()
 {
 }
 
 SavedGameConverterArmageddon::~SavedGameConverterArmageddon()
 {
-}
-
-const DosFormatConfig& SavedGameConverterArmageddon::GetDosFormatConfig() const
-{
-    return dosFormatConfigArmageddon;
 }
 
 const uint16_t SavedGameConverterArmageddon::GetActorId(

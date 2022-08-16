@@ -16,23 +16,6 @@
 #include "SavedGameConverterCatacomb3D.h"
 #include "DecorateAll.h"
 
-static const DosFormatConfig dosFormatConfigCatacomb3D =
-{
-    "", // gameName
-    "", // saveVersion
-    {
-        HeaderItemSignature, HeaderItemOldTest, HeaderItemPresent, HeaderItemName,
-        HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
-        HeaderItemKeys, HeaderItemScrolls, HeaderItemScore, HeaderItemBody, HeaderItemShotpower
-    },   // headerItems
-    {
-        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState16, ObjectShootable, ObjectTileObject,
-        ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
-        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
-        ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev
-    }   // objectItems
-};
-
 // obclass definitions as seen in C3_DEF.H
 const uint16_t obclassNothing = 0;
 const uint16_t obclassPlayer = 1;
@@ -160,11 +143,6 @@ SavedGameConverterCatacomb3D::SavedGameConverterCatacomb3D()
 
 SavedGameConverterCatacomb3D::~SavedGameConverterCatacomb3D()
 {
-}
-
-const DosFormatConfig& SavedGameConverterCatacomb3D::GetDosFormatConfig() const
-{
-    return dosFormatConfigCatacomb3D;
 }
 
 const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfBonus(const uint16_t state16, const int16_t temp1) const

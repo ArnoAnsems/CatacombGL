@@ -530,5 +530,8 @@
     <ClInclude Include="SavedGameInDosFormatLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavedGameInDosFormatConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

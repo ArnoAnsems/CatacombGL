@@ -27,7 +27,6 @@ class SavedGameConverterArmageddon : public ISavedGameConverter
 public:
     SavedGameConverterArmageddon();
     ~SavedGameConverterArmageddon();
-    const DosFormatConfig& GetDosFormatConfig() const override;
     const uint16_t GetActorId(
         const uint16_t obclass,
         const uint16_t state16,

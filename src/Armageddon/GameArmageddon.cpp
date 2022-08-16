@@ -19,6 +19,7 @@
 #include "IntroViewArmageddon.h"
 #include "AudioRepositoryArmageddon.h"
 #include "DecorateAll.h"
+#include "SavesGameInDosFormatConfigArmageddon.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
 
@@ -907,6 +908,11 @@ const CatalogInfo catalogInfo =
 const CatalogInfo& GameArmageddon::GetCatalogInfo() const
 {
     return catalogInfo;
+}
+
+const SavedGameInDosFormatConfig& GameArmageddon::GetSavedGameInDosFormatConfig() const
+{
+    return savedGameInDosFormatConfigArmageddon;
 }
 
 const ISavedGameConverter& GameArmageddon::GetSavedGameConverter() const

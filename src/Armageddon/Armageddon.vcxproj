@@ -148,6 +148,7 @@
     <ClInclude Include="GameMapsArmageddon.h" />
     <ClInclude Include="IntroViewArmageddon.h" />
     <ClInclude Include="SavedGameConverterArmageddon.h" />
+    <ClInclude Include="SavesGameInDosFormatConfigArmageddon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameArmageddon.cpp" />

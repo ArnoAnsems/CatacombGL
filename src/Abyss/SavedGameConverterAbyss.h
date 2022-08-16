@@ -27,7 +27,6 @@ class SavedGameConverterAbyss : public ISavedGameConverter
 public:
     SavedGameConverterAbyss();
     ~SavedGameConverterAbyss();
-    const DosFormatConfig& GetDosFormatConfig() const override;
     const uint16_t GetActorId(
         const uint16_t obclass,
         const uint16_t state16,

@@ -16,6 +16,7 @@
 #include "GameAbyss.h"
 #include "GameMapsAbyss.h"
 #include "IntroViewAbyss.h"
+#include "SavedGameInDosFormatConfigAbyss.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
 
@@ -970,6 +971,11 @@ const CatalogInfo catalogInfoV124 =
 const CatalogInfo& GameAbyss::GetCatalogInfo() const
 {
     return (m_gameId == 1) ? catalogInfoV113 : catalogInfoV124;
+}
+
+const SavedGameInDosFormatConfig& GameAbyss::GetSavedGameInDosFormatConfig() const
+{
+    return savedGameInDosFormatConfigAbyss;
 }
 
 const ISavedGameConverter& GameAbyss::GetSavedGameConverter() const

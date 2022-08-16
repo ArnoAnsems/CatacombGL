@@ -148,6 +148,7 @@
     <ClInclude Include="GameMapsApocalypse.h" />
     <ClInclude Include="IntroViewApocalypse.h" />
     <ClInclude Include="SavedGameConverterApocalypse.h" />
+    <ClInclude Include="SavedGameInDosFormatConfigApocalypse.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApocalypse.cpp" />
