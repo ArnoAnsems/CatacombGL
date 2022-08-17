@@ -269,7 +269,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(
         actorId = actorIdProjectileMageShot;
         break;
     case obclassInert:
-        // TODO
+        actorId = GetActorIdOfInert(state16);
         break;
     case obclassBounce:
         actorId = actorIdMonsterBounce;
@@ -287,4 +287,52 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(
 const bool SavedGameConverterCatacomb3D::IsInertObject(const uint16_t obclass) const
 {
     return obclass == obclassInert;
+}
+
+const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfInert(const uint16_t state16) const
+{
+    uint16_t actorId = 0;
+    switch (state16)
+    {
+    case s_walldie1:
+    case s_walldie2:
+    case s_walldie3:
+    case s_walldie4:
+    case s_walldie5:
+    case s_walldie6:
+        actorId = actorIdExplodingWall;
+        break;
+    case s_trolldie1:
+    case s_trolldie2:
+    case s_trolldie3:
+        actorId = actorIdMonsterTroll;
+        break;
+    case s_orcdie1:
+    case s_orcdie2:
+    case s_orcdie3:
+        actorId = actorIdMonsterOrc;
+        break;
+    case s_demondie1:
+    case s_demondie2:
+    case s_demondie3:
+        actorId = actorIdMonsterDemon;
+        break;
+    case s_magedie1:
+    case s_magedie2:
+        actorId = actorIdMonsterMage;
+        break;
+    case s_greldie1:
+    case s_greldie2:
+    case s_greldie3:
+    case s_greldie4:
+    case s_greldie5:
+    case s_greldie6:
+        actorId = actorIdMonsterNemesis;
+        break;
+    case s_batdie1:
+    case s_batdie2:
+        actorId = actorIdMonsterBat;
+        break;
+    }
+    return actorId;
 }
