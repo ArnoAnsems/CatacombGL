@@ -51,7 +51,7 @@ void SavedGameInDosFormatLoader::LoadActors(
     for (uint16_t i = 1; i < m_savedGameInDosFormat.GetNumberOfObjects(); i++)
     {
         const SavedGameInDosFormat::ObjectInDosFormat& dosObject = m_savedGameInDosFormat.GetObject(i);
-        const uint16_t actorId = m_savedGameConverter.GetActorId(dosObject.obclass, dosObject.state16, dosObject.state32, dosObject.temp1);
+        const uint16_t actorId = m_savedGameConverter.GetActorId(dosObject);
         const auto it = m_decorateActors.find(actorId);
         if (it != m_decorateActors.end())
         {

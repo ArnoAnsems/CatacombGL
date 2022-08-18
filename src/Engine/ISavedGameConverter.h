@@ -21,15 +21,12 @@
 #pragma once
 
 #include <stdint.h>
+#include "SavedGameInDosFormat.h"
 
 class ISavedGameConverter
 {
 public:
     virtual ~ISavedGameConverter() {};
-    virtual const uint16_t GetActorId(
-        const uint16_t obclass,
-        const uint16_t state16,
-        const uint32_t state32,
-        const int16_t temp1) const = 0;
+    virtual const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const = 0;
     virtual const bool IsInertObject(const uint16_t obclass) const = 0;
 };

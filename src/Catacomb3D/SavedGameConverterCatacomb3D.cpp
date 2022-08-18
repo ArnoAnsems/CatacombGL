@@ -226,20 +226,16 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfGate(const uint16_t sta
     return actorId;
 }
 
-const uint16_t SavedGameConverterCatacomb3D::GetActorId(
-    const uint16_t obclass,
-    const uint16_t state16,
-    const uint32_t state32,
-    const int16_t temp1) const
+const uint16_t SavedGameConverterCatacomb3D::GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
     uint16_t actorId = 0;
-    switch (obclass)
+    switch (dosObject.obclass)
     {
     case obclassPlayer:
         actorId = actorIdPlayer;
         break;
     case obclassBonus:
-        actorId = GetActorIdOfBonus(state16, temp1);
+        actorId = GetActorIdOfBonus(dosObject.state16, dosObject.temp1);
         break;
     case obclassOrc:
         actorId = actorIdMonsterOrc;
@@ -269,7 +265,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(
         actorId = actorIdProjectileMageShot;
         break;
     case obclassInert:
-        actorId = GetActorIdOfInert(state16);
+        actorId = GetActorIdOfInert(dosObject.state16);
         break;
     case obclassBounce:
         actorId = actorIdMonsterBounce;
@@ -278,7 +274,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorId(
         actorId = actorIdMonsterNemesis;
         break;
     case obclassGate:
-        actorId = GetActorIdOfGate(state16, temp1);
+        actorId = GetActorIdOfGate(dosObject.state16, dosObject.temp1);
         break;
     }
     return actorId;

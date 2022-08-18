@@ -23,11 +23,7 @@ SavedGameConverterAbyss::~SavedGameConverterAbyss()
 {
 }
 
-const uint16_t SavedGameConverterAbyss::GetActorId(
-    const uint16_t /*obclass*/,
-    const uint16_t /*state16*/,
-    const uint32_t /*state32*/,
-    const int16_t /*temp1*/) const
+const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
 {
     // TODO
     return 0;
