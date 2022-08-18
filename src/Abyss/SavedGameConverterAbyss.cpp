@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SavedGameConverterAbyss.h"
+#include "DecorateAll.h"
 
 SavedGameConverterAbyss::SavedGameConverterAbyss()
 {
@@ -24,6 +25,17 @@ SavedGameConverterAbyss::~SavedGameConverterAbyss()
 }
 
 const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+{
+    // TODO
+    return 0;
+}
+
+const DecorateStateId SavedGameConverterAbyss::GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+{
+    // TODO
+    return StateIdWalk;
+}
+const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
 {
     // TODO
     return 0;

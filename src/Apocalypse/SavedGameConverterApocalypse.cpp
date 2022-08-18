@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SavedGameConverterApocalypse.h"
+#include "DecorateAll.h"
 
 SavedGameConverterApocalypse::SavedGameConverterApocalypse()
 {
@@ -24,6 +25,17 @@ SavedGameConverterApocalypse::~SavedGameConverterApocalypse()
 }
 
 const uint16_t SavedGameConverterApocalypse::GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+{
+    // TODO
+    return 0;
+}
+
+const DecorateStateId SavedGameConverterApocalypse::GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+{
+    // TODO
+    return StateIdWalk;
+}
+const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
 {
     // TODO
     return 0;

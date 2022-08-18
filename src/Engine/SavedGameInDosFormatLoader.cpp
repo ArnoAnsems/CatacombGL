@@ -65,7 +65,8 @@ void SavedGameInDosFormatLoader::LoadActors(
             actor->SetHealth(dosObject.hitpoints);
             actor->SetTemp1(dosObject.temp1);
             actor->SetTemp2(dosObject.temp2);
-            actor->SetState(decorateActor.initialState, 0);
+            actor->SetState(m_savedGameConverter.GetDecorateStateId(dosObject), 0);
+            actor->SetAnimationFrame(m_savedGameConverter.GetAnimationFrame(dosObject));
             actor->SetTimeToNextAction(0);
             if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
             {

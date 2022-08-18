@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SavedGameConverterArmageddon.h"
+#include "DecorateAll.h"
 
 SavedGameConverterArmageddon::SavedGameConverterArmageddon()
 {
@@ -24,6 +25,17 @@ SavedGameConverterArmageddon::~SavedGameConverterArmageddon()
 }
 
 const uint16_t SavedGameConverterArmageddon::GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+{
+    // TODO
+    return 0;
+}
+
+const DecorateStateId SavedGameConverterArmageddon::GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+{
+    // TODO
+    return StateIdWalk;
+}
+const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
 {
     // TODO
     return 0;

@@ -22,11 +22,14 @@
 
 #include <stdint.h>
 #include "SavedGameInDosFormat.h"
+#include "Decorate.h"
 
 class ISavedGameConverter
 {
 public:
     virtual ~ISavedGameConverter() {};
     virtual const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const = 0;
+    virtual const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const = 0;
+    virtual const uint16_t GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const = 0;
     virtual const bool IsInertObject(const uint16_t obclass) const = 0;
 };

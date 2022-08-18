@@ -28,6 +28,8 @@ public:
     SavedGameConverterApocalypse();
     ~SavedGameConverterApocalypse();
     const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
+    const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
+    const uint16_t GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const bool IsInertObject(const uint16_t obclass) const override;
 };
 
