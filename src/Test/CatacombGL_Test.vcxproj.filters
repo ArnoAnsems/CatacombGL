@@ -84,6 +84,9 @@
     <ClCompile Include="SavedGameInDosFormatLoader_Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SavedGameConverterCatacomb3D_Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FramesCounter_Test.h">
@@ -147,6 +150,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SavedGameInDosFormatLoader_Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SavedGameConverterCatacomb3D_Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -166,6 +166,7 @@
     <ClCompile Include="LevelLocationNames_Test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RendererStub.cpp" />
+    <ClCompile Include="SavedGameConverterCatacomb3D_Test.cpp" />
     <ClCompile Include="SavedGameInDosFormatLoader_Test.cpp" />
     <ClCompile Include="SavedGameInDosFormat_Test.cpp" />
     <ClCompile Include="SavedGamesInDosFormat_Test.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="HelpPages_Test.h" />
     <ClInclude Include="LevelLocationNames_Test.h" />
     <ClInclude Include="RendererStub.h" />
+    <ClInclude Include="SavedGameConverterCatacomb3D_Test.h" />
     <ClInclude Include="SavedGameInDosFormatLoader_Test.h" />
     <ClInclude Include="SavedGameInDosFormat_Data.h" />
     <ClInclude Include="SavedGameInDosFormat_Test.h" />
