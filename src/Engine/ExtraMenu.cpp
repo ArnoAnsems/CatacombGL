@@ -52,7 +52,8 @@ ExtraMenu::ExtraMenu(
     std::vector<std::string>& savedGames,
     const IRenderer& renderer,
     const CatalogInfo& catalogInfo,
-    const std::string& gameFolder) :
+    const std::string& gameFolder,
+    SavedGamesInDosFormat& savedGamesInDosFormat) :
     m_menuActive(false),
     m_configurationSettings(configurationSettings),
     m_audioPlayer(audioPlayer),
@@ -65,7 +66,8 @@ ExtraMenu::ExtraMenu(
     m_savingPopupName(""),
     m_guiMenu(playerInput),
     m_renderableText(*egaGraph->GetFont(3)),
-    m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10))
+    m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10)),
+    m_savedGamesInDosFormat(savedGamesInDosFormat)
 {
     // Main menu
     GuiPage* pageMain = new GuiPage(playerInput);
@@ -187,6 +189,16 @@ ExtraMenu::ExtraMenu(
             savedGameIndex++;
         }
     }
+    if (m_savedGamesInDosFormat.GetSavedGameInDosFormat().size() > 0)
+    {
+        int16_t savedGameIndex = 0;
+        for (const SavedGameInDosFormat* savedGameInDosFormat : m_savedGamesInDosFormat.GetSavedGameInDosFormat())
+        {
+            const std::string savedGameName = savedGameInDosFormat->GetName() + " [DOS]";
+            elementListLoadGame->AddChild(new GuiElementButton(playerInput, savedGameName, { GuiActionLoadDosGame, savedGameIndex }, m_renderableText));
+            savedGameIndex++;
+        }
+    }
     pageLoadGame->AddChild(elementListLoadGame, 60, 30);
 
     GuiElementStaticText* pageLabelLoadGame = new GuiElementStaticText(playerInput, "Load Game", EgaBrightYellow, m_renderableText);
@@ -288,6 +300,11 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
         {
             command = MenuCommandLoadGame;
             m_newSaveGameName = m_savedGames.at(guiEvent.guiParameter);
+        }
+        else if (guiEvent.guiAction == GuiActionLoadDosGame)
+        {
+            command = MenuCommandLoadDosGame;
+            m_newSaveGameName = m_savedGamesInDosFormat.GetSavedGameInDosFormat().at(guiEvent.guiParameter)->GetName();
         }
         else if (guiEvent.guiAction == GuiActionSaveGame)
         {

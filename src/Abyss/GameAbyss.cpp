@@ -623,7 +623,7 @@ IMenu* GameAbyss::CreateMenu(
     std::vector<std::string>& savedGames,
     SavedGamesInDosFormat& savedGamesInDosFormat)
 {
-    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames, m_renderer, GetCatalogInfo(), m_gamePath);
+    return new ExtraMenu(configurationSettings, *GetAudioPlayer(), playerInput, GetEgaGraph(), GetMenuCursorPic(), savedGames, m_renderer, GetCatalogInfo(), m_gamePath, savedGamesInDosFormat);
 }
 
 void GameAbyss::DrawHelpPage()

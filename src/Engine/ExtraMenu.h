@@ -44,7 +44,8 @@ public:
         std::vector<std::string>& savedGames,
         const IRenderer& renderer,
         const CatalogInfo& catalogInfo,
-        const std::string& gameFolder);
+        const std::string& gameFolder,
+        SavedGamesInDosFormat& savedGamesInDosFormat);
     bool IsActive() const override;
     void SetActive(bool active) override;
     MenuCommand ProcessInput(const PlayerInput& playerInput) override;
@@ -78,4 +79,5 @@ private:
     GuiMenu m_guiMenu;
     RenderableText m_renderableText;
     RenderableText m_renderableTextDefaultFont;
+    SavedGamesInDosFormat& m_savedGamesInDosFormat;
 };

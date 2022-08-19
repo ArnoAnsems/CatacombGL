@@ -100,10 +100,40 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
 
     if (game.GetId() == 5)
     {
+        // Retrieve Catacomb 3-D saved DOS games
         const std::string& gameDataPath = configurationSettings.GetCVarString(CVarIdPathCatacomb3Dv122).Get();
         for (uint8_t index = 0; index < 10; index++)
         {
             const std::string fullFilename = gameDataPath + "SAVEGAM" + std::to_string(index) + ".C3D";
+            std::ifstream file;
+            file.open(fullFilename, std::ifstream::binary);
+            if (file.is_open())
+            {
+                const std::streampos beginPos = file.tellg();
+                file.seekg(0, std::ios::end);
+                const int32_t fileSize = (int32_t)(file.tellg() - beginPos);
+                FileChunk* fileChunk = new FileChunk(fileSize);
+                file.seekg(0, std::ios::beg);
+                file.read((char*)fileChunk->GetChunk(), fileSize);
+                file.close();
+                m_savedGamesInDosFormat.AddSavedGame(fileChunk);
+                delete fileChunk;
+            }
+        }
+    }
+    else
+    {
+        // Retrieve Catacomb Adventure Trilogy saved DOS games
+        const std::string& gameDataPath =
+            (game.GetId() == 1) ? configurationSettings.GetCVarString(CVarIdPathAbyssv113).Get() :
+            (game.GetId() == 2) ? configurationSettings.GetCVarString(CVarIdPathAbyssv124).Get() :
+            (game.GetId() == 3) ? configurationSettings.GetCVarString(CVarIdPathArmageddonv102).Get() :
+            configurationSettings.GetCVarString(CVarIdPathApocalypsev101).Get();
+        std::vector<std::string> filesFound;
+        m_system.GetSavedGameNamesFromFolder(gameDataPath, filesFound);
+        for (const std::string& filename : filesFound)
+        {
+            const std::string fullFilename = gameDataPath + filename + ".SAV";
             std::ifstream file;
             file.open(fullFilename, std::ifstream::binary);
             if (file.is_open())

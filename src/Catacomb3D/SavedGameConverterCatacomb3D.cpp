@@ -486,6 +486,11 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     case s_magedie1:
     case s_greldie1:
     case s_batdie1:
+    case s_magedie2:
+    case s_orcdie3:
+    case s_trolldie3:
+    case s_demondie3:
+    case s_greldie6:
     case s_shotexplode:
     case s_walldie1:
     case s_pshot1:
@@ -523,7 +528,6 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     case s_greldie2:
     case s_batdie2:
     case s_walldie2:
-    case s_magedie2:
     case s_pshot2:
     case s_bigpshot2:
     case s_mshot2:
@@ -544,9 +548,6 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     case s_grelattack3:
     case s_greldie3:
     case s_walldie3:
-    case s_orcdie3:
-    case s_trolldie3:
-    case s_demondie3:
     case s_gate3:
     case s_fgate3:
         animationFrame = 2u;
@@ -571,7 +572,6 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
         animationFrame = 4u;
         break;
     case s_walldie6:
-    case s_greldie6:
         animationFrame = 5u;
         break;
     }
