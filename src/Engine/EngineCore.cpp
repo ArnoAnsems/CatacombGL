@@ -145,7 +145,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
                 file.seekg(0, std::ios::beg);
                 file.read((char*)fileChunk->GetChunk(), fileSize);
                 file.close();
-                m_savedGamesInDosFormat.AddSavedGame(fileChunk);
+                m_savedGamesInDosFormat.AddSavedGame(fileChunk, filename);
                 delete fileChunk;
             }
         }

@@ -60,6 +60,7 @@ public:
     } ObjectInDosFormat;
 
     SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config);
+    SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config, const std::string& name);
     ~SavedGameInDosFormat();
 
     bool Load();

@@ -48,6 +48,24 @@ void SavedGamesInDosFormat::AddSavedGame(const FileChunk* fileChunk)
     }
 }
 
+void SavedGamesInDosFormat::AddSavedGame(const FileChunk* fileChunk, const std::string& name)
+{
+    if (fileChunk != nullptr)
+    {
+        SavedGameInDosFormat* savedGame = new SavedGameInDosFormat(fileChunk, m_config, name);
+        const bool savedGameIsLoaded = savedGame->Load();
+
+        if (savedGameIsLoaded)
+        {
+            m_savedGames.push_back(savedGame);
+        }
+        else
+        {
+            delete savedGame;
+        }
+    }
+}
+
 const std::vector<SavedGameInDosFormat*>& SavedGamesInDosFormat::GetSavedGameInDosFormat() const
 {
     return m_savedGames;

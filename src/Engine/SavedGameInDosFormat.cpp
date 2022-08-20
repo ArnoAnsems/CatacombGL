@@ -23,7 +23,20 @@ SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk, const Sav
     m_plane0(nullptr),
     m_plane2(nullptr),
     m_objects(nullptr),
-    m_dataIsValid(false)
+    m_dataIsValid(false),
+    m_name("")
+{
+
+}
+
+SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config, const std::string& name) :
+    m_fileChunk(fileChunk),
+    m_config(config),
+    m_plane0(nullptr),
+    m_plane2(nullptr),
+    m_objects(nullptr),
+    m_dataIsValid(false),
+    m_name(name)
 {
 
 }
@@ -281,9 +294,13 @@ void SavedGameInDosFormat::ReadPresent(uint32_t& offset)
 void SavedGameInDosFormat::ReadName(uint32_t& offset)
 {
     constexpr uint32_t nameSize = 33;
-    char tempName[nameSize];
-    std::memcpy(tempName, m_fileChunk->GetChunk() + offset, sizeof(tempName));
-    m_name = std::string(tempName);
+    if (m_name.empty())
+    {
+        // Only read the name when the name wasn't set already by the constructor
+        char tempName[nameSize];
+        std::memcpy(tempName, m_fileChunk->GetChunk() + offset, sizeof(tempName));
+        m_name = std::string(tempName);
+    }
     // +1 due to byte alignment
     offset += (nameSize + 1);
 }
