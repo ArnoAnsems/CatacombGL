@@ -33,7 +33,7 @@ GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer
     m_zombie_base_delay (0),
     m_introView (nullptr),
     m_helpPageIndex(0),
-    m_savedGameConverter()
+    m_savedGameConverter(gameId)
 {
     m_gameMaps = nullptr;
     m_egaGraph = nullptr;
