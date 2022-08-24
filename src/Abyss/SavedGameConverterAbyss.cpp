@@ -273,7 +273,7 @@ SavedGameConverterAbyss::~SavedGameConverterAbyss()
 
 const uint16_t SavedGameConverterAbyss::GetActorIdOfBonus(const uint16_t state16, const int16_t temp1) const
 {
-    const uint8_t i = (m_gameId == 0) ? 0 : 1;
+    const uint8_t i = GetGameIndex();
     const uint16_t actorId =
         (state16 == s_boltbonus[i] || state16 == s_boltbonus2[i] || state16 == s_boltbonus3[i]) ? actorIdBonusBolt :
         (state16 == s_nukebonus[i] || state16 == s_nukebonus2[i] || state16 == s_nukebonus3[i]) ? actorIdBonusNuke :
@@ -301,6 +301,39 @@ const uint16_t SavedGameConverterAbyss::GetActorIdOfBonus(const uint16_t state16
         (state16 == s_bgem1bonus[i] || state16 == s_bgem2bonus[i]) ? actorIdBonusGemBlue :
         (state16 == s_pgem1bonus[i] || state16 == s_pgem2bonus[i]) ? actorIdBonusGemPurple :
         0;
+    return actorId;
+}
+
+const uint16_t SavedGameConverterAbyss::GetActorIdOfSolid(const uint16_t state16) const
+{
+    const uint8_t i = GetGameIndex();
+    const uint16_t actorId =
+        (state16 == s_tombs0[i]) ? actorIdTomb1 :
+        (state16 == s_tombs1[i]) ? actorIdTomb2 :
+        (state16 == s_tombs2[i]) ? actorIdTomb3 :
+        0;
+    return actorId;
+}
+
+const uint16_t SavedGameConverterAbyss::GetActorIdOfGate(const uint16_t state16, const int16_t temp1) const
+{
+    const uint8_t i = GetGameIndex();
+    uint16_t actorId = 0;
+    if (state16 == s_pit[i])
+    {
+        actorId = actorIdWarpPit;
+    }
+    else if (state16 == s_obj_gate1[i] || state16 == s_obj_gate2[i] || state16 == s_obj_gate3[i] || state16 == s_obj_gate4[i])
+    {
+        actorId =
+            (temp1 == 1) ? actorIdWarpPortal1 :
+            (temp1 == 2) ? actorIdWarpPortal2 :
+            (temp1 == 3) ? actorIdWarpPortal3 :
+            (temp1 == 4) ? actorIdWarpPortal4 :
+            (temp1 == 5) ? actorIdWarpPortal5 :
+            0;
+    }
+
     return actorId;
 }
 
@@ -352,7 +385,7 @@ const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::O
         actorId = actorIdMonsterNemesis;
         break;
     case obclassGate:
-        // TODO
+        actorId = GetActorIdOfGate(dosObject.state16, dosObject.temp1);
         break;
     case obclassZombie:
         actorId = actorIdMonsterZombie;
@@ -364,7 +397,7 @@ const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::O
         actorId = actorIdMonsterWetMan;
         break;
     case obclassExp:
-        // TODO
+        actorId = actorIdBonusExplosion;
         break;
     case obclassEye:
         actorId = actorIdMonsterEye;
@@ -385,7 +418,7 @@ const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::O
         actorId = actorIdBonusFreezeTime;
         break;
     case obclassSolid:
-        // TODO
+        actorId = GetActorIdOfSolid(dosObject.state16);
         break;
     }
     return actorId;
@@ -406,4 +439,9 @@ const bool SavedGameConverterAbyss::IsInertObject(const uint16_t obclass) const
 {
     // TODO
     return false;
+}
+
+const uint8_t SavedGameConverterAbyss::GetGameIndex() const
+{
+    return (m_gameId == 0) ? 0 : 1;
 }
