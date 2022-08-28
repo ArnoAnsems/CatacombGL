@@ -36,6 +36,7 @@ private:
     const uint16_t GetActorIdOfBonus(const uint16_t state16, const int16_t temp1) const;
     const uint16_t GetActorIdOfSolid(const uint16_t state16) const;
     const uint16_t GetActorIdOfGate(const uint16_t state16, const int16_t temp1) const;
+    const uint16_t GetActorIdOfInert(const uint16_t state16) const;
     const uint8_t GetGameIndex() const;
 
     const uint8_t m_gameId;

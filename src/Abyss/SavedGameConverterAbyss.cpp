@@ -337,6 +337,121 @@ const uint16_t SavedGameConverterAbyss::GetActorIdOfGate(const uint16_t state16,
     return actorId;
 }
 
+const uint16_t SavedGameConverterAbyss::GetActorIdOfInert(const uint16_t state16) const
+{
+    const uint8_t i = GetGameIndex();
+    uint16_t actorId = 0;
+    if (state16 == s_walldie1[i] ||
+        state16 == s_walldie2[i] ||
+        state16 == s_walldie3[i] ||
+        state16 == s_walldie4[i] ||
+        state16 == s_walldie5[i] ||
+        state16 == s_walldie6[i])
+    {
+        actorId = actorIdExplodingWall;
+    }
+    else if (
+        state16 == s_trolldie1[i] ||
+        state16 == s_trolldie2[i] ||
+        state16 == s_trolldie3[i])
+    {
+        actorId = actorIdMonsterTroll;
+    }
+    else if (
+        state16 == s_wet_die1[i] ||
+        state16 == s_wet_die2[i] ||
+        state16 == s_wet_die3[i])
+    {
+        actorId = actorIdMonsterWetMan;
+    }
+    else if (
+        state16 == s_zombie_death1[i] ||
+        state16 == s_zombie_death2[i] ||
+        state16 == s_zombie_death3[i]
+        )
+    {
+        actorId = actorIdMonsterZombie;
+    }
+    else if (
+        state16 == s_spookdie[i] ||
+        state16 == s_spookdie1[i] ||
+        state16 == s_spookdie2[i] ||
+        state16 == s_spookdie3[i] ||
+        state16 == s_spookdie4[i] ||
+        state16 == s_spookdie5[i]
+        )
+    {
+        actorId = actorIdMonsterSpook;
+    }
+    else if (
+        state16 == s_skel_die1[i] ||
+        state16 == s_skel_die2[i] ||
+        state16 == s_skel_die3[i]
+        )
+    {
+        actorId == actorIdMonsterSkeleton;
+    }
+    else if (
+        state16 == s_eye_die1[i] ||
+        state16 == s_eye_die2[i] ||
+        state16 == s_eye_die3[i]
+        )
+    {
+        actorId = actorIdMonsterEye;
+    }
+    else if (
+        state16 == s_orcdie1[i] ||
+        state16 == s_orcdie2[i] ||
+        state16 == s_orcdie3[i]
+        )
+    {
+        actorId = actorIdMonsterOrc;
+    }
+    else if (
+        state16 == s_demondie1[i] ||
+        state16 == s_demondie2[i] ||
+        state16 == s_demondie3[i]
+        )
+    {
+        actorId = actorIdMonsterDemon;
+    }
+    else if (
+        state16 == s_magedie1[i] ||
+        state16 == s_magedie2[i]
+        )
+    {
+        actorId = actorIdMonsterMage;
+    }
+    else if (
+        state16 == s_red_demondie1[i] ||
+        state16 == s_red_demondie2[i] ||
+        state16 == s_red_demondie3[i]
+        )
+    {
+        actorId = actorIdMonsterRedDemon;
+    }
+    else if (
+        state16 == s_greldie1[i] ||
+        state16 == s_greldie2[i] ||
+        state16 == s_greldie3[i] ||
+        state16 == s_greldie4[i] ||
+        state16 == s_greldie5[i] ||
+        state16 == s_greldie5a[i] ||
+        state16 == s_greldie6[i]
+        )
+    {
+        actorId = actorIdMonsterNemesis;
+    }
+    else if (
+        state16 == s_batdie1[i] ||
+        state16 == s_batdie2[i]
+        )
+    {
+        actorId = actorIdMonsterBat;
+    }
+    return actorId;
+}
+
 const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
     uint16_t actorId = 0;
@@ -376,7 +491,7 @@ const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::O
         actorId = actorIdProjectileMageShot;
         break;
     case obclassInert:
-        // TODO
+        actorId = GetActorIdOfInert(dosObject.state16);
         break;
     case obclassBounce:
         // Not used in Catacomb Abyss
@@ -443,5 +558,5 @@ const bool SavedGameConverterAbyss::IsInertObject(const uint16_t obclass) const
 
 const uint8_t SavedGameConverterAbyss::GetGameIndex() const
 {
-    return (m_gameId == 0) ? 0 : 1;
+    return (m_gameId == 1) ? 0 : 1;
 }

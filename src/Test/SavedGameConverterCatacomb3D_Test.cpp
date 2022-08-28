@@ -27,7 +27,7 @@ SavedGameConverterCatacomb3D_Test::~SavedGameConverterCatacomb3D_Test()
 
 }
 
-void CheckAnimationFrameExists(const uint16_t actorId, const DecorateStateId stateId, const uint16_t frameIndex)
+void CheckAnimationFrameExistsCatacomb3D(const uint16_t actorId, const DecorateStateId stateId, const uint16_t frameIndex)
 {
     const auto actorIt = decorateCatacomb3DAll.find(actorId);
     ASSERT_TRUE(actorIt != decorateCatacomb3DAll.end());
@@ -50,7 +50,7 @@ TEST(SavedGameConverterCatacomb3D_Test, ConvertAttackingOrc)
     EXPECT_EQ(StateIdAttack, converter.GetDecorateStateId(dosObject));
     EXPECT_EQ(2u, converter.GetAnimationFrame(dosObject));
 
-    CheckAnimationFrameExists(actorIdMonsterOrc, StateIdAttack, 2u);
+    CheckAnimationFrameExistsCatacomb3D(actorIdMonsterOrc, StateIdAttack, 2u);
 }
 
 TEST(SavedGameConverterCatacomb3D_Test, ConvertDeadTroll)
@@ -67,7 +67,7 @@ TEST(SavedGameConverterCatacomb3D_Test, ConvertDeadTroll)
     EXPECT_EQ(StateIdDead, converter.GetDecorateStateId(dosObject));
     EXPECT_EQ(0, converter.GetAnimationFrame(dosObject));
 
-    CheckAnimationFrameExists(actorIdMonsterTroll, StateIdDead, 0);
+    CheckAnimationFrameExistsCatacomb3D(actorIdMonsterTroll, StateIdDead, 0);
 }
 
 TEST(SavedGameConverterCatacomb3D_Test, ConvertBoltBonus)
@@ -84,7 +84,7 @@ TEST(SavedGameConverterCatacomb3D_Test, ConvertBoltBonus)
     EXPECT_EQ(StateIdWaitForPickup, converter.GetDecorateStateId(dosObject));
     EXPECT_EQ(1u, converter.GetAnimationFrame(dosObject));
 
-    CheckAnimationFrameExists(actorIdBonusBolt, StateIdWaitForPickup, 1u);
+    CheckAnimationFrameExistsCatacomb3D(actorIdBonusBolt, StateIdWaitForPickup, 1u);
 }
 
 TEST(SavedGameConverterCatacomb3D_Test, ConvertPlayerShot)
@@ -101,5 +101,5 @@ TEST(SavedGameConverterCatacomb3D_Test, ConvertPlayerShot)
     EXPECT_EQ(StateIdProjectileFly, converter.GetDecorateStateId(dosObject));
     EXPECT_EQ(0, converter.GetAnimationFrame(dosObject));
 
-    CheckAnimationFrameExists(actorIdProjectilePlayerShot, StateIdProjectileFly, 0);
+    CheckAnimationFrameExistsCatacomb3D(actorIdProjectilePlayerShot, StateIdProjectileFly, 0);
 }
