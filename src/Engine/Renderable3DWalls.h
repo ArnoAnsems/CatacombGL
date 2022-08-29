@@ -21,7 +21,7 @@
 
 #include <map>
 #include <vector>
-
+#include <cstdint>
 
 class Renderable3DWalls
 {

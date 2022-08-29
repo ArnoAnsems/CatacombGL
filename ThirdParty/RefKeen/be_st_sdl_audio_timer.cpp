@@ -17,11 +17,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <stdlib.h>
-#include <string.h>
-#include "../SDL/include/SDL.h"
 #include "be_st.h"
 #include "../opl/dbopl.h"
+#include <SDL.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define PC_PIT_RATE 1193182
 

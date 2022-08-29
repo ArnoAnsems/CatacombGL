@@ -24,12 +24,13 @@
 #include "../Engine/EgaGraph.h"
 #include "../Engine/HighScores.h"
 #include "../Engine/FadeEffect.h"
+#include <filesystem>
 #include <string>
 
 class IntroViewCatacomb3D : public IIntroView
 {
 public:
-    IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path, HighScores& highScores);
+    IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::filesystem::path& path, HighScores& highScores);
     ~IntroViewCatacomb3D();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();

@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
+#include <filesystem>
 #include <stdint.h>
 #include <vector>
 #include <string>
@@ -34,7 +35,7 @@ typedef struct audioRepositoryStaticData
 class AudioRepository
 {
 public:
-    AudioRepository(const audioRepositoryStaticData& staticData, const std::string& path);
+    AudioRepository(const audioRepositoryStaticData& staticData, const std::filesystem::path& path);
     ~AudioRepository();
 
     PCSound* GetPCSound(const uint16_t index);

@@ -17,6 +17,7 @@
 #include "SavedGameInDosFormat_Data.h"
 #include "../Engine/SavedGamesInDosFormat.h"
 #include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
+#include <cstring>
 
 SavedGamesInDosFormat_Test::SavedGamesInDosFormat_Test()
 {
@@ -57,4 +58,6 @@ TEST(SavedGamesInDosFormat_Test, LoadSavedGames)
 
     // Requesting a saved game with the wrong name results in a nullptr
     EXPECT_EQ(nullptr, savedGames.GetSavedGameInDosFormat("WrongName"));
+
+    delete fileChunk;
 }

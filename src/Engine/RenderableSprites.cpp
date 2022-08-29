@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "RenderableSprites.h"
+#include <cmath>
 
 const uint8_t MaxSpritesToRender = 100;
 
@@ -34,8 +35,8 @@ void RenderableSprites::Reset(const float playerPosX, const float playerPosY, co
 
     // Determine a second point inside the player view screen, at a distance of 1.0 from the player position.
     // This helps later on in calculating the distance between the player view screen and each of the sprites.
-    m_pointInPlayerViewScreenX = m_playerPosX - (float)sin((m_angle + 90.f) * 3.14159265f / 180.0f);
-    m_pointInPlayerViewScreenY = m_playerPosY + (float)cos((m_angle + 90.f) * 3.14159265f / 180.0f);
+    m_pointInPlayerViewScreenX = m_playerPosX - (float)std::sin((m_angle + 90.f) * 3.14159265f / 180.0f);
+    m_pointInPlayerViewScreenY = m_playerPosY + (float)std::cos((m_angle + 90.f) * 3.14159265f / 180.0f);
 
     m_sprites.clear();
 }
@@ -48,7 +49,7 @@ void RenderableSprites::AddSprite(const Picture* picture, const float offsetX, c
     }
 
     const float distance =
-        abs(
+        std::abs(
             ((m_pointInPlayerViewScreenX - m_playerPosX) * (m_playerPosY - offsetY)) -
             ((m_playerPosX - offsetX) * (m_pointInPlayerViewScreenY - m_playerPosY))
         );

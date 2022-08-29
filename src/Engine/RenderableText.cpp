@@ -13,6 +13,9 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #include "RenderableText.h"
+#include <cstring>
+#include <cstdlib>
+#include <numeric>
 
 RenderableText::RenderableText(const Font& font) :
     m_font(font)
@@ -87,7 +90,7 @@ void RenderableText::LeftAlignedTruncated(
     char truncatedText[300];
     if (combinedWidth <= maxLength)
     {
-        strcpy_s(truncatedText, text.c_str());
+        std::strcpy(truncatedText, text.c_str());
     }
     else
     {
@@ -102,7 +105,7 @@ void RenderableText::LeftAlignedTruncated(
             maxLengthReached = (combinedWidth > maxLength);
             chari--;
         }
-        strcpy_s(truncatedText, "...");
+        std::strcpy(truncatedText, "...");
         chari += 2;
         uint16_t i = 3;
         while (chari < text.length())
@@ -156,7 +159,7 @@ uint8_t RenderableText::LeftAlignedMultiLine(
             }
 
             memset(dest, 0, 200);
-            strncpy_s(dest, text.c_str() + startLine, posLastSpaceBeforeMaxWidth - startLine);
+            std::strncpy(dest, text.c_str() + startLine, posLastSpaceBeforeMaxWidth - startLine);
             LeftAligned(dest, color, offsetX, offsetY + (9 * numberOfLines));
 
             startLine = posLastSpaceBeforeMaxWidth + 1;
@@ -200,7 +203,7 @@ void RenderableText::Number(
 {
     char str[10];
 
-    _itoa_s(value, str, 10);
+    snprintf(str, 10, "%d", value);
 
     const uint16_t widthOfBlank = m_font.GetCharacterWidth('0');
     const uint16_t widthOfBlanks = widthOfBlank * (maxDigits - (uint16_t)strlen(str));

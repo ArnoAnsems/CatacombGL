@@ -15,19 +15,24 @@
 
 #include "EgaGraph.h"
 #include "IRenderer.h"
-#include <fstream>
 
-#include "Picture.h"
-#include "Font.h"
 #include "DefaultFont.h"
+#include "Font.h"
+#include "LevelLocationNames.h"
+#include "Picture.h"
 #include "PictureTable.h"
 #include "SpriteTable.h"
-#include "LevelLocationNames.h"
+
+#include <cstring>
+#include <filesystem>
+#include <fstream>
+
+namespace fs = std::filesystem;
 
 static const uint16_t numTilesSize8 = 104;
 static const uint16_t numTilesSize8Masked = 12;
 
-EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer) :
+EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const fs::path& path, IRenderer& renderer) :
     m_staticData(staticData),
     m_renderer(renderer)
 {
@@ -39,9 +44,14 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     // Read the entire EGA graph file into memory
     uint32_t fileSize = m_staticData.offsets.back();
     m_rawData = new FileChunk(fileSize);
-    std::ifstream file;
-    const std::string fullPath = path + m_staticData.filename;
-    file.open(fullPath, std::ifstream::in | std::ifstream::binary);
+    const fs::path fullPath = path / m_staticData.filename;
+
+    if ( !std::filesystem::exists( fullPath ) )
+    {
+        Logging::Instance().FatalError("Failed to read file " + fullPath.string());
+    }
+
+    std::ifstream file (fullPath, std::ifstream::binary);
     if (file.is_open())
     {
         file.read((char*)m_rawData->GetChunk(), fileSize);
@@ -53,7 +63,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const std::string& path
     }
     else
     {
-        Logging::Instance().FatalError("Failed to open " + fullPath);
+        Logging::Instance().FatalError("Failed to open " + fullPath.string());
     }
 
     // Initialize picture table

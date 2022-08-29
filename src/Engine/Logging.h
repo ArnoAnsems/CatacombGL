@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/
 #pragma once
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -25,12 +26,12 @@ public:
     void AddLogMessage(const std::string& logline);
     const std::vector<std::string>& GetAllLogMessages() const;
     void FatalError(const std::string& message);
-    void SetLogFile(const std::string traceFileName);
+    void SetLogFile(const std::filesystem::path traceFileName);
 
 private:
     Logging();
     ~Logging();
 
     std::vector<std::string> m_allLogMessages;
-    std::string m_traceFileName;
+    std::filesystem::path m_traceFileName;
 };

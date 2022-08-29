@@ -20,6 +20,7 @@
 //
 #pragma once
 
+#include <filesystem>
 #include <string>
 #include <vector>
 #include "../Engine/IRenderer.h"
@@ -39,8 +40,8 @@ public:
     ~HighScores();
 
     const std::vector<HighScore>& Get() const;
-    bool LoadFromFile(const std::string& path);
-    bool StoreToFile(const std::string& path);
+    bool LoadFromFile(const std::filesystem::path& path);
+    bool StoreToFile(const std::filesystem::path& path);
     void LoadGraphics(EgaGraph& egaGraph, const uint16_t backgroundPic);
     bool TryToAddNewScore(const uint32_t newScore, const uint16_t newLevel);
     void AddCharactersToNameOfNewScore(const std::string& characters);

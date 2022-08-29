@@ -20,6 +20,7 @@
 //
 #pragma once
 
+#include <filesystem>
 #include <stdint.h>
 #include "PlayerInput.h"
 #include "IRenderer.h"

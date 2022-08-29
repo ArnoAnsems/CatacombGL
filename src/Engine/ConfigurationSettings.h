@@ -20,12 +20,13 @@
 //
 #pragma once
 
-#include <stdint.h>
 #include "ControlsMap.h"
 #include "ConsoleVariableBool.h"
 #include "ConsoleVariableString.h"
 #include "ConsoleVariableEnum.h"
 #include "ConsoleVariableInt.h"
+#include <filesystem>
+#include <stdint.h>
 
 static const uint8_t CVarIdDepthShading = 0;
 static const uint8_t CVarIdVSync = 1;
@@ -85,8 +86,8 @@ class ConfigurationSettings
 public:
     ConfigurationSettings();
 
-    void LoadFromFile(const std::string& configurationFile);
-    void StoreToFile(const std::string& configurationFile) const;
+    void LoadFromFile(const std::filesystem::path& configurationFile);
+    void StoreToFile(const std::filesystem::path& configurationFile) const;
 
     ControlsMap& GetControlsMap();
     const ControlsMap& GetConstControlsMap() const;

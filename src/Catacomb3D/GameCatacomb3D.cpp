@@ -23,9 +23,11 @@
 #include "../Engine/IRenderer.h"
 #include "Catacomb3DMenu.h"
 
+namespace fs = std::filesystem;
+
 static const std::string Catacomb3DName = "Catacomb 3-D v1.22";
 
-GameCatacomb3D::GameCatacomb3D(const std::string gamePath, const std::string configPath, IRenderer& renderer) :
+GameCatacomb3D::GameCatacomb3D(const fs::path gamePath, const fs::path configPath, IRenderer& renderer) :
     m_gameId(5),
     m_gamePath(gamePath),
     m_configPath(configPath),
@@ -519,7 +521,7 @@ const uint16_t GameCatacomb3D::GetNorthIconSprite() const
 
 const std::string GameCatacomb3D::GetSavedGamesPath() const
 {
-    return "\\Cat3D";
+    return "Cat3D";
 }
 
 const std::vector<std::vector<uint16_t>> wallSkeletonAnimations = { { 0 } };

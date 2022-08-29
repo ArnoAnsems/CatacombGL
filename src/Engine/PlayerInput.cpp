@@ -16,6 +16,7 @@
 #include "PlayerInput.h"
 
 PlayerInput::PlayerInput() :
+        m_mouseUpdateTick(0),
         m_mouseXPos(0),
         m_mouseYPos(0),
         m_hasFocus(true)
@@ -141,6 +142,16 @@ bool PlayerInput::IsMouseButtonPressed(const uint8_t buttonCode) const
 bool PlayerInput::IsMouseButtonJustPressed(const uint8_t buttonCode) const
 {
     return m_buttonJustPressed[buttonCode];
+}
+
+uint32_t PlayerInput::GetMouseUpdateTick() const
+{
+    return m_mouseUpdateTick;
+}
+
+void PlayerInput::SetMouseUpdateTick(const uint32_t ticks)
+{
+    m_mouseUpdateTick = ticks;
 }
 
 int32_t PlayerInput::GetMouseXPos() const

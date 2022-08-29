@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementEditText.h"
-#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
+#include <SDL_keyboard.h>
 
 GuiElementEditText::GuiElementEditText(
     const PlayerInput& playerInput,

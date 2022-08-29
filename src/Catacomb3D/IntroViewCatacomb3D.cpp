@@ -17,7 +17,9 @@
 #include "../Engine/DefaultFont.h"
 #include "EgaGraphCatacomb3D.h"
 
-IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::string& path, HighScores& highScores) :
+namespace fs = std::filesystem;
+
+IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const fs::path& path, HighScores& highScores) :
     IIntroView(renderer),
     m_egaGraph(egagraph),
     m_highScores(highScores),

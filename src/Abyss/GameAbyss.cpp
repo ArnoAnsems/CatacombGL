@@ -23,10 +23,12 @@
 // Decorate
 #include "DecorateAll.h"
 
+namespace fs = std::filesystem;
+
 static const std::string AbyssV113Name = "Catacomb Abyss v1.13 Shareware";
 static const std::string AbyssV124Name = "Catacomb Abyss v1.24 Registered";
 
-GameAbyss::GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer) :
+GameAbyss::GameAbyss(const uint8_t gameId, const fs::path gamePath, IRenderer& renderer) :
     m_gameId (gameId),
     m_gamePath (gamePath),
     m_renderer (renderer),
@@ -681,7 +683,7 @@ HelpPages* GameAbyss::GetHelpPages()
     if (m_helpPages == nullptr)
     {
         std::ifstream file;
-        const std::string fullPath = m_gamePath + "HELP.TXT";
+        const fs::path fullPath = m_gamePath / "HELP.TXT";
         file.open(fullPath, std::ifstream::binary);
         if (file.is_open())
         {
@@ -730,7 +732,7 @@ const uint16_t GameAbyss::GetNorthIconSprite() const
 
 const std::string GameAbyss::GetSavedGamesPath() const
 {
-    return "\\Abyss";
+    return "Abyss";
 }
 
 const std::vector<std::vector<uint16_t>> wallSkeletonAnimations = { { 6, 7, 8, 6 }, { 41, 43, 41}, {42, 44, 42 } };

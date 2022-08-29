@@ -17,7 +17,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
+#include <SDL_keyboard.h>
+
+namespace fs = std::filesystem;
 
 ConfigurationSettings::ConfigurationSettings() :
     m_controlsMap(),
@@ -132,7 +134,7 @@ ConfigurationSettings::ConfigurationSettings() :
 
 }
 
-void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
+void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
 {
     std::ifstream file;
     file.open(configurationFile);
@@ -201,7 +203,7 @@ void ConfigurationSettings::LoadFromFile(const std::string& configurationFile)
     }
 }
 
-void ConfigurationSettings::StoreToFile(const std::string& configurationFile) const
+void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
 {
     std::ofstream file;
     file.open(configurationFile);
@@ -424,15 +426,15 @@ void ConfigurationSettings::ResetToDefaults()
 {
     m_controlsMap.ResetToDefaults();
 
-    for each(auto cvarIntPair in m_cvarsInt)
+    for (auto cvarIntPair : m_cvarsInt)
     {
         cvarIntPair.second->SetToDefault();
     }
-    for each (auto cvarBoolPair in m_cvarsBool)
+    for (auto cvarBoolPair : m_cvarsBool)
     {
         cvarBoolPair.second->SetToDefault();
     }
-    for each (auto cvarEnumPair in m_cvarsEnum)
+    for (auto cvarEnumPair : m_cvarsEnum)
     {
         cvarEnumPair.second->SetToDefault();
     }

@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameTimer.h"
-#include "../../ThirdParty/SDL/include/SDL_timer.h"
+#include <SDL_timer.h>
 #include <fstream>
 
 GameTimer::GameTimer()

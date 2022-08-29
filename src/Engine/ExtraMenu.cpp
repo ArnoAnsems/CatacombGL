@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ExtraMenu.h"
-#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
 #include "DefaultFont.h"
+#include "GuiElementBase.h"
 #include "GuiElementBoolSelection.h"
 #include "GuiElementEnumSelection.h"
 #include "GuiElementIntSelection.h"
@@ -25,6 +25,9 @@
 #include "GuiElementButton.h"
 #include "GuiElementEditText.h"
 #include "GuiCatalog.h"
+#include <SDL_keyboard.h>
+
+namespace fs = std::filesystem;
 
 const uint16_t browseMenuSound = 0;
 
@@ -52,7 +55,7 @@ ExtraMenu::ExtraMenu(
     std::vector<std::string>& savedGames,
     const IRenderer& renderer,
     const CatalogInfo& catalogInfo,
-    const std::string& gameFolder,
+    const fs::path& gameFolder,
     SavedGamesInDosFormat& savedGamesInDosFormat) :
     m_menuActive(false),
     m_configurationSettings(configurationSettings),
@@ -183,7 +186,7 @@ ExtraMenu::ExtraMenu(
     if (savedGames.size() > 0)
     {
         int16_t savedGameIndex = 0;
-        for (const std::string& savedGame : savedGames)
+        for (const auto& savedGame : savedGames)
         {
             elementListLoadGame->AddChild(new GuiElementButton(playerInput, savedGame, { GuiActionLoadGame, savedGameIndex }, m_renderableText));
             savedGameIndex++;
@@ -208,15 +211,16 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageSaveGame = new GuiPage(playerInput);
     pageSaveGame->SetId(pageSaveGameId);
 
+    GuiEvent event = GuiEvent({GuiActionSaveGame, -1});
     GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    GuiElementEditText* saveGameEditText = new GuiElementEditText(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, GuiEvent({GuiActionSaveGame, -1}));
+    GuiElementEditText* saveGameEditText = new GuiElementEditText(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, event );
     elementListSaveGame->SetId(saveGameListId);
     elementListSaveGame->AddChild(saveGameEditText);
     
     if (savedGames.size() > 0)
     {
         int16_t savedGameIndex = 0;
-        for (const std::string& savedGame : savedGames)
+        for (const auto& savedGame : savedGames)
         {
             elementListSaveGame->AddChild(new GuiElementButton(playerInput, savedGame, { GuiActionSaveGame, savedGameIndex }, m_renderableText));
             savedGameIndex++;

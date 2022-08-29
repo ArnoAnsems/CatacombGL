@@ -15,7 +15,10 @@
 
 #include "HighScores.h"
 #include "Logging.h"
+#include <cstring>
 #include <fstream>
+
+namespace fs = std::filesystem;
 
 static const std::vector<HighScores::HighScore> defaultHighScores =
 {
@@ -47,7 +50,7 @@ const std::vector<HighScores::HighScore>& HighScores::Get() const
     return m_highscores;
 }
 
-bool HighScores::LoadFromFile(const std::string& path)
+bool HighScores::LoadFromFile(const fs::path& path)
 {
     struct ConfigHeader
     {
@@ -56,7 +59,7 @@ bool HighScores::LoadFromFile(const std::string& path)
     };
 
     const std::string fileName = "CONFIG.C3D";
-    const std::string fullPath = path + "\\" + fileName;
+    const fs::path fullPath = path / fileName;
 
     std::ifstream file;
     file.open(fullPath, std::ifstream::binary);
@@ -77,7 +80,7 @@ bool HighScores::LoadFromFile(const std::string& path)
         file.read((char*)&header, sizeof(header));
         if (file.fail())
         {
-            Logging::Instance().AddLogMessage("WARNING: Unable to read header from " + fullPath);
+            Logging::Instance().AddLogMessage("WARNING: Unable to read header from " + fullPath.string());
             file.close();
             return false;
         }
@@ -99,7 +102,7 @@ bool HighScores::LoadFromFile(const std::string& path)
             file.read((char*)&level, sizeof(level));
             if (file.fail())
             {
-                Logging::Instance().AddLogMessage("WARNING: Unable to read high scores from " + fullPath);
+                Logging::Instance().AddLogMessage("WARNING: Unable to read high scores from " + fullPath.string());
                 file.close();
                 return false;
             }
@@ -113,17 +116,17 @@ bool HighScores::LoadFromFile(const std::string& path)
     }
     else
     {
-        Logging::Instance().AddLogMessage("WARNING: File not found: " + fullPath);
+        Logging::Instance().AddLogMessage("WARNING: File not found: " + fullPath.string());
         return false;
     }
 
     return true;
 }
 
-bool HighScores::StoreToFile(const std::string& path)
+bool HighScores::StoreToFile(const fs::path& path)
 {
     const std::string fileName = "CONFIG.C3D";
-    const std::string fullPath = path + "\\" + fileName;
+    const fs::path fullPath = path / fileName;
 
     std::ofstream file;
     file.open(fullPath, std::ofstream::binary);

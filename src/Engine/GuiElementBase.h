@@ -67,7 +67,7 @@ protected:
 
     const PlayerInput& m_playerInput;
     GuiEvent m_guiEvent;
-    int16_t m_id;
+    int16_t m_id{0};
     bool m_enabled;
     int16_t m_originX;
     int16_t m_originY;

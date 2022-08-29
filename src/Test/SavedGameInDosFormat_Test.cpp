@@ -20,6 +20,7 @@
 #include "../Armageddon/SavesGameInDosFormatConfigArmageddon.h"
 #include "../Apocalypse/SavedGameInDosFormatConfigApocalypse.h"
 #include "SavedGameInDosFormat_Data.h"
+#include <cstring>
 
 SavedGameInDosFormat_Test::SavedGameInDosFormat_Test()
 {
@@ -155,6 +156,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
         CheckObjectRanges(object);
         CheckObjectCoordinates(object, mapWidth, mapHeight);
     }
+
+    delete fileChunk;
 }
 
 TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameNullptr)
@@ -172,6 +175,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
     SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "too small to contain header");
+    delete fileChunk;
 }
 
 TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane0)
@@ -183,6 +187,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompress
     SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 0");
+    delete fileChunk;
 }
 
 TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane2)
@@ -194,6 +199,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompress
     SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "unable to decompress plane 2");
+    delete fileChunk;
 }
 
 TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
@@ -205,6 +211,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
     SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "no objects found");
+    delete fileChunk;
 }
 
 TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
@@ -258,6 +265,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
         CheckObjectRanges(object);
         CheckObjectCoordinates(object, mapWidth, mapHeight);
     }
+
+    delete fileChunk;
 }
 
 TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
@@ -309,6 +318,8 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
         CheckObjectRanges(object);
         CheckObjectCoordinates(object, mapWidth, mapHeight);
     }
+
+    delete fileChunk;
 }
 
 TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
@@ -359,4 +370,6 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
         CheckObjectRanges(object);
         CheckObjectCoordinates(object, mapWidth, mapHeight);
     }
+
+    delete fileChunk;
 }

@@ -23,13 +23,14 @@
 #include "Picture.h"
 #include "IRenderer.h"
 #include "Logging.h"
+#include <filesystem>
 
 class Shape
 {
 public:
     Shape(const IRenderer& renderer);
     ~Shape();
-    bool LoadFromFile(const char* filename);
+    bool LoadFromFile(const std::filesystem::path filename);
 
     uint16_t GetOffsetX() const;
     uint16_t GetOffsetY() const;

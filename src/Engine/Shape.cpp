@@ -18,11 +18,17 @@
 // Based on GELIB.C from the Catacomb Abyss source code, with modifications from the Reflection Keen source port.
 
 #include "Shape.h"
-#include "FileChunk.h"
-#include "Decompressor.h"
-#include "string.h"
-#include "stdio.h"
 #include "IRenderer.h"
+#include "Decompressor.h"
+#include "FileChunk.h"
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+#include <fstream>
+#include <ios>
+
+namespace fs = std::filesystem;
 
 Shape::Shape(const IRenderer& renderer) :
     m_renderer (renderer)
@@ -45,13 +51,11 @@ struct CMP1Header
     uint32_t CompressLen;			// Length of data after compression (A MUST for LZHUFF!)
 };
 
-FileChunk* ext_BLoad(const char *SourceFile)
+FileChunk* ext_BLoad(const fs::path SourceFile)
 {
-    FILE* handle = nullptr;
-
     FileChunk* SrcPtr = nullptr;
     FileChunk* DstPtr = nullptr;
-    uint8_t Buffer[4];
+    char Buffer[4];
     struct CMP1Header CompHeader;
 
     memset((void *)&CompHeader,0,sizeof(struct CMP1Header));
@@ -60,39 +64,39 @@ FileChunk* ext_BLoad(const char *SourceFile)
     // Open file to load....
     //
 
-    fopen_s(&handle, SourceFile, "rb");
-    if (handle == nullptr)
+    std::ifstream file(SourceFile, std::ios::binary);
+    if( !file )
     {
         return nullptr;
     }
 
-    fread(Buffer, 1, 4, handle);
+    file.read(Buffer, 4);
 
-    if (strncmp((char *)Buffer,"CMP1",4) != 0)
+    if( std::strncmp(Buffer, "CMP1",4) != 0 )
     {
-        fclose(handle);
+        file.close();
         return nullptr;
     }
 
     //
     // Compressed under new file format...
     //
-    fread((void*)&CompHeader.CompType, sizeof(CompHeader.CompType), 1, handle);
+    file.read((char*)&CompHeader.CompType, sizeof(CompHeader.CompType));
 
     if (CompHeader.CompType != 2)   // 2 == LZH
     {
-        fclose(handle);
+        file.close();
         return nullptr;
     }
 
-    fread((void*)&CompHeader.OrginalLen, sizeof(CompHeader.OrginalLen), 1, handle);
-    fread((void*)&CompHeader.CompressLen, sizeof(CompHeader.CompressLen), 1, handle);
+    file.read((char*)&CompHeader.OrginalLen, sizeof(CompHeader.OrginalLen));
+    file.read((char*)&CompHeader.CompressLen, sizeof(CompHeader.CompressLen));
 
     SrcPtr = new FileChunk(CompHeader.CompressLen);
-    fread(SrcPtr->GetChunk(), 1, SrcPtr->GetSize(), handle);
+    file.read((char*)SrcPtr->GetChunk(), SrcPtr->GetSize());
     DstPtr = new FileChunk(CompHeader.OrginalLen);
 
-    fclose(handle);
+    file.close();
 
     Decompressor::lzhDecompress(SrcPtr->GetChunk(), DstPtr->GetChunk(), CompHeader.OrginalLen, CompHeader.CompressLen);
 
@@ -105,18 +109,20 @@ struct BitMapHeader {
     uint8_t	d,trans,comp,pad;
 };
 
+constexpr bool CmpChunk(const uint8_t* const Ptr, const char Name[4]) {
+    return  Ptr[0] == Name[0] &&
+            Ptr[1] == Name[1] &&
+            Ptr[2] == Name[2] &&
+            Ptr[3] == Name[3];
+}
 
-bool Shape::LoadFromFile(const char* filename)
+#define BE_Cross_Swap16(x) ((uint16_t)(((uint16_t)(x)<<8)|((uint16_t)(x)>>8)))
+#define BE_Cross_Swap32(x) ((uint32_t)(((uint32_t)(x)<<24)|(((uint32_t)(x)<<8)&0x00FF0000)|(((uint32_t)(x)>>8)&0x0000FF00)|((uint32_t)(x)>>24)))
+
+bool Shape::LoadFromFile(const fs::path filename)
 {
-#define CHUNK(Name) ( \
-    (*ptr == *Name) &&			\
-    (*(ptr+1) == *(Name+1)) &&	\
-    (*(ptr+2) == *(Name+2)) &&	\
-    (*(ptr+3) == *(Name+3)) \
-    )
-
     uint8_t* data = nullptr;
-    int32_t dataSize = 0;
+    std::size_t dataSize = 0;
     uint16_t bytesPerRow = 0;
     uint16_t width = 0;
     uint16_t height = 0;
@@ -132,21 +138,23 @@ bool Shape::LoadFromFile(const char* filename)
         return false;
     }
 
-    // Evaluate the file
+    // LAMBDA: Evaluate the file
     //
+    [&](){
+
     uint8_t *ptr = (uint8_t*)IFFfile->GetChunk();
-    if (!CHUNK("FORM"))
-        goto EXIT_FUNC;
+
+    if (!CmpChunk(ptr, "FORM"))
+        // LAMBDA RETURN
+        return;
     ptr += 4;
 
-#define BE_Cross_Swap16(x) ((uint16_t)(((uint16_t)(x)<<8)|((uint16_t)(x)>>8)))
-#define BE_Cross_Swap32(x) ((uint32_t)(((uint32_t)(x)<<24)|(((uint32_t)(x)<<8)&0x00FF0000)|(((uint32_t)(x)>>8)&0x0000FF00)|((uint32_t)(x)>>24)))
-
-    uint32_t FileLen = BE_Cross_Swap32(*(uint32_t*)ptr);
+    std::size_t FileLen = BE_Cross_Swap32(*(uint32_t*)ptr);
     ptr += 4;
 
-    if (!CHUNK("ILBM"))
-        goto EXIT_FUNC;
+    if (!CmpChunk(ptr, "ILBM"))
+        // LAMBDA RETURN
+        return;
     ptr += 4;
 
     while (FileLen != 0)
@@ -154,7 +162,7 @@ bool Shape::LoadFromFile(const char* filename)
         uint32_t ChunkLen = BE_Cross_Swap32(*(int32_t*)(ptr+4));
         ChunkLen = (ChunkLen+1) & 0xFFFFFFFE;
 
-        if (CHUNK("BMHD"))
+        if (CmpChunk(ptr, "BMHD"))
         {
             ptr += 8;
             width = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->w);
@@ -165,7 +173,7 @@ bool Shape::LoadFromFile(const char* filename)
             numberOfPlanes = ((struct BitMapHeader*)ptr)->d;
             if (numberOfPlanes != 4)
             {
-                Logging::Instance().FatalError("Failed to read shape " + std::string(filename) + ": number of planes is " + std::to_string(numberOfPlanes) + "; expected: 4");
+                Logging::Instance().FatalError("Failed to read shape " + filename.string() + ": number of planes is " + std::to_string(numberOfPlanes) + "; expected: 4");
             }
 
             const uint8_t transparent = ((struct BitMapHeader*)ptr)->trans;
@@ -174,21 +182,22 @@ bool Shape::LoadFromFile(const char* filename)
 
             ptr += ChunkLen;
         }
-        else if (CHUNK("BODY"))
+        else if (CmpChunk(ptr, "BODY"))
         {
             ptr += 4;
             dataSize = BE_Cross_Swap32(*((int32_t*)ptr));
             ptr += 4;
 
-            if ((int32_t)FileLen < dataSize)
+            if (FileLen < dataSize)
             {
-                Logging::Instance().AddLogMessage("Failed to read shape " + std::string(filename) + ": body reports data size of " + std::to_string(dataSize) + " bytes, but only " + std::to_string(FileLen) + " bytes remaining in the file");
+                Logging::Instance().AddLogMessage("Failed to read shape " + filename.string() + ": body reports data size of " + std::to_string(dataSize) + " bytes, but only " + std::to_string(FileLen) + " bytes remaining in the file");
             }
 
             bytesPerRow = (width + 7) >> 3;
             data = new uint8_t[dataSize];
             if (!data)
-                goto EXIT_FUNC;
+                // LAMBDA RETURN
+                return;
             memcpy(data,ptr,dataSize);
             ptr += ChunkLen;
 
@@ -202,7 +211,9 @@ bool Shape::LoadFromFile(const char* filename)
         FileLen -= ChunkLen+8;
     }
 
-EXIT_FUNC:;
+    // LAMBDA END
+    }();
+
     if (IFFfile)
     {
         delete IFFfile;
@@ -215,7 +226,7 @@ EXIT_FUNC:;
 
     if (data == nullptr)
     {
-        Logging::Instance().AddLogMessage("Failed to read shape " + std::string(filename) + ": body not found");
+        Logging::Instance().AddLogMessage("Failed to read shape " + filename.string() + ": body not found");
     }
 
 	int8_t* Src = (int8_t *)(data);

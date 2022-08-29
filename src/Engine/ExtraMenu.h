@@ -44,7 +44,7 @@ public:
         std::vector<std::string>& savedGames,
         const IRenderer& renderer,
         const CatalogInfo& catalogInfo,
-        const std::string& gameFolder,
+        const std::filesystem::path& gameFolder,
         SavedGamesInDosFormat& savedGamesInDosFormat);
     bool IsActive() const override;
     void SetActive(bool active) override;

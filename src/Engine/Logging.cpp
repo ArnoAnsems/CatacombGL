@@ -12,12 +12,12 @@
 // 
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/
-#pragma once
-
 #include "Logging.h"
 #include <fstream>
 #include <iostream>
-#include "../../ThirdParty/SDL/include/SDL_messagebox.h"
+#include <SDL_messagebox.h>
+
+namespace fs = std::filesystem;
 
 static Logging* m_instance = nullptr;
 
@@ -42,7 +42,7 @@ Logging::~Logging()
     m_allLogMessages.clear();
 }
 
-void Logging::SetLogFile(const std::string traceFileName)
+void Logging::SetLogFile(const fs::path traceFileName)
 {
     m_traceFileName = traceFileName;
 

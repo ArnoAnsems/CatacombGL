@@ -14,11 +14,14 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "AudioRepository.h"
-#include <fstream>
 #include "AdlibSound.h"
 #include "PCSound.h"
+#include <cstring>
+#include <fstream>
 
-AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, const std::string& path) :
+namespace fs = std::filesystem;
+
+AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, const fs::path& path) :
     m_staticData(staticData)
 {
     Logging::Instance().AddLogMessage("Loading " + m_staticData.filename);
@@ -37,7 +40,7 @@ AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, co
     uint32_t fileSize = staticData.offsets.back();
     m_rawData = new FileChunk(fileSize);
     std::ifstream file;
-    const std::string fullPath = path + staticData.filename;
+    const fs::path fullPath = path / staticData.filename;
     file.open(fullPath, std::ifstream::in | std::ifstream::binary);
     if (file.is_open())
     {
@@ -50,7 +53,7 @@ AudioRepository::AudioRepository(const audioRepositoryStaticData& staticData, co
     }
     else
     {
-        Logging::Instance().FatalError("Failed to open " + fullPath);
+        Logging::Instance().FatalError("Failed to open " + fullPath.string());
     }
 
     // Initialize PC and Adlib sounds

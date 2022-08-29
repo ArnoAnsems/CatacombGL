@@ -24,7 +24,7 @@ SavedGamesInDosFormat::SavedGamesInDosFormat(const SavedGameInDosFormatConfig& c
 
 SavedGamesInDosFormat::~SavedGamesInDosFormat()
 {
-    for each (SavedGameInDosFormat* savedGame in m_savedGames)
+    for(SavedGameInDosFormat* savedGame : m_savedGames)
     {
         delete savedGame;
     }
@@ -74,7 +74,7 @@ const std::vector<SavedGameInDosFormat*>& SavedGamesInDosFormat::GetSavedGameInD
 const SavedGameInDosFormat* const SavedGamesInDosFormat::GetSavedGameInDosFormat(const std::string name) const
 {
     SavedGameInDosFormat* matchingSavedGame = nullptr;
-    for each (SavedGameInDosFormat * savedGame in m_savedGames)
+    for (SavedGameInDosFormat * savedGame : m_savedGames)
     {
         if (savedGame->GetName() == name)
         {
