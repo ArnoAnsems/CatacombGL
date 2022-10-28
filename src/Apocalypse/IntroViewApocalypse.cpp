@@ -15,60 +15,62 @@
 
 #include "IntroViewApocalypse.h"
 
-IntroViewApocalypse::IntroViewApocalypse(IRenderer& renderer, const std::string& path) :
+namespace fs = std::filesystem;
+
+IntroViewApocalypse::IntroViewApocalypse(IRenderer& renderer, const fs::path& path) :
     IIntroView(renderer)
 {
     m_shapeEntering = new Shape(renderer);
-    const std::string shp8 = path + "SHP8.APC";
-    m_shapeEntering->LoadFromFile(shp8.c_str());
+    const fs::path shp8 = path / "SHP8.APC";
+    m_shapeEntering->LoadFromFile(shp8);
 
     m_shapePresents = new Shape(renderer);
-    const std::string shp14 = path + "SHP14.APC";
-    m_shapePresents->LoadFromFile(shp14.c_str());
+    const fs::path shp14 = path / "SHP14.APC";
+    m_shapePresents->LoadFromFile(shp14);
 
     m_shapeSoftdisk = new Shape(renderer);
-    const std::string shp1 = path + "SHP1.APC";
-    m_shapeSoftdisk->LoadFromFile(shp1.c_str());
+    const fs::path shp1 = path / "SHP1.APC";
+    m_shapeSoftdisk->LoadFromFile(shp1);
 
     m_shapeTitle = new Shape(renderer);
-    const std::string shp2 = path + "SHP2.APC";
-    m_shapeTitle->LoadFromFile(shp2.c_str());
+    const fs::path shp2 = path / "SHP2.APC";
+    m_shapeTitle->LoadFromFile(shp2);
 
     m_shapeCreditsProgramming = new Shape(renderer);
-    const std::string shp3 = path + "SHP3.APC";
-    m_shapeCreditsProgramming->LoadFromFile(shp3.c_str());
+    const fs::path shp3 = path / "SHP3.APC";
+    m_shapeCreditsProgramming->LoadFromFile(shp3);
 
     m_shapeCreditsArt = new Shape(renderer);
-    const std::string shp4 = path + "SHP4.APC";
-    m_shapeCreditsArt->LoadFromFile(shp4.c_str());
+    const fs::path shp4 = path / "SHP4.APC";
+    m_shapeCreditsArt->LoadFromFile(shp4);
 
     m_shapeCreditsQA = new Shape(renderer);
-    const std::string shp5 = path + "SHP5.APC";
-    m_shapeCreditsQA->LoadFromFile(shp5.c_str());
+    const fs::path shp5 = path / "SHP5.APC";
+    m_shapeCreditsQA->LoadFromFile(shp5);
 
     m_shapeCreditsDesign = new Shape(renderer);
-    const std::string shp6 = path + "SHP6.APC";
-    m_shapeCreditsDesign->LoadFromFile(shp6.c_str());
+    const fs::path shp6 = path / "SHP6.APC";
+    m_shapeCreditsDesign->LoadFromFile(shp6);
 
     m_shapeSelectDifficulty = new Shape(renderer);
-    const std::string shp10 = path + "SHP10.APC";
-    m_shapeSelectDifficulty->LoadFromFile(shp10.c_str());
+    const fs::path shp10 = path / "SHP10.APC";
+    m_shapeSelectDifficulty->LoadFromFile(shp10);
 
     m_shapeConfirmDifficulty = new Shape(renderer);
-    const std::string shp9 = path + "SHP9.APC";
-    m_shapeConfirmDifficulty->LoadFromFile(shp9.c_str());
+    const fs::path shp9 = path / "SHP9.APC";
+    m_shapeConfirmDifficulty->LoadFromFile(shp9);
 
     m_shapeNovice = new Shape(renderer);
-    const std::string shp11 = path + "SHP11.APC";
-    m_shapeNovice->LoadFromFile(shp11.c_str());
+    const fs::path shp11 = path / "SHP11.APC";
+    m_shapeNovice->LoadFromFile(shp11);
 
     m_shapeWarrior = new Shape(renderer);
-    const std::string shp12 = path + "SHP12.APC";
-    m_shapeWarrior->LoadFromFile(shp12.c_str());
+    const fs::path shp12 = path / "SHP12.APC";
+    m_shapeWarrior->LoadFromFile(shp12);
 
     m_shapeStandBeforeGate = new Shape(renderer);
-    const std::string shp7 = path + "SHP7.APC";
-    m_shapeStandBeforeGate->LoadFromFile(shp7.c_str());
+    const fs::path shp7 = path / "SHP7.APC";
+    m_shapeStandBeforeGate->LoadFromFile(shp7);
 }
 
 IntroViewApocalypse::~IntroViewApocalypse()

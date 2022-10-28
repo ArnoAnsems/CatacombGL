@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "LevelStatistics.h"
+#include <cstring>
 
 LevelStatistics::LevelStatistics() :
     m_totalMonsters(0),

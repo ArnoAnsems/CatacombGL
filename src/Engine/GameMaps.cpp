@@ -18,10 +18,12 @@
 #include "Decompressor.h"
 #include "SavedGameInDosFormat.h"
 
+namespace fs = std::filesystem;
+
 static const uint16_t MaxMapWidth = 128;
 static const uint16_t MaxMapHeight = 128;
 
-GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path) :
+GameMaps::GameMaps(const gameMapsStaticData& staticData, const fs::path& path) :
     m_staticData(staticData)
 {
     Logging::Instance().AddLogMessage("Loading " + m_staticData.filename);
@@ -31,7 +33,7 @@ GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path
     m_rawData = new FileChunk(fileSize);
 
     std::ifstream file;
-    const std::string fullPath = path + staticData.filename;
+    const fs::path fullPath = path / staticData.filename;
     file.open(fullPath, std::ifstream::in | std::ifstream::binary);
     if (file.is_open())
     {
@@ -44,7 +46,7 @@ GameMaps::GameMaps(const gameMapsStaticData& staticData, const std::string& path
     }
     else
     {
-        Logging::Instance().FatalError("Failed to open " + fullPath);
+        Logging::Instance().FatalError("Failed to open " + fullPath.string());
     }
 }
 

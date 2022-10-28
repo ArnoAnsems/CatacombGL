@@ -20,23 +20,13 @@
 //
 #pragma once
 
-#include <stdint.h>
+#include "Macros.h"
+#include <cstdint>
+#include <GL/gl.h>
 
 class OpenGLBasic
 {
 public:
-    static const unsigned int GL_TEXTURE_2D = 0x0DE1;
-    static const unsigned int GL_TEXTURE_MAG_FILTER = 0x2800;
-    static const unsigned int GL_TEXTURE_MIN_FILTER = 0x2801;
-    static const unsigned int GL_TEXTURE_WRAP_S = 0x2802;
-    static const unsigned int GL_TEXTURE_WRAP_T = 0x2803;
-    static const unsigned int GL_UNSIGNED_BYTE = 0x1401;
-    static const unsigned int GL_FLOAT = 0x1406;
-    static const unsigned int GL_DEPTH_COMPONENT = 0x1902;
-    static const unsigned int GL_RGBA = 0x1908;
-    static const unsigned int GL_NEAREST = 0x2600;
-    static const unsigned int GL_CLAMP = 0x2900;
-
     OpenGLBasic();
     ~OpenGLBasic();
 
@@ -57,10 +47,10 @@ public:
         void* pixels) const;
 
 private:
-    typedef void(__stdcall* GL_GenTextures_Func)(unsigned int, unsigned int*);
-    typedef void(__stdcall* GL_BindTexture_Func)(unsigned int, unsigned int);
-    typedef void(__stdcall* GL_TexParameteri_Func)(unsigned int, unsigned int, int);
-    typedef void(__stdcall* GL_TexImage2D_Func)(unsigned int, int, int, unsigned int, unsigned int, int, unsigned int, unsigned int, void*);
+    typedef void(CALLBACK *GL_GenTextures_Func)(unsigned int, unsigned int*);
+    typedef void(CALLBACK *GL_BindTexture_Func)(unsigned int, unsigned int);
+    typedef void(CALLBACK *GL_TexParameteri_Func)(unsigned int, unsigned int, int);
+    typedef void(CALLBACK *GL_TexImage2D_Func)(unsigned int, int, int, unsigned int, unsigned int, int, unsigned int, unsigned int, void*);
 
     GL_GenTextures_Func m_genTexturesFuncPtr;
     GL_BindTexture_Func m_bindTextureFuncPtr;

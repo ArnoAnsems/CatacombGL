@@ -23,6 +23,8 @@
 #include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
 #include "../Catacomb3D/DecorateAll.h"
 
+#include <cstring>
+
 SavedGameInDosFormatLoader_Test::SavedGameInDosFormatLoader_Test()
 {
 }
@@ -52,4 +54,7 @@ TEST(SavedGameInDosFormatLoader_Test, LoadPlayerActor)
     EXPECT_EQ((float)firstObject.y / 65536.0f, playerActor->GetY());
     EXPECT_EQ(firstObject.tilex, playerActor->GetTileX());
     EXPECT_EQ(firstObject.tiley, playerActor->GetTileY());
+
+    delete fileChunk;
+    delete playerActor;
 }

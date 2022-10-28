@@ -20,17 +20,19 @@
 //
 #pragma once
 
+#include "SavedGameConverterCatacomb3D.h"
+#include "../Engine/HighScores.h"
 #include "../Engine/IGame.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/Logging.h"
-#include "../Engine/HighScores.h"
+#include <filesystem>
 #include <map>
-#include "SavedGameConverterCatacomb3D.h"
+#include <memory>
 
 class GameCatacomb3D : public IGame
 {
 public:
-    GameCatacomb3D(const std::string gamePath, const std::string configPath, IRenderer& renderer);
+    GameCatacomb3D(const std::filesystem::path gamePath, const std::filesystem::path configPath, IRenderer& renderer);
     ~GameCatacomb3D();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -99,8 +101,8 @@ private:
 
     IIntroView* m_introView;
     const uint8_t m_gameId;
-    const std::string m_gamePath;
-    const std::string m_configPath;
+    const std::filesystem::path m_gamePath;
+    const std::filesystem::path m_configPath;
     IRenderer& m_renderer;
     std::unique_ptr<HighScores> m_highScores;
     const SavedGameConverterCatacomb3D m_savedGameConverter;

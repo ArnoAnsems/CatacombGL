@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementHighScores.h"
-#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
+#include <SDL_keyboard.h>
 
 GuiElementHighScores::GuiElementHighScores(
     const PlayerInput& playerInput,

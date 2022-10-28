@@ -12,8 +12,6 @@
 // 
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
-#pragma once
-
 #include "GameSelection.h"
 #include "DefaultFont.h"
 
@@ -105,12 +103,12 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
     }
 
     DrawBox(2, 118, 636, 80, "Browse", renderableText);
-    renderableText.LeftAlignedTruncated(presentation.searchFolder, EgaBrightYellow, 18, 138, 550);
+    renderableText.LeftAlignedTruncated(presentation.searchFolder.string(), EgaBrightYellow, 18, 138, 550);
     const uint32_t maxSubFoldersVisible = 4;
     const uint32_t endOfSubFolders = ((uint32_t)presentation.subFolders.size() - presentation.subFolderOffset > maxSubFoldersVisible ? presentation.subFolderOffset + maxSubFoldersVisible : (uint32_t)presentation.subFolders.size());
     for (uint32_t subFolderIndex = presentation.subFolderOffset; subFolderIndex < endOfSubFolders; subFolderIndex++)
     {
-        const std::string& subFolderName = presentation.subFolders.at(subFolderIndex);
+        const std::string& subFolderName = presentation.subFolders.at(subFolderIndex).filename().string();
         const egaColor subFolderColor = (subFolderIndex == presentation.selectedSubFolder) ? EgaBrightCyan : EgaBrightWhite;
         renderableText.LeftAlignedTruncated(subFolderName, subFolderColor, 22, 148 + (10 * (subFolderIndex - presentation.subFolderOffset)), 550);
     }

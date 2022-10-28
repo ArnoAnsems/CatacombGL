@@ -23,9 +23,11 @@
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
 
+namespace fs = std::filesystem;
+
 static const std::string ArmageddonName = "Catacomb Armageddon v1.02";
 
-GameArmageddon::GameArmageddon(const std::string gamePath, IRenderer& renderer) :
+GameArmageddon::GameArmageddon(const fs::path gamePath, IRenderer& renderer) :
     m_gameId (3),
     m_gamePath (gamePath),
     m_renderer (renderer),
@@ -699,7 +701,7 @@ const uint16_t GameArmageddon::GetNorthIconSprite() const
 
 const std::string GameArmageddon::GetSavedGamesPath() const
 {
-    return "\\Armageddon";
+    return "Armageddon";
 }
 
 const std::vector<std::vector<uint16_t>> wallSkeletonAnimations = { { 66, 68, 21 },{ 67, 69, 21 } };

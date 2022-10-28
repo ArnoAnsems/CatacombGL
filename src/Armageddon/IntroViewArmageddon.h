@@ -22,12 +22,13 @@
 
 #include "../Engine/IIntroView.h"
 #include "../Engine/Shape.h"
+#include <filesystem>
 #include <string>
 
 class IntroViewArmageddon : public IIntroView
 {
 public:
-    IntroViewArmageddon(IRenderer& renderer, const std::string& path);
+    IntroViewArmageddon(IRenderer& renderer, const std::filesystem::path& path);
     ~IntroViewArmageddon();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();

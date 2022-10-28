@@ -21,14 +21,15 @@
 //
 #pragma once
 
+#include <filesystem>
+#include <map>
 #include <stdint.h>
 #include <string>
-#include <map>
 
 struct DetectionReport
 {
     uint8_t gameId;
-    std::string folder;
+    std::filesystem::path folder;
     uint16_t score;
     std::string infoString;
 };
@@ -39,7 +40,7 @@ public:
     GameDetection();
 
     const DetectionReport& GetBestMatch() const;
-    const DetectionReport& GetDetectionReport(const uint8_t gameId, const std::string& folder, const std::map<std::string, uint32_t>& files);
+    const DetectionReport& GetDetectionReport(const uint8_t gameId, const std::filesystem::path& folder, const std::map<std::string, uint32_t>& files);
 
 private:
     DetectionReport m_latestReport;

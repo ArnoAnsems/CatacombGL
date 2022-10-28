@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Actor.h"
-#include "Math.h"
+#include <cmath>
 #include <fstream>
 
 Actor::Actor(const float x, const float y, const uint32_t timestamp, const DecorateActor& decorateActor) :
@@ -117,8 +117,8 @@ void Actor::SetTile(const uint8_t x, const uint8_t y)
 
 float Actor::GetDistanceToTarget() const
 {
-    const float distanceX = abs(m_x - float(m_tileX) - 0.5f);
-    const float distanceY = abs(m_y - float(m_tileY) - 0.5f);
+    const float distanceX = std::abs(m_x - float(m_tileX) - 0.5f);
+    const float distanceY = std::abs(m_y - float(m_tileY) - 0.5f);
     return (distanceX > distanceY) ? distanceX : distanceY;
 }
 
@@ -172,7 +172,7 @@ actorAction Actor::GetAction() const
 
 bool Actor::WouldCollideWithActor(const float x, const float y, const float size) const
 {
-    return (m_solid && (abs(x - m_x) < size + m_decorateActor.size) && (abs(y - m_y) < size + m_decorateActor.size));
+    return (m_solid && (std::abs(x - m_x) < size + m_decorateActor.size) && (std::abs(y - m_y) < size + m_decorateActor.size));
 }
 
 actorDirection Actor::GetDirection() const

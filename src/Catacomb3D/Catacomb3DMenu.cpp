@@ -15,7 +15,6 @@
 
 #include "Catacomb3DMenu.h"
 #include "AudioRepositoryCatacomb3D.h"
-#include "../../ThirdParty/SDL/include/SDL_keyboard.h"
 #include "../Engine/DefaultFont.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/GuiElementList.h"
@@ -30,6 +29,7 @@
 #include "GuiElementEnumSelectionCat3DRadio.h"
 #include "../Engine/GuiElementHighScores.h"
 #include "../Engine/GuiPage.h"
+// #include <SDL_keyboard.h>
 
 const uint16_t browseMenuSound = 0;
 
@@ -242,7 +242,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageSaveGame->AddChild(pageFrameSaveGame);
 
     GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 6, 11, nullptr, browseMenuSound);
-    GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, GuiEvent({ GuiActionSaveGame, -1 }), m_flashIcon, pageFrameSaveGame);
+    GuiEvent guiEvent = { GuiActionSaveGame, -1 };
+    GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, guiEvent, m_flashIcon, pageFrameSaveGame);
     elementListSaveGame->SetId(saveGameListId);
     elementListSaveGame->AddChild(saveGameEditText);
 

@@ -20,6 +20,7 @@
 //
 #pragma once
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -27,9 +28,9 @@ class ISystem
 {
 public:
     virtual ~ISystem() {};
-    virtual const std::string& GetConfigurationFilePath() const = 0;
-    virtual void GetSavedGameNamesFromFolder(const std::string& path, std::vector<std::string>& filesFound) const = 0;
-    virtual bool CreatePath(const std::string& path) const = 0;
+    virtual const std::filesystem::path& GetConfigurationFilePath() const = 0;
+    virtual void GetSavedGameNamesFromFolder(const std::filesystem::path& path, std::vector<std::string>& filesFound) const = 0;
+    virtual bool CreatePath(const std::filesystem::path& path) const = 0;
     virtual std::string GetOSVersion() const = 0;
     virtual bool isBuiltIn64Bit() const = 0;
 };

@@ -16,6 +16,7 @@
 
 #include "GuiElementBase.h"
 #include "Shape.h"
+#include <filesystem>
 
 class GuiCatalog : public GuiElementBase
 {
@@ -24,7 +25,7 @@ public:
         PlayerInput& playerInput,
         const IRenderer& renderer,
         const std::vector<std::string>& catalogFilenames,
-        const std::string& gameFolder);
+        const std::filesystem::path& gameFolder);
     ~GuiCatalog();
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
@@ -36,5 +37,5 @@ private:
     uint16_t m_currentPage;
     uint16_t m_mostRecentPageWithFullscreenImage;
     const IRenderer& m_renderer;
-    const std::string m_gameFolder;
+    const std::filesystem::path m_gameFolder;
 };

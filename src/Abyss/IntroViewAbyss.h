@@ -22,12 +22,13 @@
 
 #include "../Engine/IIntroView.h"
 #include "../Engine/Shape.h"
+#include <filesystem>
 #include <string>
 
 class IntroViewAbyss : public IIntroView
 {
 public:
-    IntroViewAbyss(IRenderer& renderer, const std::string& path);
+    IntroViewAbyss(IRenderer& renderer, const std::filesystem::path& path);
     ~IntroViewAbyss();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();

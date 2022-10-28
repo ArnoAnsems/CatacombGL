@@ -15,16 +15,18 @@
 
 #include "GuiCatalog.h"
 
+namespace fs = std::filesystem;
+
 GuiCatalog::GuiCatalog(
     PlayerInput& playerInput,
     const IRenderer& renderer,
     const std::vector<std::string>& catalogFilenames,
-    const std::string& gameFolder) :
+    const fs::path& gameFolder) :
     GuiElementBase(playerInput),
     m_shapes(),
+    m_catalogFilenames(catalogFilenames),
     m_currentPage(0),
     m_mostRecentPageWithFullscreenImage(0),
-    m_catalogFilenames(catalogFilenames),
     m_renderer(renderer),
     m_gameFolder(gameFolder)
 {
@@ -91,7 +93,7 @@ const GuiEvent& GuiCatalog::ProcessInput()
     if (m_shapes.at(m_currentPage) == nullptr)
     {
         m_shapes.at(m_currentPage) = new Shape(m_renderer);
-        m_shapes.at(m_currentPage)->LoadFromFile((m_gameFolder + "\\" + m_catalogFilenames.at(m_currentPage)).c_str());
+        m_shapes.at(m_currentPage)->LoadFromFile(m_gameFolder / m_catalogFilenames.at(m_currentPage));
     }
 
     const Picture* pic = m_shapes.at(m_currentPage)->GetPicture();

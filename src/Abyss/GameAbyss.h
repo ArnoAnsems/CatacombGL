@@ -30,7 +30,7 @@
 class GameAbyss: public IGame
 {
 public:
-    GameAbyss(const uint8_t gameId, const std::string gamePath, IRenderer& renderer);
+    GameAbyss(const uint8_t gameId, const std::filesystem::path gamePath, IRenderer& renderer);
     ~GameAbyss();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -104,7 +104,7 @@ private:
     short m_zombie_base_delay;
     IIntroView* m_introView;
     const uint8_t m_gameId;
-    const std::string m_gamePath;
+    const std::filesystem::path m_gamePath;
     IRenderer& m_renderer;
     HelpPages* m_helpPages;
     uint8_t m_helpPageIndex;

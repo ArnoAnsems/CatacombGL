@@ -20,6 +20,7 @@
 //
 #pragma once
 
+#include <filesystem>
 #include <stdint.h>
 #include <vector>
 #include "FileChunk.h"
@@ -45,7 +46,7 @@ typedef struct gameMapsStaticData
 class GameMaps
 {
 public:
-    GameMaps(const gameMapsStaticData& staticData, const std::string& path);
+    GameMaps(const gameMapsStaticData& staticData, const std::filesystem::path& path);
     ~GameMaps();
 
     Level* GetLevelFromStart(const uint8_t mapIndex) const;

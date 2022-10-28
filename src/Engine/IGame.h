@@ -20,23 +20,24 @@
 //
 #pragma once
 
-#include "Level.h"
-#include "PlayerInventory.h"
-#include "GameMaps.h"
-#include "EgaGraph.h"
-#include "AudioRepository.h"
+#include "Actor.h"
 #include "AudioPlayer.h"
+#include "AudioRepository.h"
+#include "ConfigurationSettings.h"
+#include "EgaGraph.h"
+#include "GameMaps.h"
 #include "IIntroView.h"
 #include "IMenu.h"
 #include "ISavedGameConverter.h"
-#include <map>
-#include "Actor.h"
-#include "PlayerInput.h"
-#include "ViewPorts.h"
-#include "ConfigurationSettings.h"
+#include "Level.h"
 #include "ManaBar.h"
+#include "PlayerInput.h"
+#include "PlayerInventory.h"
 #include "SavedGamesInDosFormat.h"
-#include "../../ThirdParty//SDL/include/SDL_keycode.h"
+#include "ViewPorts.h"
+#include <SDL_keyboard.h>
+#include <filesystem>
+#include <map>
 
 enum DifficultyLevel
 {

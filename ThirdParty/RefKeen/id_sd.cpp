@@ -113,7 +113,7 @@ SDL_PCPlaySound(PCSound *sound)
 //
 ///////////////////////////////////////////////////////////////////////////
 
-static void
+void
 SDL_PCStopSound(void)
 {
 	BE_ST_LockAudioRecursively();
@@ -202,7 +202,7 @@ alOut(uint8_t n,uint8_t b)
 //
 ///////////////////////////////////////////////////////////////////////////
 
-static void
+void
 SDL_ALStopSound(void)
 {
 	BE_ST_LockAudioRecursively();

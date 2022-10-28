@@ -20,9 +20,10 @@
 //
 #pragma once
 
-#include <stdint.h>
+#include <SDL_keycode.h>
+#include <SDL_stdinc.h>
+#include <cstdint>
 #include <map>
-#include "../../ThirdParty/SDL/include/SDL_keycode.h"
 
 class PlayerInput
 {
@@ -37,6 +38,8 @@ public:
     void SetMouseButtonPressed(const uint8_t buttonCode, const bool pressed);
     bool IsMouseButtonPressed(const uint8_t buttonCode) const;
     bool IsMouseButtonJustPressed(const uint8_t buttonCode) const;
+    uint32_t GetMouseUpdateTick() const;
+    void SetMouseUpdateTick(const uint32_t ticks);
     int32_t GetMouseXPos() const;
     void SetMouseXPos(const int32_t pos);
     int32_t GetMouseYPos() const;
@@ -52,6 +55,7 @@ private:
     std::map<SDL_Keycode, bool> m_keyJustPressed;
     bool m_buttonPressed[6];
     bool m_buttonJustPressed[6];
+    uint32_t m_mouseUpdateTick;
     int32_t m_mouseXPos;
     int32_t m_mouseYPos;
     bool m_hasFocus;

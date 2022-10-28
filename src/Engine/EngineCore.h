@@ -40,6 +40,7 @@
 #include "RenderableOverscanBorder.h"
 #include "RenderableLevelStatistics.h"
 #include "SavedGamesInDosFormat.h"
+#include <filesystem>
 
 class EngineCore
 {
@@ -133,9 +134,9 @@ private:
     void StartNewGameWithDifficultySelection();
     void StartNewGame();
     void UnloadLevel();
-    bool StoreGameToFileWithFullPath(const std::string filename) const;
+    bool StoreGameToFileWithFullPath(const std::filesystem::path filename) const;
     bool StoreGameToFile(const std::string filename);
-    void LoadGameFromFileWithFullPath(const std::string filename);
+    void LoadGameFromFileWithFullPath(const std::filesystem::path filename);
     void LoadGameFromFile(const std::string filename);
     void LoadDosGameFromFile(const std::string filename);
     bool AreScrollsPresent() const;

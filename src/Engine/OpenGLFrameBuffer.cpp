@@ -14,19 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/
 
 #include "OpenGLFrameBuffer.h"
-#include "../../ThirdParty/SDL/include/SDL_video.h"
 #include "../Engine/Logging.h"
-
-static const unsigned int GL_DRAW_FRAMEBUFFER = 0x8CA9;
-static const unsigned int GL_FRAMEBUFFER_COMPLETE = 0x8CD5;
-static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT = 0x8CD6;
-static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT = 0x8CD7;
-static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER = 0x8CDB;
-static const unsigned int GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER = 0x8CDC;
-static const unsigned int GL_FRAMEBUFFER_UNSUPPORTED = 0x8CDD;
-static const unsigned int GL_COLOR_ATTACHMENT0 = 0x8CE0;
-static const unsigned int GL_DEPTH_ATTACHMENT = 0x8D00;
-static const unsigned int GL_FRAMEBUFFER = 0x8D40;
+#include <GL/glext.h>
+#include <SDL_video.h>
 
 OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLBasic& openGLBasic) :
     m_openGLBasic(openGLBasic),
@@ -109,36 +99,36 @@ void OpenGLFrameBuffer::ResizeBuffer(const uint16_t width, const uint16_t height
 {
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, m_frameBufferObject);
 
-    m_openGLBasic.GlBindTexture(OpenGLBasic::GL_TEXTURE_2D, m_textureIdColor);
+    m_openGLBasic.GlBindTexture(GL_TEXTURE_2D, m_textureIdColor);
 
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MAG_FILTER, OpenGLBasic::GL_NEAREST);
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MIN_FILTER, OpenGLBasic::GL_NEAREST);
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_S, OpenGLBasic::GL_CLAMP);
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_T, OpenGLBasic::GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-    m_openGLBasic.GlTexImage2D(OpenGLBasic::GL_TEXTURE_2D, 0, OpenGLBasic::GL_RGBA,
+    m_openGLBasic.GlTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
         width,
         height,
-        0, OpenGLBasic::GL_RGBA, OpenGLBasic::GL_UNSIGNED_BYTE,
+        0, GL_RGBA, GL_UNSIGNED_BYTE,
         NULL);
 
-    m_openGLBasic.GlBindTexture(OpenGLBasic::GL_TEXTURE_2D, m_textureIdDepth);
+    m_openGLBasic.GlBindTexture(GL_TEXTURE_2D, m_textureIdDepth);
 
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MAG_FILTER, OpenGLBasic::GL_NEAREST);
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_MIN_FILTER, OpenGLBasic::GL_NEAREST);
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_S, OpenGLBasic::GL_CLAMP);
-    m_openGLBasic.GlTexParameteri(OpenGLBasic::GL_TEXTURE_2D, OpenGLBasic::GL_TEXTURE_WRAP_T, OpenGLBasic::GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    m_openGLBasic.GlTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-    m_openGLBasic.GlTexImage2D(OpenGLBasic::GL_TEXTURE_2D, 0, OpenGLBasic::GL_DEPTH_COMPONENT,
+    m_openGLBasic.GlTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
         width,
         height,
-        0, OpenGLBasic::GL_DEPTH_COMPONENT, OpenGLBasic::GL_FLOAT,
+        0, GL_DEPTH_COMPONENT, GL_FLOAT,
         NULL);
 
-    m_openGLBasic.GlBindTexture(OpenGLBasic::GL_TEXTURE_2D, 0);
+    m_openGLBasic.GlBindTexture(GL_TEXTURE_2D, 0);
 
-    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, OpenGLBasic::GL_TEXTURE_2D, m_textureIdColor, 0);
-    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, OpenGLBasic::GL_TEXTURE_2D, m_textureIdDepth, 0);
+    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textureIdColor, 0);
+    m_frameBufferTexture2DFuncPtr(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_textureIdDepth, 0);
 
     m_bindFrameBufferFuncPtr(GL_DRAW_FRAMEBUFFER, 0);
 

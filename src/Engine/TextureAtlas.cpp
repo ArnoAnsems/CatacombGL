@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "TextureAtlas.h"
+#include <cstdint>
 
 TextureAtlas::TextureAtlas(
     const unsigned int textureId,
@@ -36,11 +37,11 @@ TextureAtlas::TextureAtlas(
     m_imageRelativeWidth((float)m_imageWidth / (float)m_textureWidth),
     m_imageRelativeHeight((float)m_imageHeight / (float)m_textureHeight)
 {
-    const size_t textureSize = m_textureWidth * m_textureHeight * m_bytesPerPixel;
+    const std::size_t textureSize = m_textureWidth * m_textureHeight * m_bytesPerPixel;
     m_texturePixelData = new uint8_t[textureSize];
 
     // Fill the texture with zero's, which amounts to black and fully transparent.
-    for (size_t i = 0; i < textureSize; i++)
+    for (std::size_t i = 0; i < textureSize; i++)
     {
         m_texturePixelData[i] = 0;
     }
@@ -48,7 +49,7 @@ TextureAtlas::TextureAtlas(
 
 TextureAtlas::~TextureAtlas()
 {
-    delete m_texturePixelData;
+    delete[] m_texturePixelData;
 }
 
 unsigned int TextureAtlas::GetTextureId() const

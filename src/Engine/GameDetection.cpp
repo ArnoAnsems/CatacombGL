@@ -14,7 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameDetection.h"
-#include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 GameDetection::GameDetection()
 {
@@ -33,7 +35,7 @@ const DetectionReport& GameDetection::GetBestMatch() const
     return m_bestMatch;
 }
 
-const DetectionReport& GameDetection::GetDetectionReport(const uint8_t gameId, const std::string& folder, const std::map<std::string, uint32_t>& files)
+const DetectionReport& GameDetection::GetDetectionReport(const uint8_t gameId, const fs::path& folder, const std::map<std::string, uint32_t>& files)
 {
     m_latestReport.gameId = gameId;
     m_latestReport.folder = folder;
@@ -42,24 +44,20 @@ const DetectionReport& GameDetection::GetDetectionReport(const uint8_t gameId, c
 
     for(auto pair : files)
     {
-        const std::string fullPath = folder + pair.first;
-        std::ifstream file;
-        file.open(fullPath);
-        if (!file.is_open())
+        const fs::path fullPath = folder / pair.first;
+        if (fs::exists(fullPath))
         {
-            m_latestReport.score +=2;
-            m_latestReport.infoString += "File not found: " + pair.first + "; ";
-        }
-        else
-        {
-            file.seekg (0, file.end);
-            const uint32_t actualLength = (uint32_t)file.tellg();
-            file.close();
-            if (actualLength != pair.second)
+            const auto actualLength = fs::file_size(fullPath);
+            if ( actualLength != pair.second)
             {
                 m_latestReport.score += 1;
                 m_latestReport.infoString += "File " + pair.first + " has incorrect length (Expected: " + std::to_string(pair.second) + ", Actual: " + std::to_string(actualLength) + "); ";
             }
+        }
+        else
+        {
+            m_latestReport.score +=2;
+            m_latestReport.infoString += "File not found: " + pair.first + "; ";
         }
     }
     

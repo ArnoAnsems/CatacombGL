@@ -20,6 +20,7 @@
 //
 #pragma once
 
+#include <filesystem>
 #include <stdint.h>
 #include <string>
 #include <vector>
@@ -57,7 +58,7 @@ typedef struct egaGraphStaticData
 class EgaGraph
 {
 public:
-    EgaGraph(const egaGraphStaticData& staticData, const std::string& path, IRenderer& renderer);
+    EgaGraph(const egaGraphStaticData& staticData, const std::filesystem::path& path, IRenderer& renderer);
     ~EgaGraph();
 
     Picture* GetPicture(const uint16_t index);

@@ -20,6 +20,7 @@
 //
 #pragma once
 
+#include "Macros.h"
 #include "OpenGLBasic.h"
 #include <string>
 
@@ -38,10 +39,10 @@ public:
 private:
     void ResizeBuffer(const uint16_t width, const uint16_t height);
     const std::string FrameBufferStatusToString(const unsigned int status);
-    typedef void (__stdcall* GL_GenFrameBuffers_Func)(int, unsigned int*);
-    typedef void (__stdcall* GL_BindFramebuffer_Func)(unsigned int, unsigned int);
-    typedef void (__stdcall* GL_FrameBufferTexture2D_Func)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
-    typedef unsigned int (__stdcall* GL_CheckFrameBufferStatus_Func)(unsigned int);
+    typedef void (CALLBACK* GL_GenFrameBuffers_Func)(int, unsigned int*);
+    typedef void (CALLBACK* GL_BindFramebuffer_Func)(unsigned int, unsigned int);
+    typedef void (CALLBACK* GL_FrameBufferTexture2D_Func)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
+    typedef unsigned int (CALLBACK *GL_CheckFrameBufferStatus_Func)(unsigned int);
 
     GL_GenFrameBuffers_Func m_genFrameBuffersFuncPtr;
     GL_BindFramebuffer_Func m_bindFrameBufferFuncPtr;
@@ -56,3 +57,4 @@ private:
     uint16_t m_bufferWidth;
     uint16_t m_bufferHeight;
 };
+

@@ -15,8 +15,9 @@
 #pragma once
 
 #include "IRenderer.h"
-#include <vector>
+#include <filesystem>
 #include <string>
+#include <vector>
 
 enum GameDetectionState
 {
@@ -29,8 +30,8 @@ struct GameSelectionPresentation
 {
     std::vector<std::pair<const std::string, const GameDetectionState>> gameListCatacombsPack;
     std::vector<std::pair<const std::string, const GameDetectionState>> gameListShareware;
-    std::string searchFolder;
-    std::vector<std::string> subFolders;
+    std::filesystem::path searchFolder;
+    std::vector<std::filesystem::path> subFolders;
     uint32_t selectedSubFolder;
     uint32_t subFolderOffset;
 };

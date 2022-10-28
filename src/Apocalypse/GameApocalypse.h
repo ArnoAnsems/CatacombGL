@@ -23,13 +23,14 @@
 #include "../Engine/IGame.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/Logging.h"
-#include <map>
 #include "SavedGameConverterApocalypse.h"
+#include <filesystem>
+#include <map>
 
 class GameApocalypse : public IGame
 {
 public:
-    GameApocalypse(const std::string gamePath, IRenderer& renderer);
+    GameApocalypse(const std::filesystem::path gamePath, IRenderer& renderer);
     ~GameApocalypse();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -100,7 +101,7 @@ private:
 
     IIntroView* m_introView;
     const uint8_t m_gameId;
-    const std::string m_gamePath;
+    const std::filesystem::path m_gamePath;
     IRenderer& m_renderer;
     short m_zombie_base_delay;
     const SavedGameConverterApocalypse m_savedGameConverter;

@@ -23,9 +23,12 @@
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
 
+
+namespace fs = std::filesystem;
+
 static const std::string ApocalypseName = "Catacomb Apocalypse v1.01";
 
-GameApocalypse::GameApocalypse(const std::string gamePath, IRenderer& renderer) :
+GameApocalypse::GameApocalypse(const fs::path gamePath, IRenderer& renderer) :
     m_gameId(4),
     m_gamePath(gamePath),
     m_renderer(renderer),
@@ -561,7 +564,7 @@ const uint16_t GameApocalypse::GetNorthIconSprite() const
 
 const std::string GameApocalypse::GetSavedGamesPath() const
 {
-    return "\\Apocalypse";
+    return "Apocalypse";
 }
 
 const std::vector<std::vector<uint16_t>> wallSkeletonAnimations = { { 0 } };

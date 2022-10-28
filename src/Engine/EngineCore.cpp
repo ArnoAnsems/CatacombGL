@@ -16,11 +16,17 @@
 
 #include "EngineCore.h"
 #include "../../ThirdParty/RefKeen/id_sd.h"
-#include "LevelLocationNames.h"
 #include "DefaultFont.h"
+#include "LevelLocationNames.h"
+#include "Macros.h"
 #include "RenderableTiles.h"
-#include <math.h>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
+#include <filesystem>
 #include <fstream>
+
+namespace fs = std::filesystem;
 
 const uint8_t versionMajor = 0;
 const uint8_t versionMinor = 5;
@@ -43,41 +49,41 @@ const uint8_t VictoryStateDone = 12;
 
 const float aspectRatios[2] =
 {
-    { 4.0f / 3.0f },
-    { 10.0f }
+    4.0f / 3.0f,
+    10.0f 
 };
 
 EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboardInput, ConfigurationSettings& configurationSettings) :
-    m_gameTimer(),
     m_game(game),
-    m_system(system),
-    m_level(nullptr),
-    m_readingScroll(255),
-    m_takingChest(false),
-    m_warpToLevel(0),
+    m_configurationSettings(configurationSettings),
     m_timeStampOfPlayerCurrentFrame(0),
     m_timeStampOfPlayerPreviousFrame(0),
     m_timeStampOfWorldCurrentFrame(0),
     m_timeStampOfWorldPreviousFrame(0),
-    m_state(Introduction),
-    m_difficultyLevel(Easy),
-    m_statusMessage(nullptr),
-    m_timeStampEndOfStatusMessage(0),
-    m_warpCheatTextField(""),
-    m_godModeIsOn(false),
-    m_victoryState(VictoryStatePlayGetBolt),
-    m_lastFreezeTimeTick(0),
+    m_level(nullptr),
     m_playerInventory(game),
+    m_difficultyLevel(Easy),
+    m_godModeIsOn(false),
+    m_playerInput(keyboardInput),
+    m_keyToTake(KeyId::NoKey),
+    m_victoryState(VictoryStatePlayGetBolt),
+    m_state(Introduction),
+    m_statusMessage(nullptr),
+    m_readingScroll(255),
+    m_takingChest(false),
+    m_warpToLevel(0),
+    m_warpCheatTextField(""),
     m_playerActions(),
+    m_lastFreezeTimeTick(0),
+    m_timeStampEndOfStatusMessage(0),
     m_startTakeKey(0),
     m_timeStampToEnterGame(0),
     m_timeStampLastMouseMoveForward(0),
     m_timeStampLastMouseMoveBackward(0),
     m_timeStampFadeEffect(0),
-    m_keyToTake(KeyId::NoKey),
-    m_playerInput(keyboardInput),
+    m_gameTimer(),
+    m_system(system),
     m_savedGames(),
-    m_configurationSettings(configurationSettings),
     m_scrollsArePresent(AreScrollsPresent()),
     m_setOverlayOnNextDraw(false),
     m_renderable3DScene(m_game.GetOriginal3DViewArea()),
@@ -91,20 +97,20 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_renderableLevelStatistics(m_levelStatistics),
     m_savedGamesInDosFormat(m_game.GetSavedGameInDosFormatConfig())
 {
-    _sprintf_p(m_messageInPopup, 256, "");
+    snprintf(m_messageInPopup, 256, "");
     m_gameTimer.Reset();
 
-    const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string savedGamesPath = filenamePath + m_game.GetSavedGamesPath();
+    const fs::path filenamePath = m_system.GetConfigurationFilePath();
+    const fs::path savedGamesPath = filenamePath / m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesPath, m_savedGames);
 
     if (game.GetId() == 5)
     {
         // Retrieve Catacomb 3-D saved DOS games
-        const std::string& gameDataPath = configurationSettings.GetCVarString(CVarIdPathCatacomb3Dv122).Get();
+        const fs::path& gameDataPath = configurationSettings.GetCVarString(CVarIdPathCatacomb3Dv122).Get();
         for (uint8_t index = 0; index < 10; index++)
         {
-            const std::string fullFilename = gameDataPath + "SAVEGAM" + std::to_string(index) + ".C3D";
+            const fs::path fullFilename = gameDataPath / ( "SAVEGAM" + std::to_string(index) + ".C3D");
             std::ifstream file;
             file.open(fullFilename, std::ifstream::binary);
             if (file.is_open())
@@ -124,16 +130,16 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     else
     {
         // Retrieve Catacomb Adventure Trilogy saved DOS games
-        const std::string& gameDataPath =
+        const fs::path& gameDataPath =
             (game.GetId() == 1) ? configurationSettings.GetCVarString(CVarIdPathAbyssv113).Get() :
             (game.GetId() == 2) ? configurationSettings.GetCVarString(CVarIdPathAbyssv124).Get() :
             (game.GetId() == 3) ? configurationSettings.GetCVarString(CVarIdPathArmageddonv102).Get() :
             configurationSettings.GetCVarString(CVarIdPathApocalypsev101).Get();
         std::vector<std::string> filesFound;
         m_system.GetSavedGameNamesFromFolder(gameDataPath, filesFound);
-        for (const std::string& filename : filesFound)
+        for (const auto& filename : filesFound)
         {
-            const std::string fullFilename = gameDataPath + filename + ".SAV";
+            const fs::path fullFilename = gameDataPath / ( filename + ".SAV" );
             std::ifstream file;
             file.open(fullFilename, std::ifstream::binary);
             if (file.is_open())
@@ -323,13 +329,13 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
 #ifdef DRAWTILEINFO
             char tileStr[40];
-            sprintf_s(tileStr, 40, "tile: %d", m_level->GetFloorTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
+            std::snprintf(tileStr, 40, "tile: %d", m_level->GetFloorTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,2);
-            sprintf_s(tileStr, 40, "wall: %d", m_level->GetWallTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
+            std::snprintf(tileStr, 40, "wall: %d", m_level->GetWallTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,12);
-            sprintf_s(tileStr, 40, "X: %d Y: %d Angle: %d", (uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY(), (uint16_t)m_level->GetPlayerActor()->GetAngle());
+            std::snprintf(tileStr, 40, "X: %d Y: %d Angle: %d", (uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY(), (uint16_t)m_level->GetPlayerActor()->GetAngle());
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,22);
-            sprintf_s(tileStr, 40, "MouseX: %d", m_playerInput.GetMouseXPos());
+            std::snprintf(tileStr, 40, "MouseX: %d", m_playerInput.GetMouseXPos());
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,32);
 #endif
         }
@@ -392,7 +398,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     m_game.PlaySoundFreezeTimeTick(m_lastFreezeTimeTick);
                 }
                 char freezeMessage[100];
-                sprintf_s(freezeMessage, "Time Stopped: %d", remainingFreezeTimeTicks);
+                std::snprintf(freezeMessage, 100, "Time Stopped: %d", remainingFreezeTimeTicks);
                 const char* statusMessage = (m_statusMessage != nullptr) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
                 RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
                 renderableText.Centered(statusMessage, EgaBrightYellow, 156, 189);
@@ -463,7 +469,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_state == InGame)
     {
-        if (_strcmpi(m_messageInPopup, "") != 0)
+        if (STR_CASE_CMP(m_messageInPopup, "") != 0)
         {
             DrawCenteredTiledWindow(renderer, 20, 4);
             RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
@@ -563,7 +569,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             m_fadeEffect.DrawOverlay(renderer, m_gameTimer.GetActualTime() - m_timeStampFadeEffect);
         }
-        else if (m_timeStampFadeEffect != 0 && !m_menu->IsActive() && (_strcmpi(m_messageInPopup, "") == 0) && m_readingScroll == 255 && m_level != nullptr && !m_level->GetPlayerActor()->IsDead())
+        else if (m_timeStampFadeEffect != 0 && !m_menu->IsActive() && (STR_CASE_CMP(m_messageInPopup, "") == 0) && m_readingScroll == 255 && m_level != nullptr && !m_level->GetPlayerActor()->IsDead())
         {
             m_timeStampFadeEffect = 0;
             m_gameTimer.Resume();
@@ -1168,7 +1174,7 @@ bool EngineCore::Think()
                     {
                         if (m_startTakeKey + 2000 < m_gameTimer.GetActualTime())
                         {
-                            _sprintf_p(m_messageInPopup, 256, "");
+                            std::snprintf(m_messageInPopup, 256, "");
                             m_playerInventory.TakeKey(m_keyToTake);
                             m_gameTimer.Resume();
                             m_startTakeKey = 0;
@@ -1179,17 +1185,17 @@ bool EngineCore::Think()
                     {
                         m_startTakeKey = m_gameTimer.GetActualTime();
                         m_gameTimer.Pause();
-                        _sprintf_p(m_messageInPopup, 256, "You use a %s key", GetKeyName((KeyId)m_keyToTake));
+                        std::snprintf(m_messageInPopup, 256, "You use a %s key", GetKeyName((KeyId)m_keyToTake));
                         m_game.PlaySoundUseKey();
                     }
                 }
             }
 
-            if (_strcmpi(m_messageInPopup, "") != 0)
+            if (STR_CASE_CMP(m_messageInPopup, "") != 0)
             {
                 if (m_startTakeKey == 0 && m_playerInput.IsAnyKeyPressed())
                 {
-                    _sprintf_p(m_messageInPopup, 256, "");
+                    std::snprintf(m_messageInPopup, 256, "");
                     m_gameTimer.Resume();
                 }
             }
@@ -1512,8 +1518,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
         {
-            if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
-                (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
+            if ((std::abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
+                (std::abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
             {
                 actor->SetState(StateIdRise, m_timeStampOfWorldCurrentFrame);
                 actor->SetSolid(true);
@@ -1530,8 +1536,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 4000 + (rand() % 4) * 1000);
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction() &&
-            ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
-            (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size)))
+            ((std::abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
+            (std::abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size)))
         {
             actor->SetState(StateIdSink, m_timeStampOfWorldCurrentFrame);
             actor->SetTimeToNextAction(0);
@@ -1556,10 +1562,10 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + 4000 + (rand() % 4) * 1000);
         }
         if ((m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction()) ||
-            (abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < 2.0f + actor->GetDecorateActor().size) && (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < 2.0f + actor->GetDecorateActor().size))
+            (std::abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < 2.0f + actor->GetDecorateActor().size) && (std::abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < 2.0f + actor->GetDecorateActor().size))
         {
-            if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
-                (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
+            if ((std::abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
+                (std::abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
             {
                 actor->SetState(StateIdRise, m_timeStampOfWorldCurrentFrame);
                 actor->SetSolid(true);
@@ -1725,7 +1731,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionWaitForPickupDestructable:
     {
         actor->SetSolid(false);
-        if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size) && (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size))
+        if ((std::abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size) && (std::abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < m_level->GetPlayerActor()->GetDecorateActor().size + actor->GetDecorateActor().size))
         {
             actor->SetState(StateIdPickup, m_timeStampOfWorldCurrentFrame);
         }
@@ -1971,8 +1977,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 {
                     if (m_level->IsSolidWall(x, y))
                     {
-                        if ((abs(basex - (float)x - 0.5f) < size + 0.5f) &&
-                            (abs(basey - (float)y - 0.5f) < size + 0.5f))
+                        if ((std::abs(basex - (float)x - 0.5f) < size + 0.5f) &&
+                            (std::abs(basey - (float)y - 0.5f) < size + 0.5f))
                         {
                             m_game.PlaySoundShootWall();
                             moveOk = false;
@@ -1981,8 +1987,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
 
                     if (m_level->IsExplosiveWall(x, y))
                     {
-                        if ((abs(basex - (float)x - 0.5f) < size + 0.5f) &&
-                            (abs(basey - (float)y - 0.5f) < size + 0.5f))
+                        if ((std::abs(basex - (float)x - 0.5f) < size + 0.5f) &&
+                            (std::abs(basey - (float)y - 0.5f) < size + 0.5f))
                         {
                             if (action == ActionPlayerProjectile)
                             {
@@ -1999,8 +2005,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         {
                             if (((otherActor->IsSolid() && otherActor->GetState() != StateIdRise && otherActor->GetState() != StateIdSink) || otherActor->GetAction() == ActionWaitForPickupDestructable || otherActor->GetAction() == ActionForceField || otherActor->GetAction() == ActionHangingSkeleton || otherActor->GetAction() == ActionBurningTree
                                 ) && 
-                                (abs(basex - otherActor->GetX()) < size + otherActor->GetDecorateActor().size) &&
-                                (abs(basey - otherActor->GetY()) < size + otherActor->GetDecorateActor().size))
+                                (std::abs(basex - otherActor->GetX()) < size + otherActor->GetDecorateActor().size) &&
+                                (std::abs(basey - otherActor->GetY()) < size + otherActor->GetDecorateActor().size))
                             {
                                 if (otherActor->GetAction() == ActionStatue || otherActor->GetAction() == ActionHangingSkeleton || otherActor->GetAction() == ActionBurningTree)
                                 {
@@ -2181,8 +2187,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         {
             // Time to transform from harmless bunny to evil bunny!
             // Check that the player is not on top of the bunny.
-            if ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
-                (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
+            if ((std::abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) > 1.1f + actor->GetDecorateActor().size) ||
+                (std::abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) > 1.1f + actor->GetDecorateActor().size))
             {
                 // Put the bunny at the center of the tile, such that the chase routine can start from there.
                 actor->SetX((float)(actor->GetTileX()) + 0.5f);
@@ -2204,8 +2210,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionFakeWall:
     {
         const bool playerTouchesFakeWall =
-            ((abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < 0.9f + actor->GetDecorateActor().size) &&
-            (abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < 0.9f + actor->GetDecorateActor().size));
+            ((std::abs(m_level->GetPlayerActor()->GetX() - actor->GetX()) < 0.9f + actor->GetDecorateActor().size) &&
+            (std::abs(m_level->GetPlayerActor()->GetY() - actor->GetY()) < 0.9f + actor->GetDecorateActor().size));
         m_level->SetWallTile(actor->GetTileX(), actor->GetTileY(), playerTouchesFakeWall ? 0 : actor->GetTemp1());
         break;
     }
@@ -2306,8 +2312,8 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
 {
     bool moveOk = true;
     const float playerSize = m_level->GetPlayerActor()->GetDecorateActor().size;
-    const bool playerTouchesTile = ((abs(playerX - (float)tileX - 0.5f) < playerSize + 0.5f) &&
-        (abs(playerY - (float)tileY - 0.5f) < playerSize + 0.5f));
+    const bool playerTouchesTile = ((std::abs(playerX - (float)tileX - 0.5f) < playerSize + 0.5f) &&
+        (std::abs(playerY - (float)tileY - 0.5f) < playerSize + 0.5f));
     if (playerTouchesTile && m_level->IsSolidWall(tileX, tileY))
     {
         moveOk = false;
@@ -2329,7 +2335,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
             if (m_game.GetId() != 5)
             {
                 m_gameTimer.Pause();
-                _sprintf_p(m_messageInPopup, 256, "You need a %s key", GetKeyName(requiredKey));
+                std::snprintf(m_messageInPopup, 256, "You need a %s key", GetKeyName(requiredKey));
                 WaitForAnyKeyPressed();
                 m_game.PlaySoundHitGate();
             }
@@ -2345,7 +2351,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 if (m_game.GetId() != 5)
                 {
                     m_gameTimer.Pause();
-                    _sprintf_p(m_messageInPopup, 256, "The door is blocked");
+                    std::snprintf(m_messageInPopup, 256, "The door is blocked");
                     WaitForAnyKeyPressed();
                     m_game.PlaySoundHitGate();
                 }
@@ -2460,11 +2466,11 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
             m_game.PlaySoundWalk((ticks & 32) == 0);
         }
     }
-    xmove = -distance * (float)sin((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
-    ymove = distance * (float)cos((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
+    xmove = -distance * (float)std::sin((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
+    ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
 
     ClipXMove(xmove);
-    if (_strcmpi(m_messageInPopup, "") == 0)
+    if (STR_CASE_CMP(m_messageInPopup, "") == 0)
     {
         ClipYMove(ymove);
     }
@@ -3159,7 +3165,7 @@ void EngineCore::UnloadLevel()
     m_level = nullptr;
 }
 
-bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
+bool EngineCore::StoreGameToFileWithFullPath(const fs::path filename) const
 {
     bool result = false;
 
@@ -3191,40 +3197,40 @@ bool EngineCore::StoreGameToFileWithFullPath(const std::string filename) const
     }
     else
     {
-        Logging::Instance().AddLogMessage("WARNING: Unable to write to file " + filename);
+        Logging::Instance().AddLogMessage("WARNING: Unable to write to file " + filename.string());
     }
     return result;
 }
 
 bool EngineCore::StoreGameToFile(const std::string filename)
 {
-    const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string filenamePathForGame = filenamePath + m_game.GetSavedGamesPath();
+    const fs::path filenamePath = m_system.GetConfigurationFilePath();
+    const fs::path filenamePathForGame = filenamePath / m_game.GetSavedGamesPath();
     if (m_system.CreatePath(filenamePathForGame))
     {
-        const std::string fullPath = filenamePathForGame + "\\" + filename + ".sav";
+        const fs::path fullPath = filenamePathForGame / ( filename + ".sav" );
         return StoreGameToFileWithFullPath(fullPath);
     }
     else
     {
-        Logging::Instance().AddLogMessage("WARNING: Unable to create path " + filenamePathForGame);
+        Logging::Instance().AddLogMessage("WARNING: Unable to create path " + filenamePathForGame.string());
     }
 
     return false;
 }
 
-void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
+void EngineCore::LoadGameFromFileWithFullPath(const fs::path filename)
 {
     std::ifstream file;
     file.open(filename, std::ifstream::binary);
     if (file.is_open())
     {
-        Logging::Instance().AddLogMessage("Loading saved game " + filename);
+        Logging::Instance().AddLogMessage("Loading saved game " + filename.string());
         char headerString[11];
         file.read(headerString, 11);
         if (file.fail())
         {
-            Logging::Instance().AddLogMessage("WARNING: Unable to read header from " + filename);
+            Logging::Instance().AddLogMessage("WARNING: Unable to read header from " + filename.string());
             file.close();
             return;
         }
@@ -3283,15 +3289,15 @@ void EngineCore::LoadGameFromFileWithFullPath(const std::string filename)
     }
     else
     {
-        Logging::Instance().AddLogMessage("WARNING: Unable to open file " + filename);
+        Logging::Instance().AddLogMessage("WARNING: Unable to open file " + filename.string());
     }
 }
 
 void EngineCore::LoadGameFromFile(const std::string filename)
 {
-    const std::string filenamePath = m_system.GetConfigurationFilePath();
-    const std::string filenamePathAbyss = filenamePath + m_game.GetSavedGamesPath();
-    const std::string fullPath = filenamePathAbyss + "\\" + filename + ".sav";
+    const fs::path filenamePath = m_system.GetConfigurationFilePath();
+    const fs::path filenamePathAbyss = filenamePath / m_game.GetSavedGamesPath();
+    const fs::path fullPath = filenamePathAbyss / ( filename + ".sav" );
     LoadGameFromFileWithFullPath(fullPath);
 }
 
