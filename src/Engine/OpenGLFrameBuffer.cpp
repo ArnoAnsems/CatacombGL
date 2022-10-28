@@ -15,7 +15,21 @@
 
 #include "OpenGLFrameBuffer.h"
 #include "../Engine/Logging.h"
+#ifndef _WIN32
 #include <GL/glext.h>
+#else
+// The file glext.h is not available in the Visual Studio Platform Toolset.
+// Below are the specific definitions from glext.h that are needed in this source file.
+static constexpr unsigned int GL_DRAW_FRAMEBUFFER = 0x8CA9;
+static constexpr unsigned int GL_FRAMEBUFFER_COMPLETE = 0x8CD5;
+static constexpr unsigned int GL_COLOR_ATTACHMENT0 = 0x8CE0;
+static constexpr unsigned int GL_DEPTH_ATTACHMENT = 0x8D00;
+static constexpr unsigned int GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT = 0x8CD6;
+static constexpr unsigned int GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT = 0x8CD7;
+static constexpr unsigned int GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER = 0x8CDB;
+static constexpr unsigned int GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER = 0x8CDC;
+static constexpr unsigned int GL_FRAMEBUFFER_UNSUPPORTED = 0x8CDD;
+#endif
 #include <SDL_video.h>
 
 OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLBasic& openGLBasic) :

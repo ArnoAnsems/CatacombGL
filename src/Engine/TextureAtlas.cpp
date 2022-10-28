@@ -15,6 +15,7 @@
 
 #include "TextureAtlas.h"
 #include <cstdint>
+#include <cstddef> // For std::size_t
 
 TextureAtlas::TextureAtlas(
     const unsigned int textureId,

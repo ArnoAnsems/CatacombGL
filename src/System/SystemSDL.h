@@ -34,7 +34,7 @@ public:
         std::vector<std::string>& filesFound
     ) const override;
 
-    virtual constexpr bool isBuiltIn64Bit() const override {
+    virtual bool isBuiltIn64Bit() const override {
         return sizeof(std::size_t) == 8;
     }
 
