@@ -192,6 +192,7 @@ ExtraMenu::ExtraMenu(
             savedGameIndex++;
         }
     }
+#ifdef SAVEDGAMESINDOSFORMAT
     if (m_savedGamesInDosFormat.GetSavedGameInDosFormat().size() > 0)
     {
         int16_t savedGameIndex = 0;
@@ -202,6 +203,7 @@ ExtraMenu::ExtraMenu(
             savedGameIndex++;
         }
     }
+#endif
     pageLoadGame->AddChild(elementListLoadGame, 60, 30);
 
     GuiElementStaticText* pageLabelLoadGame = new GuiElementStaticText(playerInput, "Load Game", EgaBrightYellow, m_renderableText);
@@ -305,11 +307,13 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
             command = MenuCommandLoadGame;
             m_newSaveGameName = m_savedGames.at(guiEvent.guiParameter);
         }
+#ifdef SAVEDGAMESINDOSFORMAT
         else if (guiEvent.guiAction == GuiActionLoadDosGame)
         {
             command = MenuCommandLoadDosGame;
             m_newSaveGameName = m_savedGamesInDosFormat.GetSavedGameInDosFormat().at(guiEvent.guiParameter)->GetName();
         }
+#endif
         else if (guiEvent.guiAction == GuiActionSaveGame)
         {
             m_newSaveGameName = (guiEvent.guiParameter == -1) ? m_newSaveGameName : m_savedGames.at(guiEvent.guiParameter);

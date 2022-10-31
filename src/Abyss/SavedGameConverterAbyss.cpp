@@ -389,7 +389,7 @@ const uint16_t SavedGameConverterAbyss::GetActorIdOfInert(const uint16_t state16
         state16 == s_skel_die3[i]
         )
     {
-        actorId == actorIdMonsterSkeleton;
+        actorId = actorIdMonsterSkeleton;
     }
     else if (
         state16 == s_eye_die1[i] ||

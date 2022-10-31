@@ -220,6 +220,7 @@ Catacomb3DMenu::Catacomb3DMenu(
             savedGameIndex++;
         }
     }
+#ifdef SAVEDGAMESINDOSFORMAT
     if (m_savedGamesInDosFormat.GetSavedGameInDosFormat().size() > 0)
     {
         int16_t savedGameIndex = 0;
@@ -230,6 +231,7 @@ Catacomb3DMenu::Catacomb3DMenu(
             savedGameIndex++;
         }
     }
+#endif
 
     guiPageLoadGame->AddChild(elementListRestoreGame, 80, 60);
 
@@ -451,6 +453,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
                 command = MenuCommandLoadGame;
             }
         }
+#ifdef SAVEDGAMESINDOSFORMAT
         else if (guiEvent.guiAction == GuiActionLoadDosGame)
         {
             m_newSaveGameName = m_savedGamesInDosFormat.GetSavedGameInDosFormat().at(guiEvent.guiParameter)->GetName();
@@ -465,6 +468,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
                 command = MenuCommandLoadDosGame;
             }
         }
+#endif
         else if (guiEvent.guiAction == GuiActionNewGameEasy ||
             guiEvent.guiAction == GuiActionNewGameNormal ||
             guiEvent.guiAction == GuiActionNewGameHard)

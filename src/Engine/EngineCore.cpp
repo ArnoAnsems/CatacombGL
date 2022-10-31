@@ -104,6 +104,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     const fs::path savedGamesPath = filenamePath / m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesPath, m_savedGames);
 
+#ifdef SAVEDGAMESINDOSFORMAT
     if (game.GetId() == 5)
     {
         // Retrieve Catacomb 3-D saved DOS games
@@ -156,7 +157,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
             }
         }
     }
-
+#endif
     m_menu = game.CreateMenu(configurationSettings, keyboardInput, m_savedGames, m_savedGamesInDosFormat);
 
     // Pre-load game data from disk
