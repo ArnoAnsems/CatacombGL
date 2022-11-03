@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(CatacombGL_Armageddon LANGUAGES CXX)
 
-target_sources( CatacombGL_Objects
-PRIVATE
+add_library( CatacombGL_Armageddon OBJECT
     AudioRepositoryArmageddon.h
     DecorateAll.h
     DecorateBonus.h

@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(CatacombGL_Catacomb3D LANGUAGES CXX)
 
-target_sources( CatacombGL_Objects
-PRIVATE
+add_library( CatacombGL_Catacomb3D OBJECT
     AudioRepositoryCatacomb3D.h
     Catacomb3DMenu.cpp
     Catacomb3DMenu.h

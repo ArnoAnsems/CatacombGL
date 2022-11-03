@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(CatacombGL_Abyss LANGUAGES CXX)
 
-target_sources( CatacombGL_Objects
-PRIVATE
+add_library( CatacombGL_Abyss OBJECT
     AudioRepositoryAbyss.h
     DecorateAll.h
     DecorateBonus.h

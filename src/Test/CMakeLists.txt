@@ -79,7 +79,12 @@ endif()
 
 target_link_libraries( CatacombGL_Test
 PRIVATE
-    CatacombGL_Objects
+    CatacombGL_ThirdParty
+    CatacombGL_Engine
+    CatacombGL_Abyss
+    CatacombGL_Armageddon
+    CatacombGL_Apocalypse
+    CatacombGL_Catacomb3D
     GTest::gtest_main
     GTest::gtest
 )

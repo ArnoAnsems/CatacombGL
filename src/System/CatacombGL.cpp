@@ -421,7 +421,6 @@ int main(int /*argc*/,  char** /*argv*/)
     BE_ST_ShutdownAudio();
 
     // Store configuration
-    std::cout << configFilename.string() << "\n";
     config.StoreToFile(configFilename);
 
     delete engine;

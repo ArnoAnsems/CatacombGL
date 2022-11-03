@@ -16,7 +16,7 @@ endif()
 
 find_package(OpenGL)
 
-add_library( CatacombGL_Objects OBJECT
+add_library( CatacombGL_ThirdParty OBJECT
     ThirdParty/RefKeen/be_st.h
     ThirdParty/RefKeen/be_st_sdl_audio_timer.cpp
     ThirdParty/RefKeen/id_sd.cpp
@@ -48,7 +48,11 @@ if(WIN32)
     set(SDL2_PATH ${sdldev_SOURCE_DIR})
     find_package(SDL2 REQUIRED CONFIG PATHS ${sdldev_SOURCE_DIR}/cmake NO_DEFAULT_PATH)
 
-    target_link_libraries( CatacombGL_Objects
+    target_link_libraries( CatacombGL_Engine
+        "shlwapi"
+        SDL2::SDL2main
+    )
+    target_link_libraries( CatacombGL_ThirdParty
         "shlwapi"
         SDL2::SDL2main
     )
@@ -59,13 +63,43 @@ else()
 endif()
 
 if(SDL2_VERSION VERSION_GREATER_EQUAL "2.0.12")
-    target_link_libraries( CatacombGL_Objects
+    target_link_libraries( CatacombGL_Engine
+        SDL2::SDL2
+    )
+    target_link_libraries( CatacombGL_Abyss
+        SDL2::SDL2
+    )
+    target_link_libraries( CatacombGL_Armageddon
+        SDL2::SDL2
+    )
+    target_link_libraries( CatacombGL_Apocalypse
+        SDL2::SDL2
+    )
+    target_link_libraries( CatacombGL_Catacomb3D
+        SDL2::SDL2
+    )
+    target_link_libraries( CatacombGL_ThirdParty
         SDL2::SDL2
     )
 
 else()
     include_directories(${SDL2_INCLUDE_DIRS})
-    target_link_libraries( CatacombGL_Objects
+    target_link_libraries( CatacombGL_Engine
+        ${SDL2_LIBRARIES}
+    )
+    target_link_libraries( CatacombGL_Abyss
+        ${SDL2_LIBRARIES}
+    )
+    target_link_libraries( CatacombGL_Armageddon
+        ${SDL2_LIBRARIES}
+    )
+    target_link_libraries( CatacombGL_Apocalypse
+        ${SDL2_LIBRARIES}
+    )
+    target_link_libraries( CatacombGL_Catacomb3D
+        ${SDL2_LIBRARIES}
+    )
+    target_link_libraries( CatacombGL_ThirdParty
         ${SDL2_LIBRARIES}
     )
 
@@ -90,7 +124,12 @@ if(WIN32)
 endif()
 
 target_link_libraries( CatacombGL
-    CatacombGL_Objects
+    CatacombGL_ThirdParty
+    CatacombGL_Engine
+    CatacombGL_Abyss
+    CatacombGL_Armageddon
+    CatacombGL_Apocalypse
+    CatacombGL_Catacomb3D
     OpenGL::GL
     OpenGL::GLU
 )
