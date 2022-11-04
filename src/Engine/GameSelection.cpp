@@ -109,8 +109,9 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
     for (uint32_t subFolderIndex = presentation.subFolderOffset; subFolderIndex < endOfSubFolders; subFolderIndex++)
     {
         const std::string& subFolderName = presentation.subFolders.at(subFolderIndex).filename().string();
+        const std::string& nameToRender = (!subFolderName.empty()) ? subFolderName : presentation.subFolders.at(subFolderIndex).root_path().string();
         const egaColor subFolderColor = (subFolderIndex == presentation.selectedSubFolder) ? EgaBrightCyan : EgaBrightWhite;
-        renderableText.LeftAlignedTruncated(subFolderName, subFolderColor, 22, 148 + (10 * (subFolderIndex - presentation.subFolderOffset)), 550);
+        renderableText.LeftAlignedTruncated(nameToRender, subFolderColor, 22, 148 + (10 * (subFolderIndex - presentation.subFolderOffset)), 550);
     }
     m_renderer.RenderText(renderableText);
     m_renderer.Unprepare2DRendering();

@@ -115,10 +115,11 @@ void SystemSDL::GetSubFolders(
             const uint32_t logicalDriveBit = 1 << driveIndex;
             if (logicalDrives & logicalDriveBit)
             {
-                char logicalDriveName[3];
+                char logicalDriveName[4];
                 logicalDriveName[0] = 'A' + driveIndex;
                 logicalDriveName[1] = ':';
-                logicalDriveName[2] = 0;
+                logicalDriveName[2] = '\\';
+                logicalDriveName[3] = 0;
                 subFolders.push_back(logicalDriveName);
             }
         }

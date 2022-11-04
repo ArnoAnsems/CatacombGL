@@ -298,7 +298,7 @@ int main(int /*argc*/,  char** /*argv*/)
             else
             {
                 auto searchFolder = gameSelectionPresentation.searchFolder; 
-                if (searchFolder.has_parent_path())
+                if (searchFolder.has_parent_path() && searchFolder != searchFolder.root_path())
                 {
                     gameSelectionPresentation.searchFolder = searchFolder.parent_path();
                 }
