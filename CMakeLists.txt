@@ -62,50 +62,47 @@ else()
 
 endif()
 
+add_executable(CatacombGL)
+
+function(link_each_target_to_libs libs targets)
+    foreach(target ${targets})
+        target_link_libraries( ${target}
+            ${libs}
+        )
+    endforeach()
+endfunction()
+
+function(add_include_dirs_for_each_target dirs targets)
+    foreach(target ${targets})
+        target_include_directories( ${target}
+            PRIVATE
+            ${dirs}
+        )
+    endforeach()
+endfunction()
+
+set( CATACOMBGL_TARGETS
+    "CatacombGL_Engine"
+    "CatacombGL_Abyss" "CatacombGL_Armageddon" "CatacombGL_Apocalypse"
+    "CatacombGL_Catacomb3D"
+    "CatacombGL_ThirdParty"
+)
+
 if(SDL2_VERSION VERSION_GREATER_EQUAL "2.0.12")
-    target_link_libraries( CatacombGL_Engine
-        SDL2::SDL2
-    )
-    target_link_libraries( CatacombGL_Abyss
-        SDL2::SDL2
-    )
-    target_link_libraries( CatacombGL_Armageddon
-        SDL2::SDL2
-    )
-    target_link_libraries( CatacombGL_Apocalypse
-        SDL2::SDL2
-    )
-    target_link_libraries( CatacombGL_Catacomb3D
-        SDL2::SDL2
-    )
-    target_link_libraries( CatacombGL_ThirdParty
-        SDL2::SDL2
+    link_each_target_to_libs( SDL2::SDL2
+        ${CATACOMBGL_TARGETS}
     )
 
 else()
-    include_directories(${SDL2_INCLUDE_DIRS})
-    target_link_libraries( CatacombGL_Engine
-        ${SDL2_LIBRARIES}
+    link_each_target_to_libs( ${SDL2_LIBRARIES}
+        ${CATACOMBGL_TARGETS}
     )
-    target_link_libraries( CatacombGL_Abyss
-        ${SDL2_LIBRARIES}
-    )
-    target_link_libraries( CatacombGL_Armageddon
-        ${SDL2_LIBRARIES}
-    )
-    target_link_libraries( CatacombGL_Apocalypse
-        ${SDL2_LIBRARIES}
-    )
-    target_link_libraries( CatacombGL_Catacomb3D
-        ${SDL2_LIBRARIES}
-    )
-    target_link_libraries( CatacombGL_ThirdParty
-        ${SDL2_LIBRARIES}
+    add_include_dirs_for_each_target( ${SDL2_INCLUDE_DIRS}
+        "CatacombGL;${CATACOMBGL_TARGETS}"
     )
 
 endif()
 
-add_executable(CatacombGL)
 add_subdirectory(src/System)
 
 if(WIN32)
