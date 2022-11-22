@@ -90,12 +90,12 @@ set( CATACOMBGL_TARGETS
 
 if(SDL2_VERSION VERSION_GREATER_EQUAL "2.0.12")
     link_each_target_to_libs( SDL2::SDL2
-        ${CATACOMBGL_TARGETS}
+        "${CATACOMBGL_TARGETS}"
     )
 
 else()
     link_each_target_to_libs( ${SDL2_LIBRARIES}
-        ${CATACOMBGL_TARGETS}
+        "${CATACOMBGL_TARGETS}"
     )
     add_include_dirs_for_each_target( ${SDL2_INCLUDE_DIRS}
         "CatacombGL;${CATACOMBGL_TARGETS}"
