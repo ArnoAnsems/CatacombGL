@@ -110,25 +110,25 @@ const bool Renderable3DScene::GetOriginalScreenResolution() const
 
 void Renderable3DScene::AddNorthWall(const uint16_t x, const uint16_t y, const unsigned int textureId)
 {
-    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x + 1u, y, x, y };
+    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ (uint16_t)(x + 1u), y, x, y };
     m_walls.AddWall(textureId, wall);
 }
 
 void Renderable3DScene::AddSouthWall(const uint16_t x, const uint16_t y, const unsigned int textureId)
 {
-    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x + 1u, y };
+    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, (uint16_t)(x + 1u), y };
     m_walls.AddWall(textureId, wall);
 }
 
 void Renderable3DScene::AddWestWall(const uint16_t x, const uint16_t y, const unsigned int textureId)
 {
-    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x, y + 1u };
+    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x, (uint16_t)(y + 1u) };
     m_walls.AddWall(textureId, wall);
 }
 
 void Renderable3DScene::AddEastWall(const uint16_t x, const uint16_t y, const unsigned int textureId)
 {
-    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y + 1u, x, y };
+    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, (uint16_t)(y + 1u), x, y };
     m_walls.AddWall(textureId, wall);
 }
 

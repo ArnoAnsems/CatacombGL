@@ -97,7 +97,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_renderableLevelStatistics(m_levelStatistics),
     m_savedGamesInDosFormat(m_game.GetSavedGameInDosFormatConfig())
 {
-    snprintf(m_messageInPopup, 256, "");
+    m_messageInPopup[0] = 0;
     m_gameTimer.Reset();
 
     const fs::path filenamePath = m_system.GetConfigurationFilePath();
@@ -1175,7 +1175,7 @@ bool EngineCore::Think()
                     {
                         if (m_startTakeKey + 2000 < m_gameTimer.GetActualTime())
                         {
-                            std::snprintf(m_messageInPopup, 256, "");
+                            m_messageInPopup[0] = 0;
                             m_playerInventory.TakeKey(m_keyToTake);
                             m_gameTimer.Resume();
                             m_startTakeKey = 0;
@@ -1192,11 +1192,11 @@ bool EngineCore::Think()
                 }
             }
 
-            if (STR_CASE_CMP(m_messageInPopup, "") != 0)
+            if (m_messageInPopup[0] != 0)
             {
                 if (m_startTakeKey == 0 && m_playerInput.IsAnyKeyPressed())
                 {
-                    std::snprintf(m_messageInPopup, 256, "");
+                    m_messageInPopup[0] = 0;
                     m_gameTimer.Resume();
                 }
             }
@@ -2471,7 +2471,7 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
     ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
 
     ClipXMove(xmove);
-    if (STR_CASE_CMP(m_messageInPopup, "") == 0)
+    if (m_messageInPopup[0] == 0)
     {
         ClipYMove(ymove);
     }

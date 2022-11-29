@@ -120,13 +120,13 @@ void RenderableAutoMapIso::SetPlayerPosition(const float x, const float y, const
 
 void RenderableAutoMapIso::AddNorthWall(const uint16_t x, const uint16_t y, const unsigned int textureId)
 {
-    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x + 1u, y, x, y };
+    const Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ (uint16_t)(x + 1u), y, x, y };
     m_walls.AddWall(textureId, wall);
 }
 
 void RenderableAutoMapIso::AddWestWall(const uint16_t x, const uint16_t y, const unsigned int textureId)
 {
-    Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x, y + 1u };
+    Renderable3DWalls::wallCoordinate wall = Renderable3DWalls::wallCoordinate{ x, y, x, (uint16_t)(y + 1u) };
     m_walls.AddWall(textureId, wall);
 }
 

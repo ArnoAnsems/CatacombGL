@@ -57,7 +57,7 @@ void RenderableText::LeftAligned(
         const uint8_t charIndex = text[chari];
         const uint16_t charWidth = m_font.GetCharacterWidth(charIndex);
 
-        m_text.push_back({ offsetX + combinedWidth, offsetY, charIndex, color });
+        m_text.push_back({ (int16_t)(offsetX + combinedWidth), offsetY, charIndex, color });
 
         combinedWidth += charWidth;
     }

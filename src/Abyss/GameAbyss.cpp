@@ -906,7 +906,8 @@ const ViewPorts::ViewPortRect3D& GameAbyss::GetOriginal3DViewArea()
     return original3DViewArea;
 }
 
-static const ManaBar::ManaBarConfig manaBarConfig = { original3DViewArea.width / 2, 114, EgaBrightCyan, EgaCyan };
+static const int16_t manabarCenterX = (int16_t)original3DViewArea.width / 2;
+static const ManaBar::ManaBarConfig manaBarConfig = { manabarCenterX, 114, EgaBrightCyan, EgaCyan };
 
 const ManaBar::ManaBarConfig& GameAbyss::GetManaBarConfig()
 {

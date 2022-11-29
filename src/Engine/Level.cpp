@@ -1946,7 +1946,9 @@ void Level::SetupAutoMapTopDown(
                         if (centerColor != wallCapMainColor)
                         {
                             const int16_t border = tileSize / 4;
-                            renderableAutoMapTopDown.AddWallCap(centerColor, { sx + border, sy + border });
+                            const int16_t wallCoordinateX = sx + border;
+                            const int16_t wallCoordinateY = sy + border;
+                            renderableAutoMapTopDown.AddWallCap(centerColor, { wallCoordinateX, wallCoordinateY });
                         }
                     }
                     else

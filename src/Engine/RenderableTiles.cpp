@@ -58,20 +58,20 @@ void RenderableTiles::DrawWindow(
     const int16_t sh = (height + 1) * 8;
 
     m_tiles.push_back({ sx, sy, TileIdWindowTopLeft });
-    m_tiles.push_back({ sx, sy + sh, TileIdWindowBottomLeft });
+    m_tiles.push_back({ sx, (int16_t)(sy + sh), TileIdWindowBottomLeft });
 
     for (int16_t i = sx + 8; i <= sx + sw - 8; i += 8)
     {
         m_tiles.push_back({ i, sy, TileIdWindowTop });
-        m_tiles.push_back({ i, sy + sh, TileIdWindowBottom });
+        m_tiles.push_back({ i, (int16_t)(sy + sh), TileIdWindowBottom });
     }
-    m_tiles.push_back({ sx + sw, sy, TileIdWindowTopRight });
-    m_tiles.push_back({ sx + sw, sy + sh, TileIdWindowBottomRight });
+    m_tiles.push_back({ (int16_t)(sx + sw), sy, TileIdWindowTopRight });
+    m_tiles.push_back({ (int16_t)(sx + sw), (int16_t)(sy + sh), TileIdWindowBottomRight });
 
     for (int16_t i = sy + 8; i <= sy + sh - 8; i += 8)
     {
         m_tiles.push_back({ sx, i, TileIdWindowLeft });
-        m_tiles.push_back({ sx + sw, i, TileIdWindowRight });
+        m_tiles.push_back({ (int16_t)(sx + sw), i, TileIdWindowRight });
     }
 }
 
@@ -82,17 +82,17 @@ void RenderableTiles::DrawDialog(
 {
     // Based on CAL_DialogDraw in ID_CA.C
     m_tiles.push_back({ x, y, TileIdWindowTopLeft });
-    m_tiles.push_back({ x, y + 8, TileIdWindowLeft });
-    m_tiles.push_back({ x, y + 16, TileIdWindowBottomLeft });
-    m_tiles.push_back({ x + (length - 1) * 8, y, TileIdWindowTopRight });
-    m_tiles.push_back({ x + (length - 1) * 8, y + 8, TileIdWindowRight });
-    m_tiles.push_back({ x + (length - 1) * 8, y + 16, TileIdWindowBottomRight });
+    m_tiles.push_back({ x, (int16_t)(y + 8), TileIdWindowLeft });
+    m_tiles.push_back({ x, (int16_t)(y + 16), TileIdWindowBottomLeft });
+    m_tiles.push_back({ (int16_t)(x + (length - 1) * 8), y, TileIdWindowTopRight });
+    m_tiles.push_back({ (int16_t)(x + (length - 1) * 8), (int16_t)(y + 8), TileIdWindowRight });
+    m_tiles.push_back({ (int16_t)(x + (length - 1) * 8), (int16_t)(y + 16), TileIdWindowBottomRight });
 
     for (int16_t x2 = x + 8; x2 < x + (length - 1) * 8; x2 += 8)
     {
         m_tiles.push_back({ x2, y, TileIdWindowTop });
-        m_tiles.push_back({ x2, y + 8, TileIdWindowCenter });
-        m_tiles.push_back({ x2, y + 16, TileIdWindowBottom });
+        m_tiles.push_back({ x2, (int16_t)(y + 8), TileIdWindowCenter });
+        m_tiles.push_back({ x2, (int16_t)(y + 16), TileIdWindowBottom });
     }
 }
 
