@@ -152,7 +152,7 @@ void Finder::LoadPaths(const ConfigurationSettings& config)
 void Finder::SafePaths(ConfigurationSettings &config)
 {
     // If game data was found, remember the path!
-    for ( std::uint8_t i = 1; i < GameID::Count; ++i )
+    for ( std::uint8_t i = 0; i < GameID::Count; ++i )
     {
         if (GetGameScore(i) == 0)
         {
