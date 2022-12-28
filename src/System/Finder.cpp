@@ -23,6 +23,10 @@
 #ifdef _WIN32
 #include <shlwapi.h>
 #include <windows.h>
+#elif __linux__
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 #endif
 
 namespace fs = std::filesystem;
@@ -74,19 +78,36 @@ inline bool GetCatacombsPackGOGPath(fs::path& path)
     // Check GOG Catacombs Pack - Legacy path
     LSTATUS status = SHGetValueA(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\GOG.com\\GOGCATACOMBSPACK", "PATH", &dwType, gog_catacombs_path, &dwSize);
     bool isGogCatacombsPathFound = ((status == ERROR_SUCCESS) && (dwType == REG_SZ));
-    if (isGogCatacombsPathFound)
-    {
-        path.assign(std::string(gog_catacombs_path));
-    }
-    else
+    if (!isGogCatacombsPathFound)
     {
         // Check GOG Catacombs Pack - Product ID 1207659189
         status = SHGetValueA(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\GOG.com\\GAMES\\1207659189", "PATH", &dwType, gog_catacombs_path, &dwSize);
         isGogCatacombsPathFound = ((status == ERROR_SUCCESS) && (dwType == REG_SZ));
-        if (isGogCatacombsPathFound)
-        {
-            path.assign(std::string(gog_catacombs_path));
-        }
+    }
+
+    if (isGogCatacombsPathFound)
+    {
+        path.assign(std::string(gog_catacombs_path));
+        Logging::Instance().AddLogMessage("Catacombs Pack is present in Windows registry: " + std::string(gog_catacombs_path));
+    }
+
+    return isGogCatacombsPathFound;
+#elif __linux__
+    // When the GOG Catacombs Pack is installed on Linux via Wine and the default target location is not modified;
+    // it will end up in a specific path.
+    const char* homePath = getenv("HOME");
+    if (homePath == nullptr)
+    {
+        homePath = getpwuid(getuid())->pw_dir;
+    }
+    const std::string defaultWineLocationForCatacombsPack = "/.wine/dosdevices/c:/GOG Games/Catacombs Pack";
+    const std::string fullCatacombsPackPath = std::string(homePath) + defaultWineLocationForCatacombsPack;
+    const bool isGogCatacombsPathFound = std::filesystem::exists(fullCatacombsPackPath);
+
+    if (isGogCatacombsPathFound)
+    {
+        path.assign(fullCatacombsPackPath);
+        Logging::Instance().AddLogMessage("Catacombs Pack is present in default Wine target location");
     }
 
     return isGogCatacombsPathFound;
@@ -111,12 +132,12 @@ void Finder::FindGamesInWorkingPath()
 void Finder::FindGOGPack()
 {
     fs::path gogPath = fs::current_path();
-    if (GetCatacombsPackGOGPath(gogPath))
+    if (!GetCatacombsPackGOGPath(gogPath))
     {
-        Logging::Instance().AddLogMessage("Catacombs Pack is present in Windows registry: " + gogPath.string());
-        // Start from 1 as 0 is the shareware game and not included in the GOG Pack
+        Logging::Instance().AddLogMessage("Path to GOG Catacombs Pack not found");
     }
 
+    // Start from 1 as 0 is the shareware game and not included in the GOG Pack
     for ( std::uint8_t i = 1; i < GameID::Count; ++i )
     {
         if( !GOGFolder[i].empty() && GetGameScore(i) != 0 )
