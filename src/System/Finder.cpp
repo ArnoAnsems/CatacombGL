@@ -71,8 +71,9 @@ const std::array<std::string, GameID::Count> GameName
 inline bool GetCatacombsPackGOGPath(fs::path& path)
 {
 #ifdef _WIN32
-    CHAR gog_catacombs_path[256];
-    memset(gog_catacombs_path, 0, 256);
+    constexpr size_t maxPathLength = 256;
+    CHAR gog_catacombs_path[maxPathLength];
+    memset(gog_catacombs_path, 0, maxPathLength);
     DWORD dwType = 0;
     DWORD dwSize = sizeof(gog_catacombs_path);
     // Check GOG Catacombs Pack - Legacy path
@@ -87,6 +88,7 @@ inline bool GetCatacombsPackGOGPath(fs::path& path)
 
     if (isGogCatacombsPathFound)
     {
+        gog_catacombs_path[maxPathLength - 1] = '\0';
         path.assign(std::string(gog_catacombs_path));
         Logging::Instance().AddLogMessage("Catacombs Pack is present in Windows registry: " + std::string(gog_catacombs_path));
     }

@@ -1,21 +1,38 @@
 # Introduction
-CatacombGL is a Windows source port of Catacomb 3D and the Catacomb Adventure series. These games were originally developed for MS-DOS. Catacomb 3D: The Descent was developed by Id Software in 1991. The Catacomb Adventure series was developed by Softdisk Publishing in 1992-1993 and consists of The Catacomb Abyss, The Catacomb Armageddon and The Catacomb Apocalypse. The original games visualized their 3D graphics in 16 colors and a 320x200 pixels view window. The main goal of the CatacombGL source port is to utilize OpenGL to improve the visual presentation of the Catacomb 3D games.
+CatacombGL is a source port of Catacomb 3D and the Catacomb Adventure series. These games were originally developed for MS-DOS. Catacomb 3D: The Descent was developed by Id Software in 1991. The Catacomb Adventure series was developed by Softdisk Publishing in 1992-1993 and consists of The Catacomb Abyss, The Catacomb Armageddon and The Catacomb Apocalypse. The original games visualized their 3D graphics in 16 colors and a 320x200 pixels view window. The main goal of the CatacombGL source port is to utilize OpenGL to improve the visual presentation of the Catacomb 3D games.
 
 Main features: 
-* Runs native on Windows 7/8/10. 
+* Runs native on Windows 7/8/10/11 and Linux. 
 * Hardware accelerated 3D rendering via OpenGL, supporting widescreen resolutions, a customizable field of view and an uncapped frame rate. 
 * Player, projectile and monster movement with floating point precision.
 * Configurable mouse and keyboard controls.
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.5.3: 
+Current limitations as of version 0.5.4: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 
 # How to install
 CatacombGL does not run standalone, but requires the original game data (levels, pictures, sounds, etc) to be present on the system. The Catacomb Abyss game data can be obtained legitimately and free-of-charge by downloading the 1.13 shareware version. Various websites offer the shareware version for download, see for example https://archive.org/details/TheCatacombAbyss. Alternatively, the game data can also be obtained by buying the Catacombs Pack from gog.com, see https://www.gog.com/game/catacombs_pack. The differences between the shareware and commercial versions are purely cosmetic. The Catacombs Pack is required in order to run Catacomb 3D (The Descent), The Catacomb Armageddon or The Catacomb Apocalypse.
-The CatacombGL.exe can be run from any location. When started, a selection screen with an overview of all the supported games is shown. In case the Catacombs Pack was installed via the GOG installer, the game data will be auto-detected. Otherwise, it is possible to manually browse to the folder which contains either the Catacombs Pack or the shareware version.
+The CatacombGL.exe (Windows) or CatacombGL.a (Linux) can be run from any location. When started, a selection screen with an overview of all the supported games is shown. In case the Catacombs Pack was installed via the GOG installer (Windows), the game data will be auto-detected. Otherwise, it is possible to manually browse to the folder which contains either the Catacombs Pack or the shareware version.
+
+# How to build on Linux
+With the following steps, CatacombGL was built on Ubuntu 22.10:
+* install CMake via Ubuntu Software Center.
+* sudo apt-get update
+* sudo apt-get install build-essential
+* sudo add-apt-repository universe
+* sudo apt-get install libsdl2-dev
+* ccmake <path to CatacombGL source>
+* Configure and generate the build via the CMake GUI
+* make
+With the following steps, CatacombGL was built on RaspberryPi:
+* sudo apt-get install git build-essential cmake-curses-gui libsdl2-dev
+* git clone "https://github.com/arnoansems/catacombgl"
+* ccmake <path to CatacombGL source>
+* Configure and generate the build via the CMake GUI
+* make -j3
 
 # Controls
 The keyboard and mouse controls for moving, shooting, etc. can be customized via the in-game menu. The following keys are reserved and cannot be customized: 
@@ -27,7 +44,7 @@ The keyboard and mouse controls for moving, shooting, etc. can be customized via
 
 # Additional notes
 * The original Catacomb 3D allowed the player to reconfigure movement and action keys, but CatacombGL ignores those settings. Instead, CatacombGL has its own keyboard/mouse configuration, which is shared across all four games.
-* High scores achieved in Catacomb 3D are not stored in the GOG folder, to avoid file access issues. Instead, CatacombGL stores the high scores in \%appdata%\CatacombGL\CONFIG.C3D.
+* High scores achieved in Catacomb 3D are not stored in the GOG folder, to avoid file access issues. Instead, CatacombGL stores the high scores in \%appdata%\CatacombGL\CONFIG.C3D (Windows) or ~/.config/CatacombGL/CONFIG.C3D (Linux).
 * To aid in navigating through narrow corridors, CatacombGL allows the player to slide along walls in Catacomb 3D.
 * The automap can be opened via a configurable key, with the default being the 'O' key. The automap can be visualized in four different styles, which is configurable via the Video menu. The "original" style is based on the Catacomb 3D debug automap. Pressing the Ctrl key in the original style automap will cycle it through several different view modes, just like in the original Catacomb 3D. Only locations that were visited by the player are shown on the automap. The automap can also be opened via a cheat code, which is F10+O in Catacomb 3D and Abyss, or Backspace+O in Armageddon and Apocalypse. When this cheat code is used, then all locations are shown immediately.
 
@@ -57,8 +74,15 @@ Special thanks goes to:
 * GOG.com and catacomb.games for providing a platform to obtain the Catacomb 3D games.
 * Roland Ansems for playtesting every level and reporting various bugs.
 * NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
+* GoGoOtaku for porting CatacombGL to Linux and CMake.
 
 # History
+* Version 0.5.4 (2022-12-30) New in this release:
+  * Support for Linux was added through the hard work of GoGoOtaku, who in the process also did the migration to CMake. Additional testing was performed by NY00123 (Ubuntu), AlyxxTheRat (Linux Mint) and Scandy (RaspberryPi). The functionality to auto-detect the default location of the GOG Catacombs Pack in the Wine folder was suggested by Stuart Axon.
+  * Fix: close cheat dialog when ESC is pressed. Reported by NY00123.
+  * Fix: do not split help screen with black bar. Reported by NY00123.
+  * Fix: border flash color should be magenta in Catacomb 3-D. Reported by NY00123.
+
 * Version 0.5.3 (2021-08-28) New in this release:
   * Added emulation of the CRT overscan border. This border can flash when the player gets hit, when destroying an item or when approaching a fake wall. Suggested by NY00123, dosnostalgic and DiscussMetalDan.
   * Added monster, secret and item statistics to the automap (excluding legacy mode). Suggested by yasagani and Mech4Gaming.

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
-project(CatacombGL LANGUAGES CXX VERSION 0.5.3)
+project(CatacombGL LANGUAGES CXX VERSION 0.5.4)
 
 option(BUILD_TESTS "Build Tests" OFF)
 
