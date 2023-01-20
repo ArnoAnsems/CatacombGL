@@ -99,6 +99,7 @@ private:
     void PrepareTopDownRendering(const float aspectRatio, const ViewPorts::ViewPortRect3D original3DViewArea, const uint16_t scale);
     void RenderTopDownFloorTiles(const Renderable3DTiles& tiles, const uint16_t tileSize);
     void ApplyDepthShading(const Renderable3DScene& renderable3DScene) const;
+    egaColor GetAutomapPlayerMarkerColor(const egaColor floorColor) const;
 
     uint16_t m_windowWidth;
     uint16_t m_windowHeight;

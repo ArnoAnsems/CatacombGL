@@ -685,7 +685,8 @@ void RendererOpenGL::RenderAutoMapTopDown(const RenderableAutoMapTopDown& autoMa
 
     if (autoMapTopDown.GetTileSize() == 64)
     {
-        BindTexture(m_singleColorTexture[EgaBrightYellow]);
+        const egaColor playerMarkerColor = GetAutomapPlayerMarkerColor(autoMapTopDown.GetFloorTiles().GetFloorColor());
+        BindTexture(m_singleColorTexture[playerMarkerColor]);
 
         glPushMatrix();
 
@@ -731,7 +732,8 @@ void RendererOpenGL::RenderAutoMapIso(const RenderableAutoMapIso& autoMapIso)
 
     RenderSprites(autoMapIso.GetSprites());
 
-    BindTexture(m_singleColorTexture[EgaBrightYellow]);
+    const egaColor playerMarkerColor = GetAutomapPlayerMarkerColor(autoMapIso.GetFloorTiles().GetFloorColor());
+    BindTexture(m_singleColorTexture[playerMarkerColor]);
 
     const float playerX = autoMapIso.GetPlayerX();
     const float playerY = autoMapIso.GetPlayerY();
@@ -1042,4 +1044,9 @@ const std::string& RendererOpenGL::GetGraphicsAdapterVendor() const
 const std::string& RendererOpenGL::GetGraphicsAdapterModel() const
 {
     return m_graphicsAdapterModel;
+}
+
+egaColor RendererOpenGL::GetAutomapPlayerMarkerColor(const egaColor floorColor) const
+{
+    return (floorColor == EgaBrightWhite || floorColor == EgaBrightYellow) ? EgaDarkGray : EgaBrightYellow;
 }
