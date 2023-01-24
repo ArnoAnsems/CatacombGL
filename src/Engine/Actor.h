@@ -50,6 +50,7 @@ public:
     bool TargetReached() const;
     actorAction GetAction() const;
     void Damage(const int16_t points);
+    void DamageInEasyMode(const int16_t points);
     bool IsDead() const;
     bool IsActive() const;
     void SetActive(const bool active);

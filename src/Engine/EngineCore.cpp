@@ -2015,10 +2015,17 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                 }
                                 else
                                 {
-                                    // In the original Catacomb Adventure series, the hit points of all monsters were divided by four when playing in easy mode, see function EasyHitPoints in C4_ACT1.C.
-                                    // To prevent the Actor class from having to look up the difficulty mode, the damage inflicted by the players' fireball is simply multiplied by 4 here.
-                                    const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? actor->GetDecorateActor().damage * 4 : actor->GetDecorateActor().damage;
-                                    otherActor->Damage(damage);
+                                    const bool isEasyModeFromAdventureSeries = (m_difficultyLevel == Easy && m_game.GetId() != 5);
+                                    const uint8_t damage = actor->GetDecorateActor().damage;
+                                    if (isEasyModeFromAdventureSeries)
+                                    {
+                                        otherActor->DamageInEasyMode(damage);
+                                    }
+                                    else
+                                    {
+                                        otherActor->Damage(damage);
+                                    }
+                                    
                                     m_game.GetAudioPlayer()->Play(otherActor->GetDecorateActor().hitSound);
 
                                     if (otherActor->IsDead())

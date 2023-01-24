@@ -197,6 +197,22 @@ void Actor::Damage(const int16_t points)
     }
 }
 
+void Actor::DamageInEasyMode(const int16_t points)
+{
+    if (m_decorateActor.states.find(StateIdDying) != m_decorateActor.states.end())
+    {
+        // In the original Catacomb Adventure series, the hit points of all monsters were divided by four
+        // when playing in easy mode, see function EasyHitPoints in C4_ACT1.C.
+        constexpr int16_t healthReductionFactorInEasyMode = 4;
+        const int16_t healthInEasyMode = m_health / healthReductionFactorInEasyMode;
+        m_health = (healthInEasyMode - points) * healthReductionFactorInEasyMode;
+        if (m_health < 0)
+        {
+            m_health = 0;
+        }
+    }
+}
+
 bool Actor::IsDead() const
 {
     return (m_health <= 0);
