@@ -199,6 +199,7 @@ Catacomb3DMenu::Catacomb3DMenu(
 
     GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdStickyWalls), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageGameplay->AddChild(elementListGameplay, 76, 62);
 
     // Restore game menu

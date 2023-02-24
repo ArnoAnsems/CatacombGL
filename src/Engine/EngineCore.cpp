@@ -2265,7 +2265,7 @@ const char* EngineCore::GetKeyName(const KeyId keyId) const
 }
 
 // Based on ClipXMove() in C4_WIZ.C of the Catacomb Abyss source code.
-void EngineCore::ClipXMove (const float xmove)
+bool EngineCore::ClipXMove (const float xmove)
 {
     //
     // move player and check to see if any corners are in solid tiles
@@ -2289,10 +2289,12 @@ void EngineCore::ClipXMove (const float xmove)
     {
         m_level->GetPlayerActor()->SetX(basex);
     }
+
+    return moveOk;
 }
 
 // Based on ClipYMove() in C4_WIZ.C of the Catacomb Abyss source code.
-void EngineCore::ClipYMove (const float ymove)
+bool EngineCore::ClipYMove (const float ymove)
 {
     const float basex = m_level->GetPlayerActor()->GetX();
     const float basey = m_level->GetPlayerActor()->GetY() + ymove;
@@ -2314,6 +2316,8 @@ void EngineCore::ClipYMove (const float ymove)
     {
         m_level->GetPlayerActor()->SetY(basey);
     }
+
+    return moveOk;
 }
 
 bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const float playerX, const float playerY)
@@ -2477,10 +2481,20 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
     xmove = -distance * (float)std::sin((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
     ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
 
-    ClipXMove(xmove);
+    const float playerPosXBeforeMove = m_level->GetPlayerActor()->GetX();
+    const float playerPosYBeforeMove = m_level->GetPlayerActor()->GetY();
+
+    bool moveOk = ClipXMove(xmove);
     if (m_messageInPopup[0] == 0)
     {
-        ClipYMove(ymove);
+        moveOk &= ClipYMove(ymove);
+    }
+
+    if (!moveOk && m_game.GetId() == 5 && m_configurationSettings.GetCVarBool(CVarIdStickyWalls).IsEnabled())
+    {
+        // Simulate the sticky walls from the Catacomb 3-D by setting the player back to the position before the move
+        m_level->GetPlayerActor()->SetX(playerPosXBeforeMove);
+        m_level->GetPlayerActor()->SetY(playerPosYBeforeMove);
     }
 }
 

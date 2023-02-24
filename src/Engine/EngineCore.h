@@ -86,8 +86,8 @@ private:
     void ThinkActors();
     void ThinkNonBlockingActors();
 
-    void ClipXMove (const float xmove);
-    void ClipYMove (const float ymove);
+    bool ClipXMove (const float xmove);
+    bool ClipYMove (const float ymove);
     bool ClipWithTile(const uint16_t tileX, const uint16_t tileY, const float playerX, const float playerY);
 
     void DrawCenteredTiledWindow(IRenderer& renderer, const uint16_t width, const uint16_t height);

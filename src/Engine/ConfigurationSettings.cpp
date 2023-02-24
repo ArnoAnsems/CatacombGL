@@ -31,6 +31,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_autoFire("Auto Fire", "autoFire", false),
     m_manaBar("Mana Bar", "manaBar", false),
     m_preventSoftlock("Prevent Softlock", "preventSoftlock", true),
+    m_stickyWalls("Sticky Walls", "stickyWalls", false),
     m_cvarsBool(
         {
             std::make_pair(CVarIdDepthShading, &m_depthShading),
@@ -39,7 +40,8 @@ ConfigurationSettings::ConfigurationSettings() :
             std::make_pair(CVarIdAlwaysRun, &m_alwaysRun),
             std::make_pair(CVarIdAutoFire, &m_autoFire),
             std::make_pair(CVarIdManaBar, &m_manaBar),
-            std::make_pair(CVarIdPreventSoftlock, &m_preventSoftlock)
+            std::make_pair(CVarIdPreventSoftlock, &m_preventSoftlock),
+            std::make_pair(CVarIdStickyWalls, &m_stickyWalls)
         }),
     m_dummyCvarString("Dummy", "Dummy", ""),
     m_pathAbyssv113("", "pathabyssv113", ""),
@@ -179,6 +181,7 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdAutoMapMode);
         DeserializeCVar(keyValuePairs, CVarIdManaBar);
         DeserializeCVar(keyValuePairs, CVarIdPreventSoftlock);
+        DeserializeCVar(keyValuePairs, CVarIdStickyWalls);
 
         for (auto keyPair : keyValuePairs)
         {
@@ -238,6 +241,7 @@ void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
         file << "# Gameplay settings\n";
         SerializeCVar(file, CVarIdManaBar);
         SerializeCVar(file, CVarIdPreventSoftlock);
+        SerializeCVar(file, CVarIdStickyWalls);
         file << "# Key bindings\n";
         for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
 	    {
@@ -451,6 +455,7 @@ void ConfigurationSettings::ResetToClassic()
     GetCVarBoolMutable(CVarIdAutoFire).SetEnabled(false);
     GetCVarBoolMutable(CVarIdManaBar).SetEnabled(false);
     GetCVarBoolMutable(CVarIdPreventSoftlock).SetEnabled(false);
+    GetCVarBoolMutable(CVarIdStickyWalls).SetEnabled(true);
     GetCVarEnumMutable(CVarIdAutoMapMode).SetItemIndex(CVarItemIdAutoMapOriginal);
     GetCVarEnumMutable(CVarIdShowFpsMode).SetItemIndex(CVarItemIdShowFpsOff);
     GetCVarEnumMutable(CVarIdScreenResolution).SetItemIndex(CVarItemIdScreenResolutionOriginal);

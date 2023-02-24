@@ -51,6 +51,7 @@ static const uint8_t CVarIdFov = 40;
 static const uint8_t CVarIdMouseSensitivity = 41;
 static const uint8_t CVarIdTurnSpeed = 42;
 static const uint8_t CVarIdPreventSoftlock = 43;
+static const uint8_t CVarIdStickyWalls = 44;
 
 static const uint8_t CVarItemIdScreenModeWindowed = 0;
 static const uint8_t CVarItemIdScreenModeFullscreen = 1;
@@ -132,6 +133,7 @@ private:
     ConsoleVariableBool m_autoFire;
     ConsoleVariableBool m_manaBar;
     ConsoleVariableBool m_preventSoftlock;
+    ConsoleVariableBool m_stickyWalls;
 
     ConsoleVariableEnum m_dummyCvarEnum;
     ConsoleVariableEnum m_screenMode;
