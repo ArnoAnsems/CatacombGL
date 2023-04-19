@@ -19,14 +19,23 @@ The CatacombGL.exe (Windows) or CatacombGL.a (Linux) can be run from any locatio
 
 # How to build on Linux
 With the following steps, CatacombGL was built on Ubuntu 22.10:
-* install CMake via Ubuntu Software Center.
 * sudo apt-get update
-* sudo apt-get install build-essential
+* sudo apt-get install build-essential cmake cmake-data
 * sudo add-apt-repository universe
 * sudo apt-get install libsdl2-dev
-* ccmake <path to CatacombGL source>
-* Configure and generate the build via the CMake GUI
-* make
+
+Ccmake gui is optional (sudo apt-get install ccmake-curses-gui) <br />
+<br />
+General Linux compilation instruction:
+```
+git clone https://github.com/ArnoAnsems/CatacombGL
+cd CatacombGL
+mkdir build
+cd build
+cmake ..
+make -j3
+ ```
+ 
 With the following steps, CatacombGL was built on RaspberryPi:
 * sudo apt-get install git build-essential cmake-curses-gui libsdl2-dev
 * git clone "https://github.com/arnoansems/catacombgl"
