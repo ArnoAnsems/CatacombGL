@@ -15,6 +15,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
 #include "ConsoleVariable.h"
 
 class ConsoleVariableEnum : public ConsoleVariable
