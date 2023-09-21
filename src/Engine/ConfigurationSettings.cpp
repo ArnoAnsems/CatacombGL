@@ -183,6 +183,8 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdPreventSoftlock);
         DeserializeCVar(keyValuePairs, CVarIdStickyWalls);
 
+        m_controlsMap.Clear();
+
         for (auto keyPair : keyValuePairs)
         {
             SDL_Keycode keyCode = SDL_GetKeyFromName(keyPair.first.c_str());
@@ -203,6 +205,8 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
                 m_controlsMap.AssignActionToMouseButton(action, i);
             }
         }
+
+        m_controlsMap.AssignUnusedKeysToDefaults();
     }
 }
 

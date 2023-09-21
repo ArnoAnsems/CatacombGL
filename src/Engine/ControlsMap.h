@@ -73,7 +73,9 @@ public:
     const std::map<ControlAction, std::string>& GetActionLabels() const;
 
     bool AssignActionToKey(const ControlAction action, const SDL_Keycode keyCode);
+    void AssignDefaultActionToKey(const ControlAction action, const SDL_Keycode keyCode);
     bool AssignActionToMouseButton(const ControlAction action, const uint8_t buttonCode);
+    void AssignDefaultActionToMouseButton(const ControlAction action, const uint8_t buttonCode);
 
     std::string GetKeyStringFromAction(const ControlAction action) const;
 
@@ -86,6 +88,8 @@ public:
     static const ControlAction StringToAction(const std::string& str);
 
     void ResetToDefaults();
+    void Clear();
+    void AssignUnusedKeysToDefaults();
 
 private:
     std::map<SDL_Keycode, ControlAction> m_KeyToActionMap;

@@ -70,6 +70,15 @@ bool ControlsMap::AssignActionToKey(const ControlAction action, const SDL_Keycod
 	return true;
 }
 
+void ControlsMap::AssignDefaultActionToKey(const ControlAction action, const SDL_Keycode keyCode)
+{
+    if (GetKeysFromAction(action).empty() &&
+        GetActionFromKey(keyCode) == None)
+    {
+        m_KeyToActionMap.insert(std::make_pair(keyCode, action));
+    }
+}
+
 bool ControlsMap::AssignActionToMouseButton(const ControlAction action, const uint8_t buttonCode)
 {
     const auto it = m_mouseButtonToActionMap.find(buttonCode);
@@ -98,6 +107,15 @@ bool ControlsMap::AssignActionToMouseButton(const ControlAction action, const ui
 		return true;
     }
 	return false;
+}
+
+void ControlsMap::AssignDefaultActionToMouseButton(const ControlAction action, const uint8_t buttonCode)
+{
+    if (GetMouseButtonsFromAction(action).empty() &&
+        GetActionFromMouseButton(buttonCode) == None)
+    {
+        m_mouseButtonToActionMap[buttonCode] = action;
+    }
 }
 
 const std::map<ControlAction, std::string>& ControlsMap::GetActionLabels() const
@@ -210,6 +228,12 @@ const ControlAction ControlsMap::StringToAction(const std::string& str)
 
 void ControlsMap::ResetToDefaults()
 {
+    Clear();
+    AssignUnusedKeysToDefaults();
+}
+
+void ControlsMap::Clear()
+{
     m_mouseButtonToActionMap.clear();
     m_KeyToActionMap.clear();
 
@@ -218,28 +242,31 @@ void ControlsMap::ResetToDefaults()
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_RIGHT, None));
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_X1, None));
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_X2, None));
+}
 
+void ControlsMap::AssignUnusedKeysToDefaults()
+{
     // Define default action to key map
-    AssignActionToKey(MoveForward, SDLK_UP);
-    AssignActionToKey(MoveBackward, SDLK_DOWN);
-    AssignActionToKey(TurnLeft, SDLK_LEFT);
-    AssignActionToKey(TurnRight, SDLK_RIGHT);
-    AssignActionToKey(Strafe, SDLK_RALT);
-    AssignActionToKey(StrafeLeft, SDLK_a);
-    AssignActionToKey(StrafeRight, SDLK_d);
-    AssignActionToKey(MoveForward, SDLK_w);
-    AssignActionToKey(MoveBackward, SDLK_s);
-    AssignActionToKey(QuickTurn, SDLK_v);
-    AssignActionToKey(QuickTurn, SDLK_TAB);
-    AssignActionToKey(Shoot, SDLK_RCTRL);
-    AssignActionToKey(ShootZappper, SDLK_z);
-    AssignActionToKey(ShootXterminator, SDLK_x);
-    AssignActionToKey(UsePotion, SDLK_c);
-    AssignActionToKey(UsePotion, SDLK_SPACE);
-    AssignActionToKey(Run, SDLK_RSHIFT);
-    AssignActionToKey(ShowAutoMap, SDLK_o);
+    AssignDefaultActionToKey(MoveForward, SDLK_UP);
+    AssignDefaultActionToKey(MoveBackward, SDLK_DOWN);
+    AssignDefaultActionToKey(TurnLeft, SDLK_LEFT);
+    AssignDefaultActionToKey(TurnRight, SDLK_RIGHT);
+    AssignDefaultActionToKey(Strafe, SDLK_RALT);
+    AssignDefaultActionToKey(StrafeLeft, SDLK_a);
+    AssignDefaultActionToKey(StrafeRight, SDLK_d);
+    AssignDefaultActionToKey(MoveForward, SDLK_w);
+    AssignDefaultActionToKey(MoveBackward, SDLK_s);
+    AssignDefaultActionToKey(QuickTurn, SDLK_v);
+    AssignDefaultActionToKey(QuickTurn, SDLK_TAB);
+    AssignDefaultActionToKey(Shoot, SDLK_RCTRL);
+    AssignDefaultActionToKey(ShootZappper, SDLK_z);
+    AssignDefaultActionToKey(ShootXterminator, SDLK_x);
+    AssignDefaultActionToKey(UsePotion, SDLK_c);
+    AssignDefaultActionToKey(UsePotion, SDLK_SPACE);
+    AssignDefaultActionToKey(Run, SDLK_RSHIFT);
+    AssignDefaultActionToKey(ShowAutoMap, SDLK_o);
 
-    AssignActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
-    AssignActionToMouseButton(ShootZappper, SDL_BUTTON_MIDDLE);
-    AssignActionToMouseButton(ShootXterminator, SDL_BUTTON_RIGHT);
+    AssignDefaultActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
+    AssignDefaultActionToMouseButton(ShootZappper, SDL_BUTTON_MIDDLE);
+    AssignDefaultActionToMouseButton(ShootXterminator, SDL_BUTTON_RIGHT);
 }
