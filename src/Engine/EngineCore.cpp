@@ -28,24 +28,26 @@
 
 namespace fs = std::filesystem;
 
-const uint8_t versionMajor = 0;
-const uint8_t versionMinor = 5;
-const uint8_t versionLevel = 4;
+constexpr uint8_t versionMajor = 0;
+constexpr uint8_t versionMinor = 5;
+constexpr uint8_t versionLevel = 4;
 const std::string versionPhase = "Beta";
 
-const uint8_t VictoryStatePlayGetBolt = 0;
-const uint8_t VictoryStatePlayingGetBolt = 1;
-const uint8_t VictoryStatePlayGetNuke = 2;
-const uint8_t VictoryStatePlayingGetNuke = 3;
-const uint8_t VictoryStatePlayGetPotion = 4;
-const uint8_t VictoryStatePlayingGetPotion = 5;
-const uint8_t VictoryStatePlayGetKey = 6;
-const uint8_t VictoryStatePlayingGetKey = 7;
-const uint8_t VictoryStatePlayGetScroll = 8;
-const uint8_t VictoryStatePlayingGetScroll = 9;
-const uint8_t VictoryStatePlayGetPoint = 10;
-const uint8_t VictoryStatePlayingGetPoint = 11;
-const uint8_t VictoryStateDone = 12;
+constexpr uint8_t VictoryStatePlayGetBolt = 0;
+constexpr uint8_t VictoryStatePlayingGetBolt = 1;
+constexpr uint8_t VictoryStatePlayGetNuke = 2;
+constexpr uint8_t VictoryStatePlayingGetNuke = 3;
+constexpr uint8_t VictoryStatePlayGetPotion = 4;
+constexpr uint8_t VictoryStatePlayingGetPotion = 5;
+constexpr uint8_t VictoryStatePlayGetKey = 6;
+constexpr uint8_t VictoryStatePlayingGetKey = 7;
+constexpr uint8_t VictoryStatePlayGetScroll = 8;
+constexpr uint8_t VictoryStatePlayingGetScroll = 9;
+constexpr uint8_t VictoryStatePlayGetPoint = 10;
+constexpr uint8_t VictoryStatePlayingGetPoint = 11;
+constexpr uint8_t VictoryStateDone = 12;
+
+constexpr uint8_t NotReadingAnyScroll = 255u;
 
 const float aspectRatios[2] =
 {
@@ -271,7 +273,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         if (!m_menu->IsActive() || m_game.GetId() != 5)
         {
-            if (m_readingScroll == 255 && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
+            if (m_readingScroll == NotReadingAnyScroll && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
             {
                 m_renderable3DScene.PrepareFrame(
                     aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()],
@@ -304,7 +306,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_state == InGame)
     {
-        if (m_readingScroll != 255)
+        if (m_readingScroll != NotReadingAnyScroll)
         {
             // Read scroll
             m_game.DrawScroll(m_readingScroll);
@@ -353,7 +355,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             locationMessage = "Pass this way?      Y/N";
         }
-        else if (m_readingScroll != 255)
+        else if (m_readingScroll != NotReadingAnyScroll)
         {
             // The original game also gave the option to close the scroll via ESC, but CatacombGL has ESC reserved for the new menu.
             locationMessage = "Press ENTER to exit.";
@@ -570,7 +572,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             m_fadeEffect.DrawOverlay(renderer, m_gameTimer.GetActualTime() - m_timeStampFadeEffect);
         }
-        else if (m_timeStampFadeEffect != 0 && !m_menu->IsActive() && (STR_CASE_CMP(m_messageInPopup, "") == 0) && m_readingScroll == 255 && m_level != nullptr && !m_level->GetPlayerActor()->IsDead())
+        else if (m_timeStampFadeEffect != 0 && !m_menu->IsActive() && (STR_CASE_CMP(m_messageInPopup, "") == 0) && m_readingScroll == NotReadingAnyScroll && m_level != nullptr && !m_level->GetPlayerActor()->IsDead())
         {
             m_timeStampFadeEffect = 0;
             m_gameTimer.Resume();
@@ -633,9 +635,9 @@ void EngineCore::EnterKeyReleased()
 {
     if (!m_menu->IsActive())
     {
-        if (m_readingScroll != 255)
+        if (m_readingScroll != NotReadingAnyScroll)
         {
-            m_readingScroll = 255;
+            m_readingScroll = NotReadingAnyScroll;
             if (!m_takingChest)
             {
                 m_gameTimer.Resume();
@@ -1356,7 +1358,7 @@ bool EngineCore::Think()
                 ThinkNonBlockingActors();
             }
 
-            if (m_takingChest && !m_menu->IsActive() && m_readingScroll == 255)
+            if (m_takingChest && !m_menu->IsActive() && m_readingScroll == NotReadingAnyScroll)
             {
                 if (!m_game.GetAudioPlayer()->IsPlaying())
                 {
@@ -2462,7 +2464,7 @@ void EngineCore::SelectDifficultyLevelWarrior()
 
 void EngineCore::Thrust(const uint16_t angle, const float distance)
 {
-    if (m_state != InGame || m_readingScroll != 255)
+    if (m_state != InGame || m_readingScroll != NotReadingAnyScroll)
     {
         return;
     }
