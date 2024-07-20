@@ -15,6 +15,7 @@
 
 #include "../Engine/ConfigurationSettings.h"
 #include "../Engine/GameDetection.h"
+#include "../Engine/GameId.h"
 
 #include "../Abyss/GameDetectionAbyss.h"
 #include "../Armageddon/GameDetectionArmageddon.h"
@@ -28,22 +29,6 @@
 #include <array>
 #include <vector>
 #include <filesystem>
-
-// Order matters! Please do not reorder 
-namespace GameID
-{
-    enum
-    {
-        CatacombAbyssv113 = 0,
-        CatacombAbyssv124,
-        CatacombArmageddonv102,
-        CatacombApocalypsev101,
-        Catacomb3Dv122,
-    
-        Count,
-        NotDetected
-    };
-};
 
 class Finder
 {

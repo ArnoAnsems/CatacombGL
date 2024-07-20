@@ -23,6 +23,7 @@
 #include "SystemSDL.h"
 #include "WindowSDL.h"
 
+#include "../Engine/CommandLineParser.h"
 #include "../Engine/ConfigurationSettings.h"
 #include "../Engine/Console.h"
 #include "../Engine/DefaultFont.h"
@@ -56,29 +57,9 @@
 #include <windows.h>
 #endif
 
-using namespace std;
-
 namespace fs = std::filesystem;
 
 uint8_t selectedGame = GameID::NotDetected;
-
-bool compareStrings(const string& str1, const string& str2)
-{
-    if (str1.length() != str2.length())
-    {
-        return false;
-    }
-
-	for (int i = 0; i < str1.length(); ++i)
-    {
-        if (tolower(str1[i]) != tolower(str2[i]))
-        {
-            return false;
-        }
-	}
-
-	return true;
-}
 
 void UpdatePlayerInput(const SDL_Window* const window, PlayerInput& input)
 {
@@ -128,57 +109,6 @@ void InitializeSDL()
 	}
 }
 
-const std::string paramDescent = "--descent";
-const std::string paramAbyss = "--abyss";
-const std::string paramArmageddon = "--armageddon";
-const std::string paramApocalypse = "--apocalypse";
-const std::string paramAbyssSW13 = "--abyss_sw13";
-
-const std::string paramIniFile = "--ini";
-std::string FilenameIni = "";
-const std::string paramLogFile = "--log";
-std::string FilenameLog = "";
-
-void parseCommandLine(int argc, char* argv[])
-{
-	for (int i = 1; i < argc; i++)
-	{
-		std::string prev = argv[i - 1];
-		std::string current = argv[i];
-
-        if (compareStrings(current, paramDescent))
-        {
-            selectedGame = GameID::Catacomb3Dv122;
-        }
-        if (compareStrings(current, paramAbyss))
-        {
-            selectedGame = GameID::CatacombAbyssv124;
-        }
-        if (compareStrings(current, paramApocalypse))
-        {
-            selectedGame = GameID::CatacombApocalypsev101;
-        }
-        if (compareStrings(current, paramArmageddon))
-        {
-            selectedGame = GameID::CatacombArmageddonv102;
-        }
-        if (compareStrings(current, paramAbyssSW13))
-        {
-            selectedGame = GameID::CatacombAbyssv113;
-        }
-
-        if (compareStrings(prev, paramIniFile))
-        {
-            FilenameIni = current;
-        }
-
-        if (compareStrings(prev, paramLogFile))
-        {
-            FilenameLog = current;
-        }
-	};
-}
-
 int main(int argc, char* argv[])
 {
 	ConfigurationSettings config;
@@ -200,15 +130,14 @@ int main(int argc, char* argv[])
 	srand((unsigned int)time(nullptr));
 
 	/* Check command line parameters */
-    if (argc > 1)
-    {
-        parseCommandLine(argc, argv);
-    }
+    CommandLineParser commandLineParser;
+    commandLineParser.parse(argc, argv);
+    selectedGame = commandLineParser.gameIdToStart();
 
 	const fs::path configPath = system.GetConfigurationFilePath();
 	system.CreatePath(configPath);
 
-	const fs::path logFilename = FilenameLog.empty() ? configPath / "CatacombGL_log.txt" : FilenameLog;
+	const fs::path logFilename = commandLineParser.getFilenameLog().empty() ? configPath / "CatacombGL_log.txt" : commandLineParser.getFilenameLog();
 	Logging::Instance().SetLogFile(logFilename);
 	Logging::Instance().AddLogMessage("Configuration file used .... " + logFilename.string());
 
@@ -217,7 +146,7 @@ int main(int argc, char* argv[])
 
 	Logging::Instance().AddLogMessage("Running on " + system.GetOSVersion());
 
-	const fs::path configFilename = FilenameIni.empty() ? configPath / "CatacombGL.ini" : FilenameIni;
+	const fs::path configFilename = commandLineParser.getFilenameIni().empty() ? configPath / "CatacombGL.ini" : commandLineParser.getFilenameIni();
 	Logging::Instance().AddLogMessage("Loading CatacombGL.ini");
 	config.LoadFromFile(configFilename);
 

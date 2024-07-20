@@ -12,6 +12,8 @@ add_library( CatacombGL_Engine OBJECT
     AudioRepository.h
     AutoMap.cpp
     AutoMap.h
+    CommandLineParser.cpp
+    CommandLineParser.h
     ConfigurationSettings.cpp
     ConfigurationSettings.h
     Console.cpp
@@ -50,6 +52,7 @@ add_library( CatacombGL_Engine OBJECT
     FramesCounter.h
     GameDetection.cpp
     GameDetection.h
+    GameId.h
     GameMaps.cpp
     GameMaps.h
     GameSelection.cpp

@@ -20,6 +20,8 @@ if(NOT GTest_FOUND)
 endif()
 
 add_executable( CatacombGL_Test
+    CommandLineParser_Test.cpp
+    CommandLineParser_Test.h
     ConsoleVariableBool_Test.cpp
     ConsoleVariableBool_Test.h
     ConsoleVariableEnum_Test.cpp
