@@ -20,11 +20,11 @@ namespace fs = std::filesystem;
 
 GameDetection::GameDetection()
 {
-    m_latestReport.gameId = 0;
+    m_latestReport.gameId = GameId::NotDetected;
     m_latestReport.folder.clear();
     m_latestReport.score = UINT16_MAX;
     m_latestReport.infoString.clear();
-    m_bestMatch.gameId = 0;
+    m_bestMatch.gameId = GameId::NotDetected;
     m_bestMatch.folder.clear();
     m_bestMatch.score = UINT16_MAX;
     m_bestMatch.infoString.clear();
@@ -35,7 +35,7 @@ const DetectionReport& GameDetection::GetBestMatch() const
     return m_bestMatch;
 }
 
-const DetectionReport& GameDetection::GetDetectionReport(const uint8_t gameId, const fs::path& folder, const std::map<std::string, uint32_t>& files)
+const DetectionReport& GameDetection::GetDetectionReport(const GameId gameId, const fs::path& folder, const std::map<std::string, uint32_t>& files)
 {
     m_latestReport.gameId = gameId;
     m_latestReport.folder = folder;

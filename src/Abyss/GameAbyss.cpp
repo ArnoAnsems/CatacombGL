@@ -28,7 +28,7 @@ namespace fs = std::filesystem;
 static const std::string AbyssV113Name = "Catacomb Abyss v1.13 Shareware";
 static const std::string AbyssV124Name = "Catacomb Abyss v1.24 Registered";
 
-GameAbyss::GameAbyss(const uint8_t gameId, const fs::path gamePath, IRenderer& renderer) :
+GameAbyss::GameAbyss(const GameId gameId, const fs::path gamePath, IRenderer& renderer) :
     m_gameId (gameId),
     m_gamePath (gamePath),
     m_renderer (renderer),
@@ -582,7 +582,7 @@ EgaGraph* GameAbyss::GetEgaGraph()
 {
     if (m_egaGraph == nullptr)
     {
-        const egaGraphStaticData& staticData = (m_gameId == 1) ? egaGraphAbyss : egaGraphAbyssV124;
+        const egaGraphStaticData& staticData = (m_gameId == GameId::CatacombAbyssv113) ? egaGraphAbyss : egaGraphAbyssV124;
         m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer);
     }
 
@@ -712,10 +712,10 @@ const std::map<uint16_t, const DecorateActor>& GameAbyss::GetDecorateActors() co
 
 const std::string& GameAbyss::GetName() const
 {
-    return (m_gameId == 1) ? AbyssV113Name : AbyssV124Name;
+    return (m_gameId == GameId::CatacombAbyssv113) ? AbyssV113Name : AbyssV124Name;
 }
 
-const uint8_t GameAbyss::GetId() const
+const GameId GameAbyss::GetId() const
 {
     return m_gameId;
 }
@@ -973,7 +973,7 @@ const CatalogInfo catalogInfoV124 =
 
 const CatalogInfo& GameAbyss::GetCatalogInfo() const
 {
-    return (m_gameId == 1) ? catalogInfoV113 : catalogInfoV124;
+    return (m_gameId == GameId::CatacombAbyssv113) ? catalogInfoV113 : catalogInfoV124;
 }
 
 const SavedGameInDosFormatConfig& GameAbyss::GetSavedGameInDosFormatConfig() const

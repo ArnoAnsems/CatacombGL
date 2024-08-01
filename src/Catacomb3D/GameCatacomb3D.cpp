@@ -28,7 +28,7 @@ namespace fs = std::filesystem;
 static const std::string Catacomb3DName = "Catacomb 3-D v1.22";
 
 GameCatacomb3D::GameCatacomb3D(const fs::path gamePath, const fs::path configPath, IRenderer& renderer) :
-    m_gameId(5),
+    m_gameId(GameId::Catacomb3Dv122),
     m_gamePath(gamePath),
     m_configPath(configPath),
     m_renderer(renderer),
@@ -369,7 +369,7 @@ const std::string& GameCatacomb3D::GetName() const
     return Catacomb3DName;
 }
 
-const uint8_t GameCatacomb3D::GetId() const
+const GameId GameCatacomb3D::GetId() const
 {
     return m_gameId;
 }

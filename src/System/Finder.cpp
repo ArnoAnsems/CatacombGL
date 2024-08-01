@@ -31,41 +31,39 @@
 
 namespace fs = std::filesystem;
 
-// These 3 const members have to be in the same order as GameID
-const std::array<const std::map<std::string, uint32_t>*, GameID::Count> GameFile
+const std::map<GameId, const std::map<std::string, uint32_t>*> GameFiles
 {
-    &abyssFilesv113,
-    &abyssFilesv124,
-    &armageddonFiles,
-    &apocalypseFiles,
-    &catacomb3DFiles
+    {GameId::CatacombAbyssv113, &abyssFilesv113},
+    {GameId::CatacombAbyssv124, &abyssFilesv124},
+    {GameId::CatacombArmageddonv102, &armageddonFiles},
+    {GameId::CatacombApocalypsev101, &apocalypseFiles},
+    {GameId::Catacomb3Dv122, &catacomb3DFiles}
 };
 
-const std::array<const std::string, GameID::Count> GOGFolder
+const std::map<GameId, const std::string> GOGFolders
 {
-    "",
-    "Abyss",
-    "Armageddon",
-    "Apocalypse",
-    "Cat3D"
+    {GameId::CatacombAbyssv124, "Abyss"},
+    {GameId::CatacombArmageddonv102, "Armageddon"},
+    {GameId::CatacombApocalypsev101, "Apocalypse"},
+    {GameId::Catacomb3Dv122, "Cat3D"}
 };
 
-const std::array<const uint8_t, GameID::Count> ConfigID
+const std::map<GameId, uint8_t> ConfigIds
 {
-    CVarIdPathAbyssv113,
-    CVarIdPathAbyssv124,
-    CVarIdPathArmageddonv102,
-    CVarIdPathApocalypsev101,
-    CVarIdPathCatacomb3Dv122
+    {GameId::CatacombAbyssv113, CVarIdPathAbyssv113},
+    {GameId::CatacombAbyssv124, CVarIdPathAbyssv124},
+    {GameId::CatacombArmageddonv102, CVarIdPathArmageddonv102},
+    {GameId::CatacombApocalypsev101, CVarIdPathApocalypsev101},
+    {GameId::Catacomb3Dv122, CVarIdPathCatacomb3Dv122}
 };
 
-const std::array<std::string, GameID::Count> GameName
+const std::map<GameId, std::string> GameNames
 {
-    "Catacomb Abyss v1.13",
-    "Catacomb Abyss v1.24",
-    "Catacomb Armageddon v1.02",
-    "Catacomb Apocalypse v1.01",
-    "Catacomb 3-D v1.22"
+    {GameId::CatacombAbyssv113, "Catacomb Abyss v1.13"},
+    {GameId::CatacombAbyssv124, "Catacomb Abyss v1.24"},
+    {GameId::CatacombArmageddonv102, "Catacomb Armageddon v1.02"},
+    {GameId::CatacombApocalypsev101, "Catacomb Apocalypse v1.01"},
+    {GameId::Catacomb3Dv122, "Catacomb 3-D v1.22"}
 };
 
 inline bool GetCatacombsPackGOGPath(fs::path& path)
@@ -120,6 +118,12 @@ inline bool GetCatacombsPackGOGPath(fs::path& path)
 
 Finder::Finder(const ConfigurationSettings& config)
 {
+    for (GameId gameId : getAllGameIds())
+    {
+        GameDetection gameDetection;
+        m_detector.insert(std::make_pair(gameId, gameDetection));
+    }
+
     FindGamesInWorkingPath();
     LoadPaths(config);
     FindGOGPack();
@@ -139,35 +143,36 @@ void Finder::FindGOGPack()
         Logging::Instance().AddLogMessage("Path to GOG Catacombs Pack not found");
     }
 
-    // Start from 1 as 0 is the shareware game and not included in the GOG Pack
-    for ( std::uint8_t i = 1; i < GameID::Count; ++i )
+    for ( const auto& folderIt : GOGFolders )
     {
-        if( !GOGFolder[i].empty() && GetGameScore(i) != 0 )
+        const GameId gameId = folderIt.first;
+        const std::string gogFolder = folderIt.second;
+        if( !gogFolder.empty() && GetGameScore(gameId) != 0 )
         {
-            const fs::path path = gogPath / GOGFolder[i];
-            m_detector[i].GetDetectionReport(i, path, *GameFile[i] );
+            const fs::path path = gogPath / gogFolder;
+            m_detector.at(gameId).GetDetectionReport(gameId, path, *GameFiles.at(gameId));
         }
     }
 }
 
 void Finder::FindInPath(const fs::path& path)
 {
-    for ( std::uint8_t i = 0; i < GameID::Count; ++i )
+    for ( GameId gameId : getAllGameIds())
     {
-        if( GetGameScore(i) != 0 )
+        if( GetGameScore(gameId) != 0 )
         {
-            m_detector[i].GetDetectionReport(i, path, *GameFile[i] );
+            m_detector.at(gameId).GetDetectionReport(gameId, path, *GameFiles.at(gameId) );
         }
     }
 }
 
 void Finder::LoadPaths(const ConfigurationSettings& config)
 {
-    for ( std::uint8_t i = 0; i < GameID::Count; ++i )
+    for (GameId gameId : getAllGameIds())
     {
-        if( GetGameScore(i) != 0 && !config.GetCVarString(ConfigID[i]).Get().empty()  )
+        if( GetGameScore(gameId) != 0 && !config.GetCVarString(ConfigIds.at(gameId)).Get().empty()  )
         {
-            m_detector[i].GetDetectionReport(i, config.GetCVarString(ConfigID[i]).Get(), *GameFile[i] );
+            m_detector.at(gameId).GetDetectionReport(gameId, config.GetCVarString(ConfigIds.at(gameId)).Get(), *GameFiles.at(gameId) );
         }
     }
 }
@@ -175,36 +180,36 @@ void Finder::LoadPaths(const ConfigurationSettings& config)
 void Finder::SafePaths(ConfigurationSettings &config)
 {
     // If game data was found, remember the path!
-    for ( std::uint8_t i = 0; i < GameID::Count; ++i )
+    for (GameId gameId : getAllGameIds())
     {
-        if (GetGameScore(i) == 0)
+        if (GetGameScore(gameId) == 0)
         {
-            config.GetCVarStringMutable(ConfigID[i]).Set(GetGameFolder(i).string());
+            config.GetCVarStringMutable(ConfigIds.at(gameId)).Set(GetGameFolder(gameId).string());
         }
     }
 }
 
-const GameDetection Finder::GetGameDetector(uint8_t ID) const
+const GameDetection Finder::GetGameDetector(GameId ID) const
 {
     return m_detector.at(ID);
 }
 
-const DetectionReport Finder::GetGameReport(uint8_t ID) const
+const DetectionReport Finder::GetGameReport(GameId ID) const
 {
     return GetGameDetector(ID).GetBestMatch();
 }
 
-const std::string Finder::GetGameName(uint8_t ID) const
+const std::string Finder::GetGameName(GameId ID) const
 {
-    return GameName.at(ID);
+    return GameNames.at(ID);
 }
 
-uint16_t Finder::GetGameScore(uint8_t ID) const
+uint16_t Finder::GetGameScore(GameId ID) const
 {
     return GetGameReport(ID).score;
 }
 
-const fs::path Finder::GetGameFolder(uint8_t ID) const
+const fs::path Finder::GetGameFolder(GameId ID) const
 {
     return GetGameReport(ID).folder;
 }

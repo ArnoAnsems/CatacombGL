@@ -28,7 +28,7 @@ namespace fs = std::filesystem;
 static const std::string ArmageddonName = "Catacomb Armageddon v1.02";
 
 GameArmageddon::GameArmageddon(const fs::path gamePath, IRenderer& renderer) :
-    m_gameId (3),
+    m_gameId (GameId::CatacombArmageddonv102),
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_introView (nullptr),
@@ -595,7 +595,7 @@ const std::string& GameArmageddon::GetName() const
     return ArmageddonName;
 }
 
-const uint8_t GameArmageddon::GetId() const
+const GameId GameArmageddon::GetId() const
 {
     return m_gameId;
 }

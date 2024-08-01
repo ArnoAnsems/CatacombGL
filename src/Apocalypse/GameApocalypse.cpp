@@ -29,7 +29,7 @@ namespace fs = std::filesystem;
 static const std::string ApocalypseName = "Catacomb Apocalypse v1.01";
 
 GameApocalypse::GameApocalypse(const fs::path gamePath, IRenderer& renderer) :
-    m_gameId(4),
+    m_gameId(GameId::CatacombApocalypsev101),
     m_gamePath(gamePath),
     m_renderer(renderer),
     m_introView(nullptr),
@@ -458,7 +458,7 @@ const std::string& GameApocalypse::GetName() const
     return ApocalypseName;
 }
 
-const uint8_t GameApocalypse::GetId() const
+const GameId GameApocalypse::GetId() const
 {
     return m_gameId;
 }

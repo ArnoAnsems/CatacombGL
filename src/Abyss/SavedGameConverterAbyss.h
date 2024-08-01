@@ -21,11 +21,12 @@
 #pragma once
 
 #include "../Engine/ISavedGameConverter.h"
+#include "../Engine/GameId.h"
 
 class SavedGameConverterAbyss : public ISavedGameConverter
 {
 public:
-    SavedGameConverterAbyss(const uint8_t gameId);
+    SavedGameConverterAbyss(const GameId gameId);
     ~SavedGameConverterAbyss();
     const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
@@ -39,7 +40,7 @@ private:
     const uint16_t GetActorIdOfInert(const uint16_t state16) const;
     const uint8_t GetGameIndex() const;
 
-    const uint8_t m_gameId;
+    const GameId m_gameId;
 };
 
 

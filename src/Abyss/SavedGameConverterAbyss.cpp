@@ -262,7 +262,7 @@ constexpr uint16_t s_batpast[] = { 0x2856, 0x2810 };
 constexpr uint16_t s_batdie1[] = { 0x2860, 0x281A };
 constexpr uint16_t s_batdie2[] = { 0x286A, 0x2824 };
 
-SavedGameConverterAbyss::SavedGameConverterAbyss(const uint8_t gameId) :
+SavedGameConverterAbyss::SavedGameConverterAbyss(const GameId gameId) :
     m_gameId(gameId)
 {
 }
@@ -558,5 +558,5 @@ const bool SavedGameConverterAbyss::IsInertObject(const uint16_t obclass) const
 
 const uint8_t SavedGameConverterAbyss::GetGameIndex() const
 {
-    return (m_gameId == 1) ? 0 : 1;
+    return (m_gameId == GameId::CatacombAbyssv113) ? 0 : 1;
 }

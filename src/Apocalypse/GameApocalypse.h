@@ -54,7 +54,7 @@ public:
     bool ProcessInputOnHelpPage(PlayerInput& playerInput) override;
     const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;
     const std::string& GetName() const override;
-    const uint8_t GetId() const override;
+    const GameId GetId() const override;
     const uint16_t GetMenuCursorPic() const override;
     const uint16_t GetNorthIconSprite() const override;
     const std::string GetSavedGamesPath() const override;
@@ -100,7 +100,7 @@ private:
     void DrawGems(const PlayerInventory& playerInventory);
 
     IIntroView* m_introView;
-    const uint8_t m_gameId;
+    const GameId m_gameId;
     const std::filesystem::path m_gamePath;
     IRenderer& m_renderer;
     short m_zombie_base_delay;

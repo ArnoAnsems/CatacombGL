@@ -14,7 +14,6 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "CommandLineParser.h"
-#include "GameId.h"
 
 const std::string paramDescent = "--descent";
 const std::string paramAbyss = "--abyss";
@@ -26,7 +25,7 @@ const std::string paramIniFile = "--ini";
 const std::string paramLogFile = "--log";
 
 CommandLineParser::CommandLineParser() :
-    m_gameIdToStart(GameID::NotDetected)
+    m_gameIdToStart(GameId::NotDetected)
 {
 }
 
@@ -57,23 +56,23 @@ void CommandLineParser::parse(const int argc, char* argv[])
 
         if (compareStrings(current, paramDescent))
         {
-            m_gameIdToStart = GameID::Catacomb3Dv122;
+            m_gameIdToStart = GameId::Catacomb3Dv122;
         }
         if (compareStrings(current, paramAbyss))
         {
-            m_gameIdToStart = GameID::CatacombAbyssv124;
+            m_gameIdToStart = GameId::CatacombAbyssv124;
         }
         if (compareStrings(current, paramApocalypse))
         {
-            m_gameIdToStart = GameID::CatacombApocalypsev101;
+            m_gameIdToStart = GameId::CatacombApocalypsev101;
         }
         if (compareStrings(current, paramArmageddon))
         {
-            m_gameIdToStart = GameID::CatacombArmageddonv102;
+            m_gameIdToStart = GameId::CatacombArmageddonv102;
         }
         if (compareStrings(current, paramAbyssSW13))
         {
-            m_gameIdToStart = GameID::CatacombAbyssv113;
+            m_gameIdToStart = GameId::CatacombAbyssv113;
         }
 
         if (compareStrings(prev, paramIniFile))
@@ -98,7 +97,7 @@ const std::string& CommandLineParser::getFilenameLog() const
     return m_filenameLog;
 }
 
-uint8_t CommandLineParser::gameIdToStart() const
+GameId CommandLineParser::gameIdToStart() const
 {
     return m_gameIdToStart;
 }

@@ -26,7 +26,6 @@
 #include <cstdint>
 #include <string>
 #include <map>
-#include <array>
 #include <vector>
 #include <filesystem>
 
@@ -42,14 +41,14 @@ public:
     void LoadPaths(const ConfigurationSettings& config);
     void SafePaths(ConfigurationSettings& config);
 
-    const GameDetection GetGameDetector(uint8_t ID) const;
-    const DetectionReport GetGameReport(uint8_t ID) const;
-    const std::string GetGameName(uint8_t ID) const;
-    uint16_t GetGameScore(uint8_t ID) const;
-    const std::filesystem::path GetGameFolder(uint8_t ID) const;
+    const GameDetection GetGameDetector(GameId Id) const;
+    const DetectionReport GetGameReport(GameId Id) const;
+    const std::string GetGameName(GameId Id) const;
+    uint16_t GetGameScore(GameId Id) const;
+    const std::filesystem::path GetGameFolder(GameId Id) const;
 
 private:
-    std::array<GameDetection, GameID::Count> m_detector;
+    std::map<GameId, GameDetection> m_detector;
 
 };
 

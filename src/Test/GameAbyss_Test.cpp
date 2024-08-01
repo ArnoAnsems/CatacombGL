@@ -30,7 +30,7 @@ GameAbyss_Test::~GameAbyss_Test()
 TEST(GameAbyss_Test, CheckGetDecorateActors)
 {
     RendererStub renderer;
-    GameAbyss gameAbyss(0, ".\\", renderer);
+    GameAbyss gameAbyss(GameId::CatacombAbyssv113, ".\\", renderer);
     auto decorateActors = gameAbyss.GetDecorateActors();
     ASSERT_GT(decorateActors.size(), 0u);
 

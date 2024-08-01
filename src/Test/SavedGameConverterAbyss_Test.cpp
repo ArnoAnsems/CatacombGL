@@ -47,8 +47,8 @@ TEST(SavedGameConverterAbyss_Test, ConvertHidingZombie)
         dosObject.obclass = obclassZombie;
         dosObject.state16 = s_zombie_inground[versionIndex];
 
-        const uint8_t version = (versionIndex == 0) ? 1 : 2;
-        SavedGameConverterAbyss converter(version);
+        const GameId gameId = (versionIndex == 0) ? GameId::CatacombAbyssv113 : GameId::CatacombAbyssv124;
+        SavedGameConverterAbyss converter(gameId);
         EXPECT_EQ(actorIdMonsterZombie, converter.GetActorId(dosObject));
 
         CheckAnimationFrameExistsAbyss(actorIdMonsterZombie, StateIdHidden, 0u);

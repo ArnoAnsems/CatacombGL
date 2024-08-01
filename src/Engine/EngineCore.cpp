@@ -195,7 +195,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     if (m_configurationSettings.GetCVarBool(CVarIdPreventSoftlock).IsEnabled())
     {
         // Prevent soft lock in The Town of Morbidity
-        if (m_game.GetId() == 3 && m_level->GetLevelIndex() == 0)
+        if (m_game.GetId() == GameId::CatacombArmageddonv102 && m_level->GetLevelIndex() == 0)
         {
             // Change yellow key to red key
             m_level->SetFloorTile(29, 24, 8);
@@ -206,7 +206,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     }
 
     // Remove unreachable skeleton in Mike's Blastable Passage
-    if ((m_game.GetId() == 1 || m_game.GetId() == 2) && m_level->GetLevelIndex() == 5)
+    if ((m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124) && m_level->GetLevelIndex() == 5)
     {
         m_level->SetFloorTile(7, 17, 0);
     }
@@ -271,7 +271,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
     else
     {
-        if (!m_menu->IsActive() || m_game.GetId() != 5)
+        if (!m_menu->IsActive() || m_game.GetId() != GameId::Catacomb3Dv122)
         {
             if (m_readingScroll == NotReadingAnyScroll && (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || (m_state == Victory && m_victoryState != VictoryStateDone) || m_state == VerifyGateExit))
             {
@@ -315,15 +315,15 @@ void EngineCore::DrawScene(IRenderer& renderer)
         {
             if (m_playerActions.GetHandHeight() > 0)
             {
-                const uint16_t statusbarOffset = (m_game.GetId() == 5) ? 144 : 120;
+                const uint16_t statusbarOffset = (m_game.GetId() == GameId::Catacomb3Dv122) ? 144 : 120;
                 uint16_t pictureIndex = m_game.GetEgaGraph()->GetHandPictureIndex();
                 // When shot power is building up in Catacomb 3D, check if the hand with the fire effect needs to be shown.
-                if (m_game.GetId() == 5 && m_playerActions.GetShotPower() > 0 && m_gameTimer.GetTicksForPlayer() % 16 < 8)
+                if (m_game.GetId() == GameId::Catacomb3Dv122 && m_playerActions.GetShotPower() > 0 && m_gameTimer.GetTicksForPlayer() % 16 < 8)
                 {
                     pictureIndex++;
                 }
                 const Picture* handPicture = m_game.GetEgaGraph()->GetMaskedPicture(pictureIndex);
-                const int16_t offsetX = (m_game.GetId() == 5) ? 92 : 120;
+                const int16_t offsetX = (m_game.GetId() == GameId::Catacomb3Dv122) ? 92 : 120;
                 // Draw only the segment of the hand graphic that is visible above the statusbar.
                 renderer.Render2DPictureSegment(handPicture, offsetX, statusbarOffset - m_playerActions.GetHandHeight(), 0, 0, handPicture->GetImageWidth(), m_playerActions.GetHandHeight());
             }
@@ -382,7 +382,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
     }
 
-    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.GetId() != 5)) || (m_state == Victory && m_game.GetId() != 5))
+    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.GetId() != GameId::Catacomb3Dv122)) || (m_state == Victory && m_game.GetId() != GameId::Catacomb3Dv122))
     {
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;
@@ -391,7 +391,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
         if (m_state != Victory)
         {
-            if (m_game.GetId() != 5)  // Status message and radar not in Catacomb 3-D
+            if (m_game.GetId() != GameId::Catacomb3Dv122)  // Status message and radar not in Catacomb 3-D
             {
                 const int32_t remainingFreezeTime = m_gameTimer.GetRemainingFreezeTime();
                 const int32_t remainingFreezeTimeTicks = (remainingFreezeTime * 70) / 30000;
@@ -436,7 +436,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         const uint16_t margin = renderer.GetAdditionalMarginDueToWideScreen(aspectRatios[m_configurationSettings.GetCVarEnum(CVarIdAspectRatio).GetItemIndex()]);
         RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
-        if (m_game.GetId() == 5)
+        if (m_game.GetId() == GameId::Catacomb3Dv122)
         {
             // Catacomb 3-D
             renderer.Render2DBar(0 - margin, 0, 264 + (2 * margin), 144, EgaBrightBlue);
@@ -451,7 +451,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
             if (width == 0)
             {
 
-                const char* enterAreaText = (m_game.GetId() == 3) ? "You enter a new area ..." : "A new challenge awaits you.";
+                const char* enterAreaText = (m_game.GetId() == GameId::CatacombArmageddonv102) ? "You enter a new area ..." : "A new challenge awaits you.";
                 width = (uint16_t)strlen(enterAreaText);
                 DrawCenteredTiledWindow(renderer, width, 3);
                 renderableText.Centered(enterAreaText, EgaDarkGray, 160, 56);
@@ -485,7 +485,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         DrawCenteredTiledWindow(renderer, 26, 3);
         // In Catacomb 3-D, the on-screen level indices start at 1 instead of 0.
-        const bool onScreenLevelIndexStartsAtZero = (m_game.GetId() != 5);
+        const bool onScreenLevelIndexStartsAtZero = (m_game.GetId() != GameId::Catacomb3Dv122);
         const uint8_t firstLevel = onScreenLevelIndexStartsAtZero ? 0 : 1;
         const uint8_t totalNumberOfLevels = m_game.GetGameMaps()->GetNumberOfLevels();
         const uint8_t lastLevel = onScreenLevelIndexStartsAtZero ? totalNumberOfLevels - 1 : totalNumberOfLevels;
@@ -532,7 +532,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         renderer.RenderText(renderableText);
     }
 
-    if (m_level != nullptr && m_level->GetPlayerActor()->IsDead() && m_playerInventory.GetPotions() > 0 && m_game.GetId() != 5)
+    if (m_level != nullptr && m_level->GetPlayerActor()->IsDead() && m_playerInventory.GetPotions() > 0 && m_game.GetId() != GameId::Catacomb3Dv122)
     {
         DrawCenteredTiledWindow(renderer, 35, 3);
         RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
@@ -581,7 +581,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
 
     if (m_menu->IsActive())
     {
-        if (m_game.GetId() != 5)
+        if (m_game.GetId() != GameId::Catacomb3Dv122)
         {
             DrawTiledWindow(renderer, 2, 1, 36, 13);
         }
@@ -646,7 +646,7 @@ void EngineCore::EnterKeyReleased()
 
         if (m_state == Introduction)
         {
-            if (m_game.GetId() == 5)
+            if (m_game.GetId() == GameId::Catacomb3Dv122)
             {
                 OpenMenu();
             }
@@ -671,7 +671,7 @@ void EngineCore::EnterKeyReleased()
             // Warp to level
             const int levelIndexOnScreen = atoi(m_warpCheatTextField.c_str());
             // In Catacomb 3-D, the on-screen level indices start at 1 instead of 0.
-            const int levelIndexInGameMaps = (m_game.GetId() == 5) ? levelIndexOnScreen - 1 : levelIndexOnScreen;
+            const int levelIndexInGameMaps = (m_game.GetId() == GameId::Catacomb3Dv122) ? levelIndexOnScreen - 1 : levelIndexOnScreen;
             if (levelIndexInGameMaps >= 0 && levelIndexInGameMaps < m_game.GetGameMaps()->GetNumberOfLevels())
             {
                 m_warpToLevel = (uint8_t)levelIndexInGameMaps;
@@ -762,7 +762,7 @@ bool EngineCore::Think()
         else if (command == MenuCommandExitGame)
         {
             m_state = ExitGame;
-            if (m_game.GetId() != 5)
+            if (m_game.GetId() != GameId::Catacomb3Dv122)
             {
                 DisplayStatusMessage("FARE THEE WELL!", 2000);
             }
@@ -887,7 +887,7 @@ bool EngineCore::Think()
         }
     }
 
-    if (m_playerInput.IsKeyPressed(SDLK_F10) && m_state == Introduction && m_game.GetId() == 1)
+    if (m_playerInput.IsKeyPressed(SDLK_F10) && m_state == Introduction && m_game.GetId() == GameId::CatacombAbyssv113)
     {
         // Catacomb Abyss Shareware Demo
         m_menu->OpenDemo();
@@ -944,7 +944,7 @@ bool EngineCore::Think()
             }
             if (m_playerInput.IsKeyPressed(SDLK_e)) // E = Exit level (Catacomb 3D)
             {
-                if (m_game.GetId() == 5 &&
+                if (m_game.GetId() == GameId::Catacomb3Dv122 &&
                     m_state == InGame &&
                     m_level->GetLevelIndex() + 1 < m_game.GetGameMaps()->GetNumberOfLevels())
                 {
@@ -1037,7 +1037,7 @@ bool EngineCore::Think()
             m_state = InGame;
         }
     }
-    else if (m_state == InGame && m_game.GetId() != 5 && m_playerInput.IsKeyJustPressed(SDLK_F1))
+    else if (m_state == InGame && m_game.GetId() != GameId::Catacomb3Dv122 && m_playerInput.IsKeyJustPressed(SDLK_F1))
     {
         m_state = Help;
 
@@ -1163,7 +1163,7 @@ bool EngineCore::Think()
         {
             if (m_keyToTake != NoKey)
             {
-                if (m_game.GetId() == 5)
+                if (m_game.GetId() == GameId::Catacomb3Dv122)
                 {
                     // In Catacomb 3D there is no popup. Use the key immediately.
                     m_playerInventory.TakeKey(m_keyToTake);
@@ -1209,7 +1209,7 @@ bool EngineCore::Think()
 
                 bool shoot = false;
                 const bool autoFire = m_configurationSettings.GetCVarBool(CVarIdAutoFire).IsEnabled();
-                if (m_game.GetId() != 5)
+                if (m_game.GetId() != GameId::Catacomb3Dv122)
                 {
                     shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
                 }
@@ -1256,7 +1256,7 @@ bool EngineCore::Think()
 
                 if (m_playerActions.UpdateContinueBolt(m_timeStampOfPlayerCurrentFrame))
                 {
-                    const uint16_t projectileId = (m_game.GetId() == 5) ? m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1 : m_level->GetPlayerActor()->GetDecorateActor().projectileId;
+                    const uint16_t projectileId = (m_game.GetId() == GameId::Catacomb3Dv122) ? m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1 : m_level->GetPlayerActor()->GetDecorateActor().projectileId;
                     const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
                     if (decorateProjectilePair != m_game.GetDecorateActors().end())
                     {
@@ -1382,7 +1382,7 @@ bool EngineCore::Think()
             {
                 m_gameTimer.Pause();
 
-                if (m_game.GetId() == 5)
+                if (m_game.GetId() == GameId::Catacomb3Dv122)
                 {
                     m_setOverlayOnNextDraw = true;
                 }
@@ -1402,7 +1402,7 @@ bool EngineCore::Think()
             m_playerActions.ResetForNewLevel();
             m_state = EnteringLevel;
             m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
-            if (m_game.GetId() == 5)
+            if (m_game.GetId() == GameId::Catacomb3Dv122)
             {
                 m_setOverlayOnNextDraw = true;
                 m_timeStampToEnterGame += 1000;
@@ -1600,10 +1600,10 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             {
                 if (!m_godModeIsOn)
                 {
-                    const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
+                    const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != GameId::Catacomb3Dv122) ? actor->GetDecorateActor().damage / 2 : actor->GetDecorateActor().damage;
                     m_level->GetPlayerActor()->Damage(damage);
                     m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
-                    const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
+                    const uint8_t borderSignal = (m_game.GetId() != GameId::Catacomb3Dv122) ? 12 : 5;
                     const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
                     m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
                     DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
@@ -1887,7 +1887,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     case ActionWarpToOtherLevel:
     {
-        if (m_game.GetId() == 5)
+        if (m_game.GetId() == GameId::Catacomb3Dv122)
         {
             // Catacomb 3D
             const uint16_t wallTile = m_level->GetWallTile(actor->GetTileX(), actor->GetTileY());
@@ -1934,10 +1934,10 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             if (!m_godModeIsOn)
             {
                 const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
-                const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5) ? baseDamage / 2 : baseDamage;
+                const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != GameId::Catacomb3Dv122) ? baseDamage / 2 : baseDamage;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
-                const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
+                const uint8_t borderSignal = (m_game.GetId() != GameId::Catacomb3Dv122) ? 12 : 5;
                 const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
                 m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
                 DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
@@ -2017,7 +2017,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                 }
                                 else
                                 {
-                                    const bool isEasyModeFromAdventureSeries = (m_difficultyLevel == Easy && m_game.GetId() != 5);
+                                    const bool isEasyModeFromAdventureSeries = (m_difficultyLevel == Easy && m_game.GetId() != GameId::Catacomb3Dv122);
                                     const uint8_t damage = actor->GetDecorateActor().damage;
                                     if (isEasyModeFromAdventureSeries)
                                     {
@@ -2046,19 +2046,19 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                                     }
                                     else
                                     {
-                                        if (m_game.GetId() == 3 && otherActor->GetDecorateActor().id == 56 && rand() % 8 != 0)
+                                        if (m_game.GetId() == GameId::CatacombArmageddonv102 && otherActor->GetDecorateActor().id == 56 && rand() % 8 != 0)
                                         {
                                             // The red demon from Armageddon has a pain chance of 1:8, see C5_STATE.C.
                                         }
-                                        else if (m_game.GetId() == 4 && otherActor->GetDecorateActor().id == 64 && rand() % 5 != 0)
+                                        else if (m_game.GetId() == GameId::CatacombApocalypsev101 && otherActor->GetDecorateActor().id == 64 && rand() % 5 != 0)
                                         {
                                             // The yellow troll from Apocalypse has a pain chance of 1:5, see C6_STATE.C.
                                         }
-                                        else if (m_game.GetId() == 4 && otherActor->GetDecorateActor().id == 57 && rand() % 8 != 0)
+                                        else if (m_game.GetId() == GameId::CatacombApocalypsev101 && otherActor->GetDecorateActor().id == 57 && rand() % 8 != 0)
                                         {
                                             // The cyber demon from Apocalypse has a pain chance of 1:8, see C6_STATE.C.
                                         }
-                                        else if (m_game.GetId() == 4 && otherActor->GetDecorateActor().id == 62 && rand() % 8 != 0)
+                                        else if (m_game.GetId() == GameId::CatacombApocalypsev101 && otherActor->GetDecorateActor().id == 62 && rand() % 8 != 0)
                                         {
                                             // The demon from Apocalypse has a pain chance of 1:8, see C6_STATE.C.
                                         }
@@ -2084,10 +2084,10 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     if (!m_godModeIsOn)
                     {
                         const uint8_t baseDamage = (actor->GetTemp2() > 0) ? (uint8_t)actor->GetTemp2() : actor->GetDecorateActor().damage;
-                        const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != 5 && baseDamage > 1) ? baseDamage / 2 : baseDamage;
+                        const uint8_t damage = (m_difficultyLevel == Easy && m_game.GetId() != GameId::Catacomb3Dv122 && baseDamage > 1) ? baseDamage / 2 : baseDamage;
                         m_level->GetPlayerActor()->Damage(damage);
                         m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
-                        const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
+                        const uint8_t borderSignal = (m_game.GetId() != GameId::Catacomb3Dv122) ? 12 : 5;
                         const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
                         m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
                         DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
@@ -2161,7 +2161,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 const int16_t damage = 1;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
-                const uint8_t borderSignal = (m_game.GetId() != 5) ? 12 : 5;
+                const uint8_t borderSignal = (m_game.GetId() != GameId::Catacomb3Dv122) ? 12 : 5;
                 const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
                 m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
             }
@@ -2333,7 +2333,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
         moveOk = false;
 
         // Play sound while sliding along a wall in Catacomb 3D
-        if (m_game.GetId() == 5 && m_state == InGame && !m_game.GetAudioPlayer()->IsPlaying())
+        if (m_game.GetId() == GameId::Catacomb3Dv122 && m_state == InGame && !m_game.GetAudioPlayer()->IsPlaying())
         {
             m_game.GetAudioPlayer()->Play(0);
         }
@@ -2346,7 +2346,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
         const KeyId requiredKey = m_level->GetRequiredKeyForDoor(tileX, tileY);
         if (requiredKey != NoKey && m_playerInventory.GetKeys(requiredKey) == 0)
         {
-            if (m_game.GetId() != 5)
+            if (m_game.GetId() != GameId::Catacomb3Dv122)
             {
                 m_gameTimer.Pause();
                 std::snprintf(m_messageInPopup, 256, "You need a %s key", GetKeyName(requiredKey));
@@ -2362,7 +2362,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
             }
             if (m_level->IsBlockedDoor(tileX, tileY))
             {
-                if (m_game.GetId() != 5)
+                if (m_game.GetId() != GameId::Catacomb3Dv122)
                 {
                     m_gameTimer.Pause();
                     std::snprintf(m_messageInPopup, 256, "The door is blocked");
@@ -2371,7 +2371,7 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 }
             }
             else if (m_level->IsRemovableDoor(tileX, tileY) ||
-                     m_game.GetId() == 5) // All doors in the Catacomb 3-D can be removed
+                     m_game.GetId() == GameId::Catacomb3Dv122) // All doors in the Catacomb 3-D can be removed
             {
                 // Open the door
                 m_level->SetWallTile(tileX, tileY, 0);
@@ -2492,7 +2492,7 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
         moveOk &= ClipYMove(ymove);
     }
 
-    if (!moveOk && m_game.GetId() == 5 && m_configurationSettings.GetCVarBool(CVarIdStickyWalls).IsEnabled())
+    if (!moveOk && m_game.GetId() == GameId::Catacomb3Dv122 && m_configurationSettings.GetCVarBool(CVarIdStickyWalls).IsEnabled())
     {
         // Simulate the sticky walls from the Catacomb 3-D by setting the player back to the position before the move
         m_level->GetPlayerActor()->SetX(playerPosXBeforeMove);
@@ -2525,15 +2525,15 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
     // The water troll in Abyss and the water dragon in Armageddon move slower when under water.
     // The blob from Apocalypse moves slower when in shadow mode.
     if (actor->GetState() == StateIdHidden &&
-        (((m_game.GetId() == 1 || m_game.GetId() == 2 || m_game.GetId() == 3) && actor->GetDecorateActor().id == 61)) ||
-        ((m_game.GetId() == 4 && actor->GetDecorateActor().id == 54)))
+        (((m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124 || m_game.GetId() == GameId::CatacombArmageddonv102) && actor->GetDecorateActor().id == 61)) ||
+        ((m_game.GetId() == GameId::CatacombApocalypsev101 && actor->GetDecorateActor().id == 54)))
     {
         speed = 1200;
     }
 
     // The manta ray in Apocalypse move slower when under water.
     if (actor->GetState() == StateIdHidden &&
-        ((m_game.GetId() == 4 && actor->GetDecorateActor().id == 65)))
+        ((m_game.GetId() == GameId::CatacombApocalypsev101 && actor->GetDecorateActor().id == 65)))
     {
         speed = 1700;
     }
@@ -2550,7 +2550,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
             if (actor->GetDecorateActor().damage > 0)
             {
                 // Melee attack
-                const bool performRandomAttack = ((m_game.GetId() != 5) && (rand() % (5000 / truncatedDeltaTimeInMs) == 0));
+                const bool performRandomAttack = ((m_game.GetId() != GameId::Catacomb3Dv122) && (rand() % (5000 / truncatedDeltaTimeInMs) == 0));
                 const bool playerInRange = actor->WouldCollideWithActor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), 1.0f);
                 if (playerInRange || performRandomAttack)
                 {
@@ -3105,7 +3105,7 @@ void EngineCore::OpenMenu()
     {
         m_gameTimer.Pause();
     }
-    if (m_game.GetId() != 5)
+    if (m_game.GetId() != GameId::Catacomb3Dv122)
     {
         m_game.PlaySoundWarpUpOrDown(true);
     }
@@ -3118,7 +3118,7 @@ void EngineCore::CloseMenu()
     {
         m_gameTimer.Resume();
     }
-    if (m_game.GetId() != 5)
+    if (m_game.GetId() != GameId::Catacomb3Dv122)
     {
         m_game.PlaySoundWarpUpOrDown(false);
     }
@@ -3206,8 +3206,8 @@ bool EngineCore::StoreGameToFileWithFullPath(const fs::path filename) const
         file.write(headerString, sizeof(headerString));
         file.write((const char*)&versionMajor, sizeof(versionMajor));
         file.write((const char*)&versionMinor, sizeof(versionMinor));
-        const uint8_t gameId = m_game.GetId();
-        file.write((const char*)&gameId, sizeof(gameId));
+        const uint8_t persistentGameId = getPersistentGameId(m_game.GetId());
+        file.write((const char*)&persistentGameId, sizeof(persistentGameId));
         file.write((const char*)&m_difficultyLevel, sizeof(m_difficultyLevel));
         file.write((const char*)&m_godModeIsOn, sizeof(m_godModeIsOn));
         m_playerInventory.StoreToFile(file);
@@ -3411,7 +3411,7 @@ bool EngineCore::AreScrollsPresent() const
 
 void EngineCore::StartMusicIfNeeded()
 {
-    if (m_game.GetId() == 5 &&
+    if (m_game.GetId() == GameId::Catacomb3Dv122 &&
         m_configurationSettings.GetCVarEnum(CVarIdMusicMode).GetItemIndex() == CVarItemIdMusicModeAdlib &&
         (m_state == InGame || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == WarpCheatDialog || m_state == AutoMapDialog) &&
         !m_menu->IsActive())

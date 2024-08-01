@@ -57,7 +57,7 @@ public:
     bool ProcessInputOnHelpPage(PlayerInput& playerInput) override;
     const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;
     const std::string& GetName() const override;
-    const uint8_t GetId() const override;
+    const GameId GetId() const override;
     const uint16_t GetMenuCursorPic() const override;
     const uint16_t GetNorthIconSprite() const override;
     const std::string GetSavedGamesPath() const override;
@@ -100,7 +100,7 @@ private:
     void DrawStatusBarWideScreenMargin(const int16_t offsetX, const int16_t marginWidth);
 
     IIntroView* m_introView;
-    const uint8_t m_gameId;
+    const GameId m_gameId;
     const std::filesystem::path m_gamePath;
     const std::filesystem::path m_configPath;
     IRenderer& m_renderer;

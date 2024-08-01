@@ -59,7 +59,7 @@
 
 namespace fs = std::filesystem;
 
-uint8_t selectedGame = GameID::NotDetected;
+GameId selectedGame = GameId::NotDetected;
 
 void UpdatePlayerInput(const SDL_Window* const window, PlayerInput& input)
 {
@@ -154,15 +154,15 @@ int main(int argc, char* argv[])
 
 	Finder finder = Finder(config);
 
-	for (uint8_t i = 0; i < GameID::Count; ++i)
+	for (GameId gameId : getAllGameIds())
 	{
-		if (finder.GetGameScore(i) == 0)
+		if (finder.GetGameScore(gameId) == 0)
 		{
-			Logging::Instance().AddLogMessage(finder.GetGameName(i) + " detected at " + finder.GetGameFolder(i).string());
+			Logging::Instance().AddLogMessage(finder.GetGameName(gameId) + " detected at " + finder.GetGameFolder(gameId).string());
 		}
 		else
 		{
-			Logging::Instance().AddLogMessage(finder.GetGameName(i) + " not detected");
+			Logging::Instance().AddLogMessage(finder.GetGameName(gameId) + " not detected");
 		}
 	}
 
@@ -192,9 +192,9 @@ int main(int argc, char* argv[])
 
 	system.GetSubFolders(initialSearchFolder, gameSelectionPresentation.subFolders);
 
-	if (selectedGame == GameID::NotDetected)
+	if (selectedGame == GameId::NotDetected)
 	{
-		while (selectedGame == GameID::NotDetected && active)
+		while (selectedGame == GameId::NotDetected && active)
 		{
 			SDL_Event event;
 			memset(&event, 0, sizeof(event));
@@ -208,20 +208,20 @@ int main(int argc, char* argv[])
 
 			if (gameSelectionPresentation.gameListCatacombsPack.empty())
 			{
-				const GameDetectionState catacomb3Dv122DetectionState = (finder.GetGameScore(GameID::Catacomb3Dv122) == 0) ? Detected : NotDetected;
+				const GameDetectionState catacomb3Dv122DetectionState = (finder.GetGameScore(GameId::Catacomb3Dv122) == 0) ? Detected : NotDetected;
 				gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("1. Catacomb 3-D: The Descent v1.22", catacomb3Dv122DetectionState));
-				const GameDetectionState abyssv124DetectionState = (finder.GetGameScore(GameID::CatacombAbyssv124) == 0) ? Detected : NotDetected;
+				const GameDetectionState abyssv124DetectionState = (finder.GetGameScore(GameId::CatacombAbyssv124) == 0) ? Detected : NotDetected;
 				gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("2. Catacomb Abyss v1.24", abyssv124DetectionState));
-				const GameDetectionState armageddonDetectionState = (finder.GetGameScore(GameID::CatacombArmageddonv102) == 0) ? Detected : NotDetected;
+				const GameDetectionState armageddonDetectionState = (finder.GetGameScore(GameId::CatacombArmageddonv102) == 0) ? Detected : NotDetected;
 				gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("3. Catacomb Armageddon v1.02", armageddonDetectionState));
-				const GameDetectionState apocalypseDetectionState = (finder.GetGameScore(GameID::CatacombApocalypsev101) == 0) ? Detected : NotDetected;
+				const GameDetectionState apocalypseDetectionState = (finder.GetGameScore(GameId::CatacombApocalypsev101) == 0) ? Detected : NotDetected;
 				gameSelectionPresentation.gameListCatacombsPack.push_back(std::make_pair("4. Catacomb Apocalypse v1.01", apocalypseDetectionState));
 			}
 
 			if (gameSelectionPresentation.gameListShareware.empty())
 			{
 				gameSelectionPresentation.gameListShareware.push_back(std::make_pair("5. Catacomb Abyss v1.12", NotSupported));
-				const GameDetectionState abyssv133DetectionState = (finder.GetGameScore(GameID::CatacombAbyssv113) == 0) ? Detected : NotDetected;
+				const GameDetectionState abyssv133DetectionState = (finder.GetGameScore(GameId::CatacombAbyssv113) == 0) ? Detected : NotDetected;
 				gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
 			}
 
@@ -238,27 +238,27 @@ int main(int argc, char* argv[])
 
 			if (input.IsKeyPressed(SDLK_1))
 			{
-				selectedGame = GameID::Catacomb3Dv122;
+				selectedGame = GameId::Catacomb3Dv122;
 			}
 
 			if (input.IsKeyPressed(SDLK_2))
 			{
-				selectedGame = GameID::CatacombAbyssv124;
+				selectedGame = GameId::CatacombAbyssv124;
 			}
 
 			if (input.IsKeyPressed(SDLK_3))
 			{
-				selectedGame = GameID::CatacombArmageddonv102;
+				selectedGame = GameId::CatacombArmageddonv102;
 			}
 
 			if (input.IsKeyPressed(SDLK_4))
 			{
-				selectedGame = GameID::CatacombApocalypsev101;
+				selectedGame = GameId::CatacombApocalypsev101;
 			}
 
 			if (input.IsKeyPressed(SDLK_6))
 			{
-				selectedGame = GameID::CatacombAbyssv113;
+				selectedGame = GameId::CatacombAbyssv113;
 			}
 
 			if (input.IsKeyJustPressed(SDLK_UP))
@@ -352,21 +352,21 @@ int main(int argc, char* argv[])
 		{
 			switch (report.gameId)
 			{
-			case GameID::Catacomb3Dv122:
+			case GameId::Catacomb3Dv122:
 				game = new GameCatacomb3D(report.folder, system.GetConfigurationFilePath(), *renderer);
 				break;
-			case GameID::CatacombAbyssv124:
-				game = new GameAbyss(2, report.folder, *renderer);
+			case GameId::CatacombAbyssv124:
+				game = new GameAbyss(GameId::CatacombAbyssv124, report.folder, *renderer);
 				break;
-			case GameID::CatacombArmageddonv102:
+			case GameId::CatacombArmageddonv102:
 				game = new GameArmageddon(report.folder, *renderer);
 				break;
-			case GameID::CatacombApocalypsev101:
+			case GameId::CatacombApocalypsev101:
 				game = new GameApocalypse(report.folder, *renderer);
 				break;
 			default:
-				// DEMO
-				game = new GameAbyss(1, report.folder, *renderer);
+				// Shareware
+				game = new GameAbyss(GameId::CatacombAbyssv113, report.folder, *renderer);
 
 			}
 			Logging::Instance().AddLogMessage("Initializing game " + game->GetName());

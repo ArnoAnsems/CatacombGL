@@ -22,7 +22,7 @@ TEST(CommandLineParser_Test, parseWithNoCommands)
     CommandLineParser commandLineParser;
     char* commands[] = { "test.exe" };
     commandLineParser.parse(1, commands);
-    EXPECT_EQ(GameID::NotDetected, commandLineParser.gameIdToStart());
+    EXPECT_EQ(GameId::NotDetected, commandLineParser.gameIdToStart());
     EXPECT_TRUE(commandLineParser.getFilenameIni().empty());
     EXPECT_TRUE(commandLineParser.getFilenameLog().empty());
 }
@@ -32,7 +32,7 @@ TEST(CommandLineParser_Test, startWithCatacomb3D)
     CommandLineParser commandLineParser;
     char* commands[] = {"test.exe", "--descent"};
     commandLineParser.parse(2, commands);
-    EXPECT_EQ(GameID::Catacomb3Dv122, commandLineParser.gameIdToStart());
+    EXPECT_EQ(GameId::Catacomb3Dv122, commandLineParser.gameIdToStart());
 }
 
 TEST(CommandLineParser_Test, startWithCatacombAbyssSharewareV113)
@@ -40,7 +40,7 @@ TEST(CommandLineParser_Test, startWithCatacombAbyssSharewareV113)
     CommandLineParser commandLineParser;
     char* commands[] = { "test.exe", "--abyss_sw13" };
     commandLineParser.parse(2, commands);
-    EXPECT_EQ(GameID::CatacombAbyssv113, commandLineParser.gameIdToStart());
+    EXPECT_EQ(GameId::CatacombAbyssv113, commandLineParser.gameIdToStart());
 }
 
 TEST(CommandLineParser_Test, startWithCatacombAbyssRegistered)
@@ -48,7 +48,7 @@ TEST(CommandLineParser_Test, startWithCatacombAbyssRegistered)
     CommandLineParser commandLineParser;
     char* commands[] = { "test.exe", "--abyss" };
     commandLineParser.parse(2, commands);
-    EXPECT_EQ(GameID::CatacombAbyssv124, commandLineParser.gameIdToStart());
+    EXPECT_EQ(GameId::CatacombAbyssv124, commandLineParser.gameIdToStart());
 }
 
 TEST(CommandLineParser_Test, startWithCatacombArmageddon)
@@ -56,7 +56,7 @@ TEST(CommandLineParser_Test, startWithCatacombArmageddon)
     CommandLineParser commandLineParser;
     char* commands[] = { "test.exe", "--armageddon" };
     commandLineParser.parse(2, commands);
-    EXPECT_EQ(GameID::CatacombArmageddonv102, commandLineParser.gameIdToStart());
+    EXPECT_EQ(GameId::CatacombArmageddonv102, commandLineParser.gameIdToStart());
 }
 
 TEST(CommandLineParser_Test, startWithCatacombApocalypse)
@@ -64,7 +64,7 @@ TEST(CommandLineParser_Test, startWithCatacombApocalypse)
     CommandLineParser commandLineParser;
     char* commands[] = { "test.exe", "--apocalypse" };
     commandLineParser.parse(2, commands);
-    EXPECT_EQ(GameID::CatacombApocalypsev101, commandLineParser.gameIdToStart());
+    EXPECT_EQ(GameId::CatacombApocalypsev101, commandLineParser.gameIdToStart());
 }
 
 TEST(CommandLineParser_Test, iniWithoutFilename)
@@ -104,5 +104,5 @@ TEST(CommandLineParser_Test, useCapitals)
     CommandLineParser commandLineParser;
     char* commands[] = { "test.exe", "--ABysS" };
     commandLineParser.parse(2, commands);
-    EXPECT_EQ(GameID::CatacombAbyssv124, commandLineParser.gameIdToStart());
+    EXPECT_EQ(GameId::CatacombAbyssv124, commandLineParser.gameIdToStart());
 }

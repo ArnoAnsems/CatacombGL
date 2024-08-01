@@ -30,7 +30,7 @@
 class GameAbyss: public IGame
 {
 public:
-    GameAbyss(const uint8_t gameId, const std::filesystem::path gamePath, IRenderer& renderer);
+    GameAbyss(const GameId gameId, const std::filesystem::path gamePath, IRenderer& renderer);
     ~GameAbyss();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;
@@ -54,7 +54,7 @@ public:
     bool ProcessInputOnHelpPage(PlayerInput& playerInput) override;
     const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const override;
     const std::string& GetName() const override;
-    const uint8_t GetId() const override;
+    const GameId GetId() const override;
     const uint16_t GetMenuCursorPic() const override;
     const uint16_t GetNorthIconSprite() const override;
     const std::string GetSavedGamesPath() const override;
@@ -103,7 +103,7 @@ private:
 
     short m_zombie_base_delay;
     IIntroView* m_introView;
-    const uint8_t m_gameId;
+    const GameId m_gameId;
     const std::filesystem::path m_gamePath;
     IRenderer& m_renderer;
     HelpPages* m_helpPages;

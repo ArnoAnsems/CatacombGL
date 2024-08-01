@@ -25,6 +25,7 @@
 #include "AudioRepository.h"
 #include "ConfigurationSettings.h"
 #include "EgaGraph.h"
+#include "GameId.h"
 #include "GameMaps.h"
 #include "IIntroView.h"
 #include "IMenu.h"
@@ -77,7 +78,7 @@ public:
     virtual bool ProcessInputOnHelpPage(PlayerInput& playerInput) = 0;
     virtual const std::map<uint16_t, const DecorateActor>& GetDecorateActors() const = 0;
     virtual const std::string& GetName() const = 0;
-    virtual const uint8_t GetId() const = 0;
+    virtual const GameId GetId() const = 0;
     virtual const uint16_t GetMenuCursorPic() const = 0;
     virtual const uint16_t GetNorthIconSprite() const = 0;
     virtual const std::string GetSavedGamesPath() const = 0;

@@ -15,8 +15,8 @@
 
 #pragma once
 
-#include <stdint.h>
 #include <string>
+#include "GameId.h"
 
 class CommandLineParser
 {
@@ -27,12 +27,12 @@ public:
     void parse(const int argc, char* argv[]);
     const std::string& getFilenameIni() const;
     const std::string& getFilenameLog() const;
-    uint8_t gameIdToStart() const;
+    GameId gameIdToStart() const;
 
 private:
     static bool compareStrings(const std::string& str1, const std::string& str2);
 
     std::string m_filenameIni;
     std::string m_filenameLog;
-    uint8_t m_gameIdToStart;
+    GameId m_gameIdToStart;
 };
