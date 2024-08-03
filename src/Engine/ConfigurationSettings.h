@@ -28,59 +28,60 @@
 #include <filesystem>
 #include <stdint.h>
 
-static const uint8_t CVarIdDepthShading = 0;
-static const uint8_t CVarIdVSync = 1;
-static const uint8_t CVarIdMouseLook = 2;
-static const uint8_t CVarIdAlwaysRun = 3;
-static const uint8_t CVarIdAutoFire = 4;
-static const uint8_t CVarIdManaBar = 5;
-static const uint8_t CVarIdPathAbyssv113 = 10;
-static const uint8_t CVarIdPathAbyssv124 = 11;
-static const uint8_t CVarIdPathArmageddonv102 = 12;
-static const uint8_t CVarIdPathApocalypsev101 = 13;
-static const uint8_t CVarIdPathCatacomb3Dv122 = 14;
-static const uint8_t CVarIdScreenMode = 20;
-static const uint8_t CVarIdAutoMapMode = 21;
-static const uint8_t CVarIdShowFpsMode = 22;
-static const uint8_t CVarIdScreenResolution = 23;
-static const uint8_t CVarIdSoundMode = 24;
-static const uint8_t CVarIdMusicMode = 25;
-static const uint8_t CVarIdTextureFilter = 26;
-static const uint8_t CVarIdAspectRatio = 27;
-static const uint8_t CVarIdFov = 40;
-static const uint8_t CVarIdMouseSensitivity = 41;
-static const uint8_t CVarIdTurnSpeed = 42;
-static const uint8_t CVarIdPreventSoftlock = 43;
-static const uint8_t CVarIdStickyWalls = 44;
+static constexpr uint8_t CVarIdDepthShading = 0;
+static constexpr uint8_t CVarIdVSync = 1;
+static constexpr uint8_t CVarIdMouseLook = 2;
+static constexpr uint8_t CVarIdAlwaysRun = 3;
+static constexpr uint8_t CVarIdAutoFire = 4;
+static constexpr uint8_t CVarIdManaBar = 5;
+static constexpr uint8_t CVarIdPathAbyssv113 = 10;
+static constexpr uint8_t CVarIdPathAbyssv124 = 11;
+static constexpr uint8_t CVarIdPathArmageddonv102 = 12;
+static constexpr uint8_t CVarIdPathApocalypsev101 = 13;
+static constexpr uint8_t CVarIdPathCatacomb3Dv122 = 14;
+static constexpr uint8_t CVarIdScreenMode = 20;
+static constexpr uint8_t CVarIdAutoMapMode = 21;
+static constexpr uint8_t CVarIdShowFpsMode = 22;
+static constexpr uint8_t CVarIdScreenResolution = 23;
+static constexpr uint8_t CVarIdSoundMode = 24;
+static constexpr uint8_t CVarIdMusicMode = 25;
+static constexpr uint8_t CVarIdTextureFilter = 26;
+static constexpr uint8_t CVarIdAspectRatio = 27;
+static constexpr uint8_t CVarIdFov = 40;
+static constexpr uint8_t CVarIdMouseSensitivity = 41;
+static constexpr uint8_t CVarIdTurnSpeed = 42;
+static constexpr uint8_t CVarIdPreventSoftlock = 43;
+static constexpr uint8_t CVarIdStickyWalls = 44;
+static constexpr uint8_t CVarIdMusicModeAdventureTrilogy = 45;
 
-static const uint8_t CVarItemIdScreenModeWindowed = 0;
-static const uint8_t CVarItemIdScreenModeFullscreen = 1;
-static const uint8_t CVarItemIdScreenModeBorderlessWindowed = 2;
+static constexpr uint8_t CVarItemIdScreenModeWindowed = 0;
+static constexpr uint8_t CVarItemIdScreenModeFullscreen = 1;
+static constexpr uint8_t CVarItemIdScreenModeBorderlessWindowed = 2;
 
-static const uint8_t CVarItemIdAutoMapOriginal = 0;
-static const uint8_t CVarItemIdAutoMapTopDown = 1;
-static const uint8_t CVarItemIdAutoMapTopDownHD = 2;
-static const uint8_t CVarItemIdAutoMapIsometric = 3;
+static constexpr uint8_t CVarItemIdAutoMapOriginal = 0;
+static constexpr uint8_t CVarItemIdAutoMapTopDown = 1;
+static constexpr uint8_t CVarItemIdAutoMapTopDownHD = 2;
+static constexpr uint8_t CVarItemIdAutoMapIsometric = 3;
 
-static const uint8_t CVarItemIdShowFpsOff = 0;
-static const uint8_t CVarItemIdShowFpsMinimal = 1;
-static const uint8_t CVarItemIdShowFpsExtended = 2;
+static constexpr uint8_t CVarItemIdShowFpsOff = 0;
+static constexpr uint8_t CVarItemIdShowFpsMinimal = 1;
+static constexpr uint8_t CVarItemIdShowFpsExtended = 2;
 
-static const uint8_t CVarItemIdScreenResolutionOriginal = 0;
-static const uint8_t CVarItemIdScreenResolutionHigh = 1;
+static constexpr uint8_t CVarItemIdScreenResolutionOriginal = 0;
+static constexpr uint8_t CVarItemIdScreenResolutionHigh = 1;
 
-static const uint8_t CVarItemIdSoundModeOff = 0;
-static const uint8_t CVarItemIdSoundModePCSpeaker = 1;
-static const uint8_t CVarItemIdSoundModeAdlib = 2;
+static constexpr uint8_t CVarItemIdSoundModeOff = 0;
+static constexpr uint8_t CVarItemIdSoundModePCSpeaker = 1;
+static constexpr uint8_t CVarItemIdSoundModeAdlib = 2;
 
-static const uint8_t CVarItemIdMusicModeOff = 0;
-static const uint8_t CVarItemIdMusicModeAdlib = 1;
+static constexpr uint8_t CVarItemIdMusicModeOff = 0;
+static constexpr uint8_t CVarItemIdMusicModeAdlib = 1;
 
-static const uint8_t CVarItemIdTextureFilterNearest = 0;
-static const uint8_t CVarItemIdTextureFilterLinear = 1;
+static constexpr uint8_t CVarItemIdTextureFilterNearest = 0;
+static constexpr uint8_t CVarItemIdTextureFilterLinear = 1;
 
-static const uint8_t CVarItemIdAspectRatioOriginal = 0;
-static const uint8_t CVarItemIdAspectRatioFitToWindow = 1;
+static constexpr uint8_t CVarItemIdAspectRatioOriginal = 0;
+static constexpr uint8_t CVarItemIdAspectRatioFitToWindow = 1;
 
 class ConfigurationSettings
 {
@@ -142,6 +143,7 @@ private:
     ConsoleVariableEnum m_screenResolution;
     ConsoleVariableEnum m_soundMode;
     ConsoleVariableEnum m_musicMode;
+    ConsoleVariableEnum m_musicModeAdventureTrilogy;
     ConsoleVariableEnum m_textureFilter;
     ConsoleVariableEnum m_aspectRatio;
 

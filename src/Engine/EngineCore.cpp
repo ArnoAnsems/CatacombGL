@@ -723,12 +723,12 @@ bool EngineCore::Think()
     }
 
     const SMMode musicMode = SD_GetMusicMode();
-    const uint8_t musicModeIndex = m_configurationSettings.GetCVarEnum(CVarIdMusicMode).GetItemIndex();
-    if (musicModeIndex == CVarItemIdMusicModeAdlib && musicMode == smm_Off)
+    const bool isMusicSetToAdlibInConfiguration = IsMusicSetToAdlibInConfiguration();
+    if (isMusicSetToAdlibInConfiguration && musicMode == smm_Off)
     {
         SD_SetMusicMode(smm_AdLib);
     }
-    else if (musicModeIndex == CVarItemIdMusicModeOff && musicMode == smm_AdLib)
+    else if (!isMusicSetToAdlibInConfiguration && musicMode == smm_AdLib)
     {
         SD_SetMusicMode(smm_Off);
     }
@@ -3411,11 +3411,17 @@ bool EngineCore::AreScrollsPresent() const
 
 void EngineCore::StartMusicIfNeeded()
 {
-    if (m_game.GetId() == GameId::Catacomb3Dv122 &&
-        m_configurationSettings.GetCVarEnum(CVarIdMusicMode).GetItemIndex() == CVarItemIdMusicModeAdlib &&
+    if (IsMusicSetToAdlibInConfiguration() &&
         (m_state == InGame || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == WarpCheatDialog || m_state == AutoMapDialog) &&
         !m_menu->IsActive())
     {
         m_game.GetAudioPlayer()->StartMusic(0);
     }
+}
+
+bool EngineCore::IsMusicSetToAdlibInConfiguration() const
+{
+    const GameId gameId = m_game.GetId();
+    const uint8_t applicableMusicModeCVar = (gameId == GameId::Catacomb3Dv122) ? CVarIdMusicMode : CVarIdMusicModeAdventureTrilogy;
+    return (m_configurationSettings.GetCVarEnum(applicableMusicModeCVar).GetItemIndex() == CVarItemIdMusicModeAdlib);
 }

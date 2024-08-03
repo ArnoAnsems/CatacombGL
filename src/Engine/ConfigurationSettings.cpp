@@ -99,6 +99,12 @@ ConfigurationSettings::ConfigurationSettings() :
             {"ADLIB/SOUNDBLASTER", "Adlib", ""}
         },
         CVarItemIdMusicModeAdlib),
+    m_musicModeAdventureTrilogy("Music mode", "musicadventuretrilogy",
+        {
+            {"Off", "Off", ""},
+            {"Adlib", "Adlib", ""}
+        },
+        CVarItemIdMusicModeOff),
     m_textureFilter("Texture filtering", "texturefilter",
         {
             {"Nearest", "Nearest", ""},
@@ -120,7 +126,8 @@ ConfigurationSettings::ConfigurationSettings() :
             std::make_pair(CVarIdSoundMode, &m_soundMode),
             std::make_pair(CVarIdMusicMode, &m_musicMode),
             std::make_pair(CVarIdTextureFilter, &m_textureFilter),
-            std::make_pair(CVarIdAspectRatio, &m_aspectRatio)
+            std::make_pair(CVarIdAspectRatio, &m_aspectRatio),
+            std::make_pair(CVarIdMusicModeAdventureTrilogy, &m_musicModeAdventureTrilogy),
         }),
     m_dummyCvarInt("Dummy", "Dummy", 0, 0, 0),
     m_fov("Field Of View (Y)", "fov", 25, 45, 25),
@@ -173,6 +180,7 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdScreenResolution);
         DeserializeCVar(keyValuePairs, CVarIdSoundMode);
         DeserializeCVar(keyValuePairs, CVarIdMusicMode);
+        DeserializeCVar(keyValuePairs, CVarIdMusicModeAdventureTrilogy);
         DeserializeCVar(keyValuePairs, CVarIdMouseLook);
         DeserializeCVar(keyValuePairs, CVarIdMouseSensitivity);
         DeserializeCVar(keyValuePairs, CVarIdTurnSpeed);
@@ -236,6 +244,7 @@ void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
         file << "# Sound settings\n";
         SerializeCVar(file, CVarIdSoundMode);
         SerializeCVar(file, CVarIdMusicMode);
+        SerializeCVar(file, CVarIdMusicModeAdventureTrilogy);
         file << "# Controls settings\n";
         SerializeCVar(file, CVarIdMouseLook);
         SerializeCVar(file, CVarIdMouseSensitivity);
@@ -465,6 +474,7 @@ void ConfigurationSettings::ResetToClassic()
     GetCVarEnumMutable(CVarIdScreenResolution).SetItemIndex(CVarItemIdScreenResolutionOriginal);
     GetCVarEnumMutable(CVarIdTextureFilter).SetItemIndex(CVarItemIdTextureFilterNearest);
     GetCVarEnumMutable(CVarIdAspectRatio).SetItemIndex(CVarItemIdAspectRatioOriginal);
+    GetCVarEnumMutable(CVarIdMusicModeAdventureTrilogy).SetItemIndex(CVarItemIdMusicModeOff);
     GetCVarIntMutable(CVarIdFov).SetToDefault();
     GetCVarIntMutable(CVarIdTurnSpeed).SetToDefault();
 }

@@ -141,6 +141,7 @@ private:
     void LoadDosGameFromFile(const std::string filename);
     bool AreScrollsPresent() const;
     void StartMusicIfNeeded();
+    bool IsMusicSetToAdlibInConfiguration() const;
 
     IGame& m_game;
     ConfigurationSettings& m_configurationSettings;

@@ -134,9 +134,15 @@ FileChunk* AudioRepository::GetMusicTrack(const uint16_t index)
         return nullptr;
     }
 
+    const uint16_t chunkIndex = index + (m_staticData.lastSound * 3);
+    if (chunkIndex >= m_staticData.offsets.size())
+    {
+        return nullptr;
+    }
+
     if (m_musicTracks[index] == nullptr)
     {
-        uint8_t* compressedSound = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(index + (m_staticData.lastSound * 3))];
+        uint8_t* compressedSound = (uint8_t*)&m_rawData->GetChunk()[m_staticData.offsets.at(chunkIndex)];
         uint32_t compressedSize = GetChunkSize(index + (m_staticData.lastSound * 3)) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedSound;
         FileChunk* soundChunk = m_huffman->Decompress(&compressedSound[sizeof(uint32_t)], compressedSize, uncompressedSize);

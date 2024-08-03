@@ -172,6 +172,7 @@ ExtraMenu::ExtraMenu(
 
     GuiElementList* elementListSound = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), 140, m_renderableText));
+    elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicModeAdventureTrilogy), 140, m_renderableText));
     pageSound->AddChild(elementListSound, 60, 30);
 
     GuiElementStaticText* pageLabelSound = new GuiElementStaticText(playerInput, "Sound Options", EgaBrightYellow, m_renderableText);
