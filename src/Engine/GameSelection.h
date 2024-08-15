@@ -32,8 +32,8 @@ struct GameSelectionPresentation
     std::vector<std::pair<const std::string, const GameDetectionState>> gameListShareware;
     std::filesystem::path searchFolder;
     std::vector<std::filesystem::path> subFolders;
-    uint32_t selectedSubFolder;
-    uint32_t subFolderOffset;
+    uint32_t selectedSubFolder = 0u;
+    uint32_t subFolderOffset = 0u;
 };
 
 class GameSelection

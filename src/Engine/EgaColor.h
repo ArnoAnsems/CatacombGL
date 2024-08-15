@@ -71,7 +71,7 @@ constexpr const rgbColor egaToRgbMap[EgaRange] =
 
 constexpr rgbColor EgaToRgb(const egaColor ega)
 {
-    if (ega < EgaRange)
+    if (ega >= EgaBlack && ega < EgaRange)
     {
         return egaToRgbMap[ega];
     }

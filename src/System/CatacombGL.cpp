@@ -377,7 +377,7 @@ int main(int argc, char* argv[])
 			Logging::Instance().FatalError(errorMessage);
 		}
 
-		if (active)
+		if (active && game != nullptr)
 		{
 			engine = new EngineCore(*game, system, input, config);
 
@@ -388,7 +388,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Loop That Runs While done=FALSE
-	while (active)
+	while (active && game != nullptr)
 	{
 		SDL_Event event;
 		memset(&event, 0, sizeof(event));

@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.16)
 
+# CMake will not change any file in the source folder.
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
+
+# The build process should be kept in a different folder from the main source code.
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+
 
 project(CatacombGL LANGUAGES CXX VERSION 0.5.4)
 
+# GoogleTests are by default not part of the build process, but can be added
+# by selecting the option in CMake.
 option(BUILD_TESTS "Build Tests" OFF)
 
+# Sets the C++ Language Standard to "ISO C++17 Standard" in Visual Studio.
 set(CMAKE_CXX_STANDARD 17)
 
 if(MINGW)
@@ -16,15 +23,7 @@ endif()
 
 find_package(OpenGL)
 
-add_library( CatacombGL_ThirdParty OBJECT
-    ThirdParty/RefKeen/be_st.h
-    ThirdParty/RefKeen/be_st_sdl_audio_timer.cpp
-    ThirdParty/RefKeen/id_sd.cpp
-    ThirdParty/RefKeen/id_sd.h
-    ThirdParty/opl/dbopl.cpp
-    ThirdParty/opl/dbopl.h
-)
-
+add_subdirectory(ThirdParty)
 add_subdirectory(src/Engine)
 add_subdirectory(src/Abyss)
 add_subdirectory(src/Apocalypse)
@@ -32,6 +31,7 @@ add_subdirectory(src/Armageddon)
 add_subdirectory(src/Catacomb3D)
 
 if(WIN32)
+    # On Windows, the SDL2 development package is fetched from Github.
     include(FetchContent)
 
     if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
@@ -40,8 +40,8 @@ if(WIN32)
 
     FetchContent_Declare(
         sdldev
-        URL     https://github.com/libsdl-org/SDL/releases/download/release-2.24.1/SDL2-devel-2.24.1-VC.zip
-        URL_MD5 63dd0eca2c6715c8170b1cd3e84017fc
+        URL     https://github.com/libsdl-org/SDL/releases/download/release-2.30.6/SDL2-devel-2.30.6-VC.zip
+        URL_MD5 54e68b9c4627627107105fa108bf7eed
     )
 
     FetchContent_MakeAvailable(sdldev)
@@ -58,6 +58,7 @@ if(WIN32)
     )
 
 else()
+    # On Linux, it is assumed that the SDL2 development package is already installed.
     find_package(SDL2 REQUIRED)
 
 endif()
@@ -83,7 +84,9 @@ endfunction()
 
 set( CATACOMBGL_TARGETS
     "CatacombGL_Engine"
-    "CatacombGL_Abyss" "CatacombGL_Armageddon" "CatacombGL_Apocalypse"
+    "CatacombGL_Abyss"
+    "CatacombGL_Armageddon"
+    "CatacombGL_Apocalypse"
     "CatacombGL_Catacomb3D"
     "CatacombGL_ThirdParty"
 )
