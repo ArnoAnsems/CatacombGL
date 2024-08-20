@@ -1,17 +1,17 @@
 // Copyright (C) 2018 Arno Ansems
-// 
-// This program is free software: you can redistribute it and/or modify 
-// it under the terms of the GNU General Public License as published by 
-// the Free Software Foundation, either version 3 of the License, or 
-// (at your option) any later version. 
-// 
-// This program is distributed in the hope that it will be useful, 
-// but WITHOUT ANY WARRANTY; without even the implied warranty of 
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-// GNU General Public License for more details. 
-// 
-// You should have received a copy of the GNU General Public License 
-// along with this program.  If not, see http://www.gnu.org/licenses/ 
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
 
 //
 // This source file is the main entry point of the CatacombGL executable. It contains the WinMain function.
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
 	const fs::path configPath = system.GetConfigurationFilePath();
 	system.CreatePath(configPath);
 
-	const fs::path logFilename = commandLineParser.getFilenameLog().empty() ? configPath / "CatacombGL_log.txt" : commandLineParser.getFilenameLog();
+	const fs::path logFilename = commandLineParser.getFilenameLog().empty() ? (fs::path) configPath / "CatacombGL_log.txt" : (fs::path) commandLineParser.getFilenameLog();
 	Logging::Instance().SetLogFile(logFilename);
 	Logging::Instance().AddLogMessage("Configuration file used .... " + logFilename.string());
 
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
 
 	Logging::Instance().AddLogMessage("Running on " + system.GetOSVersion());
 
-	const fs::path configFilename = commandLineParser.getFilenameIni().empty() ? configPath / "CatacombGL.ini" : commandLineParser.getFilenameIni();
+	const fs::path configFilename = commandLineParser.getFilenameIni().empty() ? (fs::path) configPath / "CatacombGL.ini" : (fs::path) commandLineParser.getFilenameIni();
 	Logging::Instance().AddLogMessage("Loading CatacombGL.ini");
 	config.LoadFromFile(configFilename);
 
