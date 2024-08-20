@@ -12,5 +12,7 @@ PUBLIC
     RendererOpenGL.h
     SystemSDL.cpp
     WindowSDL.cpp
+    OpenGLUtilityLocal.h
+    OpenGLUtilityLocal.cpp
 )
 

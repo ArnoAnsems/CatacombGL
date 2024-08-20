@@ -131,7 +131,6 @@ target_link_libraries( CatacombGL
     CatacombGL_Apocalypse
     CatacombGL_Catacomb3D
     OpenGL::GL
-    OpenGL::GLU
 )
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTS)

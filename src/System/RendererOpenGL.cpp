@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "RendererOpenGL.h"
+#include "OpenGLUtilityLocal.h"
 #include "../Engine/Logging.h"
 #include "../Engine/Console.h"
 #include "../Engine/OverscanBorder.h"
@@ -31,7 +32,6 @@
 // Below is the specific definition from glext.h that is needed in this source file.
 static const unsigned int GL_CLAMP_TO_EDGE = 0x812F;
 #endif
-#include <GL/glu.h>
 #include <SDL_video.h>
 #include <cmath>
 #include <string>
@@ -255,7 +255,7 @@ void RendererOpenGL::Prepare2DRendering(const bool helpWindow)
 
     ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(m_windowWidth, m_windowHeight, helpWindow);
 
-    gluOrtho2D(rect.left, rect.right, rect.bottom, rect.top);
+    OpenGLUtilityLocal::gluOrtho2D(rect.left, rect.right, rect.bottom, rect.top);
 
     glDisable(GL_LIGHTING);
 }
@@ -401,7 +401,7 @@ void RendererOpenGL::Render3DScene(const Renderable3DScene& renderable3DScene)
 
         // Calculate The Aspect Ratio Of The Window
         const double aspect = (double)bufferWidth / ((double)rect3D.height * 1.2);
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.2, 100.0);
+        OpenGLUtilityLocal::gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.2, 100.0);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
@@ -458,7 +458,7 @@ void RendererOpenGL::Render3DScene(const Renderable3DScene& renderable3DScene)
 
         // Calculate The Aspect Ratio Of The Window
         const double aspect = (double)rect.width / (double)rect.height;
-        gluPerspective((double)renderable3DScene.GetFieldOfView(), aspect, 0.2, 100.0);
+        OpenGLUtilityLocal::gluPerspective((GLdouble)renderable3DScene.GetFieldOfView(), aspect, 0.2, 100.0);
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
@@ -799,7 +799,8 @@ float RendererOpenGL::PrepareIsoRendering(const float aspectRatio, const ViewPor
     const double dist = std::sqrt(1 / 3.0);
     const float xScale = (float)rect.width / (float)rect.height * 6.0f;
     glOrtho(-xScale, xScale, -4.0f, 4.0f, -20.0f, 20.0f);
-    gluLookAt(dist + x, dist + y, z - dist,  // position of camera
+    OpenGLUtilityLocal::gluLookAt(
+        dist + x, dist + y, z - dist,  // position of camera
         x, y, z,   // where camera is pointing at
         0.0, 0.0, -1.0);  // which direction is up
     glMatrixMode(GL_MODELVIEW);
@@ -823,7 +824,8 @@ void RendererOpenGL::PrepareIsoRenderingText(const float originX, const float or
     // use this length so that camera is 1 unit away from origin
     const double dist = std::sqrt(1 / 3.0);
     glOrtho(-xScale * 32.0f, xScale * 32.0f, -128.0f, 128.0f, -640.0f, 640.0f);
-    gluLookAt(dist + x, dist + y, z - dist,  // position of camera
+    OpenGLUtilityLocal::gluLookAt(
+        dist + x, dist + y, z - dist,  // position of camera
         x, y, z,   // where camera is pointing at
         0.0, 0.0, -1.0);  // which direction is up
     glMatrixMode(GL_MODELVIEW);
@@ -860,7 +862,7 @@ void RendererOpenGL::PrepareTopDownRendering(const float aspectRatio, const View
     const double additionalMargin = (rect.left == 0) ? rect2D.right - rect2D.left - 320.0 : 0.0;
     const double orthoRight = ((double)(original3DViewArea.width) + additionalMargin) * (double)scale;
     const double orthoBottom = (double)(original3DViewArea.bottom * scale);
-    gluOrtho2D(0.0, orthoRight, orthoBottom, 0.0);
+    OpenGLUtilityLocal::gluOrtho2D(0.0, orthoRight, orthoBottom, 0.0);
 
     glDisable(GL_LIGHTING);
 }
