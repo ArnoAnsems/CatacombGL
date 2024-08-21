@@ -9,7 +9,7 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.5.4: 
+Current limitations as of version 0.5.5: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 
@@ -18,7 +18,7 @@ CatacombGL does not run standalone, but requires the original game data (levels,
 The CatacombGL.exe (Windows) or CatacombGL.a (Linux) can be run from any location. When started, a selection screen with an overview of all the supported games is shown. In case the Catacombs Pack was installed via the GOG installer (Windows), the game data will be auto-detected. Otherwise, it is possible to manually browse to the folder which contains either the Catacombs Pack or the shareware version.
 
 # How to build on Linux
-With the following steps, CatacombGL was built on Ubuntu 22.10:
+With the following steps, CatacombGL was built on Ubuntu 24.04 LTS:
 * sudo apt-get update
 * sudo apt-get install build-essential cmake cmake-data
 * sudo add-apt-repository universe
@@ -50,6 +50,15 @@ The keyboard and mouse controls for moving, shooting, etc. can be customized via
 * Numerical keys - read scrolls
 * Backspace - cheat codes in Armageddon and Apocalypse
 * Tilde (~) - show log
+
+# Command line parameters
+* --descent Skips the game selection screen and starts Catacomb 3-D THe Descent.
+* --abyss Skips the game selection screen and starts Catacomb Abyss (registered version).
+* --armageddon Skips the game selection screen and starts Catacomb Armageddon.
+* --apocalypse Skips the game selection screen and starts Catacomb Apocalypse.
+* --abyss_sw13 Skips the game selection screen and starts Catacomb Abyss shareware v1.13
+* --ini <filename> Loads the ini file from the specified location.
+* --log <filename> Stores the log file into the specified location.
 
 # Additional notes
 * The original Catacomb 3D allowed the player to reconfigure movement and action keys, but CatacombGL ignores those settings. Instead, CatacombGL has its own keyboard/mouse configuration, which is shared across all four games.
@@ -86,6 +95,18 @@ Special thanks goes to:
 * GoGoOtaku for porting CatacombGL to Linux and CMake.
 
 # History
+* Version 0.5.5 (2024-08-21) New in this release:
+  * Support for command line parameters was implemented by wcapes. See the readme file for a list of commands.
+  * The sticky walls in Catacomb 3-D are now configurable. Suggested by @ivfall@bitbang.social on Mastodon.
+  * Music playback can now be enabled in the Catacomb Adventure Series. The music track is "Too Hot to Handle" by Bobby Prince, which is the same track as used in Catacomb 3-D. The track was already present in the game data of the Catacomb Adventure Series, but not used until now. Suggested by taufan99.
+  * The Windows binaries are now built with Microsoft Visual Studio 2022 Community Edition.
+  * Upgraded SDL2 to version 2.30.6.
+  * The instructions for compiling CatacombGL on Linux using CMake were simplified by arrowgent.
+  * Fix: Linux compilation errors were fixed by SymenMulders and bdnugget.
+  * Fix: the automap player marker now has a contrasting color when the floor is white or yellow. Reported by youtuber MadJak91.
+  * Fix: in the Catacomb Adventure Series, as was seen in the original DOS games, the damage of player shots is round off in novice mode. Reported by youtuber MadJak91.
+  * Fix: prevent key bindings from being overwritten by the default values. Reported by vermian.
+
 * Version 0.5.4 (2022-12-30) New in this release:
   * Support for Linux was added through the hard work of GoGoOtaku, who in the process also did the migration to CMake. Additional testing was performed by NY00123 (Ubuntu), AlyxxTheRat (Linux Mint) and Scandy (RaspberryPi). The functionality to auto-detect the default location of the GOG Catacombs Pack in the Wine folder was suggested by Stuart Axon.
   * Fix: close cheat dialog when ESC is pressed. Reported by NY00123.
