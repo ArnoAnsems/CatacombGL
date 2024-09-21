@@ -23,33 +23,58 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/*** General ***/
 void BE_ST_InitAudio(void);
-void BE_ST_ShutdownAudio(void);
 
-/*** Audio/timer (vanilla Keen kind-of has these mixed) ***/
-void BE_ST_StartAudioAndTimerInt(void(*funcPtr)(void));
+ /*** Audio/timer (vanilla Keen kind-of has these mixed) ***/
+void BE_ST_StartAudioAndTimerInt(void (*funcPtr)(void));
 void BE_ST_StopAudioAndTimerInt(void);
+void BE_ST_StartDigiAudioInt(void (*funcPtr)(void));
+void BE_ST_StopDigiAudioInt(void);
 void BE_ST_LockAudioRecursively(void);
 void BE_ST_UnlockAudioRecursively(void);
 bool BE_ST_IsEmulatedOPLChipReady(void);
-// WARNING about using BE_ST_PCSpeakerOn/Off:
+bool BE_ST_IsEmulatedSBReady(void);
+bool BE_ST_IsEmulatedSBProReady(void);
+// WARNING about using BE_ST_PCSpeaker*:
 //
 // You MUST call BE_ST_LockAudioRecursively before calling any of these
 // functions. Afterwards, you MUST call BE_ST_UnlockAudioRecursively.
 // If you don't, unexpected behaviors may be reproduced
 // (e.g., an audio callback thread hang).
 //
-// The sound frequency is about 1193182Hz/spkVal.
-void BE_ST_PCSpeakerOn(uint16_t spkVal);
-void BE_ST_PCSpeakerOff(void);
-// Used for playback from digitized sound data in signed 16-bit int format.
+// For BE_ST_PCSpeakerSetInvFreq: The frequency is about 1193182Hz/spkInvFreq.
+// To turn the PC Speaker off, call BE_ST_PCSpeakerSetConstVal(0).
+void BE_ST_PCSpeakerSetInvFreq(uint16_t spkInvFreq);
+void BE_ST_PCSpeakerSetConstVal(bool isUp);
+// Used for playback from digitized sound data with
+// unsigned 8-bit or signed 16-bit int sample format.
 // Do NOT assume the data is copied; You ***must*** call BE_ST_StopSoundEffect.
 // You can also use BE_ST_StartAudioAndTimerInt to set a callback function,
 // to be called when reading of sound data is complete. This can happen
 // a bit before actual sound playback is complete, in case
 // some mechanism of resampling is in use.
-void BE_ST_PlayS16SoundEffect(int16_t *data, int numOfSamples);
+void BE_ST_SetDigiSoundFreq(int freq);
+static inline void BE_ST_SetDigiSoundFreqFromSBTimeValue(uint8_t timevalue)
+{
+	BE_ST_SetDigiSoundFreq(1000000 / (256 - timevalue));
+}
+
+// This is used for setting digitized sound volumes for
+// stereo panning, as done for the SB Pro or SB 16 in Wolf3D.
+// Two 4-bit volumes in the range 0-15 should be packed into a byte.
+void BE_ST_SetDigiSBProSoundVolumes(uint8_t volBits);
+
+// Same but for getting the volumes
+uint8_t BE_ST_GetDigiSBProSoundVolumes(void);
+
+// Similar functions, but for the SB Pro's FM synthesis.
+void BE_ST_SetFMSBProSoundVolumes(uint8_t volBits);
+uint8_t BE_ST_GetFMSBProSoundVolumes(void);
+
+// Compatibility macro that was originally added for Super 3-D Noah's Ark
+#define BE_ST_SetLineInSBProSoundVolumes(volBits)
+
+void BE_ST_PlaySoundEffect(void* data, int numOfSamples, int bits);
 void BE_ST_StopSoundEffect(void);
 // Safe alternatives for Borland's sound and nosound functions from Catacomb Abyss' gelib.c
 void BE_ST_BSound(uint16_t frequency);
@@ -73,5 +98,12 @@ void BE_ST_TimerIntCallsDelayWithOffset(int nCalls);
 
 void BE_ST_ShortSleep(void);
 void BE_ST_Delay(uint16_t msec); // Replacement for delay from dos.h
+
+void BE_ST_InitTiming(void);
+void BEL_ST_SetConfig(void);
+void BE_ST_ShutdownAudio(void);
+
+// MUST be included here (since be_st_cfg.h depends on be_st.h)
+#include "be_st_cfg.h"
 
 #endif // BE_ST_H

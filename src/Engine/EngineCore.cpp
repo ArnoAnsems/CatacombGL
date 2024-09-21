@@ -15,7 +15,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "EngineCore.h"
-#include "../../ThirdParty/RefKeen/id_sd.h"
+#include "../../ThirdParty/ReflectionHLE/id_sd.h"
 #include "DefaultFont.h"
 #include "LevelLocationNames.h"
 #include "Macros.h"

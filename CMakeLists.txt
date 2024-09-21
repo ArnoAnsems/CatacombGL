@@ -7,7 +7,7 @@ set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 
-project(CatacombGL LANGUAGES CXX VERSION 0.5.5)
+project(CatacombGL LANGUAGES CXX C VERSION 0.5.5)
 
 # GoogleTests are by default not part of the build process, but can be added
 # by selecting the option in CMake.

@@ -42,8 +42,10 @@
 #include "../Catacomb3D/GameCatacomb3D.h"
 #include "../Catacomb3D/GameDetectionCatacomb3D.h"
 
-#include "../../ThirdParty/RefKeen/be_st.h"
-#include "../../ThirdParty/RefKeen/id_sd.h"
+extern "C" {
+#include "../../ThirdParty/ReflectionHLE/be_st.h"
+};
+#include "../../ThirdParty/ReflectionHLE/id_sd.h"
 
 #include <SDL.h>
 #include <SDL_mouse.h>
@@ -179,6 +181,8 @@ int main(int argc, char* argv[])
 	Logging::Instance().AddLogMessage("Running on graphics adapter model " + renderer->GetGraphicsAdapterModel());
 	Logging::Instance().AddLogMessage("Running on " + renderer->GetGraphicsApiVersion());
 
+	BEL_ST_SetConfig();
+	BE_ST_InitTiming();
 	BE_ST_InitAudio();
 	SD_Startup();
 

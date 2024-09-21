@@ -16,10 +16,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "id_sd.h"
-#include "be_st.h"
 
-#define	SDL_SoundFinished()	{SoundNumber = SoundPriority = 0;}
+#include "id_sd.h"
+
+extern "C" {
+#include "be_st.h"
+};
 
 //	Global variables
 bool		SoundSourcePresent,SoundBlasterPresent,AdLibPresent;
@@ -33,7 +35,6 @@ AdlibSound ** AdlibSoundTable;
 //	Internal variables
 static	bool			SD_Started;
 static	void			(*SoundUserHook)(void);
-static	uint16_t			SoundNumber,SoundPriority;
 
 //	PC Sound variables
 static	uint8_t			pcLastSample, *pcSound;
@@ -102,8 +103,6 @@ SDL_PCPlaySound(PCSound *sound)
 	pcLengthLeft = sound->GetLength();
 	pcSound = sound->GetData();
 
-    SoundPriority = sound->GetPriority();
-
 	BE_ST_UnlockAudioRecursively();
 }
 
@@ -119,7 +118,7 @@ SDL_PCStopSound(void)
 	BE_ST_LockAudioRecursively();
 
 	pcSound = 0;
-	BE_ST_PCSpeakerOff();
+	BE_ST_PCSpeakerSetConstVal(0);
 
 	BE_ST_UnlockAudioRecursively();
 }
@@ -146,12 +145,12 @@ SDL_PCService(void)
 			if (s)					// We have a frequency!
 			{
 				t = pcSoundLookup[s];
-				BE_ST_PCSpeakerOn(t);
+				BE_ST_PCSpeakerSetInvFreq(t);
 
 			}
 			else					// Time for some silence
 			{
-				BE_ST_PCSpeakerOff();
+				BE_ST_PCSpeakerSetConstVal(0);
 			}
 
 			BE_ST_UnlockAudioRecursively();
@@ -160,7 +159,6 @@ SDL_PCService(void)
 		if (!(--pcLengthLeft))
 		{
 			SDL_PCStopSound();
-			SDL_SoundFinished();
 		}
 	}
 }
@@ -177,7 +175,7 @@ SDL_ShutPC(void)
 
 	pcSound = 0;
 
-	BE_ST_PCSpeakerOff();
+	BE_ST_PCSpeakerSetConstVal(0);
 
 	BE_ST_UnlockAudioRecursively();
 }
@@ -248,8 +246,6 @@ SDL_ALPlaySound(AdlibSound *sound)
 	alSound = sound->GetData();
 	alBlock = ((sound->GetOctave() & 7) << 2) | 0x20;
 
-    SoundPriority = sound->GetPriority();
-
 	if (!(sound->GetmSus() | sound->GetcSus()))
 	{
 		BE_ST_UnlockAudioRecursively();
@@ -286,7 +282,6 @@ SDL_ALSoundService(void)
 		{
 			alSound = 0;
 			alOut(alFreqH + 0,0);
-			SDL_SoundFinished();
 		}
 	}
 }
@@ -504,7 +499,6 @@ SDL_StartDevice(void)
 		SDL_StartAL();
 		break;
 	}
-	SoundNumber = SoundPriority = 0;
 }
 
 static void
@@ -759,8 +753,6 @@ SD_StopSound(void)
 		SDL_ALStopSound();
 		break;
 	}
-
-	SDL_SoundFinished();
 }
 
 ///////////////////////////////////////////////////////////////////////////

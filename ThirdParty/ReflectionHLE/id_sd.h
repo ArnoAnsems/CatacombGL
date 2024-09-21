@@ -67,22 +67,7 @@ typedef	enum	{
 #define	alFeedCon	0xc0
 // Global stuff
 #define	alEffects	0xbd
-/*
-typedef	struct
-		{
-			id0_byte_t	mChar,cChar,
-					mScale,cScale,
-					mAttack,cAttack,
-					mSus,cSus,
-					mWave,cWave,
-					nConn,
 
-					// These are only for Muse - these bytes are really unused
-					voice,
-					mode,
-					unused[3];
-		} __attribute((__packed__)) Instrument;
-*/
 
 //
 //	Sequencing stuff

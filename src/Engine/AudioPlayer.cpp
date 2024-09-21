@@ -15,7 +15,7 @@
 
 #include "AudioPlayer.h"
 #include <stdlib.h>
-#include "../../ThirdParty/RefKeen/id_sd.h"
+#include "../../ThirdParty/ReflectionHLE/id_sd.h"
 
 AudioPlayer::AudioPlayer(AudioRepository* audioRepository) :
     m_audioRepository(audioRepository)
