@@ -439,6 +439,7 @@ const audioRepositoryStaticData audioRepositoryArmageddon =
     "AUDIO.ARM",
     audioRepositoryOffsetsArmageddon,
     audioDictionaryArmageddon,
-    LASTSOUND
+    LASTSOUND,
+    true
 };
 

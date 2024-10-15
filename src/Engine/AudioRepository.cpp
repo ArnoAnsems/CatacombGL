@@ -147,8 +147,16 @@ FileChunk* AudioRepository::GetMusicTrack(const uint16_t index)
         uint32_t uncompressedSize = *(uint32_t*)compressedSound;
         FileChunk* soundChunk = m_huffman->Decompress(&compressedSound[sizeof(uint32_t)], compressedSize, uncompressedSize);
         const uint16_t musicTrackLength = *(uint16_t*)soundChunk->GetChunk();
-        m_musicTracks[index] = new FileChunk(musicTrackLength);
-        memcpy(m_musicTracks[index]->GetChunk(), soundChunk->GetChunk() + sizeof(uint16_t), musicTrackLength);
+
+        // Music tracks in the Catacomb 3D games are stored as IMF data, which essentially consists of a stream of
+        // instructions for the OPL chip. All Catacomb 3-D games contain the music track "Too hot to handle". The music
+        // data of this track starts with 9 instructions that alter the first channel. In some games this has the side
+        // effect of altering the sound effects. To prevent this, the first nine instructions (36 bytes) are dynamically
+        // removed here from the music data. This has no noticeable impact on the music.
+        // Credits to NY00123 for suggesting this workaround.
+        const uint16_t bytesToRemove = m_staticData.musicShouldNotInterfereWithFirstChannel ? 36u : 0u;
+        m_musicTracks[index] = new FileChunk(musicTrackLength - bytesToRemove);
+        memcpy(m_musicTracks[index]->GetChunk(), soundChunk->GetChunk() + sizeof(uint16_t) + bytesToRemove, musicTrackLength - bytesToRemove);
         delete soundChunk;
     }
 

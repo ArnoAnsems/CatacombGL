@@ -418,7 +418,8 @@ const audioRepositoryStaticData audioRepositoryCatacomb3D =
     "AUDIO.C3D",
     audioRepositoryOffsetsCatacomb3D,
     audioDictionaryCatacomb3D,
-    LASTSOUND
+    LASTSOUND,
+    false
 };
 
 

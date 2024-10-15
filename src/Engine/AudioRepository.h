@@ -30,6 +30,7 @@ typedef struct audioRepositoryStaticData
     const std::vector<int32_t>& offsets;
     const huffmanTable& table;
     const int32_t lastSound;
+    const bool musicShouldNotInterfereWithFirstChannel;
 } audioRepositoryStaticData;
 
 class AudioRepository

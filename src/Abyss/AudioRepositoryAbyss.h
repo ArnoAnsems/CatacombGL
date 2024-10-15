@@ -435,5 +435,6 @@ const audioRepositoryStaticData audioRepositoryAbyss =
     "AUDIO.ABS",
     audioRepositoryOffsetsAbyss,
     audioDictionaryAbyss,
-    LASTSOUND
+    LASTSOUND,
+    true
 };

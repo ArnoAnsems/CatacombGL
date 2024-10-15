@@ -446,5 +446,6 @@ const audioRepositoryStaticData audioRepositoryApocalypse =
     "AUDIO.APC",
     audioRepositoryOffsetsApocalypse,
     audioDictionaryApocalypse,
-    LASTSOUND
+    LASTSOUND,
+    true
 };
