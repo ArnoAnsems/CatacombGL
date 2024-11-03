@@ -440,7 +440,7 @@ uint8_t Level::GetLevelIndex() const
     return m_levelIndex;
 }
 
-void Level::UpdateVisibilityMap()
+void Level::UpdateVisibilityMap(const float cameraX, const float cameraY)
 {
     for (std::size_t i = 0; i < (m_levelWidth * m_levelHeight); ++i)
     {
@@ -458,7 +458,7 @@ void Level::UpdateVisibilityMap()
     while (!done)
     {
         LevelWall wallHit;
-        RayTraceWall(coordinateOnOuterWall, wallHit);
+        RayTraceWall(coordinateOnOuterWall, wallHit, cameraX, cameraY);
         if (firstWallHit.x == 0 && firstWallHit.y == 0)
         {
             firstWallHit = wallHit;
@@ -477,8 +477,8 @@ void Level::UpdateVisibilityMap()
             {
                 m_wallYVisible[wallArrayIndex] = true;
             }
-            const LevelCoordinate wallEdge = GetRightEdgeOfWall(wallHit);
-            const LevelCoordinate intersection = GetIntersectionWithOuterWall(wallEdge);
+            const LevelCoordinate wallEdge = GetRightEdgeOfWall(wallHit, cameraX, cameraY);
+            const LevelCoordinate intersection = GetIntersectionWithOuterWall(wallEdge, cameraX, cameraY);
             const float distance = GetDistanceOnOuterWall(intersection);
             if (std::abs(distance - previousDistance) < 0.0000001f)
             {
@@ -500,16 +500,16 @@ void Level::UpdateVisibilityMap()
                 previousDistance = distance;
                 retryDistance = false;
             }
-            BackTraceWalls(distance, firstWallBackTraced);
+            BackTraceWalls(distance, firstWallBackTraced, cameraX, cameraY);
             const float additionalDistance = (retryDistance) ? 0.01f : 0.001f;
             coordinateOnOuterWall = GetOuterWallCoordinate(distance + additionalDistance);
         }
     }
 
-    const LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(firstWallHit);
-    const LevelCoordinate intersection2 = GetIntersectionWithOuterWall(wallEdgeLeft);
+    const LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(firstWallHit, cameraX, cameraY);
+    const LevelCoordinate intersection2 = GetIntersectionWithOuterWall(wallEdgeLeft, cameraX, cameraY);
     const float distanceForBackTracing = GetDistanceOnOuterWall(intersection2) - 0.001f;
-    BackTraceWalls(distanceForBackTracing, firstWallBackTraced);
+    BackTraceWalls(distanceForBackTracing, firstWallBackTraced, cameraX, cameraY);
 
     for (uint16_t x = 1; x < m_levelWidth - 1; x++)
     {
@@ -541,7 +541,7 @@ void Level::UpdateVisibilityMap()
     }
 }
 
-void Level::BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall)
+void Level::BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall, const float cameraX, const float cameraY)
 {
     firstWall = { 0, 0, true };
     float distanceForBackTracing = distanceOnOuterWall;
@@ -573,7 +573,7 @@ void Level::BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall
         const float additionalDistance = (retryDistance) ? 0.01f : 0.001f;
         const LevelCoordinate leftCoordinate = GetOuterWallCoordinate(distanceForBackTracing - additionalDistance);
         LevelWall wallHit;
-        RayTraceWall(leftCoordinate, wallHit);
+        RayTraceWall(leftCoordinate, wallHit, cameraX, cameraY);
         const uint16_t wallHitIndex = (wallHit.y * m_levelWidth) + wallHit.x;
         if (firstWall.x == 0 && firstWall.y == 0)
         {
@@ -594,8 +594,8 @@ void Level::BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall
                 m_wallYVisible[wallHitIndex] = true;
             }
 
-            const LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(wallHit);
-            const LevelCoordinate intersection = GetIntersectionWithOuterWall(wallEdgeLeft);
+            const LevelCoordinate wallEdgeLeft = GetLeftEdgeOfWall(wallHit, cameraX, cameraY);
+            const LevelCoordinate intersection = GetIntersectionWithOuterWall(wallEdgeLeft, cameraX, cameraY);
             distanceForBackTracing = GetDistanceOnOuterWall(intersection);
         }
     }
@@ -690,59 +690,53 @@ float Level::GetDistanceOnOuterWall(const LevelCoordinate& coordinate) const
     return 0.0f;
 }
 
-LevelCoordinate Level::GetRightEdgeOfWall(LevelWall& wall) const
+LevelCoordinate Level::GetRightEdgeOfWall(LevelWall& wall, const float cameraX, const float cameraY) const
 {
-    const float x = m_playerActor->GetX();
-    const float y = m_playerActor->GetY();
-    const float levelX = (!wall.isXWall && y > wall.y) ? (float)wall.x + 1.0f : (float)wall.x;
-    const float levelY = (wall.isXWall && x <= wall.x) ? (float)wall.y + 1.0f : (float)wall.y;
+    const float levelX = (!wall.isXWall && cameraY > wall.y) ? (float)wall.x + 1.0f : (float)wall.x;
+    const float levelY = (wall.isXWall && cameraX <= wall.x) ? (float)wall.y + 1.0f : (float)wall.y;
     return { levelX, levelY };
 }
 
-LevelCoordinate Level::GetLeftEdgeOfWall(LevelWall& wall) const
+LevelCoordinate Level::GetLeftEdgeOfWall(LevelWall& wall, const float cameraX, const float cameraY) const
 {
-    const float x = m_playerActor->GetX();
-    const float y = m_playerActor->GetY();
-    const float levelX = (!wall.isXWall && y < wall.y) ? (float)wall.x + 1.0f : (float)wall.x;
-    const float levelY = (wall.isXWall && x >= wall.x) ? (float)wall.y + 1.0f : (float)wall.y;
+    const float levelX = (!wall.isXWall && cameraY < wall.y) ? (float)wall.x + 1.0f : (float)wall.x;
+    const float levelY = (wall.isXWall && cameraX >= wall.x) ? (float)wall.y + 1.0f : (float)wall.y;
     return { levelX, levelY };
 }
 
-LevelCoordinate Level::GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView) const
+LevelCoordinate Level::GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView, const float cameraX, const float cameraY) const
 {
-    const float x = m_playerActor->GetX();
-    const float y = m_playerActor->GetY();
     bool hitFound = false;
     LevelCoordinate intersection = { 0.0f, 0.0f };
-    if (std::abs(x - coordinateInView.x) < 0.000001)
+    if (std::abs(cameraX - coordinateInView.x) < 0.000001)
     {
-        if (y > coordinateInView.y)
+        if (cameraY > coordinateInView.y)
         {
-            intersection = { x, 0.0f };
+            intersection = { cameraX, 0.0f };
         }
         else
         {
-            intersection = { x, (float)m_levelHeight };
+            intersection = { cameraX, (float)m_levelHeight };
         }
     }
-    else if (std::abs(y - coordinateInView.y) < 0.000001)
+    else if (std::abs(cameraY - coordinateInView.y) < 0.000001)
     {
-        if (x > coordinateInView.x)
+        if (cameraX > coordinateInView.x)
         {
-            intersection = { 0.0f, y};
+            intersection = { 0.0f, cameraY};
         }
         else
         {
-            intersection = { (float)m_levelWidth, y };
+            intersection = { (float)m_levelWidth, cameraY };
         }
     }
     else 
     {
-        if (coordinateInView.x < x)
+        if (coordinateInView.x < cameraX)
         {
             // Test for hit on West wall
-            const float normalY = (coordinateInView.y - y) / (x - coordinateInView.x);
-            const float hitWally = ((x * normalY) + y);
+            const float normalY = (coordinateInView.y - cameraY) / (cameraX - coordinateInView.x);
+            const float hitWally = ((cameraX * normalY) + cameraY);
             if (hitWally >= 0.0f && hitWally <= (float)m_levelHeight)
             {
                 intersection = { 0.0f, hitWally };
@@ -752,8 +746,8 @@ LevelCoordinate Level::GetIntersectionWithOuterWall(const LevelCoordinate& coord
         else
         {
             // Test for hit on East wall
-            const float normalY = (coordinateInView.y - y) / (coordinateInView.x - x);
-            const float hitWally = ((((float)m_levelWidth - x) * normalY) + y);
+            const float normalY = (coordinateInView.y - cameraY) / (coordinateInView.x - cameraX);
+            const float hitWally = ((((float)m_levelWidth - cameraX) * normalY) + cameraY);
             if (hitWally >= 0.0f && hitWally <= (float)m_levelHeight)
             {
                 intersection = { (float)m_levelWidth, hitWally };
@@ -763,11 +757,11 @@ LevelCoordinate Level::GetIntersectionWithOuterWall(const LevelCoordinate& coord
 
         if (!hitFound)
         {
-            if (coordinateInView.y < y)
+            if (coordinateInView.y < cameraY)
             {
                 // Test for hit on North wall
-                const float normalX = (coordinateInView.x - x) / (y - coordinateInView.y);
-                const float hitWallx = ((y * normalX) + x);
+                const float normalX = (coordinateInView.x - cameraX) / (cameraY - coordinateInView.y);
+                const float hitWallx = ((cameraY * normalX) + cameraX);
                 if (hitWallx >= 0.0f && hitWallx <= (float)m_levelWidth)
                 {
                     intersection = { hitWallx, 0.0f };
@@ -776,8 +770,8 @@ LevelCoordinate Level::GetIntersectionWithOuterWall(const LevelCoordinate& coord
             else
             {
                 // Test for hit on South wall
-                const float normalX = (coordinateInView.x - x) / (coordinateInView.y - y);
-                const float hitWallx = ((((float)m_levelHeight - y) * normalX) + x);
+                const float normalX = (coordinateInView.x - cameraX) / (coordinateInView.y - cameraY);
+                const float hitWallx = ((((float)m_levelHeight - cameraY) * normalX) + cameraX);
                 if (hitWallx >= 0.0f && hitWallx <= (float)m_levelWidth)
                 {
                     intersection = { hitWallx, (float)m_levelHeight };
@@ -789,7 +783,7 @@ LevelCoordinate Level::GetIntersectionWithOuterWall(const LevelCoordinate& coord
     return intersection;
 }
 
-void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wallHit)
+void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wallHit, const float cameraX, const float cameraY)
 {
     const float x = coordinateInView.x;
     const float y = coordinateInView.y;
@@ -801,26 +795,26 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
         WallIsFurtherAway
     };
 
-    TraceState traceStateX = (std::abs(m_playerActor->GetX() - x) < 0.000001 ||
-        ((x > m_playerActor->GetX()) && x <= (float)(int32_t)(m_playerActor->GetX() + 1.0f)) ||
-        ((x < m_playerActor->GetX()) && x >= (float)(int32_t)m_playerActor->GetX())) ? NoWallFound : LookingForWall;
+    TraceState traceStateX = (std::abs(cameraX - x) < 0.000001 ||
+        ((x > cameraX) && x <= (float)(int32_t)(cameraX + 1.0f)) ||
+        ((x < cameraX) && x >= (float)(int32_t)cameraX)) ? NoWallFound : LookingForWall;
 
-    TraceState traceStateY = (std::abs(m_playerActor->GetY() - y) < 0.000001 ||
-        ((y > m_playerActor->GetY()) && y <= (float)(int32_t)(m_playerActor->GetY() + 1.0f)) ||
-        ((y < m_playerActor->GetY()) && y >= (float)(int32_t)m_playerActor->GetY())) ? NoWallFound : LookingForWall;
+    TraceState traceStateY = (std::abs(cameraY - y) < 0.000001 ||
+        ((y > cameraY) && y <= (float)(int32_t)(cameraY + 1.0f)) ||
+        ((y < cameraY) && y >= (float)(int32_t)cameraY)) ? NoWallFound : LookingForWall;
 
     uint16_t hitWallX_x = 0;
     float hitWallX_y = 0.0f;
     uint16_t hitWallY_y = 0;
     float hitWallY_x = 0.0f;
-    int32_t tileX = (x >= m_playerActor->GetX()) ? (int32_t)(m_playerActor->GetX() + 1.0f) : (int32_t)m_playerActor->GetX();
-    int32_t tileY = (y >= m_playerActor->GetY()) ? (int32_t)(m_playerActor->GetY() + 1.0f) : (int32_t)m_playerActor->GetY();
+    int32_t tileX = (x >= cameraX) ? (int32_t)(cameraX + 1.0f) : (int32_t)cameraX;
+    int32_t tileY = (y >= cameraY) ? (int32_t)(cameraY + 1.0f) : (int32_t)cameraY;
 
     float squareDistanceX = 0.0f;
     float squareDistanceY = 0.0f;
 
-    const float normalX = (std::abs(m_playerActor->GetY() - y) < 0.000001) ? 100000.0f : ((float)x - m_playerActor->GetX()) / ((float)y - m_playerActor->GetY());
-    const float normalY = (std::abs(m_playerActor->GetX() - x) < 0.000001) ? 100000.0f : ((float)y - m_playerActor->GetY()) / ((float)x - m_playerActor->GetX());
+    const float normalX = (std::abs(cameraY - y) < 0.000001) ? 100000.0f : ((float)x - cameraX) / ((float)y - cameraY);
+    const float normalY = (std::abs(cameraX - x) < 0.000001) ? 100000.0f : ((float)y - cameraY) / ((float)x - cameraX);
 
     while (traceStateX == LookingForWall || traceStateY == LookingForWall)
     {
@@ -828,18 +822,19 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
            ((traceStateY == LookingForWall && squareDistanceX <= squareDistanceY) ||
             (traceStateY != LookingForWall)))
         {
-            const bool traceEast = (x > m_playerActor->GetX() && (float)tileX < x);
-            const bool traceWest = (x <= m_playerActor->GetX() && (float)tileX > x);
+            const bool traceEast = (x > cameraX && (float)tileX < x);
+            const bool traceWest = (x <= cameraX && (float)tileX > x);
             if (traceWest || traceEast)
             {
                 hitWallX_x = (uint16_t)tileX;
-                hitWallX_y = ((((float)tileX - m_playerActor->GetX()) * normalY) + m_playerActor->GetY());
+                hitWallX_y = ((((float)tileX - cameraX) * normalY) + cameraY);
 
-                const float deltaX_x = std::abs(m_playerActor->GetX() - (float)hitWallX_x);
-                const float deltaX_y = std::abs(m_playerActor->GetY() - hitWallX_y);
+                const float deltaX_x = std::abs(cameraX - (float)hitWallX_x);
+                const float deltaX_y = std::abs(cameraY - hitWallX_y);
                 squareDistanceX = (deltaX_x * deltaX_x) + (deltaX_y * deltaX_y);
 
                 const uint16_t nextTileX = (traceEast) ? hitWallX_x : hitWallX_x - 1;
+                const uint16_t previousTileX = (traceEast) ? nextTileX - 1 : nextTileX + 1;
                 if (squareDistanceX > squareDistanceY && traceStateY == WallFound)
                 {
                     traceStateX = WallIsFurtherAway;
@@ -865,18 +860,19 @@ void Level::RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wal
         }
         else
         {
-            const bool traceNorth = (y > m_playerActor->GetY() && (float)tileY < y);
-            const bool traceSouth = (y <= m_playerActor->GetY() && (float)tileY > y);
+            const bool traceNorth = (y > cameraY && (float)tileY < y);
+            const bool traceSouth = (y <= cameraY && (float)tileY > y);
             if (traceNorth || traceSouth)
             {
-                hitWallY_x = ((((float)tileY - m_playerActor->GetY()) * normalX) + m_playerActor->GetX());
+                hitWallY_x = ((((float)tileY - cameraY) * normalX) + cameraX);
                 hitWallY_y = (uint16_t)tileY;
 
-                const float deltaY_x = std::abs(m_playerActor->GetX() - hitWallY_x);
-                const float deltaY_y = std::abs(m_playerActor->GetY() - (float)hitWallY_y);
+                const float deltaY_x = std::abs(cameraX - hitWallY_x);
+                const float deltaY_y = std::abs(cameraY - (float)hitWallY_y);
                 squareDistanceY = (deltaY_x * deltaY_x) + (deltaY_y * deltaY_y);
 
                 const uint16_t nextTileY = (traceNorth) ? hitWallY_y : hitWallY_y - 1;
+                const uint16_t previousTileY = (traceNorth) ? nextTileY - 1 : nextTileY + 1;
                 if (squareDistanceY >= squareDistanceX && traceStateX == WallFound)
                 {
                     traceStateY = WallIsFurtherAway;
@@ -1442,8 +1438,8 @@ void Level::Setup3DScene(
     renderable3DTiles.SetFloorColor(GetGroundColor());
     renderable3DTiles.SetCeilingColor(GetSkyColor(timeStamp));
 
-    const float x1 = m_playerActor->GetX();
-    const float y1 = m_playerActor->GetY();
+    const float x1 = renderable3DScene.GetCameraX();
+    const float y1 = renderable3DScene.GetCameraY();
     const float x2 = x1 - 1.0f * (float)std::sin((m_playerActor->GetAngle() + 270.0f) * 3.14159265f / 180.0f);
     const float y2 = y1 + 1.0f * (float)std::cos((m_playerActor->GetAngle() + 270.0f) * 3.14159265f / 180.0f);
 
@@ -1514,7 +1510,7 @@ void Level::Setup3DScene(
     }
 
     RenderableSprites& renderableSprites = renderable3DScene.GetSpritesMutable();
-    renderableSprites.Reset(m_playerActor->GetX(), m_playerActor->GetY(), m_playerActor->GetAngle());
+    renderableSprites.Reset(renderable3DScene.GetCameraX(), renderable3DScene.GetCameraY(), m_playerActor->GetAngle());
     for (uint16_t y = 1; y < m_levelHeight - 1; y++)
     {
         for (uint16_t x = 1; x < m_levelWidth - 1; x++)

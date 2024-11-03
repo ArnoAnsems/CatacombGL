@@ -124,6 +124,7 @@ ExtraMenu::ExtraMenu(
     VSyncSelection->SetId(selectVSyncId);
     elementListVideo->AddChild(VSyncSelection);
     elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 132, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 132, m_renderableText));
     pageVideo->AddChild(elementListVideo, 60, 30);
 
     GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video Options", EgaBrightYellow, m_renderableText);

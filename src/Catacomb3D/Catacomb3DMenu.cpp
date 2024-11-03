@@ -165,6 +165,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     VSyncSelection->SetId(selectVSyncId);
     elementListVideo->AddChild(VSyncSelection);
     elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 104, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageVideo->AddChild(elementListVideo, 76, 62);
 
     // Controls menu

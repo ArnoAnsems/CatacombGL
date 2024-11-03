@@ -366,7 +366,7 @@ void RendererOpenGL::ApplyDepthShading(const Renderable3DScene& renderable3DScen
     {
         const GLfloat LightAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
         const GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-        const GLfloat LightPosition[] = { renderable3DScene.GetOriginX(), renderable3DScene.GetOriginY(), -PlayerZ, 1.0f };
+        const GLfloat LightPosition[] = { renderable3DScene.GetCameraX(), renderable3DScene.GetCameraY(), -PlayerZ, 1.0f };
         glEnable(GL_LIGHTING);
         glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
         glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
@@ -405,7 +405,7 @@ void RendererOpenGL::Render3DScene(const Renderable3DScene& renderable3DScene)
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
-        glTranslatef(-renderable3DScene.GetOriginX(), -renderable3DScene.GetOriginY(), -PlayerZ);
+        glTranslatef(-renderable3DScene.GetCameraX(), -renderable3DScene.GetCameraY(), -PlayerZ);
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -462,7 +462,7 @@ void RendererOpenGL::Render3DScene(const Renderable3DScene& renderable3DScene)
 
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
         glRotatef(renderable3DScene.GetAngle(), 0.0f, 0.0f, -1.0f);
-        glTranslatef(-renderable3DScene.GetOriginX(), -renderable3DScene.GetOriginY(), -PlayerZ);
+        glTranslatef(-renderable3DScene.GetCameraX(), -renderable3DScene.GetCameraY(), -PlayerZ);
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();

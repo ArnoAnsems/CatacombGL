@@ -137,7 +137,7 @@ public:
     const egaColor GetSkyColor(const uint32_t timeStamp);
     const egaColor GetGroundColor() const;
     uint8_t GetLevelIndex() const;
-    void UpdateVisibilityMap();
+    void UpdateVisibilityMap(const float cameraX, const float cameraY);
     bool IsTileVisibleForPlayer(const uint16_t x, const uint16_t y) const;
     bool IsTileClearFromFogOfWar(const uint16_t x, const uint16_t y) const;
     Actor* const GetPlayerActor();
@@ -204,14 +204,14 @@ private:
 
     uint16_t GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;
     uint16_t GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_t ticks) const;
-    void BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall);
+    void BackTraceWalls(const float distanceOnOuterWall, LevelWall& firstWall, const float cameraX, const float cameraY);
     bool IsActorVisibleForPlayer(const Actor* actor) const;
-    void RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wallHit);
+    void RayTraceWall(const LevelCoordinate& coordinateInView, LevelWall& wallHit, const float cameraX, const float cameraY);
     LevelCoordinate GetOuterWallCoordinate(const float distance) const;
     float GetDistanceOnOuterWall(const LevelCoordinate& coordinate) const;
-    LevelCoordinate GetRightEdgeOfWall(LevelWall& wall) const;
-    LevelCoordinate GetLeftEdgeOfWall(LevelWall& wall) const;
-    LevelCoordinate GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView) const;
+    LevelCoordinate GetRightEdgeOfWall(LevelWall& wall, const float cameraX, const float cameraY) const;
+    LevelCoordinate GetLeftEdgeOfWall(LevelWall& wall, const float cameraX, const float cameraY) const;
+    LevelCoordinate GetIntersectionWithOuterWall(const LevelCoordinate& coordinateInView, const float cameraX, const float cameraY) const;
     egaColor GetWallCapMainColor() const;
     egaColor GetWallCapCenterColor(const uint16_t x, const uint16_t y, const bool cheat) const;
     static uint16_t GetTileIdFromActor(const Actor* actor);

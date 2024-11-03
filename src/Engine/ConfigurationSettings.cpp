@@ -117,6 +117,12 @@ ConfigurationSettings::ConfigurationSettings() :
             {"Fit to window", "FitToScreen", ""}
         },
         CVarItemIdAspectRatioFitToWindow),
+    m_cameraPosition("Camera position", "cameraposition",
+        {
+            {"At player", "AtPlayer", ""},
+            {"Behind player", "BehindPlayer", ""}
+        },
+        CVarItemIdCameraAtPlayer),
     m_cvarsEnum(
         {
             std::make_pair(CVarIdScreenMode, &m_screenMode),
@@ -127,10 +133,11 @@ ConfigurationSettings::ConfigurationSettings() :
             std::make_pair(CVarIdMusicMode, &m_musicMode),
             std::make_pair(CVarIdTextureFilter, &m_textureFilter),
             std::make_pair(CVarIdAspectRatio, &m_aspectRatio),
+            std::make_pair(CVarIdCameraPosition, &m_cameraPosition),
             std::make_pair(CVarIdMusicModeAdventureTrilogy, &m_musicModeAdventureTrilogy),
         }),
     m_dummyCvarInt("Dummy", "Dummy", 0, 0, 0),
-    m_fov("Field Of View (Y)", "fov", 25, 45, 25),
+    m_fov("Field Of View (Y)", "fov", 20, 45, 25),
     m_mouseSensitivity("Mouse Sensitiv.", "mouseSensitivity", 1, 20, 10),
     m_turnSpeed("Turn Speed", "turnSpeed", 100, 250, 100),
     m_cvarsInt(
@@ -178,6 +185,7 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdTextureFilter);
         DeserializeCVar(keyValuePairs, CVarIdFov);
         DeserializeCVar(keyValuePairs, CVarIdScreenResolution);
+        DeserializeCVar(keyValuePairs, CVarIdCameraPosition);
         DeserializeCVar(keyValuePairs, CVarIdSoundMode);
         DeserializeCVar(keyValuePairs, CVarIdMusicMode);
         DeserializeCVar(keyValuePairs, CVarIdMusicModeAdventureTrilogy);
@@ -241,6 +249,7 @@ void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
         SerializeCVar(file, CVarIdTextureFilter);
         SerializeCVar(file, CVarIdFov);
         SerializeCVar(file, CVarIdAutoMapMode);
+        SerializeCVar(file, CVarIdCameraPosition);
         file << "# Sound settings\n";
         SerializeCVar(file, CVarIdSoundMode);
         SerializeCVar(file, CVarIdMusicMode);
@@ -474,7 +483,8 @@ void ConfigurationSettings::ResetToClassic()
     GetCVarEnumMutable(CVarIdScreenResolution).SetItemIndex(CVarItemIdScreenResolutionOriginal);
     GetCVarEnumMutable(CVarIdTextureFilter).SetItemIndex(CVarItemIdTextureFilterNearest);
     GetCVarEnumMutable(CVarIdAspectRatio).SetItemIndex(CVarItemIdAspectRatioOriginal);
+    GetCVarEnumMutable(CVarIdCameraPosition).SetItemIndex(CVarItemIdCameraBehindPlayer);
     GetCVarEnumMutable(CVarIdMusicModeAdventureTrilogy).SetItemIndex(CVarItemIdMusicModeOff);
-    GetCVarIntMutable(CVarIdFov).SetToDefault();
+    GetCVarIntMutable(CVarIdFov).SetValue(21);
     GetCVarIntMutable(CVarIdTurnSpeed).SetToDefault();
 }

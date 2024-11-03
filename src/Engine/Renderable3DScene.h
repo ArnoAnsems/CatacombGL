@@ -32,18 +32,19 @@ public:
 
     void PrepareFrame(
         const float aspectRatio,
-        const float originX,
-        const float originY,
+        const float playerX,
+        const float playerY,
         const float angle,
         const bool depthShading,
         const uint16_t fieldOfView,
-        const bool originalScreenResolution);
+        const bool originalScreenResolution,
+        const bool cameraBehindPlayer);
     void FinalizeFrame();
 
     const float GetAspectRatio() const;
     const ViewPorts::ViewPortRect3D& GetOriginal3DViewArea() const;
-    const float GetOriginX() const;
-    const float GetOriginY() const;
+    const float GetCameraX() const;
+    const float GetCameraY() const;
     const float GetAngle() const;
     const Renderable3DWalls& GetWalls() const;
     const Renderable3DTiles& Get3DTiles() const;
@@ -65,10 +66,11 @@ private:
     Renderable3DTiles m_3DTiles;
     RenderableSprites m_sprites;
     float m_aspectRatio;
-    float m_originX;
-    float m_originY;
+    float m_cameraX;
+    float m_cameraY;
     float m_angle;
     bool m_depthShading;
     uint16_t m_fieldOfView;
     bool m_originalScreenResolution;
+    bool m_originalCameraView;
 };

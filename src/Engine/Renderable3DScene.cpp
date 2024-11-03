@@ -14,37 +14,45 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Renderable3DScene.h"
+#include <cmath>
 
 Renderable3DScene::Renderable3DScene(const ViewPorts::ViewPortRect3D original3DViewArea) :
     m_original3DViewArea(original3DViewArea),
     m_aspectRatio(1.0f),
-    m_originX(1.0f),
-    m_originY(1.0f),
+    m_cameraX(1.0f),
+    m_cameraY(1.0f),
     m_angle(1.0f),
     m_depthShading(true),
-    m_fieldOfView(25)
+    m_fieldOfView(25),
+    m_originalScreenResolution(false),
+    m_originalCameraView(false)
 {
 
 }
 
 void Renderable3DScene::PrepareFrame(
     const float aspectRatio,
-    const float originX,
-    const float originY,
+    const float playerX,
+    const float playerY,
     const float angle,
     const bool depthShading,
     const uint16_t fieldOfView,
-    const bool originalScreenResolution)
+    const bool originalScreenResolution,
+    const bool cameraBehindPlayer)
 {
     m_aspectRatio = aspectRatio;
-    m_originX = originX;
-    m_originY = originY;
+    const float angleInRadians = (angle + 180.0f) * 3.14159265f / 180.0f;
+    // In the original DOS games, the camera position is slightly behind the player position, see the function
+    // ThreeDRefresh in C3_DRAW.C. This behavior is optionally emulated here, depending on the flag cameraBehindPlayer.
+    constexpr float distanceFromPlayerToCamera = 0.4f;
+    m_cameraX = cameraBehindPlayer ? playerX + distanceFromPlayerToCamera * std::sin(angleInRadians) : playerX;
+    m_cameraY = cameraBehindPlayer ? playerY - distanceFromPlayerToCamera * std::cos(angleInRadians) : playerY;
     m_angle = angle;
     m_depthShading = depthShading;
     m_fieldOfView = fieldOfView;
     m_walls.Reset();
     m_3DTiles.Reset();
-    m_sprites.Reset(originX, originY, angle);
+    m_sprites.Reset(m_cameraX, m_cameraY, angle);
     m_originalScreenResolution = originalScreenResolution;
 }
 
@@ -63,14 +71,14 @@ const ViewPorts::ViewPortRect3D& Renderable3DScene::GetOriginal3DViewArea() cons
     return m_original3DViewArea;
 }
 
-const float Renderable3DScene::GetOriginX() const
+const float Renderable3DScene::GetCameraX() const
 {
-    return m_originX;
+    return m_cameraX;
 }
 
-const float Renderable3DScene::GetOriginY() const
+const float Renderable3DScene::GetCameraY() const
 {
-    return m_originY;
+    return m_cameraY;
 }
 
 const float Renderable3DScene::GetAngle() const

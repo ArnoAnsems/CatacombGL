@@ -282,7 +282,8 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     m_level->GetPlayerActor()->GetAngle(),
                     m_configurationSettings.GetCVarBool(CVarIdDepthShading).IsEnabled(),
                     m_configurationSettings.GetCVarInt(CVarIdFov).GetValue(),
-                    renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetCVarEnum(CVarIdScreenResolution).GetItemIndex() == CVarItemIdScreenResolutionOriginal);
+                    renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetCVarEnum(CVarIdScreenResolution).GetItemIndex() == CVarItemIdScreenResolutionOriginal,
+                    m_configurationSettings.GetCVarEnum(CVarIdCameraPosition).GetItemIndex() == CVarItemIdCameraBehindPlayer);
                 m_level->Setup3DScene(
                     *m_game.GetEgaGraph(),
                     m_renderable3DScene,
@@ -1352,7 +1353,7 @@ bool EngineCore::Think()
                     m_playerInput.SetMouseXPos(0);
                 }
 
-                m_level->UpdateVisibilityMap();
+                m_level->UpdateVisibilityMap(m_renderable3DScene.GetCameraX(), m_renderable3DScene.GetCameraY());
 
                 ThinkActors();
                 ThinkNonBlockingActors();
@@ -2898,7 +2899,7 @@ void EngineCore::WarpInsideLevel(const Actor* sourceWarp)
                 Thrust(0, 0.5f);
 
                 // Update visibility map based on new location of player
-                m_level->UpdateVisibilityMap();
+                m_level->UpdateVisibilityMap(m_renderable3DScene.GetCameraX(), m_renderable3DScene.GetCameraY());
             }
         }
     }
