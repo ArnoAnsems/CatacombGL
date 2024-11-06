@@ -72,10 +72,16 @@ bool ControlsMap::AssignActionToKey(const ControlAction action, const SDL_Keycod
 
 void ControlsMap::AssignDefaultActionToKey(const ControlAction action, const SDL_Keycode keyCode)
 {
-    if (GetKeysFromAction(action).empty() &&
-        GetActionFromKey(keyCode) == None)
+    if (GetActionFromKey(keyCode) == None)
     {
-        m_KeyToActionMap.insert(std::make_pair(keyCode, action));
+        // There is no action bound to this key yet.
+        const std::vector<SDL_Keycode> otherKeysWithThisAction = GetKeysFromAction(action);
+        const std::vector<uint8_t> otherMouseButtonsWithThisAction = GetMouseButtonsFromAction(action);
+        if (otherKeysWithThisAction.size() + otherMouseButtonsWithThisAction.size() < 2)
+        {
+            // Less than 2 other keys or mouse buttons are bound to this action, so there is room for one more.
+            m_KeyToActionMap.insert(std::make_pair(keyCode, action));
+        }
     }
 }
 
@@ -111,10 +117,16 @@ bool ControlsMap::AssignActionToMouseButton(const ControlAction action, const ui
 
 void ControlsMap::AssignDefaultActionToMouseButton(const ControlAction action, const uint8_t buttonCode)
 {
-    if (GetMouseButtonsFromAction(action).empty() &&
-        GetActionFromMouseButton(buttonCode) == None)
+    if (GetActionFromMouseButton(buttonCode) == None)
     {
-        m_mouseButtonToActionMap[buttonCode] = action;
+        // There is no action bound to this mouse button yet.
+        const std::vector<SDL_Keycode> otherKeysWithThisAction = GetKeysFromAction(action);
+        const std::vector<uint8_t> otherMouseButtonsWithThisAction = GetMouseButtonsFromAction(action);
+        if (otherKeysWithThisAction.size() + otherMouseButtonsWithThisAction.size() < 2)
+        {
+            // Less than 2 other keys or mouse buttons are bound to this action, so there is room for one more.
+            m_mouseButtonToActionMap[buttonCode] = action;
+        }
     }
 }
 
