@@ -1002,16 +1002,19 @@ bool EngineCore::Think()
         if (m_playerInput.IsKeyPressed(SDLK_F2))
         {
             m_menu->OpenSoundMenu();
+            m_game.GetAudioPlayer()->StopMusic();
             m_gameTimer.Pause();
         }
         if (m_playerInput.IsKeyPressed(SDLK_F3))
         {
             m_menu->OpenSaveGameMenu();
+            m_game.GetAudioPlayer()->StopMusic();
             m_gameTimer.Pause();
         }
         if (m_playerInput.IsKeyPressed(SDLK_F4))
         {
             m_menu->OpenRestoreGameMenu();
+            m_game.GetAudioPlayer()->StopMusic();
             m_gameTimer.Pause();
         }
     }
