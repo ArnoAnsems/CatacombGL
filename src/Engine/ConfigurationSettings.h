@@ -48,6 +48,8 @@ static constexpr uint8_t CVarIdMusicMode = 25;
 static constexpr uint8_t CVarIdTextureFilter = 26;
 static constexpr uint8_t CVarIdAspectRatio = 27;
 static constexpr uint8_t CVarIdCameraPosition = 28;
+static constexpr uint8_t CVarIdWindowedScreenWidth = 29;
+static constexpr uint8_t CVarIdWindowedScreenHeight = 30;
 static constexpr uint8_t CVarIdFov = 40;
 static constexpr uint8_t CVarIdMouseSensitivity = 41;
 static constexpr uint8_t CVarIdTurnSpeed = 42;
@@ -156,4 +158,6 @@ private:
     ConsoleVariableInt m_fov;
     ConsoleVariableInt m_mouseSensitivity;
     ConsoleVariableInt m_turnSpeed;
+    ConsoleVariableInt m_windowedScreenWidth;
+    ConsoleVariableInt m_windowedScreenHeight;
 };

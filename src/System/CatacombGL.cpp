@@ -169,14 +169,16 @@ int main(int argc, char* argv[])
 	}
 
 	// Create Our OpenGL Window
-	CreateGLWindow(800, 600, 16, window, context);
+	const int windowedScreenWidth = config.GetCVarInt(CVarIdWindowedScreenWidth).GetValue();
+	const int windowedScreenHeight = config.GetCVarInt(CVarIdWindowedScreenHeight).GetValue();
+	CreateGLWindow(windowedScreenWidth, windowedScreenHeight, 16, window, context);
 
 	renderer = new RendererOpenGL();
 	renderer->Setup();
 	SetScreenMode(config.GetCVarEnum(CVarIdScreenMode).GetItemIndex(), window);
 
 	// Set Up Our Perspective GL Screen
-	ReSizeGLScene(renderer, 800, 600);
+	ReSizeGLScene(renderer, windowedScreenWidth, windowedScreenHeight);
 
 	Logging::Instance().AddLogMessage("Running on graphics adapter model " + renderer->GetGraphicsAdapterModel());
 	Logging::Instance().AddLogMessage("Running on " + renderer->GetGraphicsApiVersion());
