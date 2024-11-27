@@ -9,7 +9,7 @@ Main features:
 * Supports all four Catacomb 3D games as included in the Catacombs Pack from GOG.com.
 * Supports The Catacomb Abyss version 1.13 (shareware).
 
-Current limitations as of version 0.5.5: 
+Current limitations as of version 0.5.6: 
 * No support for game controllers. 
 * No backwards compatibility with saved games from the original DOS game. 
 
@@ -95,6 +95,14 @@ Special thanks goes to:
 * GoGoOtaku for porting CatacombGL to Linux and CMake.
 
 # History
+* Version 0.5.6 (2024-11-27) New in this release:
+  * Added an option to place the camera position slightly behind the player, as seen in the original DOS games. The default camera position is still centered on the player. Suggested by N00123, Blzut3 and WhiteMagicRaven.
+  * Added configuration variables WindowedScreenWidth and WindowedScreenHeight, which can be used to set the initial screen resolution in windowed mode. These variables have to be set via the configuration file, since they are not included in the menu. The default is 800 x 600. Suggested by The Kinsie.
+  * Integrated the latest audio backend from ReflectionHLE.
+  * Fix: prevent music playback from interfering with sound effects in the Catacomb Adventure series. Reported by NY00123.
+  * Fix: switch off the music when opening the menu via the F2, F3 or F4 keyboard keys in the Catacomb Adventure series. Reported by NY00123.
+  * Fix: allow for two default keyboard keys to be bound to a single action.
+
 * Version 0.5.5 (2024-08-21) New in this release:
   * Support for command line parameters was implemented by wcapes. See the readme file for a list of commands.
   * The sticky walls in Catacomb 3-D are now configurable. Suggested by @ivfall@bitbang.social on Mastodon.
