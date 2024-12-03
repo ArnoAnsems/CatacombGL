@@ -136,13 +136,34 @@ void SystemSDL::GetSubFolders(
     }
 
     subFolders.push_back(".."); // Make sure the "return to parent" folder ends up at the top of the list.
-    if (fs::is_directory(workFolder)) {
+    if (fs::is_directory(workFolder))
+    {
         for (auto const& entry : fs::directory_iterator{workFolder})
         {
-            if (entry.is_directory()) {
+            if (isFolderAccessible(entry))
+            {
                 subFolders.push_back(entry.path());
             }
         }
     }
+}
+
+bool SystemSDL::isFolderAccessible(const std::filesystem::directory_entry& entry)
+{
+    bool folderIsAccessible = false;
+    if (entry.is_directory())
+    {
+        try
+        {
+            const std::filesystem::directory_iterator subFolderIterator = fs::directory_iterator{ entry };
+            folderIsAccessible = true;
+        }
+        catch (std::filesystem::filesystem_error)
+        {
+            // This can happen when the application has no access rights for that specific folder.
+        }
+    }
+
+    return folderIsAccessible;
 }
 

@@ -47,6 +47,8 @@ protected:
     std::filesystem::path FindConfigurationFile() const;
 
 private:
+    static bool isFolderAccessible(const std::filesystem::directory_entry& entry);
+
     const std::filesystem::path m_configurationFile;
 };
 
