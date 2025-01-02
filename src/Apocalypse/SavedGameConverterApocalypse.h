@@ -31,6 +31,11 @@ public:
     const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const uint16_t GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const bool IsInertObject(const uint16_t obclass) const override;
+
+private:
+    const uint16_t GetActorIdOfBonus(const uint32_t state32) const;
+    const uint16_t GetActorIdOfSolid(const uint32_t state32) const;
+    const uint16_t GetActorIdOfExplosion(const uint32_t state32) const;
 };
 
 

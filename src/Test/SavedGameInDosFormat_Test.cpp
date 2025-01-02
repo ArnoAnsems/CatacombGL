@@ -309,6 +309,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
     EXPECT_EQ(firstObject.viewx, 0);
     EXPECT_EQ(firstObject.viewheight, 0);
     EXPECT_EQ(firstObject.size, 26214);
+    EXPECT_EQ(firstObject.state32, 0x1BFA0000);  // 0x1A580000 + 1A20000
 
     CheckObjectIsPlayer(savedGame.GetObject(0));
 
@@ -361,6 +362,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
     EXPECT_EQ(firstObject.viewx, 0);
     EXPECT_EQ(firstObject.viewheight, 0);
     EXPECT_EQ(firstObject.size, 26214);
+    EXPECT_EQ(firstObject.state32, 0x1C110000); // 0x1A6F0000 + 1A20000
 
     CheckObjectIsPlayer(savedGame.GetObject(0));
 

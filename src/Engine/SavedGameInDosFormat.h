@@ -32,8 +32,8 @@ public:
         uint16_t active;
         int16_t ticcount;
         uint16_t obclass;
-        int16_t state16;
-        int32_t state32;
+        uint16_t state16;
+        uint32_t state32;
         uint16_t shootable;
         uint16_t flags;
         uint16_t tileObject;
