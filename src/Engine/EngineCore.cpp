@@ -212,6 +212,12 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     }
 
     m_game.SpawnActors(m_level, m_difficultyLevel);
+    // Update the camera position to the player position in the new level, such that the visibility map gets correctly updated
+    m_renderable3DScene.UpdateCamera(
+        m_level->GetPlayerActor()->GetX(),
+        m_level->GetPlayerActor()->GetY(),
+        m_level->GetPlayerActor()->GetAngle(),
+        m_configurationSettings.GetCVarEnum(CVarIdCameraPosition).GetItemIndex() == CVarItemIdCameraBehindPlayer);
     m_level->GetPlayerActor()->SetHealth(health);
     m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex());
     m_levelStatistics.SetCountersAtStartOfLevel(*m_level);
@@ -3274,6 +3280,12 @@ void EngineCore::LoadGameFromFileWithFullPath(const fs::path filename)
         UnloadLevel();
         m_level = m_game.GetGameMaps()->GetLevelFromSavedGame(file);
         m_level->LoadActorsFromFile(file, m_game.GetDecorateActors());
+        // Update the camera position to the player position in the new level, such that the visibility map gets correctly updated
+        m_renderable3DScene.UpdateCamera(
+            m_level->GetPlayerActor()->GetX(),
+            m_level->GetPlayerActor()->GetY(),
+            m_level->GetPlayerActor()->GetAngle(),
+            m_configurationSettings.GetCVarEnum(CVarIdCameraPosition).GetItemIndex() == CVarItemIdCameraBehindPlayer);
         if (versionMajorRead > 0 || versionMinorRead >= 5)
         {
             // The fog of war map gets stored since version 0.5.0

@@ -41,12 +41,7 @@ void Renderable3DScene::PrepareFrame(
     const bool cameraBehindPlayer)
 {
     m_aspectRatio = aspectRatio;
-    const float angleInRadians = (angle + 180.0f) * 3.14159265f / 180.0f;
-    // In the original DOS games, the camera position is slightly behind the player position, see the function
-    // ThreeDRefresh in C3_DRAW.C. This behavior is optionally emulated here, depending on the flag cameraBehindPlayer.
-    constexpr float distanceFromPlayerToCamera = 0.4f;
-    m_cameraX = cameraBehindPlayer ? playerX + distanceFromPlayerToCamera * std::sin(angleInRadians) : playerX;
-    m_cameraY = cameraBehindPlayer ? playerY - distanceFromPlayerToCamera * std::cos(angleInRadians) : playerY;
+    UpdateCamera(playerX, playerY, angle, cameraBehindPlayer);
     m_angle = angle;
     m_depthShading = depthShading;
     m_fieldOfView = fieldOfView;
@@ -59,6 +54,16 @@ void Renderable3DScene::PrepareFrame(
 void Renderable3DScene::FinalizeFrame()
 {
     m_sprites.SortSpritesBackToFront();
+}
+
+void Renderable3DScene::UpdateCamera(const float playerX, const float playerY, const float angle, const bool cameraBehindPlayer)
+{
+    const float angleInRadians = (angle + 180.0f) * 3.14159265f / 180.0f;
+    // In the original DOS games, the camera position is slightly behind the player position, see the function
+    // ThreeDRefresh in C3_DRAW.C. This behavior is optionally emulated here, depending on the flag cameraBehindPlayer.
+    constexpr float distanceFromPlayerToCamera = 0.4f;
+    m_cameraX = cameraBehindPlayer ? playerX + distanceFromPlayerToCamera * std::sin(angleInRadians) : playerX;
+    m_cameraY = cameraBehindPlayer ? playerY - distanceFromPlayerToCamera * std::cos(angleInRadians) : playerY;
 }
 
 const float Renderable3DScene::GetAspectRatio() const

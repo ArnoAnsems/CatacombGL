@@ -59,6 +59,7 @@ public:
     void AddEastWall(const uint16_t x, const uint16_t y, const unsigned int textureId);
     Renderable3DTiles& Get3DTilesMutable();
     RenderableSprites& GetSpritesMutable();
+    void UpdateCamera(const float playerX, const float playerY, const float angle, const bool cameraBehindPlayer);
 
 private:
     const ViewPorts::ViewPortRect3D m_original3DViewArea;
