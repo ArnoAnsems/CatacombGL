@@ -30,7 +30,7 @@ namespace fs = std::filesystem;
 
 constexpr uint8_t versionMajor = 0;
 constexpr uint8_t versionMinor = 5;
-constexpr uint8_t versionLevel = 6;
+constexpr uint8_t versionLevel = 7;
 const std::string versionPhase = "Beta";
 
 constexpr uint8_t VictoryStatePlayGetBolt = 0;
