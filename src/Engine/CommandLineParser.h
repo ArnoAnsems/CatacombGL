@@ -27,6 +27,7 @@ public:
     void parse(const int argc, char* argv[]);
     const std::string& getFilenameIni() const;
     const std::string& getFilenameLog() const;
+    const std::string& getSaveDir() const;
     GameId gameIdToStart() const;
 
 private:
@@ -34,5 +35,6 @@ private:
 
     std::string m_filenameIni;
     std::string m_filenameLog;
+    std::string m_saveDir;
     GameId m_gameIdToStart;
 };

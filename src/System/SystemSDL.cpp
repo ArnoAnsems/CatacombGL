@@ -47,6 +47,16 @@ const fs::path& SystemSDL::GetConfigurationFilePath() const
     return m_configurationFile;
 }
 
+const std::filesystem::path& SystemSDL::GetSavedGamesPath() const
+{
+    return (m_customizedSavedGamesPath.empty()) ? m_configurationFile : m_customizedSavedGamesPath; 
+}
+
+void SystemSDL::SetCustomizedSavedGamesPath(const std::filesystem::path& customPath)
+{
+    m_customizedSavedGamesPath = customPath;
+}
+
 void SystemSDL::GetSavedGameNamesFromFolder(
     const fs::path& path,
     std::vector<std::string>& filesFound

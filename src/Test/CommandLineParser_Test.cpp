@@ -99,6 +99,22 @@ TEST(CommandLineParser_Test, logWithFilename)
     EXPECT_EQ("log.txt", commandLineParser.getFilenameLog());
 }
 
+TEST(CommandLineParser_Test, saveDirWithoutDirectory)
+{
+    CommandLineParser commandLineParser;
+    char* commands[] = { "test.exe", "--savedir" };
+    commandLineParser.parse(2, commands);
+    EXPECT_TRUE(commandLineParser.getSaveDir().empty());
+}
+
+TEST(CommandLineParser_Test, saveDirWithDirectory)
+{
+    CommandLineParser commandLineParser;
+    char* commands[] = { "test.exe", "--savedir", "C:\\temp\\saves" };
+    commandLineParser.parse(3, commands);
+    EXPECT_EQ("C:\\temp\\saves", commandLineParser.getSaveDir());
+}
+
 TEST(CommandLineParser_Test, useCapitals)
 {
     CommandLineParser commandLineParser;

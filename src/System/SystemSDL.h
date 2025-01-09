@@ -29,6 +29,7 @@ public:
     virtual std::string GetOSVersion() const override;
     virtual bool CreatePath(const std::filesystem::path& path) const override;
     virtual const std::filesystem::path& GetConfigurationFilePath() const override;
+    virtual const std::filesystem::path& GetSavedGamesPath() const override;
     virtual void GetSavedGameNamesFromFolder(
         const std::filesystem::path& path,
         std::vector<std::string>& filesFound
@@ -42,6 +43,7 @@ public:
         const std::filesystem::path selectedFolder,
         std::vector<std::filesystem::path>& subFolders
     ) const;
+    void SetCustomizedSavedGamesPath(const std::filesystem::path& customPath);
 
 protected:
     std::filesystem::path FindConfigurationFile() const;
@@ -50,5 +52,6 @@ private:
     static bool isFolderAccessible(const std::filesystem::directory_entry& entry);
 
     const std::filesystem::path m_configurationFile;
+    std::filesystem::path m_customizedSavedGamesPath;
 };
 

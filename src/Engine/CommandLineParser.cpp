@@ -23,6 +23,7 @@ const std::string paramAbyssSW13 = "--abyss_sw13";
 
 const std::string paramIniFile = "--ini";
 const std::string paramLogFile = "--log";
+const std::string paramSaveDir = "--savedir";
 
 CommandLineParser::CommandLineParser() :
     m_gameIdToStart(GameId::NotDetected)
@@ -84,6 +85,11 @@ void CommandLineParser::parse(const int argc, char* argv[])
         {
             m_filenameLog = current;
         }
+
+        if (compareStrings(prev, paramSaveDir))
+        {
+            m_saveDir = current;
+        }
     };
 }
 
@@ -95,6 +101,11 @@ const std::string& CommandLineParser::getFilenameIni() const
 const std::string& CommandLineParser::getFilenameLog() const
 {
     return m_filenameLog;
+}
+
+const std::string& CommandLineParser::getSaveDir() const
+{
+    return m_saveDir;
 }
 
 GameId CommandLineParser::gameIdToStart() const

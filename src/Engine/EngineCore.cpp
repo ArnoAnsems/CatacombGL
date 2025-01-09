@@ -103,7 +103,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_gameTimer.Reset();
 
     const fs::path filenamePath = m_system.GetConfigurationFilePath();
-    const fs::path savedGamesPath = filenamePath / m_game.GetSavedGamesPath();
+    const fs::path savedGamesPath = m_system.GetSavedGamesPath() / m_game.GetSavedGamesPath();
     m_system.GetSavedGameNamesFromFolder(savedGamesPath, m_savedGames);
 
 #ifdef SAVEDGAMESINDOSFORMAT
@@ -3238,7 +3238,7 @@ bool EngineCore::StoreGameToFileWithFullPath(const fs::path filename) const
 
 bool EngineCore::StoreGameToFile(const std::string filename)
 {
-    const fs::path filenamePath = m_system.GetConfigurationFilePath();
+    const fs::path filenamePath = m_system.GetSavedGamesPath();
     const fs::path filenamePathForGame = filenamePath / m_game.GetSavedGamesPath();
     if (m_system.CreatePath(filenamePathForGame))
     {
@@ -3335,7 +3335,7 @@ void EngineCore::LoadGameFromFileWithFullPath(const fs::path filename)
 
 void EngineCore::LoadGameFromFile(const std::string filename)
 {
-    const fs::path filenamePath = m_system.GetConfigurationFilePath();
+    const fs::path filenamePath = m_system.GetSavedGamesPath();
     const fs::path filenamePathAbyss = filenamePath / m_game.GetSavedGamesPath();
     const fs::path fullPath = filenamePathAbyss / ( filename + ".sav" );
     LoadGameFromFileWithFullPath(fullPath);

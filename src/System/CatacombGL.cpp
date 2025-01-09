@@ -139,9 +139,17 @@ int main(int argc, char* argv[])
 	const fs::path configPath = system.GetConfigurationFilePath();
 	system.CreatePath(configPath);
 
+	const std::string& savedGamesPathFromCommandLine = commandLineParser.getSaveDir();
+	if (!savedGamesPathFromCommandLine.empty())
+	{
+		system.SetCustomizedSavedGamesPath(savedGamesPathFromCommandLine);
+	}
+	const fs::path savedGamesPath = system.GetSavedGamesPath();
+
 	const fs::path logFilename = commandLineParser.getFilenameLog().empty() ? (fs::path) configPath / "CatacombGL_log.txt" : (fs::path) commandLineParser.getFilenameLog();
 	Logging::Instance().SetLogFile(logFilename);
 	Logging::Instance().AddLogMessage("Configuration file used .... " + logFilename.string());
+	Logging::Instance().AddLogMessage("Saved games path set to " + savedGamesPath.string());
 
 	const std::string buildBitInfo(system.isBuiltIn64Bit() ? " (64 bit)" : " (32 bit)");
 	Logging::Instance().AddLogMessage("Initializing CatacombGL " + EngineCore::GetVersionInfo() + buildBitInfo);
