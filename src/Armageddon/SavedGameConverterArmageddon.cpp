@@ -66,7 +66,7 @@ constexpr uint32_t s_pshot_exp3 = 0x1A570000 + farPtrOffset;
 constexpr uint32_t s_player = 0x1A580000 + farPtrOffset;
 constexpr uint32_t s_explode = 0x1A590000 + farPtrOffset;
 constexpr uint32_t s_boltbonus = 0x1A5A0000 + farPtrOffset;
-constexpr uint32_t s_boltbonus2 = 0x1A5B0000 + farPtrOffset;;
+constexpr uint32_t s_boltbonus2 = 0x1A5B0000 + farPtrOffset;
 constexpr uint32_t s_boltbonus3 = 0x1A5C0000 + farPtrOffset;
 constexpr uint32_t s_nukebonus = 0x1A5D0000 + farPtrOffset;
 constexpr uint32_t s_nukebonus2 = 0x1A5E0000 + farPtrOffset;
@@ -632,15 +632,608 @@ const uint16_t SavedGameConverterArmageddon::GetActorIdOfInert(const uint32_t st
     return actorId;
 }
 
-const DecorateStateId SavedGameConverterArmageddon::GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+const DecorateStateId SavedGameConverterArmageddon::GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
-    // TODO
-    return StateIdWalk;
+    DecorateStateId stateId = StateIdWalk;
+    switch (dosObject.state32)
+    {
+    case s_player:
+    case s_fatdemon_walk1:
+    case s_fatdemon_walk2:
+    case s_fatdemon_walk3:
+    case s_fatdemon_walk4:
+    case s_wet_walk1:
+    case s_wet_walk2:
+    case s_wet_walk3:
+    case s_wet_walk4:
+    case s_skel_1:
+    case s_skel_2:
+    case s_skel_3:
+    case s_skel_4:
+    case s_eye_1:
+    case s_eye_2:
+    case s_eye_3:
+    case s_eye_4:
+    case s_succubus_walk1:
+    case s_succubus_walk2:
+    case s_succubus_walk3:
+    case s_succubus_walk4:
+    case s_mage1:
+    case s_mage2:
+    case s_bunny_walk1:
+    case s_bunny_walk2:
+    case s_red_demon1:
+    case s_red_demon2:
+    case s_red_demon3:
+    case s_red_demon4:
+    case s_grel1:
+    case s_grel2:
+    case s_bat1:
+    case s_bat2:
+    case s_bat3:
+    case s_bat4:
+    case s_godess1:
+    case s_godess2:
+    case s_godess3:
+    case s_ant_walk1:
+    case s_ant_walk2:
+    case s_ant_walk3:
+    case s_zombie_alive1:
+    case s_zombie_alive2:
+    case s_zombie_alive3:
+    case s_tree_walk1:
+    case s_tree_walk2:
+        stateId = StateIdWalk;
+        break;
+    case s_fatdemon_pause:
+    case s_fatdemon_attack1:
+    case s_fatdemon_attack2:
+    case s_wet_attack1:
+    case s_wet_attack2:
+    case s_wet_attack3:
+    case s_wet_attack4:
+    case s_skel_pause:
+    case s_skel_attack1:
+    case s_skel_attack2:
+    case s_skel_attack3:
+    case s_eye_pause:
+    case s_eye_shootplayer_1:
+    case s_eye_shootplayer_2:
+    case s_succubus_pause:
+    case s_succubus_attack1:
+    case s_succubus_attack2:
+    case s_succubus_attack3:
+    case s_magepause:
+    case s_mageattack3:
+    case s_bunny_attack1:
+    case s_bunny_attack2:
+    case s_bunny_pause:
+    case s_red_demonpause:
+    case s_red_demonattack1:
+    case s_red_demonattack2:
+    case s_red_demonattack3:
+    case s_grelpause:
+    case s_grelattack3:
+    case s_batpast:
+    case s_godesspause:
+    case s_godessattack1:
+    case s_godessattack2:
+    case s_godessattack3:
+    case s_ant_attack1:
+    case s_ant_pause:
+    case s_zombie_pause:
+    case s_zombie_attack:
+    case s_tree_pause:
+    case s_tree_attack1:
+    case s_tree_attack2:
+    case s_tree_attack3:
+        stateId = StateIdAttack;
+        break;
+    case s_fatdemon_ouch:
+    case s_wet_ouch:
+    case s_skel_ouch:
+    case s_eye_ouch:
+    case s_eye_ouch2:
+    case s_succubus_ouch:
+    case s_mageouch:
+    case s_bunny_ouch:
+    case s_red_demonouch:
+    case s_grelouch:
+    case s_godessouch:
+    case s_ant_ouch:
+    case s_zombie_ouch:
+    case s_tree_ouch:
+        stateId = StateIdPain;
+        break;
+    case s_explode:
+    case s_bonus_die:
+    case s_fatdemon_blowup1:
+    case s_fatdemon_blowup2:
+    case s_fatdemon_blowup3:
+    case s_fatdemon_blowup4:
+    case s_fatdemon_blowup5:
+    case s_fatdemon_blowup6:
+    case s_fatdemon_blowup7:
+    case s_fatdemon_explode:
+    case s_wet_die1:
+    case s_wet_die2:
+    case s_wet_die3:
+    case s_wet_die4:
+    case s_wet_die5:
+    case s_skel_die1:
+    case s_skel_die2:
+    case s_eye_die1:
+    case s_eye_die2:
+    case s_eye_die3:
+    case s_succubus_death1:
+    case s_magedie1:
+    case s_bunny_death1:
+    case s_bunny_death2:
+    case s_red_demondie1:
+    case s_red_demondie2:
+    case s_red_demondie3:
+    case s_greldie1:
+    case s_greldie2:
+    case s_greldie3:
+    case s_greldie4:
+    case s_greldie5:
+    case s_greldie5a:
+    case s_batdie1:
+    case s_batdie2:
+    case s_godessdie1:
+    case s_ant_die1:
+    case s_zombie_death1:
+    case s_zombie_death2:
+    case s_tree_death1:
+    case s_tree_death2:
+    case s_force_field_die:
+    case s_force_field_die1:
+        stateId = StateIdDying;
+        break;
+    case s_walldie1:
+    case s_walldie2:
+    case s_walldie3:
+    case s_walldie4:
+    case s_walldie5:
+    case s_walldie6:
+    case s_fatdemon_feet:
+    case s_skel_die3:
+    case s_succubus_death2:
+    case s_magedie2:
+    case s_bunny_death3:
+    case s_red_demondie4:
+    case s_greldie6:
+    case s_godessdie2:
+    case s_ant_die2:
+    case s_ant_die3:
+    case s_zombie_death3:
+    case s_tree_death3:
+    case s_tree_death4:
+    case s_tree_death5:
+        stateId = StateIdDead;
+        break;
+    case s_wet_bubbles1:
+    case s_wet_bubbles2:
+    case s_wet_bubbles3:
+    case s_wallskel:
+    case s_godess_statue1:
+    case s_ant_wait:
+    case s_zombie_inground:
+    case s_tree_idle:
+    case s_skeleton_hanging:
+        stateId = StateIdHidden;
+        break;
+    case s_wet_rise1:
+    case s_wet_rise3:
+    case s_wet_rise4:
+    case s_wet_rise5:
+    case s_wallskel2:
+    case s_bunny_meta1:
+    case s_bunny_meta2:
+    case s_godess_statue2:
+    case s_ant_egg:
+    case s_zombie_risen:
+    case s_zombie_rise1:
+    case s_zombie_rise2:
+    case s_zombie_rise3:
+    case s_zombie_rise4:
+    case s_tree_awakening1:
+    case s_tree_awakening2:
+        stateId = StateIdRise;
+        break;
+    case s_wet_sink1:
+    case s_wet_sink2:
+    case s_wet_sink3:
+        stateId = StateIdSink;
+        break;
+    case s_wet_peek:
+    case s_bunny_right1:
+    case s_bunny_right2:
+    case s_bunny_right3:
+        stateId = StateIdPeek;
+        break;
+    case s_pshot1:
+    case s_pshot2:
+    case s_pshot_exp1:
+    case s_pshot_exp2:
+    case s_pshot_exp3:
+    case s_dragon_shot1:
+    case s_dragon_shot2:
+    case s_eshot1:
+    case s_eshot2:
+    case s_succubus_shot1:
+    case s_mshot1:
+    case s_mshot2:
+    case s_gshot1:
+        stateId = StateIdProjectileFly;
+        break;
+    case s_obj_gate1:
+    case s_obj_gate2:
+    case s_obj_gate3:
+    case s_obj_gate4:
+    case s_anthill:
+    case s_boltbonus:
+    case s_boltbonus2:
+    case s_boltbonus3:
+    case s_nukebonus:
+    case s_nukebonus2:
+    case s_nukebonus3:
+    case s_potionbonus:
+    case s_rkeybonus:
+    case s_ykeybonus:
+    case s_gkeybonus:
+    case s_bkeybonus:
+    case s_chestbonus:
+    case s_waterchestbonus1:
+    case s_waterchestbonus2:
+    case s_rgem1bonus:
+    case s_ygem1bonus:
+    case s_ggem1bonus:
+    case s_bgem1bonus:
+    case s_pgem1bonus:
+    case s_rgem2bonus:
+    case s_ygem2bonus:
+    case s_ggem2bonus:
+    case s_bgem2bonus:
+    case s_pgem2bonus:
+    case s_ftimebonus:
+    case s_ftimebonus2:
+        stateId = StateIdWaitForPickup;
+        break;
+    case s_tombs0:
+    case s_tombs1:
+    case s_tombs2:
+    case s_column:
+    case s_sulphur_gas_1:
+    case s_sulphur_gas_2:
+    case s_sulphur_gas_3:
+    case s_fire_pot_1:
+    case s_fire_pot_2:
+    case s_fountain:
+        stateId = StateIdDecoration;
+        break;
+    case s_arch_1:
+    case s_arch_2:
+    case s_arch_3:
+    case s_arch_4:
+    case s_arch_5:
+    case s_arch_6:
+    case s_arch_7:
+    case s_arch_8:
+    case s_arch_9:
+    case s_arch_10:
+    case s_arch_11:
+    case s_arch_12:
+    case s_arch_13:
+    case s_force_field_1:
+    case s_force_field_2:
+    case s_force_field_3:
+    case s_force_field_4:
+        stateId = StateIdArch;
+        break;
+    case s_bunny_left1:
+    case s_bunny_left2:
+    case s_bunny_left3:
+        stateId = StateIdPeekAlternative;
+        break;
+    }
+    return stateId;
 }
-const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& /*dosObject*/) const
+
+const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
-    // TODO
-    return 0;
+    uint16_t animationFrame = 0;
+    switch (dosObject.state32)
+    {
+    case s_pshot1:
+    case s_pshot_exp1:
+    case s_player:
+    case s_explode:
+    case s_boltbonus:
+    case s_nukebonus:
+    case s_potionbonus:
+    case s_rkeybonus:
+    case s_ykeybonus:
+    case s_gkeybonus:
+    case s_bkeybonus:
+    case s_chestbonus:
+    case s_waterchestbonus1:
+    case s_rgem1bonus:
+    case s_ygem1bonus:
+    case s_ggem1bonus:
+    case s_bgem1bonus:
+    case s_pgem1bonus:
+    case s_bonus_die:
+    case s_tombs0:
+    case s_tombs1:
+    case s_tombs2:
+    case s_ftimebonus:
+    case s_walldie1:
+    case s_obj_gate1:
+    case s_anthill:
+    case s_fatdemon_walk1:
+    case s_fatdemon_attack1:
+    case s_fatdemon_ouch:
+    case s_fatdemon_blowup1:
+    case s_fatdemon_feet:
+    case s_wet_bubbles1:
+    case s_wet_peek:
+    case s_wet_rise1:
+    case s_wet_sink1:
+    case s_wet_walk1:
+    case s_wet_attack1:
+    case s_wet_ouch:
+    case s_wet_die1:
+    case s_dragon_shot1:
+    case s_wallskel:
+    case s_wallskel2:
+    case s_skel_1:
+    case s_skel_attack1:
+    case s_skel_ouch:
+    case s_skel_die1:
+    case s_skel_die3:
+    case s_eye_1:
+    case s_eye_shootplayer_1:
+    case s_eye_ouch:
+    case s_eye_die1:
+    case s_eshot1:
+    case s_succubus_walk1:
+    case s_succubus_attack1:
+    case s_succubus_ouch:
+    case s_succubus_death1:
+    case s_succubus_death2:
+    case s_succubus_shot1:
+    case s_mage1:
+    case s_mageattack3:
+    case s_mageouch:
+    case s_magedie1:
+    case s_magedie2:
+    case s_mshot1:
+    case s_bunny_left1:
+    case s_bunny_right1:
+    case s_bunny_meta1:
+    case s_bunny_walk1:
+    case s_bunny_attack1:
+    case s_bunny_ouch:
+    case s_bunny_death1:
+    case s_bunny_death3:
+    case s_red_demon1:
+    case s_red_demonattack1:
+    case s_red_demonouch:
+    case s_red_demondie1:
+    case s_red_demondie4:
+    case s_grel1:
+    case s_grelattack3:
+    case s_grelouch:
+    case s_greldie1:
+    case s_greldie6:
+    case s_gshot1:
+    case s_bat1:
+    case s_batpast:
+    case s_batdie1:
+    case s_godess_statue1:
+    case s_godess_statue2:
+    case s_godess1:
+    case s_godessattack1:
+    case s_godessouch:
+    case s_godessdie1:
+    case s_godessdie2:
+    case s_ant_wait:
+    case s_ant_egg:
+    case s_ant_walk1:
+    case s_ant_attack1:
+    case s_ant_ouch:
+    case s_ant_die1:
+    case s_ant_die2:
+    case s_zombie_risen:
+    case s_zombie_inground:
+    case s_zombie_rise1:
+    case s_zombie_alive1:
+    case s_zombie_death1:
+    case s_zombie_death3:
+    case s_zombie_attack:
+    case s_zombie_ouch:
+    case s_tree_idle:
+    case s_tree_awakening1:
+    case s_tree_walk1:
+    case s_tree_death1:
+    case s_tree_attack1:
+    case s_tree_ouch:
+    case s_arch_1:
+    case s_arch_2:
+    case s_arch_3:
+    case s_arch_4:
+    case s_arch_5:
+    case s_arch_6:
+    case s_arch_7:
+    case s_arch_8:
+    case s_arch_9:
+    case s_arch_10:
+    case s_arch_11:
+    case s_arch_12:
+    case s_arch_13:
+    case s_column:
+    case s_sulphur_gas_1:
+    case s_fire_pot_1:
+    case s_fountain:
+    case s_force_field_1:
+    case s_force_field_die:
+    case s_skeleton_hanging:
+        animationFrame = 0u;
+        break;
+    case s_pshot2:
+    case s_pshot_exp2:
+    case s_boltbonus2:
+    case s_nukebonus2:
+    case s_waterchestbonus2:
+    case s_rgem2bonus:
+    case s_ygem2bonus:
+    case s_ggem2bonus:
+    case s_bgem2bonus:
+    case s_pgem2bonus:
+    case s_ftimebonus2:
+    case s_walldie2:
+    case s_obj_gate2:
+    case s_fatdemon_walk2:
+    case s_fatdemon_attack2:
+    case s_fatdemon_blowup2:
+    case s_wet_bubbles2:
+    case s_wet_rise3:
+    case s_wet_sink2:
+    case s_wet_walk2:
+    case s_wet_attack2:
+    case s_wet_die2:
+    case s_dragon_shot2:
+    case s_skel_2:
+    case s_skel_attack2:
+    case s_skel_die2:
+    case s_eye_2:
+    case s_eye_shootplayer_2:
+    case s_eye_ouch2:
+    case s_eye_die2:
+    case s_eshot2:
+    case s_succubus_pause:
+    case s_succubus_walk2:
+    case s_succubus_attack2:
+    case s_magepause:
+    case s_mage2:
+    case s_mshot2:
+    case s_bunny_left2:
+    case s_bunny_right2:
+    case s_bunny_meta2:
+    case s_bunny_walk2:
+    case s_bunny_attack2:
+    case s_bunny_death2:
+    case s_red_demon2:
+    case s_red_demonattack2:
+    case s_red_demondie2:
+    case s_grelpause:
+    case s_grel2:
+    case s_greldie2:
+    case s_bat2:
+    case s_batdie2:
+    case s_godess2:
+    case s_godessattack2:
+    case s_ant_walk2:
+    case s_ant_pause:
+    case s_ant_die3:
+    case s_zombie_pause:
+    case s_zombie_rise2:
+    case s_zombie_alive2:
+    case s_zombie_death2:
+    case s_tree_awakening2:
+    case s_tree_walk2:
+    case s_tree_death2:
+    case s_tree_death4:
+    case s_tree_attack2:
+    case s_sulphur_gas_2:
+    case s_fire_pot_2:
+    case s_force_field_2:
+    case s_force_field_die1:
+        animationFrame = 1u;
+        break;
+    case s_pshot_exp3:
+    case s_boltbonus3:
+    case s_nukebonus3:
+    case s_walldie3:
+    case s_obj_gate3:
+    case s_fatdemon_pause:
+    case s_fatdemon_walk3:
+    case s_fatdemon_blowup3:
+    case s_wet_bubbles3:
+    case s_wet_rise4:
+    case s_wet_sink3:
+    case s_wet_walk3:
+    case s_wet_attack3:
+    case s_wet_die3:
+    case s_skel_3:
+    case s_skel_attack3:
+    case s_eye_3:
+    case s_eye_pause:
+    case s_eye_die3:
+    case s_succubus_walk3:
+    case s_succubus_attack3:
+    case s_bunny_left3:
+    case s_bunny_right3:
+    case s_bunny_pause:
+    case s_red_demon3:
+    case s_red_demonattack3:
+    case s_red_demondie3:
+    case s_greldie3:
+    case s_bat3:
+    case s_godess3:
+    case s_godessattack3:
+    case s_ant_walk3:
+    case s_zombie_rise3:
+    case s_zombie_alive3:
+    case s_tree_death3:
+    case s_tree_death5:
+    case s_tree_attack3:
+    case s_sulphur_gas_3:
+    case s_force_field_3:
+        animationFrame = 2u;
+        break;
+    case s_walldie4:
+    case s_obj_gate4:
+    case s_fatdemon_walk4:
+    case s_fatdemon_blowup4:
+    case s_wet_rise5:
+    case s_wet_walk4:
+    case s_wet_attack4:
+    case s_wet_die4:
+    case s_skel_pause:
+    case s_skel_4:
+    case s_eye_4:
+    case s_succubus_walk4:
+    case s_red_demonpause:
+    case s_red_demon4:
+    case s_greldie4:
+    case s_bat4:
+    case s_godesspause:
+    case s_zombie_rise4:
+    case s_tree_pause:
+    case s_force_field_4:
+        animationFrame = 3u;
+        break;
+    case s_walldie5:
+    case s_fatdemon_blowup5:
+    case s_wet_die5:
+    case s_greldie5:
+        animationFrame = 4u;
+        break;
+    case s_walldie6:
+    case s_fatdemon_blowup6:
+    case s_greldie5a:
+        animationFrame = 5u;
+        break;
+    case s_fatdemon_blowup7:
+        animationFrame = 6u;
+        break;
+    case s_fatdemon_explode:
+        animationFrame = 7u;
+        break;
+    }
+    return animationFrame;
 }
 
 const bool SavedGameConverterArmageddon::IsInertObject(const uint16_t obclass) const

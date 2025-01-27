@@ -36,6 +36,8 @@ private:
     const uint16_t GetActorIdOfBonus(const uint32_t state32) const;
     const uint16_t GetActorIdOfSolid(const uint32_t state32) const;
     const uint16_t GetActorIdOfExplosion(const uint32_t state32) const;
+    const uint16_t GetActorIdOfInert(const uint32_t state32) const;
+    const uint16_t GetActorIdOfRealSolid(const uint32_t state32) const;
 };
 
 
