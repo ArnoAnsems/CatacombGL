@@ -470,6 +470,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     case s_bounce1:
     case s_trollattack1:
     case s_orcattack1:
+    case s_orcattack2:
     case s_demonattack1:
     case s_batpast:
     case s_mageattack1:
@@ -493,6 +494,7 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     case s_greldie6:
     case s_shotexplode:
     case s_walldie1:
+    case s_walldie2:
     case s_pshot1:
     case s_bigpshot1:
     case s_mshot1:
@@ -518,16 +520,19 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     case s_mage2:
     case s_bounce2:
     case s_trollattack2:
-    case s_orcattack2:
+    case s_trollattack3:
     case s_demonattack2:
     case s_mageattack2:
+    case s_mageattack3:
     case s_grelattack2:
+    case s_grelattack3:
     case s_orcdie2:
     case s_trolldie2:
     case s_demondie2:
     case s_greldie2:
     case s_batdie2:
-    case s_walldie2:
+    case s_walldie3:
+    case s_walldie4:
     case s_pshot2:
     case s_bigpshot2:
     case s_mshot2:
@@ -538,16 +543,18 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
         animationFrame = 1u;
         break;
     case s_orc3:
+    case s_orcpause:
     case s_troll3:
     case s_demon3:
     case s_bat3:
-    case s_trollattack3:
+    case s_trollpause:
     case s_orcattack3:
     case s_demonattack3:
-    case s_mageattack3:
-    case s_grelattack3:
+    case s_magepause:
+    case s_grelpause:
     case s_greldie3:
-    case s_walldie3:
+    case s_walldie5:
+    case s_walldie6:
     case s_gate3:
     case s_fgate3:
         animationFrame = 2u;
@@ -556,23 +563,14 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     case s_troll4:
     case s_demon4:
     case s_bat4:
-    case s_trollpause:
-    case s_orcpause:
     case s_demonpause:
-    case s_magepause:
-    case s_grelpause:
     case s_greldie4:
-    case s_walldie4:
     case s_gate4:
     case s_fgate4:
         animationFrame = 3u;
         break;
     case s_greldie5:
-    case s_walldie5:
         animationFrame = 4u;
-        break;
-    case s_walldie6:
-        animationFrame = 5u;
         break;
     }
     return animationFrame;

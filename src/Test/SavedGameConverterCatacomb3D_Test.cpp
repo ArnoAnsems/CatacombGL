@@ -27,79 +27,201 @@ SavedGameConverterCatacomb3D_Test::~SavedGameConverterCatacomb3D_Test()
 
 }
 
-void CheckAnimationFrameExistsCatacomb3D(const uint16_t actorId, const DecorateStateId stateId, const uint16_t frameIndex)
+void CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
 {
+    SavedGameConverterCatacomb3D converter;
+    const uint16_t actorId = converter.GetActorId(dosObject);
     const auto actorIt = decorateCatacomb3DAll.find(actorId);
     ASSERT_TRUE(actorIt != decorateCatacomb3DAll.end());
+
+    const DecorateStateId stateId = converter.GetDecorateStateId(dosObject);
     const auto stateIt = actorIt->second.states.find(stateId);
     ASSERT_TRUE(stateIt != actorIt->second.states.end());
-    EXPECT_LE(frameIndex, stateIt->second.animation.size() - 1);
+
+    const uint16_t animationFrame = converter.GetAnimationFrame(dosObject);
+    EXPECT_LE(animationFrame, stateIt->second.animation.size() - 1);
 }
 
-TEST(SavedGameConverterCatacomb3D_Test, ConvertAttackingOrc)
-{
-    const uint16_t obclassOrc = 3;
-    const uint16_t s_trollattack3 = 0x190E;
-
-    SavedGameInDosFormat::ObjectInDosFormat dosObject;
-    dosObject.obclass = obclassOrc;
-    dosObject.state16 = s_trollattack3;
-
-    SavedGameConverterCatacomb3D converter;
-    EXPECT_EQ(actorIdMonsterOrc, converter.GetActorId(dosObject));
-    EXPECT_EQ(StateIdAttack, converter.GetDecorateStateId(dosObject));
-    EXPECT_EQ(2u, converter.GetAnimationFrame(dosObject));
-
-    CheckAnimationFrameExistsCatacomb3D(actorIdMonsterOrc, StateIdAttack, 2u);
-}
-
-TEST(SavedGameConverterCatacomb3D_Test, ConvertDeadTroll)
-{
-    const uint16_t obclassInert = 12;
-    const uint16_t s_trolldie3 = 0x1936;
-
-    SavedGameInDosFormat::ObjectInDosFormat dosObject;
-    dosObject.obclass = obclassInert;
-    dosObject.state16 = s_trolldie3;
-
-    SavedGameConverterCatacomb3D converter;
-    EXPECT_EQ(actorIdMonsterTroll, converter.GetActorId(dosObject));
-    EXPECT_EQ(StateIdDead, converter.GetDecorateStateId(dosObject));
-    EXPECT_EQ(0, converter.GetAnimationFrame(dosObject));
-
-    CheckAnimationFrameExistsCatacomb3D(actorIdMonsterTroll, StateIdDead, 0);
-}
-
-TEST(SavedGameConverterCatacomb3D_Test, ConvertBoltBonus)
+TEST(SavedGameConverterCatacomb3D_Test, ConvertBonus)
 {
     const uint16_t obclassBonus = 2;
-    const uint16_t s_boltbonus2 = 0x17CE;
+    const uint16_t allState16[] = { 0x17C4, 0x17CE, 0x17D8, 0x17E2, 0x17EC, 0x17F6, 0x1800, 0x180A, 0x1814, 0x181E, 0x1828, 0x1832 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassBonus;
+        dosObject.state16 = state16;
 
-    SavedGameInDosFormat::ObjectInDosFormat dosObject;
-    dosObject.obclass = obclassBonus;
-    dosObject.state16 = s_boltbonus2;
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
 
-    SavedGameConverterCatacomb3D converter;
-    EXPECT_EQ(actorIdBonusBolt, converter.GetActorId(dosObject));
-    EXPECT_EQ(StateIdWaitForPickup, converter.GetDecorateStateId(dosObject));
-    EXPECT_EQ(1u, converter.GetAnimationFrame(dosObject));
+TEST(SavedGameConverterCatacomb3D_Test, ConvertOrc)
+{
+    const uint16_t obclassOrc = 3;
+    const uint16_t allState16[] = { 0x190E, 0x1940, 0x194A, 0x1954, 0x195E, 0x1968, 0x1972, 0x197C, 0x1986, 0x1990, 0x199A, 0x19A4, 0x19AE };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassOrc;
+        dosObject.state16 = state16;
 
-    CheckAnimationFrameExistsCatacomb3D(actorIdBonusBolt, StateIdWaitForPickup, 1u);
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertBat)
+{
+    constexpr uint16_t obclassBat = 4;
+    const uint16_t allState16[] = { 0x1B20, 0x1B2A, 0x1B34, 0x1B3E, 0x1B48, 0x1B52, 0x1B5C, 0x1B66, 0x1B70 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassBat;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertTroll)
+{
+    constexpr uint16_t obclassTroll = 6;
+    const uint16_t allState16[] = { 0x18C8, 0x18D2, 0x18DC, 0x18E6, 0x18F0, 0x18FA, 0x1904, 0x190E, 0x1918, 0x1922, 0x192C, 0x1936 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassTroll;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertDemon)
+{
+    constexpr uint16_t obclassDemon = 7;
+    const uint16_t allState16[] = { 0x19B8,  0x19C2, 0x19CC, 0x19D6, 0x19E0, 0x19EA, 0x19F4, 0x19FE, 0x1A08, 0x1A12, 0x1A1C, 0x1A26 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassDemon;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertMage)
+{
+    constexpr uint16_t obclassMage = 8;
+    const uint16_t allState16[] = { 0x1A44, 0x1A4E, 0x1A58, 0x1A62, 0x1A6C, 0x1A76, 0x1A80, 0x1A8A, 0x1A94 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassMage;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
 }
 
 TEST(SavedGameConverterCatacomb3D_Test, ConvertPlayerShot)
 {
-    const uint16_t obclassPlayerShot = 9;
-    const uint16_t s_pshot1 = 0x1776;
+    constexpr uint16_t obclassPlayerShot = 9;
+    const uint16_t allState16[] = { 0x1776, 0x1780 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassPlayerShot;
+        dosObject.state16 = state16;
 
-    SavedGameInDosFormat::ObjectInDosFormat dosObject;
-    dosObject.obclass = obclassPlayerShot;
-    dosObject.state16 = s_pshot1;
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
 
-    SavedGameConverterCatacomb3D converter;
-    EXPECT_EQ(actorIdProjectilePlayerShot, converter.GetActorId(dosObject));
-    EXPECT_EQ(StateIdProjectileFly, converter.GetDecorateStateId(dosObject));
-    EXPECT_EQ(0, converter.GetAnimationFrame(dosObject));
+TEST(SavedGameConverterCatacomb3D_Test, ConvertPlayerBigShot)
+{
+    constexpr uint16_t obclassBigPlayerShot = 10;
+    const uint16_t allState16[] = { 0x1794, 0x179E };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassBigPlayerShot;
+        dosObject.state16 = state16;
 
-    CheckAnimationFrameExistsCatacomb3D(actorIdProjectilePlayerShot, StateIdProjectileFly, 0);
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertMageShot)
+{
+    constexpr uint16_t obclassMageShot = 11;
+    const uint16_t allState16[] = { 0x1A30, 0x1A3A };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassMageShot;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertInert)
+{
+    constexpr uint16_t obclassInert = 12;
+    const uint16_t allState16[] = {
+        0x183C, 0x1846, 0x1850, 0x185A, 0x1864, 0x186E, 0x1922, 0x192C, 0x1936, 0x199A, 0x19A4, 0x19AE, 0x1A12, 0x1A1C, 0x1A26,
+        0x1A8A, 0x1A94, 0x1AE4, 0x1AEE, 0x1AF8, 0x1B02, 0x1B0C, 0x1B16, 0x1B52, 0x1B5C };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassInert;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertBounce)
+{
+    constexpr uint16_t obclassBounce = 13;
+    const uint16_t allState16[] = { 0x1B66, 0x1B70 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassBounce;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertNemesis)
+{
+    constexpr uint16_t obclassGrelminar = 14;
+    const uint16_t allState16[] = { 0x1A9E, 0x1AA8, 0x1AB2, 0x1ABC, 0x1AC6, 0x1AD0, 0x1ADA, 0x1AE4, 0x1AEE, 0x1AF8, 0x1B02, 0x1B0C, 0x1B16 };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassGrelminar;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST(SavedGameConverterCatacomb3D_Test, ConvertGate)
+{
+    constexpr uint16_t obclassGate = 15;
+    const uint16_t allState16[] = { 0x1878, 0x1882, 0x188C, 0x1896, 0x18A0, 0x18AA, 0x18B4, 0x18BE };
+    for (uint16_t state16 : allState16)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassGate;
+        dosObject.state16 = state16;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
 }
