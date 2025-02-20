@@ -360,7 +360,9 @@ const uint16_t SavedGameConverterAbyss::GetActorIdOfInert(const uint16_t state16
     else if (
         state16 == s_wet_die1[i] ||
         state16 == s_wet_die2[i] ||
-        state16 == s_wet_die3[i])
+        state16 == s_wet_die3[i] ||
+        state16 == s_wet_die4[i] ||
+        state16 == s_wet_die5[i])
     {
         actorId = actorIdMonsterWetMan;
     }
@@ -852,6 +854,7 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         state16 == s_tombs2[i] ||
         state16 == s_ftimebonus[i] ||
         state16 == s_walldie1[i] ||
+        state16 == s_walldie2[i] ||
         state16 == s_obj_gate1[i] ||
         state16 == s_pit[i] ||
         state16 == s_troll1[i] ||
@@ -938,7 +941,8 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         state16 == s_bgem2bonus[i] ||
         state16 == s_pgem2bonus[i] ||
         state16 == s_ftimebonus2[i] ||
-        state16 == s_walldie2[i] ||
+        state16 == s_walldie3[i] ||
+        state16 == s_walldie4[i] ||
         state16 == s_obj_gate2[i] ||
         state16 == s_troll2[i] ||
         state16 == s_trollattack2[i] ||
@@ -956,6 +960,7 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         state16 == s_spook0_1[i] ||
         state16 == s_spook2[i] ||
         state16 == s_spook_attack3[i] ||
+        state16 == s_spook_pause[i] ||
         state16 == s_spookdie1[i] ||
         state16 == s_wallskel2[i] ||
         state16 == s_skel_2[i] ||
@@ -990,7 +995,8 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         state16 == s_pshot_exp3[i] ||
         state16 == s_boltbonus3[i] ||
         state16 == s_nukebonus3[i] ||
-        state16 == s_walldie3[i] ||
+        state16 == s_walldie5[i] ||
+        state16 == s_walldie6[i] ||
         state16 == s_obj_gate3[i] ||
         state16 == s_troll3[i] ||
         state16 == s_trollattack3[i] ||
@@ -999,12 +1005,12 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         state16 == s_wet_sink3[i] ||
         state16 == s_wet_walk3[i] ||
         state16 == s_wet_attack3[i] ||
+        state16 == s_wet_attack4[i] ||
         state16 == s_wet_die3[i] ||
         state16 == s_zombie_alive3[i] ||
         state16 == s_zombie_rise3[i] ||
         state16 == s_spook0_2[i] ||
         state16 == s_spook3[i] ||
-        state16 == s_spook_pause[i] ||
         state16 == s_spookdie2[i] ||
         state16 == s_skel_3[i] ||
         state16 == s_skel_attack3[i] ||
@@ -1023,13 +1029,11 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         animationFrame = 2u;
     }
     else if (
-        state16 == s_walldie4[i] ||
         state16 == s_obj_gate4[i] ||
         state16 == s_troll4[i] ||
         state16 == s_trollpause[i] ||
         state16 == s_wet_rise5[i] ||
         state16 == s_wet_walk4[i] ||
-        state16 == s_wet_attack4[i] ||
         state16 == s_wet_die4[i] ||
         state16 == s_zombie_rise4[i] ||
         state16 == s_spook4[i] ||
@@ -1050,7 +1054,6 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         animationFrame = 3u;
     }
     else if (
-        state16 == s_walldie5[i] ||
         state16 == s_wet_die5[i] ||
         state16 == s_spook5[i] ||
         state16 == s_spookdie4[i] ||
@@ -1060,7 +1063,6 @@ const uint16_t SavedGameConverterAbyss::GetAnimationFrame(const SavedGameInDosFo
         animationFrame = 4u;
     }
     else if (
-        state16 == s_walldie6[i] ||
         state16 == s_spook6[i] ||
         state16 == s_spookdie5[i] ||
         state16 == s_greldie5a[i]

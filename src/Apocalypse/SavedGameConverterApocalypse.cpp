@@ -1039,6 +1039,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_bonus_die:
     case s_ftimebonus:
     case s_walldie1:
+    case s_walldie2:
     case s_portal_wait:
     case s_portal1:
     case s_aqua_under1:
@@ -1157,7 +1158,6 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_nukebonus2:
     case s_waterchestbonus2:
     case s_ftimebonus2:
-    case s_walldie2:
     case s_portal2:
     case s_aqua_under2:
     case s_aqua_rise2:
@@ -1228,13 +1228,14 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_ofire_pot2:
     case s_force_field_2:
     case s_force_field_die1:
+    case s_walldie3:
+    case s_walldie4:
        animationFrame = 1u;
        break;
     case s_pshot_exp3:
     case s_boltbonus3:
     case s_nukebonus3:
     case s_waterchestbonus3:
-    case s_walldie3:
     case s_portal3:
     case s_aqua_under3:
     case s_aqua_die3:
@@ -1275,9 +1276,10 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_invis_death3:
     case s_greldie3:
     case s_force_field_3:
+    case s_walldie5:
+    case s_walldie6:
         animationFrame = 2u;
         break;
-    case s_walldie4:
     case s_portal4:
     case s_aqua_die4:
     case s_wizard_walk4:
@@ -1301,14 +1303,12 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_force_field_4:
         animationFrame = 3u;
         break;
-    case s_walldie5:
     case s_portal5:
     case s_aqua_die5:
     case s_stompy_shot5:
     case s_greldie5:
         animationFrame = 4u;
         break;
-    case s_walldie6:
     case s_portal6:
     case s_aqua_die6:
     case s_greldie5a:

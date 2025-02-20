@@ -969,6 +969,7 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_tombs2:
     case s_ftimebonus:
     case s_walldie1:
+    case s_walldie2:
     case s_obj_gate1:
     case s_anthill:
     case s_fatdemon_walk1:
@@ -1092,7 +1093,8 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_bgem2bonus:
     case s_pgem2bonus:
     case s_ftimebonus2:
-    case s_walldie2:
+    case s_walldie3:
+    case s_walldie4:
     case s_obj_gate2:
     case s_fatdemon_walk2:
     case s_fatdemon_attack2:
@@ -1155,7 +1157,8 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_pshot_exp3:
     case s_boltbonus3:
     case s_nukebonus3:
-    case s_walldie3:
+    case s_walldie5:
+    case s_walldie6:
     case s_obj_gate3:
     case s_fatdemon_pause:
     case s_fatdemon_walk3:
@@ -1193,7 +1196,6 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_force_field_3:
         animationFrame = 2u;
         break;
-    case s_walldie4:
     case s_obj_gate4:
     case s_fatdemon_walk4:
     case s_fatdemon_blowup4:
@@ -1215,13 +1217,11 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_force_field_4:
         animationFrame = 3u;
         break;
-    case s_walldie5:
     case s_fatdemon_blowup5:
     case s_wet_die5:
     case s_greldie5:
         animationFrame = 4u;
         break;
-    case s_walldie6:
     case s_fatdemon_blowup6:
     case s_greldie5a:
         animationFrame = 5u;
