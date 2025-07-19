@@ -34,7 +34,7 @@ GameApocalypse::GameApocalypse(const fs::path gamePath, IRenderer& renderer) :
     m_renderer(renderer),
     m_introView(nullptr),
     m_zombie_base_delay(0),
-    m_savedGameConverter()
+    m_savedGameConverter(0x1A20000)
 {
     m_gameMaps = nullptr;
     m_egaGraph = nullptr;

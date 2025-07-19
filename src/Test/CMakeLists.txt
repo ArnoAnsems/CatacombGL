@@ -54,6 +54,10 @@ add_executable( CatacombGL_Test
     RendererStub.h
     SavedGameConverterAbyss_Test.cpp
     SavedGameConverterAbyss_Test.h
+    SavedGameConverterApocalypse_Test.cpp
+    SavedGameConverterApocalypse_Test.h
+    SavedGameConverterArmageddon_Test.cpp
+    SavedGameConverterArmageddon_Test.h
     SavedGameConverterCatacomb3D_Test.cpp
     SavedGameConverterCatacomb3D_Test.h
     SavedGameInDosFormatLoader_Test.cpp

@@ -58,300 +58,296 @@ constexpr uint16_t bigpshotobj = 37;
 constexpr uint16_t eshotobj = 38;
 constexpr uint16_t gshotobj = 39;
 
-constexpr uint32_t farPtrOffset = 0x1A20000;
+// State pointers as conveniently documented in ReflectionHLE (statetype_ptr_conversion.c).
+constexpr uint32_t s_pshot1 = 0x1A6A0000;
+constexpr uint32_t s_pshot2 = 0x1A6B0000;
+constexpr uint32_t s_pshot_exp1 =0x1A6C0000;
+constexpr uint32_t s_pshot_exp2 =0x1A6D0000;
+constexpr uint32_t s_pshot_exp3 = 0x1A6E0000;
+constexpr uint32_t s_player = 0x1A6F0000;
+constexpr uint32_t s_explode = 0x1A700000;
+constexpr uint32_t s_boltbonus = 0x1A710000;
+constexpr uint32_t s_boltbonus2 = 0x1A720000;
+constexpr uint32_t s_boltbonus3 = 0x1A730000;
+constexpr uint32_t s_nukebonus = 0x1A740000;
+constexpr uint32_t s_nukebonus2 = 0x1A750000;
+constexpr uint32_t s_nukebonus3 = 0x1A760000;
+constexpr uint32_t s_potionbonus = 0x1A770000;
+constexpr uint32_t s_rkeybonus = 0x1A780000;
+constexpr uint32_t s_ykeybonus = 0x1A790000;
+constexpr uint32_t s_gkeybonus = 0x1A7A0000;
+constexpr uint32_t s_bkeybonus = 0x1A7B0000;
+constexpr uint32_t s_chestbonus = 0x1A7C0000;
+constexpr uint32_t s_oldchestbonus = 0x1A7D0000;
+constexpr uint32_t s_waterchestbonus1 = 0x1A7E0000;
+constexpr uint32_t s_waterchestbonus2 = 0x1A7F0000;
+constexpr uint32_t s_waterchestbonus3 = 0x1A800000;
+constexpr uint32_t s_rgem1bonus = 0x1A810000;
+constexpr uint32_t s_ygem1bonus = 0x1A820000;
+constexpr uint32_t s_ggem1bonus = 0x1A830000;
+constexpr uint32_t s_bgem1bonus = 0x1A840000;
+constexpr uint32_t s_pgem1bonus = 0x1A850000;
+constexpr uint32_t s_bonus_die = 0x1A860000;
+constexpr uint32_t s_ftimebonus = 0x1A870000;
+constexpr uint32_t s_ftimebonus2 = 0x1A880000;
+constexpr uint32_t s_walldie1 = 0x1A890000;
+constexpr uint32_t s_walldie2 = 0x1A8A0000;
+constexpr uint32_t s_walldie3 = 0x1A8B0000;
+constexpr uint32_t s_walldie4 = 0x1A8C0000;
+constexpr uint32_t s_walldie5 = 0x1A8D0000;
+constexpr uint32_t s_walldie6 = 0x1A8E0000;
+constexpr uint32_t s_portal_wait = 0x1A8F0000;
+constexpr uint32_t s_portal1 = 0x1A900000;
+constexpr uint32_t s_portal2 = 0x1A910000;
+constexpr uint32_t s_portal3 = 0x1A920000;
+constexpr uint32_t s_portal4 = 0x1A930000;
+constexpr uint32_t s_portal5 = 0x1A940000;
+constexpr uint32_t s_portal6 = 0x1A950000;
+constexpr uint32_t s_aqua_under1 = 0x1A960000;
+constexpr uint32_t s_aqua_under2 = 0x1A970000;
+constexpr uint32_t s_aqua_under3 = 0x1A980000;
+constexpr uint32_t s_aqua_left = 0x1A990000;
+constexpr uint32_t s_aqua_right = 0x1A9A0000;
+constexpr uint32_t s_aqua_rise1 = 0x1A9B0000;
+constexpr uint32_t s_aqua_rise2 = 0x1A9C0000;
+constexpr uint32_t s_aqua_sink1 = 0x1A9D0000;
+constexpr uint32_t s_aqua_sink2 = 0x1A9E0000;
+constexpr uint32_t s_aqua_walk1 = 0x1A9F0000;
+constexpr uint32_t s_aqua_walk2 = 0x1AA00000;
+constexpr uint32_t s_aqua_attack1 = 0x1AA10000;
+constexpr uint32_t s_aqua_attack2 = 0x1AA20000;
+constexpr uint32_t s_aqua_die1 = 0x1AA30000;
+constexpr uint32_t s_aqua_die2 = 0x1AA40000;
+constexpr uint32_t s_aqua_die3 = 0x1AA50000;
+constexpr uint32_t s_aqua_die4 = 0x1AA60000;
+constexpr uint32_t s_aqua_die5 = 0x1AA70000;
+constexpr uint32_t s_aqua_die6 = 0x1AA80000;
+constexpr uint32_t s_aqua_die7 = 0x1AA90000;
+constexpr uint32_t s_wizard_walk1 = 0x1AAA0000;
+constexpr uint32_t s_wizard_walk2 = 0x1AAB0000;
+constexpr uint32_t s_wizard_walk3 = 0x1AAC0000;
+constexpr uint32_t s_wizard_walk4 = 0x1AAD0000;
+constexpr uint32_t s_wizard_attack1 = 0x1AAE0000;
+constexpr uint32_t s_wizard_attack2 = 0x1AAF0000;
+constexpr uint32_t s_wizard_ouch = 0x1AB00000;
+constexpr uint32_t s_wizard_die1 = 0x1AB10000;
+constexpr uint32_t s_wizard_die2 = 0x1AB20000;
+constexpr uint32_t s_wizard_die3 = 0x1AB30000;
+constexpr uint32_t s_wizard_die4 = 0x1AB40000;
+constexpr uint32_t s_wizard_shoot1 = 0x1AB50000;
+constexpr uint32_t s_wizard_shoot2 = 0x1AB60000;
+constexpr uint32_t s_wizard_shoot3 = 0x1AB70000;
+constexpr uint32_t s_wizard_shot1 = 0x1AB80000;
+constexpr uint32_t s_wizard_shot2 = 0x1AB90000;
+constexpr uint32_t s_ray_under = 0x1ABA0000;
+constexpr uint32_t s_ray_rise = 0x1ABB0000;
+constexpr uint32_t s_ray_sink = 0x1ABC0000;
+constexpr uint32_t s_ray_fly1 = 0x1ABD0000;
+constexpr uint32_t s_ray_fly2 = 0x1ABE0000;
+constexpr uint32_t s_ray_fly3 = 0x1ABF0000;
+constexpr uint32_t s_ray_fly4 = 0x1AC00000;
+constexpr uint32_t s_ray_attack1 = 0x1AC10000;
+constexpr uint32_t s_ray_attack2 = 0x1AC20000;
+constexpr uint32_t s_ray_attack3 = 0x1AC30000;
+constexpr uint32_t s_ray_die1 = 0x1AC40000;
+constexpr uint32_t s_ray_die2 = 0x1AC50000;
+constexpr uint32_t s_ray_shot1 = 0x1AC60000;
+constexpr uint32_t s_ray_shot2 = 0x1AC70000;
+constexpr uint32_t s_blob_gnd1 = 0x1AC80000;
+constexpr uint32_t s_blob_gnd2 = 0x1AC90000;
+constexpr uint32_t s_blob_rise1 = 0x1ACA0000;
+constexpr uint32_t s_blob_rise2 = 0x1ACB0000;
+constexpr uint32_t s_blob_sink1 = 0x1ACC0000;
+constexpr uint32_t s_blob_sink2 = 0x1ACD0000;
+constexpr uint32_t s_blob_walk1 = 0x1ACE0000;
+constexpr uint32_t s_blob_walk2 = 0x1ACF0000;
+constexpr uint32_t s_blob_walk3 = 0x1AD00000;
+constexpr uint32_t s_blob_ouch = 0x1AD10000;
+constexpr uint32_t s_blob_die1 = 0x1AD20000;
+constexpr uint32_t s_blob_die2 = 0x1AD30000;
+constexpr uint32_t s_blob_die3 = 0x1AD40000;
+constexpr uint32_t s_blob_shot1 = 0x1AD50000;
+constexpr uint32_t s_blob_shot2 = 0x1AD60000;
+constexpr uint32_t s_skel_1 = 0x1AD70000;
+constexpr uint32_t s_skel_2 = 0x1AD80000;
+constexpr uint32_t s_skel_3 = 0x1AD90000;
+constexpr uint32_t s_skel_4 = 0x1ADA0000;
+constexpr uint32_t s_skel_attack1 = 0x1ADB0000;
+constexpr uint32_t s_skel_attack2 = 0x1ADC0000;
+constexpr uint32_t s_skel_attack3 = 0x1ADD0000;
+constexpr uint32_t s_skel_attack4 = 0x1ADE0000;
+constexpr uint32_t s_skel_ouch = 0x1ADF0000;
+constexpr uint32_t s_skel_die1 = 0x1AE00000;
+constexpr uint32_t s_skel_die2 = 0x1AE10000;
+constexpr uint32_t s_skel_die3 = 0x1AE20000;
+constexpr uint32_t s_skel_shot1 = 0x1AE30000;
+constexpr uint32_t s_skel_shot2 = 0x1AE40000;
+constexpr uint32_t s_fmage1 = 0x1AE50000;
+constexpr uint32_t s_fmage2 = 0x1AE60000;
+constexpr uint32_t s_fmage3 = 0x1AE70000;
+constexpr uint32_t s_fmageattack1 = 0x1AE80000;
+constexpr uint32_t s_fmageattack2 = 0x1AE90000;
+constexpr uint32_t s_fmageattack3 = 0x1AEA0000;
+constexpr uint32_t s_fmageouch = 0x1AEB0000;
+constexpr uint32_t s_fmagedie1 = 0x1AEC0000;
+constexpr uint32_t s_fmagedie2 = 0x1AED0000;
+constexpr uint32_t s_fmagedie3 = 0x1AEE0000;
+constexpr uint32_t s_fmshot1 = 0x1AEF0000;
+constexpr uint32_t s_fmshot2 = 0x1AF00000;
+constexpr uint32_t s_robotank_walk1 = 0x1AF10000;
+constexpr uint32_t s_robotank_walk2 = 0x1AF20000;
+constexpr uint32_t s_robotank_walk3 = 0x1AF30000;
+constexpr uint32_t s_robotank_walk4 = 0x1AF40000;
+constexpr uint32_t s_robotank_attack1 = 0x1AF50000;
+constexpr uint32_t s_robotank_attack2 = 0x1AF60000;
+constexpr uint32_t s_robotank_attack3 = 0x1AF70000;
+constexpr uint32_t s_robotank_attack4 = 0x1AF80000;
+constexpr uint32_t s_robotank_death1 = 0x1AF90000;
+constexpr uint32_t s_robotank_death2 = 0x1AFA0000;
+constexpr uint32_t s_robotank_death3 = 0x1AFB0000;
+constexpr uint32_t s_robotank_death4 = 0x1AFC0000;
+constexpr uint32_t s_robotank_death5 = 0x1AFD0000;
+constexpr uint32_t s_robotank_shot1 = 0x1AFE0000;
+constexpr uint32_t s_robotank_shot2 = 0x1AFF0000;
+constexpr uint32_t s_stompy_walk1 = 0x1B000000;
+constexpr uint32_t s_stompy_walk2 = 0x1B010000;
+constexpr uint32_t s_stompy_walk3 = 0x1B020000;
+constexpr uint32_t s_stompy_walk4 = 0x1B030000;
+constexpr uint32_t s_stompy_attack1 = 0x1B040000;
+constexpr uint32_t s_stompy_attack2 = 0x1B050000;
+constexpr uint32_t s_stompy_attack3 = 0x1B060000;
+constexpr uint32_t s_stompy_attack4 = 0x1B070000;
+constexpr uint32_t s_stompy_ouch = 0x1B080000;
+constexpr uint32_t s_stompy_death1 = 0x1B090000;
+constexpr uint32_t s_stompy_death2 = 0x1B0A0000;
+constexpr uint32_t s_stompy_death3 = 0x1B0B0000;
+constexpr uint32_t s_stompy_death4 = 0x1B0C0000;
+constexpr uint32_t s_stompy_shot1 = 0x1B0D0000;
+constexpr uint32_t s_stompy_shot2 = 0x1B0E0000;
+constexpr uint32_t s_stompy_shot3 = 0x1B0F0000;
+constexpr uint32_t s_stompy_shot4 = 0x1B100000;
+constexpr uint32_t s_stompy_shot5 = 0x1B110000;
+constexpr uint32_t s_bug_walk1 = 0x1B120000;
+constexpr uint32_t s_bug_walk2 = 0x1B130000;
+constexpr uint32_t s_bug_walk3 = 0x1B140000;
+constexpr uint32_t s_bug_attack1 = 0x1B150000;
+constexpr uint32_t s_bug_attack2 = 0x1B160000;
+constexpr uint32_t s_bug_attack3 = 0x1B170000;
+constexpr uint32_t s_bug_attack4 = 0x1B180000;
+constexpr uint32_t s_bug_ouch = 0x1B190000;
+constexpr uint32_t s_bug_death1 = 0x1B1A0000;
+constexpr uint32_t s_bug_death2 = 0x1B1B0000;
+constexpr uint32_t s_bug_shot1 = 0x1B1C0000;
+constexpr uint32_t s_bug_shot2 = 0x1B1D0000;
+constexpr uint32_t s_eye_pause = 0x1B1E0000;
+constexpr uint32_t s_eye_1 = 0x1B1F0000;
+constexpr uint32_t s_eye_2 = 0x1B200000;
+constexpr uint32_t s_eye_3 = 0x1B210000;
+constexpr uint32_t s_eye_4 = 0x1B220000;
+constexpr uint32_t s_eye_shootplayer_1 = 0x1B230000;
+constexpr uint32_t s_eye_shootplayer_2 = 0x1B240000;
+constexpr uint32_t s_eye_ouch = 0x1B250000;
+constexpr uint32_t s_eye_ouch2 = 0x1B260000;
+constexpr uint32_t s_eye_die1 = 0x1B270000;
+constexpr uint32_t s_eye_die2 = 0x1B280000;
+constexpr uint32_t s_eye_die3 = 0x1B290000;
+constexpr uint32_t s_eye_die4 = 0x1B2A0000;
+constexpr uint32_t s_eshot1 = 0x1B2B0000;
+constexpr uint32_t s_eshot2 = 0x1B2C0000;
+constexpr uint32_t s_reye_1 = 0x1B2D0000;
+constexpr uint32_t s_reye_2 = 0x1B2E0000;
+constexpr uint32_t s_reye_3 = 0x1B2F0000;
+constexpr uint32_t s_reye_4 = 0x1B300000;
+constexpr uint32_t s_reye_ouch = 0x1B310000;
+constexpr uint32_t s_reye_ouch2 = 0x1B320000;
+constexpr uint32_t s_reye_die1 = 0x1B330000;
+constexpr uint32_t s_reye_die2 = 0x1B340000;
+constexpr uint32_t s_reye_die3 = 0x1B350000;
+constexpr uint32_t s_reye_die4 = 0x1B360000;
+constexpr uint32_t s_head = 0x1B370000;
+constexpr uint32_t s_head_shot1 = 0x1B380000;
+constexpr uint32_t s_head_shot2 = 0x1B390000;
+constexpr uint32_t s_demonpause = 0x1B3A0000;
+constexpr uint32_t s_demon1 = 0x1B3B0000;
+constexpr uint32_t s_demon2 = 0x1B3C0000;
+constexpr uint32_t s_demon3 = 0x1B3D0000;
+constexpr uint32_t s_demon4 = 0x1B3E0000;
+constexpr uint32_t s_demonattack1 = 0x1B3F0000;
+constexpr uint32_t s_demonattack2 = 0x1B400000;
+constexpr uint32_t s_demonattack3 = 0x1B410000;
+constexpr uint32_t s_demonouch = 0x1B420000;
+constexpr uint32_t s_demondie1 = 0x1B430000;
+constexpr uint32_t s_demondie2 = 0x1B440000;
+constexpr uint32_t s_demondie3 = 0x1B450000;
+constexpr uint32_t s_trollpause = 0x1B460000;
+constexpr uint32_t s_troll1 = 0x1B470000;
+constexpr uint32_t s_troll2 = 0x1B480000;
+constexpr uint32_t s_troll3 = 0x1B490000;
+constexpr uint32_t s_troll4 = 0x1B4A0000;
+constexpr uint32_t s_trollattack1 = 0x1B4B0000;
+constexpr uint32_t s_trollattack2 = 0x1B4C0000;
+constexpr uint32_t s_trollouch = 0x1B4D0000;
+constexpr uint32_t s_trolldie1 = 0x1B4E0000;
+constexpr uint32_t s_trolldie2 = 0x1B4F0000;
+constexpr uint32_t s_trolldie3 = 0x1B500000;
+constexpr uint32_t s_cyborg_demon1 = 0x1B510000;
+constexpr uint32_t s_cyborg_demon2 = 0x1B520000;
+constexpr uint32_t s_cyborg_demon3 = 0x1B530000;
+constexpr uint32_t s_cyborg_demon4 = 0x1B540000;
+constexpr uint32_t s_cyborg_demonattack1 = 0x1B550000;
+constexpr uint32_t s_cyborg_demonattack2 = 0x1B560000;
+constexpr uint32_t s_cyborg_demonattack3 = 0x1B570000;
+constexpr uint32_t s_cyborg_demonouch = 0x1B580000;
+constexpr uint32_t s_cyborg_demondie1 = 0x1B590000;
+constexpr uint32_t s_cyborg_demondie2 = 0x1B5A0000;
+constexpr uint32_t s_cyborg_demondie3 = 0x1B5B0000;
+constexpr uint32_t s_invis_fizz1 = 0x1B5C0000;
+constexpr uint32_t s_invis_fizz2 = 0x1B5D0000;
+constexpr uint32_t s_invis_fizz3 = 0x1B5E0000;
+constexpr uint32_t s_invis_walk = 0x1B5F0000;
+constexpr uint32_t s_invis_attack = 0x1B600000;
+constexpr uint32_t s_invis_pause = 0x1B610000;
+constexpr uint32_t s_invis_flash1 = 0x1B620000;
+constexpr uint32_t s_invis_flash2 = 0x1B630000;
+constexpr uint32_t s_invis_flash3 = 0x1B640000;
+constexpr uint32_t s_invis_death1 = 0x1B650000;
+constexpr uint32_t s_invis_death2 = 0x1B660000;
+constexpr uint32_t s_invis_death3 = 0x1B670000;
+constexpr uint32_t s_bounce1 = 0x1B680000;
+constexpr uint32_t s_bounce2 = 0x1B690000;
+constexpr uint32_t s_grelpause = 0x1B6A0000;
+constexpr uint32_t s_grel1 = 0x1B6B0000;
+constexpr uint32_t s_grel2 = 0x1B6C0000;
+constexpr uint32_t s_grelattack3 = 0x1B6D0000;
+constexpr uint32_t s_grelouch = 0x1B6E0000;
+constexpr uint32_t s_greldie1 = 0x1B6F0000;
+constexpr uint32_t s_greldie2 = 0x1B700000;
+constexpr uint32_t s_greldie3 = 0x1B710000;
+constexpr uint32_t s_greldie4 = 0x1B720000;
+constexpr uint32_t s_greldie5 = 0x1B730000;
+constexpr uint32_t s_greldie5a = 0x1B740000;
+constexpr uint32_t s_greldie6 = 0x1B750000;
+constexpr uint32_t s_gshot1 = 0x1B760000;
+constexpr uint32_t s_column1 = 0x1B770000;
+constexpr uint32_t s_column2 = 0x1B780000;
+constexpr uint32_t s_column3 = 0x1B790000;
+constexpr uint32_t s_column4 = 0x1B7A0000;
+constexpr uint32_t s_column5 = 0x1B7B0000;
+constexpr uint32_t s_ffire_pot = 0x1B7C0000;
+constexpr uint32_t s_ofire_pot1 = 0x1B7D0000;
+constexpr uint32_t s_ofire_pot2 = 0x1B7E0000;
+constexpr uint32_t s_tomb1 = 0x1B7F0000;
+constexpr uint32_t s_tomb2 = 0x1B800000;
+constexpr uint32_t s_force_field_1 = 0x1B810000;
+constexpr uint32_t s_force_field_2 = 0x1B820000;
+constexpr uint32_t s_force_field_3 = 0x1B830000;
+constexpr uint32_t s_force_field_4 = 0x1B840000;
+constexpr uint32_t s_force_field_die = 0x1B850000;
+constexpr uint32_t s_force_field_die1 = 0x1B860000;
+constexpr uint32_t s_invis_wall_control = 0x1B870000;
 
-constexpr uint32_t s_pshot1 = 0x1A6A0000 + farPtrOffset;
-constexpr uint32_t s_pshot2 = 0x1A6B0000 + farPtrOffset;
-constexpr uint32_t s_pshot_exp1 =0x1A6C0000 + farPtrOffset;
-constexpr uint32_t s_pshot_exp2 =0x1A6D0000 + farPtrOffset;
-constexpr uint32_t s_pshot_exp3 = 0x1A6E0000 + farPtrOffset;
-constexpr uint32_t s_player = 0x1A6F0000 + farPtrOffset;
-constexpr uint32_t s_explode = 0x1A700000 + farPtrOffset;
-constexpr uint32_t s_boltbonus = 0x1A710000 + farPtrOffset;
-constexpr uint32_t s_boltbonus2 = 0x1A720000 + farPtrOffset;
-constexpr uint32_t s_boltbonus3 = 0x1A730000 + farPtrOffset;
-constexpr uint32_t s_nukebonus = 0x1A740000 + farPtrOffset;
-constexpr uint32_t s_nukebonus2 = 0x1A750000 + farPtrOffset;
-constexpr uint32_t s_nukebonus3 = 0x1A760000 + farPtrOffset;
-constexpr uint32_t s_potionbonus = 0x1A770000 + farPtrOffset;
-constexpr uint32_t s_rkeybonus = 0x1A780000 + farPtrOffset;
-constexpr uint32_t s_ykeybonus = 0x1A790000 + farPtrOffset;
-constexpr uint32_t s_gkeybonus = 0x1A7A0000 + farPtrOffset;
-constexpr uint32_t s_bkeybonus = 0x1A7B0000 + farPtrOffset;
-constexpr uint32_t s_chestbonus = 0x1A7C0000 + farPtrOffset;
-constexpr uint32_t s_oldchestbonus = 0x1A7D0000 + farPtrOffset;
-constexpr uint32_t s_waterchestbonus1 = 0x1A7E0000 + farPtrOffset;
-constexpr uint32_t s_waterchestbonus2 = 0x1A7F0000 + farPtrOffset;
-constexpr uint32_t s_waterchestbonus3 = 0x1A800000 + farPtrOffset;
-constexpr uint32_t s_rgem1bonus = 0x1A810000 + farPtrOffset;
-constexpr uint32_t s_ygem1bonus = 0x1A820000 + farPtrOffset;
-constexpr uint32_t s_ggem1bonus = 0x1A830000 + farPtrOffset;
-constexpr uint32_t s_bgem1bonus = 0x1A840000 + farPtrOffset;
-constexpr uint32_t s_pgem1bonus = 0x1A850000 + farPtrOffset;
-constexpr uint32_t s_bonus_die = 0x1A860000 + farPtrOffset;
-constexpr uint32_t s_ftimebonus = 0x1A870000 + farPtrOffset;
-constexpr uint32_t s_ftimebonus2 = 0x1A880000 + farPtrOffset;
-constexpr uint32_t s_walldie1 = 0x1A890000 + farPtrOffset;
-constexpr uint32_t s_walldie2 = 0x1A8A0000 + farPtrOffset;
-constexpr uint32_t s_walldie3 = 0x1A8B0000 + farPtrOffset;
-constexpr uint32_t s_walldie4 = 0x1A8C0000 + farPtrOffset;
-constexpr uint32_t s_walldie5 = 0x1A8D0000 + farPtrOffset;
-constexpr uint32_t s_walldie6 = 0x1A8E0000 + farPtrOffset;
-constexpr uint32_t s_portal_wait = 0x1A8F0000 + farPtrOffset;
-constexpr uint32_t s_portal1 = 0x1A900000 + farPtrOffset;
-constexpr uint32_t s_portal2 = 0x1A910000 + farPtrOffset;
-constexpr uint32_t s_portal3 = 0x1A920000 + farPtrOffset;
-constexpr uint32_t s_portal4 = 0x1A930000 + farPtrOffset;
-constexpr uint32_t s_portal5 = 0x1A940000 + farPtrOffset;
-constexpr uint32_t s_portal6 = 0x1A950000 + farPtrOffset;
-constexpr uint32_t s_aqua_under1 = 0x1A960000 + farPtrOffset;
-constexpr uint32_t s_aqua_under2 = 0x1A970000 + farPtrOffset;
-constexpr uint32_t s_aqua_under3 = 0x1A980000 + farPtrOffset;
-constexpr uint32_t s_aqua_left = 0x1A990000 + farPtrOffset;
-constexpr uint32_t s_aqua_right = 0x1A9A0000 + farPtrOffset;
-constexpr uint32_t s_aqua_rise1 = 0x1A9B0000 + farPtrOffset;
-constexpr uint32_t s_aqua_rise2 = 0x1A9C0000 + farPtrOffset;
-constexpr uint32_t s_aqua_sink1 = 0x1A9D0000 + farPtrOffset;
-constexpr uint32_t s_aqua_sink2 = 0x1A9E0000 + farPtrOffset;
-constexpr uint32_t s_aqua_walk1 = 0x1A9F0000 + farPtrOffset;
-constexpr uint32_t s_aqua_walk2 = 0x1AA00000 + farPtrOffset;
-constexpr uint32_t s_aqua_attack1 = 0x1AA10000 + farPtrOffset;
-constexpr uint32_t s_aqua_attack2 = 0x1AA20000 + farPtrOffset;
-constexpr uint32_t s_aqua_die1 = 0x1AA30000 + farPtrOffset;
-constexpr uint32_t s_aqua_die2 = 0x1AA40000 + farPtrOffset;
-constexpr uint32_t s_aqua_die3 = 0x1AA50000 + farPtrOffset;
-constexpr uint32_t s_aqua_die4 = 0x1AA60000 + farPtrOffset;
-constexpr uint32_t s_aqua_die5 = 0x1AA70000 + farPtrOffset;
-constexpr uint32_t s_aqua_die6 = 0x1AA80000 + farPtrOffset;
-constexpr uint32_t s_aqua_die7 = 0x1AA90000 + farPtrOffset;
-constexpr uint32_t s_wizard_walk1 = 0x1AAA0000 + farPtrOffset;
-constexpr uint32_t s_wizard_walk2 = 0x1AAB0000 + farPtrOffset;
-constexpr uint32_t s_wizard_walk3 = 0x1AAC0000 + farPtrOffset;
-constexpr uint32_t s_wizard_walk4 = 0x1AAD0000 + farPtrOffset;
-constexpr uint32_t s_wizard_attack1 = 0x1AAE0000 + farPtrOffset;
-constexpr uint32_t s_wizard_attack2 = 0x1AAF0000 + farPtrOffset;
-constexpr uint32_t s_wizard_ouch = 0x1AB00000 + farPtrOffset;
-constexpr uint32_t s_wizard_die1 = 0x1AB10000 + farPtrOffset;
-constexpr uint32_t s_wizard_die2 = 0x1AB20000 + farPtrOffset;
-constexpr uint32_t s_wizard_die3 = 0x1AB30000 + farPtrOffset;
-constexpr uint32_t s_wizard_die4 = 0x1AB40000 + farPtrOffset;
-constexpr uint32_t s_wizard_shoot1 = 0x1AB50000 + farPtrOffset;
-constexpr uint32_t s_wizard_shoot2 = 0x1AB60000 + farPtrOffset;
-constexpr uint32_t s_wizard_shoot3 = 0x1AB70000 + farPtrOffset;
-constexpr uint32_t s_wizard_shot1 = 0x1AB80000 + farPtrOffset;
-constexpr uint32_t s_wizard_shot2 = 0x1AB90000 + farPtrOffset;
-constexpr uint32_t s_ray_under = 0x1ABA0000 + farPtrOffset;
-constexpr uint32_t s_ray_rise = 0x1ABB0000 + farPtrOffset;
-constexpr uint32_t s_ray_sink = 0x1ABC0000 + farPtrOffset;
-constexpr uint32_t s_ray_fly1 = 0x1ABD0000 + farPtrOffset;
-constexpr uint32_t s_ray_fly2 = 0x1ABE0000 + farPtrOffset;
-constexpr uint32_t s_ray_fly3 = 0x1ABF0000 + farPtrOffset;
-constexpr uint32_t s_ray_fly4 = 0x1AC00000 + farPtrOffset;
-constexpr uint32_t s_ray_attack1 = 0x1AC10000 + farPtrOffset;
-constexpr uint32_t s_ray_attack2 = 0x1AC20000 + farPtrOffset;
-constexpr uint32_t s_ray_attack3 = 0x1AC30000 + farPtrOffset;
-constexpr uint32_t s_ray_die1 = 0x1AC40000 + farPtrOffset;
-constexpr uint32_t s_ray_die2 = 0x1AC50000 + farPtrOffset;
-constexpr uint32_t s_ray_shot1 = 0x1AC60000 + farPtrOffset;
-constexpr uint32_t s_ray_shot2 = 0x1AC70000 + farPtrOffset;
-constexpr uint32_t s_blob_gnd1 = 0x1AC80000 + farPtrOffset;
-constexpr uint32_t s_blob_gnd2 = 0x1AC90000 + farPtrOffset;
-constexpr uint32_t s_blob_rise1 = 0x1ACA0000 + farPtrOffset;
-constexpr uint32_t s_blob_rise2 = 0x1ACB0000 + farPtrOffset;
-constexpr uint32_t s_blob_sink1 = 0x1ACC0000 + farPtrOffset;
-constexpr uint32_t s_blob_sink2 = 0x1ACD0000 + farPtrOffset;
-constexpr uint32_t s_blob_walk1 = 0x1ACE0000 + farPtrOffset;
-constexpr uint32_t s_blob_walk2 = 0x1ACF0000 + farPtrOffset;
-constexpr uint32_t s_blob_walk3 = 0x1AD00000 + farPtrOffset;
-constexpr uint32_t s_blob_ouch = 0x1AD10000 + farPtrOffset;
-constexpr uint32_t s_blob_die1 = 0x1AD20000 + farPtrOffset;
-constexpr uint32_t s_blob_die2 = 0x1AD30000 + farPtrOffset;
-constexpr uint32_t s_blob_die3 = 0x1AD40000 + farPtrOffset;
-constexpr uint32_t s_blob_shot1 = 0x1AD50000 + farPtrOffset;
-constexpr uint32_t s_blob_shot2 = 0x1AD60000 + farPtrOffset;
-constexpr uint32_t s_skel_1 = 0x1AD70000 + farPtrOffset;
-constexpr uint32_t s_skel_2 = 0x1AD80000 + farPtrOffset;
-constexpr uint32_t s_skel_3 = 0x1AD90000 + farPtrOffset;
-constexpr uint32_t s_skel_4 = 0x1ADA0000 + farPtrOffset;
-constexpr uint32_t s_skel_attack1 = 0x1ADB0000 + farPtrOffset;
-constexpr uint32_t s_skel_attack2 = 0x1ADC0000 + farPtrOffset;
-constexpr uint32_t s_skel_attack3 = 0x1ADD0000 + farPtrOffset;
-constexpr uint32_t s_skel_attack4 = 0x1ADE0000 + farPtrOffset;
-constexpr uint32_t s_skel_ouch = 0x1ADF0000 + farPtrOffset;
-constexpr uint32_t s_skel_die1 = 0x1AE00000 + farPtrOffset;
-constexpr uint32_t s_skel_die2 = 0x1AE10000 + farPtrOffset;
-constexpr uint32_t s_skel_die3 = 0x1AE20000 + farPtrOffset;
-constexpr uint32_t s_skel_shot1 = 0x1AE30000 + farPtrOffset;
-constexpr uint32_t s_skel_shot2 = 0x1AE40000 + farPtrOffset;
-constexpr uint32_t s_fmage1 = 0x1AE50000 + farPtrOffset;
-constexpr uint32_t s_fmage2 = 0x1AE60000 + farPtrOffset;
-constexpr uint32_t s_fmage3 = 0x1AE70000 + farPtrOffset;
-constexpr uint32_t s_fmageattack1 = 0x1AE80000 + farPtrOffset;
-constexpr uint32_t s_fmageattack2 = 0x1AE90000 + farPtrOffset;
-constexpr uint32_t s_fmageattack3 = 0x1AEA0000 + farPtrOffset;
-constexpr uint32_t s_fmageouch = 0x1AEB0000 + farPtrOffset;
-constexpr uint32_t s_fmagedie1 = 0x1AEC0000 + farPtrOffset;
-constexpr uint32_t s_fmagedie2 = 0x1AED0000 + farPtrOffset;
-constexpr uint32_t s_fmagedie3 = 0x1AEE0000 + farPtrOffset;
-constexpr uint32_t s_fmshot1 = 0x1AEF0000 + farPtrOffset;
-constexpr uint32_t s_fmshot2 = 0x1AF00000 + farPtrOffset;
-constexpr uint32_t s_robotank_walk1 = 0x1AF10000 + farPtrOffset;
-constexpr uint32_t s_robotank_walk2 = 0x1AF20000 + farPtrOffset;
-constexpr uint32_t s_robotank_walk3 = 0x1AF30000 + farPtrOffset;
-constexpr uint32_t s_robotank_walk4 = 0x1AF40000 + farPtrOffset;
-constexpr uint32_t s_robotank_attack1 = 0x1AF50000 + farPtrOffset;
-constexpr uint32_t s_robotank_attack2 = 0x1AF60000 + farPtrOffset;
-constexpr uint32_t s_robotank_attack3 = 0x1AF70000 + farPtrOffset;
-constexpr uint32_t s_robotank_attack4 = 0x1AF80000 + farPtrOffset;
-constexpr uint32_t s_robotank_death1 = 0x1AF90000 + farPtrOffset;
-constexpr uint32_t s_robotank_death2 = 0x1AFA0000 + farPtrOffset;
-constexpr uint32_t s_robotank_death3 = 0x1AFB0000 + farPtrOffset;
-constexpr uint32_t s_robotank_death4 = 0x1AFC0000 + farPtrOffset;
-constexpr uint32_t s_robotank_death5 = 0x1AFD0000 + farPtrOffset;
-constexpr uint32_t s_robotank_shot1 = 0x1AFE0000 + farPtrOffset;
-constexpr uint32_t s_robotank_shot2 = 0x1AFF0000 + farPtrOffset;
-constexpr uint32_t s_stompy_walk1 = 0x1B000000 + farPtrOffset;
-constexpr uint32_t s_stompy_walk2 = 0x1B010000 + farPtrOffset;
-constexpr uint32_t s_stompy_walk3 = 0x1B020000 + farPtrOffset;
-constexpr uint32_t s_stompy_walk4 = 0x1B030000 + farPtrOffset;
-constexpr uint32_t s_stompy_attack1 = 0x1B040000 + farPtrOffset;
-constexpr uint32_t s_stompy_attack2 = 0x1B050000 + farPtrOffset;
-constexpr uint32_t s_stompy_attack3 = 0x1B060000 + farPtrOffset;
-constexpr uint32_t s_stompy_attack4 = 0x1B070000 + farPtrOffset;
-constexpr uint32_t s_stompy_ouch = 0x1B080000 + farPtrOffset;
-constexpr uint32_t s_stompy_death1 = 0x1B090000 + farPtrOffset;
-constexpr uint32_t s_stompy_death2 = 0x1B0A0000 + farPtrOffset;
-constexpr uint32_t s_stompy_death3 = 0x1B0B0000 + farPtrOffset;
-constexpr uint32_t s_stompy_death4 = 0x1B0C0000 + farPtrOffset;
-constexpr uint32_t s_stompy_shot1 = 0x1B0D0000 + farPtrOffset;
-constexpr uint32_t s_stompy_shot2 = 0x1B0E0000 + farPtrOffset;
-constexpr uint32_t s_stompy_shot3 = 0x1B0F0000 + farPtrOffset;
-constexpr uint32_t s_stompy_shot4 = 0x1B100000 + farPtrOffset;
-constexpr uint32_t s_stompy_shot5 = 0x1B110000 + farPtrOffset;
-constexpr uint32_t s_bug_walk1 = 0x1B120000 + farPtrOffset;
-constexpr uint32_t s_bug_walk2 = 0x1B130000 + farPtrOffset;
-constexpr uint32_t s_bug_walk3 = 0x1B140000 + farPtrOffset;
-constexpr uint32_t s_bug_attack1 = 0x1B150000 + farPtrOffset;
-constexpr uint32_t s_bug_attack2 = 0x1B160000 + farPtrOffset;
-constexpr uint32_t s_bug_attack3 = 0x1B170000 + farPtrOffset;
-constexpr uint32_t s_bug_attack4 = 0x1B180000 + farPtrOffset;
-constexpr uint32_t s_bug_ouch = 0x1B190000 + farPtrOffset;
-constexpr uint32_t s_bug_death1 = 0x1B1A0000 + farPtrOffset;
-constexpr uint32_t s_bug_death2 = 0x1B1B0000 + farPtrOffset;
-constexpr uint32_t s_bug_shot1 = 0x1B1C0000 + farPtrOffset;
-constexpr uint32_t s_bug_shot2 = 0x1B1D0000 + farPtrOffset;
-constexpr uint32_t s_eye_pause = 0x1B1E0000 + farPtrOffset;
-constexpr uint32_t s_eye_1 = 0x1B1F0000 + farPtrOffset;
-constexpr uint32_t s_eye_2 = 0x1B200000 + farPtrOffset;
-constexpr uint32_t s_eye_3 = 0x1B210000 + farPtrOffset;
-constexpr uint32_t s_eye_4 = 0x1B220000 + farPtrOffset;
-constexpr uint32_t s_eye_shootplayer_1 = 0x1B230000 + farPtrOffset;
-constexpr uint32_t s_eye_shootplayer_2 = 0x1B240000 + farPtrOffset;
-constexpr uint32_t s_eye_ouch = 0x1B250000 + farPtrOffset;
-constexpr uint32_t s_eye_ouch2 = 0x1B260000 + farPtrOffset;
-constexpr uint32_t s_eye_die1 = 0x1B270000 + farPtrOffset;
-constexpr uint32_t s_eye_die2 = 0x1B280000 + farPtrOffset;
-constexpr uint32_t s_eye_die3 = 0x1B290000 + farPtrOffset;
-constexpr uint32_t s_eye_die4 = 0x1B2A0000 + farPtrOffset;
-constexpr uint32_t s_eshot1 = 0x1B2B0000 + farPtrOffset;
-constexpr uint32_t s_eshot2 = 0x1B2C0000 + farPtrOffset;
-constexpr uint32_t s_reye_1 = 0x1B2D0000 + farPtrOffset;
-constexpr uint32_t s_reye_2 = 0x1B2E0000 + farPtrOffset;
-constexpr uint32_t s_reye_3 = 0x1B2F0000 + farPtrOffset;
-constexpr uint32_t s_reye_4 = 0x1B300000 + farPtrOffset;
-constexpr uint32_t s_reye_ouch = 0x1B310000 + farPtrOffset;
-constexpr uint32_t s_reye_ouch2 = 0x1B320000 + farPtrOffset;
-constexpr uint32_t s_reye_die1 = 0x1B330000 + farPtrOffset;
-constexpr uint32_t s_reye_die2 = 0x1B340000 + farPtrOffset;
-constexpr uint32_t s_reye_die3 = 0x1B350000 + farPtrOffset;
-constexpr uint32_t s_reye_die4 = 0x1B360000 + farPtrOffset;
-constexpr uint32_t s_head = 0x1B370000 + farPtrOffset;
-constexpr uint32_t s_head_shot1 = 0x1B380000 + farPtrOffset;
-constexpr uint32_t s_head_shot2 = 0x1B390000 + farPtrOffset;
-constexpr uint32_t s_demonpause  =  + farPtrOffset;
-constexpr uint32_t s_demon1 = 0x1B3B0000 + farPtrOffset;
-constexpr uint32_t s_demon2 = 0x1B3C0000 + farPtrOffset;
-constexpr uint32_t s_demon3 = 0x1B3D0000 + farPtrOffset;
-constexpr uint32_t s_demon4 = 0x1B3E0000 + farPtrOffset;
-constexpr uint32_t s_demonattack1 = 0x1B3F0000 + farPtrOffset;
-constexpr uint32_t s_demonattack2 = 0x1B400000 + farPtrOffset;
-constexpr uint32_t s_demonattack3 = 0x1B410000 + farPtrOffset;
-constexpr uint32_t s_demonouch = 0x1B420000 + farPtrOffset;
-constexpr uint32_t s_demondie1 = 0x1B430000 + farPtrOffset;
-constexpr uint32_t s_demondie2 = 0x1B440000 + farPtrOffset;
-constexpr uint32_t s_demondie3 = 0x1B450000 + farPtrOffset;
-constexpr uint32_t s_trollpause = 0x1B460000 + farPtrOffset;
-constexpr uint32_t s_troll1 = 0x1B470000 + farPtrOffset;
-constexpr uint32_t s_troll2 = 0x1B480000 + farPtrOffset;
-constexpr uint32_t s_troll3 = 0x1B490000 + farPtrOffset;
-constexpr uint32_t s_troll4 = 0x1B4A0000 + farPtrOffset;
-constexpr uint32_t s_trollattack1 = 0x1B4B0000 + farPtrOffset;
-constexpr uint32_t s_trollattack2 = 0x1B4C0000 + farPtrOffset;
-constexpr uint32_t s_trollouch = 0x1B4D0000 + farPtrOffset;
-constexpr uint32_t s_trolldie1 = 0x1B4E0000 + farPtrOffset;
-constexpr uint32_t s_trolldie2 = 0x1B4F0000 + farPtrOffset;
-constexpr uint32_t s_trolldie3 = 0x1B500000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demon1 = 0x1B510000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demon2 = 0x1B520000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demon3 = 0x1B530000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demon4 = 0x1B540000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demonattack1 = 0x1B550000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demonattack2 = 0x1B560000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demonattack3 = 0x1B570000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demonouch = 0x1B580000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demondie1 = 0x1B590000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demondie2 = 0x1B5A0000 + farPtrOffset;
-constexpr uint32_t s_cyborg_demondie3 = 0x1B5B0000 + farPtrOffset;
-constexpr uint32_t s_invis_fizz1 = 0x1B5C0000 + farPtrOffset;
-constexpr uint32_t s_invis_fizz2 = 0x1B5D0000 + farPtrOffset;
-constexpr uint32_t s_invis_fizz3 = 0x1B5E0000 + farPtrOffset;
-constexpr uint32_t s_invis_walk = 0x1B5F0000 + farPtrOffset;
-constexpr uint32_t s_invis_attack = 0x1B600000 + farPtrOffset;
-constexpr uint32_t s_invis_pause = 0x1B610000 + farPtrOffset;
-constexpr uint32_t s_invis_flash1 = 0x1B620000 + farPtrOffset;
-constexpr uint32_t s_invis_flash2 = 0x1B630000 + farPtrOffset;
-constexpr uint32_t s_invis_flash3 = 0x1B640000 + farPtrOffset;
-constexpr uint32_t s_invis_death1 = 0x1B650000 + farPtrOffset;
-constexpr uint32_t s_invis_death2 = 0x1B660000 + farPtrOffset;
-constexpr uint32_t s_invis_death3 = 0x1B670000 + farPtrOffset;
-constexpr uint32_t s_bounce1 = 0x1B680000 + farPtrOffset;
-constexpr uint32_t s_bounce2 = 0x1B690000 + farPtrOffset;
-constexpr uint32_t s_grelpause = 0x1B6A0000 + farPtrOffset;
-constexpr uint32_t s_grel1 = 0x1B6B0000 + farPtrOffset;
-constexpr uint32_t s_grel2 = 0x1B6C0000 + farPtrOffset;
-constexpr uint32_t s_grelattack3 = 0x1B6D0000 + farPtrOffset;
-constexpr uint32_t s_grelouch = 0x1B6E0000 + farPtrOffset;
-constexpr uint32_t s_greldie1 = 0x1B6F0000 + farPtrOffset;
-constexpr uint32_t s_greldie2 = 0x1B700000 + farPtrOffset;
-constexpr uint32_t s_greldie3 = 0x1B710000 + farPtrOffset;
-constexpr uint32_t s_greldie4 = 0x1B720000 + farPtrOffset;
-constexpr uint32_t s_greldie5 = 0x1B730000 + farPtrOffset;
-constexpr uint32_t s_greldie5a = 0x1B740000 + farPtrOffset;
-constexpr uint32_t s_greldie6 = 0x1B750000 + farPtrOffset;
-constexpr uint32_t s_gshot1 = 0x1B760000 + farPtrOffset;
-constexpr uint32_t s_column1 = 0x1B770000 + farPtrOffset;
-constexpr uint32_t s_column2 = 0x1B780000 + farPtrOffset;
-constexpr uint32_t s_column3 = 0x1B790000 + farPtrOffset;
-constexpr uint32_t s_column4 = 0x1B7A0000 + farPtrOffset;
-constexpr uint32_t s_column5 = 0x1B7B0000 + farPtrOffset;
-constexpr uint32_t s_ffire_pot = 0x1B7C0000 + farPtrOffset;
-constexpr uint32_t s_ofire_pot1 = 0x1B7D0000 + farPtrOffset;
-constexpr uint32_t s_ofire_pot2 = 0x1B7E0000 + farPtrOffset;
-constexpr uint32_t s_tomb1 = 0x1B7F0000 + farPtrOffset;
-constexpr uint32_t s_tomb2 = 0x1B800000 + farPtrOffset;
-constexpr uint32_t s_force_field_1 = 0x1B810000 + farPtrOffset;
-constexpr uint32_t s_force_field_2 = 0x1B820000 + farPtrOffset;
-constexpr uint32_t s_force_field_3 = 0x1B830000 + farPtrOffset;
-constexpr uint32_t s_force_field_4 = 0x1B840000 + farPtrOffset;
-constexpr uint32_t s_force_field_die = 0x1B850000 + farPtrOffset;
-constexpr uint32_t s_force_field_die1 = 0x1B860000 + farPtrOffset;
-constexpr uint32_t s_invis_wall_control = 0x1B870000 + farPtrOffset;
-
-SavedGameConverterApocalypse::SavedGameConverterApocalypse()
-{
-}
-
-SavedGameConverterApocalypse::~SavedGameConverterApocalypse()
+SavedGameConverterApocalypse::SavedGameConverterApocalypse(const uint32_t farPointerOffset) :
+    m_farPointerOffset(farPointerOffset)
 {
 }
 
@@ -486,42 +482,45 @@ const uint16_t SavedGameConverterApocalypse::GetActorId(const SavedGameInDosForm
 
 const uint16_t SavedGameConverterApocalypse::GetActorIdOfBonus(const uint32_t state32) const
 {
+    const uint32_t localState32 = state32 - m_farPointerOffset;
     const uint16_t actorId =
-        (state32 == s_boltbonus || state32 == s_boltbonus2 || state32 == s_boltbonus3) ? actorIdBonusBolt :
-        (state32 == s_nukebonus || state32 == s_nukebonus2 || state32 == s_nukebonus3) ? actorIdBonusNuke :
-        (state32 == s_potionbonus) ? actorIdBonusPotion :
-        (state32 == s_rkeybonus) ? actorIdBonusKeyRed :
-        (state32 == s_ykeybonus) ? actorIdBonusKeyYellow :
-        (state32 == s_gkeybonus) ? actorIdBonusKeyGreen :
-        (state32 == s_bkeybonus) ? actorIdBonusKeyBlue :
-        (state32 == s_chestbonus) ? actorIdBonusChest :
-        (state32 == s_oldchestbonus) ? actorIdBonusOldChest :
-        (state32 == s_waterchestbonus1 || state32 == s_waterchestbonus2) ? actorIdBonusWaterChest :
-        (state32 == s_bonus_die) ? actorIdBonusExplosion :
-        (state32 == s_ftimebonus || state32 == s_ftimebonus2) ? actorIdBonusFreezeTime :
-        (state32 == s_rgem1bonus) ? actorIdBonusGemRed :
-        (state32 == s_ygem1bonus) ? actorIdBonusGemYellow :
-        (state32 == s_ggem1bonus) ? actorIdBonusGemGreen :
-        (state32 == s_bgem1bonus) ? actorIdBonusGemBlue :
-        (state32 == s_pgem1bonus) ? actorIdBonusGemPurple :
+        (localState32 == s_boltbonus || localState32 == s_boltbonus2 || localState32 == s_boltbonus3) ? actorIdBonusBolt :
+        (localState32 == s_nukebonus || localState32 == s_nukebonus2 || localState32 == s_nukebonus3) ? actorIdBonusNuke :
+        (localState32 == s_potionbonus) ? actorIdBonusPotion :
+        (localState32 == s_rkeybonus) ? actorIdBonusKeyRed :
+        (localState32 == s_ykeybonus) ? actorIdBonusKeyYellow :
+        (localState32 == s_gkeybonus) ? actorIdBonusKeyGreen :
+        (localState32 == s_bkeybonus) ? actorIdBonusKeyBlue :
+        (localState32 == s_chestbonus) ? actorIdBonusChest :
+        (localState32 == s_oldchestbonus) ? actorIdBonusOldChest :
+        (localState32 == s_waterchestbonus1 || localState32 == s_waterchestbonus2 || localState32 == s_waterchestbonus3) ? actorIdBonusWaterChest :
+        (localState32 == s_bonus_die) ? actorIdBonusExplosion :
+        (localState32 == s_ftimebonus || localState32 == s_ftimebonus2) ? actorIdBonusFreezeTime :
+        (localState32 == s_rgem1bonus) ? actorIdBonusGemRed :
+        (localState32 == s_ygem1bonus) ? actorIdBonusGemYellow :
+        (localState32 == s_ggem1bonus) ? actorIdBonusGemGreen :
+        (localState32 == s_bgem1bonus) ? actorIdBonusGemBlue :
+        (localState32 == s_pgem1bonus) ? actorIdBonusGemPurple :
         0;
     return actorId;
 }
 
 const uint16_t SavedGameConverterApocalypse::GetActorIdOfSolid(const uint32_t state32) const
 {
+    const uint32_t localState32 = state32 - m_farPointerOffset;
     const uint16_t actorId =
-        (state32 == s_force_field_1 || state32 == s_force_field_2 || state32 == s_force_field_3 || state32 == s_force_field_4) ? actorIdForceField :
-        (state32 == s_invis_wall_control) ? actorIdFakeWall :
+        (localState32 == s_force_field_1 || localState32 == s_force_field_2 || localState32 == s_force_field_3 || localState32 == s_force_field_4) ? actorIdForceField :
+        (localState32 == s_invis_wall_control) ? actorIdFakeWall :
         0;
     return actorId;
 }
 
 const uint16_t SavedGameConverterApocalypse::GetActorIdOfExplosion(const uint32_t state32) const
 {
+    const uint32_t localState32 = state32 - m_farPointerOffset;
     const uint16_t actorId =
-        (state32 == s_pshot_exp1 || state32 == s_pshot_exp2 || state32 == s_pshot_exp3) ? actorIdProjectilePlayerShot :
-        (state32 == s_explode) ? actorIdBonusExplosion :
+        (localState32 == s_pshot_exp1 || localState32 == s_pshot_exp2 || localState32 == s_pshot_exp3) ? actorIdProjectilePlayerShot :
+        (localState32 == s_explode) ? actorIdBonusExplosion :
         0;
     return actorId;
 }
@@ -529,7 +528,7 @@ const uint16_t SavedGameConverterApocalypse::GetActorIdOfExplosion(const uint32_
 const uint16_t SavedGameConverterApocalypse::GetActorIdOfInert(const uint32_t state32) const
 {
     uint16_t actorId = 0;
-    switch (state32)
+    switch (state32 - m_farPointerOffset)
     {
     case s_pshot_exp1:
     case s_pshot_exp2:
@@ -651,7 +650,7 @@ const uint16_t SavedGameConverterApocalypse::GetActorIdOfInert(const uint32_t st
 const uint16_t SavedGameConverterApocalypse::GetActorIdOfRealSolid(const uint32_t state32) const
 {
     uint16_t actorId = actorIdNone;
-    switch (state32)
+    switch (state32 - m_farPointerOffset)
     {
     case s_head:
         actorId = actorIdMonsterTimeLord;
@@ -691,7 +690,7 @@ const uint16_t SavedGameConverterApocalypse::GetActorIdOfRealSolid(const uint32_
 const DecorateStateId SavedGameConverterApocalypse::GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
     DecorateStateId stateId = StateIdWalk;
-    switch (dosObject.state32)
+    switch (dosObject.state32 - m_farPointerOffset)
     {
     case s_player:
     case s_aqua_walk1:
@@ -1015,7 +1014,7 @@ const DecorateStateId SavedGameConverterApocalypse::GetDecorateStateId(const Sav
 const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
     uint16_t animationFrame = 0;
-    switch (dosObject.state32)
+    switch (dosObject.state32 - m_farPointerOffset)
     {
     case s_pshot1:
     case s_pshot_exp1:

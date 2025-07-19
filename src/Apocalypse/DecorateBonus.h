@@ -335,8 +335,9 @@ const DecorateActor decorateChest =
 
 const DecorateAnimation waterChestWaitForPickupAnimation =
 {
-    { O_WATER_CHEST1PIC, 8, ActionWaitForPickupDestructable },
-    { O_WATER_CHEST2PIC, 8, ActionWaitForPickupDestructable }
+    { O_WATER_CHEST1PIC, 10, ActionWaitForPickupDestructable },
+    { O_WATER_CHEST2PIC, 10, ActionWaitForPickupDestructable },
+    { O_WATER_CHEST3PIC, 10, ActionWaitForPickupDestructable }
 };
 
 const DecorateState waterChestWaitForPickup =

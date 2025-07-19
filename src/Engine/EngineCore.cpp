@@ -107,7 +107,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     m_system.GetSavedGameNamesFromFolder(savedGamesPath, m_savedGames);
 
 #ifdef SAVEDGAMESINDOSFORMAT
-    if (game.GetId() == 5)
+    if (game.GetId() == GameId::Catacomb3Dv122)
     {
         // Retrieve Catacomb 3-D saved DOS games
         const fs::path& gameDataPath = configurationSettings.GetCVarString(CVarIdPathCatacomb3Dv122).Get();
@@ -134,9 +134,9 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     {
         // Retrieve Catacomb Adventure Trilogy saved DOS games
         const fs::path& gameDataPath =
-            (game.GetId() == 1) ? configurationSettings.GetCVarString(CVarIdPathAbyssv113).Get() :
-            (game.GetId() == 2) ? configurationSettings.GetCVarString(CVarIdPathAbyssv124).Get() :
-            (game.GetId() == 3) ? configurationSettings.GetCVarString(CVarIdPathArmageddonv102).Get() :
+            (game.GetId() == GameId::CatacombAbyssv113) ? configurationSettings.GetCVarString(CVarIdPathAbyssv113).Get() :
+            (game.GetId() == GameId::CatacombAbyssv124) ? configurationSettings.GetCVarString(CVarIdPathAbyssv124).Get() :
+            (game.GetId() == GameId::CatacombArmageddonv102) ? configurationSettings.GetCVarString(CVarIdPathArmageddonv102).Get() :
             configurationSettings.GetCVarString(CVarIdPathApocalypsev101).Get();
         std::vector<std::string> filesFound;
         m_system.GetSavedGameNamesFromFolder(gameDataPath, filesFound);

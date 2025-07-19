@@ -76,7 +76,7 @@ void SystemSDL::GetSavedGameNamesFromFolder(
 
     for (const auto & entry : fs::directory_iterator(path))
     {
-        if (!entry.is_directory() && entry.path().extension() == ".sav")
+        if (!entry.is_directory() && (entry.path().extension() == ".sav" || entry.path().extension() == ".SAV"))
         {
             filesFound.push_back(entry.path().stem().string());
         }

@@ -25,8 +25,8 @@
 class SavedGameConverterArmageddon : public ISavedGameConverter
 {
 public:
-    SavedGameConverterArmageddon();
-    ~SavedGameConverterArmageddon();
+    SavedGameConverterArmageddon(const uint32_t farPointerOffset);
+    ~SavedGameConverterArmageddon() = default;
     const uint16_t GetActorIdOfGate(const uint32_t state32, const int16_t temp1) const;
     const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
@@ -39,6 +39,8 @@ private:
     const uint16_t GetActorIdOfRealSolid(const uint32_t state32) const;
     const uint16_t GetActorIdOfExplosion(const uint32_t state32) const;
     const uint16_t GetActorIdOfInert(const uint32_t state32) const;
+
+    const uint32_t m_farPointerOffset;
 };
 
 
