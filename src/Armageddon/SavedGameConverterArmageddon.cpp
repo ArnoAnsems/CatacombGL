@@ -745,6 +745,9 @@ const DecorateStateId SavedGameConverterArmageddon::GetDecorateStateId(const Sav
         break;
     case s_explode:
     case s_bonus_die:
+    case s_pshot_exp1:
+    case s_pshot_exp2:
+    case s_pshot_exp3:
     case s_fatdemon_blowup1:
     case s_fatdemon_blowup2:
     case s_fatdemon_blowup3:
@@ -819,6 +822,9 @@ const DecorateStateId SavedGameConverterArmageddon::GetDecorateStateId(const Sav
     case s_zombie_inground:
     case s_tree_idle:
     case s_skeleton_hanging:
+    case s_sulphur_gas_1:
+    case s_sulphur_gas_2:
+    case s_sulphur_gas_3:
         stateId = StateIdHidden;
         break;
     case s_wet_rise1:
@@ -852,9 +858,6 @@ const DecorateStateId SavedGameConverterArmageddon::GetDecorateStateId(const Sav
         break;
     case s_pshot1:
     case s_pshot2:
-    case s_pshot_exp1:
-    case s_pshot_exp2:
-    case s_pshot_exp3:
     case s_dragon_shot1:
     case s_dragon_shot2:
     case s_eshot1:
@@ -902,9 +905,6 @@ const DecorateStateId SavedGameConverterArmageddon::GetDecorateStateId(const Sav
     case s_tombs1:
     case s_tombs2:
     case s_column:
-    case s_sulphur_gas_1:
-    case s_sulphur_gas_2:
-    case s_sulphur_gas_3:
     case s_fire_pot_1:
     case s_fire_pot_2:
     case s_fountain:
@@ -993,7 +993,9 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_skel_die3:
     case s_eye_1:
     case s_eye_shootplayer_1:
+    case s_eye_shootplayer_2:
     case s_eye_ouch:
+    case s_eye_pause:
     case s_eye_die1:
     case s_eshot1:
     case s_succubus_walk1:
@@ -1054,6 +1056,7 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_zombie_ouch:
     case s_tree_idle:
     case s_tree_awakening1:
+    case s_tree_awakening2:
     case s_tree_walk1:
     case s_tree_death1:
     case s_tree_attack1:
@@ -1077,6 +1080,7 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_fountain:
     case s_force_field_1:
     case s_force_field_die:
+    case s_force_field_die1:
     case s_skeleton_hanging:
         animationFrame = 0u;
         break;
@@ -1108,7 +1112,6 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_skel_attack2:
     case s_skel_die2:
     case s_eye_2:
-    case s_eye_shootplayer_2:
     case s_eye_ouch2:
     case s_eye_die2:
     case s_eshot2:
@@ -1123,6 +1126,7 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_bunny_meta2:
     case s_bunny_walk2:
     case s_bunny_attack2:
+    case s_bunny_pause:
     case s_bunny_death2:
     case s_red_demon2:
     case s_red_demonattack2:
@@ -1141,7 +1145,6 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_zombie_rise2:
     case s_zombie_alive2:
     case s_zombie_death2:
-    case s_tree_awakening2:
     case s_tree_walk2:
     case s_tree_death2:
     case s_tree_death4:
@@ -1149,7 +1152,6 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_sulphur_gas_2:
     case s_fire_pot_2:
     case s_force_field_2:
-    case s_force_field_die1:
         animationFrame = 1u;
         break;
     case s_pshot_exp3:
@@ -1166,19 +1168,19 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_wet_sink3:
     case s_wet_walk3:
     case s_wet_attack3:
+    case s_wet_attack4:
     case s_wet_die3:
     case s_skel_3:
     case s_skel_attack3:
     case s_eye_3:
-    case s_eye_pause:
     case s_eye_die3:
     case s_succubus_walk3:
     case s_succubus_attack3:
     case s_bunny_left3:
     case s_bunny_right3:
-    case s_bunny_pause:
     case s_red_demon3:
     case s_red_demonattack3:
+    case s_red_demonpause:
     case s_red_demondie3:
     case s_greldie3:
     case s_bat3:
@@ -1190,6 +1192,7 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_tree_death3:
     case s_tree_death5:
     case s_tree_attack3:
+    case s_tree_pause:
     case s_sulphur_gas_3:
     case s_force_field_3:
         animationFrame = 2u;
@@ -1199,19 +1202,16 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
     case s_fatdemon_blowup4:
     case s_wet_rise5:
     case s_wet_walk4:
-    case s_wet_attack4:
     case s_wet_die4:
     case s_skel_pause:
     case s_skel_4:
     case s_eye_4:
     case s_succubus_walk4:
-    case s_red_demonpause:
     case s_red_demon4:
     case s_greldie4:
     case s_bat4:
     case s_godesspause:
     case s_zombie_rise4:
-    case s_tree_pause:
     case s_force_field_4:
         animationFrame = 3u;
         break;
