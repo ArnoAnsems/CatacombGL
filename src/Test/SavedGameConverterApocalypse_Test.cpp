@@ -55,3 +55,45 @@ TEST_F(SavedGameConverterApocalypse_Test, ConvertBonus)
         CheckDosObjectIsConvertible(dosObject);
     }
 }
+
+TEST_F(SavedGameConverterApocalypse_Test, ConvertAquaMan)
+{
+    constexpr uint16_t obclassAquaMan = 3;
+    constexpr uint32_t allState32[] = {
+        0x1A960000 + m_farPointerOffset, 0x1A970000 + m_farPointerOffset, 0x1A980000 + m_farPointerOffset,
+        0x1A990000 + m_farPointerOffset, 0x1A9A0000 + m_farPointerOffset, 0x1A9B0000 + m_farPointerOffset,
+        0x1A9C0000 + m_farPointerOffset, 0x1A9D0000 + m_farPointerOffset, 0x1A9E0000 + m_farPointerOffset,
+        0x1A9F0000 + m_farPointerOffset, 0x1AA00000 + m_farPointerOffset, 0x1AA10000 + m_farPointerOffset,
+        0x1AA20000 + m_farPointerOffset, 0x1AA30000 + m_farPointerOffset, 0x1AA40000 + m_farPointerOffset,
+        0x1AA50000 + m_farPointerOffset, 0x1AA60000 + m_farPointerOffset, 0x1AA70000 + m_farPointerOffset,
+        0x1AA80000 + m_farPointerOffset, 0x1AA90000 + m_farPointerOffset
+    };
+    for (uint32_t state32 : allState32)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassAquaMan;
+        dosObject.state32 = state32;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}
+
+TEST_F(SavedGameConverterApocalypse_Test, ConvertWizard)
+{
+    constexpr uint16_t obclassWizard = 4;
+    constexpr uint32_t allState32[] = {
+        0x1AAA0000 + m_farPointerOffset, 0x1AAB0000 + m_farPointerOffset, 0x1AAC0000 + m_farPointerOffset,
+        0x1AAD0000 + m_farPointerOffset, 0x1AAE0000 + m_farPointerOffset, 0x1AAF0000 + m_farPointerOffset,
+        0x1AB00000 + m_farPointerOffset, 0x1AB10000 + m_farPointerOffset, 0x1AB20000 + m_farPointerOffset,
+        0x1AB30000 + m_farPointerOffset, 0x1AB40000 + m_farPointerOffset, 0x1AB50000 + m_farPointerOffset,
+        0x1AB60000 + m_farPointerOffset, 0x1AB70000 + m_farPointerOffset
+    };
+    for (uint32_t state32 : allState32)
+    {
+        SavedGameInDosFormat::ObjectInDosFormat dosObject;
+        dosObject.obclass = obclassWizard;
+        dosObject.state32 = state32;
+
+        CheckDosObjectIsConvertible(dosObject);
+    }
+}

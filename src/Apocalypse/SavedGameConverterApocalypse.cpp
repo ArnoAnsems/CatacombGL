@@ -1168,6 +1168,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_wizard_attack2:
     case s_wizard_die2:
     case s_wizard_shoot2:
+    case s_wizard_shoot3:
     case s_wizard_shot2:
     case s_ray_fly2:
     case s_ray_attack2:
@@ -1200,6 +1201,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_bug_shot2:
     case s_eye_2:
     case s_eye_shootplayer_2:
+    case s_eye_pause:
     case s_eye_ouch2:
     case s_eye_die2:
     case s_eshot2:
@@ -1212,6 +1214,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_demondie2:
     case s_troll2:
     case s_trollattack2:
+    case s_trollpause:
     case s_trolldie2:
     case s_cyborg_demon2:
     case s_cyborg_demonattack2:
@@ -1240,7 +1243,6 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_aqua_die3:
     case s_wizard_walk3:
     case s_wizard_die3:
-    case s_wizard_shoot3:
     case s_ray_fly3:
     case s_ray_attack3:
     case s_blob_walk3:
@@ -1260,14 +1262,13 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_bug_walk3:
     case s_bug_attack3:
     case s_eye_3:
-    case s_eye_pause:
     case s_eye_die3:
     case s_reye_3:
     case s_reye_die3:
     case s_demon3:
     case s_demonattack3:
+    case s_demonpause:
     case s_troll3:
-    case s_trollpause:
     case s_cyborg_demon3:
     case s_cyborg_demonattack3:
     case s_invis_fizz3:
@@ -1295,7 +1296,6 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_eye_4:
     case s_reye_4:
     case s_demon4:
-    case s_demonpause:
     case s_troll4:
     case s_cyborg_demon4:
     case s_greldie4:

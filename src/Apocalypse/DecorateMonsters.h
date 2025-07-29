@@ -159,7 +159,7 @@ const DecorateState wizardStateWalk =
 const DecorateAnimation wizardAttackAnimation =
 {
     { WIZARDATTACK1PIC, 20, ActionAttack },
-    { WIZARDATTACK1PIC, 20, ActionChaseLikeMage }
+    { WIZARDATTACK2PIC, 20, ActionNone }
 };
 
 const DecorateState wizardStateAttack =
