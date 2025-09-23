@@ -26,19 +26,16 @@
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-#ifndef _WIN32
-#ifdef __APPLE__
 #include <OpenGL/glext.h>
 #else
+#include <GL/gl.h>
+#ifndef _WIN32
 #include <GL/glext.h>
-#endif
 #else
 // The file glext.h is not available in the Visual Studio Platform Toolset.
 // Below is the specific definition from glext.h that is needed in this source file.
 static const unsigned int GL_CLAMP_TO_EDGE = 0x812F;
+#endif
 #endif
 #include <SDL_video.h>
 #include <cmath>
