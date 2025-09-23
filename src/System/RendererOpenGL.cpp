@@ -24,9 +24,17 @@
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #ifndef _WIN32
+#ifdef __APPLE__
+#include <OpenGL/glext.h>
+#else
 #include <GL/glext.h>
+#endif
 #else
 // The file glext.h is not available in the Visual Studio Platform Toolset.
 // Below is the specific definition from glext.h that is needed in this source file.

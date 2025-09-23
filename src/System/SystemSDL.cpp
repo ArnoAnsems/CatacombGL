@@ -136,7 +136,7 @@ void SystemSDL::GetSubFolders(
 
         return;
 
-#elif defined (__linux__)
+#elif defined (__linux__) or defined (__APPLE__)
         workFolder = getenv("HOME");
 
 #else
