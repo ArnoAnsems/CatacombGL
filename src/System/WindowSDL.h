@@ -20,7 +20,11 @@
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #include <SDL.h>
 
 void CreateGLWindow(int width, int height, int /*bits*/, SDL_Window*& window, SDL_GLContext& context );

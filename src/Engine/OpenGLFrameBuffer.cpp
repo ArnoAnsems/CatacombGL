@@ -16,7 +16,11 @@
 #include "OpenGLFrameBuffer.h"
 #include "../Engine/Logging.h"
 #ifndef _WIN32
+#ifdef __APPLE__
+#include <OpenGL/glext.h>
+#else
 #include <GL/glext.h>
+#endif
 #else
 // The file glext.h is not available in the Visual Studio Platform Toolset.
 // Below are the specific definitions from glext.h that are needed in this source file.
