@@ -61,8 +61,8 @@ constexpr uint16_t gshotobj = 39;
 // State pointers as conveniently documented in ReflectionHLE (statetype_ptr_conversion.c).
 constexpr uint32_t s_pshot1 = 0x1A6A0000;
 constexpr uint32_t s_pshot2 = 0x1A6B0000;
-constexpr uint32_t s_pshot_exp1 =0x1A6C0000;
-constexpr uint32_t s_pshot_exp2 =0x1A6D0000;
+constexpr uint32_t s_pshot_exp1 = 0x1A6C0000;
+constexpr uint32_t s_pshot_exp2 = 0x1A6D0000;
 constexpr uint32_t s_pshot_exp3 = 0x1A6E0000;
 constexpr uint32_t s_player = 0x1A6F0000;
 constexpr uint32_t s_explode = 0x1A700000;
@@ -453,10 +453,10 @@ const uint16_t SavedGameConverterApocalypse::GetActorId(const SavedGameInDosForm
         actorId = actorIdBonusFreezeTime;
         break;
     case solidobj:
-        GetActorIdOfSolid(dosObject.state32);
+        actorId = GetActorIdOfSolid(dosObject.state32);
         break;
     case inertobj:
-        GetActorIdOfInert(dosObject.state32);
+        actorId = GetActorIdOfInert(dosObject.state32);
         break;
     case gateobj:
         actorId = actorIdPortal;
@@ -911,6 +911,9 @@ const DecorateStateId SavedGameConverterApocalypse::GetDecorateStateId(const Sav
     case s_ray_rise:
     case s_blob_rise1:
     case s_blob_rise2:
+    case s_stompy_shot1:
+    case s_stompy_shot2:
+    case s_stompy_shot3:
         stateId = StateIdRise;
         break;
     case s_aqua_sink1:
@@ -938,9 +941,6 @@ const DecorateStateId SavedGameConverterApocalypse::GetDecorateStateId(const Sav
     case s_fmshot2:
     case s_robotank_shot1:
     case s_robotank_shot2:
-    case s_stompy_shot1:
-    case s_stompy_shot2:
-    case s_stompy_shot3:
     case s_stompy_shot4:
     case s_stompy_shot5:
     case s_bug_shot1:
@@ -1092,6 +1092,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_stompy_death1:
     case s_stompy_death4:
     case s_stompy_shot1:
+    case s_stompy_shot4:
     case s_bug_walk1:
     case s_bug_attack1:
     case s_bug_ouch:
@@ -1130,6 +1131,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_invis_attack:
     case s_invis_flash1:
     case s_invis_death1:
+    case s_invis_death3:
     case s_bounce1:
     case s_grel1:
     case s_grelattack3:
@@ -1148,6 +1150,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_tomb2:
     case s_force_field_1:
     case s_force_field_die:
+    case s_force_field_die1:
     case s_invis_wall_control:
        animationFrame = 0u;
        break;
@@ -1196,6 +1199,7 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_stompy_attack2:
     case s_stompy_death2:
     case s_stompy_shot2:
+    case s_stompy_shot5:
     case s_bug_walk2:
     case s_bug_attack2:
     case s_bug_shot2:
@@ -1229,7 +1233,6 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_greldie2:
     case s_ofire_pot2:
     case s_force_field_2:
-    case s_force_field_die1:
     case s_walldie3:
     case s_walldie4:
        animationFrame = 1u;
@@ -1273,7 +1276,6 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_cyborg_demonattack3:
     case s_invis_fizz3:
     case s_invis_flash3:
-    case s_invis_death3:
     case s_greldie3:
     case s_force_field_3:
     case s_walldie5:
@@ -1291,7 +1293,6 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
     case s_robotank_death4:
     case s_stompy_walk4:
     case s_stompy_attack4:
-    case s_stompy_shot4:
     case s_bug_attack4:
     case s_eye_4:
     case s_reye_4:
@@ -1304,7 +1305,6 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
         break;
     case s_portal5:
     case s_aqua_die5:
-    case s_stompy_shot5:
     case s_greldie5:
         animationFrame = 4u;
         break;
