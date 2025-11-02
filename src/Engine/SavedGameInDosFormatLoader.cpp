@@ -81,6 +81,12 @@ void SavedGameInDosFormatLoader::LoadActors(
     }
 }
 
+uint32_t SavedGameInDosFormatLoader::GetPlayerState32() const
+{
+    const SavedGameInDosFormat::ObjectInDosFormat& playerObject = m_savedGameInDosFormat.GetObject(0);
+    return playerObject.state32;
+}
+
 const float SavedGameInDosFormatLoader::DosToGLCoordinate(const int32_t dosCoordinate)
 {
     const float dosToGLScaleFactor = 65536.0f;

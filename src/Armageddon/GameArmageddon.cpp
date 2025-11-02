@@ -32,8 +32,7 @@ GameArmageddon::GameArmageddon(const fs::path gamePath, IRenderer& renderer) :
     m_gamePath (gamePath),
     m_renderer (renderer),
     m_introView (nullptr),
-    m_zombie_base_delay(0),
-    m_savedGameConverter(0x1A20000)
+    m_zombie_base_delay(0)
 {
     m_gameMaps = nullptr;
     m_egaGraph = nullptr;
@@ -918,7 +917,7 @@ const SavedGameInDosFormatConfig& GameArmageddon::GetSavedGameInDosFormatConfig(
     return savedGameInDosFormatConfigArmageddon;
 }
 
-const ISavedGameConverter& GameArmageddon::GetSavedGameConverter() const
+ISavedGameConverter& GameArmageddon::GetSavedGameConverter()
 {
     return m_savedGameConverter;
 }

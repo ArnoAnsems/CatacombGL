@@ -20,7 +20,8 @@
 void SavedGameConverterApocalypse_Test::CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
 {
 
-    SavedGameConverterApocalypse converter(m_farPointerOffset);
+    SavedGameConverterApocalypse converter;
+    converter.SetFarPointerOffset(m_farPointerOffset + 0x1A6F0000);
     const uint16_t actorId = converter.GetActorId(dosObject);
     const auto actorIt = decorateApocalypseAll.find(actorId);
     ASSERT_TRUE(actorIt != decorateApocalypseAll.end());

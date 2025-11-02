@@ -1083,3 +1083,8 @@ const uint8_t SavedGameConverterAbyss::GetGameIndex() const
 {
     return (m_gameId == GameId::CatacombAbyssv113) ? 0 : 1;
 }
+
+void SavedGameConverterAbyss::SetFarPointerOffset(const uint32_t /*playerState32*/)
+{
+    // No far pointer offset used.
+}

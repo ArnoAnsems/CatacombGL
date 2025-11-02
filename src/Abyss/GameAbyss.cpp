@@ -981,7 +981,7 @@ const SavedGameInDosFormatConfig& GameAbyss::GetSavedGameInDosFormatConfig() con
     return savedGameInDosFormatConfigAbyss;
 }
 
-const ISavedGameConverter& GameAbyss::GetSavedGameConverter() const
+ISavedGameConverter& GameAbyss::GetSavedGameConverter()
 {
     return m_savedGameConverter;
 }

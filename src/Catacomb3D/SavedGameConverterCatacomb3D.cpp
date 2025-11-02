@@ -575,3 +575,8 @@ const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameIn
     }
     return animationFrame;
 }
+
+void SavedGameConverterCatacomb3D::SetFarPointerOffset(const uint32_t /*playerState32*/)
+{
+    // No far pointer offset used.
+}

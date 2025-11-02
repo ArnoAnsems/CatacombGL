@@ -19,8 +19,8 @@
 
 void SavedGameConverterArmageddon_Test::CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
 {
-
-    SavedGameConverterArmageddon converter(m_farPointerOffset);
+    SavedGameConverterArmageddon converter;
+    converter.SetFarPointerOffset(m_farPointerOffset + 0x1A580000);
     const uint16_t actorId = converter.GetActorId(dosObject);
     const auto actorIt = decorateArmageddonAll.find(actorId);
     ASSERT_TRUE(actorIt != decorateArmageddonAll.end());

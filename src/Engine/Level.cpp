@@ -25,6 +25,7 @@
 #include "RenderableSprites.h"
 #include "SavedGameInDosFormat.h"
 #include "SavedGameInDosFormatLoader.h"
+#include "ISavedGameConverter.h"
 #include <cmath>
 #include <cstddef>
 
@@ -124,11 +125,12 @@ bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, con
 
 bool Level::LoadActorsFromDosSavedGame(
     const SavedGameInDosFormat& savedGameInDosFormat,
-    const ISavedGameConverter& savedGameConverter,
+    ISavedGameConverter& savedGameConverter,
     const std::map<uint16_t, const DecorateActor>& decorateActors)
 {
     SavedGameInDosFormatLoader loader(savedGameInDosFormat, savedGameConverter, decorateActors);
     m_playerActor = loader.LoadPlayerActor();
+    savedGameConverter.SetFarPointerOffset(loader.GetPlayerState32());
     loader.LoadActors(m_blockingActors, m_nonBlockingActors, m_levelWidth, m_levelHeight);
     /*
     const SavedGameInDosFormat::ObjectInDosFormat& playerObject = savedGameInDosFormat.GetObject(0);

@@ -91,7 +91,7 @@ public:
     const ManaBar::ManaBarConfig& GetManaBarConfig() override;
     const CatalogInfo& GetCatalogInfo() const override;
     const SavedGameInDosFormatConfig& GetSavedGameInDosFormatConfig() const override;
-    const ISavedGameConverter& GetSavedGameConverter() const override;
+    ISavedGameConverter& GetSavedGameConverter() override;
 
 private:
     void DrawHealth(RenderableTiles& renderableTiles, const int16_t health);
@@ -104,6 +104,6 @@ private:
     const std::filesystem::path m_gamePath;
     IRenderer& m_renderer;
     short m_zombie_base_delay;
-    const SavedGameConverterApocalypse m_savedGameConverter;
+    SavedGameConverterApocalypse m_savedGameConverter;
 };
 

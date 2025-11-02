@@ -94,7 +94,7 @@ public:
     const ManaBar::ManaBarConfig& GetManaBarConfig() override;
     const CatalogInfo& GetCatalogInfo() const override;
     const SavedGameInDosFormatConfig& GetSavedGameInDosFormatConfig() const override;
-    const ISavedGameConverter& GetSavedGameConverter() const override;
+    ISavedGameConverter& GetSavedGameConverter() override;
 
 private:
     void DrawStatusBarWideScreenMargin(const int16_t offsetX, const int16_t marginWidth);
@@ -105,6 +105,6 @@ private:
     const std::filesystem::path m_configPath;
     IRenderer& m_renderer;
     std::unique_ptr<HighScores> m_highScores;
-    const SavedGameConverterCatacomb3D m_savedGameConverter;
+    SavedGameConverterCatacomb3D m_savedGameConverter;
 };
 

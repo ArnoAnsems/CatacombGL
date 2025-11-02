@@ -706,7 +706,7 @@ const SavedGameInDosFormatConfig& GameCatacomb3D::GetSavedGameInDosFormatConfig(
     return savedGameInDosFormatConfigCatacomb3D;
 }
 
-const ISavedGameConverter& GameCatacomb3D::GetSavedGameConverter() const
+ISavedGameConverter& GameCatacomb3D::GetSavedGameConverter()
 {
     return m_savedGameConverter;
 }

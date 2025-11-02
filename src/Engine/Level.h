@@ -110,7 +110,7 @@ public:
     bool LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
     bool LoadActorsFromDosSavedGame(
         const SavedGameInDosFormat& savedGameInDosFormat,
-        const ISavedGameConverter& savedGameConverter,
+        ISavedGameConverter& savedGameConverter,
         const std::map<uint16_t, const DecorateActor>& decorateActors);
     bool LoadFogOfWarFromFile(std::ifstream& file);
     ~Level();

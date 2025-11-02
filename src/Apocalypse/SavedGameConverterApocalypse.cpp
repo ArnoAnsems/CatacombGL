@@ -346,11 +346,6 @@ constexpr uint32_t s_force_field_die = 0x1B850000;
 constexpr uint32_t s_force_field_die1 = 0x1B860000;
 constexpr uint32_t s_invis_wall_control = 0x1B870000;
 
-SavedGameConverterApocalypse::SavedGameConverterApocalypse(const uint32_t farPointerOffset) :
-    m_farPointerOffset(farPointerOffset)
-{
-}
-
 const uint16_t SavedGameConverterApocalypse::GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
     uint16_t actorId = 0;
@@ -1323,4 +1318,9 @@ const uint16_t SavedGameConverterApocalypse::GetAnimationFrame(const SavedGameIn
 const bool SavedGameConverterApocalypse::IsInertObject(const uint16_t obclass) const
 {
     return obclass == inertobj;
+}
+
+void SavedGameConverterApocalypse::SetFarPointerOffset(const uint32_t playerState32)
+{
+    m_farPointerOffset = playerState32 - s_player;
 }

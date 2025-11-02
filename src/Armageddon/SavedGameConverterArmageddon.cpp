@@ -325,11 +325,6 @@ constexpr uint32_t s_force_field_die = 0x1B5F0000;
 constexpr uint32_t s_force_field_die1 = 0x1B600000;
 constexpr uint32_t s_skeleton_hanging = 0x1B610000;
 
-SavedGameConverterArmageddon::SavedGameConverterArmageddon(const uint32_t farPointerOffset) :
-    m_farPointerOffset(farPointerOffset)
-{
-}
-
 const uint16_t SavedGameConverterArmageddon::GetActorIdOfGate(const uint32_t state32, const int16_t temp1) const
 {
     const uint32_t localState32 = state32 - m_farPointerOffset;
@@ -1237,4 +1232,9 @@ const uint16_t SavedGameConverterArmageddon::GetAnimationFrame(const SavedGameIn
 const bool SavedGameConverterArmageddon::IsInertObject(const uint16_t obclass) const
 {
     return obclass == inertobj;
+}
+
+void SavedGameConverterArmageddon::SetFarPointerOffset(const uint32_t playerState32)
+{
+    m_farPointerOffset = playerState32 - s_player;
 }

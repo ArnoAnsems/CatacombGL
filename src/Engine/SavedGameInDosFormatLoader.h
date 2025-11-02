@@ -38,6 +38,7 @@ public:
         Actor** nonBlockingActors,
         const uint16_t levelWidth,
         const uint16_t levelHeight);
+    uint32_t GetPlayerState32() const;
 
 private:
     static const float DosToGLCoordinate(const int32_t dosCoordinate);
