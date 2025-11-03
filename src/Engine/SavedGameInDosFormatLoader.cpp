@@ -18,6 +18,25 @@
 #include "ISavedGameConverter.h"
 #include "Actor.h"
 
+namespace
+{
+    const actorDirection DosDirToDirection(const uint16_t dir)
+    {
+        return
+            (dir == 0u) ? northwest :
+            (dir == 1u) ? north :
+            (dir == 2u) ? northeast :
+            (dir == 3u) ? west :
+            (dir == 4u) ? nodir :
+            (dir == 5u) ? east :
+            (dir == 6u) ? southwest :
+            (dir == 7u) ? south :
+            (dir == 8u) ? southeast :
+            nodir;
+    }
+
+};
+
 SavedGameInDosFormatLoader::SavedGameInDosFormatLoader(
     const SavedGameInDosFormat& savedGameInDosFormat,
     const ISavedGameConverter& savedGameConverter,
@@ -65,6 +84,7 @@ void SavedGameInDosFormatLoader::LoadActors(
             actor->SetHealth(dosObject.hitpoints);
             actor->SetTemp1(dosObject.temp1);
             actor->SetTemp2(dosObject.temp2);
+            actor->SetDirection(DosDirToDirection(dosObject.dir));
             actor->SetState(m_savedGameConverter.GetDecorateStateId(dosObject), 0);
             actor->SetAnimationFrame(m_savedGameConverter.GetAnimationFrame(dosObject));
             actor->SetTimeToNextAction(0);
