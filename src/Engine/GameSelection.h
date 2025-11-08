@@ -30,6 +30,7 @@ struct GameSelectionPresentation
 {
     std::vector<std::pair<const std::string, const GameDetectionState>> gameListCatacombsPack;
     std::vector<std::pair<const std::string, const GameDetectionState>> gameListShareware;
+    std::vector<std::pair<const std::string, const GameDetectionState>> gameListCatacomb3DBigBox;
     std::filesystem::path searchFolder;
     std::vector<std::filesystem::path> subFolders;
     uint32_t selectedSubFolder = 0u;
@@ -45,7 +46,7 @@ public:
     void Draw(const GameSelectionPresentation& presentation);
 
 private:
-    void DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const char* title, RenderableText& renderableText);
+    void DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const std::string& title, RenderableText& renderableText);
 
     IRenderer& m_renderer;
 };

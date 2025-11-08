@@ -239,6 +239,11 @@ int main(int argc, char* argv[])
 				gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
 			}
 
+			if (gameSelectionPresentation.gameListCatacomb3DBigBox.empty())
+			{
+				gameSelectionPresentation.gameListCatacomb3DBigBox.push_back(std::make_pair("7. Catacomb 3-D v1.00", NotSupported));
+			}
+
 			IRenderer::FrameSettings frameSettings;
 			frameSettings.textureFilter = (config.GetCVarEnum(CVarIdTextureFilter).GetItemIndex() == CVarItemIdTextureFilterNearest) ? IRenderer::Nearest : IRenderer::Linear;
 			frameSettings.vSyncEnabled = config.GetCVarBool(CVarIdVSync).IsEnabled();
