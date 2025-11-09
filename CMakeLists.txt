@@ -31,22 +31,27 @@ add_subdirectory(src/Armageddon)
 add_subdirectory(src/Catacomb3D)
 
 if(WIN32)
-    # On Windows, the SDL2 development package is fetched from Github.
-    include(FetchContent)
+    if (MSVC)
+        # On Visual Studio for Windows, the SDL2 development package is fetched from Github.
+        include(FetchContent)
 
-    if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
-		cmake_policy(SET CMP0135 NEW)
-	endif()
+        if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+            cmake_policy(SET CMP0135 NEW)
+        endif()
 
-    FetchContent_Declare(
-        sdldev
-        URL     https://github.com/libsdl-org/SDL/releases/download/release-2.30.6/SDL2-devel-2.30.6-VC.zip
-        URL_MD5 54e68b9c4627627107105fa108bf7eed
-    )
+        FetchContent_Declare(
+            sdldev
+            URL     https://github.com/libsdl-org/SDL/releases/download/release-2.30.6/SDL2-devel-2.30.6-VC.zip
+            URL_MD5 54e68b9c4627627107105fa108bf7eed
+        )
 
-    FetchContent_MakeAvailable(sdldev)
-    set(SDL2_PATH ${sdldev_SOURCE_DIR})
-    find_package(SDL2 REQUIRED CONFIG PATHS ${sdldev_SOURCE_DIR}/cmake NO_DEFAULT_PATH)
+        FetchContent_MakeAvailable(sdldev)
+        set(SDL2_PATH ${sdldev_SOURCE_DIR})
+        find_package(SDL2 REQUIRED CONFIG PATHS ${sdldev_SOURCE_DIR}/cmake NO_DEFAULT_PATH)
+    else()
+        # On MinGW, uses the system library of SDL2
+        find_package(SDL2 REQUIRED)
+    endif()
 
     target_link_libraries( CatacombGL_Engine
         "shlwapi"
