@@ -28,6 +28,7 @@
 
 #include <limits.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "../audio/be_audio_private.h"
 //#include "../input/be_input_tables.h"

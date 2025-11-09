@@ -39,6 +39,7 @@ static const unsigned int GL_CLAMP_TO_EDGE = 0x812F;
 #endif
 #include <SDL_video.h>
 #include <cmath>
+#include <cstring>
 #include <string>
 
 const float FloorZ = 2.2f;
