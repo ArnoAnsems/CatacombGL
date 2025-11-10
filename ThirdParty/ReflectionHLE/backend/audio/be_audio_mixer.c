@@ -34,6 +34,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 /* These tables are based on dB values described here by James-F:
    https://www.vogons.org/viewtopic.php?t=54269 */

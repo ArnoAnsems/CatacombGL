@@ -52,6 +52,7 @@ extern "C" {
 #include <SDL_video.h>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <filesystem>
 #include <iostream>
 
