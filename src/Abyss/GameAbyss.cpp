@@ -985,3 +985,13 @@ ISavedGameConverter& GameAbyss::GetSavedGameConverter()
 {
     return m_savedGameConverter;
 }
+
+bool GameAbyss::IsCatacomb3D() const
+{
+    return false;
+}
+
+bool GameAbyss::IsCatacombAdventureSeries() const
+{
+    return true;
+}

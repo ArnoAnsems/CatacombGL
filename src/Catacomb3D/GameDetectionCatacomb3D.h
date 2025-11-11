@@ -24,7 +24,14 @@
 #include <map>
 #include <string>
 
-const std::map<std::string, uint32_t> catacomb3DFiles =
+const std::map<std::string, uint32_t> catacomb3Dv100Files =
+{
+    std::make_pair("AUDIO.C3D",    5062),
+    std::make_pair("EGAGRAPH.C3D", 258007),
+    std::make_pair("GAMEMAPS.C3D", 14288)
+};
+
+const std::map<std::string, uint32_t> catacomb3Dv122Files =
 {
     std::make_pair("AUDIO.C3D",    5062),
     std::make_pair("EGAGRAPH.C3D", 256899),

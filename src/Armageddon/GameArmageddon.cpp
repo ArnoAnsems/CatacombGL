@@ -921,3 +921,13 @@ ISavedGameConverter& GameArmageddon::GetSavedGameConverter()
 {
     return m_savedGameConverter;
 }
+
+bool GameArmageddon::IsCatacomb3D() const
+{
+    return false;
+}
+
+bool GameArmageddon::IsCatacombAdventureSeries() const
+{
+    return true;
+}

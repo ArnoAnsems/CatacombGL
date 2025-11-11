@@ -95,6 +95,8 @@ public:
     const CatalogInfo& GetCatalogInfo() const override;
     const SavedGameInDosFormatConfig& GetSavedGameInDosFormatConfig() const override;
     ISavedGameConverter& GetSavedGameConverter() override;
+    bool IsCatacomb3D() const override;
+    bool IsCatacombAdventureSeries() const override;
 
 private:
     void DrawStatusBarWideScreenMargin(const int16_t offsetX, const int16_t marginWidth);

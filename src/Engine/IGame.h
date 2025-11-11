@@ -116,6 +116,8 @@ public:
     virtual const CatalogInfo& GetCatalogInfo() const = 0;
     virtual const SavedGameInDosFormatConfig& GetSavedGameInDosFormatConfig() const = 0;
     virtual ISavedGameConverter& GetSavedGameConverter() = 0;
+    virtual bool IsCatacomb3D() const = 0;
+    virtual bool IsCatacombAdventureSeries() const = 0;
 
 protected:
     GameMaps* m_gameMaps = nullptr;

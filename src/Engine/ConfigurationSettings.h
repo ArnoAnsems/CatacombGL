@@ -39,6 +39,7 @@ static constexpr uint8_t CVarIdPathAbyssv124 = 11;
 static constexpr uint8_t CVarIdPathArmageddonv102 = 12;
 static constexpr uint8_t CVarIdPathApocalypsev101 = 13;
 static constexpr uint8_t CVarIdPathCatacomb3Dv122 = 14;
+static constexpr uint8_t CVarIdPathCatacomb3Dv100 = 15;
 static constexpr uint8_t CVarIdScreenMode = 20;
 static constexpr uint8_t CVarIdAutoMapMode = 21;
 static constexpr uint8_t CVarIdShowFpsMode = 22;
@@ -130,6 +131,7 @@ private:
     ConsoleVariableString m_pathAbyssv124;
     ConsoleVariableString m_pathArmageddonv102;
     ConsoleVariableString m_pathApocalypsev101;
+    ConsoleVariableString m_pathCatacomb3Dv100;
     ConsoleVariableString m_pathCatacomb3Dv122;
 
     ConsoleVariableBool m_dummyCvarBool;

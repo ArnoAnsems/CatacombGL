@@ -786,3 +786,13 @@ ISavedGameConverter& GameApocalypse::GetSavedGameConverter()
 {
     return m_savedGameConverter;
 }
+
+bool GameApocalypse::IsCatacomb3D() const
+{
+    return false;
+}
+
+bool GameApocalypse::IsCatacombAdventureSeries() const
+{
+    return true;
+}

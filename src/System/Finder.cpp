@@ -37,7 +37,8 @@ const std::map<GameId, const std::map<std::string, uint32_t>*> GameFiles
     {GameId::CatacombAbyssv124, &abyssFilesv124},
     {GameId::CatacombArmageddonv102, &armageddonFiles},
     {GameId::CatacombApocalypsev101, &apocalypseFiles},
-    {GameId::Catacomb3Dv122, &catacomb3DFiles}
+    {GameId::Catacomb3Dv100, &catacomb3Dv100Files},
+    {GameId::Catacomb3Dv122, &catacomb3Dv122Files}
 };
 
 const std::map<GameId, const std::string> GOGFolders
@@ -54,6 +55,7 @@ const std::map<GameId, uint8_t> ConfigIds
     {GameId::CatacombAbyssv124, CVarIdPathAbyssv124},
     {GameId::CatacombArmageddonv102, CVarIdPathArmageddonv102},
     {GameId::CatacombApocalypsev101, CVarIdPathApocalypsev101},
+    {GameId::Catacomb3Dv100, CVarIdPathCatacomb3Dv100},
     {GameId::Catacomb3Dv122, CVarIdPathCatacomb3Dv122}
 };
 
@@ -63,6 +65,7 @@ const std::map<GameId, std::string> GameNames
     {GameId::CatacombAbyssv124, "Catacomb Abyss v1.24"},
     {GameId::CatacombArmageddonv102, "Catacomb Armageddon v1.02"},
     {GameId::CatacombApocalypsev101, "Catacomb Apocalypse v1.01"},
+    {GameId::Catacomb3Dv100, "Catacomb 3-D v1.00"},
     {GameId::Catacomb3Dv122, "Catacomb 3-D v1.22"}
 };
 

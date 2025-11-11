@@ -48,6 +48,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_pathAbyssv124("", "pathabyssv124", ""),
     m_pathArmageddonv102("", "patharmageddonv102", ""),
     m_pathApocalypsev101("", "pathapocalypsev101", ""),
+    m_pathCatacomb3Dv100("", "pathcatacomb3dv100", ""),
     m_pathCatacomb3Dv122("", "pathcatacomb3dv122", ""),
     m_cvarsString(
         {
@@ -55,7 +56,9 @@ ConfigurationSettings::ConfigurationSettings() :
             std::make_pair(CVarIdPathAbyssv124, &m_pathAbyssv124),
             std::make_pair(CVarIdPathArmageddonv102, &m_pathArmageddonv102),
             std::make_pair(CVarIdPathApocalypsev101, &m_pathApocalypsev101),
+            std::make_pair(CVarIdPathCatacomb3Dv100, &m_pathCatacomb3Dv100),
             std::make_pair(CVarIdPathCatacomb3Dv122, &m_pathCatacomb3Dv122)
+
         }),
     m_dummyCvarEnum("Dummy", "Dummy", { {"","",""} }, 0),
     m_screenMode("Screen Mode", "screenmode",
@@ -179,6 +182,7 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdPathAbyssv124);
         DeserializeCVar(keyValuePairs, CVarIdPathArmageddonv102);
         DeserializeCVar(keyValuePairs, CVarIdPathApocalypsev101);
+        DeserializeCVar(keyValuePairs, CVarIdPathCatacomb3Dv100);
         DeserializeCVar(keyValuePairs, CVarIdPathCatacomb3Dv122);
 
         DeserializeCVar(keyValuePairs, CVarIdScreenMode);
@@ -244,6 +248,7 @@ void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
         SerializeCVar(file, CVarIdPathAbyssv124);
         SerializeCVar(file, CVarIdPathArmageddonv102);
         SerializeCVar(file, CVarIdPathApocalypsev101);
+        SerializeCVar(file, CVarIdPathCatacomb3Dv100);
         SerializeCVar(file, CVarIdPathCatacomb3Dv122);
         file << "# Video settings\n";
         SerializeCVar(file, CVarIdScreenMode);

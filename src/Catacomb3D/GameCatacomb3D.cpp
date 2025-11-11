@@ -710,3 +710,13 @@ ISavedGameConverter& GameCatacomb3D::GetSavedGameConverter()
 {
     return m_savedGameConverter;
 }
+
+bool GameCatacomb3D::IsCatacomb3D() const
+{
+    return true;
+}
+
+bool GameCatacomb3D::IsCatacombAdventureSeries() const
+{
+    return false;
+}

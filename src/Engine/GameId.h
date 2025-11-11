@@ -25,6 +25,7 @@ enum class GameId
     CatacombAbyssv124,
     CatacombArmageddonv102,
     CatacombApocalypsev101,
+    Catacomb3Dv100,
     Catacomb3Dv122,
     NotDetected
 };
@@ -37,6 +38,7 @@ inline uint8_t getPersistentGameId(const GameId gameId)
     constexpr uint8_t persistentGameIdCatacombArmageddonv102 = 3u;
     constexpr uint8_t persistentGameIdCatacombApocalypsev101 = 4u;
     constexpr uint8_t persistentGameIdCatacomb3Dv122 = 5u;
+    constexpr uint8_t persistentGameIdCatacomb3Dv100 = 6u;
 
     static const std::map<GameId, uint8_t> gameIdToIntMap =
     {
@@ -44,6 +46,7 @@ inline uint8_t getPersistentGameId(const GameId gameId)
         {GameId::CatacombAbyssv124, persistentGameIdCatacombAbyssv124},
         {GameId::CatacombArmageddonv102, persistentGameIdCatacombArmageddonv102},
         {GameId::CatacombApocalypsev101, persistentGameIdCatacombApocalypsev101},
+        {GameId::Catacomb3Dv100, persistentGameIdCatacomb3Dv100},
         {GameId::Catacomb3Dv122, persistentGameIdCatacomb3Dv122}
     };
 
@@ -59,6 +62,7 @@ inline const std::list<GameId>& getAllGameIds()
         GameId::CatacombAbyssv124,
         GameId::CatacombArmageddonv102,
         GameId::CatacombApocalypsev101,
+        GameId::Catacomb3Dv100,
         GameId::Catacomb3Dv122
     };
     return allGameIds;
