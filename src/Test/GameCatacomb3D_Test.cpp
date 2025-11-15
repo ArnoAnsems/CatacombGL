@@ -30,7 +30,7 @@ GameCatacomb3D_Test::~GameCatacomb3D_Test()
 TEST(GameCatacomb3D_Test, CheckGetDecorateActors)
 {
     RendererStub renderer;
-    GameCatacomb3D gameCatacomb3D(".\\", ".\\", renderer);
+    GameCatacomb3D gameCatacomb3D(GameId::Catacomb3Dv122, ".\\", ".\\", renderer);
     auto decorateActors = gameCatacomb3D.GetDecorateActors();
     ASSERT_GT(decorateActors.size(), 0u);
 

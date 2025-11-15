@@ -32,7 +32,7 @@
 class GameCatacomb3D : public IGame
 {
 public:
-    GameCatacomb3D(const std::filesystem::path gamePath, const std::filesystem::path configPath, IRenderer& renderer);
+    GameCatacomb3D(const GameId gameId, const std::filesystem::path gamePath, const std::filesystem::path configPath, IRenderer& renderer);
     ~GameCatacomb3D();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;

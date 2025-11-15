@@ -48,7 +48,151 @@ const std::vector<int32_t> gameMapsOffsetsCatacomb3D =
     14288
 };
 
-const std::vector<LevelInfo> gameMapsInfoCatacomb3D =
+const std::vector<LevelInfo> gameMapsInfoCatacomb3Dv100 =
+{
+    {
+        "The Approach",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Grelminar's Keep",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Ground Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Second Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Third Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Tower One",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Tower Two",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Secret Halls",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Access Floor",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Dungeon",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Lower Dungeon",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Catacomb",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Lower Reaches",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Warrens",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Hidden Caverns",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Fens of Insanity",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Chaos Corridors",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "The Labyrinth",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Halls of Blood",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    },
+    {
+        "Grelminar's Lair",
+        EgaBlack,
+        EgaDarkGray,
+        false,
+        false
+    }
+};
+
+const std::vector<LevelInfo> gameMapsInfoCatacomb3Dv122 =
 {
     {
         "The Approach",
@@ -231,4 +375,5 @@ const std::vector<WallInfo> wallsInfoCatacomb3D =
     {{BDOOR2PIC, BDOOR1PIC}, {BDOOR2PIC, BDOOR1PIC}, WTDoorBlueKeyRequired},
 };
 
-const gameMapsStaticData gameMapsCatacomb3D = { "GAMEMAPS.C3D", gameMapsOffsetsCatacomb3D, gameMapsInfoCatacomb3D, wallsInfoCatacomb3D, 15, 15 };
+const gameMapsStaticData gameMapsCatacomb3Dv100 = { "GAMEMAPS.C3D", gameMapsOffsetsCatacomb3D, gameMapsInfoCatacomb3Dv100, wallsInfoCatacomb3D, 15, 15 };
+const gameMapsStaticData gameMapsCatacomb3Dv122 = { "GAMEMAPS.C3D", gameMapsOffsetsCatacomb3D, gameMapsInfoCatacomb3Dv122, wallsInfoCatacomb3D, 15, 15 };

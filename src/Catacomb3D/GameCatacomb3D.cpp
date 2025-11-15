@@ -25,10 +25,11 @@
 
 namespace fs = std::filesystem;
 
-static const std::string Catacomb3DName = "Catacomb 3-D v1.22";
+static const std::string Catacomb3DNameV100 = "Catacomb 3-D v1.00";
+static const std::string Catacomb3DNameV122 = "Catacomb 3-D v1.22";
 
-GameCatacomb3D::GameCatacomb3D(const fs::path gamePath, const fs::path configPath, IRenderer& renderer) :
-    m_gameId(GameId::Catacomb3Dv122),
+GameCatacomb3D::GameCatacomb3D(const GameId gameId, const fs::path gamePath, const fs::path configPath, IRenderer& renderer) :
+    m_gameId(gameId),
     m_gamePath(gamePath),
     m_configPath(configPath),
     m_renderer(renderer),
@@ -293,7 +294,8 @@ GameMaps* GameCatacomb3D::GetGameMaps()
 {
     if (m_gameMaps == nullptr)
     {
-        m_gameMaps = new GameMaps(gameMapsCatacomb3D, m_gamePath);
+        const gameMapsStaticData& staticData = (m_gameId == GameId::Catacomb3Dv100) ? gameMapsCatacomb3Dv100 : gameMapsCatacomb3Dv122;
+        m_gameMaps = new GameMaps(staticData, m_gamePath);
     }
 
     return m_gameMaps;
@@ -303,7 +305,8 @@ EgaGraph* GameCatacomb3D::GetEgaGraph()
 {
     if (m_egaGraph == nullptr)
     {
-        m_egaGraph = new EgaGraph(egaGraphCatacomb3D, m_gamePath, m_renderer);
+        const egaGraphStaticData& staticData = (m_gameId == GameId::Catacomb3Dv100) ? egaGraphCatacomb3Dv100 : egaGraphCatacomb3Dv122;
+        m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer);
         m_highScores->LoadGraphics(*m_egaGraph, HIGHSCORESPIC);
     }
 
@@ -366,7 +369,7 @@ const std::map<uint16_t, const DecorateActor>& GameCatacomb3D::GetDecorateActors
 
 const std::string& GameCatacomb3D::GetName() const
 {
-    return Catacomb3DName;
+    return (m_gameId == GameId::Catacomb3Dv100) ? Catacomb3DNameV100 : Catacomb3DNameV122;
 }
 
 const GameId GameCatacomb3D::GetId() const

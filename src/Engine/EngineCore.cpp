@@ -391,7 +391,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
         }
     }
 
-    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.IsCatacombAdventureSeries())) || (m_state == Victory && m_game.GetId() != GameId::Catacomb3Dv122))
+    if (((m_state == InGame || m_state == EnteringLevel || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit || m_state == ExitGame) && (!m_menu->IsActive() || m_game.IsCatacombAdventureSeries())) || (m_state == Victory && m_game.IsCatacombAdventureSeries()))
     {
         const int16_t playerHealth = (m_level != 0) ? m_level->GetPlayerActor()->GetHealth() : 100;
         const float playerAngle = (m_level != 0) ? m_level->GetPlayerActor()->GetAngle() : 0.0f;

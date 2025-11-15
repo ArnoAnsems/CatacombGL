@@ -242,7 +242,8 @@ int main(int argc, char* argv[])
 
 			if (gameSelectionPresentation.gameListCatacomb3DBigBox.empty())
 			{
-				gameSelectionPresentation.gameListCatacomb3DBigBox.push_back(std::make_pair("7. Catacomb 3-D v1.00", NotSupported));
+				const GameDetectionState catacomb3Dv100DetectionState = (finder.GetGameScore(GameId::Catacomb3Dv100) == 0) ? Detected : NotDetected;
+				gameSelectionPresentation.gameListCatacomb3DBigBox.push_back(std::make_pair("7. Catacomb 3-D v1.00", catacomb3Dv100DetectionState));
 			}
 
 			IRenderer::FrameSettings frameSettings;
@@ -279,6 +280,11 @@ int main(int argc, char* argv[])
 			if (input.IsKeyPressed(SDLK_6))
 			{
 				selectedGame = GameId::CatacombAbyssv113;
+			}
+
+			if (input.IsKeyPressed(SDLK_7))
+			{
+				selectedGame = GameId::Catacomb3Dv100;
 			}
 
 			if (input.IsKeyJustPressed(SDLK_UP))
@@ -350,6 +356,7 @@ int main(int argc, char* argv[])
 					finder.FindInPath(gameSelectionPresentation.searchFolder);
 					gameSelectionPresentation.gameListShareware.clear();
 					gameSelectionPresentation.gameListCatacombsPack.clear();
+					gameSelectionPresentation.gameListCatacomb3DBigBox.clear();
 				}
 			}
 
@@ -372,8 +379,11 @@ int main(int argc, char* argv[])
 		{
 			switch (report.gameId)
 			{
+			case GameId::Catacomb3Dv100:
+				game = new GameCatacomb3D(GameId::Catacomb3Dv100, report.folder, system.GetConfigurationFilePath(), *renderer);
+				break;
 			case GameId::Catacomb3Dv122:
-				game = new GameCatacomb3D(report.folder, system.GetConfigurationFilePath(), *renderer);
+				game = new GameCatacomb3D(GameId::Catacomb3Dv122, report.folder, system.GetConfigurationFilePath(), *renderer);
 				break;
 			case GameId::CatacombAbyssv124:
 				game = new GameAbyss(GameId::CatacombAbyssv124, report.folder, *renderer);
