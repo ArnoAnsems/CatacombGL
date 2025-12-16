@@ -35,109 +35,110 @@ constexpr uint16_t obclassGrelminar = 14;
 constexpr uint16_t obclassGate = 15;
 
 // State pointers as conveniently documented in ReflectionHLE (statetype_ptr_conversion.c).
-constexpr uint16_t s_pshot1 = 0x1776;
-constexpr uint16_t s_pshot2 = 0x1780;
-constexpr uint16_t s_shotexplode = 0x178A;
-constexpr uint16_t s_bigpshot1 = 0x1794;
-constexpr uint16_t s_bigpshot2 = 0x179E;
-constexpr uint16_t s_player = 0x17A8;
-constexpr uint16_t s_boltbonus = 0x17C4;
-constexpr uint16_t s_boltbonus2 = 0x17CE;
-constexpr uint16_t s_nukebonus = 0x17D8;
-constexpr uint16_t s_nukebonus2 = 0x17E2;
-constexpr uint16_t s_potionbonus = 0x17EC;
-constexpr uint16_t s_rkeybonus = 0x17F6;
-constexpr uint16_t s_ykeybonus = 0x1800;
-constexpr uint16_t s_gkeybonus = 0x180A;
-constexpr uint16_t s_bkeybonus = 0x1814;
-constexpr uint16_t s_scrollbonus = 0x181E;
-constexpr uint16_t s_chestbonus = 0x1828;
-constexpr uint16_t s_goalbonus = 0x1832;
-constexpr uint16_t s_walldie1 = 0x183C;
-constexpr uint16_t s_walldie2 = 0x1846;
-constexpr uint16_t s_walldie3 = 0x1850;
-constexpr uint16_t s_walldie4 = 0x185A;
-constexpr uint16_t s_walldie5 = 0x1864;
-constexpr uint16_t s_walldie6 = 0x186E;
-constexpr uint16_t s_gate1 = 0x1878;
-constexpr uint16_t s_gate2 = 0x1882;
-constexpr uint16_t s_gate3 = 0x188C;
-constexpr uint16_t s_gate4 = 0x1896;
-constexpr uint16_t s_fgate1 = 0x18A0;
-constexpr uint16_t s_fgate2 = 0x18AA;
-constexpr uint16_t s_fgate3 = 0x18B4;
-constexpr uint16_t s_fgate4 = 0x18BE;
-constexpr uint16_t s_trollpause = 0x18C8;
-constexpr uint16_t s_troll1 = 0x18D2;
-constexpr uint16_t s_troll2 = 0x18DC;
-constexpr uint16_t s_troll3 = 0x18E6;
-constexpr uint16_t s_troll4 = 0x18F0;
-constexpr uint16_t s_trollattack1 = 0x18FA;
-constexpr uint16_t s_trollattack2 = 0x1904;
-constexpr uint16_t s_trollattack3 = 0x190E;
-constexpr uint16_t s_trollouch = 0x1918;
-constexpr uint16_t s_trolldie1 = 0x1922;
-constexpr uint16_t s_trolldie2 = 0x192C;
-constexpr uint16_t s_trolldie3 = 0x1936;
-constexpr uint16_t s_orcpause = 0x1940;
-constexpr uint16_t s_orc1 = 0x194A;
-constexpr uint16_t s_orc2 = 0x1954;
-constexpr uint16_t s_orc3 = 0x195E;
-constexpr uint16_t s_orc4 = 0x1968;
-constexpr uint16_t s_orcattack1 = 0x1972;
-constexpr uint16_t s_orcattack2 = 0x197C;
-constexpr uint16_t s_orcattack3 = 0x1986;
-constexpr uint16_t s_orcouch = 0x1990;
-constexpr uint16_t s_orcdie1 = 0x199A;
-constexpr uint16_t s_orcdie2 = 0x19A4;
-constexpr uint16_t s_orcdie3 = 0x19AE;
-constexpr uint16_t s_demonpause = 0x19B8;
-constexpr uint16_t s_demon1 = 0x19C2;
-constexpr uint16_t s_demon2 = 0x19CC;
-constexpr uint16_t s_demon3 = 0x19D6;
-constexpr uint16_t s_demon4 = 0x19E0;
-constexpr uint16_t s_demonattack1 = 0x19EA;
-constexpr uint16_t s_demonattack2 = 0x19F4;
-constexpr uint16_t s_demonattack3 = 0x19FE;
-constexpr uint16_t s_demonouch = 0x1A08;
-constexpr uint16_t s_demondie1 = 0x1A12;
-constexpr uint16_t s_demondie2 = 0x1A1C;
-constexpr uint16_t s_demondie3 = 0x1A26;
-constexpr uint16_t s_mshot1 = 0x1A30;
-constexpr uint16_t s_mshot2 = 0x1A3A;
-constexpr uint16_t s_magepause = 0x1A44;
-constexpr uint16_t s_mage1 = 0x1A4E;
-constexpr uint16_t s_mage2 = 0x1A58;
-constexpr uint16_t s_mageattack1 = 0x1A62;
-constexpr uint16_t s_mageattack2 = 0x1A6C;
-constexpr uint16_t s_mageattack3 = 0x1A76;
-constexpr uint16_t s_mageouch = 0x1A80;
-constexpr uint16_t s_magedie1 = 0x1A8A;
-constexpr uint16_t s_magedie2 = 0x1A94;
-constexpr uint16_t s_grelpause = 0x1A9E;
-constexpr uint16_t s_grel1 = 0x1AA8;
-constexpr uint16_t s_grel2 = 0x1AB2;
-constexpr uint16_t s_grelattack1 = 0x1ABC;
-constexpr uint16_t s_grelattack2 = 0x1AC6;
-constexpr uint16_t s_grelattack3 = 0x1AD0;
-constexpr uint16_t s_grelouch = 0x1ADA;
-constexpr uint16_t s_greldie1 = 0x1AE4;
-constexpr uint16_t s_greldie2 = 0x1AEE;
-constexpr uint16_t s_greldie3 = 0x1AF8;
-constexpr uint16_t s_greldie4 = 0x1B02;
-constexpr uint16_t s_greldie5 = 0x1B0C;
-constexpr uint16_t s_greldie6 = 0x1B16;
-constexpr uint16_t s_bat1 = 0x1B20;
-constexpr uint16_t s_bat2 = 0x1B2A;
-constexpr uint16_t s_bat3 = 0x1B34;
-constexpr uint16_t s_bat4 = 0x1B3E;
-constexpr uint16_t s_batpast = 0x1B48;
-constexpr uint16_t s_batdie1 = 0x1B52;
-constexpr uint16_t s_batdie2 = 0x1B5C;
-constexpr uint16_t s_bounce1 = 0x1B66;
-constexpr uint16_t s_bounce2 = 0x1B70;
+constexpr uint16_t s_pshot1[] = { 0x0, 0x1776 };
+constexpr uint16_t s_pshot2[] = { 0x0, 0x1780 };
+constexpr uint16_t s_shotexplode[] = { 0x0, 0x178A };
+constexpr uint16_t s_bigpshot1[] = { 0x0, 0x1794 };
+constexpr uint16_t s_bigpshot2[] = { 0x0, 0x179E };
+constexpr uint16_t s_player[] = { 0x0, 0x17A8 };
+constexpr uint16_t s_boltbonus[] = { 0x0, 0x17C4 };
+constexpr uint16_t s_boltbonus2[] = { 0x0, 0x17CE };
+constexpr uint16_t s_nukebonus[] = { 0x0, 0x17D8 };
+constexpr uint16_t s_nukebonus2[] = { 0x0, 0x17E2 };
+constexpr uint16_t s_potionbonus[] = { 0x0, 0x17EC };
+constexpr uint16_t s_rkeybonus[] = { 0x0, 0x17F6 };
+constexpr uint16_t s_ykeybonus[] = { 0x0, 0x1800 };
+constexpr uint16_t s_gkeybonus[] = { 0x0, 0x180A };
+constexpr uint16_t s_bkeybonus[] = { 0x0, 0x1814 };
+constexpr uint16_t s_scrollbonus[] = { 0x0, 0x181E };
+constexpr uint16_t s_chestbonus[] = { 0x0, 0x1828 };
+constexpr uint16_t s_goalbonus[] = { 0x0, 0x1832 };
+constexpr uint16_t s_walldie1[] = { 0x0, 0x183C };
+constexpr uint16_t s_walldie2[] = { 0x0, 0x1846 };
+constexpr uint16_t s_walldie3[] = { 0x0, 0x1850 };
+constexpr uint16_t s_walldie4[] = { 0x0, 0x185A };
+constexpr uint16_t s_walldie5[] = { 0x0, 0x1864 };
+constexpr uint16_t s_walldie6[] = { 0x0, 0x186E };
+constexpr uint16_t s_gate1[] = { 0x0, 0x1878 };
+constexpr uint16_t s_gate2[] = { 0x0, 0x1882 };
+constexpr uint16_t s_gate3[] = { 0x0, 0x188C };
+constexpr uint16_t s_gate4[] = { 0x0, 0x1896 };
+constexpr uint16_t s_fgate1[] = { 0x0, 0x18A0 };
+constexpr uint16_t s_fgate2[] = { 0x0, 0x18AA };
+constexpr uint16_t s_fgate3[] = { 0x0, 0x18B4 };
+constexpr uint16_t s_fgate4[] = { 0x0, 0x18BE };
+constexpr uint16_t s_trollpause[] = { 0x0, 0x18C8 };
+constexpr uint16_t s_troll1[] = { 0x0, 0x18D2 };
+constexpr uint16_t s_troll2[] = { 0x0, 0x18DC };
+constexpr uint16_t s_troll3[] = { 0x0, 0x18E6 };
+constexpr uint16_t s_troll4[] = { 0x0, 0x18F0 };
+constexpr uint16_t s_trollattack1[] = { 0x0, 0x18FA };
+constexpr uint16_t s_trollattack2[] = { 0x0, 0x1904 };
+constexpr uint16_t s_trollattack3[] = { 0x0, 0x190E };
+constexpr uint16_t s_trollouch[] = { 0x0, 0x1918 };
+constexpr uint16_t s_trolldie1[] = { 0x0, 0x1922 };
+constexpr uint16_t s_trolldie2[] = { 0x0, 0x192C };
+constexpr uint16_t s_trolldie3[] = { 0x0,  0x1936 };
+constexpr uint16_t s_orcpause[] = { 0x0, 0x1940 };
+constexpr uint16_t s_orc1[] = { 0x0, 0x194A };
+constexpr uint16_t s_orc2[] = { 0x0, 0x1954 };
+constexpr uint16_t s_orc3[] = { 0x0, 0x195E };
+constexpr uint16_t s_orc4[] = { 0x0, 0x1968 };
+constexpr uint16_t s_orcattack1[] = { 0x0, 0x1972 };
+constexpr uint16_t s_orcattack2[] = { 0x0, 0x197C };
+constexpr uint16_t s_orcattack3[] = { 0x0, 0x1986 };
+constexpr uint16_t s_orcouch[] = { 0x0, 0x1990 };
+constexpr uint16_t s_orcdie1[] = { 0x0, 0x199A };
+constexpr uint16_t s_orcdie2[] = { 0x0, 0x19A4 };
+constexpr uint16_t s_orcdie3[] = { 0x0, 0x19AE };
+constexpr uint16_t s_demonpause[] = { 0x0, 0x19B8 };
+constexpr uint16_t s_demon1[] = { 0x0, 0x19C2 };
+constexpr uint16_t s_demon2[] = { 0x0, 0x19CC };
+constexpr uint16_t s_demon3[] = { 0x0, 0x19D6 };
+constexpr uint16_t s_demon4[] = { 0x0, 0x19E0 };
+constexpr uint16_t s_demonattack1[] = { 0x0, 0x19EA };
+constexpr uint16_t s_demonattack2[] = { 0x0, 0x19F4 };
+constexpr uint16_t s_demonattack3[] = { 0x0, 0x19FE };
+constexpr uint16_t s_demonouch[] = { 0x0, 0x1A08 };
+constexpr uint16_t s_demondie1[] = { 0x0, 0x1A12 };
+constexpr uint16_t s_demondie2[] = { 0x0, 0x1A1C };
+constexpr uint16_t s_demondie3[] = { 0x0, 0x1A26 };
+constexpr uint16_t s_mshot1[] = { 0x0, 0x1A30 };
+constexpr uint16_t s_mshot2[] = { 0x0, 0x1A3A };
+constexpr uint16_t s_magepause[] = { 0x0, 0x1A44 };
+constexpr uint16_t s_mage1[] = { 0x0, 0x1A4E };
+constexpr uint16_t s_mage2[] = { 0x0, 0x1A58 };
+constexpr uint16_t s_mageattack1[] = { 0x0, 0x1A62 };
+constexpr uint16_t s_mageattack2[] = { 0x0, 0x1A6C };
+constexpr uint16_t s_mageattack3[] = { 0x0, 0x1A76 };
+constexpr uint16_t s_mageouch[] = { 0x0, 0x1A80 };
+constexpr uint16_t s_magedie1[] = { 0x0, 0x1A8A };
+constexpr uint16_t s_magedie2[] = { 0x0, 0x1A94 };
+constexpr uint16_t s_grelpause[] = { 0x0, 0x1A9E };
+constexpr uint16_t s_grel1[] = { 0x0, 0x1AA8 };
+constexpr uint16_t s_grel2[] = { 0x0, 0x1AB2 };
+constexpr uint16_t s_grelattack1[] = { 0x0, 0x1ABC };
+constexpr uint16_t s_grelattack2[] = { 0x0, 0x1AC6 };
+constexpr uint16_t s_grelattack3[] = { 0x0, 0x1AD0 };
+constexpr uint16_t s_grelouch[] = { 0x0, 0x1ADA };
+constexpr uint16_t s_greldie1[] = { 0x0, 0x1AE4 };
+constexpr uint16_t s_greldie2[] = { 0x0, 0x1AEE };
+constexpr uint16_t s_greldie3[] = { 0x0, 0x1AF8 };
+constexpr uint16_t s_greldie4[] = { 0x0, 0x1B02 };
+constexpr uint16_t s_greldie5[] = { 0x0, 0x1B0C };
+constexpr uint16_t s_greldie6[] = { 0x0, 0x1B16 };
+constexpr uint16_t s_bat1[] = { 0x0, 0x1B20 };
+constexpr uint16_t s_bat2[] = { 0x0, 0x1B2A };
+constexpr uint16_t s_bat3[] = { 0x0, 0x1B34 };
+constexpr uint16_t s_bat4[] = { 0x0, 0x1B3E };
+constexpr uint16_t s_batpast[] = { 0x0, 0x1B48 };
+constexpr uint16_t s_batdie1[] = { 0x0, 0x1B52 };
+constexpr uint16_t s_batdie2[] = { 0x0, 0x1B5C };
+constexpr uint16_t s_bounce1[] = { 0x0, 0x1B66 };
+constexpr uint16_t s_bounce2[] = { 0x0, 0x1B70 };
 
-SavedGameConverterCatacomb3D::SavedGameConverterCatacomb3D()
+SavedGameConverterCatacomb3D::SavedGameConverterCatacomb3D(const GameId gameId) :
+    m_gameId(gameId)
 {
 }
 
@@ -147,50 +148,27 @@ SavedGameConverterCatacomb3D::~SavedGameConverterCatacomb3D()
 
 const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfBonus(const uint16_t state16, const int16_t temp1) const
 {
-    uint16_t actorId = 0;
-    switch (state16)
-    {
-    case s_boltbonus:
-    case s_boltbonus2:
-        actorId = actorIdBonusBolt;
-        break;
-    case s_nukebonus:
-    case s_nukebonus2:
-        actorId = actorIdBonusNuke;
-        break;
-    case s_potionbonus:
-        actorId = actorIdBonusPotion;
-        break;
-    case s_rkeybonus:
-        actorId = actorIdBonusKeyRed;
-        break;
-    case s_ykeybonus:
-        actorId = actorIdBonusKeyYellow;
-        break;
-    case s_gkeybonus:
-        actorId = actorIdBonusKeyGreen;
-        break;
-    case s_bkeybonus:
-        actorId = actorIdBonusKeyBlue;
-        break;
-    case s_scrollbonus:
-        actorId =
-            (temp1 == 7) ? actorIdBonusScroll1 :
-            (temp1 == 8) ? actorIdBonusScroll2 :
-            (temp1 == 9) ? actorIdBonusScroll3 :
-            (temp1 == 10) ? actorIdBonusScroll4 :
-            (temp1 == 11) ? actorIdBonusScroll5 :
-            (temp1 == 12) ? actorIdBonusScroll6 :
-            (temp1 == 13) ? actorIdBonusScroll7 :
-            actorIdBonusScroll8;
-        break;
-    case s_chestbonus:
-        actorId = actorIdBonusChest;
-        break;
-    case s_goalbonus:
-        actorId = actorIdGrelminar;
-        break;
-    }
+    const uint8_t i = GetGameIndex();
+    const uint16_t actorId =
+        (state16 == s_boltbonus[i] || state16 == s_boltbonus2[i]) ? actorIdBonusBolt :
+        (state16 == s_nukebonus[i] || state16 == s_nukebonus2[i]) ? actorIdBonusNuke :
+        (state16 == s_potionbonus[i]) ? actorIdBonusPotion :
+        (state16 == s_rkeybonus[i]) ? actorIdBonusKeyRed :
+        (state16 == s_ykeybonus[i]) ? actorIdBonusKeyYellow :
+        (state16 == s_gkeybonus[i]) ? actorIdBonusKeyGreen :
+        (state16 == s_bkeybonus[i]) ? actorIdBonusKeyBlue :
+        (state16 == s_scrollbonus[i] && temp1 == 7) ? actorIdBonusScroll1 :
+        (state16 == s_scrollbonus[i] && temp1 == 8) ? actorIdBonusScroll2 :
+        (state16 == s_scrollbonus[i] && temp1 == 9) ? actorIdBonusScroll3 :
+        (state16 == s_scrollbonus[i] && temp1 == 10) ? actorIdBonusScroll4 :
+        (state16 == s_scrollbonus[i] && temp1 == 11) ? actorIdBonusScroll5 :
+        (state16 == s_scrollbonus[i] && temp1 == 12) ? actorIdBonusScroll6 :
+        (state16 == s_scrollbonus[i] && temp1 == 13) ? actorIdBonusScroll7 :
+        (state16 == s_scrollbonus[i] && temp1 == 14) ? actorIdBonusScroll8 :
+        (state16 == s_chestbonus[i]) ? actorIdBonusChest :
+        (state16 == s_goalbonus[i]) ? actorIdGrelminar :
+        0;
+
     return actorId;
 }
 
@@ -203,25 +181,13 @@ const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfGate(const uint16_t sta
     }
     else
     {
-        switch (state16)
-        {
-        case s_gate1:
-        case s_fgate1:
-            actorId = actorIdWarpPortal1;
-            break;
-        case s_gate2:
-        case s_fgate2:
-            actorId = actorIdWarpPortal2;
-            break;
-        case s_gate3:
-        case s_fgate3:
-            actorId = actorIdWarpPortal3;
-            break;
-        case s_gate4:
-        case s_fgate4:
-            actorId = actorIdWarpPortal4;
-            break;
-        }
+        const uint8_t i = GetGameIndex();
+        actorId =
+            (state16 == s_gate1[i] || state16 == s_fgate1[i]) ? actorIdWarpPortal1 :
+            (state16 == s_gate2[i] || state16 == s_fgate2[i]) ? actorIdWarpPortal2 :
+            (state16 == s_gate3[i] || state16 == s_fgate3[i]) ? actorIdWarpPortal3 :
+            (state16 == s_gate4[i] || state16 == s_fgate4[i]) ? actorIdWarpPortal4 :
+            0;
     }
     return actorId;
 }
@@ -287,293 +253,302 @@ const bool SavedGameConverterCatacomb3D::IsInertObject(const uint16_t obclass) c
 
 const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfInert(const uint16_t state16) const
 {
-    uint16_t actorId = 0;
-    switch (state16)
-    {
-    case s_walldie1:
-    case s_walldie2:
-    case s_walldie3:
-    case s_walldie4:
-    case s_walldie5:
-    case s_walldie6:
-        actorId = actorIdExplodingWall;
-        break;
-    case s_trolldie1:
-    case s_trolldie2:
-    case s_trolldie3:
-        actorId = actorIdMonsterTroll;
-        break;
-    case s_orcdie1:
-    case s_orcdie2:
-    case s_orcdie3:
-        actorId = actorIdMonsterOrc;
-        break;
-    case s_demondie1:
-    case s_demondie2:
-    case s_demondie3:
-        actorId = actorIdMonsterDemon;
-        break;
-    case s_magedie1:
-    case s_magedie2:
-        actorId = actorIdMonsterMage;
-        break;
-    case s_greldie1:
-    case s_greldie2:
-    case s_greldie3:
-    case s_greldie4:
-    case s_greldie5:
-    case s_greldie6:
-        actorId = actorIdMonsterNemesis;
-        break;
-    case s_batdie1:
-    case s_batdie2:
-        actorId = actorIdMonsterBat;
-        break;
-    }
+    const uint8_t i = GetGameIndex();
+    const uint16_t actorId =
+        (state16 == s_walldie1[i] || state16 == s_walldie2[i] || state16 == s_walldie3[i] || state16 == s_walldie4[i] || state16 == s_walldie5[i] || state16 == s_walldie6[i]) ? actorIdExplodingWall :
+        (state16 == s_trolldie1[i] || state16 == s_trolldie2[i] || state16 == s_trolldie3[i]) ? actorIdMonsterTroll :
+        (state16 == s_orcdie1[i] || state16 == s_orcdie2[i] || state16 == s_orcdie3[i]) ? actorIdMonsterOrc :
+        (state16 == s_demondie1[i] || state16 == s_demondie2[i] || state16 == s_demondie3[i]) ? actorIdMonsterDemon :
+        (state16 == s_magedie1[i] || state16 == s_magedie2[i]) ? actorIdMonsterMage :
+        (state16 == s_greldie1[i] || state16 == s_greldie2[i] || state16 == s_greldie3[i] || state16 == s_greldie4[i] || state16 == s_greldie5[i] || state16 == s_greldie6[i]) ? actorIdMonsterNemesis :
+        (state16 == s_batdie1[i] || state16 == s_batdie2[i]) ? actorIdMonsterBat :
+        0;
     return actorId;
 }
 
 const DecorateStateId SavedGameConverterCatacomb3D::GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
     DecorateStateId stateId = StateIdWalk;
-    switch (dosObject.state16)
+    const uint16_t state16 = dosObject.state16;
+    const uint8_t i = GetGameIndex();
+
+    if (
+        state16 == s_orc1[i] ||
+        state16 == s_orc2[i] ||
+        state16 == s_orc3[i] ||
+        state16 == s_orc4[i] ||
+        state16 == s_troll1[i] ||
+        state16 == s_troll2[i] ||
+        state16 == s_troll3[i] ||
+        state16 == s_troll4[i] ||
+        state16 == s_demon1[i] ||
+        state16 == s_demon2[i] ||
+        state16 == s_demon3[i] ||
+        state16 == s_demon4[i] ||
+        state16 == s_grel1[i] ||
+        state16 == s_grel2[i] ||
+        state16 == s_bat1[i] ||
+        state16 == s_bat2[i] ||
+        state16 == s_bat3[i] ||
+        state16 == s_bat4[i] ||
+        state16 == s_mage1[i] ||
+        state16 == s_mage2[i] ||
+        state16 == s_player[i]
+        )
     {
-    case s_orc1:
-    case s_orc2:
-    case s_orc3:
-    case s_orc4:
-    case s_troll1:
-    case s_troll2:
-    case s_troll3:
-    case s_troll4:
-    case s_demon1:
-    case s_demon2:
-    case s_demon3:
-    case s_demon4:
-    case s_grel1:
-    case s_grel2:
-    case s_bat1:
-    case s_bat2:
-    case s_bat3:
-    case s_bat4:
-    case s_mage1:
-    case s_mage2:
-    case s_bounce1:
-    case s_bounce2:
-    case s_player:
         stateId = StateIdWalk;
-        break;
-    case s_trollattack1:
-    case s_trollattack2:
-    case s_trollattack3:
-    case s_orcattack1:
-    case s_orcattack2:
-    case s_orcattack3:
-    case s_demonattack1:
-    case s_demonattack2:
-    case s_demonattack3:
-    case s_batpast:
-    case s_mageattack1:
-    case s_mageattack2:
-    case s_mageattack3:
-    case s_grelattack1:
-    case s_grelattack2:
-    case s_grelattack3:
-    case s_trollpause:
-    case s_orcpause:
-    case s_demonpause:
-    case s_magepause:
-    case s_grelpause:
-        stateId = StateIdAttack;
-        break;
-    case s_trollouch:
-    case s_orcouch:
-    case s_demonouch:
-    case s_mageouch:
-    case s_grelouch:
-        stateId = StateIdPain;
-        break;
-    case s_orcdie1:
-    case s_orcdie2:
-    case s_trolldie1:
-    case s_trolldie2:
-    case s_demondie1:
-    case s_demondie2:
-    case s_magedie1:
-    case s_greldie1:
-    case s_greldie2:
-    case s_greldie3:
-    case s_greldie4:
-    case s_greldie5:
-    case s_batdie1:
-    case s_batdie2:
-    case s_shotexplode:
-        stateId = StateIdDying;
-        break;
-    case s_walldie1:
-    case s_walldie2:
-    case s_walldie3:
-    case s_walldie4:
-    case s_walldie5:
-    case s_walldie6:
-    case s_orcdie3:
-    case s_trolldie3:
-    case s_demondie3:
-    case s_magedie2:
-    case s_greldie6:
-        stateId = StateIdDead;
-        break;
-    case s_pshot1:
-    case s_pshot2:
-    case s_bigpshot1:
-    case s_bigpshot2:
-    case s_mshot1:
-    case s_mshot2:
-        stateId = StateIdProjectileFly;
-        break;
-    case s_boltbonus:
-    case s_boltbonus2:
-    case s_nukebonus:
-    case s_nukebonus2:
-    case s_potionbonus:
-    case s_rkeybonus:
-    case s_ykeybonus:
-    case s_gkeybonus:
-    case s_bkeybonus:
-    case s_scrollbonus:
-    case s_chestbonus:
-    case s_goalbonus:
-    case s_gate1:
-    case s_gate2:
-    case s_gate3:
-    case s_gate4:
-    case s_fgate1:
-    case s_fgate2:
-    case s_fgate3:
-    case s_fgate4:
-        stateId = StateIdWaitForPickup;
-        break;
     }
+    else if (
+        state16 == s_trollattack1[i] ||
+        state16 == s_trollattack2[i] ||
+        state16 == s_trollattack3[i] ||
+        state16 == s_orcattack1[i] ||
+        state16 == s_orcattack2[i] ||
+        state16 == s_orcattack3[i] ||
+        state16 == s_demonattack1[i] ||
+        state16 == s_demonattack2[i] ||
+        state16 == s_demonattack3[i] ||
+        state16 == s_batpast[i] ||
+        state16 == s_mageattack1[i] ||
+        state16 == s_mageattack2[i] ||
+        state16 == s_mageattack3[i] ||
+        state16 == s_grelattack1[i] ||
+        state16 == s_grelattack2[i] ||
+        state16 == s_grelattack3[i] ||
+        state16 == s_trollpause[i] ||
+        state16 == s_trollpause[i] ||
+        state16 == s_demonpause[i] ||
+        state16 == s_magepause[i] ||
+        state16 == s_grelpause[i]
+        )
+    {
+        stateId = StateIdAttack;
+    }
+    else if (
+        state16 == s_trollouch[i] ||
+        state16 == s_orcouch[i] ||
+        state16 == s_demonouch[i] ||
+        state16 == s_mageouch[i] ||
+        state16 == s_grelouch[i]
+        )
+    {
+        stateId = StateIdPain;
+    }
+    else if (
+        state16 == s_orcdie1[i] ||
+        state16 == s_orcdie2[i] ||
+        state16 == s_trolldie1[i] ||
+        state16 == s_trolldie2[i] ||
+        state16 == s_demondie1[i] ||
+        state16 == s_demondie2[i] ||
+        state16 == s_magedie1[i] ||
+        state16 == s_greldie1[i] ||
+        state16 == s_greldie2[i] ||
+        state16 == s_greldie3[i] ||
+        state16 == s_greldie4[i] ||
+        state16 == s_greldie5[i] ||
+        state16 == s_batdie1[i] ||
+        state16 == s_batdie2[i] ||
+        state16 == s_shotexplode[i]
+        )
+    {
+        stateId = StateIdDying;
+    }
+    else if (
+        state16 == s_walldie1[i] ||
+        state16 == s_walldie2[i] ||
+        state16 == s_walldie3[i] ||
+        state16 == s_walldie4[i] ||
+        state16 == s_walldie5[i] ||
+        state16 == s_walldie6[i] ||
+        state16 == s_orcdie3[i] ||
+        state16 == s_trolldie3[i] ||
+        state16 == s_demondie3[i] ||
+        state16 == s_magedie2[i] ||
+        state16 == s_greldie6[i]
+        )
+    {
+        stateId = StateIdDead;
+    }
+    else if (
+        state16 == s_pshot1[i] ||
+        state16 == s_pshot2[i] ||
+        state16 == s_bigpshot1[i] ||
+        state16 == s_bigpshot2[i] ||
+        state16 == s_mshot1[i] ||
+        state16 == s_mshot2[i]
+        )
+    {
+        stateId = StateIdProjectileFly;
+    }
+    else if (
+        state16 == s_boltbonus[i] ||
+        state16 == s_boltbonus2[i] ||
+        state16 == s_nukebonus[i] ||
+        state16 == s_nukebonus2[i] ||
+        state16 == s_potionbonus[i] ||
+        state16 == s_rkeybonus[i] ||
+        state16 == s_ykeybonus[i] ||
+        state16 == s_gkeybonus[i] ||
+        state16 == s_bkeybonus[i] ||
+        state16 == s_scrollbonus[i] ||
+        state16 == s_chestbonus[i] ||
+        state16 == s_goalbonus[i] ||
+        state16 == s_gate1[i] ||
+        state16 == s_gate2[i] ||
+        state16 == s_gate3[i] ||
+        state16 == s_gate4[i] ||
+        state16 == s_fgate1[i] ||
+        state16 == s_fgate2[i] ||
+        state16 == s_fgate3[i] ||
+        state16 == s_fgate4[i]
+        )
+    {
+        stateId = StateIdWaitForPickup;
+    }
+
     return stateId;
 }
+
 const uint16_t SavedGameConverterCatacomb3D::GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const
 {
+    const uint16_t state16 = dosObject.state16;
+    const uint8_t i = GetGameIndex();
+
     uint16_t animationFrame = 0;
-    switch (dosObject.state16)
+    if (
+        state16 == s_orc1[i] ||
+        state16 == s_troll1[i] ||
+        state16 == s_demon1[i] ||
+        state16 == s_grel1[i] ||
+        state16 == s_bat1[i] ||
+        state16 == s_mage1[i] ||
+        state16 == s_bounce1[i] ||
+        state16 == s_trollattack1[i] ||
+        state16 == s_orcattack1[i] ||
+        state16 == s_orcattack2[i] ||
+        state16 == s_demonattack1[i] ||
+        state16 == s_batpast[i] ||
+        state16 == s_mageattack1[i] ||
+        state16 == s_grelattack1[i] ||
+        state16 == s_trollouch[i] ||
+        state16 == s_bounce1[i] ||
+        state16 == s_orcouch[i] ||
+        state16 == s_demonouch[i] ||
+        state16 == s_mageouch[i] ||
+        state16 == s_grelouch[i] ||
+        state16 == s_player[i] ||
+        state16 == s_orcdie1[i] ||
+        state16 == s_trolldie1[i] ||
+        state16 == s_demondie1[i] ||
+        state16 == s_magedie1[i] ||
+        state16 == s_greldie1[i] ||
+        state16 == s_batdie1[i] ||
+        state16 == s_magedie2[i] ||
+        state16 == s_orcdie3[i] ||
+        state16 == s_trolldie3[i] ||
+        state16 == s_demondie3[i] ||
+        state16 == s_greldie6[i] ||
+        state16 == s_shotexplode[i] ||
+        state16 == s_walldie1[i] ||
+        state16 == s_walldie2[i] ||
+        state16 == s_pshot1[i] ||
+        state16 == s_bigpshot1[i] ||
+        state16 == s_mshot1[i] ||
+        state16 == s_boltbonus[i] ||
+        state16 == s_nukebonus[i] ||
+        state16 == s_potionbonus[i] ||
+        state16 == s_rkeybonus[i] ||
+        state16 == s_ykeybonus[i] ||
+        state16 == s_gkeybonus[i] ||
+        state16 == s_bkeybonus[i] ||
+        state16 == s_scrollbonus[i] ||
+        state16 == s_chestbonus[i] ||
+        state16 == s_goalbonus[i] ||
+        state16 == s_gate1[i] ||
+        state16 == s_fgate1[i]
+        )
     {
-    case s_orc1:
-    case s_troll1:
-    case s_demon1:
-    case s_grel1:
-    case s_bat1:
-    case s_mage1:
-    case s_bounce1:
-    case s_trollattack1:
-    case s_orcattack1:
-    case s_orcattack2:
-    case s_demonattack1:
-    case s_batpast:
-    case s_mageattack1:
-    case s_grelattack1:
-    case s_trollouch:
-    case s_orcouch:
-    case s_demonouch:
-    case s_mageouch:
-    case s_grelouch:
-    case s_player:
-    case s_orcdie1:
-    case s_trolldie1:
-    case s_demondie1:
-    case s_magedie1:
-    case s_greldie1:
-    case s_batdie1:
-    case s_magedie2:
-    case s_orcdie3:
-    case s_trolldie3:
-    case s_demondie3:
-    case s_greldie6:
-    case s_shotexplode:
-    case s_walldie1:
-    case s_walldie2:
-    case s_pshot1:
-    case s_bigpshot1:
-    case s_mshot1:
-    case s_boltbonus:
-    case s_nukebonus:
-    case s_potionbonus:
-    case s_rkeybonus:
-    case s_ykeybonus:
-    case s_gkeybonus:
-    case s_bkeybonus:
-    case s_scrollbonus:
-    case s_chestbonus:
-    case s_goalbonus:
-    case s_gate1:
-    case s_fgate1:
-        animationFrame = 0;
-        break;
-    case s_orc2:
-    case s_troll2:
-    case s_demon2:
-    case s_grel2:
-    case s_bat2:
-    case s_mage2:
-    case s_bounce2:
-    case s_trollattack2:
-    case s_trollattack3:
-    case s_demonattack2:
-    case s_mageattack2:
-    case s_mageattack3:
-    case s_grelattack2:
-    case s_grelattack3:
-    case s_orcdie2:
-    case s_trolldie2:
-    case s_demondie2:
-    case s_greldie2:
-    case s_batdie2:
-    case s_walldie3:
-    case s_walldie4:
-    case s_pshot2:
-    case s_bigpshot2:
-    case s_mshot2:
-    case s_boltbonus2:
-    case s_nukebonus2:
-    case s_gate2:
-    case s_fgate2:
+        animationFrame = 0u;
+    }
+    else if (
+        state16 == s_orc2[i] ||
+        state16 == s_troll2[i] ||
+        state16 == s_demon2[i] ||
+        state16 == s_grel2[i] ||
+        state16 == s_bat2[i] ||
+        state16 == s_mage2[i] ||
+        state16 == s_bounce2[i] ||
+        state16 == s_trollattack2[i] ||
+        state16 == s_trollattack3[i] ||
+        state16 == s_demonattack2[i] ||
+        state16 == s_mageattack2[i] ||
+        state16 == s_mageattack3[i] ||
+        state16 == s_grelattack2[i] ||
+        state16 == s_grelattack3[i] ||
+        state16 == s_orcdie2[i] ||
+        state16 == s_trolldie2[i] ||
+        state16 == s_demondie2[i] ||
+        state16 == s_greldie2[i] ||
+        state16 == s_batdie2[i] ||
+        state16 == s_walldie3[i] ||
+        state16 == s_walldie4[i] ||
+        state16 == s_pshot2[i] ||
+        state16 == s_bigpshot2[i] ||
+        state16 == s_mshot2[i] ||
+        state16 == s_boltbonus2[i] ||
+        state16 == s_nukebonus2[i] ||
+        state16 == s_gate2[i] ||
+        state16 == s_fgate2[i]
+        )
+    {
         animationFrame = 1u;
-        break;
-    case s_orc3:
-    case s_orcpause:
-    case s_troll3:
-    case s_demon3:
-    case s_bat3:
-    case s_trollpause:
-    case s_orcattack3:
-    case s_demonattack3:
-    case s_magepause:
-    case s_grelpause:
-    case s_greldie3:
-    case s_walldie5:
-    case s_walldie6:
-    case s_gate3:
-    case s_fgate3:
+    }
+    else if (
+        state16 == s_orc3[i] ||
+        state16 == s_orcpause[i] ||
+        state16 == s_troll3[i] ||
+        state16 == s_demon3[i] ||
+        state16 == s_bat3[i] ||
+        state16 == s_trollpause[i] ||
+        state16 == s_orcattack3[i] ||
+        state16 == s_demonattack3[i] ||
+        state16 == s_magepause[i] ||
+        state16 == s_grelpause[i] ||
+        state16 == s_greldie3[i] ||
+        state16 == s_walldie5[i] ||
+        state16 == s_walldie6[i] ||
+        state16 == s_gate3[i] ||
+        state16 == s_fgate3[i]
+        )
+    {
         animationFrame = 2u;
-        break;
-    case s_orc4:
-    case s_troll4:
-    case s_demon4:
-    case s_bat4:
-    case s_demonpause:
-    case s_greldie4:
-    case s_gate4:
-    case s_fgate4:
-        animationFrame = 3u;
-        break;
-    case s_greldie5:
+    }
+    else if (
+        state16 == s_orc4[i] ||
+        state16 == s_troll4[i] ||
+        state16 == s_demon4[i] ||
+        state16 == s_bat4[i] ||
+        state16 == s_demonpause[i] ||
+        state16 == s_greldie4[i] ||
+        state16 == s_gate4[i] ||
+        state16 == s_fgate4[i]
+        )
+    {
+            animationFrame = 3u;
+    }
+    else if (
+        state16 == s_greldie5[i]
+        )
+    {
         animationFrame = 4u;
-        break;
     }
     return animationFrame;
+}
+
+const uint8_t SavedGameConverterCatacomb3D::GetGameIndex() const
+{
+    return (m_gameId == GameId::Catacomb3Dv100) ? 0 : 1;
 }
 
 void SavedGameConverterCatacomb3D::SetFarPointerOffset(const uint32_t /*playerState32*/)

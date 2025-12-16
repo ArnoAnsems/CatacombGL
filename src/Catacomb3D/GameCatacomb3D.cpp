@@ -35,7 +35,7 @@ GameCatacomb3D::GameCatacomb3D(const GameId gameId, const fs::path gamePath, con
     m_renderer(renderer),
     m_introView(nullptr),
     m_highScores(std::make_unique<HighScores>()),
-    m_savedGameConverter()
+    m_savedGameConverter(gameId)
 {
     m_gameMaps = nullptr;
     m_egaGraph = nullptr;

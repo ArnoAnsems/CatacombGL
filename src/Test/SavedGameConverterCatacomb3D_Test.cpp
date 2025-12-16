@@ -29,7 +29,7 @@ SavedGameConverterCatacomb3D_Test::~SavedGameConverterCatacomb3D_Test()
 
 void CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
 {
-    SavedGameConverterCatacomb3D converter;
+    SavedGameConverterCatacomb3D converter(GameId::Catacomb3Dv122);
     const uint16_t actorId = converter.GetActorId(dosObject);
     const auto actorIt = decorateCatacomb3DAll.find(actorId);
     ASSERT_TRUE(actorIt != decorateCatacomb3DAll.end());
@@ -51,6 +51,7 @@ TEST(SavedGameConverterCatacomb3D_Test, ConvertBonus)
         SavedGameInDosFormat::ObjectInDosFormat dosObject;
         dosObject.obclass = obclassBonus;
         dosObject.state16 = state16;
+        dosObject.temp1 = 7;
 
         CheckDosObjectIsConvertible(dosObject);
     }

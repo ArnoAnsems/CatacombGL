@@ -21,11 +21,12 @@
 #pragma once
 
 #include "../Engine/ISavedGameConverter.h"
+#include "../Engine/GameId.h"
 
 class SavedGameConverterCatacomb3D : public ISavedGameConverter
 {
 public:
-    SavedGameConverterCatacomb3D();
+    SavedGameConverterCatacomb3D(const GameId gameId);
     ~SavedGameConverterCatacomb3D();
     const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
@@ -36,5 +37,8 @@ private:
     const uint16_t GetActorIdOfBonus(const uint16_t state16, const int16_t temp1) const;
     const uint16_t GetActorIdOfGate(const uint16_t state16, const int16_t temp1) const;
     const uint16_t GetActorIdOfInert(const uint16_t state16) const;
+    const uint8_t GetGameIndex() const;
+
+    const GameId m_gameId;
 };
 

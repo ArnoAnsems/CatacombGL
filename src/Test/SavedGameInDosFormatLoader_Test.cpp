@@ -40,7 +40,7 @@ TEST(SavedGameInDosFormatLoader_Test, LoadPlayerActor)
     SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_TRUE(savedGame.Load());
 
-    SavedGameConverterCatacomb3D converter;
+    SavedGameConverterCatacomb3D converter(GameId::Catacomb3Dv122);
     SavedGameInDosFormatLoader loader(savedGame, converter, decorateCatacomb3DAll);
 
     Actor* playerActor = loader.LoadPlayerActor();
