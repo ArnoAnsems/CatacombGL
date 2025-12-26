@@ -161,6 +161,8 @@ add_library( CatacombGL_Engine OBJECT
     Shape.h
     SpriteTable.cpp
     SpriteTable.h
+    StringUtility.cpp
+    StringUtility.h
     TextureAtlas.cpp
     TextureAtlas.h
     ViewPorts.cpp

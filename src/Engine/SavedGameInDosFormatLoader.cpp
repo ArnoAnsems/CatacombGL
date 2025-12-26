@@ -17,6 +17,8 @@
 #include "SavedGamesInDosFormat.h"
 #include "ISavedGameConverter.h"
 #include "Actor.h"
+#include "Logging.h"
+#include "StringUtility.h"
 
 namespace
 {
@@ -97,6 +99,14 @@ void SavedGameInDosFormatLoader::LoadActors(
             {
                 blockingActors[(dosObject.tiley * levelWidth) + dosObject.tilex] = actor;
             }
+        }
+        else
+        {
+            const std::string warningMessage =
+                "WARNING: Unidentified actor at (" + std::to_string(dosObject.tilex) + "," + std::to_string(dosObject.tiley) + ") "
+                "with state16=" + StringUtility::IntToHexadecimal(dosObject.state16) +
+                " and state32=" + StringUtility::IntToHexadecimal(dosObject.state32);
+            Logging::Instance().AddLogMessage(warningMessage);
         }
     }
 }
