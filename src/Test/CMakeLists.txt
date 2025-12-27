@@ -67,6 +67,8 @@ add_executable( CatacombGL_Test
     SavedGameInDosFormat_Test.h
     SavedGamesInDosFormat_Test.cpp
     SavedGamesInDosFormat_Test.h
+    StringUtility_Test.cpp
+    StringUtility_Test.h
     TextureAtlas_Test.cpp
     TextureAtlas_Test.h
     ViewPorts_Test.cpp
