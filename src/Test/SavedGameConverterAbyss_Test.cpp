@@ -13,34 +13,28 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "SavedGameConverterAbyss_Test.h"
+#include <gtest/gtest.h>
 #include "../Abyss/SavedGameConverterAbyss.h"
 #include "../Abyss/DecorateAll.h"
 
-SavedGameConverterAbyss_Test::SavedGameConverterAbyss_Test()
+class SavedGameConverterAbyss_Test : public ::testing::Test
 {
+protected:
+    void CheckDosObjectIsConvertible(const GameId gameId, const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
+    {
+        const SavedGameConverterAbyss converter(gameId);
+        const uint16_t actorId = converter.GetActorId(dosObject);
+        const auto actorIt = decorateAbyssAll.find(actorId);
+        ASSERT_TRUE(actorIt != decorateAbyssAll.end());
 
-}
+        const DecorateStateId stateId = converter.GetDecorateStateId(dosObject);
+        const auto stateIt = actorIt->second.states.find(stateId);
+        ASSERT_TRUE(stateIt != actorIt->second.states.end());
 
-SavedGameConverterAbyss_Test::~SavedGameConverterAbyss_Test()
-{
-
-}
-
-void CheckDosObjectIsConvertible(const GameId gameId, const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
-{
-    SavedGameConverterAbyss converter(gameId);
-    const uint16_t actorId = converter.GetActorId(dosObject);
-    const auto actorIt = decorateAbyssAll.find(actorId);
-    ASSERT_TRUE(actorIt != decorateAbyssAll.end());
-
-    const DecorateStateId stateId = converter.GetDecorateStateId(dosObject);
-    const auto stateIt = actorIt->second.states.find(stateId);
-    ASSERT_TRUE(stateIt != actorIt->second.states.end());
-
-    const uint16_t animationFrame = converter.GetAnimationFrame(dosObject);
-    EXPECT_LE(animationFrame, stateIt->second.animation.size() - 1);
-}
+        const uint16_t animationFrame = converter.GetAnimationFrame(dosObject);
+        EXPECT_LE(animationFrame, stateIt->second.animation.size() - 1);
+    }
+};
 
 TEST_F(SavedGameConverterAbyss_Test, ConvertBonus)
 {

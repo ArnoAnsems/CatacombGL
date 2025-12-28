@@ -13,25 +13,19 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "ViewPorts_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/ViewPorts.h"
 #include "../Engine/OverscanBorder.h"
 
-static const float originalAspectRatio = 4.0f / 3.0f;
-static const float fitToWindowAspectRatio = 10.0f;
-static const ViewPorts::ViewPortRect3D original3DViewArea = { 0, 120, 320, 120 };
-
-ViewPorts_Test::ViewPorts_Test()
+class ViewPorts_Test : public ::testing::Test
 {
+protected:
+    static constexpr float m_originalAspectRatio = 4.0f / 3.0f;
+    static constexpr float m_fitToWindowAspectRatio = 10.0f;
+    static constexpr ViewPorts::ViewPortRect3D m_original3DViewArea = { 0, 120, 320, 120 };
+};
 
-}
-
-ViewPorts_Test::~ViewPorts_Test()
-{
-
-}
-
-TEST(ViewPorts_Test, GetOrtho2DClassicWindow)
+TEST_F(ViewPorts_Test, GetOrtho2DClassicWindow)
 {
     // The window is in the classic 4:3 aspect ratio.
     ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(40, 30, false);
@@ -49,7 +43,7 @@ TEST(ViewPorts_Test, GetOrtho2DClassicWindow)
     EXPECT_DOUBLE_EQ(rect2D.bottom, 200.0 + overscanBorderHeight);
 }
 
-TEST(ViewPorts_Test, GetOrtho2DWideWindow)
+TEST_F(ViewPorts_Test, GetOrtho2DWideWindow)
 {
     // The window is two times wider compared to the classic 4:3 aspect ratio.
     ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(80, 30, false);
@@ -67,7 +61,7 @@ TEST(ViewPorts_Test, GetOrtho2DWideWindow)
     EXPECT_DOUBLE_EQ(rect2D.bottom, 200.0 + overscanBorderHeight);
 }
 
-TEST(ViewPorts_Test, GetOrtho2DNarrowWindow)
+TEST_F(ViewPorts_Test, GetOrtho2DNarrowWindow)
 {
     // The window is only half as wide compared to the original 4:3 aspect ratio.
     ViewPorts::ViewPortRect2D rect2D = ViewPorts::GetOrtho2D(20, 30, false);
@@ -85,10 +79,10 @@ TEST(ViewPorts_Test, GetOrtho2DNarrowWindow)
     EXPECT_DOUBLE_EQ(rect2D.bottom, 300.0 + (2 * overscanBorderHeight));
 }
 
-TEST(ViewPorts_Test, Get3DWideWindowWithOriginalAspectRatio)
+TEST_F(ViewPorts_Test, Get3DWideWindowWithOriginalAspectRatio)
 {
     // The window is two times wider compared to the classic 4:3 aspect ratio.
-    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(80, 30, originalAspectRatio, original3DViewArea);
+    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(80, 30, m_originalAspectRatio, m_original3DViewArea);
 
     // The 3D viewport must be only half as wide as the window.
     EXPECT_EQ(rect3D.left, 20);
@@ -99,10 +93,10 @@ TEST(ViewPorts_Test, Get3DWideWindowWithOriginalAspectRatio)
     EXPECT_EQ(rect3D.height, 17);
 }
 
-TEST(ViewPorts_Test, Get3DWideWindowWithFitToWindowAspectRatio)
+TEST_F(ViewPorts_Test, Get3DWideWindowWithFitToWindowAspectRatio)
 {
     // The window is two times wider compared to the classic 4:3 aspect ratio.
-    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(80, 30, fitToWindowAspectRatio, original3DViewArea);
+    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(80, 30, m_fitToWindowAspectRatio, m_original3DViewArea);
 
     // The 3D viewport must be just as wide as the window.
     EXPECT_EQ(rect3D.left, 0);
@@ -113,10 +107,10 @@ TEST(ViewPorts_Test, Get3DWideWindowWithFitToWindowAspectRatio)
     EXPECT_EQ(rect3D.height, 17);
 }
 
-TEST(ViewPorts_Test, Get3DNarrowWindowWithOriginalAspectRatio)
+TEST_F(ViewPorts_Test, Get3DNarrowWindowWithOriginalAspectRatio)
 {
     // The window is only half as wide compared to the original 4:3 aspect ratio.
-    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(20, 30, originalAspectRatio, original3DViewArea);
+    ViewPorts::ViewPortRect3D rect3D = ViewPorts::Get3D(20, 30, m_originalAspectRatio, m_original3DViewArea);
 
     // The 3D viewport must be just as wide as the window.
     EXPECT_EQ(rect3D.left, 0);

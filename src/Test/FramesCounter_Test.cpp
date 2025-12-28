@@ -13,18 +13,12 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "FramesCounter_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/FramesCounter.h"
 
-FramesCounter_Test::FramesCounter_Test()
+class FramesCounter_Test : public ::testing::Test
 {
-
-}
-
-FramesCounter_Test::~FramesCounter_Test()
-{
-
-}
+};
 
 TEST(FramesCounter_Test, ZeroFpsWhenNoFramesAdded)
 {

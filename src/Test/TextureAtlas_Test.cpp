@@ -13,18 +13,12 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "TextureAtlas_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/TextureAtlas.h"
 
-TextureAtlas_Test::TextureAtlas_Test()
+class TextureAtlas_Test : public ::testing::Test
 {
-
-}
-
-TextureAtlas_Test::~TextureAtlas_Test()
-{
-
-}
+};
 
 TEST(TextureAtlas_Test, GetImageRelativeOffsets)
 {

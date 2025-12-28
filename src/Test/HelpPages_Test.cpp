@@ -13,18 +13,12 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "HelpPages_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/HelpPages.h"
 
-HelpPages_Test::HelpPages_Test()
+class HelpPages_Test : public ::testing::Test
 {
-
-}
-
-HelpPages_Test::~HelpPages_Test()
-{
-
-}
+};
 
 TEST(HelpPages_Test, ZeroPagesWhenEmptyString)
 {

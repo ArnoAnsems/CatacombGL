@@ -13,18 +13,12 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "ConsoleVariableBool_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/ConsoleVariableBool.h"
 
-ConsoleVariableBool_Test::ConsoleVariableBool_Test()
+class ConsoleVariableBool_Test : public ::testing::Test
 {
-
-}
-
-ConsoleVariableBool_Test::~ConsoleVariableBool_Test()
-{
-
-}
+};
 
 TEST(ConsoleVariableBool_Test, CheckNaming)
 {

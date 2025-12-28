@@ -13,19 +13,13 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "GameApocalypse_Test.h"
+#include <gtest/gtest.h>
 #include "../Apocalypse/GameApocalypse.h"
 #include "RendererStub.h"
 
-GameApocalypse_Test::GameApocalypse_Test()
+class GameApocalypse_Test : public ::testing::Test
 {
-
-}
-
-GameApocalypse_Test::~GameApocalypse_Test()
-{
-
-}
+};
 
 TEST(GameApocalypse_Test, CheckGetDecorateActors)
 {

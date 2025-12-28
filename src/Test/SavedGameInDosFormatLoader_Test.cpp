@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "SavedGameInDosFormatLoader_Test.h"
+#include <gtest/gtest.h>
 #include "SavedGameInDosFormat_Data.h"
 
 #include "../Engine/SavedGameInDosFormatLoader.h"
@@ -25,13 +25,9 @@
 
 #include <cstring>
 
-SavedGameInDosFormatLoader_Test::SavedGameInDosFormatLoader_Test()
+class SavedGameInDosFormatLoader_Test : public ::testing::Test
 {
-}
-
-SavedGameInDosFormatLoader_Test::~SavedGameInDosFormatLoader_Test()
-{
-}
+};
 
 TEST(SavedGameInDosFormatLoader_Test, LoadPlayerActor)
 {

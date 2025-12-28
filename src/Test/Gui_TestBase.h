@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Arno Ansems
+// Copyright (C) 2025 Arno Ansems
 // 
 // This program is free software: you can redistribute it and/or modify 
 // it under the terms of the GNU General Public License as published by 
@@ -16,10 +16,16 @@
 #pragma once
 
 #include <gtest/gtest.h>
+#include <SDL_keycode.h>
 
-class ConsoleVariableBool_Test : public ::testing::Test
+class Font;
+class RenderableText;
+class PlayerInput;
+
+class Gui_TestBase : public ::testing::Test
 {
-public:
-    ConsoleVariableBool_Test();
-    virtual ~ConsoleVariableBool_Test();
+protected:
+    static const Font& GetDefaultFont();
+    static const std::string RenderableTextToString(const RenderableText& renderableText);
+    static void PressKey(PlayerInput& playerInput, const SDL_Keycode key);
 };

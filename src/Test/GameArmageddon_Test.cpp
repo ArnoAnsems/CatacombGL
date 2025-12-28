@@ -13,19 +13,13 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "GameArmageddon_Test.h"
+#include <gtest/gtest.h>
 #include "../Armageddon/GameArmageddon.h"
 #include "RendererStub.h"
 
-GameArmageddon_Test::GameArmageddon_Test()
+class GameArmageddon_Test : public ::testing::Test
 {
-
-}
-
-GameArmageddon_Test::~GameArmageddon_Test()
-{
-
-}
+};
 
 TEST(GameArmageddon_Test, CheckGetDecorateActors)
 {

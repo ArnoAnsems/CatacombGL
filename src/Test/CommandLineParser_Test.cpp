@@ -13,9 +13,13 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "CommandLineParser_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/CommandLineParser.h"
 #include "../Engine/GameId.h"
+
+class CommandLineParser_Test : public ::testing::Test
+{
+};
 
 TEST(CommandLineParser_Test, parseWithNoCommands)
 {

@@ -13,25 +13,32 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "SavedGameConverterArmageddon_Test.h"
+#include <gtest/gtest.h>
 #include "../Armageddon/SavedGameConverterArmageddon.h"
 #include "../Armageddon/DecorateAll.h"
 
-void SavedGameConverterArmageddon_Test::CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
+class SavedGameConverterArmageddon_Test : public ::testing::Test
 {
-    SavedGameConverterArmageddon converter;
-    converter.SetFarPointerOffset(m_farPointerOffset + 0x1A580000);
-    const uint16_t actorId = converter.GetActorId(dosObject);
-    const auto actorIt = decorateArmageddonAll.find(actorId);
-    ASSERT_TRUE(actorIt != decorateArmageddonAll.end());
+protected:
+    void CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
+    {
+        SavedGameConverterArmageddon converter;
+        converter.SetFarPointerOffset(m_farPointerOffset + 0x1A580000);
+        const uint16_t actorId = converter.GetActorId(dosObject);
+        const auto actorIt = decorateArmageddonAll.find(actorId);
+        ASSERT_TRUE(actorIt != decorateArmageddonAll.end());
 
-    const DecorateStateId stateId = converter.GetDecorateStateId(dosObject);
-    const auto stateIt = actorIt->second.states.find(stateId);
-    ASSERT_TRUE(stateIt != actorIt->second.states.end());
+        const DecorateStateId stateId = converter.GetDecorateStateId(dosObject);
+        const auto stateIt = actorIt->second.states.find(stateId);
+        ASSERT_TRUE(stateIt != actorIt->second.states.end());
 
-    const uint16_t animationFrame = converter.GetAnimationFrame(dosObject);
-    EXPECT_LE(animationFrame, stateIt->second.animation.size() - 1);
-}
+        const uint16_t animationFrame = converter.GetAnimationFrame(dosObject);
+        EXPECT_LE(animationFrame, stateIt->second.animation.size() - 1);
+    }
+
+    static constexpr uint32_t m_farPointerOffset = 0x1A20000;
+};
+
 
 TEST_F(SavedGameConverterArmageddon_Test, ConvertBonus)
 {

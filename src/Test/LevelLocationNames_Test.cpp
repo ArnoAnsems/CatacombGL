@@ -13,18 +13,12 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "LevelLocationNames_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/LevelLocationNames.h"
 
-LevelLocationNames_Test::LevelLocationNames_Test()
+class LevelLocationNames_Test : public ::testing::Test
 {
-
-}
-
-LevelLocationNames_Test::~LevelLocationNames_Test()
-{
-
-}
+};
 
 TEST(LevelLocationNames_Test, EmptyChunk)
 {

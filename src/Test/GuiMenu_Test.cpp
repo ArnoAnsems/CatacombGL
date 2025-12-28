@@ -13,25 +13,19 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "GuiMenu_Test.h"
-
+#include <gtest/gtest.h>
+#include "Gui_TestBase.h"
 #include "../Engine/GuiMenu.h"
 #include "../Engine/GuiElementButton.h"
 #include "../Engine/GuiPage.h"
 #include "../Engine/DefaultFont.h"
 #include "RendererStub.h"
 
-GuiMenu_Test::GuiMenu_Test()
+class GuiMenu_Test : public Gui_TestBase
 {
+};
 
-}
-
-GuiMenu_Test::~GuiMenu_Test()
-{
-
-}
-
-TEST(GuiMenu_Test, NavigateThroughPages)
+TEST_F(GuiMenu_Test, NavigateThroughPages)
 {
     const int16_t pageId1 = 1;
     const int16_t pageId2 = 2;
@@ -124,37 +118,4 @@ TEST(GuiMenu_Test, NavigateThroughPages)
     renderableText.Reset();
     guiMenu.Draw(rendererStub);
     EXPECT_EQ(GuiMenu_Test::RenderableTextToString(renderableText), "Button on second page");
-}
-
-const Font& GuiMenu_Test::GetDefaultFont()
-{
-    RendererStub rendererStub;
-    const Font* font = DefaultFont::Get(rendererStub, 10);
-    return *font;
-}
-
-const std::string GuiMenu_Test::RenderableTextToString(const RenderableText& renderableText)
-{
-    std::string outputStr = "";
-    const std::vector<RenderableText::renderableCharacter>& text = renderableText.GetText();
-    int16_t previousOffsetY = -1;
-    for (size_t i = 0; i < text.size(); i++)
-    {
-        // Detect new lines by checking the offsetY
-        if (previousOffsetY != -1 && previousOffsetY != text.at(i).offsetY)
-        {
-            outputStr += "\n";
-        }
-        previousOffsetY = text.at(i).offsetY;
-
-        outputStr += (char)(text.at(i).imageIndex);
-    }
-
-    return outputStr;
-}
-
-void GuiMenu_Test::PressKey(PlayerInput& playerInput, const SDL_Keycode key)
-{
-    playerInput.ClearAll();
-    playerInput.SetKeyPressed(key, true);
 }

@@ -13,24 +13,18 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "GuiElementList_Test.h"
-
+#include <gtest/gtest.h>
+#include "Gui_TestBase.h"
 #include "../Engine/GuiElementList.h"
 #include "../Engine/GuiElementButton.h"
 #include "../Engine/DefaultFont.h"
 #include "RendererStub.h"
 
-GuiElementList_Test::GuiElementList_Test()
+class GuiElementList_Test : public Gui_TestBase
 {
+};
 
-}
-
-GuiElementList_Test::~GuiElementList_Test()
-{
-
-}
-
-TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
+TEST_F(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
 {
     const uint8_t actionFirstButtonPressed = 1;
     const uint8_t actionSecondButtonPressed = 2;
@@ -57,7 +51,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     // Check that all three buttons are rendered.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First buttonSecond buttonThird button");
 
     // When ENTER is pressed, the first button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -84,7 +78,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     // Check that all three buttons are rendered.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First buttonSecond buttonThird button");
 
     // Scroll down to go from the third back to the first button.
     playerInput.ClearAll();
@@ -105,7 +99,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     EXPECT_EQ(guiElementList.ProcessInput().guiAction, actionThirdButtonPressed);
 }
 
-TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
+TEST_F(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 {
     const uint8_t actionFirstButtonPressed = 1;
     const uint8_t actionSecondButtonPressed = 2;
@@ -136,7 +130,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
 
     // Check that the first three buttons are rendered.
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First buttonSecond buttonThird button");
 
     // When ENTER is pressed, the first button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -149,7 +143,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Check that the last three buttons are rendered.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second button\nThird button\nFourth button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second buttonThird buttonFourth button");
 
     // When ENTER is pressed, the last button is triggered.
     GuiElementList_Test::PressKey(playerInput, SDLK_RETURN);
@@ -162,7 +156,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Check that the first three buttons are rendered again.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First buttonSecond buttonThird button");
 
     // Scroll down to go from the first to the second button.
     playerInput.ClearAll();
@@ -185,7 +179,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Check that still only the first three buttons are rendered.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First buttonSecond buttonThird button");
 
     // Scroll down to go from the third to the fourth button.
     playerInput.ClearAll();
@@ -195,7 +189,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Check that the last three buttons are rendered.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second button\nThird button\nFourth button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second buttonThird buttonFourth button");
 
     // Scroll up to go from the fourth to the third button.
     playerInput.ClearAll();
@@ -210,7 +204,7 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Check that still the last three buttons are rendered.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second button\nThird button\nFourth button");
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "Second buttonThird buttonFourth button");
 
     // Scroll up to go from the second to the first button.
     playerInput.ClearAll();
@@ -220,38 +214,5 @@ TEST(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     // Check that the first three buttons are rendered again.
     renderableText.Reset();
     guiElementList.Draw(rendererStub);
-    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First button\nSecond button\nThird button");
-}
-
-const Font& GuiElementList_Test::GetDefaultFont()
-{
-    RendererStub rendererStub;
-    const Font* font = DefaultFont::Get(rendererStub, 10);
-    return *font;
-}
-
-const std::string GuiElementList_Test::RenderableTextToString(const RenderableText& renderableText)
-{
-    std::string outputStr = "";
-    const std::vector<RenderableText::renderableCharacter>& text = renderableText.GetText();
-    int16_t previousOffsetY = -1;
-    for (size_t i = 0; i < text.size(); i++)
-    {
-        // Detect new lines by checking the offsetY
-        if (previousOffsetY != -1 && previousOffsetY != text.at(i).offsetY)
-        {
-            outputStr += "\n";
-        }
-        previousOffsetY = text.at(i).offsetY;
-
-        outputStr += (char)(text.at(i).imageIndex);
-    }
-
-    return outputStr;
-}
-
-void GuiElementList_Test::PressKey(PlayerInput& playerInput, const SDL_Keycode key)
-{
-    playerInput.ClearAll();
-    playerInput.SetKeyPressed(key, true);
+    EXPECT_EQ(GuiElementList_Test::RenderableTextToString(renderableText), "First buttonSecond buttonThird button");
 }

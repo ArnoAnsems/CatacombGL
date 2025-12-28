@@ -13,18 +13,12 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "StringUtility_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/StringUtility.h"
 
-StringUtility_Test::StringUtility_Test()
+class StringUtility_Test : public ::testing::Test
 {
-
-}
-
-StringUtility_Test::~StringUtility_Test()
-{
-
-}
+};
 
 TEST(StringUtility_Test, IntToHexadecimal)
 {

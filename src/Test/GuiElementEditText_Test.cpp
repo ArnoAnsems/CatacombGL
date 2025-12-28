@@ -13,23 +13,17 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "GuiElementEditText_Test.h"
-
+#include <gtest/gtest.h>
+#include "Gui_TestBase.h"
 #include "../Engine/GuiElementEditText.h"
 #include "../Engine/DefaultFont.h"
 #include "RendererStub.h"
 
-GuiElementEditText_Test::GuiElementEditText_Test()
+class GuiElementEditText_Test : public Gui_TestBase
 {
+};
 
-}
-
-GuiElementEditText_Test::~GuiElementEditText_Test()
-{
-
-}
-
-TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
+TEST_F(GuiElementEditText_Test, EnterTextAndPressEnter)
 {
     PlayerInput playerInput;
     std::string outputText;
@@ -103,7 +97,7 @@ TEST(GuiElementEditText_Test, EnterTextAndPressEnter)
     EXPECT_EQ(finalEvent.guiParameter, completeEvent.guiParameter);
 }
 
-TEST(GuiElementEditText_Test, ClearTextWithBackspace)
+TEST_F(GuiElementEditText_Test, ClearTextWithBackspace)
 {
     PlayerInput playerInput;
     std::string outputText;
@@ -173,7 +167,7 @@ TEST(GuiElementEditText_Test, ClearTextWithBackspace)
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "_");
 }
 
-TEST(GuiElementEditText_Test, CancelEditWithEsc)
+TEST_F(GuiElementEditText_Test, CancelEditWithEsc)
 {
     PlayerInput playerInput;
     std::string outputText;
@@ -213,7 +207,7 @@ TEST(GuiElementEditText_Test, CancelEditWithEsc)
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "Type text ...");
 }
 
-TEST(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
+TEST_F(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
 {
     PlayerInput playerInput;
     std::string outputText;
@@ -249,7 +243,7 @@ TEST(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "_");
 }
 
-TEST(GuiElementEditText_Test, CheckMaxTextLength)
+TEST_F(GuiElementEditText_Test, CheckMaxTextLength)
 {
     const uint16_t maxTextLength = 5;
     PlayerInput playerInput;
@@ -289,7 +283,7 @@ TEST(GuiElementEditText_Test, CheckMaxTextLength)
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "AAAAA_");
 }
 
-TEST(GuiElementEditText_Test, CheckDisabled)
+TEST_F(GuiElementEditText_Test, CheckDisabled)
 {
     const uint16_t maxTextLength = 5;
     PlayerInput playerInput;
@@ -320,29 +314,4 @@ TEST(GuiElementEditText_Test, CheckDisabled)
     guiElementEditText.Draw(rendererStub);
     EXPECT_EQ(outputText, "");
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "Type text ...");
-}
-
-const Font& GuiElementEditText_Test::GetDefaultFont()
-{
-    RendererStub rendererStub;
-    const Font* font = DefaultFont::Get(rendererStub, 10);
-    return *font;
-}
-
-const std::string GuiElementEditText_Test::RenderableTextToString(const RenderableText& renderableText)
-{
-    std::string outputStr = "";
-    const std::vector<RenderableText::renderableCharacter>& text = renderableText.GetText();
-    for (size_t i = 0; i < text.size(); i++)
-    {
-        outputStr += (char)(text.at(i).imageIndex);
-    }
-
-    return outputStr;
-}
-
-void GuiElementEditText_Test::PressKey(PlayerInput& playerInput, const SDL_Keycode key)
-{
-    playerInput.ClearAll();
-    playerInput.SetKeyPressed(key, true);
 }

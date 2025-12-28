@@ -13,19 +13,13 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "GameAbyss_Test.h"
+#include <gtest/gtest.h>
 #include "../Abyss/GameAbyss.h"
 #include "RendererStub.h"
 
-GameAbyss_Test::GameAbyss_Test()
+class GameAbyss_Test : public ::testing::Test
 {
-
-}
-
-GameAbyss_Test::~GameAbyss_Test()
-{
-
-}
+};
 
 TEST(GameAbyss_Test, CheckGetDecorateActors)
 {

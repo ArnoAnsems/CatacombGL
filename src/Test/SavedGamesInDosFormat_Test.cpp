@@ -13,21 +13,15 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "SavedGamesInDosFormat_Test.h"
+#include <gtest/gtest.h>
 #include "SavedGameInDosFormat_Data.h"
 #include "../Engine/SavedGamesInDosFormat.h"
 #include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
 #include <cstring>
 
-SavedGamesInDosFormat_Test::SavedGamesInDosFormat_Test()
+class SavedGamesInDosFormat_Test : public ::testing::Test
 {
-
-}
-
-SavedGamesInDosFormat_Test::~SavedGamesInDosFormat_Test()
-{
-
-}
+};
 
 TEST(SavedGamesInDosFormat_Test, LoadSavedGames)
 {

@@ -13,26 +13,32 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "SavedGameConverterApocalypse_Test.h"
+#include <gtest/gtest.h>
 #include "../Apocalypse/SavedGameConverterApocalypse.h"
 #include "../Apocalypse/DecorateAll.h"
 
-void SavedGameConverterApocalypse_Test::CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
+class SavedGameConverterApocalypse_Test : public ::testing::Test
 {
+protected:
+    void CheckDosObjectIsConvertible(const SavedGameInDosFormat::ObjectInDosFormat& dosObject)
+    {
+        SavedGameConverterApocalypse converter;
+        converter.SetFarPointerOffset(m_farPointerOffset + 0x1A6F0000);
+        const uint16_t actorId = converter.GetActorId(dosObject);
+        const auto actorIt = decorateApocalypseAll.find(actorId);
+        ASSERT_TRUE(actorIt != decorateApocalypseAll.end());
 
-    SavedGameConverterApocalypse converter;
-    converter.SetFarPointerOffset(m_farPointerOffset + 0x1A6F0000);
-    const uint16_t actorId = converter.GetActorId(dosObject);
-    const auto actorIt = decorateApocalypseAll.find(actorId);
-    ASSERT_TRUE(actorIt != decorateApocalypseAll.end());
+        const DecorateStateId stateId = converter.GetDecorateStateId(dosObject);
+        const auto stateIt = actorIt->second.states.find(stateId);
+        ASSERT_TRUE(stateIt != actorIt->second.states.end());
 
-    const DecorateStateId stateId = converter.GetDecorateStateId(dosObject);
-    const auto stateIt = actorIt->second.states.find(stateId);
-    ASSERT_TRUE(stateIt != actorIt->second.states.end());
+        const uint16_t animationFrame = converter.GetAnimationFrame(dosObject);
+        EXPECT_LE(animationFrame, stateIt->second.animation.size() - 1);
+    }
 
-    const uint16_t animationFrame = converter.GetAnimationFrame(dosObject);
-    EXPECT_LE(animationFrame, stateIt->second.animation.size() - 1);
-}
+    static constexpr uint32_t m_farPointerOffset = 0x1A20000;
+};
+
 
 TEST_F(SavedGameConverterApocalypse_Test, ConvertBonus)
 {

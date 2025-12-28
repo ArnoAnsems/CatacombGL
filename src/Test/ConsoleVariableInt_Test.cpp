@@ -13,18 +13,12 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "ConsoleVariableInt_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/ConsoleVariableInt.h"
 
-ConsoleVariableInt_Test::ConsoleVariableInt_Test()
+class ConsoleVariableInt_Test : public ::testing::Test
 {
-
-}
-
-ConsoleVariableInt_Test::~ConsoleVariableInt_Test()
-{
-
-}
+};
 
 TEST(ConsoleVariableInt_Test, CheckNaming)
 {

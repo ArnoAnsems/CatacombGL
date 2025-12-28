@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "SavedGameInDosFormat_Test.h"
+#include <gtest/gtest.h>
 #include "../Engine/SavedGameInDosFormat.h"
 #include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
 #include "../Abyss/SavedGameInDosFormatConfigAbyss.h"
@@ -22,54 +22,48 @@
 #include "SavedGameInDosFormat_Data.h"
 #include <cstring>
 
-SavedGameInDosFormat_Test::SavedGameInDosFormat_Test()
+class SavedGameInDosFormat_Test : public ::testing::Test
 {
+protected:
+    static void CheckObjectIsPlayer(
+        const SavedGameInDosFormat::ObjectInDosFormat& object)
+    {
+        EXPECT_EQ(object.obclass, 1);  // playerobj
+        EXPECT_EQ(object.size, 26214);
+    }
 
-}
+    static void CheckObjectRanges(
+        const SavedGameInDosFormat::ObjectInDosFormat& object)
+    {
+        EXPECT_LE(object.active, 3);
+        EXPECT_LE(object.obclass, 39); // Apocalypse has 39 obclass enums, which is the most
+        EXPECT_LE(object.dir, 8); // nodir
+        EXPECT_LE(object.speed, 10000); // Fastest object has a speed of 10000
+        EXPECT_LE(object.hitpoints, 100); // Nemesis has 100 hitpoints, which is the most
+        EXPECT_LE(object.angle, 359);
+    }
 
-SavedGameInDosFormat_Test::~SavedGameInDosFormat_Test()
-{
+    static void CheckObjectCoordinates(
+        const SavedGameInDosFormat::ObjectInDosFormat& object,
+        const uint16_t mapWidth,
+        const uint16_t mapHeight)
+    {
+        // tilex and tiley should fit within the dimensions of the map
+        EXPECT_GE(object.tilex, 1);
+        EXPECT_GE(object.tiley, 1);
+        EXPECT_LE(object.tilex, mapWidth - 1);
+        EXPECT_LE(object.tiley, mapHeight - 1);
 
-}
+        // Coordinates x and y should be located near tilex and tiley
+        constexpr int32_t tileScaleFactor = 65536;
+        EXPECT_GE(object.x, (object.tilex - 0.5) * tileScaleFactor);
+        EXPECT_LE(object.x, (object.tilex + 1.5) * tileScaleFactor);
+        EXPECT_GE(object.y, (object.tiley - 0.5) * tileScaleFactor);
+        EXPECT_LE(object.y, (object.tiley + 1.5) * tileScaleFactor);
+    }
+};
 
-static void CheckObjectIsPlayer(
-    const SavedGameInDosFormat::ObjectInDosFormat& object)
-{
-    EXPECT_EQ(object.obclass, 1);  // playerobj
-    EXPECT_EQ(object.size, 26214);
-}
-
-static void CheckObjectRanges(
-    const SavedGameInDosFormat::ObjectInDosFormat& object)
-{
-    EXPECT_LE(object.active, 3);
-    EXPECT_LE(object.obclass, 39); // Apocalypse has 39 obclass enums, which is the most
-    EXPECT_LE(object.dir, 8); // nodir
-    EXPECT_LE(object.speed, 10000); // Fastest object has a speed of 10000
-    EXPECT_LE(object.hitpoints, 100); // Nemesis has 100 hitpoints, which is the most
-    EXPECT_LE(object.angle, 359);
-}
-
-static void CheckObjectCoordinates(
-    const SavedGameInDosFormat::ObjectInDosFormat& object,
-    const uint16_t mapWidth,
-    const uint16_t mapHeight)
-{
-    // tilex and tiley should fit within the dimensions of the map
-    EXPECT_GE(object.tilex, 1);
-    EXPECT_GE(object.tiley, 1);
-    EXPECT_LE(object.tilex, mapWidth - 1);
-    EXPECT_LE(object.tiley, mapHeight - 1);
-
-    // Coordinates x and y should be located near tilex and tiley
-    constexpr int32_t tileScaleFactor = 65536;
-    EXPECT_GE(object.x, (object.tilex - 0.5) * tileScaleFactor);
-    EXPECT_LE(object.x, (object.tilex + 1.5) * tileScaleFactor);
-    EXPECT_GE(object.y, (object.tiley - 0.5) * tileScaleFactor);
-    EXPECT_LE(object.y, (object.tiley + 1.5) * tileScaleFactor);
-}
-
-TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
+TEST_F(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
 {
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
@@ -160,14 +154,14 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameCatacomb3D)
     delete fileChunk;
 }
 
-TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameNullptr)
+TEST_F(SavedGameInDosFormat_Test, LoadInvalidSavedGameNullptr)
 {
     SavedGameInDosFormat savedGame(nullptr, savedGameInDosFormatConfigCatacomb3D);
     EXPECT_FALSE(savedGame.Load());
     EXPECT_EQ(savedGame.GetErrorMessage(), "data is null");
 }
 
-TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
+TEST_F(SavedGameInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
 {
     // Load saved game data that is too small to contain the header.
     FileChunk* fileChunk = new FileChunk(87);
@@ -178,7 +172,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameTooSmallForHeader)
     delete fileChunk;
 }
 
-TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane0)
+TEST_F(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane0)
 {
     FileChunk* fileChunk = new FileChunk(3166);
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
@@ -190,7 +184,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompress
     delete fileChunk;
 }
 
-TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane2)
+TEST_F(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompressPlane2)
 {
     FileChunk* fileChunk = new FileChunk(3166);
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacomb3D, 3166);
@@ -202,7 +196,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DUnableToDecompress
     delete fileChunk;
 }
 
-TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
+TEST_F(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
 {
     // Copy the raw saved game data to a fileChunk, but without the object data.
     const uint32_t sizeOfRawSavedGameDataWithoutObjects = 3166 - (24 * 68);
@@ -214,7 +208,7 @@ TEST(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
     delete fileChunk;
 }
 
-TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
+TEST_F(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
 {
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
@@ -269,7 +263,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
     delete fileChunk;
 }
 
-TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
+TEST_F(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
 {
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
@@ -323,7 +317,7 @@ TEST(SavedGameInDosFormat_Test, LoadSavedGameArmageddon)
     delete fileChunk;
 }
 
-TEST(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
+TEST_F(SavedGameInDosFormat_Test, LoadSavedGameApocalypse)
 {
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;

@@ -13,19 +13,13 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "GameCatacomb3D_Test.h"
+#include <gtest/gtest.h>
 #include "../Catacomb3D/GameCatacomb3D.h"
 #include "RendererStub.h"
 
-GameCatacomb3D_Test::GameCatacomb3D_Test()
+class GameCatacomb3D_Test : public ::testing::Test
 {
-
-}
-
-GameCatacomb3D_Test::~GameCatacomb3D_Test()
-{
-
-}
+};
 
 TEST(GameCatacomb3D_Test, CheckGetDecorateActors)
 {
