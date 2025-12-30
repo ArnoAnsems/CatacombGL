@@ -41,7 +41,8 @@ public:
     uint32_t GetPlayerState32() const;
 
 private:
-    static const float DosToGLCoordinate(const int32_t dosCoordinate);
+    static constexpr float DosToGLCoordinate(const int32_t dosCoordinate);
+    static constexpr float DosToGLAngle(const int16_t dosAngle);
 
     const SavedGameInDosFormat& m_savedGameInDosFormat;
     const ISavedGameConverter& m_savedGameConverter;

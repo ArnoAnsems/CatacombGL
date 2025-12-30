@@ -188,7 +188,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
 {
     // The playerActor will be unloaded and reloaded in the next map. The health of the playerActor
     // must be preserved when transfering to the next map.
-    const int16_t health = (m_level == nullptr) ? 100 : m_level->GetPlayerActor()->GetHealth();
+    int16_t health = (m_level == nullptr) ? 100 : m_level->GetPlayerActor()->GetHealth();
     UnloadLevel();
 
     m_level = m_game.GetGameMaps()->GetLevelFromStart(mapIndex);
@@ -220,6 +220,11 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
         m_level->GetPlayerActor()->GetY(),
         m_level->GetPlayerActor()->GetAngle(),
         m_configurationSettings.GetCVarEnum(CVarIdCameraPosition).GetItemIndex() == CVarItemIdCameraBehindPlayer);
+    const uint16_t initialPlayerHealth = m_level->GetPlayerActor()->GetDecorateActor().initialHealth;
+    if (health > initialPlayerHealth)
+    {
+        health = initialPlayerHealth;
+    }
     m_level->GetPlayerActor()->SetHealth(health);
     m_autoMap.ResetOrigin(*m_level, m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex());
     m_levelStatistics.SetCountersAtStartOfLevel(*m_level);
@@ -2955,11 +2960,12 @@ void EngineCore::KeyYPressed()
         
 void EngineCore::PlayerUsesPotion()
 {
-    if (!m_level->GetPlayerActor()->IsDead() && m_level->GetPlayerActor()->GetHealth() < 100)
+    const uint16_t initialHealth = m_level->GetPlayerActor()->GetDecorateActor().initialHealth;
+    if (!m_level->GetPlayerActor()->IsDead() && m_level->GetPlayerActor()->GetHealth() < initialHealth)
     {
         if (m_playerInventory.UsePotion())
         {
-            m_level->GetPlayerActor()->SetHealth(100);
+            m_level->GetPlayerActor()->SetHealth(initialHealth);
             DisplayStatusMessage("Curing", (uint16_t)(30 * (1000.0 / 70.0)));
         }
     }

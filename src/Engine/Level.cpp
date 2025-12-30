@@ -92,6 +92,14 @@ Level::Level(
 bool Level::LoadActorsFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors)
 {
     m_playerActor = new Actor(file, decorateActors);
+
+    // Truncate player health to the initial health
+    const uint16_t initialPlayerHealth = m_playerActor->GetDecorateActor().initialHealth;
+    if (m_playerActor->GetHealth() > initialPlayerHealth)
+    {
+        m_playerActor->SetHealth(initialPlayerHealth);
+    }
+
     uint16_t numberOfBlockingActors = 0;
     file.read((char*)&numberOfBlockingActors, sizeof(numberOfBlockingActors));
     if (file.fail())

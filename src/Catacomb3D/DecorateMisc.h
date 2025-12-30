@@ -280,7 +280,7 @@ const DecorateActor decoratePlayer =
     0, // spawnOnAllDifficulties;
     0, // spawnOnNormalAndHard;
     0,  // spawnOnHard
-    100,  // initialHealth;
+    64,  // initialHealth;
     0.4f,    // size;
     Always,  // radarVisibility;
     EgaBrightWhite,   // radarColor;

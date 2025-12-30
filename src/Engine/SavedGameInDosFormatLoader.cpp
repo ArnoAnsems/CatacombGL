@@ -55,7 +55,7 @@ Actor* SavedGameInDosFormatLoader::LoadPlayerActor() const
     const float playerX = DosToGLCoordinate(playerObject.x);
     const float playerY = DosToGLCoordinate(playerObject.y);
     Actor* playerActor = new Actor(playerX, playerY, 0, m_decorateActors.at(11));
-    playerActor->SetAngle(playerObject.angle);
+    playerActor->SetAngle(DosToGLAngle(playerObject.angle));
     playerActor->SetHealth(m_savedGameInDosFormat.GetBody());
     playerActor->SetTile((const uint8_t)playerObject.tilex, (const uint8_t)playerObject.tiley);
 
@@ -81,7 +81,7 @@ void SavedGameInDosFormatLoader::LoadActors(
             const float y = DosToGLCoordinate(dosObject.y);
             Actor* actor = new Actor(x, y, 0, decorateActor);
             actor->SetTile((uint8_t)dosObject.tilex, (uint8_t)dosObject.tiley);
-            actor->SetAngle(dosObject.angle);
+            actor->SetAngle(DosToGLAngle(dosObject.angle));
             actor->SetActive(dosObject.active != 0);
             actor->SetHealth(dosObject.hitpoints);
             actor->SetTemp1(dosObject.temp1);
@@ -117,8 +117,13 @@ uint32_t SavedGameInDosFormatLoader::GetPlayerState32() const
     return playerObject.state32;
 }
 
-const float SavedGameInDosFormatLoader::DosToGLCoordinate(const int32_t dosCoordinate)
+constexpr float SavedGameInDosFormatLoader::DosToGLCoordinate(const int32_t dosCoordinate)
 {
     const float dosToGLScaleFactor = 65536.0f;
     return (float)dosCoordinate / dosToGLScaleFactor;
+}
+
+constexpr float SavedGameInDosFormatLoader::DosToGLAngle(const int16_t dosAngle)
+{
+    return static_cast<float>((360u + 90u - dosAngle) % 360u);
 }
