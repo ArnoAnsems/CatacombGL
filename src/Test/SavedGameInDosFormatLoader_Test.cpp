@@ -43,7 +43,7 @@ TEST(SavedGameInDosFormatLoader_Test, LoadPlayerActor)
     ASSERT_TRUE(playerActor != nullptr);
 
     const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
-    EXPECT_EQ(firstObject.angle, playerActor->GetAngle());
+    EXPECT_FLOAT_EQ(static_cast<float>((360u + 90u - firstObject.angle) % 360u), playerActor->GetAngle());
     EXPECT_EQ(savedGame.GetBody(), playerActor->GetHealth());
     EXPECT_EQ(actorIdPlayer, playerActor->GetDecorateActor().id);
     EXPECT_EQ((float)firstObject.x / 65536.0f, playerActor->GetX());
