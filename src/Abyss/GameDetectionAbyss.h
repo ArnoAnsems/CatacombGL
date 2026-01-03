@@ -25,6 +25,18 @@
 #include <map>
 #include <string>
 
+const std::map<std::string, uint32_t> abyssFilesv112 =
+{
+    std::make_pair("AUDIO.ABS",    6904),
+    std::make_pair("BEGIN.ABS",    12742),
+    std::make_pair("CREDITS.ABS",  15237),
+    std::make_pair("EGAGRAPH.ABS", 320626),
+    std::make_pair("FINALE.ABS",   11918),
+    std::make_pair("GAMEMAPS.ABS", 20433),
+    std::make_pair("SDLOGO.ABS",   1431),
+    std::make_pair("TITLE.ABS",    17486)
+};
+
 const std::map<std::string, uint32_t> abyssFilesv113 =
 {
     std::make_pair("AUDIO.ABS",    6904),

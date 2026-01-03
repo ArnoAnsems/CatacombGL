@@ -39,6 +39,22 @@ TEST(CommandLineParser_Test, startWithCatacomb3D)
     EXPECT_EQ(GameId::Catacomb3Dv122, commandLineParser.gameIdToStart());
 }
 
+TEST(CommandLineParser_Test, startWithCatacomb3Dv100)
+{
+    CommandLineParser commandLineParser;
+    char* commands[] = { "test.exe", "--cat3d_100" };
+    commandLineParser.parse(2, commands);
+    EXPECT_EQ(GameId::Catacomb3Dv100, commandLineParser.gameIdToStart());
+}
+
+TEST(CommandLineParser_Test, startWithCatacombAbyssSharewareV112)
+{
+    CommandLineParser commandLineParser;
+    char* commands[] = { "test.exe", "--abyss_sw12" };
+    commandLineParser.parse(2, commands);
+    EXPECT_EQ(GameId::CatacombAbyssv112, commandLineParser.gameIdToStart());
+}
+
 TEST(CommandLineParser_Test, startWithCatacombAbyssSharewareV113)
 {
     CommandLineParser commandLineParser;

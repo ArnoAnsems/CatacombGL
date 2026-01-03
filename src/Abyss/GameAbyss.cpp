@@ -25,6 +25,7 @@
 
 namespace fs = std::filesystem;
 
+static const std::string AbyssV112Name = "Catacomb Abyss v1.12 Shareware";
 static const std::string AbyssV113Name = "Catacomb Abyss v1.13 Shareware";
 static const std::string AbyssV124Name = "Catacomb Abyss v1.24 Registered";
 
@@ -582,7 +583,10 @@ EgaGraph* GameAbyss::GetEgaGraph()
 {
     if (m_egaGraph == nullptr)
     {
-        const egaGraphStaticData& staticData = (m_gameId == GameId::CatacombAbyssv113) ? egaGraphAbyss : egaGraphAbyssV124;
+        const egaGraphStaticData& staticData =
+            (m_gameId == GameId::CatacombAbyssv112) ? egaGraphAbyssV112 :
+            (m_gameId == GameId::CatacombAbyssv113) ? egaGraphAbyssV113 :
+            egaGraphAbyssV124;
         m_egaGraph = new EgaGraph(staticData, m_gamePath, m_renderer);
     }
 
@@ -613,7 +617,7 @@ IIntroView* GameAbyss::GetIntroView()
 {
     if (m_introView == nullptr)
     {
-        m_introView = new IntroViewAbyss(m_renderer, m_gamePath);
+        m_introView = new IntroViewAbyss(m_gameId, m_renderer, m_gamePath);
     }
 
     return m_introView;
@@ -712,7 +716,10 @@ const std::map<uint16_t, const DecorateActor>& GameAbyss::GetDecorateActors() co
 
 const std::string& GameAbyss::GetName() const
 {
-    return (m_gameId == GameId::CatacombAbyssv113) ? AbyssV113Name : AbyssV124Name;
+    return
+        (m_gameId == GameId::CatacombAbyssv112) ? AbyssV112Name :
+        (m_gameId == GameId::CatacombAbyssv113) ? AbyssV113Name :
+        AbyssV124Name;
 }
 
 const GameId GameAbyss::GetId() const
@@ -914,6 +921,12 @@ const ManaBar::ManaBarConfig& GameAbyss::GetManaBarConfig()
     return manaBarConfig;
 }
 
+const CatalogInfo catalogInfoV112 =
+{
+    "Demo"
+,
+{} };
+
 const CatalogInfo catalogInfoV113 =
 {
     "Demo"
@@ -973,7 +986,10 @@ const CatalogInfo catalogInfoV124 =
 
 const CatalogInfo& GameAbyss::GetCatalogInfo() const
 {
-    return (m_gameId == GameId::CatacombAbyssv113) ? catalogInfoV113 : catalogInfoV124;
+    return
+        (m_gameId == GameId::CatacombAbyssv112) ? catalogInfoV112 :
+        (m_gameId == GameId::CatacombAbyssv113) ? catalogInfoV113 :
+        catalogInfoV124;
 }
 
 const SavedGameInDosFormatConfig& GameAbyss::GetSavedGameInDosFormatConfig() const

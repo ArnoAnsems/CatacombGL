@@ -235,9 +235,14 @@ int main(int argc, char* argv[])
 
 			if (gameSelectionPresentation.gameListShareware.empty())
 			{
+#ifdef CATABYSSV112
+				const GameDetectionState abyssv112DetectionState = (finder.GetGameScore(GameId::CatacombAbyssv112) == 0) ? Detected : NotDetected;
+				gameSelectionPresentation.gameListShareware.push_back(std::make_pair("5. Catacomb Abyss v1.12", abyssv112DetectionState));
+#else
 				gameSelectionPresentation.gameListShareware.push_back(std::make_pair("5. Catacomb Abyss v1.12", NotSupported));
-				const GameDetectionState abyssv133DetectionState = (finder.GetGameScore(GameId::CatacombAbyssv113) == 0) ? Detected : NotDetected;
-				gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv133DetectionState));
+#endif
+				const GameDetectionState abyssv113DetectionState = (finder.GetGameScore(GameId::CatacombAbyssv113) == 0) ? Detected : NotDetected;
+				gameSelectionPresentation.gameListShareware.push_back(std::make_pair("6. Catacomb Abyss v1.13", abyssv113DetectionState));
 			}
 
 			if (gameSelectionPresentation.gameListCatacomb3DBigBox.empty())
@@ -276,6 +281,13 @@ int main(int argc, char* argv[])
 			{
 				selectedGame = GameId::CatacombApocalypsev101;
 			}
+
+#ifdef CATABYSSV112
+			if (input.IsKeyPressed(SDLK_5))
+			{
+				selectedGame = GameId::CatacombAbyssv112;
+			}
+#endif
 
 			if (input.IsKeyPressed(SDLK_6))
 			{
@@ -384,6 +396,9 @@ int main(int argc, char* argv[])
 				break;
 			case GameId::Catacomb3Dv122:
 				game = new GameCatacomb3D(GameId::Catacomb3Dv122, report.folder, system.GetConfigurationFilePath(), *renderer);
+				break;
+			case GameId::CatacombAbyssv112:
+				game = new GameAbyss(GameId::CatacombAbyssv112, report.folder, *renderer);
 				break;
 			case GameId::CatacombAbyssv124:
 				game = new GameAbyss(GameId::CatacombAbyssv124, report.folder, *renderer);

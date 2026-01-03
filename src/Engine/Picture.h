@@ -36,10 +36,10 @@ public:
     static uint16_t GetNearestPowerOfTwo(const uint16_t size);
 
 private:
-    uint16_t m_imageWidth;
-    uint16_t m_imageHeight;
-    uint16_t m_textureWidth;
-    uint16_t m_textureHeight;
-    unsigned int m_textureId;
+    const uint16_t m_imageWidth;
+    const uint16_t m_imageHeight;
+    const uint16_t m_textureWidth;
+    const uint16_t m_textureHeight;
+    const unsigned int m_textureId;
 };
 

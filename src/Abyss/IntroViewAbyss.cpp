@@ -17,60 +17,68 @@
 
 namespace fs = std::filesystem;
 
-IntroViewAbyss::IntroViewAbyss(IRenderer& renderer, const fs::path& path) :
-    IIntroView(renderer)
+IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, const fs::path& path) :
+    IIntroView(renderer),
+    m_gameId(gameId)
 {
-    m_shapeEntering = new Shape(renderer);
-    const fs::path shp05 = path / "SHP05.ABS";
-    m_shapeEntering->LoadFromFile(shp05);
+    if (m_gameId == GameId::CatacombAbyssv112)
+    {
 
-    m_shapePresents = new Shape(renderer);
-    const fs::path shp12 = path / "SHP12.ABS";
-    m_shapePresents->LoadFromFile(shp12);
+    }
+    else
+    {
+        m_shapeEntering = new Shape(renderer);
+        const fs::path shp05 = path / "SHP05.ABS";
+        m_shapeEntering->LoadFromFile(shp05);
 
-    m_shapeSoftdisk = new Shape(renderer);
-    const fs::path shp01 = path / "SHP01.ABS";
-    m_shapeSoftdisk->LoadFromFile(shp01);
+        m_shapePresents = new Shape(renderer);
+        const fs::path shp12 = path / "SHP12.ABS";
+        m_shapePresents->LoadFromFile(shp12);
 
-    m_shapeTitle = new Shape(renderer);
-    const fs::path shp02 = path / "SHP02.ABS";
-    m_shapeTitle->LoadFromFile(shp02);
+        m_shapeSoftdisk = new Shape(renderer);
+        const fs::path shp01 = path / "SHP01.ABS";
+        m_shapeSoftdisk->LoadFromFile(shp01);
 
-    m_shapeCredits = new Shape(renderer);
-    const fs::path shp03 = path / "SHP03.ABS";
-    m_shapeCredits->LoadFromFile(shp03);
+        m_shapeTitle = new Shape(renderer);
+        const fs::path shp02 = path / "SHP02.ABS";
+        m_shapeTitle->LoadFromFile(shp02);
 
-    m_shapeTrilogy = new Shape(renderer);
-    const fs::path shp11 = path / "SHP11.ABS";
-    m_shapeTrilogy->LoadFromFile(shp11);
+        m_shapeCredits = new Shape(renderer);
+        const fs::path shp03 = path / "SHP03.ABS";
+        m_shapeCredits->LoadFromFile(shp03);
 
-    m_shapeSelectDifficulty = new Shape(renderer);
-    const fs::path shp07 = path / "SHP07.ABS";
-    m_shapeSelectDifficulty->LoadFromFile(shp07);
+        m_shapeTrilogy = new Shape(renderer);
+        const fs::path shp11 = path / "SHP11.ABS";
+        m_shapeTrilogy->LoadFromFile(shp11);
 
-    m_shapeConfirmDifficulty = new Shape(renderer);
-    const fs::path shp06 = path / "SHP06.ABS";
-    m_shapeConfirmDifficulty->LoadFromFile(shp06);
+        m_shapeSelectDifficulty = new Shape(renderer);
+        const fs::path shp07 = path / "SHP07.ABS";
+        m_shapeSelectDifficulty->LoadFromFile(shp07);
 
-    m_shapeNovice = new Shape(renderer);
-    const fs::path shp08 = path / "SHP08.ABS";
-    m_shapeNovice->LoadFromFile(shp08);
+        m_shapeConfirmDifficulty = new Shape(renderer);
+        const fs::path shp06 = path / "SHP06.ABS";
+        m_shapeConfirmDifficulty->LoadFromFile(shp06);
 
-    m_shapeWarrior = new Shape(renderer);
-    const fs::path shp09 = path / "SHP09.ABS";
-    m_shapeWarrior->LoadFromFile(shp09);
+        m_shapeNovice = new Shape(renderer);
+        const fs::path shp08 = path / "SHP08.ABS";
+        m_shapeNovice->LoadFromFile(shp08);
 
-    m_shapeStandBeforeGate = new Shape(renderer);
-    const fs::path shp04 = path / "SHP04.ABS";
-    m_shapeStandBeforeGate->LoadFromFile(shp04);
+        m_shapeWarrior = new Shape(renderer);
+        const fs::path shp09 = path / "SHP09.ABS";
+        m_shapeWarrior->LoadFromFile(shp09);
 
-    // SHP04 = Stand before gate
-    // SHP05 = Prepare
-    // SHP06 = Nemesis
-    // SHP08 = Ha! Another novice!
-    // SHP09 = Warriors blood!
-    // SHP10 = Back for more!
-    // SHP11 = Trilogy
+        m_shapeStandBeforeGate = new Shape(renderer);
+        const fs::path shp04 = path / "SHP04.ABS";
+        m_shapeStandBeforeGate->LoadFromFile(shp04);
+
+        // SHP04 = Stand before gate
+        // SHP05 = Prepare
+        // SHP06 = Nemesis
+        // SHP08 = Ha! Another novice!
+        // SHP09 = Warriors blood!
+        // SHP10 = Back for more!
+        // SHP11 = Trilogy
+    }
 }
 
 IntroViewAbyss::~IntroViewAbyss()
@@ -111,65 +119,83 @@ IntroViewAbyss::~IntroViewAbyss()
 
 void IntroViewAbyss::DrawIntroduction(const uint32_t timeStamp)
 {
-    if (timeStamp < 5000)
+    if (m_gameId == GameId::CatacombAbyssv112)
     {
-        m_renderer.Render2DPicture(m_shapeEntering->GetPicture(), 20, 72);
+
     }
     else
     {
-        const uint8_t pictureIndex = ((timeStamp - 5000) / 5000) % 5;
-        switch (pictureIndex)
+        if (timeStamp < 5000)
         {
-        case 0:
+            m_renderer.Render2DPicture(m_shapeEntering->GetPicture(), 20, 72);
+        }
+        else
+        {
+            const uint8_t pictureIndex = ((timeStamp - 5000) / 5000) % 5;
+            switch (pictureIndex)
+            {
+            case 0:
             {
                 m_renderer.Render2DPicture(m_shapePresents->GetPicture(), m_shapePresents->GetOffsetX(), m_shapePresents->GetOffsetY());
                 break;
             }
-        case 1:
+            case 1:
             {
                 m_renderer.Render2DPicture(m_shapeSoftdisk->GetPicture(), m_shapeSoftdisk->GetOffsetX(), m_shapeSoftdisk->GetOffsetY());
                 break;
             }
-        case 2:
+            case 2:
             {
                 m_renderer.Render2DPicture(m_shapeTitle->GetPicture(), m_shapeTitle->GetOffsetX(), m_shapeTitle->GetOffsetY());
                 break;
             }
-        case 3:
+            case 3:
             {
                 m_renderer.Render2DPicture(m_shapeCredits->GetPicture(), m_shapeCredits->GetOffsetX(), m_shapeCredits->GetOffsetY());
                 break;
             }
-        case 4:
+            case 4:
             {
                 m_renderer.Render2DPicture(m_shapeTrilogy->GetPicture(), m_shapeTrilogy->GetOffsetX(), m_shapeTrilogy->GetOffsetY());
                 break;
             }
-        default:
-            break;
+            default:
+                break;
+            }
         }
-        
     }
 }
 
 void IntroViewAbyss::DrawRequestDifficultyLevel()
 {
-    m_renderer.Render2DPicture(m_shapeSelectDifficulty->GetPicture(), m_shapeSelectDifficulty->GetOffsetX(), m_shapeSelectDifficulty->GetOffsetY());
+    if (m_gameId != GameId::CatacombAbyssv112)
+    {
+        m_renderer.Render2DPicture(m_shapeSelectDifficulty->GetPicture(), m_shapeSelectDifficulty->GetOffsetX(), m_shapeSelectDifficulty->GetOffsetY());
+    }
 }
 
 void IntroViewAbyss::DrawNoviceSelected()
 {
-    m_renderer.Render2DPicture(m_shapeConfirmDifficulty->GetPicture(), 0, 0);
-    m_renderer.Render2DPicture(m_shapeNovice->GetPicture(), 16, 192);
+    if (m_gameId != GameId::CatacombAbyssv112)
+    {
+        m_renderer.Render2DPicture(m_shapeConfirmDifficulty->GetPicture(), 0, 0);
+        m_renderer.Render2DPicture(m_shapeNovice->GetPicture(), 16, 192);
+    }
 }
 
 void IntroViewAbyss::DrawWarriorSelected()
 {
-    m_renderer.Render2DPicture(m_shapeConfirmDifficulty->GetPicture(), 0, 0);
-    m_renderer.Render2DPicture(m_shapeWarrior->GetPicture(), 16, 192);
+    if (m_gameId != GameId::CatacombAbyssv112)
+    {
+        m_renderer.Render2DPicture(m_shapeConfirmDifficulty->GetPicture(), 0, 0);
+        m_renderer.Render2DPicture(m_shapeWarrior->GetPicture(), 16, 192);
+    }
 }
 
 void IntroViewAbyss::DrawStandBeforeGate()
 {
-    m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
+    if (m_gameId != GameId::CatacombAbyssv112)
+    {
+        m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
+    }
 }

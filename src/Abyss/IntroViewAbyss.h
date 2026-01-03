@@ -22,13 +22,14 @@
 
 #include "../Engine/IIntroView.h"
 #include "../Engine/Shape.h"
+#include "../Engine/GameId.h"
 #include <filesystem>
 #include <string>
 
 class IntroViewAbyss : public IIntroView
 {
 public:
-    IntroViewAbyss(IRenderer& renderer, const std::filesystem::path& path);
+    IntroViewAbyss(GameId gameId, IRenderer& renderer, const std::filesystem::path& path);
     ~IntroViewAbyss();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();
@@ -37,16 +38,17 @@ public:
     void DrawStandBeforeGate();
 
 private:
-    Shape* m_shapeEntering;
-    Shape* m_shapePresents;
-    Shape* m_shapeSoftdisk;
-    Shape* m_shapeTitle;
-    Shape* m_shapeCredits;
-    Shape* m_shapeTrilogy;
-    Shape* m_shapeSelectDifficulty;
-    Shape* m_shapeConfirmDifficulty;
-    Shape* m_shapeNovice;
-    Shape* m_shapeWarrior;
-    Shape* m_shapeStandBeforeGate;
+    const GameId m_gameId;
+    Shape* m_shapeEntering = nullptr;
+    Shape* m_shapePresents = nullptr;
+    Shape* m_shapeSoftdisk = nullptr;
+    Shape* m_shapeTitle = nullptr;
+    Shape* m_shapeCredits = nullptr;
+    Shape* m_shapeTrilogy = nullptr;
+    Shape* m_shapeSelectDifficulty = nullptr;
+    Shape* m_shapeConfirmDifficulty = nullptr;
+    Shape* m_shapeNovice = nullptr;
+    Shape* m_shapeWarrior = nullptr;
+    Shape* m_shapeStandBeforeGate = nullptr;
 };
 

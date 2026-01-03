@@ -16,9 +16,11 @@
 #include "CommandLineParser.h"
 
 const std::string paramDescent = "--descent";
+const std::string paramCat3D100 = "--cat3d_100";
 const std::string paramAbyss = "--abyss";
 const std::string paramArmageddon = "--armageddon";
 const std::string paramApocalypse = "--apocalypse";
+const std::string paramAbyssSW12 = "--abyss_sw12";
 const std::string paramAbyssSW13 = "--abyss_sw13";
 
 const std::string paramIniFile = "--ini";
@@ -59,6 +61,10 @@ void CommandLineParser::parse(const int argc, char* argv[])
         {
             m_gameIdToStart = GameId::Catacomb3Dv122;
         }
+        if (compareStrings(current, paramCat3D100))
+        {
+            m_gameIdToStart = GameId::Catacomb3Dv100;
+        }
         if (compareStrings(current, paramAbyss))
         {
             m_gameIdToStart = GameId::CatacombAbyssv124;
@@ -70,6 +76,10 @@ void CommandLineParser::parse(const int argc, char* argv[])
         if (compareStrings(current, paramArmageddon))
         {
             m_gameIdToStart = GameId::CatacombArmageddonv102;
+        }
+        if (compareStrings(current, paramAbyssSW12))
+        {
+            m_gameIdToStart = GameId::CatacombAbyssv112;
         }
         if (compareStrings(current, paramAbyssSW13))
         {

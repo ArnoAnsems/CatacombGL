@@ -33,6 +33,7 @@ namespace fs = std::filesystem;
 
 const std::map<GameId, const std::map<std::string, uint32_t>*> GameFiles
 {
+    {GameId::CatacombAbyssv112, &abyssFilesv112},
     {GameId::CatacombAbyssv113, &abyssFilesv113},
     {GameId::CatacombAbyssv124, &abyssFilesv124},
     {GameId::CatacombArmageddonv102, &armageddonFiles},
@@ -51,6 +52,7 @@ const std::map<GameId, const std::string> GOGFolders
 
 const std::map<GameId, uint8_t> ConfigIds
 {
+    {GameId::CatacombAbyssv112, CVarIdPathAbyssv112},
     {GameId::CatacombAbyssv113, CVarIdPathAbyssv113},
     {GameId::CatacombAbyssv124, CVarIdPathAbyssv124},
     {GameId::CatacombArmageddonv102, CVarIdPathArmageddonv102},
@@ -61,6 +63,7 @@ const std::map<GameId, uint8_t> ConfigIds
 
 const std::map<GameId, std::string> GameNames
 {
+    {GameId::CatacombAbyssv112, "Catacomb Abyss v1.12"},
     {GameId::CatacombAbyssv113, "Catacomb Abyss v1.13"},
     {GameId::CatacombAbyssv124, "Catacomb Abyss v1.24"},
     {GameId::CatacombArmageddonv102, "Catacomb Armageddon v1.02"},

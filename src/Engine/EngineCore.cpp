@@ -208,7 +208,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     }
 
     // Remove unreachable skeleton in Mike's Blastable Passage
-    if ((m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124) && m_level->GetLevelIndex() == 5)
+    if ((m_game.GetId() == GameId::CatacombAbyssv112 || m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124) && m_level->GetLevelIndex() == 5)
     {
         m_level->SetFloorTile(7, 17, 0);
     }
@@ -666,7 +666,16 @@ void EngineCore::EnterKeyReleased()
             }
             else
             {
-                m_state = RequestDifficultyLevel;
+                if (m_game.GetId() == GameId::CatacombAbyssv112)
+                {
+                    m_state = EnteringLevel;
+                    m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
+                    m_warpToLevel = 0;
+                }
+                else
+                {
+                    m_state = RequestDifficultyLevel;
+                }
             }
         }
         else if (m_state == ShowDifficultyLevel)
@@ -2542,7 +2551,7 @@ bool EngineCore::Chase(Actor* actor, const bool diagonal, const ChaseTarget targ
     // The water troll in Abyss and the water dragon in Armageddon move slower when under water.
     // The blob from Apocalypse moves slower when in shadow mode.
     if (actor->GetState() == StateIdHidden &&
-        (((m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124 || m_game.GetId() == GameId::CatacombArmageddonv102) && actor->GetDecorateActor().id == 61)) ||
+        (((m_game.GetId() == GameId::CatacombAbyssv112 || m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124 || m_game.GetId() == GameId::CatacombArmageddonv102) && actor->GetDecorateActor().id == 61)) ||
         ((m_game.GetId() == GameId::CatacombApocalypsev101 && actor->GetDecorateActor().id == 54)))
     {
         speed = 1200;

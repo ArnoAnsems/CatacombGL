@@ -40,6 +40,7 @@ static constexpr uint8_t CVarIdPathArmageddonv102 = 12;
 static constexpr uint8_t CVarIdPathApocalypsev101 = 13;
 static constexpr uint8_t CVarIdPathCatacomb3Dv122 = 14;
 static constexpr uint8_t CVarIdPathCatacomb3Dv100 = 15;
+static constexpr uint8_t CVarIdPathAbyssv112 = 16;
 static constexpr uint8_t CVarIdScreenMode = 20;
 static constexpr uint8_t CVarIdAutoMapMode = 21;
 static constexpr uint8_t CVarIdShowFpsMode = 22;
@@ -127,6 +128,7 @@ private:
     std::map<const uint8_t, ConsoleVariableInt* const> m_cvarsInt;
 
     ConsoleVariableString m_dummyCvarString;
+    ConsoleVariableString m_pathAbyssv112;
     ConsoleVariableString m_pathAbyssv113;
     ConsoleVariableString m_pathAbyssv124;
     ConsoleVariableString m_pathArmageddonv102;
