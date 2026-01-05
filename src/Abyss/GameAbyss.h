@@ -26,6 +26,8 @@
 #include "../Engine/Logging.h"
 #include <map>
 #include "SavedGameConverterAbyss.h"
+#include "GameMapsAbyssV112.h"
+#include "DecorateV112.h"
 
 class GameAbyss: public IGame
 {
@@ -102,6 +104,8 @@ private:
     void DrawBonus(RenderableTiles& renderableTiles, const PlayerInventory& playerInventory);
     void DrawGems(const PlayerInventory& playerInventory);
     HelpPages* GetHelpPages();
+    const DecorateActor& GetDecorateActor(const uint16_t actorId) const;
+    const uint16_t GetPictureIndexForCurrentGame(const uint16_t pictureIndexForV124) const;
 
     short m_zombie_base_delay;
     IIntroView* m_introView;
@@ -111,4 +115,6 @@ private:
     HelpPages* m_helpPages;
     uint8_t m_helpPageIndex;
     SavedGameConverterAbyss m_savedGameConverter;
+    GameMapsAbyssV112 m_gameMapsAbyssV112;
+    DecorateV112 m_decorateV112;
 };

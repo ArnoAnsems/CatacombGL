@@ -80,65 +80,66 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 5:
                 {
-                    Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBolt);
+                    Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusBolt));
                     actors[(y * level->GetLevelWidth()) + x] = bonusActor;
                     break;
                 }
             case 6:
                 {
-                    Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNuke);
+                    Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusNuke));
                     actors[(y * level->GetLevelWidth()) + x] = bonusActor;
                     break;
                 }
             case 7:
 
                 {
-                    Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, decoratePotion);
+                    Actor* bonusActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusPotion));
                     actors[(y * level->GetLevelWidth()) + x] = bonusActor;
                     break;
                 }
             case 8:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyRed);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusKeyRed));
                 break;
             case 9:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyYellow);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusKeyYellow));
                 break;
             case 10:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyGreen);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusKeyGreen));
                 break;
             case 11:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyBlue);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusKeyBlue));
                 break;
             case 12:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll1);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll1));
                 break;
             case 13:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll2);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll2));
                 break;
             case 14:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll3);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll3));
                 break;
             case 15:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll4);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll4));
                 break;
             case 16:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll5);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll5));
                 break;
             case 17:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll6);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll6));
                 break;
             case 18:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll7);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll7));
                 break;
             case 19:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateScroll8);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusScroll8));
                 break;
             case 29:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateKeyRed2);;
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusKeyRed2));;
                 break;
             case 21:
                 {
-                    Actor* bonusActorChest = level->IsWaterLevel() ? new Actor(x + 0.5f, y + 0.5f, 0, decorateWaterChest) : new Actor(x + 0.5f, y + 0.5f, 0, decorateChest);
+                    const uint16_t actorId = level->IsWaterLevel() ? actorIdBonusWaterChest : actorIdBonusChest;
+                    Actor* bonusActorChest = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorId));
                     actors[(y * level->GetLevelWidth()) + x] = bonusActorChest;
                     break;
                 }
@@ -146,7 +147,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
             case 24:
             case 30:
                 {
-                    Actor* redDemonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateRedDemon);
+                    Actor* redDemonActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterRedDemon));
                     actors[(y * level->GetLevelWidth()) + x] = redDemonActor;
                     break;
                 }
@@ -162,7 +163,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 25:
                 {
-                    Actor* batActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateBat);
+                    Actor* batActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterBat));
                     actors[(y * level->GetLevelWidth()) + x] = batActor;
                     break;
                 }
@@ -178,7 +179,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 26:
                 {
-                    Actor* demonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateDemon);
+                    Actor* demonActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterDemon));
                     actors[(y * level->GetLevelWidth()) + x] = demonActor;
                     break;
                 }
@@ -194,7 +195,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 22:
                 {
-                    Actor* trollActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateTroll);
+                    Actor* trollActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterTroll));
                     actors[(y * level->GetLevelWidth()) + x] = trollActor;
                     break;
                 }
@@ -210,7 +211,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 23:
                 {
-                    Actor* orcActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateOrc);
+                    Actor* orcActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterOrc));
                     actors[(y * level->GetLevelWidth()) + x] = orcActor;
                     break;
                 }
@@ -227,7 +228,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
             case 63:
                 {
                     const int16_t wetManDelay = (5*60)+ rand() % (5*60);
-                    Actor* wetManActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWetMan);
+                    Actor* wetManActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterWetMan));
                     wetManActor->SetTemp2(wetManDelay);
                     actors[(y * level->GetLevelWidth()) + x] = wetManActor;
                     break;
@@ -244,7 +245,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 66:
                 {
-                    Actor*eyeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateEye);
+                    Actor*eyeActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterEye));
                     actors[(y * level->GetLevelWidth()) + x] = eyeActor;
                     break;
                 }
@@ -260,55 +261,55 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 27:
                 {
-                    Actor* mageActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateMage);
+                    Actor* mageActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterMage));
                     actors[(y * level->GetLevelWidth()) + x] = mageActor;
                     break;
                 }
             case 28:
                 {
-                    Actor* nemesisActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateNemesis);
+                    Actor* nemesisActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterNemesis));
                     nemesisActor->SetTemp1(actorIdBonusKeyRed); // Always drop key;
                     actors[(y * level->GetLevelWidth()) + x] = nemesisActor;
                     break;
                 }
             case 31:
                 {
-                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal1);
+                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdWarpPortal1));
                     break;
                 }
             case 32:
                 {
-                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal2);
+                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdWarpPortal2));
                     break;
                 }
             case 33:
                 {
-                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal3);
+                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdWarpPortal3));
                     break;
                 }
             case 34:
                 {
-                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal4);
+                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdWarpPortal4));
                     break;
                 }
             case 35:
                 {
-                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPortal5);
+                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdWarpPortal5));
                     break;
                 }
             case 54:
                 {
-                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateWarpPit);
+                    actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdWarpPit));
                     break;
                 }
             case 46:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb1);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdTomb1));
                 break;
             case 47:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb2);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdTomb2));
                 break;
             case 48:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateTomb3);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdTomb3));
                 break;
             case 51:
                 if (difficultyLevel < Hard)
@@ -330,7 +331,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                     {
                         spook_delay = (2*60)+ rand() % (5*60);
                     }
-                    Actor* spookActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSpook);
+                    Actor* spookActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterSpook));
                     spookActor->SetTemp2(spook_delay);
                     actors[(y * level->GetLevelWidth()) + x] = spookActor;
                     break;
@@ -354,7 +355,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                         if (m_zombie_base_delay > 8*60)
                             m_zombie_base_delay = 0;
                     }
-                    Actor* zombieActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateZombie);
+                    Actor* zombieActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterZombie));
                     zombieActor->SetTemp2(zombie_delay);
                     actors[(y * level->GetLevelWidth()) + x] = zombieActor;
                     break;
@@ -366,30 +367,30 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                 }
             case 55:
                 {
-                    Actor* skeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateSkeleton);
+                    Actor* skeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterSkeleton));
                     actors[(y * level->GetLevelWidth()) + x] = skeletonActor;
                     break;
                 }
             case 57:
                 {
-                    Actor* freezeTimeActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateFreezeTime);
+                    Actor* freezeTimeActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusFreezeTime));
                     actors[(y * level->GetLevelWidth()) + x] = freezeTimeActor;
                     break;
                 }
             case 58:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemRed);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusGemRed));
                 break;
             case 59:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemGreen);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusGemGreen));
                 break;
             case 60:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemBlue);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusGemBlue));
                 break;
             case 61:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemYellow);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusGemYellow));
                 break;
             case 62:
-                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, decorateGemPurple);
+                actors[(y * level->GetLevelWidth()) + x] = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdBonusGemPurple));
                 break;
             case 71:
                 if (difficultyLevel < Hard)
@@ -435,7 +436,7 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
                             if (m_zombie_base_delay > 8 * 60)
                                 m_zombie_base_delay = 0;
                         }
-                        Actor* wallSkeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, decorateWallSkeleton);
+                        Actor* wallSkeletonActor = new Actor(x + 0.5f, y + 0.5f, 0, GetDecorateActor(actorIdMonsterWallSkeleton));
                         wallSkeletonActor->SetTemp2(zombie_delay);
                         actors[(y * level->GetLevelWidth()) + x] = wallSkeletonActor;
                     }
@@ -450,22 +451,23 @@ void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
 
 const DecorateActor& GameAbyss::GetExplosionActor()
 {
-    return decorateExplosion;
+    return GetDecorateActor(actorIdBonusExplosion);
 }
 
 const DecorateActor& GameAbyss::GetExplodingWallActor()
 {
-    return decorateExplodingWall;
+    return GetDecorateActor(actorIdExplodingWall);
 }
 
 const DecorateActor& GameAbyss::GetPlayerActor()
 {
-    return decoratePlayer;
+    return GetDecorateActor(actorIdPlayer);
 }
 
 void GameAbyss::DrawStatusBar(const int16_t health, const std::string& locationMessage, const PlayerInventory& playerInventory, const uint16_t wideScreenMargin, const float /*playerAngle*/, const uint8_t /*levelIndex*/, const uint16_t /*shotPower*/, const uint32_t /*points*/)
 {
-    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(egaGraphicsAbyss::STATUSPIC), 0, 120);
+    const uint16_t statusPic = GetPictureIndexForCurrentGame(STATUSPIC);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(statusPic), 0, 120);
 
     const Font& font = *GetEgaGraph()->GetFont(3);
     RenderableText renderableText(font);
@@ -513,6 +515,8 @@ void GameAbyss::DrawHealth(RenderableTiles& renderableTiles, const int16_t healt
         picnum = FACE5PIC;
     }
 
+    picnum = GetPictureIndexForCurrentGame(picnum);
+
     m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picnum), 64, 134);
 }
 
@@ -550,7 +554,7 @@ void GameAbyss::DrawGems(const PlayerInventory& playerInventory)
     {
         if (playerInventory.GetGem(i))
         {
-            const uint16_t picNum = RADAR_RGEMPIC + i;
+            const uint16_t picNum = GetPictureIndexForCurrentGame(RADAR_RGEMPIC + i);
             m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(picNum), 256 + (i * 8), 173);
         }
     }
@@ -558,22 +562,39 @@ void GameAbyss::DrawGems(const PlayerInventory& playerInventory)
 
 void GameAbyss::DrawScroll(const uint8_t scrollIndex)
 {
+    const uint16_t scrollTopPicture = GetPictureIndexForCurrentGame(SCROLLTOPPIC);
+    const uint16_t scrollMiddlePicture = GetPictureIndexForCurrentGame(SCROLL1PIC + scrollIndex);
+    const uint16_t scrollBottomPicture = GetPictureIndexForCurrentGame(SCROLLBOTTOMPIC);
     m_renderer.Render2DBar(0, 0, 320, 120, EgaBlack);
-    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLLTOPPIC), 80, 0);
-    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLL1PIC + scrollIndex), 80, 32);
-    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(SCROLLBOTTOMPIC), 80, 88);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(scrollTopPicture), 80, 0);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(scrollMiddlePicture), 80, 32);
+    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(scrollBottomPicture), 80, 88);
 }
 
 void GameAbyss::DrawFinal()
 {
-    m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(FINALEPIC), 0, 0);
+    if (m_gameId == GameId::CatacombAbyssv112)
+    {
+
+    }
+    else
+    {
+        m_renderer.Render2DPicture(GetEgaGraph()->GetPicture(FINALEPIC), 0, 0);
+    }
 }
 
 GameMaps* GameAbyss::GetGameMaps()
 {
     if (m_gameMaps == nullptr)
     {
-        m_gameMaps = new GameMaps(gameMapsAbyss, m_gamePath);
+        if (m_gameId == GameId::CatacombAbyssv112)
+        {
+            m_gameMaps = new GameMaps(m_gameMapsAbyssV112.Get(), m_gamePath);
+        }
+        else
+        {
+            m_gameMaps = new GameMaps(gameMapsAbyss, m_gamePath);
+        }
     }
 
     return m_gameMaps;
@@ -711,7 +732,14 @@ HelpPages* GameAbyss::GetHelpPages()
 
 const std::map<uint16_t, const DecorateActor>& GameAbyss::GetDecorateActors() const
 {
-    return decorateAbyssAll;
+    if (m_gameId == GameId::CatacombAbyssv112)
+    {
+        return m_decorateV112.Get();
+    }
+    else
+    {
+        return decorateAbyssAll;
+    }
 }
 
 const std::string& GameAbyss::GetName() const
@@ -729,12 +757,12 @@ const GameId GameAbyss::GetId() const
 
 const uint16_t GameAbyss::GetMenuCursorPic() const
 {
-    return SKULL_SHOTPIC;
+    return GetPictureIndexForCurrentGame(SKULL_SHOTPIC);
 }
 
 const uint16_t GameAbyss::GetNorthIconSprite() const
 {
-    return NORTHICONSPR;
+    return GetPictureIndexForCurrentGame(NORTHICONSPR);
 }
 
 const std::string GameAbyss::GetSavedGamesPath() const
@@ -1010,4 +1038,18 @@ bool GameAbyss::IsCatacomb3D() const
 bool GameAbyss::IsCatacombAdventureSeries() const
 {
     return true;
+}
+
+const DecorateActor& GameAbyss::GetDecorateActor(const uint16_t actorId) const
+{
+    const std::map<uint16_t, const DecorateActor>& decorateActors = GetDecorateActors();
+    const auto& decorateIterator = decorateActors.find(actorId);
+    return (decorateIterator != decorateActors.end()) ? decorateIterator->second : decoratePotion;
+}
+
+const uint16_t GameAbyss::GetPictureIndexForCurrentGame(const uint16_t pictureIndexForV124) const
+{
+    // Compared to Catacomb Abyss v1.13 and v1.24, the EGAGRAPH file of Catacomb Abyss v1.12
+    // lacks the first picture (FINALEPIC). Therefore, all indexes to pictures need to be lowered by one.
+    return (m_gameId == GameId::CatacombAbyssv112) ? pictureIndexForV124 - 1u : pictureIndexForV124;
 }
