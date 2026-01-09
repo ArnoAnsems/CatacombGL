@@ -23,7 +23,17 @@ IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, const fs::pat
 {
     if (m_gameId == GameId::CatacombAbyssv112)
     {
+        m_shapeSoftdisk = new Shape(renderer);
+        const fs::path sdlogo = path / "SDLOGO.ABS";
+        m_shapeSoftdisk->LoadFromFile(sdlogo);
 
+        m_shapeTitle = new Shape(renderer);
+        const fs::path title = path / "TITLE.ABS";
+        m_shapeTitle->LoadFromFile(title);
+
+        m_shapeCredits = new Shape(renderer);
+        const fs::path credits = path / "CREDITS.ABS";
+        m_shapeCredits->LoadFromFile(credits);
     }
     else
     {
@@ -121,7 +131,51 @@ void IntroViewAbyss::DrawIntroduction(const uint32_t timeStamp)
 {
     if (m_gameId == GameId::CatacombAbyssv112)
     {
+        if (timeStamp < 100)
+        {
+            // Start from a black screen
+            m_renderer.Render2DBar(0, 0, 320, 200, EgaBlack);
+            if (m_fadeEffect.OverlayActive())
+            {
+                m_fadeEffect.SetOverlay(m_renderer);
+            }
+        }
+        else
+        {
+            const uint8_t pictureIndex = (timeStamp / 5000) % 3;
+            switch (pictureIndex)
+            {
+            case 0:
+            {
+                m_renderer.Render2DPicture(m_shapeSoftdisk->GetPicture(), 96u, 65u);
+                break;
+            }
+            case 1:
+            {
+                m_renderer.Render2DPicture(m_shapeTitle->GetPicture(), 0u, 0u);
+                break;
+            }
+            case 2:
+            {
+                m_renderer.Render2DPicture(m_shapeCredits->GetPicture(), 0u, 0u);
+                break;
+            }
+            }
 
+            if ((timeStamp % 5000) > 4000)
+            {
+                if (m_fadeEffect.OverlayActive())
+                {
+                    m_fadeEffect.SetOverlay(m_renderer);
+                }
+            }
+
+            if ((timeStamp % 5000) < 1000)
+            {
+                const uint32_t milliSec = timeStamp % 5000;
+                m_fadeEffect.DrawOverlay(m_renderer, milliSec);
+            }
+        }
     }
     else
     {

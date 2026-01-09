@@ -44,6 +44,54 @@ Shape::~Shape()
     m_picture = nullptr;
 }
 
+struct COMPHeader
+{
+    uint32_t OrginalLen;			// Orginal FileLength of compressed Data.
+    uint32_t CompressLen;			// Length of data after compression (A MUST for LZHUFF!)
+};
+
+FileChunk* BLoad(const fs::path SourceFile)
+{
+    FileChunk* SrcPtr = nullptr;
+    FileChunk* DstPtr = nullptr;
+    char Buffer[4];
+
+    std::ifstream file(SourceFile, std::ios::binary);
+    if (!file)
+    {
+        return nullptr;
+    }
+
+    std::streampos startPos = file.tellg();
+    file.seekg(0, std::ios::end);
+    std::streampos endPos = file.tellg();
+    const uint32_t fileSize = static_cast<uint32_t>(endPos - startPos);
+    file.seekg(startPos);
+
+    file.read(Buffer, 4);
+
+    if (std::strncmp(Buffer, "COMP", 4) != 0)
+    {
+        file.close();
+        return nullptr;
+    }
+
+    COMPHeader CompHeader;
+    CompHeader.CompressLen = fileSize - 8;
+    file.read((char*)&CompHeader.OrginalLen, sizeof(CompHeader.OrginalLen));
+
+    SrcPtr = new FileChunk(CompHeader.CompressLen);
+    file.read((char*)SrcPtr->GetChunk(), SrcPtr->GetSize());
+    DstPtr = new FileChunk(CompHeader.OrginalLen);
+
+    file.close();
+
+    Decompressor::lzwDecompress(SrcPtr->GetChunk(), DstPtr->GetChunk(), CompHeader.OrginalLen, CompHeader.CompressLen);
+
+    delete SrcPtr;
+    return(DstPtr);
+}
+
 struct CMP1Header
 {
     uint16_t CompType;
@@ -135,7 +183,11 @@ bool Shape::LoadFromFile(const fs::path filename)
     FileChunk* IFFfile = ext_BLoad(filename);
     if (!IFFfile)
     {
-        return false;
+        IFFfile = BLoad(filename);
+        if (!IFFfile)
+        {
+            return false;
+        }
     }
 
     // LAMBDA: Evaluate the file

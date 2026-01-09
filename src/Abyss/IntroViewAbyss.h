@@ -23,6 +23,7 @@
 #include "../Engine/IIntroView.h"
 #include "../Engine/Shape.h"
 #include "../Engine/GameId.h"
+#include "../Engine/FadeEffect.h"
 #include <filesystem>
 #include <string>
 
@@ -50,5 +51,6 @@ private:
     Shape* m_shapeNovice = nullptr;
     Shape* m_shapeWarrior = nullptr;
     Shape* m_shapeStandBeforeGate = nullptr;
+    FadeEffect m_fadeEffect;
 };
 

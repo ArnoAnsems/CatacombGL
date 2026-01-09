@@ -411,6 +411,69 @@ uint32_t Decompressor::lzhDecompress(uint8_t* infile, uint8_t* outfile, uint32_t
     return(count);
 }
 
+
+void Decompressor::lzwDecompress(uint8_t* infile, uint8_t* outfile, uint32_t OrginalLength, uint32_t CompressLength)
+{
+    uint32_t i, j, k, r, c;
+    uint16_t flags;
+
+    constexpr uint32_t n_lzw = 4096;
+    constexpr uint32_t f_lzw = 18;
+
+#define nextch(ptr)	*ptr++
+    uint8_t text_buf[n_lzw + f_lzw - 1];
+
+    for (i = 0; i < n_lzw - f_lzw; i++)
+        text_buf[i] = ' ';
+
+    r = n_lzw - f_lzw;
+    flags = 0;
+
+    for (; ; )
+    {
+        if (((flags >>= 1) & 256) == 0)
+        {
+            if (!(CompressLength--))
+                break;
+            c = nextch(infile);
+
+            flags = c | 0xff00;      /* uses higher byte cleverly */
+        }                                  /* to count eight */
+
+        if (flags & 1)
+        {
+            if (!(CompressLength--))
+                break;
+            c = nextch(infile);
+
+            *outfile++ = c;
+            text_buf[r++] = c;
+            r &= (n_lzw - 1);
+        }
+        else
+        {
+            if (!(CompressLength--))
+                break;
+            i = nextch(infile);
+
+            if (!(CompressLength--))
+                break;
+            j = nextch(infile);
+
+            i |= ((j & 0xf0) << 4);
+            j = (j & 0x0f) + THRESHOLD;
+
+            for (k = 0; k <= j; k++)
+            {
+                c = text_buf[(i + k) & (n_lzw - 1)];
+                *outfile++ = c;
+                text_buf[r++] = c;
+                r &= (n_lzw - 1);
+            }
+        }
+    }
+}
+
 FileChunk* Decompressor::RLEW_Decompress(const uint8_t* compressedChunk, const uint16_t rlewtag)
 {
     uint16_t* source = (uint16_t*)compressedChunk;
