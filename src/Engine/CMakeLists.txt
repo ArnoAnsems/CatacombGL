@@ -165,6 +165,8 @@ add_library( CatacombGL_Engine OBJECT
     StringUtility.h
     TextureAtlas.cpp
     TextureAtlas.h
+    Uint16Utility.h
+    Uint32Utility.h
     ViewPorts.cpp
     ViewPorts.h
 )

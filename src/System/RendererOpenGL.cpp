@@ -19,6 +19,7 @@
 #include "../Engine/Console.h"
 #include "../Engine/OverscanBorder.h"
 #include "../Engine/ViewPorts.h"
+#include "../Engine/Uint16Utility.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -925,8 +926,8 @@ Picture* RendererOpenGL::GetScreenCapture(const unsigned int textureId)
     uint8_t* rawPixelData = new uint8_t[(unsigned int)m_windowWidth * (unsigned int)m_windowHeight * 4u];
     glReadPixels(0, 0, m_windowWidth, m_windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, rawPixelData);
 
-    const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(m_windowWidth);
-    const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(m_windowHeight);
+    const uint16_t textureWidth = Uint16Utility::NearestPowerOfTwo(m_windowWidth);
+    const uint16_t textureHeight = Uint16Utility::NearestPowerOfTwo(m_windowHeight);
 
     uint8_t* texturePixelData = new uint8_t[(unsigned int)textureWidth * (unsigned int)textureHeight * 4u];
 

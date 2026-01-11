@@ -53,15 +53,3 @@ uint16_t Picture::GetTextureHeight() const
 {
     return m_textureHeight;
 }
-
-uint16_t Picture::GetNearestPowerOfTwo(const uint16_t size)
-{
-    // In order to support OpenGL 1.4, the texture width and height need to be a power of two.
-    uint16_t powerOfTwo = 1;
-    while (powerOfTwo < size)
-    {
-        powerOfTwo *= 2;
-    }
-
-    return powerOfTwo;
-}

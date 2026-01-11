@@ -21,6 +21,8 @@
 #include "IRenderer.h"
 #include "Decompressor.h"
 #include "FileChunk.h"
+#include "Uint16Utility.h"
+#include "Uint32Utility.h"
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
@@ -164,9 +166,6 @@ constexpr bool CmpChunk(const uint8_t* const Ptr, const char Name[4]) {
             Ptr[3] == Name[3];
 }
 
-#define BE_Cross_Swap16(x) ((uint16_t)(((uint16_t)(x)<<8)|((uint16_t)(x)>>8)))
-#define BE_Cross_Swap32(x) ((uint32_t)(((uint32_t)(x)<<24)|(((uint32_t)(x)<<8)&0x00FF0000)|(((uint32_t)(x)>>8)&0x0000FF00)|((uint32_t)(x)>>24)))
-
 bool Shape::LoadFromFile(const fs::path filename)
 {
     uint8_t* data = nullptr;
@@ -201,7 +200,7 @@ bool Shape::LoadFromFile(const fs::path filename)
         return;
     ptr += 4;
 
-    std::size_t FileLen = BE_Cross_Swap32(*(uint32_t*)ptr);
+    std::size_t FileLen = Uint32Utility::Swap(*(uint32_t*)ptr);
     ptr += 4;
 
     if (!CmpChunk(ptr, "ILBM"))
@@ -211,16 +210,16 @@ bool Shape::LoadFromFile(const fs::path filename)
 
     while (FileLen != 0)
     {
-        uint32_t ChunkLen = BE_Cross_Swap32(*(int32_t*)(ptr+4));
+        uint32_t ChunkLen = Uint32Utility::Swap(*(int32_t*)(ptr+4));
         ChunkLen = (ChunkLen+1) & 0xFFFFFFFE;
 
         if (CmpChunk(ptr, "BMHD"))
         {
             ptr += 8;
-            width = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->w);
-            height = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->h);
-            m_offsetX = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->x);
-            m_offsetY = BE_Cross_Swap16(((struct BitMapHeader*)ptr)->y);
+            width = Uint16Utility::Swap(((struct BitMapHeader*)ptr)->w);
+            height = Uint16Utility::Swap(((struct BitMapHeader*)ptr)->h);
+            m_offsetX = Uint16Utility::Swap(((struct BitMapHeader*)ptr)->x);
+            m_offsetY = Uint16Utility::Swap(((struct BitMapHeader*)ptr)->y);
 
             numberOfPlanes = ((struct BitMapHeader*)ptr)->d;
             if (numberOfPlanes != 4)
@@ -237,7 +236,7 @@ bool Shape::LoadFromFile(const fs::path filename)
         else if (CmpChunk(ptr, "BODY"))
         {
             ptr += 4;
-            dataSize = BE_Cross_Swap32(*((int32_t*)ptr));
+            dataSize = Uint32Utility::Swap(*((int32_t*)ptr));
             ptr += 4;
 
             if (FileLen < dataSize)
@@ -348,8 +347,8 @@ bool Shape::LoadFromFile(const fs::path filename)
     delete[] data;
 
     const uint16_t imageWidth = bytesPerRow * numberOfPlanes * 2;
-    const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
-    const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(height);
+    const uint16_t textureWidth = Uint16Utility::NearestPowerOfTwo(imageWidth);
+    const uint16_t textureHeight = Uint16Utility::NearestPowerOfTwo(height);
     const unsigned int textureId = LoadFileChunkIntoTexture(chunk, imageWidth, height, textureWidth, textureHeight, false);
     delete chunk;
 

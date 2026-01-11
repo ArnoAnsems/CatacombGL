@@ -54,7 +54,6 @@ public:
     uint8_t* GetTexturePixelData() const;
 
 private:
-    static uint16_t GetNearestPowerOfTwo(const uint16_t size);
     static uint16_t CalculateTextureWidth(const uint16_t imageWidth, const uint16_t numberOfColumns, const uint16_t imageSpacingX);
     static uint16_t CalculateTextureHeight(const uint16_t imageHeight, const uint16_t numberOfRows, const uint16_t imageSpacingY);
     uint16_t CalculateOffsetInPixelsX(const uint16_t imageIndex) const;

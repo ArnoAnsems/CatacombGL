@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "TextureAtlas.h"
+#include "Uint16Utility.h"
 #include <cstdint>
 #include <cstddef> // For std::size_t
 
@@ -58,28 +59,20 @@ unsigned int TextureAtlas::GetTextureId() const
     return m_textureId;
 }
 
-uint16_t TextureAtlas::GetNearestPowerOfTwo(const uint16_t size)
-{
-    // In order to support OpenGL 1.4, the texture width and height need to be a power of two.
-    uint16_t powerOfTwo = 1;
-    while (powerOfTwo < size)
-    {
-        powerOfTwo *= 2;
-    }
-
-    return powerOfTwo;
-}
-
 uint16_t TextureAtlas::CalculateTextureWidth(const uint16_t imageWidth, const uint16_t numberOfColumns, const uint16_t imageSpacingX)
 {
     const uint16_t totalRequiredWidth = (imageWidth * numberOfColumns) + (imageSpacingX * (numberOfColumns - 1));
-    return GetNearestPowerOfTwo(totalRequiredWidth);
+
+    // In order to support OpenGL 1.4, the texture width and height need to be a power of two.
+    return Uint16Utility::NearestPowerOfTwo(totalRequiredWidth);
 }
 
 uint16_t TextureAtlas::CalculateTextureHeight(const uint16_t imageHeight, const uint16_t numberOfRows, const uint16_t imageSpacingY)
 {
     const uint16_t totalRequiredHeight = (imageHeight * numberOfRows) + (imageSpacingY * (numberOfRows - 1));
-    return GetNearestPowerOfTwo(totalRequiredHeight);
+
+    // In order to support OpenGL 1.4, the texture width and height need to be a power of two.
+    return Uint16Utility::NearestPowerOfTwo(totalRequiredHeight);
 }
 
 uint16_t TextureAtlas::CalculateOffsetInPixelsX(const uint16_t imageIndex) const

@@ -22,6 +22,7 @@
 #include "Picture.h"
 #include "PictureTable.h"
 #include "SpriteTable.h"
+#include "Uint16Utility.h"
 
 #include <cstring>
 #include <filesystem>
@@ -237,8 +238,8 @@ Picture* EgaGraph::GetPicture(const uint16_t index)
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
         const uint16_t imageWidth = m_pictureTable->GetWidth(pictureIndex);
         const uint16_t imageHeight = m_pictureTable->GetHeight(pictureIndex);
-        const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
-        const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(imageHeight);
+        const uint16_t textureWidth = Uint16Utility::NearestPowerOfTwo(imageWidth);
+        const uint16_t textureHeight = Uint16Utility::NearestPowerOfTwo(imageHeight);
         const unsigned int textureId = LoadFileChunkIntoTexture(pictureChunk, imageWidth, imageHeight, textureWidth, textureHeight, transparent);
         m_pictures[pictureIndex] = new Picture(textureId, imageWidth, imageHeight, textureWidth, textureHeight);
         delete pictureChunk;
@@ -263,8 +264,8 @@ Picture* EgaGraph::GetMaskedPicture(const uint16_t index)
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
         const uint16_t imageWidth = m_maskedPictureTable->GetWidth(pictureIndex);
         const uint16_t imageHeight = m_maskedPictureTable->GetHeight(pictureIndex);
-        const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
-        const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(imageHeight);
+        const uint16_t textureWidth = Uint16Utility::NearestPowerOfTwo(imageWidth);
+        const uint16_t textureHeight = Uint16Utility::NearestPowerOfTwo(imageHeight);
         const unsigned int textureId = LoadMaskedFileChunkIntoTexture(pictureChunk, imageWidth, imageHeight, textureWidth, textureHeight);
         m_maskedPictures[pictureIndex] = new Picture(textureId, imageWidth, imageHeight, textureWidth, textureHeight);
         delete pictureChunk;
@@ -289,8 +290,8 @@ Picture* EgaGraph::GetSprite(const uint16_t index)
         FileChunk* pictureChunk = m_huffman->Decompress(&compressedPicture[sizeof(uint32_t)], compressedSize, uncompressedSize);
         const uint16_t imageWidth = m_spriteTable->GetWidth(pictureIndex);
         const uint16_t imageHeight = m_spriteTable->GetHeight(pictureIndex);
-        const uint16_t textureWidth = Picture::GetNearestPowerOfTwo(imageWidth);
-        const uint16_t textureHeight = Picture::GetNearestPowerOfTwo(imageHeight);
+        const uint16_t textureWidth = Uint16Utility::NearestPowerOfTwo(imageWidth);
+        const uint16_t textureHeight = Uint16Utility::NearestPowerOfTwo(imageHeight);
         const unsigned int textureId = LoadMaskedFileChunkIntoTexture(pictureChunk, imageWidth, imageHeight, textureWidth, textureHeight);
         m_sprites[pictureIndex] = new Picture(textureId, imageWidth, imageHeight, textureWidth, textureHeight);
         delete pictureChunk;

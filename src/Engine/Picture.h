@@ -33,7 +33,6 @@ public:
     uint16_t GetImageHeight() const;
     uint16_t GetTextureWidth() const;
     uint16_t GetTextureHeight() const;
-    static uint16_t GetNearestPowerOfTwo(const uint16_t size);
 
 private:
     const uint16_t m_imageWidth;
