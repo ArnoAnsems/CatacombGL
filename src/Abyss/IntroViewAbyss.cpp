@@ -15,70 +15,72 @@
 
 #include "IntroViewAbyss.h"
 
-namespace fs = std::filesystem;
-
-IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, const fs::path& path) :
+IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, const std::filesystem::path& path) :
     IIntroView(renderer),
     m_gameId(gameId)
 {
     if (m_gameId == GameId::CatacombAbyssv112)
     {
         m_shapeSoftdisk = new Shape(renderer);
-        const fs::path sdlogo = path / "SDLOGO.ABS";
+        const std::filesystem::path sdlogo = path / "SDLOGO.ABS";
         m_shapeSoftdisk->LoadFromFile(sdlogo);
 
         m_shapeTitle = new Shape(renderer);
-        const fs::path title = path / "TITLE.ABS";
+        const std::filesystem::path title = path / "TITLE.ABS";
         m_shapeTitle->LoadFromFile(title);
 
         m_shapeCredits = new Shape(renderer);
-        const fs::path credits = path / "CREDITS.ABS";
+        const std::filesystem::path credits = path / "CREDITS.ABS";
         m_shapeCredits->LoadFromFile(credits);
+
+        m_shapeStandBeforeGate = new Shape(renderer);
+        const std::filesystem::path standBeforeGate = path / "BEGIN.ABS";
+        m_shapeStandBeforeGate->LoadFromFile(standBeforeGate);
     }
     else
     {
         m_shapeEntering = new Shape(renderer);
-        const fs::path shp05 = path / "SHP05.ABS";
+        const std::filesystem::path shp05 = path / "SHP05.ABS";
         m_shapeEntering->LoadFromFile(shp05);
 
         m_shapePresents = new Shape(renderer);
-        const fs::path shp12 = path / "SHP12.ABS";
+        const std::filesystem::path shp12 = path / "SHP12.ABS";
         m_shapePresents->LoadFromFile(shp12);
 
         m_shapeSoftdisk = new Shape(renderer);
-        const fs::path shp01 = path / "SHP01.ABS";
+        const std::filesystem::path shp01 = path / "SHP01.ABS";
         m_shapeSoftdisk->LoadFromFile(shp01);
 
         m_shapeTitle = new Shape(renderer);
-        const fs::path shp02 = path / "SHP02.ABS";
+        const std::filesystem::path shp02 = path / "SHP02.ABS";
         m_shapeTitle->LoadFromFile(shp02);
 
         m_shapeCredits = new Shape(renderer);
-        const fs::path shp03 = path / "SHP03.ABS";
+        const std::filesystem::path shp03 = path / "SHP03.ABS";
         m_shapeCredits->LoadFromFile(shp03);
 
         m_shapeTrilogy = new Shape(renderer);
-        const fs::path shp11 = path / "SHP11.ABS";
+        const std::filesystem::path shp11 = path / "SHP11.ABS";
         m_shapeTrilogy->LoadFromFile(shp11);
 
         m_shapeSelectDifficulty = new Shape(renderer);
-        const fs::path shp07 = path / "SHP07.ABS";
+        const std::filesystem::path shp07 = path / "SHP07.ABS";
         m_shapeSelectDifficulty->LoadFromFile(shp07);
 
         m_shapeConfirmDifficulty = new Shape(renderer);
-        const fs::path shp06 = path / "SHP06.ABS";
+        const std::filesystem::path shp06 = path / "SHP06.ABS";
         m_shapeConfirmDifficulty->LoadFromFile(shp06);
 
         m_shapeNovice = new Shape(renderer);
-        const fs::path shp08 = path / "SHP08.ABS";
+        const std::filesystem::path shp08 = path / "SHP08.ABS";
         m_shapeNovice->LoadFromFile(shp08);
 
         m_shapeWarrior = new Shape(renderer);
-        const fs::path shp09 = path / "SHP09.ABS";
+        const std::filesystem::path shp09 = path / "SHP09.ABS";
         m_shapeWarrior->LoadFromFile(shp09);
 
         m_shapeStandBeforeGate = new Shape(renderer);
-        const fs::path shp04 = path / "SHP04.ABS";
+        const std::filesystem::path shp04 = path / "SHP04.ABS";
         m_shapeStandBeforeGate->LoadFromFile(shp04);
 
         // SHP04 = Stand before gate
@@ -248,8 +250,5 @@ void IntroViewAbyss::DrawWarriorSelected()
 
 void IntroViewAbyss::DrawStandBeforeGate()
 {
-    if (m_gameId != GameId::CatacombAbyssv112)
-    {
-        m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
-    }
+    m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
 }

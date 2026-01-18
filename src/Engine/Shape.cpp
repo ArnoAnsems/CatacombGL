@@ -23,14 +23,10 @@
 #include "FileChunk.h"
 #include "Uint16Utility.h"
 #include "Uint32Utility.h"
-#include <cstddef>
 #include <cstdint>
-#include <cstdio>
-#include <cstring>
+#include <cstring> // required for std::strncmp() and memcpy()
 #include <fstream>
 #include <ios>
-
-namespace fs = std::filesystem;
 
 Shape::Shape(const IRenderer& renderer) :
     m_renderer (renderer)
@@ -46,112 +42,85 @@ Shape::~Shape()
     m_picture = nullptr;
 }
 
-struct COMPHeader
+static uint32_t GetFileSize(std::ifstream& file)
 {
-    uint32_t OrginalLen;			// Orginal FileLength of compressed Data.
-    uint32_t CompressLen;			// Length of data after compression (A MUST for LZHUFF!)
-};
+    const std::streampos currentPos = file.tellg();
 
-FileChunk* BLoad(const fs::path SourceFile)
+    file.seekg(0, std::ios::end);
+    const std::streampos endPos = file.tellg();
+    const uint32_t fileSize = static_cast<uint32_t>(endPos);
+
+    // Move the stream position back to the current position
+    file.seekg(currentPos);
+
+    return fileSize;
+}
+
+static FileChunk* DecompressDataFromFile(const std::filesystem::path& sourceFile)
 {
-    FileChunk* SrcPtr = nullptr;
-    FileChunk* DstPtr = nullptr;
-    char Buffer[4];
-
-    std::ifstream file(SourceFile, std::ios::binary);
+    std::ifstream file(sourceFile, std::ios::binary);
     if (!file)
     {
         return nullptr;
     }
 
-    std::streampos startPos = file.tellg();
-    file.seekg(0, std::ios::end);
-    std::streampos endPos = file.tellg();
-    const uint32_t fileSize = static_cast<uint32_t>(endPos - startPos);
-    file.seekg(startPos);
+    char shapeType[4];
+    file.read(shapeType, 4);
 
-    file.read(Buffer, 4);
-
-    if (std::strncmp(Buffer, "COMP", 4) != 0)
+    // The shape can be one of two types: COMP or CMP1.
+    const bool isComp = (std::strncmp(shapeType, "COMP", 4) == 0);
+    const bool isCmp1 = (std::strncmp(shapeType, "CMP1", 4) == 0);
+    if (!isComp && !isCmp1)
     {
+        Logging::Instance().AddLogMessage("Unrecognized shape type: " + std::string(shapeType));
         file.close();
         return nullptr;
     }
 
-    COMPHeader CompHeader;
-    CompHeader.CompressLen = fileSize - 8;
-    file.read((char*)&CompHeader.OrginalLen, sizeof(CompHeader.OrginalLen));
+    if (isCmp1)
+    {
+        uint16_t compType = 0u;
+        file.read((char*)&compType, sizeof(compType));
 
-    SrcPtr = new FileChunk(CompHeader.CompressLen);
-    file.read((char*)SrcPtr->GetChunk(), SrcPtr->GetSize());
-    DstPtr = new FileChunk(CompHeader.OrginalLen);
+        if (compType != 2)   // 2 == LZH
+        {
+            Logging::Instance().AddLogMessage("Unrecognized compression type: " + std::to_string(compType));
+            file.close();
+            return nullptr;
+        }
+    }
+
+    uint32_t decompressedLength = 0u;
+    file.read((char*)&decompressedLength, sizeof(decompressedLength));
+
+    uint32_t compressedLength = 0u;
+    if (isCmp1)
+    {
+        file.read((char*)&compressedLength, sizeof(compressedLength));
+    }
+    else
+    {
+        compressedLength = GetFileSize(file) - 8u;
+    }
+
+    FileChunk* compressedChunk = new FileChunk(compressedLength);
+    file.read((char*)compressedChunk->GetChunk(), compressedChunk->GetSize());
 
     file.close();
 
-    Decompressor::lzwDecompress(SrcPtr->GetChunk(), DstPtr->GetChunk(), CompHeader.OrginalLen, CompHeader.CompressLen);
-
-    delete SrcPtr;
-    return(DstPtr);
-}
-
-struct CMP1Header
-{
-    uint16_t CompType;
-    uint32_t OrginalLen;			// Orginal FileLength of compressed Data.
-    uint32_t CompressLen;			// Length of data after compression (A MUST for LZHUFF!)
-};
-
-FileChunk* ext_BLoad(const fs::path SourceFile)
-{
-    FileChunk* SrcPtr = nullptr;
-    FileChunk* DstPtr = nullptr;
-    char Buffer[4];
-    struct CMP1Header CompHeader;
-
-    memset((void *)&CompHeader,0,sizeof(struct CMP1Header));
-
-    //
-    // Open file to load....
-    //
-
-    std::ifstream file(SourceFile, std::ios::binary);
-    if( !file )
+    FileChunk* decompressedChunk = new FileChunk(decompressedLength);
+    if (isCmp1)
     {
-        return nullptr;
+        Decompressor::lzhDecompress(compressedChunk->GetChunk(), decompressedChunk->GetChunk(), decompressedLength, compressedLength);
+    }
+    else
+    {
+        Decompressor::lzwDecompress(compressedChunk->GetChunk(), decompressedChunk->GetChunk(), decompressedLength, compressedLength);
     }
 
-    file.read(Buffer, 4);
+    delete compressedChunk;
 
-    if( std::strncmp(Buffer, "CMP1",4) != 0 )
-    {
-        file.close();
-        return nullptr;
-    }
-
-    //
-    // Compressed under new file format...
-    //
-    file.read((char*)&CompHeader.CompType, sizeof(CompHeader.CompType));
-
-    if (CompHeader.CompType != 2)   // 2 == LZH
-    {
-        file.close();
-        return nullptr;
-    }
-
-    file.read((char*)&CompHeader.OrginalLen, sizeof(CompHeader.OrginalLen));
-    file.read((char*)&CompHeader.CompressLen, sizeof(CompHeader.CompressLen));
-
-    SrcPtr = new FileChunk(CompHeader.CompressLen);
-    file.read((char*)SrcPtr->GetChunk(), SrcPtr->GetSize());
-    DstPtr = new FileChunk(CompHeader.OrginalLen);
-
-    file.close();
-
-    Decompressor::lzhDecompress(SrcPtr->GetChunk(), DstPtr->GetChunk(), CompHeader.OrginalLen, CompHeader.CompressLen);
-
-    delete SrcPtr;
-    return(DstPtr);
+    return(decompressedChunk);
 }
 
 struct BitMapHeader {
@@ -166,7 +135,7 @@ constexpr bool CmpChunk(const uint8_t* const Ptr, const char Name[4]) {
             Ptr[3] == Name[3];
 }
 
-bool Shape::LoadFromFile(const fs::path filename)
+bool Shape::LoadFromFile(const std::filesystem::path filename)
 {
     uint8_t* data = nullptr;
     std::size_t dataSize = 0;
@@ -179,21 +148,17 @@ bool Shape::LoadFromFile(const fs::path filename)
     // Decompress to ram and return ptr to data and return len of data in
     //	passed variable...
 
-    FileChunk* IFFfile = ext_BLoad(filename);
-    if (!IFFfile)
+    FileChunk* decompressedShapeData = DecompressDataFromFile(filename);
+    if (decompressedShapeData == nullptr)
     {
-        IFFfile = BLoad(filename);
-        if (!IFFfile)
-        {
-            return false;
-        }
+        return false;
     }
 
     // LAMBDA: Evaluate the file
     //
     [&](){
 
-    uint8_t *ptr = (uint8_t*)IFFfile->GetChunk();
+    uint8_t *ptr = (uint8_t*)decompressedShapeData->GetChunk();
 
     if (!CmpChunk(ptr, "FORM"))
         // LAMBDA RETURN
@@ -265,10 +230,10 @@ bool Shape::LoadFromFile(const fs::path filename)
     // LAMBDA END
     }();
 
-    if (IFFfile)
+    if (decompressedShapeData)
     {
-        delete IFFfile;
-        IFFfile = nullptr;
+        delete decompressedShapeData;
+        decompressedShapeData = nullptr;
     }
 
     FileChunk* chunk = new FileChunk(bytesPerRow * numberOfPlanes * height);
