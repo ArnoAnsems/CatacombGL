@@ -132,6 +132,7 @@ private:
     bool IsActionActive(const ControlAction action) const;
     bool IsActionJustPressed(const ControlAction action) const;
     void StartNewGameWithDifficultySelection();
+    void StartNewGameWithoutDifficultySelection();
     void StartNewGame();
     void UnloadLevel();
     bool StoreGameToFileWithFullPath(const std::filesystem::path filename) const;

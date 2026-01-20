@@ -238,13 +238,22 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     m_gameTimer.Reset();
     m_playerActions.ResetForNewLevel();
     m_manaBar.Reset(m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled());
-    if (m_difficultyLevel == Easy)
+    if (m_game.GetId() == GameId::CatacombAbyssv112)
     {
-        DisplayStatusMessage("*** NOVICE ***", 3000);
+        // The difficulty selection is skipped in Catacomb Abyss v1.12.
+        // Briefly show an empty status message when starting the game.
+        DisplayStatusMessage("", 3000);
     }
     else
     {
-        DisplayStatusMessage("*** WARRIOR ***", 3000);
+        if (m_difficultyLevel == Easy)
+        {
+            DisplayStatusMessage("*** NOVICE ***", 3000);
+        }
+        else
+        {
+            DisplayStatusMessage("*** WARRIOR ***", 3000);
+        }
     }
     m_warpToLevel = mapIndex;
 }
@@ -668,9 +677,8 @@ void EngineCore::EnterKeyReleased()
             {
                 if (m_game.GetId() == GameId::CatacombAbyssv112)
                 {
-                    m_state = EnteringLevel;
-                    m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
-                    m_warpToLevel = 0;
+                    m_state = StandBeforeGate;
+                    m_difficultyLevel = Hard; // Warrior
                 }
                 else
                 {
@@ -762,7 +770,14 @@ bool EngineCore::Think()
         const MenuCommand command = m_menu->ProcessInput(m_playerInput);
         if (command == MenuCommandStartNewGame)
         {
-            StartNewGameWithDifficultySelection();
+            if (m_game.GetId() == GameId::CatacombAbyssv112)
+            {
+                StartNewGameWithoutDifficultySelection();
+            }
+            else
+            {
+                StartNewGameWithDifficultySelection();
+            }
         }
         else if (command == MenuCommandStartNewGameEasy)
         {
@@ -3195,6 +3210,16 @@ bool EngineCore::IsActionJustPressed(const ControlAction action) const
 void EngineCore::StartNewGameWithDifficultySelection()
 {
     m_state = RequestDifficultyLevel;
+    m_playerInventory.ResetForNewGame();
+    UnloadLevel();
+    m_score.Reset();
+}
+
+void EngineCore::StartNewGameWithoutDifficultySelection()
+{
+    // Skip the difficulty selection
+    m_state = ShowDifficultyLevel;
+    m_difficultyLevel = Hard; // Warrior
     m_playerInventory.ResetForNewGame();
     UnloadLevel();
     m_score.Reset();

@@ -14,9 +14,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "IntroViewAbyss.h"
+#include "../Engine/EgaGraph.h"
 
-IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, const std::filesystem::path& path) :
+IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path) :
     IIntroView(renderer),
+    m_egaGraph(egaGraph),
     m_gameId(gameId)
 {
     if (m_gameId == GameId::CatacombAbyssv112)
@@ -250,5 +252,26 @@ void IntroViewAbyss::DrawWarriorSelected()
 
 void IntroViewAbyss::DrawStandBeforeGate()
 {
-    m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
+    if (m_gameId == GameId::CatacombAbyssv112)
+    {
+        // In Catacomb Abyss v1.12, the "You stand before the gate ..." picture does not have the story text included.
+        // Hence the text is explicitly added here.
+        const Font& font = *m_egaGraph.GetFont(3);
+        RenderableText renderableText(font);
+        renderableText.LeftAligned("You stand before the gate leading into the Towne", EgaBrightYellow, 0, 0);
+        renderableText.LeftAligned("Cemetery. Night is falling as mournful wails mingle", EgaBrightYellow, 0, 9);
+        renderableText.LeftAligned("with the sound of your pounding heart.", EgaBrightYellow, 0, 20);
+
+        renderableText.LeftAligned("Equipped with your wits and the Secret Knowledge", EgaBrightYellow, 0, 160);
+        renderableText.LeftAligned("of Magick, you venture forth on your quest to", EgaBrightYellow, 0, 169);
+        renderableText.LeftAligned("upset the dark schemes of Nemesis, your arch", EgaBrightYellow, 0, 178);
+        renderableText.LeftAligned("rival.", EgaBrightYellow, 0, 187);
+        m_renderer.RenderText(renderableText);
+
+        m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 40);
+    }
+    else
+    {
+        m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
+    }
 }

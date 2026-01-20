@@ -27,10 +27,12 @@
 #include <filesystem>
 #include <string>
 
+class EgaGraph;
+
 class IntroViewAbyss : public IIntroView
 {
 public:
-    IntroViewAbyss(GameId gameId, IRenderer& renderer, const std::filesystem::path& path);
+    IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path);
     ~IntroViewAbyss();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();
@@ -40,6 +42,7 @@ public:
 
 private:
     const GameId m_gameId;
+    EgaGraph& m_egaGraph;
     Shape* m_shapeEntering = nullptr;
     Shape* m_shapePresents = nullptr;
     Shape* m_shapeSoftdisk = nullptr;
