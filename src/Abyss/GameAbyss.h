@@ -29,6 +29,8 @@
 #include "GameMapsAbyssV112.h"
 #include "DecorateV112.h"
 
+class Shape;
+
 class GameAbyss: public IGame
 {
 public:
@@ -117,4 +119,5 @@ private:
     SavedGameConverterAbyss m_savedGameConverter;
     GameMapsAbyssV112 m_gameMapsAbyssV112;
     DecorateV112 m_decorateV112;
+    Shape* m_shapeFinale = nullptr;
 };

@@ -19,6 +19,7 @@
 #include "SavedGameInDosFormatConfigAbyss.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
+#include "../Engine/Shape.h"
 
 // Decorate
 #include "DecorateAll.h"
@@ -43,6 +44,13 @@ GameAbyss::GameAbyss(const GameId gameId, const fs::path gamePath, IRenderer& re
     m_audioRepository = nullptr;
     m_audioPlayer = nullptr;
     m_helpPages = nullptr;
+
+    if (m_gameId == GameId::CatacombAbyssv112)
+    {
+        m_shapeFinale = new Shape(renderer);
+        const std::filesystem::path finale = gamePath / "FINALE.ABS";
+        m_shapeFinale->LoadFromFile(finale);
+    }
 }
 
 GameAbyss::~GameAbyss()
@@ -53,6 +61,7 @@ GameAbyss::~GameAbyss()
     delete m_audioPlayer;
     delete m_introView;
     delete m_helpPages;
+    delete m_shapeFinale;
 }
 
 void GameAbyss::SpawnActors(Level* level, const DifficultyLevel difficultyLevel)
@@ -575,7 +584,7 @@ void GameAbyss::DrawFinal()
 {
     if (m_gameId == GameId::CatacombAbyssv112)
     {
-
+        m_renderer.Render2DPicture(m_shapeFinale->GetPicture(), 0u, 0u);
     }
     else
     {

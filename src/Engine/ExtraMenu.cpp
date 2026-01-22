@@ -83,7 +83,9 @@ ExtraMenu::ExtraMenu(
     goToSaveGameButton->SetId(goToSaveGameId);
     elementListMain->AddChild(goToSaveGameButton);
     elementListMain->AddChild(new GuiElementButton(playerInput, "Options", { GuiActionNavigateTo, pageOptionsId }, m_renderableText));
-    elementListMain->AddChild(new GuiElementButton(playerInput, catalogInfo.label, { GuiActionNavigateTo, pageCatalogId }, m_renderableText));
+    GuiElementButton* catalogButton = new GuiElementButton(playerInput, catalogInfo.label, { GuiActionNavigateTo, pageCatalogId }, m_renderableText);
+    catalogButton->SetEnabled(!catalogInfo.filenames.empty());
+    elementListMain->AddChild(catalogButton);
     elementListMain->AddChild(new GuiElementButton(playerInput, "Quit", { GuiActionQuit, 0 }, m_renderableText));
     pageMain->AddChild(elementListMain, 120, 30);
 
@@ -235,8 +237,6 @@ ExtraMenu::ExtraMenu(
     GuiElementStaticText* pageLabelSaveGame = new GuiElementStaticText(playerInput, "Save Game", EgaBrightYellow, m_renderableText);
     pageSaveGame->AddChild(pageLabelSaveGame, 160, 12);
 
-    GuiCatalog* guiCatalog = new GuiCatalog(playerInput, renderer, catalogInfo.filenames, gameFolder);
-    guiCatalog->SetId(pageCatalogId);
 
     m_guiMenu.AddChild(pageMain);
     m_guiMenu.AddChild(pageOptions);
@@ -246,7 +246,13 @@ ExtraMenu::ExtraMenu(
     m_guiMenu.AddChild(pageSound);
     m_guiMenu.AddChild(pageLoadGame);
     m_guiMenu.AddChild(pageSaveGame);
-    m_guiMenu.AddChild(guiCatalog);
+
+    if (!catalogInfo.filenames.empty())
+    {
+        GuiCatalog* guiCatalog = new GuiCatalog(playerInput, renderer, catalogInfo.filenames, gameFolder);
+        guiCatalog->SetId(pageCatalogId);
+        m_guiMenu.AddChild(guiCatalog);
+    }
 }
 
 bool ExtraMenu::IsActive() const
