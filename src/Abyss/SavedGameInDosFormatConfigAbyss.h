@@ -16,6 +16,22 @@
 
 #include "../Engine/SavedGameInDosFormatConfig.h"
 
+static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyssV112 =
+{
+    "CATACOMB ABYSS 3-D", // gameName
+    "0.93", // saveVersion
+    {
+        HeaderItemFreezeTime, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower
+    },   // headerItems
+    {
+        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState16, ObjectFlags,
+        ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
+        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
+        ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev
+    }   // objectItems
+};
+
 static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyss =
 {
     "CATACOMB ABYSS 3-D", // gameName

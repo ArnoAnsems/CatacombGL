@@ -208,6 +208,17 @@ TEST_F(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
     delete fileChunk;
 }
 
+TEST_F(SavedGameInDosFormat_Test, LoadSavedGameAbyssV112)
+{
+    GTEST_SKIP(); // Loading of Catacomb Abyss v1.12 DOS saved games not working yet.
+    constexpr uint16_t mapWidth = 40u;
+    constexpr uint16_t mapHeight = 28u;
+    FileChunk* fileChunk = new FileChunk(5504);
+    std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombAbyssV112, 6276);
+    SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigAbyssV112);
+    EXPECT_TRUE(savedGame.Load());
+}
+
 TEST_F(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
 {
     constexpr uint16_t mapWidth = 40u;
