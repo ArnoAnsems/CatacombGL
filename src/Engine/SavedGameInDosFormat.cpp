@@ -425,43 +425,49 @@ void SavedGameInDosFormat::ReadMapHeight(uint32_t& offset)
 
 void SavedGameInDosFormat::ReadPlane0(uint32_t& offset)
 {
-    uint16_t plane0CompressedSize = 0;
-    const uint16_t plane0MaxCompressedSize = m_fileChunk->GetSize() - offset - sizeof(plane0CompressedSize);
-    m_plane0 = Decompressor::RLEW_DecompressFromSavedGame(
-        &(m_fileChunk->GetChunk()[offset]),
-        0xABCD,
-        plane0MaxCompressedSize,
-        plane0CompressedSize);
+    const uint16_t* compressedWords = reinterpret_cast<uint16_t*>(&m_fileChunk->GetChunk()[offset]);
+    const uint16_t compressedSizeInBytes = *compressedWords;
+    const uint16_t remainingBytesInChunk = m_fileChunk->GetSize() - offset - sizeof(compressedSizeInBytes);
 
-    if (m_plane0 == nullptr)
+    if (compressedSizeInBytes <= remainingBytesInChunk)
     {
-        m_errorMessage = "unable to decompress plane 0";
-        m_dataIsValid = false;
+        const uint16_t compressedSizeInWords = compressedSizeInBytes / sizeof(uint16_t);
+        const uint16_t decompressedSizeInWords = 64u * 64u;
+        m_plane0 = Decompressor::RLEW_Decompress(
+            compressedWords + 1,
+            compressedSizeInWords,
+            decompressedSizeInWords,
+            0xABCD);
+        offset += (compressedSizeInBytes + sizeof(compressedSizeInBytes));
     }
     else
     {
-        offset += (plane0CompressedSize + sizeof(plane0CompressedSize));
+        m_errorMessage = "unable to decompress plane 0";
+        m_dataIsValid = false;
     }
 }
 
 void SavedGameInDosFormat::ReadPlane2(uint32_t& offset)
 {
-    uint16_t plane2CompressedSize = 0;
-    const uint16_t plane2MaxCompressedSize = m_fileChunk->GetSize() - offset - sizeof(plane2CompressedSize);
-    m_plane2 = Decompressor::RLEW_DecompressFromSavedGame(
-        &(m_fileChunk->GetChunk()[offset]),
-        0xABCD,
-        plane2MaxCompressedSize,
-        plane2CompressedSize);
+    const uint16_t* compressedWords = reinterpret_cast<uint16_t*>(&m_fileChunk->GetChunk()[offset]);
+    const uint16_t compressedSizeInBytes = *compressedWords;
+    const uint16_t remainingBytesInChunk = m_fileChunk->GetSize() - offset - sizeof(compressedSizeInBytes);
 
-    if (m_plane2 == nullptr)
+    if (compressedSizeInBytes <= remainingBytesInChunk)
     {
-        m_errorMessage = "unable to decompress plane 2";
-        m_dataIsValid = false;
+        const uint16_t compressedSizeInWords = compressedSizeInBytes / sizeof(uint16_t);
+        const uint16_t decompressedSizeInWords = 64u * 64u;
+        m_plane2 = Decompressor::RLEW_Decompress(
+            compressedWords + 1,
+            compressedSizeInWords,
+            decompressedSizeInWords,
+            0xABCD);
+        offset += (compressedSizeInBytes + sizeof(compressedSizeInBytes));
     }
     else
     {
-        offset += (plane2CompressedSize + sizeof(plane2CompressedSize));
+        m_errorMessage = "unable to decompress plane 2";
+        m_dataIsValid = false;
     }
 }
 

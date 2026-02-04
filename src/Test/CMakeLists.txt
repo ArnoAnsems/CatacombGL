@@ -25,6 +25,7 @@ add_executable( CatacombGL_Test
     ConsoleVariableEnum_Test.cpp
     ConsoleVariableInt_Test.cpp
     ConsoleVariableString_Test.cpp
+    Decompressor_Test.cpp
     FramesCounter_Test.cpp
     GameAbyss_Test.cpp
     GameApocalypse_Test.cpp

@@ -97,7 +97,11 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 
     uint8_t* plane0Source = &(m_rawData->GetChunk()[plane0Offset]);
     FileChunk* carmackExpandedChunk = Decompressor::CarmackExpand(plane0Source);
-    FileChunk* decompressedPlane0 = Decompressor::RLEW_Decompress(carmackExpandedChunk->GetChunk(), rlewTag);
+    const uint16_t* compressedWords0 = reinterpret_cast<uint16_t*>(carmackExpandedChunk->GetChunk());
+    const uint16_t compressedSizeInWords0 = carmackExpandedChunk->GetSize() / sizeof(uint16_t);
+    const uint16_t decompressedSizeInBytes0 = *compressedWords0;
+    const uint16_t decompressedSizeInWords0 = decompressedSizeInBytes0 / sizeof(uint16_t);
+    FileChunk* decompressedPlane0 = Decompressor::RLEW_Decompress(compressedWords0 + 1, compressedSizeInWords0, decompressedSizeInWords0, rlewTag);
 
     if ((decompressedPlane0->GetSize() / sizeof(uint16_t)) < (uint32_t)mapWidth * (uint32_t)mapHeight)
     {
@@ -108,7 +112,11 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 
     uint8_t* plane2Source = &(m_rawData->GetChunk()[plane2Offset]);
     FileChunk* carmackExpandedChunk2 = Decompressor::CarmackExpand(plane2Source);
-    FileChunk* decompressedPlane2 = Decompressor::RLEW_Decompress(carmackExpandedChunk2->GetChunk(), rlewTag);
+    const uint16_t* compressedWords2 = reinterpret_cast<uint16_t*>(carmackExpandedChunk2->GetChunk());
+    const uint16_t compressedSizeInWords2 = carmackExpandedChunk2->GetSize() / sizeof(uint16_t);
+    const uint16_t decompressedSizeInBytes2 = *compressedWords2;
+    const uint16_t decompressedSizeInWords2 = decompressedSizeInBytes2 / sizeof(uint16_t);
+    FileChunk* decompressedPlane2 = Decompressor::RLEW_Decompress(compressedWords2 + 1, compressedSizeInWords2, decompressedSizeInWords2, rlewTag);
 
     if ((decompressedPlane2->GetSize() / sizeof(uint16_t)) < (uint32_t)mapWidth * (uint32_t)mapHeight)
     {

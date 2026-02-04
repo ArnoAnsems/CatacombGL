@@ -474,77 +474,49 @@ void Decompressor::lzwDecompress(uint8_t* infile, uint8_t* outfile, uint32_t Org
     }
 }
 
-FileChunk* Decompressor::RLEW_Decompress(const uint8_t* compressedChunk, const uint16_t rlewtag)
+FileChunk* Decompressor::RLEW_Decompress(
+    const uint16_t* compressedWords,
+    const uint16_t compressedSizeInWords,
+    const uint16_t maxDecompressedSizeInWords,
+    const uint16_t rlewtag)
 {
-    uint16_t* source = (uint16_t*)compressedChunk;
-    const uint16_t decompressedSize = *source++;
-    FileChunk* decompressedChunk = new FileChunk(decompressedSize);
+    FileChunk* decompressedChunk = nullptr;
+    uint16_t* source = (uint16_t*)compressedWords;
 
-    uint16_t* destination = (uint16_t*)decompressedChunk->GetChunk();
-    uint16_t* end = destination + (decompressedSize / sizeof(uint16_t));
-
-    uint16_t value, count;
+    uint16_t* tempDecompressedData = new uint16_t[maxDecompressedSizeInWords];
+    uint16_t* destination = tempDecompressedData;
+    uint16_t destinationIndex = 0u;
+    uint16_t sourceIndex = 0u;
 
     do
     {
-        value = *source++;
+        uint16_t value = source[sourceIndex];
+        sourceIndex++;
         if (value != rlewtag)
         {
             // Uncompressed
-            *destination++=value;
+            destination[destinationIndex] = value;
+            destinationIndex++;
         }
         else
         {
             // Compressed string
-            count = *source++;
-            value = *source++;
+            const uint16_t count = source[sourceIndex];
+            sourceIndex++;
+            value = source[sourceIndex];
+            sourceIndex++;
             for (uint16_t i = 0; i < count; i++)
-                *destination++ = value;
+            {
+                destination[destinationIndex] = value;
+                destinationIndex++;
+            }
         }
-    } while (destination < end);
+    } while (sourceIndex < compressedSizeInWords && destinationIndex < maxDecompressedSizeInWords);
 
-    return decompressedChunk;
-}
-
-FileChunk* Decompressor::RLEW_DecompressFromSavedGame(
-    const uint8_t* compressedChunk,
-    const uint16_t rlewtag,
-    const uint16_t maxCompressedSize,
-    uint16_t& compressedSize)
-{
-    FileChunk* decompressedChunk = nullptr;
-    uint16_t* source = (uint16_t*)compressedChunk;
-    compressedSize = *source++;
-    if (compressedSize <= maxCompressedSize)
-    {
-        uint16_t tempDecompressedData[64 * 64];
-        uint16_t* destination = tempDecompressedData;
-        uint16_t* end = source + (compressedSize / sizeof(uint16_t));
-
-        uint16_t value, count;
-
-        do
-        {
-            value = *source++;
-            if (value != rlewtag)
-            {
-                // Uncompressed
-                *destination++ = value;
-            }
-            else
-            {
-                // Compressed string
-                count = *source++;
-                value = *source++;
-                for (uint16_t i = 0; i < count; i++)
-                    *destination++ = value;
-            }
-        } while (source < end);
-
-        uint16_t decompressedSize = (destination - tempDecompressedData) * sizeof(uint16_t);
-        decompressedChunk = new FileChunk(decompressedSize);
-        std::memcpy(decompressedChunk->GetChunk(), tempDecompressedData, decompressedSize);
-    }
+    const uint16_t decompressedSizeInBytes = destinationIndex * sizeof(uint16_t);
+    decompressedChunk = new FileChunk(decompressedSizeInBytes);
+    std::memcpy(decompressedChunk->GetChunk(), tempDecompressedData, decompressedSizeInBytes);
+    delete[] tempDecompressedData;
 
     return decompressedChunk;
 }
