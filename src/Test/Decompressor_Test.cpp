@@ -31,20 +31,63 @@ protected:
     }
 };
 
-TEST_F(Decompressor_Test, ReadUncompressedRLEWData)
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataIsUncompressedThenDataIsUnchanged)
 {
-    constexpr uint16_t compressedData[3] = { 0x1234, 0x5678, 0x90ab };
-    constexpr uint16_t compressedDataSize = sizeof(compressedData);
-    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, 3u, 3u, 0xabcd);
-    constexpr uint16_t expectedData[3] = {0x1234, 0x5678, 0x90ab};
-    CheckChunkContainsExpectedData(*fileChunk, expectedData, 3u);
+    constexpr uint16_t compressedSizeInWords = 3u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0x1234, 0x5678, 0x90ab };
+    constexpr uint16_t decompressedSizeInWords = compressedSizeInWords;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedData[decompressedSizeInWords] = {0x1234, 0x5678, 0x90ab};
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, decompressedSizeInWords);
 }
 
-TEST_F(Decompressor_Test, ReadCompressedRLEWData)
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataIsCompressedThenDataIsDecompressed)
 {
-    constexpr uint16_t compressedData[6] = { 0xabcd, 0x0004, 0x1234, 0xabcd, 0x0003, 0x5678 };
-    constexpr uint16_t compressedDataSize = sizeof(compressedData);
-    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, 6u, 7u, 0xabcd);
-    constexpr uint16_t expectedData[7] = { 0x1234, 0x1234, 0x1234, 0x1234, 0x5678, 0x5678, 0x5678 };
-    CheckChunkContainsExpectedData(*fileChunk, expectedData, 7u);
+    constexpr uint16_t compressedSizeInWords = 6u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0xabcd, 0x0004, 0x1234, 0xabcd, 0x0003, 0x5678 };
+    constexpr uint16_t decompressedSizeInWords = 7u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedData[decompressedSizeInWords] = { 0x1234, 0x1234, 0x1234, 0x1234, 0x5678, 0x5678, 0x5678 };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, decompressedSizeInWords);
+}
+
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataIsSpecialTagThenDataIsSpecialTag)
+{
+    constexpr uint16_t compressedSizeInWords = 3u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0xabcd, 0x0001, 0xabcd };
+    constexpr uint16_t decompressedSizeInWords = 1u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedData[decompressedSizeInWords] = { 0xabcd };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, decompressedSizeInWords);
+}
+
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataDoesNotFillUpDecompressedSizeThenDataIsFitted)
+{
+    constexpr uint16_t compressedSizeInWords = 4u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0x5678, 0xabcd, 0x0002, 0x1234 };
+    constexpr uint16_t decompressedSizeInWords = 10u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedSizeInWords = 3u;
+    constexpr uint16_t expectedData[expectedSizeInWords] = { 0x5678, 0x1234, 0x1234 };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, expectedSizeInWords);
+}
+
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataIsUncompressedAndDoesNotFitDecompressedSizeThenDataIsTruncated)
+{
+    constexpr uint16_t compressedSizeInWords = 4u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0x1234, 0x5678, 0x90ab, 0xcdef };
+    constexpr uint16_t decompressedSizeInWords = 2u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedData[decompressedSizeInWords] = { 0x1234, 0x5678 };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, decompressedSizeInWords);
+}
+
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataIsCompressedAndDoesNotFitDecompressedSizeThenDataIsTruncated)
+{
+    constexpr uint16_t compressedSizeInWords = 9u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0xabcd, 0x0002, 0x1234, 0xabcd, 0x0003, 0x5678, 0xabcd, 0x0004, 0x90ab };
+    constexpr uint16_t decompressedSizeInWords = 5u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedData[decompressedSizeInWords] = { 0x1234, 0x1234, 0x5678, 0x5678, 0x5678 };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, decompressedSizeInWords);
 }
