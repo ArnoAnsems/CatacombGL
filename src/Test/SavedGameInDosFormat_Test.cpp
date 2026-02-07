@@ -210,13 +210,41 @@ TEST_F(SavedGameInDosFormat_Test, LoadInvalidSavedGameCatacomb3DNoObjectFound)
 
 TEST_F(SavedGameInDosFormat_Test, LoadSavedGameAbyssV112)
 {
-    GTEST_SKIP(); // Loading of Catacomb Abyss v1.12 DOS saved games not working yet.
     constexpr uint16_t mapWidth = 40u;
     constexpr uint16_t mapHeight = 28u;
-    FileChunk* fileChunk = new FileChunk(5504);
+    FileChunk* fileChunk = new FileChunk(6276);
     std::memcpy(fileChunk->GetChunk(), rawSavedGameDataCatacombAbyssV112, 6276);
     SavedGameInDosFormat savedGame(fileChunk, savedGameInDosFormatConfigAbyssV112);
     EXPECT_TRUE(savedGame.Load());
+
+    EXPECT_EQ(savedGame.GetFreezeTime(), 0);
+    EXPECT_EQ(savedGame.GetBolts(), 5);
+    EXPECT_EQ(savedGame.GetNukes(), 4);
+    EXPECT_EQ(savedGame.GetPotions(), 3);
+    EXPECT_EQ(savedGame.GetKeys(0), 1);
+    EXPECT_EQ(savedGame.GetKeys(1), 0);
+    EXPECT_EQ(savedGame.GetKeys(2), 1);
+    EXPECT_EQ(savedGame.GetKeys(3), 0);
+    EXPECT_EQ(savedGame.GetScrolls(0), 1);
+    EXPECT_EQ(savedGame.GetScrolls(1), 0);
+    EXPECT_EQ(savedGame.GetBody(), 92);
+
+    constexpr uint16_t planeSize = mapWidth * mapHeight * sizeof(uint16_t);
+    EXPECT_EQ(savedGame.GetPlane0()->GetSize(), planeSize);
+    EXPECT_EQ(savedGame.GetPlane2()->GetSize(), planeSize);
+
+    EXPECT_EQ(savedGame.GetNumberOfObjects(), 65);
+
+    const SavedGameInDosFormat::ObjectInDosFormat& firstObject = savedGame.GetObject(0);
+    EXPECT_EQ(firstObject.flags, 0);
+    EXPECT_EQ(firstObject.distance, 0);
+    EXPECT_EQ(firstObject.viewx, 0);
+    EXPECT_EQ(firstObject.viewheight, 0);
+    EXPECT_EQ(firstObject.size, 26214);
+
+    CheckObjectIsPlayer(savedGame.GetObject(0));
+
+    delete fileChunk;
 }
 
 TEST_F(SavedGameInDosFormat_Test, LoadSavedGameAbyss)
