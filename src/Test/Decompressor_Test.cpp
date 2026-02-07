@@ -91,3 +91,39 @@ TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataIsCompressedAndDoesNotFitD
     constexpr uint16_t expectedData[decompressedSizeInWords] = { 0x1234, 0x1234, 0x5678, 0x5678, 0x5678 };
     CheckChunkContainsExpectedData(*fileChunk, expectedData, decompressedSizeInWords);
 }
+
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataEndsWithASpecialTagThenSpecialTagIsIgnored)
+{
+    // The special tag at the end indicates a compressed string, but both the run length and the word to repeat are missing.
+    // The special tag will be ignored.
+    constexpr uint16_t compressedSizeInWords = 4u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0xabcd, 0x0003, 0x1234, 0xabcd };
+    constexpr uint16_t decompressedSizeInWords = 10u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedSizeInWords = 3u;
+    constexpr uint16_t expectedData[expectedSizeInWords] = { 0x1234, 0x1234, 0x1234 };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, expectedSizeInWords);
+}
+
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataEndsWithRunLengthThenRunLengthIsIgnored)
+{
+    // The special tag and the run length at the end indicate a compressed string, but the word to repeat is missing.
+    // Both the special tag and the run length will be ignored.
+    constexpr uint16_t compressedSizeInWords = 5u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0xabcd, 0x0004, 0x5678, 0xabcd, 0x0002 };
+    constexpr uint16_t decompressedSizeInWords = 10u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedSizeInWords = 4u;
+    constexpr uint16_t expectedData[expectedSizeInWords] = { 0x5678, 0x5678, 0x5678, 0x5678 };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, expectedSizeInWords);
+}
+
+TEST_F(Decompressor_Test, WhenDecompressingAndRLEWDataEndsWithTooLongStringThenStringIsTruncated)
+{
+    constexpr uint16_t compressedSizeInWords = 6u;
+    constexpr uint16_t compressedData[compressedSizeInWords] = { 0xabcd, 0x0003, 0x1234, 0xabcd, 0x00FF, 0x5678 };
+    constexpr uint16_t decompressedSizeInWords = 8u;
+    const FileChunk* fileChunk = Decompressor::RLEW_Decompress(compressedData, compressedSizeInWords, decompressedSizeInWords, 0xabcd);
+    constexpr uint16_t expectedData[decompressedSizeInWords] = { 0x1234, 0x1234, 0x1234, 0x5678, 0x5678, 0x5678, 0x5678, 0x5678 };
+    CheckChunkContainsExpectedData(*fileChunk, expectedData, decompressedSizeInWords);
+}

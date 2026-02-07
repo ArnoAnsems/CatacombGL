@@ -501,14 +501,28 @@ FileChunk* Decompressor::RLEW_Decompress(
         else
         {
             // Compressed string
-            const uint16_t count = source[sourceIndex];
-            sourceIndex++;
-            value = source[sourceIndex];
-            sourceIndex++;
-            for (uint16_t i = 0; i < count; i++)
+            const uint16_t remainingWordsAtSource = compressedSizeInWords - sourceIndex;
+            if (remainingWordsAtSource < 2u)
             {
-                destination[destinationIndex] = value;
-                destinationIndex++;
+                // There was supposed to be a compressed string here, but somehow the end of the compressed data
+                // is already reached. Just ignore whatever was left in the compressed data.
+                sourceIndex = compressedSizeInWords;
+            }
+            else
+            {
+                const uint16_t count = source[sourceIndex];
+                sourceIndex++;
+                value = source[sourceIndex];
+                sourceIndex++;
+
+                // Check how many free words remain at the destination, to prevent going out of bounds.
+                const uint16_t remainingFreeWordsAtDestination = maxDecompressedSizeInWords - destinationIndex;
+                const uint16_t lengthOfDecompressedString = (count > remainingFreeWordsAtDestination) ? remainingFreeWordsAtDestination : count;
+                for (uint16_t i = 0; i < lengthOfDecompressedString; i++)
+                {
+                    destination[destinationIndex] = value;
+                    destinationIndex++;
+                }
             }
         }
     } while (sourceIndex < compressedSizeInWords && destinationIndex < maxDecompressedSizeInWords);
