@@ -136,6 +136,7 @@ EngineCore::EngineCore(IGame& game, const ISystem& system, PlayerInput& keyboard
     {
         // Retrieve Catacomb Adventure Trilogy saved DOS games
         const fs::path& gameDataPath =
+            (game.GetId() == GameId::CatacombAbyssv112) ? configurationSettings.GetCVarString(CVarIdPathAbyssv112).Get() :
             (game.GetId() == GameId::CatacombAbyssv113) ? configurationSettings.GetCVarString(CVarIdPathAbyssv113).Get() :
             (game.GetId() == GameId::CatacombAbyssv124) ? configurationSettings.GetCVarString(CVarIdPathAbyssv124).Get() :
             (game.GetId() == GameId::CatacombArmageddonv102) ? configurationSettings.GetCVarString(CVarIdPathArmageddonv102).Get() :

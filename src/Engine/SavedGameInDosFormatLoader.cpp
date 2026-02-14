@@ -72,40 +72,49 @@ void SavedGameInDosFormatLoader::LoadActors(
     for (uint16_t i = 1; i < m_savedGameInDosFormat.GetNumberOfObjects(); i++)
     {
         const SavedGameInDosFormat::ObjectInDosFormat& dosObject = m_savedGameInDosFormat.GetObject(i);
-        const uint16_t actorId = m_savedGameConverter.GetActorId(dosObject);
-        const auto it = m_decorateActors.find(actorId);
-        if (it != m_decorateActors.end())
+        if (dosObject.active <= 3)
         {
-            const DecorateActor& decorateActor = it->second;
-            const float x = DosToGLCoordinate(dosObject.x);
-            const float y = DosToGLCoordinate(dosObject.y);
-            Actor* actor = new Actor(x, y, 0, decorateActor);
-            actor->SetTile((uint8_t)dosObject.tilex, (uint8_t)dosObject.tiley);
-            actor->SetAngle(DosToGLAngle(dosObject.angle));
-            actor->SetActive(dosObject.active != 0);
-            actor->SetHealth(dosObject.hitpoints);
-            actor->SetTemp1(dosObject.temp1);
-            actor->SetTemp2(dosObject.temp2);
-            actor->SetDirection(DosDirToDirection(dosObject.dir));
-            actor->SetState(m_savedGameConverter.GetDecorateStateId(dosObject), 0);
-            actor->SetAnimationFrame(m_savedGameConverter.GetAnimationFrame(dosObject));
-            actor->SetTimeToNextAction(0);
-            if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
+            const uint16_t actorId = m_savedGameConverter.GetActorId(dosObject);
+            const auto it = m_decorateActors.find(actorId);
+            if (it != m_decorateActors.end())
             {
-                nonBlockingActors[nonBlockingIndex] = actor;
-                nonBlockingIndex++;
+                const DecorateActor& decorateActor = it->second;
+                const float x = DosToGLCoordinate(dosObject.x);
+                const float y = DosToGLCoordinate(dosObject.y);
+                Actor* actor = new Actor(x, y, 0, decorateActor);
+                actor->SetTile((uint8_t)dosObject.tilex, (uint8_t)dosObject.tiley);
+                actor->SetAngle(DosToGLAngle(dosObject.angle));
+                actor->SetActive(dosObject.active != 0);
+                actor->SetHealth(dosObject.hitpoints);
+                actor->SetTemp1(dosObject.temp1);
+                actor->SetTemp2(dosObject.temp2);
+                actor->SetDirection(DosDirToDirection(dosObject.dir));
+                actor->SetState(m_savedGameConverter.GetDecorateStateId(dosObject), 0);
+                actor->SetAnimationFrame(m_savedGameConverter.GetAnimationFrame(dosObject));
+                actor->SetTimeToNextAction(0);
+                if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
+                {
+                    nonBlockingActors[nonBlockingIndex] = actor;
+                    nonBlockingIndex++;
+                }
+                else
+                {
+                    blockingActors[(dosObject.tiley * levelWidth) + dosObject.tilex] = actor;
+                }
             }
             else
             {
-                blockingActors[(dosObject.tiley * levelWidth) + dosObject.tilex] = actor;
+                const std::string warningMessage =
+                    "WARNING: Unidentified actor at (" + std::to_string(dosObject.tilex) + "," + std::to_string(dosObject.tiley) + ") "
+                    "with state16=" + StringUtility::IntToHexadecimal(dosObject.state16) +
+                    " and state32=" + StringUtility::IntToHexadecimal(dosObject.state32);
+                Logging::Instance().AddLogMessage(warningMessage);
             }
         }
         else
         {
             const std::string warningMessage =
-                "WARNING: Unidentified actor at (" + std::to_string(dosObject.tilex) + "," + std::to_string(dosObject.tiley) + ") "
-                "with state16=" + StringUtility::IntToHexadecimal(dosObject.state16) +
-                " and state32=" + StringUtility::IntToHexadecimal(dosObject.state32);
+                "WARNING: Unidentified actor with active=" + std::to_string(dosObject.active) + " and obclass=" + std::to_string(dosObject.obclass);
             Logging::Instance().AddLogMessage(warningMessage);
         }
     }

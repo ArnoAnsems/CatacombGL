@@ -1031,7 +1031,9 @@ const CatalogInfo& GameAbyss::GetCatalogInfo() const
 
 const SavedGameInDosFormatConfig& GameAbyss::GetSavedGameInDosFormatConfig() const
 {
-    return savedGameInDosFormatConfigAbyss;
+    return 
+        (m_gameId == GameId::CatacombAbyssv112) ? savedGameInDosFormatConfigAbyssV112 :
+        savedGameInDosFormatConfigAbyss;
 }
 
 ISavedGameConverter& GameAbyss::GetSavedGameConverter()

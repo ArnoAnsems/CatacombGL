@@ -242,7 +242,17 @@ TEST_F(SavedGameInDosFormat_Test, LoadSavedGameAbyssV112)
     EXPECT_EQ(firstObject.viewheight, 0);
     EXPECT_EQ(firstObject.size, 26214);
 
-    CheckObjectIsPlayer(savedGame.GetObject(0));
+    CheckObjectIsPlayer(firstObject);
+
+    for (uint16_t i = 0; i < savedGame.GetNumberOfObjects(); i++)
+    {
+        const SavedGameInDosFormat::ObjectInDosFormat& object = savedGame.GetObject(i);
+        if (object.active != 8)
+        {
+            CheckObjectRanges(object);
+            CheckObjectCoordinates(object, mapWidth, mapHeight);
+        }
+    }
 
     delete fileChunk;
 }
