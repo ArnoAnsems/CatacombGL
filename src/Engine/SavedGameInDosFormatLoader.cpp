@@ -72,7 +72,7 @@ void SavedGameInDosFormatLoader::LoadActors(
     for (uint16_t i = 1; i < m_savedGameInDosFormat.GetNumberOfObjects(); i++)
     {
         const SavedGameInDosFormat::ObjectInDosFormat& dosObject = m_savedGameInDosFormat.GetObject(i);
-        if (dosObject.active <= 3)
+        if (dosObject.active <= 3) // Ignore invalid objects
         {
             const uint16_t actorId = m_savedGameConverter.GetActorId(dosObject);
             const auto it = m_decorateActors.find(actorId);
@@ -110,12 +110,6 @@ void SavedGameInDosFormatLoader::LoadActors(
                     " and state32=" + StringUtility::IntToHexadecimal(dosObject.state32);
                 Logging::Instance().AddLogMessage(warningMessage);
             }
-        }
-        else
-        {
-            const std::string warningMessage =
-                "WARNING: Unidentified actor with active=" + std::to_string(dosObject.active) + " and obclass=" + std::to_string(dosObject.obclass);
-            Logging::Instance().AddLogMessage(warningMessage);
         }
     }
 }
