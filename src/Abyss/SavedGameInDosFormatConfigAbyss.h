@@ -21,7 +21,7 @@ static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyssV112 =
     "CATACOMB ABYSS 3-D", // gameName
     "0.93", // saveVersion
     {
-        HeaderItemFreezeTime, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
         HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower
     },   // headerItems
     {

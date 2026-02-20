@@ -92,6 +92,9 @@ void SavedGameInDosFormatLoader::LoadActors(
                 actor->SetState(m_savedGameConverter.GetDecorateStateId(dosObject), 0);
                 actor->SetAnimationFrame(m_savedGameConverter.GetAnimationFrame(dosObject));
                 actor->SetTimeToNextAction(0);
+                actor->SetSolid(IsSolid(actor->GetState()));
+                actor->SetActionPerformed(true);
+
                 if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
                 {
                     nonBlockingActors[nonBlockingIndex] = actor;
@@ -129,4 +132,15 @@ constexpr float SavedGameInDosFormatLoader::DosToGLCoordinate(const int32_t dosC
 constexpr float SavedGameInDosFormatLoader::DosToGLAngle(const int16_t dosAngle)
 {
     return static_cast<float>((360u + 90u - dosAngle) % 360u);
+}
+
+constexpr bool SavedGameInDosFormatLoader::IsSolid(const DecorateStateId stateId)
+{
+    return
+        (stateId == StateIdWalk ||
+         stateId == StateIdAttack ||
+         stateId == StateIdPain ||
+         stateId == StateIdRise ||
+         stateId == StateIdSink ||
+         stateId == StateIdDecoration);
 }
