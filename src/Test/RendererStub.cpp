@@ -17,14 +17,6 @@
 
 static const std::string defaultString("");
 
-RendererStub::RendererStub()
-{
-}
-
-RendererStub::~RendererStub()
-{
-}
-
 void RendererStub::Setup()
 {
 }

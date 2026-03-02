@@ -19,8 +19,8 @@
 class RendererStub : public IRenderer
 {
 public:
-    RendererStub();
-    ~RendererStub();
+    RendererStub() = default;
+    ~RendererStub() override = default;
 
     //
     // Screen setup

@@ -31,6 +31,8 @@ add_executable( CatacombGL_Test
     GameApocalypse_Test.cpp
     GameArmageddon_Test.cpp
     GameCatacomb3D_Test.cpp
+    GameStub.cpp
+    GameStub.h
     Gui_TestBase.cpp
     Gui_TestBase.h
     GuiElementEditText_Test.cpp
@@ -38,7 +40,9 @@ add_executable( CatacombGL_Test
     GuiMenu_Test.cpp
     HelpPages_Test.cpp
     LevelLocationNames_Test.cpp
+    PlayerInventory_Test.cpp
     RendererStub.cpp
+    RendererStub.h
     SavedGameConverterAbyss_Test.cpp
     SavedGameConverterApocalypse_Test.cpp
     SavedGameConverterArmageddon_Test.cpp
