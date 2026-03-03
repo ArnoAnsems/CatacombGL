@@ -39,6 +39,13 @@ class SavedGameInDosFormat;
 class PlayerInventory
 {
 public:
+    struct ChestContent
+    {
+        uint8_t m_boltsInChest = 0;
+        uint8_t m_nukesInChest = 0;
+        uint8_t m_potionsInChest = 0;
+    };
+
     PlayerInventory(IGame& game);
     ~PlayerInventory();
 
@@ -51,7 +58,8 @@ public:
     void GivePotion();
     bool UsePotion();
     void GiveBolt();
-    void GiveChest();
+    void GiveChest(const ChestContent chestContent);
+    static ChestContent GenerateRandomChestContent();
     void GiveNuke();
     void GiveScroll(const uint8_t scrollId);
     void GiveKey(const uint8_t keyId);
@@ -81,10 +89,7 @@ private:
     bool m_scrolls[maxScrolls];
     bool m_gems[maxGems];
 
-    // Contents of chest
-    uint8_t m_boltsInChest;
-    uint8_t m_nukesInChest;
-    uint8_t m_potionsInChest;
+    ChestContent m_chestContent;
 
     IGame& m_game;
 };

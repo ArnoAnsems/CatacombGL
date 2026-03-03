@@ -1806,7 +1806,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     case ActionGiveChest:
     {
-        m_playerInventory.GiveChest();
+        m_playerInventory.GiveChest(PlayerInventory::GenerateRandomChestContent());
         m_takingChest = true;
         m_gameTimer.Pause();
         actor->SetActionPerformed(true);

@@ -20,10 +20,7 @@ PlayerInventory::PlayerInventory(IGame& game) :
     m_game(game),
     m_bolts(0),
     m_nukes(0),
-    m_potions(0),
-    m_boltsInChest(0),
-    m_nukesInChest(0),
-    m_potionsInChest(0)
+    m_potions(0)
 {
     for (uint8_t key = 0; key < maxKeys; key++)
     {
@@ -111,34 +108,44 @@ void PlayerInventory::GiveBolt()
     m_bolts++;
 }
 
-void PlayerInventory::GiveChest()
+void PlayerInventory::GiveChest(const ChestContent chestContent)
 {
-    m_boltsInChest = rand() % 5;
-    m_nukesInChest = rand() % 4;
-    m_potionsInChest = rand() % 3;
+    m_chestContent = chestContent;
+}
+
+PlayerInventory::ChestContent PlayerInventory::GenerateRandomChestContent()
+{
+    constexpr uint8_t maxBoltsInChest = 5u;
+    constexpr uint8_t maxNukesInChest = 4u;
+    constexpr uint8_t maxPotionsInChest = 3u;
+    const uint8_t boltsInChest = rand() % maxBoltsInChest;
+    const uint8_t nukesInChest = rand() % maxNukesInChest;
+    const uint8_t potionsInChest = rand() % maxPotionsInChest;
+    const ChestContent chestContent{ boltsInChest , nukesInChest, potionsInChest };
+    return chestContent;
 }
 
 bool PlayerInventory::HasItemsInChest() const
 {
-    return (m_boltsInChest != 0 || m_nukesInChest != 0 || m_potionsInChest != 0);
+    return (m_chestContent.m_boltsInChest != 0 || m_chestContent.m_nukesInChest != 0 || m_chestContent.m_potionsInChest != 0);
 }
 
 void PlayerInventory::GiveNextItemInChest()
 {
-    if (m_boltsInChest > 0)
+    if (m_chestContent.m_boltsInChest > 0)
     {
         GiveBolt();
-        m_boltsInChest--;
+        m_chestContent.m_boltsInChest--;
     }
-    else if (m_nukesInChest > 0)
+    else if (m_chestContent.m_nukesInChest > 0)
     {
         GiveNuke();
-        m_nukesInChest--;
+        m_chestContent.m_nukesInChest--;
     }
-    else if (m_potionsInChest > 0)
+    else if (m_chestContent.m_potionsInChest > 0)
     {
         GivePotion();
-        m_potionsInChest--;
+        m_chestContent.m_potionsInChest--;
     }
 }
 
