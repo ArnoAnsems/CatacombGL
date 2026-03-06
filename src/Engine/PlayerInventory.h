@@ -22,6 +22,7 @@
 
 #include <stdint.h>
 #include <fstream>
+#include <vector>
 
 enum KeyId
 {
@@ -44,6 +45,11 @@ public:
         uint8_t m_boltsInChest = 0;
         uint8_t m_nukesInChest = 0;
         uint8_t m_potionsInChest = 0;
+
+        bool hasItems() const
+        {
+            return (m_boltsInChest != 0 || m_nukesInChest != 0 || m_potionsInChest != 0);
+        };
     };
 
     PlayerInventory(IGame& game);
@@ -89,7 +95,7 @@ private:
     bool m_scrolls[maxScrolls];
     bool m_gems[maxGems];
 
-    ChestContent m_chestContent;
+    std::vector<ChestContent> m_chestContent;
 
     IGame& m_game;
 };

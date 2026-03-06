@@ -40,7 +40,7 @@ TEST_F(PlayerInventory_Test, GiveEmptyChest)
     EXPECT_FALSE(playerInventory.HasItemsInChest());
 }
 
-TEST_F(PlayerInventory_Test, GiveFilledChest)
+TEST_F(PlayerInventory_Test, GiveSingleFilledChest)
 {
     PlayerInventory playerInventory(m_gameStub);
     playerInventory.GiveChest({ 2,3,1 });
@@ -59,6 +59,35 @@ TEST_F(PlayerInventory_Test, GiveFilledChest)
     EXPECT_EQ(playerInventory.GetNukes(), 3u);
     playerInventory.GiveNextItemInChest();
     EXPECT_EQ(playerInventory.GetPotions(), 1u);
+
+    EXPECT_FALSE(playerInventory.HasItemsInChest());
+}
+
+TEST_F(PlayerInventory_Test, GiveTwoFilledChests)
+{
+    PlayerInventory playerInventory(m_gameStub);
+    playerInventory.GiveChest({ 1,2,0 });
+    playerInventory.GiveChest({ 2,0,1 });
+
+    EXPECT_TRUE(playerInventory.HasItemsInChest());
+
+    // Second chest
+    playerInventory.GiveNextItemInChest();
+    EXPECT_EQ(playerInventory.GetBolts(), 1u);
+    playerInventory.GiveNextItemInChest();
+    EXPECT_EQ(playerInventory.GetBolts(), 2u);
+    playerInventory.GiveNextItemInChest();
+    EXPECT_EQ(playerInventory.GetPotions(), 1u);
+
+    EXPECT_TRUE(playerInventory.HasItemsInChest());
+
+    // First chest
+    playerInventory.GiveNextItemInChest();
+    EXPECT_EQ(playerInventory.GetBolts(), 3u);
+    playerInventory.GiveNextItemInChest();
+    EXPECT_EQ(playerInventory.GetNukes(), 1u);
+    playerInventory.GiveNextItemInChest();
+    EXPECT_EQ(playerInventory.GetNukes(), 2u);
 
     EXPECT_FALSE(playerInventory.HasItemsInChest());
 }

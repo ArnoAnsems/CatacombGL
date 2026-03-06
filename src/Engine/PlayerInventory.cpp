@@ -110,7 +110,10 @@ void PlayerInventory::GiveBolt()
 
 void PlayerInventory::GiveChest(const ChestContent chestContent)
 {
-    m_chestContent = chestContent;
+    if (chestContent.hasItems())
+    {
+        m_chestContent.push_back(chestContent);
+    }
 }
 
 PlayerInventory::ChestContent PlayerInventory::GenerateRandomChestContent()
@@ -127,25 +130,33 @@ PlayerInventory::ChestContent PlayerInventory::GenerateRandomChestContent()
 
 bool PlayerInventory::HasItemsInChest() const
 {
-    return (m_chestContent.m_boltsInChest != 0 || m_chestContent.m_nukesInChest != 0 || m_chestContent.m_potionsInChest != 0);
+    return (!m_chestContent.empty());
 }
 
 void PlayerInventory::GiveNextItemInChest()
 {
-    if (m_chestContent.m_boltsInChest > 0)
+    if (!m_chestContent.empty())
     {
-        GiveBolt();
-        m_chestContent.m_boltsInChest--;
-    }
-    else if (m_chestContent.m_nukesInChest > 0)
-    {
-        GiveNuke();
-        m_chestContent.m_nukesInChest--;
-    }
-    else if (m_chestContent.m_potionsInChest > 0)
-    {
-        GivePotion();
-        m_chestContent.m_potionsInChest--;
+        ChestContent& currentChest = m_chestContent.back();
+        if (currentChest.m_boltsInChest > 0)
+        {
+            GiveBolt();
+            currentChest.m_boltsInChest--;
+        }
+        else if (currentChest.m_nukesInChest > 0)
+        {
+            GiveNuke();
+            currentChest.m_nukesInChest--;
+        }
+        else if (currentChest.m_potionsInChest > 0)
+        {
+            GivePotion();
+            currentChest.m_potionsInChest--;
+        }
+        if (!currentChest.hasItems())
+        {
+            m_chestContent.pop_back();
+        }
     }
 }
 
