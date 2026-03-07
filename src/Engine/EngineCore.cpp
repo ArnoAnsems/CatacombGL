@@ -1400,15 +1400,13 @@ bool EngineCore::Think()
                 ThinkNonBlockingActors();
             }
 
-            if (m_takingChest && !m_menu->IsActive() && m_readingScroll == NotReadingAnyScroll)
+            if (!m_menu->IsActive() && m_readingScroll == NotReadingAnyScroll && m_playerInventory.HasItemsInChest())
             {
-                if (!m_game.GetAudioPlayer()->IsPlaying())
+                if (!m_game.GetAudioPlayer()->IsPlaying() || !m_takingChest)
                 {
-                    if (m_playerInventory.HasItemsInChest())
-                    {
-                        m_playerInventory.GiveNextItemInChest();
-                    }
-                    else
+                    m_playerInventory.GiveNextItemInChest();
+
+                    if (m_takingChest && !m_playerInventory.HasItemsInChest())
                     {
                         m_takingChest = false;
                         m_gameTimer.Resume();
@@ -1807,8 +1805,12 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     case ActionGiveChest:
     {
         m_playerInventory.GiveChest(PlayerInventory::GenerateRandomChestContent());
-        m_takingChest = true;
-        m_gameTimer.Pause();
+        if (!m_configurationSettings.GetCVarBool(CVarIdInstantChests).IsEnabled())
+        {
+            m_takingChest = true;
+            m_gameTimer.Pause();
+        }
+
         actor->SetActionPerformed(true);
         break;
     }

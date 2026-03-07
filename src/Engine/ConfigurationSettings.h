@@ -58,6 +58,7 @@ static constexpr uint8_t CVarIdTurnSpeed = 42;
 static constexpr uint8_t CVarIdPreventSoftlock = 43;
 static constexpr uint8_t CVarIdStickyWalls = 44;
 static constexpr uint8_t CVarIdMusicModeAdventureTrilogy = 45;
+static constexpr uint8_t CVarIdInstantChests = 46;
 
 static constexpr uint8_t CVarItemIdScreenModeWindowed = 0;
 static constexpr uint8_t CVarItemIdScreenModeFullscreen = 1;
@@ -145,6 +146,7 @@ private:
     ConsoleVariableBool m_manaBar;
     ConsoleVariableBool m_preventSoftlock;
     ConsoleVariableBool m_stickyWalls;
+    ConsoleVariableBool m_instantChests;
 
     ConsoleVariableEnum m_dummyCvarEnum;
     ConsoleVariableEnum m_screenMode;
