@@ -28,6 +28,7 @@
 #include "../Engine/Console.h"
 #include "../Engine/DefaultFont.h"
 #include "../Engine/EngineCore.h"
+#include "../Engine/GameController.h"
 #include "../Engine/GameDetection.h"
 #include "../Engine/GameSelection.h"
 #include "../Engine/Logging.h"
@@ -106,7 +107,7 @@ void InitializeSDL()
 		std::to_string(sdlVersion.patch);
 	Logging::Instance().AddLogMessage(sdlLogMessage);
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
 	{
 		Logging::Instance().FatalError("SDL_Init failed: " + std::string(SDL_GetError()));
 	}
@@ -162,6 +163,7 @@ int main(int argc, char* argv[])
 	config.LoadFromFile(configFilename);
 
 	InitializeSDL();
+	GameController gameController;
 
 	Finder finder = Finder(config);
 

@@ -50,6 +50,8 @@ add_library( CatacombGL_Engine OBJECT
     Font.h
     FramesCounter.cpp
     FramesCounter.h
+    GameController.cpp
+    GameController.h
     GameDetection.cpp
     GameDetection.h
     GameId.h
