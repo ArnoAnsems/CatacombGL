@@ -28,6 +28,9 @@ public:
     GameController();
     ~GameController();
 
+    bool IsDetected() const;
+    bool IsButtonPressed(const SDL_GameControllerButton gameControllerButton) const;
+
 private:
     SDL_GameController* m_sdlGameController = nullptr;
 };

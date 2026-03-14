@@ -52,3 +52,13 @@ GameController::~GameController()
 		SDL_GameControllerClose(m_sdlGameController);
 	}
 }
+
+bool GameController::IsDetected() const
+{
+	return (m_sdlGameController != nullptr);
+}
+
+bool GameController::IsButtonPressed(const SDL_GameControllerButton gameControllerButton) const
+{
+	return (m_sdlGameController != nullptr) ? SDL_GameControllerGetButton(m_sdlGameController, gameControllerButton) == 1u : false;
+}

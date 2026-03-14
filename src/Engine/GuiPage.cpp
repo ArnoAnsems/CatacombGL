@@ -42,7 +42,12 @@ const GuiEvent& GuiPage::ProcessInput()
         }
     }
 
-    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    const bool isJustClosed =
+        m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) ||
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B) ||
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_START);
+
+    if (isJustClosed)
     {
         return m_closeEvent;
     }

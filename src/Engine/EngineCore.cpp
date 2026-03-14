@@ -952,10 +952,11 @@ bool EngineCore::Think()
         m_playerInput.SetMouseYPos(0);
     }
 
-    if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
+    if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
     {
         EnterKeyReleased();
     }
+
     if (!m_menu->IsActive())
     {
         if (m_playerInput.IsKeyPressed(m_game.GetCheatsKeyCode()))
@@ -1004,7 +1005,7 @@ bool EngineCore::Think()
                 }
             }
 
-            if (m_playerInput.IsKeyJustPressed(SDLK_n)) // N
+            if (m_playerInput.IsKeyJustPressed(SDLK_n) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B)) // N
             {
                 KeyNPressed();
             }
@@ -1028,11 +1029,12 @@ bool EngineCore::Think()
                 }
             }
 
-            if (m_playerInput.IsKeyJustPressed(SDLK_w)) // W
+            if (m_playerInput.IsKeyJustPressed(SDLK_w) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_X)) // W
             {
                 KeyWPressed();
             }
-            if (m_playerInput.IsKeyJustPressed(SDLK_y)) // Y
+
+            if (m_playerInput.IsKeyJustPressed(SDLK_y) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A)) // Y
             {
                 KeyYPressed();
             }
@@ -1062,7 +1064,7 @@ bool EngineCore::Think()
         m_state != GodModeCheatDialog &&
         m_state != FreeItemsCheatDialog &&
         !m_menu->IsActive() &&
-        m_playerInput.IsKeyJustPressed(SDLK_ESCAPE)) // Escape
+        (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_START))) // Escape
     {
         OpenMenu();
         m_game.GetAudioPlayer()->StopMusic();

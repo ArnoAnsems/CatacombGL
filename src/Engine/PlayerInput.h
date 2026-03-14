@@ -22,6 +22,7 @@
 
 #include <SDL_keycode.h>
 #include <SDL_stdinc.h>
+#include <SDL_gamecontroller.h>
 #include <cstdint>
 #include <map>
 
@@ -49,10 +50,15 @@ public:
     void SetHasFocus(const bool focus);
     bool HasFocus() const;
     void ClearAll();
+    void SetGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton, const bool pressed);
+    bool IsGameControllerButtonJustPressed(const SDL_GameControllerButton gameControllerButton) const;
+    bool IsGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton) const;
 
 private:
     std::map<SDL_Keycode, bool> m_keyPressed;
     std::map<SDL_Keycode, bool> m_keyJustPressed;
+    std::map<SDL_GameControllerButton, bool> m_gameControllerButtonPressed;
+    std::map<SDL_GameControllerButton, bool> m_gameControllerButtonJustPressed;
     bool m_buttonPressed[6];
     bool m_buttonJustPressed[6];
     uint32_t m_mouseUpdateTick;

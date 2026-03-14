@@ -56,7 +56,14 @@ const GuiEvent& GuiElementList::ProcessInput()
         // The selected element didn't perform any action with the given input.
         // Check if the list itself can do something with the input.
 
-        if (m_playerInput.IsKeyJustPressed(SDLK_UP))
+        const bool isUpJustActivated =
+            m_playerInput.IsKeyJustPressed(SDLK_UP) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP);
+        const bool isDownJustActivated =
+            m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+
+        if (isUpJustActivated)
         {
             if (m_elementSelected == 0)
             {
@@ -74,7 +81,7 @@ const GuiEvent& GuiElementList::ProcessInput()
 
             makeBrowseSound = true;
         }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_DOWN))
+        else if (isDownJustActivated)
         {
             if (m_elementSelected == m_elements.size() - 1)
             {

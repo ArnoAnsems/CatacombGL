@@ -35,7 +35,11 @@ GuiElementButton::~GuiElementButton()
 
 const GuiEvent& GuiElementButton::ProcessInput()
 {
-    return (m_enabled && m_playerInput.IsKeyJustPressed(SDLK_RETURN)) ? m_guiEventWhenActivated : GetEvent();
+    const bool isJustActivated =
+        m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A);
+
+    return (m_enabled && isJustActivated) ? m_guiEventWhenActivated : GetEvent();
 }
 
 void GuiElementButton::Draw(IRenderer& renderer) const

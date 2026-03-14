@@ -33,11 +33,11 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
 {
     if (m_enabled)
     {
-        if (m_playerInput.IsKeyJustPressed(SDLK_RETURN))
+        if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
         {
             m_cvarEnum.SetItemIndex(m_elementSelected);
         }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_DOWN))
+        else if (m_playerInput.IsKeyJustPressed(SDLK_DOWN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
         {
             if (m_elementSelected == m_enumNames.size() - 1)
             {
@@ -48,7 +48,7 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
                 m_elementSelected++;
             }
         }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_UP))
+        else if (m_playerInput.IsKeyJustPressed(SDLK_UP) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP))
         {
             if (m_elementSelected == 0)
             {

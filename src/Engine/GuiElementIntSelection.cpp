@@ -37,11 +37,18 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
 {
     if (m_enabled)
     {
-        if (m_playerInput.IsKeyJustPressed(SDLK_LEFT))
+        const bool isLeftJustActivated =
+            m_playerInput.IsKeyJustPressed(SDLK_LEFT) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+        const bool isRightJustActivated =
+            m_playerInput.IsKeyJustPressed(SDLK_RIGHT) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+
+        if (isLeftJustActivated)
         {
             m_cvarInt.Decrease();
         }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_RIGHT))
+        else if (isRightJustActivated)
         {
             m_cvarInt.Increase();
         }

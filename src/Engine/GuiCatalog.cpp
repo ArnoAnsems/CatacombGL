@@ -44,7 +44,7 @@ GuiCatalog::~GuiCatalog()
 const GuiEvent& GuiCatalog::ProcessInput()
 {
     const uint16_t lastPage = (uint16_t)m_catalogFilenames.size() - 1;
-    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B))
     {
         m_mostRecentPageWithFullscreenImage = 0;
         m_currentPage = 0;
@@ -53,7 +53,9 @@ const GuiEvent& GuiCatalog::ProcessInput()
     else if (m_playerInput.IsKeyJustPressed(SDLK_LEFT) ||
              m_playerInput.IsKeyJustPressed(SDLK_UP) ||
              m_playerInput.IsKeyJustPressed(SDLK_PAGEUP) ||
-             m_playerInput.IsKeyJustPressed(SDLK_KP_9))
+             m_playerInput.IsKeyJustPressed(SDLK_KP_9) ||
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP))
     {
         if (m_currentPage > 0)
         {
@@ -67,7 +69,9 @@ const GuiEvent& GuiCatalog::ProcessInput()
     else if (m_playerInput.IsKeyJustPressed(SDLK_RIGHT) ||
              m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
              m_playerInput.IsKeyJustPressed(SDLK_PAGEDOWN) ||
-             m_playerInput.IsKeyJustPressed(SDLK_KP_3))
+             m_playerInput.IsKeyJustPressed(SDLK_KP_3) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
 
     {
         if (m_currentPage < lastPage)

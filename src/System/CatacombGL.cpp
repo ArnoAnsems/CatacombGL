@@ -65,7 +65,7 @@ namespace fs = std::filesystem;
 
 GameId selectedGame = GameId::NotDetected;
 
-void UpdatePlayerInput(const SDL_Window* const window, PlayerInput& input)
+void UpdatePlayerInput(const SDL_Window* const window, const GameController& gameController, PlayerInput& input)
 {
 	SDL_PumpEvents();
 	int numKeys = 0;
@@ -92,6 +92,15 @@ void UpdatePlayerInput(const SDL_Window* const window, PlayerInput& input)
 		input.SetMouseButtonPressed(SDL_BUTTON_X2, mouseState & SDL_BUTTON_X2MASK);
 		input.SetHasFocus(SDL_GetMouseFocus() == window);
 		input.SetMouseUpdateTick(timestamp);
+	}
+
+	if (gameController.IsDetected())
+	{
+		for (int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++)
+		{
+			const SDL_GameControllerButton gameControllerButton = static_cast<SDL_GameControllerButton>(i);
+			input.SetGameControllerButtonPressed(gameControllerButton, gameController.IsButtonPressed(gameControllerButton));
+		}
 	}
 }
 
@@ -262,7 +271,7 @@ int main(int argc, char* argv[])
 			console->Draw(*renderer);
 			SDL_GL_SwapWindow(window);
 
-			UpdatePlayerInput(window, input);
+			UpdatePlayerInput(window, gameController, input);
 
 			if (input.IsKeyPressed(SDLK_1))
 			{
@@ -454,7 +463,7 @@ int main(int argc, char* argv[])
 		else                                // Not Time To Quit, Update Screen
 		{
 			SDL_SetRelativeMouseMode(engine->RequiresMouseCapture() ? SDL_TRUE : SDL_FALSE);
-			UpdatePlayerInput(window, input);
+			UpdatePlayerInput(window, gameController, input);
 			console->ProcessInput(input);
 			if (screenMode != engine->GetScreenMode())
 			{

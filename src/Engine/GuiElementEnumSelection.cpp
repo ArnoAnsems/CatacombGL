@@ -35,7 +35,11 @@ GuiElementEnumSelection::~GuiElementEnumSelection()
 
 const GuiEvent& GuiElementEnumSelection::ProcessInput()
 {
-    if (m_enabled && m_playerInput.IsKeyJustPressed(SDLK_RETURN))
+    const bool isJustActivated =
+        m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A);
+
+    if (m_enabled && isJustActivated)
     {
         m_cvarEnum.Next();
     }

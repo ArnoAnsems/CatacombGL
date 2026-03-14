@@ -109,6 +109,14 @@ bool PlayerInput::IsAnyKeyPressed() const
         pressed |= pair.second;
     }
 
+    if (!pressed)
+    {
+        for (auto& pair : m_gameControllerButtonJustPressed)
+        {
+            pressed |= pair.second;
+        }
+    }
+
     return pressed;
 }
 
@@ -122,6 +130,11 @@ void PlayerInput::ClearJustPressed()
     for (uint8_t i = 0; i < 6; i++)
     {
         m_buttonJustPressed[i] = false;
+    }
+
+    for (auto& pair : m_gameControllerButtonJustPressed)
+    {
+        pair.second = false;
     }
 }
 
@@ -223,4 +236,67 @@ void PlayerInput::ClearAll()
     {
         m_buttonPressed[i] = false;
     }
+}
+
+void PlayerInput::SetGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton, const bool pressed)
+{
+    auto it = m_gameControllerButtonPressed.find(gameControllerButton);
+    if (it != m_gameControllerButtonPressed.end())
+    {
+        if (pressed && !it->second)
+        {
+            auto it2 = m_gameControllerButtonJustPressed.find(gameControllerButton);
+            if (it2 != m_gameControllerButtonJustPressed.end())
+            {
+                it2->second = true;
+            }
+            else
+            {
+                const std::pair<SDL_GameControllerButton, bool> pair = std::make_pair(gameControllerButton, true);
+                m_gameControllerButtonJustPressed.insert(pair);
+            }
+        }
+        it->second = pressed;
+    }
+    else
+    {
+        const std::pair<SDL_GameControllerButton, bool> pair = std::make_pair(gameControllerButton, pressed);
+        m_gameControllerButtonPressed.insert(pair);
+
+        if (pressed)
+        {
+            auto it2 = m_gameControllerButtonPressed.find(gameControllerButton);
+            if (it2 != m_gameControllerButtonPressed.end())
+            {
+                it2->second = true;
+            }
+            else
+            {
+                const std::pair<SDL_GameControllerButton, bool> pair = std::make_pair(gameControllerButton, true);
+                m_gameControllerButtonJustPressed.insert(pair);
+            }
+        }
+    }
+}
+
+bool PlayerInput::IsGameControllerButtonJustPressed(const SDL_GameControllerButton gameControllerButton) const
+{
+    const auto it = m_gameControllerButtonJustPressed.find(gameControllerButton);
+    if (it != m_gameControllerButtonJustPressed.end())
+    {
+        return it->second;
+    }
+
+    return false;
+}
+
+bool PlayerInput::IsGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton) const
+{
+    const auto it = m_gameControllerButtonPressed.find(gameControllerButton);
+    if (it != m_gameControllerButtonPressed.end())
+    {
+        return it->second;
+    }
+
+    return false;
 }
