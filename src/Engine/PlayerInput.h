@@ -53,6 +53,12 @@ public:
     void SetGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton, const bool pressed);
     bool IsGameControllerButtonJustPressed(const SDL_GameControllerButton gameControllerButton) const;
     bool IsGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton) const;
+    int16_t GetGameControllerAxisLeftX() const;
+    void SetGameControllerAxisLeftX(const int16_t value);
+    int16_t GetGameControllerAxisLeftY() const;
+    void SetGameControllerAxisLeftY(const int16_t value);
+    int16_t GetGameControllerAxisRightX() const;
+    void SetGameControllerAxisRightX(const int16_t value);
 
 private:
     std::map<SDL_Keycode, bool> m_keyPressed;
@@ -65,4 +71,7 @@ private:
     int32_t m_mouseXPos;
     int32_t m_mouseYPos;
     bool m_hasFocus;
+    int16_t m_gameControllerAxisLeftX;
+    int16_t m_gameControllerAxisLeftY;
+    int16_t m_gameControllerAxisRightX;
 };

@@ -100,6 +100,9 @@ void UpdatePlayerInput(const SDL_Window* const window, const GameController& gam
 		{
 			const SDL_GameControllerButton gameControllerButton = static_cast<SDL_GameControllerButton>(i);
 			input.SetGameControllerButtonPressed(gameControllerButton, gameController.IsButtonPressed(gameControllerButton));
+			input.SetGameControllerAxisLeftX(gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTX));
+			input.SetGameControllerAxisLeftY(gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
+			input.SetGameControllerAxisRightX(gameController.GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
 		}
 	}
 }

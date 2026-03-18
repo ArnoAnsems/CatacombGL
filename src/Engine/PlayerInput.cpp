@@ -16,10 +16,13 @@
 #include "PlayerInput.h"
 
 PlayerInput::PlayerInput() :
-        m_mouseUpdateTick(0),
-        m_mouseXPos(0),
-        m_mouseYPos(0),
-        m_hasFocus(true)
+    m_mouseUpdateTick(0),
+    m_mouseXPos(0),
+    m_mouseYPos(0),
+    m_hasFocus(true),
+    m_gameControllerAxisLeftX(0),
+    m_gameControllerAxisLeftY(0),
+    m_gameControllerAxisRightX(0)
 {
 
     m_keyPressed.clear();
@@ -299,4 +302,34 @@ bool PlayerInput::IsGameControllerButtonPressed(const SDL_GameControllerButton g
     }
 
     return false;
+}
+
+int16_t PlayerInput::GetGameControllerAxisLeftX() const
+{
+    return m_gameControllerAxisLeftX;
+}
+
+void PlayerInput::SetGameControllerAxisLeftX(const int16_t value)
+{
+    m_gameControllerAxisLeftX = value;
+}
+
+int16_t PlayerInput::GetGameControllerAxisLeftY() const
+{
+    return m_gameControllerAxisLeftY;
+}
+
+void PlayerInput::SetGameControllerAxisLeftY(const int16_t value)
+{
+    m_gameControllerAxisLeftY = value;
+}
+
+int16_t PlayerInput::GetGameControllerAxisRightX() const
+{
+    return m_gameControllerAxisRightX;
+}
+
+void PlayerInput::SetGameControllerAxisRightX(const int16_t value)
+{
+    m_gameControllerAxisRightX = value;
 }

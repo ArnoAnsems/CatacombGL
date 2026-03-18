@@ -30,6 +30,7 @@ public:
 
     bool IsDetected() const;
     bool IsButtonPressed(const SDL_GameControllerButton gameControllerButton) const;
+    int16_t GetAxis(const SDL_GameControllerAxis axis) const;
 
 private:
     SDL_GameController* m_sdlGameController = nullptr;

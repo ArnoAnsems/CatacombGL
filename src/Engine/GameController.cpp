@@ -18,47 +18,61 @@
 
 GameController::GameController()
 {
-	const int numJoysticks = SDL_NumJoysticks();
-	int joyStickIndex = 0;
-	while (m_sdlGameController == nullptr && joyStickIndex < numJoysticks)
-	{
-		if (SDL_IsGameController(joyStickIndex) == SDL_TRUE)
-		{
-			m_sdlGameController = SDL_GameControllerOpen(joyStickIndex);
-		}
-		else
-		{
-			joyStickIndex++;
-		}
-	}
+    const int numJoysticks = SDL_NumJoysticks();
+    int joyStickIndex = 0;
+    while (m_sdlGameController == nullptr && joyStickIndex < numJoysticks)
+    {
+        if (SDL_IsGameController(joyStickIndex) == SDL_TRUE)
+        {
+            m_sdlGameController = SDL_GameControllerOpen(joyStickIndex);
+        }
+        else
+        {
+            joyStickIndex++;
+        }
+    }
 
-	if (m_sdlGameController != nullptr)
-	{
-		const std::string gameControllerName = SDL_GameControllerName(m_sdlGameController);
-		const SDL_GameControllerType gameControllerType = SDL_GameControllerGetType(m_sdlGameController);
-		const std::string logMessage = "Detected game controller: " + gameControllerName;
-		Logging::Instance().AddLogMessage(logMessage);
-	}
-	else
-	{
-		Logging::Instance().AddLogMessage("No game controller detected");
-	}
+    if (m_sdlGameController != nullptr)
+    {
+        const std::string gameControllerName = SDL_GameControllerName(m_sdlGameController);
+        const SDL_GameControllerType gameControllerType = SDL_GameControllerGetType(m_sdlGameController);
+        const std::string logMessage = "Detected game controller: " + gameControllerName;
+        Logging::Instance().AddLogMessage(logMessage);
+    }
+    else
+    {
+        Logging::Instance().AddLogMessage("No game controller detected");
+    }
 }
 
 GameController::~GameController()
 {
-	if (m_sdlGameController != nullptr)
-	{
-		SDL_GameControllerClose(m_sdlGameController);
-	}
+    if (m_sdlGameController != nullptr)
+    {
+        SDL_GameControllerClose(m_sdlGameController);
+    }
 }
 
 bool GameController::IsDetected() const
 {
-	return (m_sdlGameController != nullptr);
+    return (m_sdlGameController != nullptr);
 }
 
 bool GameController::IsButtonPressed(const SDL_GameControllerButton gameControllerButton) const
 {
-	return (m_sdlGameController != nullptr) ? SDL_GameControllerGetButton(m_sdlGameController, gameControllerButton) == 1u : false;
+    return (m_sdlGameController != nullptr) ? SDL_GameControllerGetButton(m_sdlGameController, gameControllerButton) == 1u : false;
+}
+
+int16_t GameController::GetAxis(const SDL_GameControllerAxis axis) const
+{
+    int16_t value = 0;
+    if (m_sdlGameController != nullptr)
+    {
+        if (SDL_GameControllerHasAxis(m_sdlGameController, axis))
+        {
+            value = SDL_GameControllerGetAxis(m_sdlGameController, axis);
+        }
+    }
+
+    return value;
 }

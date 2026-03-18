@@ -1349,35 +1349,61 @@ bool EngineCore::Think()
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
                 }
+
+                const int16_t minGameControllerAxisDeflection = 10000;
+                if (m_playerInput.GetGameControllerAxisRightX() < -minGameControllerAxisDeflection)
+                {
+                    // Turn left with the game controller
+                    const int16_t maxGameControllerAxisDeflection = -32768;
+                    const float factor = m_playerInput.GetGameControllerAxisRightX() / maxGameControllerAxisDeflection;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
+                }
+                else if (m_playerInput.GetGameControllerAxisRightX() > minGameControllerAxisDeflection)
+                {
+                    // Turn right with the game controller
+                    const int16_t maxGameControllerAxisDeflection = 32767;
+                    const float factor = m_playerInput.GetGameControllerAxisRightX() / maxGameControllerAxisDeflection;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
+                }
+
                 constexpr float playerSpeed = 5120.0f / 65536.0f;
                 const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
                 const bool isRunning = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun).IsEnabled() != m_playerActions.GetActionActive(Run);
                 const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
+                
                 const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
-                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft)));
+                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
+                    (m_playerInput.GetGameControllerAxisLeftX() < -minGameControllerAxisDeflection);
                 const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
-                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight)));
-                if (m_playerActions.GetActionActive(MoveForward) && strafeLeft)
+                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight))) ||
+                    (m_playerInput.GetGameControllerAxisLeftX() > minGameControllerAxisDeflection);
+                const bool moveForward = m_playerActions.GetActionActive(MoveForward) ||
+                    (m_playerInput.GetGameControllerAxisLeftY() < -minGameControllerAxisDeflection);
+                const bool moveBackward = m_playerActions.GetActionActive(MoveBackward) ||
+                    (m_playerInput.GetGameControllerAxisLeftY() > minGameControllerAxisDeflection);
+                if (moveForward && strafeLeft)
                 { 
                     Thrust(315, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveBackward) && strafeLeft)
+                else if (moveBackward && strafeLeft)
                 {
                     Thrust(225, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveForward) && strafeRight)
+                else if (moveForward && strafeRight)
                 {
                     Thrust(45, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveBackward) && strafeRight)
+                else if (moveBackward && strafeRight)
                 {
                     Thrust(135, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveForward))
+                else if (moveForward)
                 {
                     Thrust(0, distance);
                 }
-                else if (m_playerActions.GetActionActive(MoveBackward))
+                else if (moveBackward)
                 {
                     Thrust(180, distance);
                 }
