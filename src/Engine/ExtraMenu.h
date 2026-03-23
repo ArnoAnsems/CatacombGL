@@ -35,7 +35,7 @@
 class ExtraMenu: public IMenu
 {
 public:
-    ExtraMenu(
+    explicit ExtraMenu(
         ConfigurationSettings& configurationSettings,
         AudioPlayer& audioPlayer,
         PlayerInput& playerInput,

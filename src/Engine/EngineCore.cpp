@@ -3214,6 +3214,14 @@ bool EngineCore::IsActionActive(const ControlAction action) const
             isActive |= m_playerInput.IsMouseButtonPressed(button);
         }
     }
+    if (!isActive)
+    {
+        const std::vector<SDL_GameControllerButton> gameControllerButtons = m_configurationSettings.GetConstControlsMap().GetGameControllerButtonsFromAction(action);
+        for (SDL_GameControllerButton gameControllerButton : gameControllerButtons)
+        {
+            isActive |= m_playerInput.IsGameControllerButtonPressed(gameControllerButton);
+        }
+    }
     return isActive;
 }
 
@@ -3233,6 +3241,14 @@ bool EngineCore::IsActionJustPressed(const ControlAction action) const
         for (uint8_t button : buttons)
         {
             isJustPressed |= m_playerInput.IsMouseButtonJustPressed(button);
+        }
+    }
+    if (!isJustPressed)
+    {
+        const std::vector<SDL_GameControllerButton> gameControllerButtons = m_configurationSettings.GetConstControlsMap().GetGameControllerButtonsFromAction(action);
+        for (SDL_GameControllerButton gameControllerButton : gameControllerButtons)
+        {
+            isJustPressed |= m_playerInput.IsGameControllerButtonJustPressed(gameControllerButton);
         }
     }
     return isJustPressed;

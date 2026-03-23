@@ -23,6 +23,7 @@
 #include <map>
 #include <string>
 #include <SDL_keycode.h>
+#include <SDL_gamecontroller.h>
 
 enum ControlAction
 {
@@ -76,15 +77,19 @@ public:
     void AssignDefaultActionToKey(const ControlAction action, const SDL_Keycode keyCode);
     bool AssignActionToMouseButton(const ControlAction action, const uint8_t buttonCode);
     void AssignDefaultActionToMouseButton(const ControlAction action, const uint8_t buttonCode);
+    bool AssignActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button);
+    void AssignDefaultActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button);
 
     std::string GetKeyStringFromAction(const ControlAction action) const;
 
     ControlAction GetActionFromKey(const SDL_Keycode keyCode) const;
     ControlAction GetActionFromMouseButton(const uint8_t buttonCode) const;
+    ControlAction GetActionFromGameControllerButton(const SDL_GameControllerButton button) const;
     std::vector<SDL_Keycode> GetKeysFromAction(const ControlAction action) const;
     std::vector<uint8_t> GetMouseButtonsFromAction(const ControlAction action) const;
+    std::vector< SDL_GameControllerButton> GetGameControllerButtonsFromAction(const ControlAction action) const;
     static std::string GetMouseButtonName(const uint8_t buttonCode);
-    static const std::vector<SDL_Keycode>& GetNotAllowedKeys();
+    static std::string GetGameControllerButtonName(const SDL_GameControllerButton button);
     static const ControlAction StringToAction(const std::string& str);
 
     void ResetToDefaults();
@@ -92,6 +97,9 @@ public:
     void AssignUnusedKeysToDefaults();
 
 private:
+    static const std::vector<SDL_Keycode>& GetNotAllowedKeys();
+
     std::map<SDL_Keycode, ControlAction> m_KeyToActionMap;
     std::map<uint8_t, ControlAction> m_mouseButtonToActionMap;
+    std::map<SDL_GameControllerButton, ControlAction> m_GameControllerButtonToActionMap;
 };

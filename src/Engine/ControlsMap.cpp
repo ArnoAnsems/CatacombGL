@@ -130,6 +130,55 @@ void ControlsMap::AssignDefaultActionToMouseButton(const ControlAction action, c
     }
 }
 
+bool ControlsMap::AssignActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button)
+{
+    if (button == SDL_CONTROLLER_BUTTON_START)
+    {
+        // Not allowed to bind
+        return false;
+    }
+
+    if (action != None)
+    {
+        const std::vector<SDL_GameControllerButton> otherButtonsWithThisAction = GetGameControllerButtonsFromAction(action);
+        if (otherButtonsWithThisAction.size() > 1)
+        {
+            // More than 2 buttons bound to the same action not allowed.
+            // Clear the action from the other buttons.
+            for (uint8_t i = 0; i < otherButtonsWithThisAction.size(); i++)
+            {
+                AssignActionToGameControllerButton(None, otherButtonsWithThisAction.at(i));
+            }
+        }
+    }
+
+    const auto it = m_GameControllerButtonToActionMap.find(button);
+    if (it == m_GameControllerButtonToActionMap.end())
+    {
+        m_GameControllerButtonToActionMap.insert(std::make_pair(button, action));
+    }
+    else
+    {
+        m_GameControllerButtonToActionMap[button] = action;
+    }
+
+    return true;
+}
+
+void ControlsMap::AssignDefaultActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button)
+{
+    if (GetActionFromGameControllerButton(button) == None)
+    {
+        // There is no action bound to this button yet.
+        const std::vector<SDL_GameControllerButton> otherButtonsWithThisAction = GetGameControllerButtonsFromAction(action);
+        if (otherButtonsWithThisAction.size() < 2)
+        {
+            // Less than 2 other buttons are bound to this action, so there is room for one more.
+            m_GameControllerButtonToActionMap.insert(std::make_pair(button, action));
+        }
+    }
+}
+
 const std::map<ControlAction, std::string>& ControlsMap::GetActionLabels() const
 {
     return controlActionLabels;
@@ -175,6 +224,37 @@ std::string ControlsMap::GetMouseButtonName(const uint8_t buttonCode)
            "";
 }
 
+std::string ControlsMap::GetGameControllerButtonName(const SDL_GameControllerButton button)
+{
+    const std::map<SDL_GameControllerButton, const std::string> buttonToStrMap =
+    {
+        {SDL_CONTROLLER_BUTTON_A, "A"},
+        {SDL_CONTROLLER_BUTTON_B, "B"},
+        {SDL_CONTROLLER_BUTTON_X, "X"},
+        {SDL_CONTROLLER_BUTTON_Y, "Y"},
+        {SDL_CONTROLLER_BUTTON_BACK, "Back"},
+        {SDL_CONTROLLER_BUTTON_GUIDE, "Guide"},
+        {SDL_CONTROLLER_BUTTON_START, "Start"},
+        {SDL_CONTROLLER_BUTTON_LEFTSTICK, "Left Stick"},
+        {SDL_CONTROLLER_BUTTON_RIGHTSTICK, "Right Stick"},
+        {SDL_CONTROLLER_BUTTON_LEFTSHOULDER, "Left Shoulder"},
+        {SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, "Right Shoulder"},
+        {SDL_CONTROLLER_BUTTON_DPAD_UP, "DPAD Up"},
+        {SDL_CONTROLLER_BUTTON_DPAD_DOWN, "DPAD Down"},
+        {SDL_CONTROLLER_BUTTON_DPAD_LEFT, "DPAD Left"},
+        {SDL_CONTROLLER_BUTTON_DPAD_RIGHT, "DPAD Right"},
+        {SDL_CONTROLLER_BUTTON_MISC1, "Misc 1"},
+        {SDL_CONTROLLER_BUTTON_PADDLE1, "Paddle 1"},
+        {SDL_CONTROLLER_BUTTON_PADDLE2, "Paddle 2"},
+        {SDL_CONTROLLER_BUTTON_PADDLE3, "Paddle 3"},
+        {SDL_CONTROLLER_BUTTON_PADDLE4, "Paddle 4"},
+        {SDL_CONTROLLER_BUTTON_TOUCHPAD, "Touchpad"}
+    };
+
+    const auto& it = buttonToStrMap.find(button);
+    return (it == buttonToStrMap.end()) ? "" : it->second;
+}
+
 ControlAction ControlsMap::GetActionFromKey(const SDL_Keycode keyCode) const
 {
     const auto it = m_KeyToActionMap.find(keyCode);
@@ -185,6 +265,12 @@ ControlAction ControlsMap::GetActionFromMouseButton(const uint8_t buttonCode) co
 {
     const auto it = m_mouseButtonToActionMap.find(buttonCode);
     return (it != m_mouseButtonToActionMap.end()) ? it->second : None;
+}
+
+ControlAction ControlsMap::GetActionFromGameControllerButton(const SDL_GameControllerButton button) const
+{
+    const auto it = m_GameControllerButtonToActionMap.find(button);
+    return (it != m_GameControllerButtonToActionMap.end()) ? it->second : None;
 }
 
 std::vector<SDL_Keycode> ControlsMap::GetKeysFromAction(const ControlAction action) const
@@ -204,6 +290,19 @@ std::vector<uint8_t> ControlsMap::GetMouseButtonsFromAction(const ControlAction 
 {
     std::vector<uint8_t> result;
     for (auto& pair : m_mouseButtonToActionMap)
+    {
+        if (action == pair.second)
+        {
+            result.push_back(pair.first);
+        }
+    }
+    return result;
+}
+
+std::vector<SDL_GameControllerButton> ControlsMap::GetGameControllerButtonsFromAction(const ControlAction action) const
+{
+    std::vector<SDL_GameControllerButton> result;
+    for (auto& pair : m_GameControllerButtonToActionMap)
     {
         if (action == pair.second)
         {
@@ -281,4 +380,14 @@ void ControlsMap::AssignUnusedKeysToDefaults()
     AssignDefaultActionToMouseButton(Shoot, SDL_BUTTON_LEFT);
     AssignDefaultActionToMouseButton(ShootZappper, SDL_BUTTON_MIDDLE);
     AssignDefaultActionToMouseButton(ShootXterminator, SDL_BUTTON_RIGHT);
+
+    AssignDefaultActionToGameControllerButton(MoveForward, SDL_CONTROLLER_BUTTON_DPAD_UP);
+    AssignDefaultActionToGameControllerButton(MoveBackward, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+    AssignDefaultActionToGameControllerButton(TurnLeft, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+    AssignDefaultActionToGameControllerButton(TurnRight, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+    AssignDefaultActionToGameControllerButton(Shoot, SDL_CONTROLLER_BUTTON_B);
+    AssignDefaultActionToGameControllerButton(ShootZappper, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+    AssignDefaultActionToGameControllerButton(ShootXterminator, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+    AssignDefaultActionToGameControllerButton(UsePotion, SDL_CONTROLLER_BUTTON_Y);
+    AssignDefaultActionToGameControllerButton(ShowAutoMap, SDL_CONTROLLER_BUTTON_X);
 }
