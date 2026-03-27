@@ -59,6 +59,10 @@ public:
     void SetGameControllerAxisLeftY(const int16_t value);
     int16_t GetGameControllerAxisRightX() const;
     void SetGameControllerAxisRightX(const int16_t value);
+    int16_t GetGameControllerAxisTriggerLeft() const;
+    void SetGameControllerAxisTriggerLeft(const int16_t value);
+    int16_t GetGameControllerAxisTriggerRight() const;
+    void SetGameControllerAxisTriggerRight(const int16_t value);
 
 private:
     std::map<SDL_Keycode, bool> m_keyPressed;
@@ -74,4 +78,6 @@ private:
     int16_t m_gameControllerAxisLeftX;
     int16_t m_gameControllerAxisLeftY;
     int16_t m_gameControllerAxisRightX;
+    int16_t m_gameControllerAxisTriggerLeft;
+    int16_t m_gameControllerAxisTriggerRight;
 };

@@ -45,61 +45,42 @@ enum ControlAction
     MaxControlAction
 };
 
-const std::pair<ControlAction, std::string> controlActionLabelArray[MaxControlAction] =
-{
-    std::make_pair(None, "None"),
-    std::make_pair(MoveForward, "MoveForward"),
-    std::make_pair(MoveBackward, "MoveBackward"),
-    std::make_pair(TurnLeft, "TurnLeft"),
-    std::make_pair(TurnRight, "TurnRight"),
-    std::make_pair(QuickTurn, "QuickTurn"),
-    std::make_pair(Strafe, "Strafe"),
-    std::make_pair(StrafeLeft, "StrafeLeft"),
-    std::make_pair(StrafeRight, "StrafeRight"),
-    std::make_pair(Shoot, "Shoot"),
-    std::make_pair(ShootZappper, "ShootZappper"),
-    std::make_pair(ShootXterminator, "ShootXterm"),
-    std::make_pair(UsePotion, "UsePotion"),
-    std::make_pair(Run, "Run"),
-    std::make_pair(ShowAutoMap, "Automap")
-};
-
-const std::map<ControlAction, std::string> controlActionLabels(controlActionLabelArray, controlActionLabelArray + sizeof(controlActionLabelArray) / sizeof(std::pair<ControlAction, std::string>));
-
 class ControlsMap
 {
 public:
     ControlsMap();
-    ~ControlsMap();
+    ~ControlsMap() = default;
     const std::map<ControlAction, std::string>& GetActionLabels() const;
 
     bool AssignActionToKey(const ControlAction action, const SDL_Keycode keyCode);
-    void AssignDefaultActionToKey(const ControlAction action, const SDL_Keycode keyCode);
     bool AssignActionToMouseButton(const ControlAction action, const uint8_t buttonCode);
-    void AssignDefaultActionToMouseButton(const ControlAction action, const uint8_t buttonCode);
     bool AssignActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button);
-    void AssignDefaultActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button);
-
+    bool AssignActionToGameControllerAxis(const ControlAction action, const SDL_GameControllerAxis axis);
     std::string GetKeyStringFromAction(const ControlAction action) const;
-
-    ControlAction GetActionFromKey(const SDL_Keycode keyCode) const;
-    ControlAction GetActionFromMouseButton(const uint8_t buttonCode) const;
-    ControlAction GetActionFromGameControllerButton(const SDL_GameControllerButton button) const;
     std::vector<SDL_Keycode> GetKeysFromAction(const ControlAction action) const;
     std::vector<uint8_t> GetMouseButtonsFromAction(const ControlAction action) const;
     std::vector< SDL_GameControllerButton> GetGameControllerButtonsFromAction(const ControlAction action) const;
+    std::vector< SDL_GameControllerAxis> GetGameControllerAxisFromAction(const ControlAction action) const;
     static std::string GetMouseButtonName(const uint8_t buttonCode);
     static std::string GetGameControllerButtonName(const SDL_GameControllerButton button);
     static const ControlAction StringToAction(const std::string& str);
-
     void ResetToDefaults();
     void Clear();
     void AssignUnusedKeysToDefaults();
 
 private:
+    void AssignDefaultActionToKey(const ControlAction action, const SDL_Keycode keyCode);
+    void AssignDefaultActionToMouseButton(const ControlAction action, const uint8_t buttonCode);
+    void AssignDefaultActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button);
+    void AssignDefaultActionToGameControllerAxis(const ControlAction action, const SDL_GameControllerAxis axis);
+    ControlAction GetActionFromKey(const SDL_Keycode keyCode) const;
+    ControlAction GetActionFromMouseButton(const uint8_t buttonCode) const;
+    ControlAction GetActionFromGameControllerButton(const SDL_GameControllerButton button) const;
+    ControlAction GetActionFromGameControllerAxis(const SDL_GameControllerAxis axis) const;
     static const std::vector<SDL_Keycode>& GetNotAllowedKeys();
 
     std::map<SDL_Keycode, ControlAction> m_KeyToActionMap;
     std::map<uint8_t, ControlAction> m_mouseButtonToActionMap;
     std::map<SDL_GameControllerButton, ControlAction> m_GameControllerButtonToActionMap;
+    std::map<SDL_GameControllerAxis, ControlAction> m_GameControllerAxisToActionMap;
 };

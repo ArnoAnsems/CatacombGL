@@ -333,3 +333,23 @@ void PlayerInput::SetGameControllerAxisRightX(const int16_t value)
 {
     m_gameControllerAxisRightX = value;
 }
+
+int16_t PlayerInput::GetGameControllerAxisTriggerLeft() const
+{
+    return m_gameControllerAxisTriggerLeft;
+}
+
+void PlayerInput::SetGameControllerAxisTriggerLeft(const int16_t value)
+{
+    m_gameControllerAxisTriggerLeft = value;
+}
+
+int16_t PlayerInput::GetGameControllerAxisTriggerRight() const
+{
+    return m_gameControllerAxisTriggerRight;
+}
+
+void PlayerInput::SetGameControllerAxisTriggerRight(const int16_t value)
+{
+    m_gameControllerAxisTriggerRight = value;
+}

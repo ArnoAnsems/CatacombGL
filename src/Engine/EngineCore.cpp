@@ -3222,6 +3222,18 @@ bool EngineCore::IsActionActive(const ControlAction action) const
             isActive |= m_playerInput.IsGameControllerButtonPressed(gameControllerButton);
         }
     }
+    if (!isActive)
+    {
+        const std::vector<SDL_GameControllerAxis> gameControllerAxes = m_configurationSettings.GetConstControlsMap().GetGameControllerAxisFromAction(action);
+        for (SDL_GameControllerAxis gameControllerAxis : gameControllerAxes)
+        {
+            const int16_t minimumAxisDeflection = 5000;
+            const bool isAxisActive =
+                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERLEFT && m_playerInput.GetGameControllerAxisTriggerLeft() > minimumAxisDeflection) ||
+                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT && m_playerInput.GetGameControllerAxisTriggerRight() > minimumAxisDeflection);
+            isActive |= isAxisActive;
+        }
+    }
     return isActive;
 }
 

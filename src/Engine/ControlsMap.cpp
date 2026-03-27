@@ -17,14 +17,30 @@
 #include <SDL_keyboard.h>
 #include <SDL_mouse.h>
 
+const std::pair<ControlAction, std::string> controlActionLabelArray[MaxControlAction] =
+{
+    std::make_pair(None, "None"),
+    std::make_pair(MoveForward, "MoveForward"),
+    std::make_pair(MoveBackward, "MoveBackward"),
+    std::make_pair(TurnLeft, "TurnLeft"),
+    std::make_pair(TurnRight, "TurnRight"),
+    std::make_pair(QuickTurn, "QuickTurn"),
+    std::make_pair(Strafe, "Strafe"),
+    std::make_pair(StrafeLeft, "StrafeLeft"),
+    std::make_pair(StrafeRight, "StrafeRight"),
+    std::make_pair(Shoot, "Shoot"),
+    std::make_pair(ShootZappper, "ShootZappper"),
+    std::make_pair(ShootXterminator, "ShootXterm"),
+    std::make_pair(UsePotion, "UsePotion"),
+    std::make_pair(Run, "Run"),
+    std::make_pair(ShowAutoMap, "Automap")
+};
+
+const std::map<ControlAction, std::string> controlActionLabels(controlActionLabelArray, controlActionLabelArray + sizeof(controlActionLabelArray) / sizeof(std::pair<ControlAction, std::string>));
+
 ControlsMap::ControlsMap()
 {
     ResetToDefaults();
-}
-
-ControlsMap::~ControlsMap()
-{
-
 }
 
 bool ControlsMap::AssignActionToKey(const ControlAction action, const SDL_Keycode keyCode)
@@ -141,13 +157,18 @@ bool ControlsMap::AssignActionToGameControllerButton(const ControlAction action,
     if (action != None)
     {
         const std::vector<SDL_GameControllerButton> otherButtonsWithThisAction = GetGameControllerButtonsFromAction(action);
-        if (otherButtonsWithThisAction.size() > 1)
+        const std::vector<SDL_GameControllerAxis> otherAxisWithThisAction = GetGameControllerAxisFromAction(action);
+        if (otherButtonsWithThisAction.size() + otherAxisWithThisAction.size() > 1)
         {
-            // More than 2 buttons bound to the same action not allowed.
-            // Clear the action from the other buttons.
+            // More than 2 buttons or axis bound to the same action not allowed.
+            // Clear the action from the other buttons and axis.
             for (uint8_t i = 0; i < otherButtonsWithThisAction.size(); i++)
             {
                 AssignActionToGameControllerButton(None, otherButtonsWithThisAction.at(i));
+            }
+            for (uint8_t i = 0; i < otherAxisWithThisAction.size(); i++)
+            {
+                AssignActionToGameControllerAxis(None, otherAxisWithThisAction.at(i));
             }
         }
     }
@@ -171,10 +192,66 @@ void ControlsMap::AssignDefaultActionToGameControllerButton(const ControlAction 
     {
         // There is no action bound to this button yet.
         const std::vector<SDL_GameControllerButton> otherButtonsWithThisAction = GetGameControllerButtonsFromAction(action);
-        if (otherButtonsWithThisAction.size() < 2)
+        const std::vector<SDL_GameControllerAxis> otherAxisWithThisAction = GetGameControllerAxisFromAction(action);
+        if (otherButtonsWithThisAction.size() + otherAxisWithThisAction.size() < 2)
         {
-            // Less than 2 other buttons are bound to this action, so there is room for one more.
+            // Less than 2 other buttons or axis are bound to this action, so there is room for one more.
             m_GameControllerButtonToActionMap.insert(std::make_pair(button, action));
+        }
+    }
+}
+
+bool ControlsMap::AssignActionToGameControllerAxis(const ControlAction action, const SDL_GameControllerAxis axis)
+{
+    if (axis != SDL_CONTROLLER_AXIS_TRIGGERLEFT || axis != SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
+    {
+        // Not allowed to bind
+        return false;
+    }
+
+    if (action != None)
+    {
+        const std::vector<SDL_GameControllerButton> otherButtonsWithThisAction = GetGameControllerButtonsFromAction(action);
+        const std::vector<SDL_GameControllerAxis> otherAxisWithThisAction = GetGameControllerAxisFromAction(action);
+        if (otherButtonsWithThisAction.size() + otherAxisWithThisAction.size() > 1)
+        {
+            // More than 2 buttons or axis bound to the same action not allowed.
+            // Clear the action from the other buttons and axis.
+            for (uint8_t i = 0; i < otherButtonsWithThisAction.size(); i++)
+            {
+                AssignActionToGameControllerButton(None, otherButtonsWithThisAction.at(i));
+            }
+            for (uint8_t i = 0; i < otherAxisWithThisAction.size(); i++)
+            {
+                AssignActionToGameControllerAxis(None, otherAxisWithThisAction.at(i));
+            }
+        }
+    }
+
+    const auto it = m_GameControllerAxisToActionMap.find(axis);
+    if (it == m_GameControllerAxisToActionMap.end())
+    {
+        m_GameControllerAxisToActionMap.insert(std::make_pair(axis, action));
+    }
+    else
+    {
+        m_GameControllerAxisToActionMap[axis] = action;
+    }
+
+    return true;
+}
+
+void ControlsMap::AssignDefaultActionToGameControllerAxis(const ControlAction action, const SDL_GameControllerAxis axis)
+{
+    if (GetActionFromGameControllerAxis(axis) == None)
+    {
+        // There is no action bound to this axis yet.
+        const std::vector<SDL_GameControllerButton> otherButtonsWithThisAction = GetGameControllerButtonsFromAction(action);
+        const std::vector<SDL_GameControllerAxis> otherAxisWithThisAction = GetGameControllerAxisFromAction(action);
+        if (otherButtonsWithThisAction.size() + otherAxisWithThisAction.size() < 2)
+        {
+            // Less than 2 other buttons or axis are bound to this action, so there is room for one more.
+            m_GameControllerAxisToActionMap.insert(std::make_pair(axis, action));
         }
     }
 }
@@ -273,6 +350,12 @@ ControlAction ControlsMap::GetActionFromGameControllerButton(const SDL_GameContr
     return (it != m_GameControllerButtonToActionMap.end()) ? it->second : None;
 }
 
+ControlAction ControlsMap::GetActionFromGameControllerAxis(const SDL_GameControllerAxis axis) const
+{
+    const auto it = m_GameControllerAxisToActionMap.find(axis);
+    return (it != m_GameControllerAxisToActionMap.end()) ? it->second : None;
+}
+
 std::vector<SDL_Keycode> ControlsMap::GetKeysFromAction(const ControlAction action) const
 {
     std::vector<SDL_Keycode> result;
@@ -303,6 +386,19 @@ std::vector<SDL_GameControllerButton> ControlsMap::GetGameControllerButtonsFromA
 {
     std::vector<SDL_GameControllerButton> result;
     for (auto& pair : m_GameControllerButtonToActionMap)
+    {
+        if (action == pair.second)
+        {
+            result.push_back(pair.first);
+        }
+    }
+    return result;
+}
+
+std::vector< SDL_GameControllerAxis> ControlsMap::GetGameControllerAxisFromAction(const ControlAction action) const
+{
+    std::vector<SDL_GameControllerAxis> result;
+    for (auto& pair : m_GameControllerAxisToActionMap)
     {
         if (action == pair.second)
         {
@@ -385,9 +481,10 @@ void ControlsMap::AssignUnusedKeysToDefaults()
     AssignDefaultActionToGameControllerButton(MoveBackward, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
     AssignDefaultActionToGameControllerButton(TurnLeft, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
     AssignDefaultActionToGameControllerButton(TurnRight, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
-    AssignDefaultActionToGameControllerButton(Shoot, SDL_CONTROLLER_BUTTON_B);
     AssignDefaultActionToGameControllerButton(ShootZappper, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
     AssignDefaultActionToGameControllerButton(ShootXterminator, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
     AssignDefaultActionToGameControllerButton(UsePotion, SDL_CONTROLLER_BUTTON_Y);
     AssignDefaultActionToGameControllerButton(ShowAutoMap, SDL_CONTROLLER_BUTTON_X);
+
+    AssignDefaultActionToGameControllerAxis(Shoot, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 }
