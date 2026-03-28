@@ -45,6 +45,12 @@ ControlsMap::ControlsMap()
 
 bool ControlsMap::AssignActionToKey(const ControlAction action, const SDL_Keycode keyCode)
 {
+    if (GetActionFromKey(keyCode) == action)
+    {
+        // It's a valid key, but already assigned to this action.
+        return true;
+    }
+
     const std::vector<SDL_Keycode>& notAllowedKeys = GetNotAllowedKeys();
     for (size_t i = 0; i < notAllowedKeys.size(); i++)
     {
@@ -106,7 +112,7 @@ bool ControlsMap::AssignActionToMouseButton(const ControlAction action, const ui
     const auto it = m_mouseButtonToActionMap.find(buttonCode);
     if (it != m_mouseButtonToActionMap.end())
     {
-        if (action != None)
+        if (action != None && it->second != action)
         {
             const std::vector<SDL_Keycode> otherKeysWithThisAction = GetKeysFromAction(action);
             const std::vector<uint8_t> otherMouseButtonsWithThisAction = GetMouseButtonsFromAction(action);
@@ -148,6 +154,12 @@ void ControlsMap::AssignDefaultActionToMouseButton(const ControlAction action, c
 
 bool ControlsMap::AssignActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button)
 {
+    if (GetActionFromGameControllerButton(button) == action)
+    {
+        // It's a valid button, but already assigned to this action.
+        return true;
+    }
+
     if (button == SDL_CONTROLLER_BUTTON_START)
     {
         // Not allowed to bind
@@ -203,7 +215,13 @@ void ControlsMap::AssignDefaultActionToGameControllerButton(const ControlAction 
 
 bool ControlsMap::AssignActionToGameControllerAxis(const ControlAction action, const SDL_GameControllerAxis axis)
 {
-    if (axis != SDL_CONTROLLER_AXIS_TRIGGERLEFT || axis != SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
+    if (GetActionFromGameControllerAxis(axis) == action)
+    {
+        // It's a valid axis, but already assigned to this action.
+        return true;
+    }
+
+    if (axis != SDL_CONTROLLER_AXIS_TRIGGERLEFT && axis != SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
     {
         // Not allowed to bind
         return false;
@@ -443,6 +461,8 @@ void ControlsMap::Clear()
 {
     m_mouseButtonToActionMap.clear();
     m_KeyToActionMap.clear();
+    m_GameControllerButtonToActionMap.clear();
+    m_GameControllerAxisToActionMap.clear();
 
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_LEFT, None));
     m_mouseButtonToActionMap.insert(std::make_pair(SDL_BUTTON_MIDDLE, None));
