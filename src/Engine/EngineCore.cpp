@@ -1351,19 +1351,19 @@ bool EngineCore::Think()
                 }
 
                 const int16_t minGameControllerAxisDeflection = 10000;
-                if (m_playerInput.GetGameControllerAxisRightX() < -minGameControllerAxisDeflection)
+                if (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
                 {
                     // Turn left with the game controller
                     const int16_t maxGameControllerAxisDeflection = -32768;
-                    const float factor = m_playerInput.GetGameControllerAxisRightX() / maxGameControllerAxisDeflection;
+                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
                 }
-                else if (m_playerInput.GetGameControllerAxisRightX() > minGameControllerAxisDeflection)
+                else if (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) > minGameControllerAxisDeflection)
                 {
                     // Turn right with the game controller
                     const int16_t maxGameControllerAxisDeflection = 32767;
-                    const float factor = m_playerInput.GetGameControllerAxisRightX() / maxGameControllerAxisDeflection;
+                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
                 }
@@ -1375,14 +1375,14 @@ bool EngineCore::Think()
                 
                 const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
                     (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
-                    (m_playerInput.GetGameControllerAxisLeftX() < -minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) < -minGameControllerAxisDeflection);
                 const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
                     (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight))) ||
-                    (m_playerInput.GetGameControllerAxisLeftX() > minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) > minGameControllerAxisDeflection);
                 const bool moveForward = m_playerActions.GetActionActive(MoveForward) ||
-                    (m_playerInput.GetGameControllerAxisLeftY() < -minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY) < -minGameControllerAxisDeflection);
                 const bool moveBackward = m_playerActions.GetActionActive(MoveBackward) ||
-                    (m_playerInput.GetGameControllerAxisLeftY() > minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY) > minGameControllerAxisDeflection);
                 if (moveForward && strafeLeft)
                 { 
                     Thrust(315, distance);
@@ -3229,8 +3229,8 @@ bool EngineCore::IsActionActive(const ControlAction action) const
         {
             const int16_t minimumAxisDeflection = 5000;
             const bool isAxisActive =
-                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERLEFT && m_playerInput.GetGameControllerAxisTriggerLeft() > minimumAxisDeflection) ||
-                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT && m_playerInput.GetGameControllerAxisTriggerRight() > minimumAxisDeflection);
+                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERLEFT && m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERLEFT) > minimumAxisDeflection) ||
+                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT && m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > minimumAxisDeflection);
             isActive |= isAxisActive;
         }
     }

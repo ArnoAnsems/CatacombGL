@@ -102,11 +102,12 @@ void UpdatePlayerInput(const SDL_Window* const window, const GameController& gam
 			input.SetGameControllerButtonPressed(gameControllerButton, gameController.IsButtonPressed(gameControllerButton));
 		}
 
-		input.SetGameControllerAxisLeftX(gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTX));
-		input.SetGameControllerAxisLeftY(gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
-		input.SetGameControllerAxisRightX(gameController.GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
-		input.SetGameControllerAxisTriggerLeft(gameController.GetAxis(SDL_CONTROLLER_AXIS_TRIGGERLEFT));
-		input.SetGameControllerAxisTriggerRight(gameController.GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
+		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX, gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTX));
+		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY, gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
+		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX, gameController.GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
+		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTY, gameController.GetAxis(SDL_CONTROLLER_AXIS_RIGHTY));
+		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERLEFT, gameController.GetAxis(SDL_CONTROLLER_AXIS_TRIGGERLEFT));
+		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERRIGHT, gameController.GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
 	}
 }
 

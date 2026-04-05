@@ -19,19 +19,28 @@ PlayerInput::PlayerInput() :
     m_mouseUpdateTick(0),
     m_mouseXPos(0),
     m_mouseYPos(0),
-    m_hasFocus(true),
-    m_gameControllerAxisLeftX(0),
-    m_gameControllerAxisLeftY(0),
-    m_gameControllerAxisRightX(0)
+    m_hasFocus(true)
 {
-
     m_keyPressed.clear();
     m_keyJustPressed.clear();
+    m_gameControllerButtonPressed.clear();
+    m_gameControllerButtonJustPressed.clear();
+    m_gameControllerAxisPressed.clear();
+    m_gameControllerAxisJustPressedTowardsNegative.clear();
+    m_gameControllerAxisJustPressedTowardsPositive.clear();
 
     for (uint16_t i = 0; i < 6; i++)
     {
         m_buttonPressed[i] = false;
         m_buttonJustPressed[i] = false;
+    }
+
+    for (int i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; i++)
+    {
+        const auto axis = static_cast<SDL_GameControllerAxis>(i);
+        m_gameControllerAxisPressed.insert(std::make_pair(axis, 0u));
+        m_gameControllerAxisJustPressedTowardsNegative.insert(std::make_pair(axis, false));
+        m_gameControllerAxisJustPressedTowardsPositive.insert(std::make_pair(axis, false));
     }
 }
 
@@ -138,6 +147,13 @@ void PlayerInput::ClearJustPressed()
     for (auto& pair : m_gameControllerButtonJustPressed)
     {
         pair.second = false;
+    }
+
+    for (int i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; i++)
+    {
+        const auto axis = static_cast<SDL_GameControllerAxis>(i);
+        m_gameControllerAxisJustPressedTowardsNegative.at(axis) = false;
+        m_gameControllerAxisJustPressedTowardsPositive.at(axis) = false;
     }
 }
 
@@ -304,52 +320,35 @@ bool PlayerInput::IsGameControllerButtonPressed(const SDL_GameControllerButton g
     return false;
 }
 
-int16_t PlayerInput::GetGameControllerAxisLeftX() const
+int16_t PlayerInput::GetGameControllerAxisPressed(const SDL_GameControllerAxis gameControllerAxis) const
 {
-    return m_gameControllerAxisLeftX;
+    return m_gameControllerAxisPressed.at(gameControllerAxis);
 }
 
-void PlayerInput::SetGameControllerAxisLeftX(const int16_t value)
+void PlayerInput::SetGameControllerAxisPressed(const SDL_GameControllerAxis gameControllerAxis, const int16_t value)
 {
-    m_gameControllerAxisLeftX = value;
+    const int16_t previousValue = m_gameControllerAxisPressed.at(gameControllerAxis);
+    m_gameControllerAxisPressed.at(gameControllerAxis) = value;
+
+    const int16_t minGameControllerAxisDeflection = 10000;
+    const bool justPressedTowardsNegative = (previousValue >= -minGameControllerAxisDeflection) && (value < -minGameControllerAxisDeflection);
+    const bool justPressedTowardsPositive = (previousValue <= minGameControllerAxisDeflection) && (value > minGameControllerAxisDeflection);
+    if (justPressedTowardsNegative)
+    {
+        m_gameControllerAxisJustPressedTowardsNegative.at(gameControllerAxis) = true;
+    }
+    if (justPressedTowardsPositive)
+    {
+        m_gameControllerAxisJustPressedTowardsPositive.at(gameControllerAxis) = true;
+    }
 }
 
-int16_t PlayerInput::GetGameControllerAxisLeftY() const
+bool PlayerInput::GetGameControllerAxisJustPressedTowardsNegative(const SDL_GameControllerAxis gameControllerAxis) const
 {
-    return m_gameControllerAxisLeftY;
+    return m_gameControllerAxisJustPressedTowardsNegative.at(gameControllerAxis);
 }
 
-void PlayerInput::SetGameControllerAxisLeftY(const int16_t value)
+bool PlayerInput::GetGameControllerAxisJustPressedTowardsPositive(const SDL_GameControllerAxis gameControllerAxis) const
 {
-    m_gameControllerAxisLeftY = value;
-}
-
-int16_t PlayerInput::GetGameControllerAxisRightX() const
-{
-    return m_gameControllerAxisRightX;
-}
-
-void PlayerInput::SetGameControllerAxisRightX(const int16_t value)
-{
-    m_gameControllerAxisRightX = value;
-}
-
-int16_t PlayerInput::GetGameControllerAxisTriggerLeft() const
-{
-    return m_gameControllerAxisTriggerLeft;
-}
-
-void PlayerInput::SetGameControllerAxisTriggerLeft(const int16_t value)
-{
-    m_gameControllerAxisTriggerLeft = value;
-}
-
-int16_t PlayerInput::GetGameControllerAxisTriggerRight() const
-{
-    return m_gameControllerAxisTriggerRight;
-}
-
-void PlayerInput::SetGameControllerAxisTriggerRight(const int16_t value)
-{
-    m_gameControllerAxisTriggerRight = value;
+    return m_gameControllerAxisJustPressedTowardsPositive.at(gameControllerAxis);
 }

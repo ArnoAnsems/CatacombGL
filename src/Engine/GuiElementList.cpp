@@ -58,10 +58,14 @@ const GuiEvent& GuiElementList::ProcessInput()
 
         const bool isUpJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_UP) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP);
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTY);
         const bool isDownJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTY);
 
         if (isUpJustActivated)
         {

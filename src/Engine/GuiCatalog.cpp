@@ -55,7 +55,11 @@ const GuiEvent& GuiCatalog::ProcessInput()
              m_playerInput.IsKeyJustPressed(SDLK_PAGEUP) ||
              m_playerInput.IsKeyJustPressed(SDLK_KP_9) ||
              m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
-             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP))
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTY) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTY))
     {
         if (m_currentPage > 0)
         {
@@ -70,8 +74,12 @@ const GuiEvent& GuiCatalog::ProcessInput()
              m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
              m_playerInput.IsKeyJustPressed(SDLK_PAGEDOWN) ||
              m_playerInput.IsKeyJustPressed(SDLK_KP_3) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTY) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTY))
 
     {
         if (m_currentPage < lastPage)

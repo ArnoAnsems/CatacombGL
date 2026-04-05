@@ -39,10 +39,14 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
     {
         const bool isLeftJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_LEFT) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTX) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTX);
         const bool isRightJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_RIGHT) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTX) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTX);
 
         if (isLeftJustActivated)
         {

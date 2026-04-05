@@ -37,7 +37,11 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
         {
             m_cvarEnum.SetItemIndex(m_elementSelected);
         }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_DOWN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+        else if
+            (m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTY))
         {
             if (m_elementSelected == m_enumNames.size() - 1)
             {
@@ -48,7 +52,11 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
                 m_elementSelected++;
             }
         }
-        else if (m_playerInput.IsKeyJustPressed(SDLK_UP) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP))
+        else if
+            (m_playerInput.IsKeyJustPressed(SDLK_UP) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTY))
         {
             if (m_elementSelected == 0)
             {
