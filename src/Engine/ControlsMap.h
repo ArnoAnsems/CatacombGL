@@ -57,12 +57,14 @@ public:
     bool AssignActionToGameControllerButton(const ControlAction action, const SDL_GameControllerButton button);
     bool AssignActionToGameControllerAxis(const ControlAction action, const SDL_GameControllerAxis axis);
     std::string GetKeyStringFromAction(const ControlAction action) const;
+    std::string GetGameControllerStringFromAction(const ControlAction action) const;
     std::vector<SDL_Keycode> GetKeysFromAction(const ControlAction action) const;
     std::vector<uint8_t> GetMouseButtonsFromAction(const ControlAction action) const;
     std::vector< SDL_GameControllerButton> GetGameControllerButtonsFromAction(const ControlAction action) const;
     std::vector< SDL_GameControllerAxis> GetGameControllerAxisFromAction(const ControlAction action) const;
     static std::string GetMouseButtonName(const uint8_t buttonCode);
     static std::string GetGameControllerButtonName(const SDL_GameControllerButton button);
+    static std::string GetGameControllerAxisName(const SDL_GameControllerAxis axis);
     static const ControlAction StringToAction(const std::string& str);
     void ResetToDefaults();
     void Clear();

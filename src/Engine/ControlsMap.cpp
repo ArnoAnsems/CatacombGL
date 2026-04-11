@@ -319,14 +319,44 @@ std::string ControlsMap::GetMouseButtonName(const uint8_t buttonCode)
            "";
 }
 
+std::string ControlsMap::GetGameControllerStringFromAction(const ControlAction action) const
+{
+    std::string gameControllerString("");
+    for (auto& pair : m_GameControllerButtonToActionMap)
+    {
+        if (action == pair.second)
+        {
+            if (gameControllerString.compare("") != 0)
+            {
+                gameControllerString += " or ";
+            }
+            gameControllerString += GetGameControllerButtonName(pair.first);
+        }
+    }
+
+    for (auto& pair : m_GameControllerAxisToActionMap)
+    {
+        if (action == pair.second)
+        {
+            if (gameControllerString.compare("") != 0)
+            {
+                gameControllerString += " or ";
+            }
+            gameControllerString += GetGameControllerAxisName(pair.first);
+        }
+    }
+
+    return gameControllerString;
+}
+
 std::string ControlsMap::GetGameControllerButtonName(const SDL_GameControllerButton button)
 {
     const std::map<SDL_GameControllerButton, const std::string> buttonToStrMap =
     {
-        {SDL_CONTROLLER_BUTTON_A, "A"},
-        {SDL_CONTROLLER_BUTTON_B, "B"},
-        {SDL_CONTROLLER_BUTTON_X, "X"},
-        {SDL_CONTROLLER_BUTTON_Y, "Y"},
+        {SDL_CONTROLLER_BUTTON_A, "Button A"},
+        {SDL_CONTROLLER_BUTTON_B, "Button B"},
+        {SDL_CONTROLLER_BUTTON_X, "Button X"},
+        {SDL_CONTROLLER_BUTTON_Y, "Button Y"},
         {SDL_CONTROLLER_BUTTON_BACK, "Back"},
         {SDL_CONTROLLER_BUTTON_GUIDE, "Guide"},
         {SDL_CONTROLLER_BUTTON_START, "Start"},
@@ -348,6 +378,18 @@ std::string ControlsMap::GetGameControllerButtonName(const SDL_GameControllerBut
 
     const auto& it = buttonToStrMap.find(button);
     return (it == buttonToStrMap.end()) ? "" : it->second;
+}
+
+std::string ControlsMap::GetGameControllerAxisName(const SDL_GameControllerAxis axis)
+{
+    const std::map<SDL_GameControllerAxis, const std::string> axisToStrMap =
+    {
+        {SDL_CONTROLLER_AXIS_TRIGGERLEFT, "Trigger Left"},
+        {SDL_CONTROLLER_AXIS_TRIGGERRIGHT, "Trigger Right"}
+    };
+
+    const auto& it = axisToStrMap.find(axis);
+    return (it == axisToStrMap.end()) ? "" : it->second;
 }
 
 ControlAction ControlsMap::GetActionFromKey(const SDL_Keycode keyCode) const

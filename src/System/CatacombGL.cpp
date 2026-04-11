@@ -180,6 +180,7 @@ int main(int argc, char* argv[])
 
 	InitializeSDL();
 	GameController gameController;
+	input.SetGameControllerDetected(gameController.IsDetected());
 
 	Finder finder = Finder(config);
 

@@ -232,6 +232,48 @@ uint8_t PlayerInput::GetFirstMouseButtonPressed() const
     return (i == 6) ? 0 : i;
 }
 
+SDL_GameControllerButton PlayerInput::GetFirstGameControllerButtonPressed() const
+{
+    SDL_GameControllerButton button = SDL_CONTROLLER_BUTTON_INVALID;
+    for (auto& pair : m_gameControllerButtonJustPressed)
+    {
+        if (pair.second == true)
+        {
+            button = pair.first;
+            break;
+        }
+    }
+
+    return button;
+}
+
+SDL_GameControllerAxis PlayerInput::GetFirstGameControllerAxisPressed() const
+{
+    SDL_GameControllerAxis axis = SDL_CONTROLLER_AXIS_INVALID;
+    for (auto& pair : m_gameControllerAxisJustPressedTowardsNegative)
+    {
+        if (pair.second == true)
+        {
+            axis = pair.first;
+            break;
+        }
+    }
+
+    if (axis == SDL_CONTROLLER_AXIS_INVALID)
+    {
+        for (auto& pair : m_gameControllerAxisJustPressedTowardsPositive)
+        {
+            if (pair.second == true)
+            {
+                axis = pair.first;
+                break;
+            }
+        }
+    }
+
+    return axis;
+}
+
 void PlayerInput::SetHasFocus(const bool focus)
 {
     m_hasFocus = focus;
@@ -351,4 +393,14 @@ bool PlayerInput::GetGameControllerAxisJustPressedTowardsNegative(const SDL_Game
 bool PlayerInput::GetGameControllerAxisJustPressedTowardsPositive(const SDL_GameControllerAxis gameControllerAxis) const
 {
     return m_gameControllerAxisJustPressedTowardsPositive.at(gameControllerAxis);
+}
+
+void PlayerInput::SetGameControllerDetected(const bool detected)
+{
+    m_isGameControllerDetected = detected;
+}
+
+bool PlayerInput::IsGameControllerDetected() const
+{
+    return m_isGameControllerDetected;
 }

@@ -238,6 +238,33 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
             }
         }
 
+        for (uint8_t i = static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_A); i < static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_MAX); i++)
+        {
+            const SDL_GameControllerButton button = static_cast<SDL_GameControllerButton>(i);
+            const std::string buttonName = ControlsMap::GetGameControllerButtonName(button);
+            const auto buttonPair = keyValuePairs.find(buttonName);
+            if (buttonPair != keyValuePairs.end())
+            {
+                const ControlAction action = ControlsMap::StringToAction(buttonPair->second);
+                m_controlsMap.AssignActionToGameControllerButton(action, button);
+            }
+        }
+
+        for (uint8_t i = static_cast<uint8_t>(SDL_CONTROLLER_AXIS_LEFTX); i < static_cast<uint8_t>(SDL_CONTROLLER_AXIS_MAX); i++)
+        {
+            const SDL_GameControllerAxis axis = static_cast<SDL_GameControllerAxis>(i);
+            const std::string axisName = ControlsMap::GetGameControllerAxisName(axis);
+            if (!axisName.empty())
+            {
+                const auto axisPair = keyValuePairs.find(axisName);
+                if (axisPair != keyValuePairs.end())
+                {
+                    const ControlAction action = ControlsMap::StringToAction(axisPair->second);
+                    m_controlsMap.AssignActionToGameControllerAxis(action, axis);
+                }
+            }
+        }
+
         m_controlsMap.AssignUnusedKeysToDefaults();
     }
 }
@@ -285,24 +312,43 @@ void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
         SerializeCVar(file, CVarIdPreventSoftlock);
         SerializeCVar(file, CVarIdStickyWalls);
         SerializeCVar(file, CVarIdInstantChests);
-        file << "# Key bindings\n";
-        for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
+        file << "# Mouse and keyboard bindings\n";
+        for (uint8_t i = static_cast<uint8_t>(MoveForward); i < static_cast<uint8_t>(MaxControlAction); i++)
 	    {
-            const std::vector<SDL_Keycode> keysForAction = m_controlsMap.GetKeysFromAction(ControlAction(i));
-            const std::string& actionLabel = m_controlsMap.GetActionLabels().at((ControlAction)i);
+            const ControlAction action = static_cast<ControlAction>(i);
+            const std::vector<SDL_Keycode> keysForAction = m_controlsMap.GetKeysFromAction(action);
+            const std::string& actionLabel = m_controlsMap.GetActionLabels().at(action);
             for (uint8_t j = 0; j < keysForAction.size(); j++)
             {
                 const std::string keyLabel = SDL_GetKeyName(keysForAction.at(j));
                 file << keyLabel << "=" << actionLabel << "\n";
             }
-            const std::vector<uint8_t>buttonsForAction = m_controlsMap.GetMouseButtonsFromAction(ControlAction(i));
+            const std::vector<uint8_t>buttonsForAction = m_controlsMap.GetMouseButtonsFromAction(action);
             for (uint8_t j = 0; j < buttonsForAction.size(); j++)
             {
                 const std::string buttonLabel = ControlsMap::GetMouseButtonName(buttonsForAction.at(j));
                 file << buttonLabel << "=" << actionLabel << "\n";
             }
         }
-            
+        file << "# Game controller bindings\n";
+        for (uint8_t i = static_cast<uint8_t>(MoveForward); i < static_cast<uint8_t>(MaxControlAction); i++)
+        {
+            const ControlAction action = static_cast<ControlAction>(i);
+            const std::vector<SDL_GameControllerButton> gameControllerButtonsForAction = m_controlsMap.GetGameControllerButtonsFromAction(action);
+            const std::string& actionLabel = m_controlsMap.GetActionLabels().at(action);
+            for (uint8_t j = 0; j < gameControllerButtonsForAction.size(); j++)
+            {
+                const std::string gameControllerButtonLabel = ControlsMap::GetGameControllerButtonName(gameControllerButtonsForAction.at(j));
+                file << gameControllerButtonLabel << "=" << actionLabel << "\n";
+            }
+            const std::vector<SDL_GameControllerAxis>gameControllerAxisForAction = m_controlsMap.GetGameControllerAxisFromAction(action);
+            for (uint8_t j = 0; j < gameControllerAxisForAction.size(); j++)
+            {
+                const std::string gameControllerAxisLabel = ControlsMap::GetGameControllerAxisName(gameControllerAxisForAction.at(j));
+                file << gameControllerAxisLabel << "=" << actionLabel << "\n";
+            }
+        }
+
         file.close();
     }
 }

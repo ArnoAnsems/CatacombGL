@@ -65,6 +65,8 @@ add_library( CatacombGL_Engine OBJECT
     GuiCatalog.h
     GuiElementBase.cpp
     GuiElementBase.h
+    GuiElementBindGameController.cpp
+    GuiElementBindGameController.h
     GuiElementBindKey.cpp
     GuiElementBindKey.h
     GuiElementBoolSelection.cpp

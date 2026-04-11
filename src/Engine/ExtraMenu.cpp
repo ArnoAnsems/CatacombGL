@@ -22,6 +22,7 @@
 #include "GuiElementList.h"
 #include "GuiElementStaticText.h"
 #include "GuiElementBindKey.h"
+#include "GuiElementBindGameController.h"
 #include "GuiElementButton.h"
 #include "GuiElementEditText.h"
 #include "GuiCatalog.h"
@@ -29,22 +30,24 @@
 
 namespace fs = std::filesystem;
 
-const uint16_t browseMenuSound = 0;
+constexpr uint16_t browseMenuSound = 0;
 
-const int16_t loadGameListId = 1;
-const int16_t saveGameListId = 2;
-const int16_t pageMainId = 3;
-const int16_t pageOptionsId = 4;
-const int16_t pageCustomizeControlsId = 5;
-const int16_t pageVideoOptionsId = 6;
-const int16_t pageSoundOptionsId = 7;
-const int16_t pageGameplayOptionsId = 8;
-const int16_t pageLoadGameId = 9;
-const int16_t pageSaveGameId = 10;
-const int16_t pageCatalogId = 11;
-const int16_t goToSaveGameId = 12;
-const int16_t selectVSyncId = 13;
-const int16_t selectScreenResolutionId = 14;
+constexpr int16_t loadGameListId = 1;
+constexpr int16_t saveGameListId = 2;
+constexpr int16_t pageMainId = 3;
+constexpr int16_t pageOptionsId = 4;
+constexpr int16_t pageCustomizeMouseAndKeyboardId = 5;
+constexpr int16_t pageCustomizeGameControllerId = 6;
+constexpr int16_t pageVideoOptionsId = 7;
+constexpr int16_t pageSoundOptionsId = 8;
+constexpr int16_t pageGameplayOptionsId = 9;
+constexpr int16_t pageLoadGameId = 10;
+constexpr int16_t pageSaveGameId = 11;
+constexpr int16_t pageCatalogId = 12;
+constexpr int16_t goToSaveGameId = 13;
+constexpr int16_t selectVSyncId = 14;
+constexpr int16_t selectScreenResolutionId = 15;
+constexpr int16_t selectGameControllerId = 16;
 
 ExtraMenu::ExtraMenu(
     ConfigurationSettings& configurationSettings,
@@ -97,7 +100,10 @@ ExtraMenu::ExtraMenu(
     pageOptions->SetId(pageOptionsId);
 
     GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Customize Controls", { GuiActionNavigateTo, pageCustomizeControlsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Customize Mouse & Keyboard", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText));
+    GuiElementButton* goToGameControllerButton = new GuiElementButton(playerInput, "Customize Game Controller", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText);
+    goToGameControllerButton->SetId(selectGameControllerId);
+    elementListOptions->AddChild(goToGameControllerButton);
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Video Options", { GuiActionNavigateTo, pageVideoOptionsId }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Sound Options", { GuiActionNavigateTo, pageSoundOptionsId }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Gameplay Options", { GuiActionNavigateTo, pageGameplayOptionsId }, m_renderableText));
@@ -132,30 +138,47 @@ ExtraMenu::ExtraMenu(
     GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video Options", EgaBrightYellow, m_renderableText);
     pageVideo->AddChild(pageLabelVideo, 160, 12);
 
-    // Controls menu
-    GuiPage* pageControls = new GuiPage(playerInput);
-    pageControls->SetId(pageCustomizeControlsId);
+    // Customize mouse and keyboard menu
+    GuiPage* pageMouseAndKeyboard = new GuiPage(playerInput);
+    pageMouseAndKeyboard->SetId(pageCustomizeMouseAndKeyboardId);
 
-    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListControls->AddChild(new GuiElementBindKey(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
+            elementListMouseAndKeyboard->AddChild(new GuiElementBindKey(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
         }
     }
-    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 95, m_renderableText));
-    elementListControls->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 95, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 95, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 95, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 95, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 95, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 95, m_renderableText));
 
-    pageControls->AddChild(elementListControls, 60, 30);
+    pageMouseAndKeyboard->AddChild(elementListMouseAndKeyboard, 60, 30);
 
-    GuiElementStaticText* pageLabelControls = new GuiElementStaticText(playerInput, "Customize Controls", EgaBrightYellow, m_renderableText);
-    pageControls->AddChild(pageLabelControls, 160, 12);
+    GuiElementStaticText* pageLabelMouseAndKeyboard = new GuiElementStaticText(playerInput, "Customize Mouse & Keyboard", EgaBrightYellow, m_renderableText);
+    pageMouseAndKeyboard->AddChild(pageLabelMouseAndKeyboard, 160, 12);
+
+    // Customize game controller menu
+    GuiPage* pageGameController = new GuiPage(playerInput);
+    pageGameController->SetId(pageCustomizeGameControllerId);
+
+    GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
+    {
+        if (actionLabel.first != None)
+        {
+            elementListGameController->AddChild(new GuiElementBindGameController(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
+        }
+    }
+    pageGameController->AddChild(elementListGameController, 60, 30);
+
+    GuiElementStaticText* pageLabelGameController = new GuiElementStaticText(playerInput, "Customize Game Controller", EgaBrightYellow, m_renderableText);
+    pageGameController->AddChild(pageLabelGameController, 160, 12);
 
     // Gameplay menu
     GuiPage* pageGameplay = new GuiPage(playerInput);
@@ -242,7 +265,8 @@ ExtraMenu::ExtraMenu(
     m_guiMenu.AddChild(pageMain);
     m_guiMenu.AddChild(pageOptions);
     m_guiMenu.AddChild(pageVideo);
-    m_guiMenu.AddChild(pageControls);
+    m_guiMenu.AddChild(pageMouseAndKeyboard);
+    m_guiMenu.AddChild(pageGameController);
     m_guiMenu.AddChild(pageGameplay);
     m_guiMenu.AddChild(pageSound);
     m_guiMenu.AddChild(pageLoadGame);
@@ -254,6 +278,9 @@ ExtraMenu::ExtraMenu(
         guiCatalog->SetId(pageCatalogId);
         m_guiMenu.AddChild(guiCatalog);
     }
+
+    // Check if a game controller is detected
+    m_guiMenu.SetEnabled(playerInput.IsGameControllerDetected(), selectGameControllerId);
 }
 
 bool ExtraMenu::IsActive() const

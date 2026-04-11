@@ -250,3 +250,22 @@ TEST_F(ControlsMap_Test, WhenGameControllerAxisIsAssignedToActionNoneThenItIsRem
     ASSERT_EQ(gameControllerAxisFromAction.size(), 1);
     EXPECT_EQ(gameControllerAxisFromAction.at(0), SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 }
+
+TEST_F(ControlsMap_Test, WhenGameControllerButtonNameThenNameIsUnique)
+{
+    for (uint8_t i = static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_A); i < static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_MAX); i++)
+    {
+        const SDL_GameControllerButton firstButton = static_cast<SDL_GameControllerButton>(i);
+        const std::string firstButtonName = ControlsMap::GetGameControllerButtonName(firstButton);
+        EXPECT_FALSE(firstButtonName.empty());
+        for (uint8_t j = static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_A); j < static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_MAX); j++)
+        {
+            const SDL_GameControllerButton secondButton = static_cast<SDL_GameControllerButton>(j);
+            if (firstButton != secondButton)
+            {
+                const std::string secondButtonName = ControlsMap::GetGameControllerButtonName(secondButton);
+                EXPECT_NE(firstButtonName, secondButtonName);
+            }
+        }
+    }
+}
