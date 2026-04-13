@@ -22,11 +22,6 @@ OverscanBorder::OverscanBorder() :
 
 }
 
-OverscanBorder::~OverscanBorder()
-{
-
-}
-
 void OverscanBorder::SetColor(const uint32_t timeStamp, const uint8_t egaSignal, const uint32_t durationInMs)
 {
     m_color = ConvertEgaSignalToEgaColor(egaSignal);

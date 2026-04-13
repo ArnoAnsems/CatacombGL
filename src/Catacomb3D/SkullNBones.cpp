@@ -17,17 +17,17 @@
 #include "EgaGraphCatacomb3D.h"
 #include "AudioRepositoryCatacomb3D.h"
 
-const float SkullMinX = 76.0f;
-const float SkullMaxX = 228.0f;
-const float SkullMinY = 62.0f;
-const float SkullMaxY = 137.0f;
-const uint16_t WinningScore = 21;
+constexpr float SkullMinX = 76.0f;
+constexpr float SkullMaxX = 228.0f;
+constexpr float SkullMinY = 62.0f;
+constexpr float SkullMaxY = 137.0f;
+constexpr uint16_t WinningScore = 21;
 
 SkullNBones::SkullNBones(
     const PlayerInput& playerInput,
     AudioPlayer& audioPlayer,
     EgaGraph& egaGraph,
-    uint32_t& timeStamp,
+    const uint32_t& timeStamp,
     RenderableText& renderableText) :
     GuiElementBase(playerInput),
     m_audioPlayer(audioPlayer),

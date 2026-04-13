@@ -26,14 +26,14 @@
 class Font
 {
 public:
-    Font(const uint8_t width[256], const TextureAtlas* const textureAtlas);
+    explicit Font(const uint8_t width[256], const TextureAtlas* const textureAtlas);
     ~Font();
 
     const TextureAtlas* const GetTextureAtlas() const;
     uint16_t GetCharacterWidth(const uint16_t charIndex) const;
 
 private:
-    static const uint16_t NumChar = 256;
+    static constexpr uint16_t NumChar = 256;
     uint8_t m_width[256];
     const TextureAtlas* const m_textureAtlas;
 };

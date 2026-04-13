@@ -38,7 +38,9 @@
 #include "AutoMap.h"
 #include "ManaBar.h"
 #include "RenderableOverscanBorder.h"
+#include "OverscanBorder.h"
 #include "RenderableLevelStatistics.h"
+#include "LevelStatistics.h"
 #include "SavedGamesInDosFormat.h"
 #include <filesystem>
 

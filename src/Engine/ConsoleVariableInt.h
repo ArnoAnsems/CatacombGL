@@ -20,13 +20,13 @@
 class ConsoleVariableInt : public ConsoleVariable
 {
 public:
-    ConsoleVariableInt(
+    explicit ConsoleVariableInt(
         const std::string& nameInMenu,
         const std::string& nameInConfigFile,
         const int32_t minValue,
         const int32_t maxValue,
         const int32_t defaultValue);
-    ~ConsoleVariableInt();
+    ~ConsoleVariableInt() = default;
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;

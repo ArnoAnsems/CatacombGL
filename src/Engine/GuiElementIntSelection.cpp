@@ -28,11 +28,6 @@ GuiElementIntSelection::GuiElementIntSelection(
 
 }
 
-GuiElementIntSelection::~GuiElementIntSelection()
-{
-
-}
-
 const GuiEvent& GuiElementIntSelection::ProcessInput()
 {
     if (m_enabled)

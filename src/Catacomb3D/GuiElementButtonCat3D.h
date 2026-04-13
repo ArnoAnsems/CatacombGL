@@ -20,17 +20,17 @@
 class GuiElementButtonCat3D : public GuiElementButton
 {
 public:
-    GuiElementButtonCat3D(
+    explicit GuiElementButtonCat3D(
         const PlayerInput& playerInput,
         const std::string& buttonLabel,
         const GuiEvent& guiEventWhenActivated,
         RenderableText& renderableText,
         RenderableTiles& renderableTiles,
-        bool& flashIcon);
+        const bool& flashIcon);
 
     virtual void Draw(IRenderer& renderer) const override;
 
 private:
     RenderableTiles& m_renderableTiles;
-    bool& m_flashIcon;
+    const bool& m_flashIcon;
 };

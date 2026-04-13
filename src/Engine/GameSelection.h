@@ -40,8 +40,8 @@ struct GameSelectionPresentation
 class GameSelection
 {
 public:
-    GameSelection(IRenderer& renderer);
-    ~GameSelection();
+    explicit GameSelection(IRenderer& renderer);
+    ~GameSelection() = default;
 
     void Draw(const GameSelectionPresentation& presentation);
 

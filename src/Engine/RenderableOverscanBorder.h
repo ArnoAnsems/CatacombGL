@@ -20,14 +20,16 @@
 // Class for rendering the overscan border to the screen.
 //
 
-#include "OverscanBorder.h"
-#include "IRenderer.h"
+#include <stdint.h>
+
+class IRenderer;
+class OverscanBorder;
 
 class RenderableOverscanBorder
 {
 public:
-    RenderableOverscanBorder(const OverscanBorder& overscanBorder);
-    ~RenderableOverscanBorder();
+    explicit RenderableOverscanBorder(const OverscanBorder& overscanBorder);
+    ~RenderableOverscanBorder() = default;
 
     void Draw(IRenderer& renderer, const uint16_t additionalMargin, const uint32_t timeStamp, const bool helpWindow);
 

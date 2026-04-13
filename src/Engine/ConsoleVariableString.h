@@ -19,8 +19,8 @@
 class ConsoleVariableString : public ConsoleVariable
 {
 public:
-    ConsoleVariableString(const std::string& nameInMenu, const std::string& nameInConfigFile, const std::string& defaultValue);
-    ~ConsoleVariableString();
+    explicit ConsoleVariableString(const std::string& nameInMenu, const std::string& nameInConfigFile, const std::string& defaultValue);
+    ~ConsoleVariableString() = default;
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;

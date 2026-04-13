@@ -21,7 +21,7 @@ GuiElementButtonCat3D::GuiElementButtonCat3D(
     const GuiEvent& guiEventWhenActivated,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
-    bool& flashIcon) :
+    const bool& flashIcon) :
     GuiElementButton(playerInput, buttonLabel, guiEventWhenActivated, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)

@@ -20,15 +20,18 @@
 // Class for rendering the level statistics.
 //
 
-#include "LevelStatistics.h"
-#include "IRenderer.h"
-#include "Font.h"
+#include "EgaColor.h"
+#include <string>
+
+class IRenderer;
+class LevelStatistics;
+class Font;
 
 class RenderableLevelStatistics
 {
 public:
-    RenderableLevelStatistics(const LevelStatistics& levelStatistics);
-    ~RenderableLevelStatistics();
+    explicit RenderableLevelStatistics(const LevelStatistics& levelStatistics);
+    ~RenderableLevelStatistics() = default;
 
     void Draw(IRenderer& renderer, const Font& font, const uint16_t additionalMargin, const uint32_t timeStamp, const egaColor floorColor);
 

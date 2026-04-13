@@ -21,7 +21,7 @@ class ConsoleVariable
 public:
     ConsoleVariable();
     ConsoleVariable(const std::string& nameInMenu, const std::string& nameInConfigFile);
-    ~ConsoleVariable();
+    ~ConsoleVariable() = default;
 
     const std::string& GetNameInMenu() const;
     const std::string& GetNameInConfigFile() const;

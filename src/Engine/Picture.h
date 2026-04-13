@@ -25,8 +25,8 @@
 class Picture
 {
 public:
-    Picture(const unsigned int textureId, const uint16_t imageWidth, const uint16_t imageHeight, const uint16_t textureWidth, const uint16_t textureHeight);
-    ~Picture();
+    explicit Picture(const unsigned int textureId, const uint16_t imageWidth, const uint16_t imageHeight, const uint16_t textureWidth, const uint16_t textureHeight);
+    ~Picture() = default;
 
     unsigned int GetTextureId() const;
     uint16_t GetImageWidth() const;

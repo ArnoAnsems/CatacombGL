@@ -26,11 +26,6 @@ ConsoleVariableBool::ConsoleVariableBool(const std::string& nameInMenu, const st
 
 }
 
-ConsoleVariableBool::~ConsoleVariableBool()
-{
-
-}
-
 const std::string ConsoleVariableBool::Serialize() const
 {
     return (m_enabled) ? "Enabled" : "Disabled";

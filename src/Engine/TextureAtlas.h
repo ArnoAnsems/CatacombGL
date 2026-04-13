@@ -28,7 +28,7 @@ class TextureAtlas
 public:
     // Spacing between individual images is needed to prevent an image from 'leaking' into its
     // neighbouring image due to linear filtering.
-    TextureAtlas(
+    explicit TextureAtlas(
         const unsigned int textureId,
         const uint16_t imageWidth,
         const uint16_t imageHeight,

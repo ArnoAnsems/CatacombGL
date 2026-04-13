@@ -15,7 +15,6 @@
 
 #include "TextureAtlas.h"
 #include "Uint16Utility.h"
-#include <cstdint>
 #include <cstddef> // For std::size_t
 
 TextureAtlas::TextureAtlas(

@@ -15,18 +15,16 @@
 
 #include "PictureTable.h"
 
-PictureTable::PictureTable(FileChunk* decompressedChunk) :
-    m_count(0),
+PictureTable::PictureTable(const FileChunk& decompressedChunk) :
+    m_count(static_cast<uint16_t>(decompressedChunk.GetSize() / 4)),
     m_width(nullptr),
     m_height(nullptr)
 {
-    m_count = (uint16_t)decompressedChunk->GetSize() / 4;
-
     if (m_count > 0)
     {
         m_width = new uint16_t[m_count];
         m_height = new uint16_t[m_count];
-        uint8_t* chunk = decompressedChunk->GetChunk();
+        const uint8_t* chunk = decompressedChunk.GetChunk();
         for (uint16_t i = 0; i < m_count; i++)
         {
             m_width[i] = *(uint16_t*)&chunk[i * 4] * 8;
@@ -41,7 +39,7 @@ PictureTable::~PictureTable()
     delete[] m_height;
 }
 
-uint16_t PictureTable::GetWidth(const uint16_t index)
+uint16_t PictureTable::GetWidth(const uint16_t index) const
 {
     if (index < m_count)
     {
@@ -51,7 +49,7 @@ uint16_t PictureTable::GetWidth(const uint16_t index)
     return 0;
 }
 
-uint16_t PictureTable::GetHeight(const uint16_t index)
+uint16_t PictureTable::GetHeight(const uint16_t index) const
 {
     if (index < m_count)
     {
@@ -61,7 +59,7 @@ uint16_t PictureTable::GetHeight(const uint16_t index)
     return 0;
 }
 
-uint16_t PictureTable::GetCount()
+uint16_t PictureTable::GetCount() const
 {
     return m_count;
 }

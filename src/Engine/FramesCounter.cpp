@@ -22,11 +22,6 @@ FramesCounter::FramesCounter() :
 {
 }
 
-FramesCounter::~FramesCounter()
-{
-
-}
-
 void FramesCounter::AddFrame(const uint32_t timeStamp)
 {
     if (timeStamp >= m_startTimestamp + 1000)

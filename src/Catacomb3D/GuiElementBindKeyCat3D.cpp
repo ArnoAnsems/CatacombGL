@@ -22,7 +22,7 @@ GuiElementBindKeyCat3D::GuiElementBindKeyCat3D(
     const int16_t offsetXValue,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
-    bool& flashIcon) :
+    const bool& flashIcon) :
     GuiElementBindKey(playerInput, controlsMap, controlAction, offsetXValue, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)

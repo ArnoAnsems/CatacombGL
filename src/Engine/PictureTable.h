@@ -25,16 +25,16 @@
 class PictureTable
 {
 public:
-    PictureTable(FileChunk* decompressedChunk);
+    explicit PictureTable(const FileChunk& decompressedChunk);
     ~PictureTable();
 
-    uint16_t GetWidth(const uint16_t index);
-    uint16_t GetHeight(const uint16_t index);
-    uint16_t GetCount();
+    uint16_t GetWidth(const uint16_t index) const;
+    uint16_t GetHeight(const uint16_t index) const;
+    uint16_t GetCount() const;
 
 private:
     uint16_t* m_width;
     uint16_t* m_height;
-    uint16_t m_count;
+    const uint16_t m_count;
 };
 

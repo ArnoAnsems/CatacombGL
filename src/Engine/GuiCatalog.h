@@ -21,19 +21,19 @@
 class GuiCatalog : public GuiElementBase
 {
 public:
-    GuiCatalog(
+    explicit GuiCatalog(
         PlayerInput& playerInput,
         const IRenderer& renderer,
         const std::vector<std::string>& catalogFilenames,
         const std::filesystem::path& gameFolder);
-    ~GuiCatalog();
+    ~GuiCatalog() = default;
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
 
 private:
     std::vector<Shape*> m_shapes;
     const std::vector<std::string>& m_catalogFilenames;
-    const GuiEvent m_closeEvent = { GuiActionClose, 0 };
+    static constexpr GuiEvent m_closeEvent = { GuiActionClose, 0 };
     uint16_t m_currentPage;
     uint16_t m_mostRecentPageWithFullscreenImage;
     const IRenderer& m_renderer;

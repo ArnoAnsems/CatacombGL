@@ -18,24 +18,24 @@
 #include "IRenderer.h"
 #include "EgaColor.h"
 
-const uint8_t GuiActionNone = 0;
-const uint8_t GuiActionKeyBinding = 1;
-const uint8_t GuiActionLoadGame = 2;
-const uint8_t GuiActionBusy = 3;
-const uint8_t GuiActionSaveGame = 4;
-const uint8_t GuiActionNavigateTo = 5;
-const uint8_t GuiActionNewGame = 6;
-const uint8_t GuiActionNewGameEasy = 7;
-const uint8_t GuiActionNewGameNormal = 8;
-const uint8_t GuiActionNewGameHard = 9;
-const uint8_t GuiActionClose = 10;
-const uint8_t GuiActionQuit = 11;
-const uint8_t GuiActionPlaySound = 12;
-const uint8_t GuiActionEndGame = 13;
-const uint8_t GuiActionHighScoreFinished = 14;
-const uint8_t GuiActionResetToDefaults = 15;
-const uint8_t GuiActionResetToClassic = 16;
-const uint8_t GuiActionLoadDosGame = 17;
+constexpr uint8_t GuiActionNone = 0;
+constexpr uint8_t GuiActionKeyBinding = 1;
+constexpr uint8_t GuiActionLoadGame = 2;
+constexpr uint8_t GuiActionBusy = 3;
+constexpr uint8_t GuiActionSaveGame = 4;
+constexpr uint8_t GuiActionNavigateTo = 5;
+constexpr uint8_t GuiActionNewGame = 6;
+constexpr uint8_t GuiActionNewGameEasy = 7;
+constexpr uint8_t GuiActionNewGameNormal = 8;
+constexpr uint8_t GuiActionNewGameHard = 9;
+constexpr uint8_t GuiActionClose = 10;
+constexpr uint8_t GuiActionQuit = 11;
+constexpr uint8_t GuiActionPlaySound = 12;
+constexpr uint8_t GuiActionEndGame = 13;
+constexpr uint8_t GuiActionHighScoreFinished = 14;
+constexpr uint8_t GuiActionResetToDefaults = 15;
+constexpr uint8_t GuiActionResetToClassic = 16;
+constexpr uint8_t GuiActionLoadDosGame = 17;
 
 struct GuiEvent
 {
@@ -46,8 +46,8 @@ struct GuiEvent
 class GuiElementBase
 {
 public:
-    GuiElementBase(const PlayerInput& playerInput);
-    virtual ~GuiElementBase();
+    explicit GuiElementBase(const PlayerInput& playerInput);
+    virtual ~GuiElementBase() = default;
     void SetId(const int16_t id);
     int16_t GetId() const;
 

@@ -28,11 +28,6 @@ GuiElementBoolSelection::GuiElementBoolSelection(
 
 }
 
-GuiElementBoolSelection::~GuiElementBoolSelection()
-{
-
-}
-
 const GuiEvent& GuiElementBoolSelection::ProcessInput()
 {
     const bool isJustActivated =

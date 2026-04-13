@@ -32,12 +32,12 @@ public:
     struct HighScore
     {
         std::string name;
-        uint32_t score;
-        uint16_t level;
+        uint32_t score = 0;
+        uint16_t level = 0;
     };
 
     HighScores();
-    ~HighScores();
+    ~HighScores() = default;
 
     const std::vector<HighScore>& Get() const;
     bool LoadFromFile(const std::filesystem::path& path);

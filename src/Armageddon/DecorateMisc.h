@@ -23,38 +23,38 @@
 #include "../Engine/Decorate.h"
 #include "DecorateProjectiles.h"
 #include "EgaGraphArmageddon.h"
-//#include "AudioRepositoryArmageddon.h"
+#include "AudioRepositoryArmageddon.h"
 
-const uint16_t actorIdNone = 0;
-const uint16_t actorIdTomb1 = 1;
-const uint16_t actorIdTomb2 = 2;
-const uint16_t actorIdTomb3 = 3;
-const uint16_t actorIdExplodingWall = 4;
-const uint16_t actorIdWarpAntHill = 5;
-const uint16_t actorIdWarpPortal1 = 6;
-const uint16_t actorIdWarpPortal2 = 7;
-const uint16_t actorIdWarpPortal3 = 8;
-const uint16_t actorIdWarpPortal4 = 9;
-const uint16_t actorIdWarpPortal5 = 10;
-const uint16_t actorIdPlayer = 11;
-const uint16_t actorIdColumn = 12;
-const uint16_t actorIdSulphurGas = 13;
-const uint16_t actorIdFirePot = 14;
-const uint16_t actorIdFountain = 15;
-const uint16_t actorIdArch1 = 80;
-const uint16_t actorIdArch2 = 81;
-const uint16_t actorIdArch3 = 82;
-const uint16_t actorIdArch4 = 83;
-const uint16_t actorIdArch5 = 84;
-const uint16_t actorIdArch6 = 85;
-const uint16_t actorIdArch7 = 86;
-const uint16_t actorIdArch8 = 87;
-const uint16_t actorIdArch9 = 88;
-const uint16_t actorIdArch10 = 89;
-const uint16_t actorIdArch11 = 90;
-const uint16_t actorIdArch12 = 91;
-const uint16_t actorIdArch13 = 92;
-const uint16_t actorIdForceField = 93;
+constexpr uint16_t actorIdNone = 0;
+constexpr uint16_t actorIdTomb1 = 1;
+constexpr uint16_t actorIdTomb2 = 2;
+constexpr uint16_t actorIdTomb3 = 3;
+constexpr uint16_t actorIdExplodingWall = 4;
+constexpr uint16_t actorIdWarpAntHill = 5;
+constexpr uint16_t actorIdWarpPortal1 = 6;
+constexpr uint16_t actorIdWarpPortal2 = 7;
+constexpr uint16_t actorIdWarpPortal3 = 8;
+constexpr uint16_t actorIdWarpPortal4 = 9;
+constexpr uint16_t actorIdWarpPortal5 = 10;
+constexpr uint16_t actorIdPlayer = 11;
+constexpr uint16_t actorIdColumn = 12;
+constexpr uint16_t actorIdSulphurGas = 13;
+constexpr uint16_t actorIdFirePot = 14;
+constexpr uint16_t actorIdFountain = 15;
+constexpr uint16_t actorIdArch1 = 80;
+constexpr uint16_t actorIdArch2 = 81;
+constexpr uint16_t actorIdArch3 = 82;
+constexpr uint16_t actorIdArch4 = 83;
+constexpr uint16_t actorIdArch5 = 84;
+constexpr uint16_t actorIdArch6 = 85;
+constexpr uint16_t actorIdArch7 = 86;
+constexpr uint16_t actorIdArch8 = 87;
+constexpr uint16_t actorIdArch9 = 88;
+constexpr uint16_t actorIdArch10 = 89;
+constexpr uint16_t actorIdArch11 = 90;
+constexpr uint16_t actorIdArch12 = 91;
+constexpr uint16_t actorIdArch13 = 92;
+constexpr uint16_t actorIdForceField = 93;
 
 //
 // TOMBSTONE 1

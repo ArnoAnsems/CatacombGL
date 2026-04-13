@@ -26,11 +26,6 @@ GuiElementBase::GuiElementBase(const PlayerInput& playerInput) :
 
 }
 
-GuiElementBase::~GuiElementBase()
-{
-
-}
-
 void GuiElementBase::SetId(const int16_t id)
 {
     m_id = id;

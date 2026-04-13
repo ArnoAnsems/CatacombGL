@@ -35,7 +35,7 @@ public:
         int16_t y;
     } pictureCoordinate;
 
-    RenderableAutoMapTopDown(
+    explicit RenderableAutoMapTopDown(
         const Font& font,
         const ViewPorts::ViewPortRect3D original3DViewArea,
         const TextureAtlas& textureAtlasTilesSize16,

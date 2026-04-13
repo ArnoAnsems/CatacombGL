@@ -28,11 +28,6 @@ AutoMap::AutoMap() :
 
 }
 
-AutoMap::~AutoMap()
-{
-
-}
-
 void AutoMap::SetCheat(const bool enabled)
 {
     m_cheat = enabled;

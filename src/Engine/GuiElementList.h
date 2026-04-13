@@ -20,7 +20,7 @@
 class GuiElementList : public GuiElementBase
 {
 public:
-    GuiElementList(
+    explicit GuiElementList(
         const PlayerInput& playerInput,
         const uint16_t maxElementsDrawn,
         const uint16_t elementHeight,

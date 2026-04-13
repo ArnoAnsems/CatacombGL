@@ -21,12 +21,12 @@
 class GuiElementIntSelection : public GuiElementBase
 {
 public:
-    GuiElementIntSelection(
+    explicit GuiElementIntSelection(
         const PlayerInput& playerInput,
         ConsoleVariableInt& cvarInt,
         const int16_t offsetXValue,
         RenderableText& renderableText);
-    ~GuiElementIntSelection() override;
+    ~GuiElementIntSelection() override = default;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;

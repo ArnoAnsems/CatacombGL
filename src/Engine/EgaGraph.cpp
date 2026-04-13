@@ -30,8 +30,8 @@
 
 namespace fs = std::filesystem;
 
-static const uint16_t numTilesSize8 = 104;
-static const uint16_t numTilesSize8Masked = 12;
+static constexpr uint16_t numTilesSize8 = 104;
+static constexpr uint16_t numTilesSize8Masked = 12;
 
 EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const fs::path& path, IRenderer& renderer) :
     m_staticData(staticData),
@@ -72,7 +72,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const fs::path& path, I
     uint32_t compressedSize = GetChunkSize(0) - sizeof(uint32_t);
     uint32_t uncompressedSize = *(uint32_t*)compressedPictureTable;
     FileChunk* pictureTableChunk = m_huffman->Decompress(&compressedPictureTable[sizeof(uint32_t)], compressedSize, uncompressedSize);
-    m_pictureTable = new PictureTable(pictureTableChunk);
+    m_pictureTable = new PictureTable(*pictureTableChunk);
     delete pictureTableChunk;
 
     if (m_staticData.indexOfFirstMaskedPicture - m_staticData.indexOfFirstPicture > m_pictureTable->GetCount())
@@ -93,7 +93,7 @@ EgaGraph::EgaGraph(const egaGraphStaticData& staticData, const fs::path& path, I
     uint32_t compressedSize2 = GetChunkSize(1) - sizeof(uint32_t);
     uint32_t uncompressedSize2 = *(uint32_t*)compressedMaskedPictureTable;
     FileChunk* maskedPictureTableChunk = m_huffman->Decompress(&compressedMaskedPictureTable[sizeof(uint32_t)], compressedSize2, uncompressedSize2);
-    m_maskedPictureTable = new PictureTable(maskedPictureTableChunk);
+    m_maskedPictureTable = new PictureTable(*maskedPictureTableChunk);
     delete maskedPictureTableChunk;
 
     if (m_staticData.indexOfFirstSprite - m_staticData.indexOfFirstMaskedPicture > m_maskedPictureTable->GetCount())
@@ -319,7 +319,7 @@ Font* EgaGraph::GetFont(const uint16_t index)
     uint32_t uncompressedSize = *(uint32_t*)compressedFont;
     FileChunk* fontChunk = m_huffman->Decompress(&compressedFont[sizeof(uint32_t)], compressedSize, uncompressedSize);
 
-    const uint16_t NumChar = 256;
+    constexpr uint16_t NumChar = 256;
 
     const uint16_t lineHeight = *(uint16_t*)&fontChunk->GetChunk()[0];
     uint16_t characterOffset[NumChar];
@@ -445,11 +445,11 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompr
     const uint16_t numberOfRows = (masked) ? 4 : 13;
     const unsigned int textureId = m_renderer.GenerateTextureId();
     TextureAtlas* textureAtlas = new TextureAtlas(textureId, 8, 8, numberOfColumns, numberOfRows, 2, 2);
-    const uint32_t bytesPerOutputPixel = 4;
+    constexpr uint32_t bytesPerOutputPixel = 4;
     const uint32_t inputSizeOfTileInBytes = masked ? 40 : 32;
-    const uint32_t numberOfPixelsInTile = 64; // 8 x 8
+    constexpr uint32_t numberOfPixelsInTile = 64; // 8 x 8
     uint8_t* textureImage = new uint8_t[numberOfPixelsInTile * bytesPerOutputPixel];
-    const uint32_t planeSize = 8;
+    constexpr uint32_t planeSize = 8;
     unsigned char* chunk = decompressedChunk->GetChunk();
     const uint32_t numberOfTiles = numberOfColumns * numberOfRows;
 
@@ -518,15 +518,15 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize8(const FileChunk* decompr
 TextureAtlas* EgaGraph::CreateTextureAtlasForTilesSize16(const bool masked) const
 {
     const uint16_t numberOfTiles = GetNumberOfTilesSize16(masked);
-    const uint16_t numberOfColumns = 512 / 18;
-    const uint16_t numberOfRows = 512 / 18;
+    constexpr uint16_t numberOfColumns = 512 / 18;
+    constexpr uint16_t numberOfRows = 512 / 18;
     const unsigned int textureId = m_renderer.GenerateTextureId();
     TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, 16, numberOfColumns, numberOfRows, 2, 2);
-    const uint32_t bytesPerOutputPixel = 4;
+    constexpr uint32_t bytesPerOutputPixel = 4;
     const uint32_t inputSizeOfTileInBytes = masked ? 160 : 128;
-    const uint32_t numberOfPixelsInTile = 256; // 16 x 16
+    constexpr uint32_t numberOfPixelsInTile = 256; // 16 x 16
     uint8_t* textureImage = new uint8_t[numberOfPixelsInTile * bytesPerOutputPixel];
-    const uint32_t planeSize = 32;
+    constexpr uint32_t planeSize = 32;
 
     for (uint32_t tile = 0; tile < numberOfTiles; tile++)
     {
@@ -605,8 +605,8 @@ TextureAtlas* EgaGraph::CreateTextureAtlasForFont(const bool* fontPicture, const
     const unsigned int textureId = m_renderer.GenerateTextureId();
 
     TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, lineHeight, 16, 16, 0, 16 - lineHeight);
-    const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t width = 16;
+    constexpr uint32_t bytesPerOutputPixel = 4;
+    constexpr uint32_t width = 16;
     const uint32_t numberOfPixelsInTexture = width * lineHeight;
     uint8_t* textureImage = new uint8_t[numberOfPixelsInTexture * bytesPerOutputPixel];
 
@@ -647,10 +647,10 @@ unsigned int EgaGraph::LoadFileChunkIntoTexture(
     const uint16_t textureHeight,
     const bool transparent)
 {
-    const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t numberOfPlanes = 4;
+    constexpr uint32_t bytesPerOutputPixel = 4;
+    constexpr uint32_t numberOfPlanes = 4;
     const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
-    const uint32_t numberOfEgaPixelsPerByte = 8;
+    constexpr uint32_t numberOfEgaPixelsPerByte = 8;
     const uint32_t numberOfPixels = planeSize * numberOfEgaPixelsPerByte;
     const uint32_t textureImageSize = textureWidth * textureHeight * bytesPerOutputPixel;
 
@@ -738,10 +738,10 @@ unsigned int EgaGraph::LoadMaskedFileChunkIntoTexture(
     const uint16_t textureWidth,
     const uint16_t textureHeight)
 {
-    const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t numberOfPlanes = 5;
+    constexpr uint32_t bytesPerOutputPixel = 4;
+    constexpr uint32_t numberOfPlanes = 5;
     const uint32_t planeSize = decompressedChunk->GetSize() / numberOfPlanes;
-    const uint32_t numberOfEgaPixelsPerByte = 8;
+    constexpr uint32_t numberOfEgaPixelsPerByte = 8;
     const uint32_t numberOfPixels = planeSize * numberOfEgaPixelsPerByte;
     const uint32_t textureImageSize = textureWidth * textureHeight * bytesPerOutputPixel;
 

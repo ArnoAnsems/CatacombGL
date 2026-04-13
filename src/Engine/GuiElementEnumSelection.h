@@ -21,12 +21,12 @@
 class GuiElementEnumSelection : public GuiElementBase
 {
 public:
-    GuiElementEnumSelection(
+    explicit GuiElementEnumSelection(
         const PlayerInput& playerInput,
         ConsoleVariableEnum& cvarEnum,
         const int16_t offsetXValue,
         RenderableText& renderableText);
-    ~GuiElementEnumSelection() override;
+    ~GuiElementEnumSelection() override = default;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;

@@ -20,8 +20,8 @@
 
 namespace fs = std::filesystem;
 
-static const uint16_t MaxMapWidth = 128;
-static const uint16_t MaxMapHeight = 128;
+static constexpr uint16_t MaxMapWidth = 128;
+static constexpr uint16_t MaxMapHeight = 128;
 
 GameMaps::GameMaps(const gameMapsStaticData& staticData, const fs::path& path) :
     m_staticData(staticData)
@@ -59,7 +59,7 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 {
     Logging::Instance().AddLogMessage("Loading map " + std::to_string(mapIndex) + " from start");
 
-    const uint16_t rlewTag = 0xABCD;    
+    constexpr uint16_t rlewTag = 0xABCD;    
     const uint8_t* headerStart = m_rawData->GetChunk() + m_staticData.offsets.at(mapIndex);
     const uint32_t plane0Offset = *(uint32_t*)(headerStart);
     const uint32_t plane2Offset = *(uint32_t*)(headerStart + 8);
@@ -95,7 +95,7 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
         Logging::Instance().FatalError("Map height (" + std::to_string(mapHeight) + ") too large for level " + std::to_string(mapIndex) + " in " + m_staticData.filename);
     }
 
-    uint8_t* plane0Source = &(m_rawData->GetChunk()[plane0Offset]);
+    uint8_t* const plane0Source = &(m_rawData->GetChunk()[plane0Offset]);
     FileChunk* carmackExpandedChunk = Decompressor::CarmackExpand(plane0Source);
     const uint16_t* compressedWords0 = reinterpret_cast<uint16_t*>(carmackExpandedChunk->GetChunk());
     const uint16_t compressedSizeInWords0 = carmackExpandedChunk->GetSize() / sizeof(uint16_t);
@@ -110,7 +110,7 @@ Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
             std::to_string(mapWidth) + " and a height of " + std::to_string(mapHeight));
     }
 
-    uint8_t* plane2Source = &(m_rawData->GetChunk()[plane2Offset]);
+    uint8_t* const plane2Source = &(m_rawData->GetChunk()[plane2Offset]);
     FileChunk* carmackExpandedChunk2 = Decompressor::CarmackExpand(plane2Source);
     const uint16_t* compressedWords2 = reinterpret_cast<uint16_t*>(carmackExpandedChunk2->GetChunk());
     const uint16_t compressedSizeInWords2 = carmackExpandedChunk2->GetSize() / sizeof(uint16_t);

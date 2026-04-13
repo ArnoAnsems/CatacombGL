@@ -28,7 +28,7 @@
 class LevelLocationNames
 {
 public:
-    LevelLocationNames(const FileChunk* decompressedChunk);
+    explicit LevelLocationNames(const FileChunk* decompressedChunk);
     ~LevelLocationNames();
 
     const std::string& GetLocationName(const uint8_t index) const;

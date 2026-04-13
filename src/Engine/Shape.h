@@ -20,15 +20,17 @@
 //
 #pragma once
 
-#include "Picture.h"
-#include "IRenderer.h"
-#include "Logging.h"
+#include <stdint.h>
 #include <filesystem>
+
+class IRenderer;
+class Picture;
+class FileChunk;
 
 class Shape
 {
 public:
-    Shape(const IRenderer& renderer);
+    explicit Shape(const IRenderer& renderer);
     ~Shape();
     bool LoadFromFile(const std::filesystem::path filename);
 

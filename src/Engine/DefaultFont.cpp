@@ -19,9 +19,9 @@
 // Characters 0 to 127 follow the ASCII encoding and are based on the font from the games.
 // Characters 128 to 255 are additional characters from the Latin alphabet, following the Windows-1252 encoding.
 
-const bool X = true;
-const bool o = false;
-const bool defaultFontDataHeight10[256 * 10 * 16] =
+constexpr bool X = true;
+constexpr bool o = false;
+constexpr bool defaultFontDataHeight10[256 * 10 * 16] =
 {
     // character 0
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
@@ -5125,7 +5125,7 @@ const bool defaultFontDataHeight7[256 * 7 * 16] =
     o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,
 };
 
-const uint8_t defaultFontWidthHeight7[256] =
+constexpr uint8_t defaultFontWidthHeight7[256] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5380,8 +5380,8 @@ TextureAtlas* DefaultFont::CreateTextureAtlasForFont(IRenderer& renderer, const 
     const unsigned int textureId = renderer.GenerateTextureId();
 
     TextureAtlas* textureAtlas = new TextureAtlas(textureId, 16, lineHeight, 16, 16, 0, 16 - lineHeight);
-    const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t width = 16;
+    constexpr uint32_t bytesPerOutputPixel = 4;
+    constexpr uint32_t width = 16;
     const uint32_t numberOfPixelsInTexture = width * lineHeight;
     uint8_t* textureImage = new uint8_t[numberOfPixelsInTexture * bytesPerOutputPixel];
 

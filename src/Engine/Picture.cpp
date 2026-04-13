@@ -24,11 +24,6 @@ Picture::Picture(const unsigned int textureId, const uint16_t imageWidth, const 
 {
 }
 
-Picture::~Picture()
-{
-
-}
-
 unsigned int Picture::GetTextureId() const
 {
     return m_textureId;

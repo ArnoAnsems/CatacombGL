@@ -35,7 +35,7 @@
 #else
 // The file glext.h is not available in the Visual Studio Platform Toolset.
 // Below is the specific definition from glext.h that is needed in this source file.
-static const unsigned int GL_CLAMP_TO_EDGE = 0x812F;
+static constexpr unsigned int GL_CLAMP_TO_EDGE = 0x812F;
 #endif
 #endif
 #include <SDL_video.h>
@@ -43,9 +43,9 @@ static const unsigned int GL_CLAMP_TO_EDGE = 0x812F;
 #include <cstring>
 #include <string>
 
-const float FloorZ = 2.2f;
-const float CeilingZ = 1.0f;
-const float PlayerZ = 1.6f;
+constexpr float FloorZ = 2.2f;
+constexpr float CeilingZ = 1.0f;
+constexpr float PlayerZ = 1.6f;
 
 // Constructor
 RendererOpenGL::RendererOpenGL() :
@@ -167,9 +167,9 @@ const std::string RendererOpenGL::ErrorCodeToString(const GLenum errorCode)
 
 unsigned int RendererOpenGL::GenerateSingleColorTexture(const egaColor color) const
 {
-    const uint32_t bytesPerOutputPixel = 4;
-    const uint32_t width = 8;
-    const uint32_t height = 8;
+    constexpr uint32_t bytesPerOutputPixel = 4;
+    constexpr uint32_t width = 8;
+    constexpr uint32_t height = 8;
     GLubyte* textureImage = new GLubyte[width * height * bytesPerOutputPixel];
 
     const rgbColor outputColor = EgaToRgb(color);
@@ -801,7 +801,7 @@ float RendererOpenGL::PrepareIsoRendering(const float aspectRatio, const ViewPor
 
     const double x = originX + 9.0;
     const double y = originY + 9.0;
-    const double z = -1.0;
+    constexpr double z = -1.0;
     // use this length so that camera is 1 unit away from origin
     const double dist = std::sqrt(1 / 3.0);
     const float xScale = (float)rect.width / (float)rect.height * 6.0f;

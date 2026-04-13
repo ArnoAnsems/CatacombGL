@@ -16,13 +16,15 @@
 #include "RenderableSprites.h"
 #include <cmath>
 
-const uint8_t MaxSpritesToRender = 100;
+constexpr uint8_t MaxSpritesToRender = 100;
 
 RenderableSprites::RenderableSprites() :
     m_playerPosX(1.0f),
     m_playerPosY(1.0f),
     m_angle(0.0f),
-    m_sprites()
+    m_sprites(),
+    m_pointInPlayerViewScreenX(0.0f),
+    m_pointInPlayerViewScreenY(0.0f)
 {
 
 }

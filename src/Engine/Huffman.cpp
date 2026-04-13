@@ -24,16 +24,11 @@ Huffman::Huffman(const huffmanTable table)
     }
 }
 
-Huffman::~Huffman()
-{
-
-}
-
 FileChunk* Huffman::Decompress(unsigned char* compressedChunk, const unsigned long compressedSize, const unsigned long decompressedSize)
 {
     FileChunk* fileChunk = new FileChunk(decompressedSize);
 
-    unsigned char* decompressedChunk = fileChunk->GetChunk();
+    unsigned char* const decompressedChunk = fileChunk->GetChunk();
     unsigned char huffindex = 254;
     unsigned long byteIndex = 0;
     unsigned long destIndex = 0;

@@ -24,7 +24,7 @@
 class FileChunk
 {
 public:
-    FileChunk(const uint32_t size);
+    explicit FileChunk(const uint32_t size);
     ~FileChunk();
 
     uint32_t GetSize() const;
@@ -32,6 +32,6 @@ public:
 
 private:
     uint8_t* m_chunk;
-    uint32_t m_size;
+    const uint32_t m_size;
 };
 

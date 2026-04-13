@@ -30,7 +30,7 @@
 class GameApocalypse : public IGame
 {
 public:
-    GameApocalypse(const std::filesystem::path gamePath, IRenderer& renderer);
+    explicit GameApocalypse(const std::filesystem::path gamePath, IRenderer& renderer);
     ~GameApocalypse();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;

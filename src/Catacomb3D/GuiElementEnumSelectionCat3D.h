@@ -20,19 +20,19 @@
 class GuiElementEnumSelectionCat3D : public GuiElementEnumSelection
 {
 public:
-    GuiElementEnumSelectionCat3D(
+    explicit GuiElementEnumSelectionCat3D(
         const PlayerInput& playerInput,
         ConsoleVariableEnum& cvarEnum,
         const int16_t offsetXValue,
         RenderableText& renderableText,
         RenderableTiles& renderableTiles,
-        bool& flashIcon);
+        const bool& flashIcon);
 
     virtual void Draw(IRenderer& renderer) const override;
 
 protected:
     RenderableTiles& m_renderableTiles;
-    bool& m_flashIcon;
+    const bool& m_flashIcon;
 };
 
 

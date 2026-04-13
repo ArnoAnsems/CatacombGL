@@ -24,11 +24,11 @@
 #include "EgaGraphAbyss.h"
 #include "AudioRepositoryAbyss.h"
 
-const uint16_t actorIdProjectilePlayerShot = 70;
-const uint16_t actorIdProjectilePlayerBigShot = 71;
-const uint16_t actorIdProjectileMageShot = 72;
-const uint16_t actorIdProjectileEyeShot = 73;
-const uint16_t actorIdProjectileNemesisShot = 74;
+constexpr uint16_t actorIdProjectilePlayerShot = 70;
+constexpr uint16_t actorIdProjectilePlayerBigShot = 71;
+constexpr uint16_t actorIdProjectileMageShot = 72;
+constexpr uint16_t actorIdProjectileEyeShot = 73;
+constexpr uint16_t actorIdProjectileNemesisShot = 74;
 
 //
 // PLAYER SHOT

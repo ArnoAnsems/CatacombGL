@@ -20,7 +20,7 @@ GuiElementSaveSlotStaticCat3D::GuiElementSaveSlotStaticCat3D(
     const std::string& buttonLabel,
     const GuiEvent& guiEventWhenActivated,
     RenderableText& renderableText,
-    bool& flashIcon) :
+    const bool& flashIcon) :
     GuiElementButton(playerInput, buttonLabel, guiEventWhenActivated, renderableText),
     m_flashIcon(flashIcon)
 {

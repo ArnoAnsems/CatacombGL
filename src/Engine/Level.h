@@ -38,10 +38,10 @@ class ISavedGameConverter;
 struct LevelInfo
 {
     std::string name;
-    egaColor ceilingColor;
-    egaColor floorColor;
-    bool showLightning;
-    bool showDusk;
+    egaColor ceilingColor = EgaBlack;
+    egaColor floorColor = EgaBlack;
+    bool showLightning = false;
+    bool showDusk = false;
 };
 
 typedef enum WallType
@@ -99,7 +99,7 @@ enum AutoMapType
 class Level
 {
 public:
-    Level(
+    explicit Level(
         const uint8_t levelIndex,
         const uint16_t levelWidth,
         const uint16_t levelHeight,
@@ -238,7 +238,7 @@ private:
     Actor* m_playerActor;
     Actor** m_blockingActors;
     Actor** m_nonBlockingActors;
-    const uint16_t m_maxNonBlockingActors = 100;
+    static constexpr uint16_t m_maxNonBlockingActors = 100;
 
     bool* m_wallXVisible;
     bool* m_wallYVisible;

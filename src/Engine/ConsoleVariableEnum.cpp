@@ -28,11 +28,6 @@ ConsoleVariableEnum::ConsoleVariableEnum(
 
 }
 
-ConsoleVariableEnum::~ConsoleVariableEnum()
-{
-
-}
-
 const std::string ConsoleVariableEnum::Serialize() const
 {
     return m_items.at(m_itemIndex).itemNameInConfig;

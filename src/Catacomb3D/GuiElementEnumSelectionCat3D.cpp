@@ -21,7 +21,7 @@ GuiElementEnumSelectionCat3D::GuiElementEnumSelectionCat3D(
     const int16_t offsetXValue,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
-    bool& flashIcon) :
+    const bool& flashIcon) :
     GuiElementEnumSelection (playerInput, cvarEnum, offsetXValue, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)

@@ -25,21 +25,21 @@
 #include "EgaGraphApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 
-const uint16_t actorIdNone = 0;
-const uint16_t actorIdTomb1 = 1;
-const uint16_t actorIdTomb2 = 2;
-const uint16_t actorIdExplodingWall = 4;
-const uint16_t actorIdPortal = 5;
-const uint16_t actorIdPlayer = 11;
-const uint16_t actorIdColumn1 = 90;
-const uint16_t actorIdColumn2 = 91;
-const uint16_t actorIdColumn3 = 92;
-const uint16_t actorIdColumn4 = 93;
-const uint16_t actorIdColumn5 = 94;
-const uint16_t actorIdFakeWall = 95;
-const uint16_t actorIdFutureFirePot = 96;
-const uint16_t actorIdOldFirePot = 97;
-const uint16_t actorIdForceField = 98;
+constexpr uint16_t actorIdNone = 0;
+constexpr uint16_t actorIdTomb1 = 1;
+constexpr uint16_t actorIdTomb2 = 2;
+constexpr uint16_t actorIdExplodingWall = 4;
+constexpr uint16_t actorIdPortal = 5;
+constexpr uint16_t actorIdPlayer = 11;
+constexpr uint16_t actorIdColumn1 = 90;
+constexpr uint16_t actorIdColumn2 = 91;
+constexpr uint16_t actorIdColumn3 = 92;
+constexpr uint16_t actorIdColumn4 = 93;
+constexpr uint16_t actorIdColumn5 = 94;
+constexpr uint16_t actorIdFakeWall = 95;
+constexpr uint16_t actorIdFutureFirePot = 96;
+constexpr uint16_t actorIdOldFirePot = 97;
+constexpr uint16_t actorIdForceField = 98;
 
 //
 // EXPLODING WALL

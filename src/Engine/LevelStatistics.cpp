@@ -27,11 +27,6 @@ LevelStatistics::LevelStatistics() :
 
 }
 
-LevelStatistics::~LevelStatistics()
-{
-
-}
-
 void LevelStatistics::SetCountersAtStartOfLevel(const Level& level)
 {
     m_totalMonsters = CountMonstersOnLevel(level);

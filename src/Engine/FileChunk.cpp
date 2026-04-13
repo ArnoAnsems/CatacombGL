@@ -16,9 +16,9 @@
 #include "stdlib.h"
 #include "FileChunk.h"
 
-FileChunk::FileChunk(const uint32_t size)
+FileChunk::FileChunk(const uint32_t size) :
+    m_size(size)
 {
-    m_size = size;
     m_chunk = new unsigned char[size];
 }
 

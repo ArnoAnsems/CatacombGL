@@ -27,11 +27,6 @@ GameTimer::GameTimer()
     m_totalFrozenTime = 0;
 }
 
-GameTimer::~GameTimer()
-{
-
-}
-
 uint32_t GameTimer::GetMillisecondsForPlayer() const
 {
     const uint32_t currentTime = m_paused ? m_pauseTime : (uint32_t)(GetCurrentTime() - m_startTimeForPlayer);
@@ -126,7 +121,7 @@ uint32_t GameTimer::GetRemainingFreezeTime()
         return 0;
     }
 
-    int64_t delta = m_freezeStartTime + GetStandardFreezePeriod() - GetMillisecondsForPlayer();
+    const int64_t delta = m_freezeStartTime + GetStandardFreezePeriod() - GetMillisecondsForPlayer();
     if (delta < 0)
     {
         return 0;

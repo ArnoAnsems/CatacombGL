@@ -24,9 +24,9 @@
 #include "EgaGraphCatacomb3D.h"
 #include "AudioRepositoryCatacomb3D.h"
 
-const uint16_t actorIdProjectilePlayerShot = 70;
-const uint16_t actorIdProjectilePlayerBigShot = 71;
-const uint16_t actorIdProjectileMageShot = 72;
+constexpr uint16_t actorIdProjectilePlayerShot = 70;
+constexpr uint16_t actorIdProjectilePlayerBigShot = 71;
+constexpr uint16_t actorIdProjectileMageShot = 72;
 
 //
 // PLAYER SHOT

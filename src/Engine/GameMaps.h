@@ -29,9 +29,9 @@
 
 class SavedGameInDosFormat;
 
-const uint16_t wallSolid = 1;
-const uint16_t wallSpecial = 2;
-const uint16_t wallRequiresKey = 4;
+constexpr uint16_t wallSolid = 1;
+constexpr uint16_t wallSpecial = 2;
+constexpr uint16_t wallRequiresKey = 4;
 
 typedef struct gameMapsStaticData
 {
@@ -46,7 +46,7 @@ typedef struct gameMapsStaticData
 class GameMaps
 {
 public:
-    GameMaps(const gameMapsStaticData& staticData, const std::filesystem::path& path);
+    explicit GameMaps(const gameMapsStaticData& staticData, const std::filesystem::path& path);
     ~GameMaps();
 
     Level* GetLevelFromStart(const uint8_t mapIndex) const;

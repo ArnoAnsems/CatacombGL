@@ -27,14 +27,13 @@ enum gemTypes
 };
 
 Radar::Radar() :
+    m_radarBlips{0,},
     m_numberOfBlips(0),
     m_playerPosX(0.0f),
-    m_playerPosY(0.0f)
-{
-
-}
-
-Radar::~Radar()
+    m_playerPosY(0.0f),
+    m_playerAngle(0.0f),
+    m_flickeringColor(EgaBlack),
+    m_gemPresent{false,}
 {
 
 }
@@ -45,7 +44,7 @@ void Radar::ResetRadar(const Actor* player, const PlayerInventory& playerInvento
     m_playerPosY = player->GetY();
     m_playerAngle = player->GetAngle();
     m_numberOfBlips = 0;
-    const egaColor flickeringColors[3] = {EgaRed, EgaBrightBlue, EgaBrightYellow};
+    static constexpr egaColor flickeringColors[3] = {EgaRed, EgaBrightBlue, EgaBrightYellow};
     const int8_t flickeringColorIndex = (uint32_t)((timeStamp % 1000) / 14.3) % 3;
     m_flickeringColor = flickeringColors[flickeringColorIndex];
     m_gemPresent[BlueGem] = playerInventory.GetGem(BlueGem);
@@ -90,7 +89,7 @@ void Radar::AddActors(const Actor** actors, const uint16_t numberOfActors)
 
         const float psin = (float)sin(m_playerAngle * 3.14159265 / 180.0);
         const float pcos = (float)cos(m_playerAngle * 3.14159265 / 180.0);
-        const float radarHalfWidth = 25.5f;
+        constexpr float radarHalfWidth = 25.5f;
 
         const float xl = m_playerPosX - radarHalfWidth;
         const float xh = m_playerPosX + radarHalfWidth;
@@ -105,7 +104,7 @@ void Radar::AddActors(const Actor** actors, const uint16_t numberOfActors)
             const float dx = m_playerPosX - oX;
             const float dY = m_playerPosY - oY;
             const float oRadius = sqrt((dx * dx) + (dY * dY));
-            const float radarRadius = 17.0f;
+            constexpr float radarRadius = 17.0f;
 
             if (oRadius < radarRadius)
             {

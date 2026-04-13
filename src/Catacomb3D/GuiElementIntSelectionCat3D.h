@@ -20,17 +20,17 @@
 class GuiElementIntSelectionCat3D : public GuiElementIntSelection
 {
 public:
-    GuiElementIntSelectionCat3D(
+    explicit GuiElementIntSelectionCat3D(
         const PlayerInput& playerInput,
         ConsoleVariableInt& cvarInt,
         const int16_t offsetXValue,
         RenderableText& renderableText,
         RenderableTiles& renderableTiles,
-        bool& flashIcon);
+        const bool& flashIcon);
 
     virtual void Draw(IRenderer& renderer) const override;
 
 private:
     RenderableTiles& m_renderableTiles;
-    bool& m_flashIcon;
+    const bool& m_flashIcon;
 };

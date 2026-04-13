@@ -26,7 +26,7 @@
 class SavedGameConverterAbyss : public ISavedGameConverter
 {
 public:
-    SavedGameConverterAbyss(const GameId gameId);
+    explicit SavedGameConverterAbyss(const GameId gameId);
     ~SavedGameConverterAbyss();
     const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;

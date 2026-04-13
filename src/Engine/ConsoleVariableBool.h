@@ -19,8 +19,8 @@
 class ConsoleVariableBool : public ConsoleVariable
 {
 public:
-    ConsoleVariableBool(const std::string& nameInMenu, const std::string& nameInConfigFile, const bool defaultValue);
-    ~ConsoleVariableBool();
+    explicit ConsoleVariableBool(const std::string& nameInMenu, const std::string& nameInConfigFile, const bool defaultValue);
+    ~ConsoleVariableBool() = default;
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;

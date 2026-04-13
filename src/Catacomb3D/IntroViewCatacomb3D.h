@@ -30,8 +30,8 @@
 class IntroViewCatacomb3D : public IIntroView
 {
 public:
-    IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::filesystem::path& path, HighScores& highScores);
-    ~IntroViewCatacomb3D();
+    explicit IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::filesystem::path& path, HighScores& highScores);
+    ~IntroViewCatacomb3D() = default;
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();
     void DrawNoviceSelected();

@@ -15,14 +15,15 @@
 
 #include "PlayerActions.h"
 
-static const int32_t nukeDelay = 667; // ms
-static const int32_t maxBolts = 10;
-static const int32_t boltInterval = 100; // ms
+static constexpr int32_t nukeDelay = 667; // ms
+static constexpr int32_t maxBolts = 10;
+static constexpr int32_t boltInterval = 100; // ms
 
 PlayerActions::PlayerActions() :
     m_handHeight(0),
     m_shotFiredHandHeight(0),
     m_shotFired(false),
+    m_boltFired(false),
     m_shotFiredTimeStamp(false),
     m_nukeFired(false),
     m_lastNukeTimeStamp(0),
@@ -35,11 +36,6 @@ PlayerActions::PlayerActions() :
     {
         m_controlActionActive[i] = false;
     }
-}
-
-PlayerActions::~PlayerActions()
-{
-
 }
 
 bool PlayerActions::GetActionActive(const ControlAction action) const
@@ -55,7 +51,8 @@ void PlayerActions::SetActionActive(const ControlAction action, const bool activ
 void PlayerActions::ResetForNewLevel()
 {
     m_handHeight = 0;
-    m_shotFired = 0;
+    m_shotFired = false;
+    m_boltFired = false;
     m_shotFiredTimeStamp = 0;
     m_nukeFired = false;
     m_lastNukeTimeStamp = 0;

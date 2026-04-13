@@ -30,7 +30,7 @@ class PlayerInput
 {
 public:
     PlayerInput();
-    ~PlayerInput();
+    ~PlayerInput() = default;
     void SetKeyPressed(const SDL_Keycode keyCode, const bool pressed);
     bool IsKeyJustPressed(const SDL_Keycode keyCode) const;
     bool IsKeyPressed(const SDL_Keycode keyCode) const;

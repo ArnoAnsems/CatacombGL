@@ -27,11 +27,6 @@ ManaBar::ManaBar(const ManaBarConfig config) :
 
 }
 
-ManaBar::~ManaBar()
-{
-
-}
-
 void ManaBar::Reset(const bool enabled)
 {
     m_enabled = enabled;
@@ -87,7 +82,7 @@ void ManaBar::Draw(IRenderer& renderer)
 {
     if (m_enabled)
     {
-        const int16_t barLengthInPixels = 80;
+        constexpr int16_t barLengthInPixels = 80;
         const int16_t manaLengthInPixels = (int16_t)(barLengthInPixels * ((float)m_mana / (float)maxMana));
         const int16_t xOffset = m_config.centerX - (barLengthInPixels / 2);
         const uint32_t manaForGreenBar = manaRequiredForOneShot * 2;

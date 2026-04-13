@@ -22,8 +22,8 @@ GuiElementSaveSlotEditableCat3D::GuiElementSaveSlotEditableCat3D(
     const uint16_t maxTextLength,
     RenderableText& renderableText,
     GuiEvent& textCompleteAction,
-    bool& flashIcon,
-    GuiPageFrameCat3D* pageFrame) :
+    const bool& flashIcon,
+    GuiPageFrameCat3D* const pageFrame) :
     GuiElementEditText(playerInput, outputText, initialText, maxTextLength, renderableText, textCompleteAction),
     m_flashIcon(flashIcon),
     m_pageFrame(pageFrame)

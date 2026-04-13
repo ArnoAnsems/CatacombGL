@@ -28,9 +28,9 @@ typedef enum {north,east,south,west,northeast,southeast,southwest,northwest,nodi
 class Actor
 {
 public:
-    Actor(const float x, const float y, const uint32_t timestamp, const DecorateActor& decorateActor);
-    Actor(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
-    ~Actor();
+    explicit Actor(const float x, const float y, const uint32_t timestamp, const DecorateActor& decorateActor);
+    explicit Actor(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors);
+    ~Actor() = default;
 
     const DecorateActor& GetDecorateActorFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors) const;
 

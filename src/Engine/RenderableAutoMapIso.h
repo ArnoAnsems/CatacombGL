@@ -40,7 +40,7 @@ public:
         float y4;
     } quadCoordinates;
 
-    RenderableAutoMapIso(
+    explicit RenderableAutoMapIso(
         const Font& font,
         const ViewPorts::ViewPortRect3D original3DViewArea);
 

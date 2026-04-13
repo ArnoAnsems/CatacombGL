@@ -14,15 +14,13 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "RenderableOverscanBorder.h"
+#include "OverscanBorder.h"
+#include "IRenderer.h"
 
 RenderableOverscanBorder::RenderableOverscanBorder(const OverscanBorder& overscanBorder) :
     m_overscanBorder(overscanBorder)
 {
 
-}
-
-RenderableOverscanBorder::~RenderableOverscanBorder()
-{
 }
 
 void RenderableOverscanBorder::Draw(IRenderer& renderer, const uint16_t additionalMargin, const uint32_t timeStamp, const bool helpWindow)

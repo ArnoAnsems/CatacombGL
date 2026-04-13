@@ -19,14 +19,14 @@
 class AudioPlayer
 {
 public:
-    AudioPlayer(AudioRepository* audioRepository);
-    ~AudioPlayer();
+    explicit AudioPlayer(AudioRepository* const audioRepository);
+    ~AudioPlayer() = default;
 
     void Play(const uint16_t index);
     void StartMusic(const uint16_t index);
-    void StopMusic();
-    bool IsPlaying();
+    static void StopMusic();
+    static bool IsPlaying();
 
 private:
-    AudioRepository* m_audioRepository;
+    AudioRepository* const m_audioRepository;
 };

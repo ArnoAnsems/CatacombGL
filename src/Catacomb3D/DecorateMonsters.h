@@ -25,13 +25,13 @@
 #include "EgaGraphCatacomb3D.h"
 #include "AudioRepositoryCatacomb3D.h"
 
-const uint16_t actorIdMonsterOrc = 53;
-const uint16_t actorIdMonsterTroll = 54;
-const uint16_t actorIdMonsterDemon = 55;
-const uint16_t actorIdMonsterBounce = 56;
-const uint16_t actorIdMonsterBat = 58;
-const uint16_t actorIdMonsterMage = 59;
-const uint16_t actorIdMonsterNemesis = 62;
+constexpr uint16_t actorIdMonsterOrc = 53;
+constexpr uint16_t actorIdMonsterTroll = 54;
+constexpr uint16_t actorIdMonsterDemon = 55;
+constexpr uint16_t actorIdMonsterBounce = 56;
+constexpr uint16_t actorIdMonsterBat = 58;
+constexpr uint16_t actorIdMonsterMage = 59;
+constexpr uint16_t actorIdMonsterNemesis = 62;
 
 //
 // ORC

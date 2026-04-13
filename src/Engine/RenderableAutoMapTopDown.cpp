@@ -26,9 +26,16 @@ RenderableAutoMapTopDown::RenderableAutoMapTopDown(
     const TextureAtlas& textureAtlasTilesSize16,
     const TextureAtlas& textureAtlasTilesSize16Masked) :
     m_text(font),
+    m_aspectRatio(1.0f),
     m_original3DViewArea(original3DViewArea),
     m_tilesSize16(textureAtlasTilesSize16),
-    m_tilesSize16Masked(textureAtlasTilesSize16Masked)
+    m_tilesSize16Masked(textureAtlasTilesSize16Masked),
+    m_originX(0.0f),
+    m_originY(0.0f),
+    m_playerX(0.0f),
+    m_playerY(0.0f),
+    m_playerAngle(0.0f),
+    m_tileSize(0)
 {
 
 }

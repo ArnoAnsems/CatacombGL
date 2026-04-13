@@ -22,8 +22,10 @@
 // Converts tiles into a format that can be processed by the renderer.
 //
 
-#include "TextureAtlas.h"
 #include <vector>
+#include <stdint.h>
+
+class TextureAtlas;
 
 class RenderableTiles
 {
@@ -35,7 +37,7 @@ public:
         uint16_t imageIndex;
     } RenderableTile;
 
-    RenderableTiles(const TextureAtlas& textureAtlas);
+    explicit RenderableTiles(const TextureAtlas& textureAtlas);
 
     const std::vector<RenderableTile>& GetTiles() const;
     const TextureAtlas& GetTextureAtlas() const;
@@ -71,27 +73,27 @@ public:
         const int16_t y,
         const int16_t number);
 
-    static const uint16_t TileIdWindowTopLeft = 0u;
-    static const uint16_t TileIdWindowTop = 1u;
-    static const uint16_t TileIdWindowTopRight = 2u;
-    static const uint16_t TileIdWindowLeft = 3u;
-    static const uint16_t TileIdWindowCenter = 4u;
-    static const uint16_t TileIdWindowRight = 5u;
-    static const uint16_t TileIdWindowBottomLeft = 6u;
-    static const uint16_t TileIdWindowBottom = 7u;
-    static const uint16_t TileIdWindowBottomRight = 8u;
-    static const uint16_t TileIdBolt = 10u;
-    static const uint16_t TileIdNuke = 11u;
-    static const uint16_t TileIdPotion = 12u;
-    static const uint16_t TileIdFirstKey = 13u;
-    static const uint16_t TileIdFirstScroll = 17u;
-    static const uint16_t TileIdFirstNumber = 25u;
-    static const uint16_t TileIdListBulletEnabled = 92u;
-    static const uint16_t TileIdListBulletEnabledFlashing = 93u;
-    static const uint16_t TileIdListRadioButtonNotSelected = 94u;
-    static const uint16_t TileIdListRadioButtonNotSelectedFlashing = 95u;
-    static const uint16_t TileIdListBulletDisabled = 96u;
-    static const uint16_t TileIdListBulletDisabledFlashing = 97u;
+    static constexpr uint16_t TileIdWindowTopLeft = 0u;
+    static constexpr uint16_t TileIdWindowTop = 1u;
+    static constexpr uint16_t TileIdWindowTopRight = 2u;
+    static constexpr uint16_t TileIdWindowLeft = 3u;
+    static constexpr uint16_t TileIdWindowCenter = 4u;
+    static constexpr uint16_t TileIdWindowRight = 5u;
+    static constexpr uint16_t TileIdWindowBottomLeft = 6u;
+    static constexpr uint16_t TileIdWindowBottom = 7u;
+    static constexpr uint16_t TileIdWindowBottomRight = 8u;
+    static constexpr uint16_t TileIdBolt = 10u;
+    static constexpr uint16_t TileIdNuke = 11u;
+    static constexpr uint16_t TileIdPotion = 12u;
+    static constexpr uint16_t TileIdFirstKey = 13u;
+    static constexpr uint16_t TileIdFirstScroll = 17u;
+    static constexpr uint16_t TileIdFirstNumber = 25u;
+    static constexpr uint16_t TileIdListBulletEnabled = 92u;
+    static constexpr uint16_t TileIdListBulletEnabledFlashing = 93u;
+    static constexpr uint16_t TileIdListRadioButtonNotSelected = 94u;
+    static constexpr uint16_t TileIdListRadioButtonNotSelectedFlashing = 95u;
+    static constexpr uint16_t TileIdListBulletDisabled = 96u;
+    static constexpr uint16_t TileIdListBulletDisabledFlashing = 97u;
 
 private:
     std::vector<RenderableTile> m_tiles;

@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "RenderableTiles.h"
+#include "TextureAtlas.h"
 #include <string>
 
 RenderableTiles::RenderableTiles(const TextureAtlas& textureAtlas) :

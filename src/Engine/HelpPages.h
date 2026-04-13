@@ -27,7 +27,7 @@
 struct HelpLine
 {
 	std::string line;
-	bool centered;
+	bool centered = false;
 };
 
 typedef std::vector<HelpLine> HelpPage;

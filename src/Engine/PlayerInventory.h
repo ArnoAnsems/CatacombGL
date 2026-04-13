@@ -84,9 +84,9 @@ public:
     void LoadFromDosGame(const SavedGameInDosFormat& savedGameInDosFormat);
 
 private:
-    static const uint8_t maxKeys = 4;
-    static const uint8_t maxScrolls = 8;
-    static const uint8_t maxGems = 5;
+    static constexpr uint8_t maxKeys = 4;
+    static constexpr uint8_t maxScrolls = 8;
+    static constexpr uint8_t maxGems = 5;
 
     uint8_t m_bolts;
     uint8_t m_nukes;

@@ -33,8 +33,8 @@ public:
         egaColor frameColor;
         egaColor frameShadowColor;
     };
-    ManaBar(const ManaBarConfig config);
-    ~ManaBar();
+    explicit ManaBar(const ManaBarConfig config);
+    ~ManaBar() = default;
 
     void Reset(const bool enabled);
     bool IsEnabled();

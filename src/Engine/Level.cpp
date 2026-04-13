@@ -399,7 +399,7 @@ const egaColor Level::GetSkyColor(const uint32_t timeStamp)
 {
     if (m_levelInfo.showDusk && timeStamp < 2500 * 4)
     {
-        const egaColor sky_daytonight[]={EgaBrightBlue,EgaBlue,EgaDarkGray,EgaBlack};
+        static constexpr egaColor sky_daytonight[]={EgaBrightBlue,EgaBlue,EgaDarkGray,EgaBlack};
         return sky_daytonight[timeStamp / 2500];
     }
     else if (m_levelInfo.showLightning)
@@ -407,10 +407,10 @@ const egaColor Level::GetSkyColor(const uint32_t timeStamp)
         if (m_lightningStartTimestamp < timeStamp)
         {
             // Time to show the lightning
-            const egaColor sky_lightning[]={EgaBlue,EgaBrightBlue,EgaBrightWhite,EgaDarkGray,EgaBlack};
-            const uint32_t lightningFrameDuration = 28; //ms (70 Hz)
-            const int8_t lightningNoFrames = sizeof(sky_lightning) / sizeof(egaColor);
-            const uint32_t lightningDuration = lightningFrameDuration * lightningNoFrames;
+            static constexpr egaColor sky_lightning[]={EgaBlue,EgaBrightBlue,EgaBrightWhite,EgaDarkGray,EgaBlack};
+            constexpr uint32_t lightningFrameDuration = 28; //ms (70 Hz)
+            constexpr int8_t lightningNoFrames = sizeof(sky_lightning) / sizeof(egaColor);
+            constexpr uint32_t lightningDuration = lightningFrameDuration * lightningNoFrames;
             const uint32_t timeSinceStartLightning = timeStamp - m_lightningStartTimestamp;
             const uint32_t lightningFrame = timeSinceStartLightning / lightningFrameDuration;
             if (lightningFrame < lightningNoFrames)
@@ -924,10 +924,12 @@ bool Level::IsActorVisibleForPlayer(const Actor* actor) const
 
     bool visible = false;
     for (int16_t y = yl; y <= yh; y++)
+    {
         for (int16_t x = xl; x <= xh; x++)
         {
             visible |= m_visibilityMap[y * m_levelWidth + x];
         }
+    }
 
     return visible;
 }
@@ -990,8 +992,8 @@ void Level::AddNonBlockingActor(Actor* projectile)
     // the last five indices can only be occupied by bonus items.
     // To ensure that the corpses of fallen monsters can spawn after crystal hour glass usages, the
     // ten indices before that cannot be occupied by projectiles.
-    const uint16_t maxNonBonusItems = m_maxNonBlockingActors - 5;
-    const uint16_t maxProjectiles = maxNonBonusItems - 10;
+    constexpr uint16_t maxNonBonusItems = m_maxNonBlockingActors - 5;
+    constexpr uint16_t maxProjectiles = maxNonBonusItems - 10;
     const bool isBonusItem = (projectile->GetDecorateActor().initialState == StateIdWaitForPickup);
     const bool isProjectile = (projectile->GetDecorateActor().initialState == StateIdProjectileFly);
     const uint8_t maxActorIndex = isBonusItem ? m_maxNonBlockingActors : isProjectile ? maxProjectiles : maxNonBonusItems;
@@ -1086,8 +1088,8 @@ bool Level::Walk(Actor* const actor)
 
 void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarget target)
 {
-    const actorDirection dirtable[9] = {northwest,north,northeast,west,nodir,east,southwest,south,southeast};
-    const actorDirection opposite[9] = {south,west,north,east,southwest,northwest,northeast,southeast,nodir};
+    static constexpr actorDirection dirtable[9] = {northwest,north,northeast,west,nodir,east,southwest,south,southeast};
+    static constexpr actorDirection opposite[9] = {south,west,north,east,southwest,northwest,northeast,southeast,nodir};
 
     actorDirection tdir = nodir;
     actorDirection d[3];
@@ -1206,7 +1208,6 @@ void Level::ChaseThink(Actor* const actor, const bool diagonal, const ChaseTarge
     {
         for (int8_t i = (int8_t)west;tdir>=(int8_t)north;i--)
         {
-            
             tdir = (actorDirection)i;
             if (tdir!=turnaround)
             {
@@ -1261,7 +1262,7 @@ void Level::MoveActor(Actor* const actor, const float distance)
 
 void Level::RunAwayThink(Actor* const actor)
 {
-    const actorDirection dirtable[9] = { northwest,north,northeast,west,nodir,east,southwest,south,southeast };
+    static constexpr actorDirection dirtable[9] = { northwest,north,northeast,west,nodir,east,southwest,south,southeast };
 
     const actorDirection oldDir = actor->GetDirection();
     actorDirection tdir = nodir;
@@ -1320,7 +1321,6 @@ void Level::RunAwayThink(Actor* const actor)
     {
         for (int8_t i = (int8_t)west; tdir >= (int8_t)north; i--)
         {
-
             tdir = (actorDirection)i;
             actor->SetDirection(tdir);
             if (Walk(actor))
@@ -1583,7 +1583,7 @@ void Level::DrawAutoMap(
     const AutoMapType autoMapType,
     const bool cheat)
 {
-    const int16_t tileWidth = 16;
+    constexpr int16_t tileWidth = 16;
     const int16_t additionalTilesInMargin = (additionalMargin == 0) ? 0 : (additionalMargin / tileWidth) + 1;
     const int16_t firstTileX = -additionalTilesInMargin + originX;
     const int16_t lastTileX = (320 / 16) + additionalTilesInMargin + originX;
@@ -2192,7 +2192,7 @@ uint16_t Level::GetDarkWallPictureIndex(const uint16_t tileIndex, const uint32_t
         const uint32_t numberOfFrames = (uint32_t)frames.size();
         if (numberOfFrames > 1)
         {
-            const uint32_t frameDurationInTicks = 8;
+            constexpr uint32_t frameDurationInTicks = 8;
             const uint32_t animDurationInTicks = frameDurationInTicks * numberOfFrames;
             const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
             return frames[currentFrame];
@@ -2216,7 +2216,7 @@ uint16_t Level::GetLightWallPictureIndex(const uint16_t tileIndex, const uint32_
         const uint32_t numberOfFrames = (uint32_t)frames.size();
         if (numberOfFrames > 1)
         {
-            const uint32_t frameDurationInTicks = 8;
+            constexpr uint32_t frameDurationInTicks = 8;
             const uint32_t animDurationInTicks = frameDurationInTicks * numberOfFrames;
             const uint32_t currentFrame = (ticks % animDurationInTicks) / frameDurationInTicks;
             return frames[currentFrame];
@@ -2347,9 +2347,9 @@ void Level::UpdateLocationNamesBestPositions()
 
 const std::string Level::RemoveTrailingSpaces(const std::string& str) const
 {
-    const char spaceChar = ' ';
+    constexpr char spaceChar = ' ';
     const size_t lastCharIndex = str.find_last_not_of(spaceChar);
-    std::string result = str.substr(0, lastCharIndex + 1);
+    const std::string result = str.substr(0, lastCharIndex + 1);
     return result;
 }
 

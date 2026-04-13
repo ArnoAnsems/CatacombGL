@@ -28,11 +28,6 @@ GuiElementEnumSelection::GuiElementEnumSelection(
 
 }
 
-GuiElementEnumSelection::~GuiElementEnumSelection()
-{
-
-}
-
 const GuiEvent& GuiElementEnumSelection::ProcessInput()
 {
     const bool isJustActivated =

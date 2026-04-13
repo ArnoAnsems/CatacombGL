@@ -40,11 +40,6 @@ HighScores::HighScores() :
     m_newScorePosition = (uint8_t)m_highscores.size();
 }
 
-HighScores::~HighScores()
-{
-
-}
-
 const std::vector<HighScores::HighScore>& HighScores::Get() const
 {
     return m_highscores;
@@ -232,7 +227,7 @@ void HighScores::FinishNameOfNewScore()
 
 void HighScores::ApplyEqualSpacingToNumbers(std::string& str)
 {
-    const uint16_t offsetInFontOfEqualSpacedNumbers = 129;
+    constexpr uint16_t offsetInFontOfEqualSpacedNumbers = 129;
     for (uint16_t i = 0; i < str.length(); i++)
     {
         str.at(i) += (offsetInFontOfEqualSpacedNumbers - '0');

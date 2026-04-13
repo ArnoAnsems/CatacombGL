@@ -19,7 +19,7 @@
 GuiElementHighScores::GuiElementHighScores(
     const PlayerInput& playerInput,
     HighScores& highscores,
-    uint32_t& timestamp) :
+    const uint32_t& timestamp) :
     GuiElementBase(playerInput),
     m_highScores(highscores),
     m_timestamp(timestamp)

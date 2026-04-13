@@ -28,7 +28,7 @@
 class Renderable3DScene
 {
 public:
-    Renderable3DScene(const ViewPorts::ViewPortRect3D original3DViewArea);
+    explicit Renderable3DScene(const ViewPorts::ViewPortRect3D original3DViewArea);
 
     void PrepareFrame(
         const float aspectRatio,

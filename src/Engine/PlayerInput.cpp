@@ -44,11 +44,6 @@ PlayerInput::PlayerInput() :
     }
 }
 
-PlayerInput::~PlayerInput()
-{
-
-}
-
 void PlayerInput::SetKeyPressed(const SDL_Keycode keyCode, const bool pressed)
 {
     const SDL_Keycode sdlCode = keyCode;

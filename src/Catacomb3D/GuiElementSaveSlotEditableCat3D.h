@@ -20,20 +20,20 @@
 class GuiElementSaveSlotEditableCat3D : public GuiElementEditText
 {
 public:
-    GuiElementSaveSlotEditableCat3D(
+    explicit GuiElementSaveSlotEditableCat3D(
         const PlayerInput& playerInput,
         std::string& outputText,
         const std::string& initialText,
         const uint16_t maxTextLength,
         RenderableText& renderableText,
         GuiEvent& textCompleteAction,
-        bool& flashIcon,
-        GuiPageFrameCat3D* pageFrame);
+        const bool& flashIcon,
+        GuiPageFrameCat3D* const pageFrame);
 
     virtual void Draw(IRenderer& renderer) const override;
 
 private:
-    bool& m_flashIcon;
-    GuiPageFrameCat3D* m_pageFrame;
+    const bool& m_flashIcon;
+    GuiPageFrameCat3D* const m_pageFrame;
 };
 

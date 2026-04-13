@@ -25,10 +25,6 @@ Console::Console(const std::string& label) :
 {
 
 }
-Console::~Console()
-{
-
-}
 
 void Console::Draw(IRenderer& renderer)
 {

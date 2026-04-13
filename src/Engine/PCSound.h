@@ -25,13 +25,13 @@
 class PCSound
 {
 public:
-    PCSound(const FileChunk* decompressedChunk);
+    explicit PCSound(const FileChunk* decompressedChunk);
     ~PCSound();
 
     uint32_t GetLength() const;
     uint16_t GetPriority() const;
     uint8_t GetInverseFrequency(const uint32_t index) const;
-    uint8_t* GetData();
+    uint8_t* GetData() const;
 
 private:
     uint32_t m_length;

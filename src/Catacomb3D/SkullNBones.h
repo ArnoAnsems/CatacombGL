@@ -27,11 +27,11 @@
 class SkullNBones: public GuiElementBase
 {
 public:
-    SkullNBones(
+    explicit SkullNBones(
         const PlayerInput& playerInput,
         AudioPlayer& audioPlayer,
         EgaGraph& egaGraph,
-        uint32_t& timeStamp,
+        const uint32_t& timeStamp,
         RenderableText& renderableText);
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
@@ -45,8 +45,8 @@ private:
     AudioPlayer& m_audioPlayer;
     uint16_t m_playerScore;
     uint16_t m_computerScore;
-    uint32_t& m_timeStamp;
-    const GuiEvent m_closeEvent = {GuiActionClose, 0 };
+    const uint32_t& m_timeStamp;
+    static constexpr GuiEvent m_closeEvent = {GuiActionClose, 0 };
     RenderableText& m_renderableText;
 
     float m_playerX;

@@ -49,7 +49,7 @@ constexpr uint8_t VictoryStateDone = 12;
 
 constexpr uint8_t NotReadingAnyScroll = 255u;
 
-const float aspectRatios[2] =
+constexpr float aspectRatios[2] =
 {
     4.0f / 3.0f,
     10.0f 
@@ -394,7 +394,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 if (!m_insideBorderFlashLocation && borderShouldFlash)
                 {
                     m_insideBorderFlashLocation = true;
-                    const uint32_t borderFlashTime = (uint32_t)(20 * (1000.0 / 70.0));
+                    constexpr uint32_t borderFlashTime = (uint32_t)(20 * (1000.0 / 70.0));
                     m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 15 | 56, borderFlashTime);
 
                 }
@@ -434,10 +434,10 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 // Radar
                 if (m_state == InGame || m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog || m_state == VerifyGateExit)
                 {
-                    const float radarCenterX = 276.5f;
-                    const float radarCenterY = 153.5f;
-                    const float radarXRadius = 21.0f;
-                    const float radarYRadius = 15.0f;
+                    constexpr float radarCenterX = 276.5f;
+                    constexpr float radarCenterY = 153.5f;
+                    constexpr float radarXRadius = 21.0f;
+                    constexpr float radarYRadius = 15.0f;
                     const float playerAngleInRadians = m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f;
                     const float northIconoffsetFromCenterX = radarXRadius * sin(playerAngleInRadians);
                     const float northIconoffsetFromCenterY = radarYRadius * cos(playerAngleInRadians);
@@ -1350,11 +1350,11 @@ bool EngineCore::Think()
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
                 }
 
-                const int16_t minGameControllerAxisDeflection = 10000;
+                constexpr int16_t minGameControllerAxisDeflection = 10000;
                 if (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
                 {
                     // Turn left with the game controller
-                    const int16_t maxGameControllerAxisDeflection = -32768;
+                    constexpr int16_t maxGameControllerAxisDeflection = -32768;
                     const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
@@ -1362,7 +1362,7 @@ bool EngineCore::Think()
                 else if (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) > minGameControllerAxisDeflection)
                 {
                     // Turn right with the game controller
-                    const int16_t maxGameControllerAxisDeflection = 32767;
+                    constexpr int16_t maxGameControllerAxisDeflection = 32767;
                     const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
@@ -1541,7 +1541,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             }
             else
             {
-                int16_t otherTarget = (rand() % 4);
+                const int16_t otherTarget = (rand() % 4);
                 actor->SetTemp1(otherTarget + 1);
             }
             actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)10000));
@@ -1727,8 +1727,6 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     case ActionSpawnSkeleton:
     {
-        int16_t xofs[] = {0,0,-1,+1};
-        int16_t yofs[] = {-1,+1,0,0};
         bool spawnSkeleton = false;
         if (!actor->IsSolid())
         {
@@ -1741,6 +1739,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
             int16_t loop = 0;
             while (loop < 4 && !tileFound)
             {
+                constexpr int16_t xofs[] = { 0,0,-1,+1 };
+                constexpr int16_t yofs[] = { -1,+1,0,0 };
                 const uint16_t tile = m_level->GetWallTile(actor->GetTileX() + xofs[loop], actor->GetTileY() + yofs[loop]);
                 const std::vector<std::vector<uint16_t>>& wallSkeletonAnimations = m_game.GetWallSkeletonAnimations();
                 uint8_t anim = 0;
@@ -1814,7 +1814,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         if (isBonusItem)
         {
             DisplayStatusMessage("Item destroyed", 80 * 14);
-            const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+            constexpr uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
             m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 14 | 56, borderFlashTime);
         }
         m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
@@ -2230,7 +2230,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         {
             if (!m_godModeIsOn)
             {
-                const int16_t damage = 1;
+                constexpr int16_t damage = 1;
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                 const uint8_t borderSignal = m_game.IsCatacombAdventureSeries() ? 12 : 5;
@@ -2245,7 +2245,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         if (actor->GetTemp2() == 0)
         {
-            int16_t flashFrame = actor->GetTemp1();
+            const int16_t flashFrame = actor->GetTemp1();
             actor->SetAnimationFrame(flashFrame);
             actor->SetTemp1(flashFrame + 1 % 3);
             actor->SetTemp2(1);
@@ -2317,7 +2317,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
 
 void EngineCore::ThinkNonBlockingActors()
 {
-    for ( uint16_t i = 0; i < m_level->GetMaxNonBlockingActors(); i++)
+    for (uint16_t i = 0; i < m_level->GetMaxNonBlockingActors(); i++)
     {
         if (m_level->GetNonBlockingActors()[i] != nullptr)
         {
@@ -2354,11 +2354,13 @@ bool EngineCore::ClipXMove (const float xmove)
     const uint16_t yh = (uint16_t)(basey + radius) > m_level->GetLevelHeight() - 1 ? m_level->GetLevelHeight() - 1 : (uint16_t)(basey + radius);
 
     bool moveOk = true;
-    for (uint16_t y=yl;y<=yh;y++)
-        for (uint16_t x=xl;x<=xh;x++)
+    for (uint16_t y = yl; y <= yh; y++)
+    {
+        for (uint16_t x = xl; x <= xh; x++)
         {
             moveOk &= ClipWithTile(x, y, basex, basey);
         }
+    }
     if (moveOk)
     {
         m_level->GetPlayerActor()->SetX(basex);
@@ -2380,11 +2382,13 @@ bool EngineCore::ClipYMove (const float ymove)
     const uint16_t yh = (uint16_t)(basey + radius) > m_level->GetLevelHeight() - 1 ? m_level->GetLevelHeight() - 1 : (uint16_t)(basey + radius);
 
     bool moveOk = true;
-    for (uint16_t y=yl;y<=yh;y++)
-        for (uint16_t x=xl;x<=xh;x++)
+    for (uint16_t y = yl; y <= yh; y++)
+    {
+        for (uint16_t x = xl; x <= xh; x++)
         {
             moveOk &= ClipWithTile(x, y, basex, basey);
         }
+    }
 
     if (moveOk)
     {
@@ -2541,8 +2545,6 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
         return;
     }
 
-    float xmove,ymove;
-
     if (!m_game.GetAudioPlayer()->IsPlaying())
     {
         const uint32_t ticks = m_gameTimer.GetTicksForPlayer();
@@ -2552,8 +2554,8 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
             m_game.PlaySoundWalk((ticks & 32) == 0);
         }
     }
-    xmove = -distance * (float)std::sin((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
-    ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
+    const float xmove = -distance * (float)std::sin((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
+    const float ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
 
     const float playerPosXBeforeMove = m_level->GetPlayerActor()->GetX();
     const float playerPosYBeforeMove = m_level->GetPlayerActor()->GetY();
@@ -2699,7 +2701,9 @@ void EngineCore::RunAway(Actor* actor)
 
         m_level->GetBlockingActors()[(actor->GetTileY() * m_level->GetLevelWidth()) + actor->GetTileX()] = nullptr;	// pick up marker from goal
         if (actor->GetDirection() == nodir)
+        {
             actor->SetDirection(north);
+        }
 
         // Instantly set the actor on its target
         move -= actor->GetDistanceToTarget();
@@ -2749,7 +2753,7 @@ void EngineCore::Bounce(Actor* actor)
         if (!m_level->Walk(actor))
         {
             // Bouncing fireball is blocked, reverse direction
-            actorDirection reverseDirection =
+            const actorDirection reverseDirection =
                 (actor->GetDirection() == north) ? south :
                 (actor->GetDirection() == south) ? north :
                 (actor->GetDirection() == west) ? east :
@@ -2800,7 +2804,7 @@ void EngineCore::ChaseLikeRunningEye(Actor* actor)
         actor->SetY((float)(actor->GetTileY()) + 0.5f);
 
         
-        int16_t newTemp2 = m_level->GetFloorTile(actor->GetTileX(), actor->GetTileY()) >> 8;
+        const int16_t newTemp2 = m_level->GetFloorTile(actor->GetTileX(), actor->GetTileY()) >> 8;
         if (newTemp2 != 0)
         {
             actor->SetTemp2(newTemp2);
@@ -2828,7 +2832,7 @@ void EngineCore::BunnyHopping(Actor* actor)
     // This function is based on T_HarmlessBunnyWalk of C5_ACT2.C, with the simplification that
     // the bunny cannot leave the tile he spawned upon while hopping from left to right.
 
-    actorDirection valid_dir[8][2] =
+    constexpr actorDirection valid_dir[8][2] =
     { 
     { west,east }, // north
     { north,south }, // east
@@ -2885,7 +2889,7 @@ void EngineCore::BunnyHopping(Actor* actor)
     const float harmlessBunnySpeed = 300.0f;
     const uint32_t deltaTimeInMs = m_timeStampOfWorldCurrentFrame - m_timeStampOfWorldPreviousFrame;
     const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-    float move = harmlessBunnySpeed * ((float)(truncatedDeltaTimeInMs) / 14.3f) / 65536.0f;
+    const float move = harmlessBunnySpeed * ((float)(truncatedDeltaTimeInMs) / 14.3f) / 65536.0f;
 
     // Calculate new (x,y) coordinates based on the direction of the bunny and the distance to travel.
     float x = actor->GetX();
@@ -3227,7 +3231,7 @@ bool EngineCore::IsActionActive(const ControlAction action) const
         const std::vector<SDL_GameControllerAxis> gameControllerAxes = m_configurationSettings.GetConstControlsMap().GetGameControllerAxisFromAction(action);
         for (SDL_GameControllerAxis gameControllerAxis : gameControllerAxes)
         {
-            const int16_t minimumAxisDeflection = 5000;
+            constexpr int16_t minimumAxisDeflection = 5000;
             const bool isAxisActive =
                 (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERLEFT && m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERLEFT) > minimumAxisDeflection) ||
                 (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT && m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > minimumAxisDeflection);
@@ -3240,7 +3244,6 @@ bool EngineCore::IsActionActive(const ControlAction action) const
 bool EngineCore::IsActionJustPressed(const ControlAction action) const
 {
     bool isJustPressed = false;
-
 
     const std::vector<SDL_Keycode> keys = m_configurationSettings.GetConstControlsMap().GetKeysFromAction(action);
     for (SDL_Keycode key : keys)
@@ -3507,12 +3510,12 @@ uint8_t EngineCore::GetScreenMode() const
 bool EngineCore::AreScrollsPresent() const
 {
     bool scrollsArePresent = false;
-    auto decorateActors = m_game.GetDecorateActors();
-    for (auto decorateActorPair : decorateActors)
+    const auto& decorateActors = m_game.GetDecorateActors();
+    for (const auto& decorateActorPair : decorateActors)
     {
-        for (auto decorateStatePair : decorateActorPair.second.states)
+        for (const auto& decorateStatePair : decorateActorPair.second.states)
         {
-            auto anim = decorateStatePair.second.animation;
+            const auto anim = decorateStatePair.second.animation;
             for (uint8_t frameIndex = 0; frameIndex < anim.size(); frameIndex++)
             {
                 if (anim.at(frameIndex).action == ActionGiveScroll)

@@ -14,15 +14,13 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "RenderableLevelStatistics.h"
+#include "LevelStatistics.h"
+#include "IRenderer.h"
 
 RenderableLevelStatistics::RenderableLevelStatistics(const LevelStatistics& levelStatistics) :
     m_levelStatistics(levelStatistics)
 {
 
-}
-
-RenderableLevelStatistics::~RenderableLevelStatistics()
-{
 }
 
 void RenderableLevelStatistics::Draw(IRenderer& renderer, const Font& font, const uint16_t additionalMargin, const uint32_t timeStamp, const egaColor floorColor)
@@ -47,11 +45,11 @@ void RenderableLevelStatistics::Draw(IRenderer& renderer, const Font& font, cons
 
 const std::string RenderableLevelStatistics::ConvertTimeStampToString(const uint32_t timeStamp)
 {
-    const uint32_t milliSecondsInSecond = 1000u;
-    const uint32_t secondsInMinute = 60u;
-    const uint32_t minutesInHour = 60u;
-    const uint32_t milliSecondsInMinute = milliSecondsInSecond * secondsInMinute;
-    const uint32_t milliSecondsInHour = milliSecondsInMinute * minutesInHour;
+    constexpr uint32_t milliSecondsInSecond = 1000u;
+    constexpr uint32_t secondsInMinute = 60u;
+    constexpr uint32_t minutesInHour = 60u;
+    constexpr uint32_t milliSecondsInMinute = milliSecondsInSecond * secondsInMinute;
+    constexpr uint32_t milliSecondsInHour = milliSecondsInMinute * minutesInHour;
     const uint32_t hours = timeStamp / milliSecondsInHour;
     const uint32_t minutes = (timeStamp % milliSecondsInHour) / milliSecondsInMinute;
     const uint32_t seconds = (timeStamp % milliSecondsInMinute) / milliSecondsInSecond;

@@ -20,14 +20,14 @@
 class GuiElementEditText : public GuiElementBase
 {
 public:
-    GuiElementEditText(
+    explicit GuiElementEditText(
         const PlayerInput& playerInput,
         std::string& outputText,
         const std::string& initialText,
         const uint16_t maxTextLength,
         RenderableText& renderableText,
         GuiEvent& textCompleteAction);
-    ~GuiElementEditText() override;
+    ~GuiElementEditText() override = default;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
@@ -40,7 +40,7 @@ protected:
     const std::string m_initialText;
     RenderableText& m_renderableText;
     const GuiEvent m_textCompleteAction;
-    const GuiEvent m_busyAction = { GuiActionBusy, 0 };
+    static constexpr GuiEvent m_busyAction = { GuiActionBusy, 0 };
     bool m_enteringText;
     const uint16_t m_maxTextLength;
 };

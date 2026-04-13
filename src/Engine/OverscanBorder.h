@@ -28,7 +28,7 @@ class OverscanBorder
 {
 public:
     OverscanBorder();
-    ~OverscanBorder();
+    ~OverscanBorder() = default;
 
     void SetColor(const uint32_t timeStamp, const uint8_t egaSignal, const uint32_t durationInMs);
     egaColor GetActiveColor(const uint32_t timeStamp) const;

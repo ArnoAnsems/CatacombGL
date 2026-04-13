@@ -57,11 +57,6 @@ OpenGLBasic::OpenGLBasic() :
     }
 }
 
-OpenGLBasic::~OpenGLBasic()
-{
-
-}
-
 bool OpenGLBasic::IsSupported() const
 {
     return m_isSupported;

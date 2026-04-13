@@ -20,7 +20,7 @@
 class GuiMenu : public GuiElementBase
 {
 public:
-    GuiMenu(
+    explicit GuiMenu(
         const PlayerInput& playerInput);
     ~GuiMenu() override;
 
@@ -37,6 +37,6 @@ private:
     std::vector<GuiElementBase*> m_elements;
     size_t m_elementOpenIndex;
     std::vector<int16_t> m_previouslyOpen;
-    const GuiEvent m_noneEvent = { GuiActionNone, 0 };
+    static constexpr GuiEvent m_noneEvent = { GuiActionNone, 0 };
 };
 

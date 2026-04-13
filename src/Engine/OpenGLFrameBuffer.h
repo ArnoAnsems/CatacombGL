@@ -27,8 +27,8 @@
 class OpenGLFrameBuffer
 {
 public:
-    OpenGLFrameBuffer(const OpenGLBasic& openGLBasic);
-    ~OpenGLFrameBuffer();
+    explicit OpenGLFrameBuffer(const OpenGLBasic& openGLBasic);
+    ~OpenGLFrameBuffer() = default;
 
     bool IsSupported() const;
 

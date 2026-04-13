@@ -19,15 +19,15 @@
 class GuiElementSaveSlotStaticCat3D : public GuiElementButton
 {
 public:
-    GuiElementSaveSlotStaticCat3D(
+    explicit GuiElementSaveSlotStaticCat3D(
         const PlayerInput& playerInput,
         const std::string& buttonLabel,
         const GuiEvent& guiEventWhenActivated,
         RenderableText& renderableText,
-        bool& flashIcon);
+        const bool& flashIcon);
 
     virtual void Draw(IRenderer& renderer) const override;
 
 private:
-    bool& m_flashIcon;
+    const bool& m_flashIcon;
 };

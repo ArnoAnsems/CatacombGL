@@ -21,8 +21,8 @@
 class Console
 {
 public:
-    Console(const std::string& label);
-    ~Console();
+    explicit Console(const std::string& label);
+    ~Console() = default;
 
     void Draw(IRenderer& renderer);
     void ProcessInput(PlayerInput& playerInput);

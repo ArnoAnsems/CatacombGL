@@ -24,31 +24,31 @@
 #include "EgaGraphAbyss.h"
 #include "AudioRepositoryAbyss.h"
 
-const uint16_t actorIdBonusExplosion = 20;
-const uint16_t actorIdBonusBolt = 21;
-const uint16_t actorIdBonusNuke = 22;
-const uint16_t actorIdBonusPotion = 23;
-const uint16_t actorIdBonusChest = 24;
-const uint16_t actorIdBonusWaterChest = 25;
-const uint16_t actorIdBonusFreezeTime = 26;
-const uint16_t actorIdBonusScroll1 = 27;
-const uint16_t actorIdBonusScroll2 = 28;
-const uint16_t actorIdBonusScroll3 = 29;
-const uint16_t actorIdBonusScroll4 = 30;
-const uint16_t actorIdBonusScroll5 = 31;
-const uint16_t actorIdBonusScroll6 = 32;
-const uint16_t actorIdBonusScroll7 = 33;
-const uint16_t actorIdBonusScroll8 = 34;
-const uint16_t actorIdBonusKeyRed = 35;
-const uint16_t actorIdBonusKeyYellow = 36;
-const uint16_t actorIdBonusKeyGreen = 37;
-const uint16_t actorIdBonusKeyBlue = 38;
-const uint16_t actorIdBonusKeyRed2 = 39;
-const uint16_t actorIdBonusGemRed = 40;
-const uint16_t actorIdBonusGemYellow = 41;
-const uint16_t actorIdBonusGemGreen = 42;
-const uint16_t actorIdBonusGemBlue = 43;
-const uint16_t actorIdBonusGemPurple = 44;
+constexpr uint16_t actorIdBonusExplosion = 20;
+constexpr uint16_t actorIdBonusBolt = 21;
+constexpr uint16_t actorIdBonusNuke = 22;
+constexpr uint16_t actorIdBonusPotion = 23;
+constexpr uint16_t actorIdBonusChest = 24;
+constexpr uint16_t actorIdBonusWaterChest = 25;
+constexpr uint16_t actorIdBonusFreezeTime = 26;
+constexpr uint16_t actorIdBonusScroll1 = 27;
+constexpr uint16_t actorIdBonusScroll2 = 28;
+constexpr uint16_t actorIdBonusScroll3 = 29;
+constexpr uint16_t actorIdBonusScroll4 = 30;
+constexpr uint16_t actorIdBonusScroll5 = 31;
+constexpr uint16_t actorIdBonusScroll6 = 32;
+constexpr uint16_t actorIdBonusScroll7 = 33;
+constexpr uint16_t actorIdBonusScroll8 = 34;
+constexpr uint16_t actorIdBonusKeyRed = 35;
+constexpr uint16_t actorIdBonusKeyYellow = 36;
+constexpr uint16_t actorIdBonusKeyGreen = 37;
+constexpr uint16_t actorIdBonusKeyBlue = 38;
+constexpr uint16_t actorIdBonusKeyRed2 = 39;
+constexpr uint16_t actorIdBonusGemRed = 40;
+constexpr uint16_t actorIdBonusGemYellow = 41;
+constexpr uint16_t actorIdBonusGemGreen = 42;
+constexpr uint16_t actorIdBonusGemBlue = 43;
+constexpr uint16_t actorIdBonusGemPurple = 44;
 
 //
 // BONUS ITEM DESTROYED

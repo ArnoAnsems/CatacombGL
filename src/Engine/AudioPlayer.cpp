@@ -17,13 +17,8 @@
 #include <stdlib.h>
 #include "../../ThirdParty/ReflectionHLE/id_sd.h"
 
-AudioPlayer::AudioPlayer(AudioRepository* audioRepository) :
+AudioPlayer::AudioPlayer(AudioRepository* const audioRepository) :
     m_audioRepository(audioRepository)
-{
-
-}
-
-AudioPlayer::~AudioPlayer()
 {
 
 }

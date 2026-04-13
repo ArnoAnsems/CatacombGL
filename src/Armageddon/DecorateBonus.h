@@ -24,22 +24,22 @@
 #include "EgaGraphArmageddon.h"
 #include "AudioRepositoryArmageddon.h"
 
-const uint16_t actorIdBonusExplosion = 20;
-const uint16_t actorIdBonusBolt = 21;
-const uint16_t actorIdBonusNuke = 22;
-const uint16_t actorIdBonusPotion = 23;
-const uint16_t actorIdBonusChest = 24;
-const uint16_t actorIdBonusWaterChest = 25;
-const uint16_t actorIdBonusFreezeTime = 26;
-const uint16_t actorIdBonusKeyRed = 35;
-const uint16_t actorIdBonusKeyYellow = 36;
-const uint16_t actorIdBonusKeyGreen = 37;
-const uint16_t actorIdBonusKeyBlue = 38;
-const uint16_t actorIdBonusGemRed = 40;
-const uint16_t actorIdBonusGemYellow = 41;
-const uint16_t actorIdBonusGemGreen = 42;
-const uint16_t actorIdBonusGemBlue = 43;
-const uint16_t actorIdBonusGemPurple = 44;
+constexpr uint16_t actorIdBonusExplosion = 20;
+constexpr uint16_t actorIdBonusBolt = 21;
+constexpr uint16_t actorIdBonusNuke = 22;
+constexpr uint16_t actorIdBonusPotion = 23;
+constexpr uint16_t actorIdBonusChest = 24;
+constexpr uint16_t actorIdBonusWaterChest = 25;
+constexpr uint16_t actorIdBonusFreezeTime = 26;
+constexpr uint16_t actorIdBonusKeyRed = 35;
+constexpr uint16_t actorIdBonusKeyYellow = 36;
+constexpr uint16_t actorIdBonusKeyGreen = 37;
+constexpr uint16_t actorIdBonusKeyBlue = 38;
+constexpr uint16_t actorIdBonusGemRed = 40;
+constexpr uint16_t actorIdBonusGemYellow = 41;
+constexpr uint16_t actorIdBonusGemGreen = 42;
+constexpr uint16_t actorIdBonusGemBlue = 43;
+constexpr uint16_t actorIdBonusGemPurple = 44;
 
 //
 // BONUS ITEM DESTROYED

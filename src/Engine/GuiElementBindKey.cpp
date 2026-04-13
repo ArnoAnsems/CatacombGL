@@ -31,11 +31,6 @@ GuiElementBindKey::GuiElementBindKey(
 
 }
 
-GuiElementBindKey::~GuiElementBindKey()
-{
-
-}
-
 const GuiEvent& GuiElementBindKey::ProcessInput()
 {
     if (m_enabled)

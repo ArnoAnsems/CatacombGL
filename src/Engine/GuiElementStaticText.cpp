@@ -28,11 +28,6 @@ GuiElementStaticText::GuiElementStaticText(
 
 }
 
-GuiElementStaticText::~GuiElementStaticText()
-{
-
-}
-
 const GuiEvent& GuiElementStaticText::ProcessInput()
 {
     // Just static text; no interaction possible.

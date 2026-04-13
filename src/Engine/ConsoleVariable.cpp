@@ -28,11 +28,6 @@ ConsoleVariable::ConsoleVariable(const std::string& nameInMenu, const std::strin
 
 }
 
-ConsoleVariable::~ConsoleVariable()
-{
-
-}
-
 const std::string& ConsoleVariable::GetNameInMenu() const
 {
     return m_nameInMenu;

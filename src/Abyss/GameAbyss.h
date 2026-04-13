@@ -34,7 +34,7 @@ class Shape;
 class GameAbyss: public IGame
 {
 public:
-    GameAbyss(const GameId gameId, const std::filesystem::path gamePath, IRenderer& renderer);
+    explicit GameAbyss(const GameId gameId, const std::filesystem::path gamePath, IRenderer& renderer);
     ~GameAbyss();
 
     void SpawnActors(Level* level, const DifficultyLevel difficultyLevel) override;

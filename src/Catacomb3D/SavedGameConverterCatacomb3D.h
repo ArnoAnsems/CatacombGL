@@ -27,7 +27,7 @@ class SavedGameConverterCatacomb3D : public ISavedGameConverter
 {
 public:
     SavedGameConverterCatacomb3D(const GameId gameId);
-    ~SavedGameConverterCatacomb3D();
+    ~SavedGameConverterCatacomb3D() = default;
     const uint16_t GetActorId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const uint16_t GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;

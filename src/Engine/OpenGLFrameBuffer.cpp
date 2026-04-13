@@ -103,11 +103,6 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLBasic& openGLBasic) :
     m_isSupported = true;
 }
 
-OpenGLFrameBuffer::~OpenGLFrameBuffer()
-{
-
-}
-
 bool OpenGLFrameBuffer::IsSupported() const
 {
     return m_isSupported;

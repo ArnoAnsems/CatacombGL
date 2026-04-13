@@ -34,11 +34,6 @@ GuiElementEditText::GuiElementEditText(
 
 }
 
-GuiElementEditText::~GuiElementEditText()
-{
-
-}
-
 const GuiEvent& GuiElementEditText::ProcessInput()
 {
     bool isTextComplete = false;

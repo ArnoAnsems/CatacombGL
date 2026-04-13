@@ -16,6 +16,7 @@
 #include "SavedGameInDosFormat.h"
 #include "SavedGameInDosFormatConfig.h"
 #include "Decompressor.h"
+#include "FileChunk.h"
 #include <cstring>
 
 SavedGameInDosFormat::SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config) :

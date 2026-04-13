@@ -36,11 +36,6 @@ GuiCatalog::GuiCatalog(
     }
 }
 
-GuiCatalog::~GuiCatalog()
-{
-
-}
-
 const GuiEvent& GuiCatalog::ProcessInput()
 {
     const uint16_t lastPage = (uint16_t)m_catalogFilenames.size() - 1;

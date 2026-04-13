@@ -33,14 +33,14 @@ typedef struct radarBlipStruct
     egaColor color;
 } radarBlip;
 
-static const uint16_t MaxBlips = 60;
+static constexpr uint16_t MaxBlips = 60;
 
 class Radar
 {
 
 public:
     Radar();
-    ~Radar();
+    ~Radar() = default;
 
     void ResetRadar(const Actor* player, const PlayerInventory& playerInventory, const uint32_t timeStamp);
     void AddActors(const Actor** actors, const uint16_t numberOfActors);

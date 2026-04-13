@@ -20,7 +20,7 @@ GuiElementEnumSelectionCat3DRadio::GuiElementEnumSelectionCat3DRadio(
     ConsoleVariableEnum& cvarEnum,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
-    bool& flashIcon,
+    const bool& flashIcon,
     const std::vector<std::string>& enumNames) :
     GuiElementEnumSelectionCat3D(playerInput, cvarEnum, 0, renderableText, renderableTiles, flashIcon),
     m_enumNames(enumNames),

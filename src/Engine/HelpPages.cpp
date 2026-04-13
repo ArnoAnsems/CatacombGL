@@ -15,10 +15,10 @@
 
 #include "HelpPages.h"
 
-static const char endOfPageMarker = '@';
-static const char centeredLineMarker = '^';
-static const char endOfLineMarker = '\n';
-static const char returnMarker = '\r';
+static constexpr char endOfPageMarker = '@';
+static constexpr char centeredLineMarker = '^';
+static constexpr char endOfLineMarker = '\n';
+static constexpr char returnMarker = '\r';
 
 const std::vector<HelpPage> helpFileNotFoundPages =
 { {

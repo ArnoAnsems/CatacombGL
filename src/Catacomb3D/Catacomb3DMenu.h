@@ -36,7 +36,7 @@
 class Catacomb3DMenu: public IMenu
 {
 public:
-    Catacomb3DMenu(
+    explicit Catacomb3DMenu(
         ConfigurationSettings& configurationSettings,
         AudioPlayer& audioPlayer,
         PlayerInput& playerInput,

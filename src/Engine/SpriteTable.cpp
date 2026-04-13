@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SpriteTable.h"
+#include "FileChunk.h"
 
 SpriteTable::SpriteTable(FileChunk* decompressedChunk)
 {

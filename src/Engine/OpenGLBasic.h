@@ -37,7 +37,7 @@ class OpenGLBasic
 {
 public:
     OpenGLBasic();
-    ~OpenGLBasic();
+    ~OpenGLBasic() = default;
 
     bool IsSupported() const;
 

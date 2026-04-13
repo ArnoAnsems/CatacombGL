@@ -28,11 +28,6 @@ GuiElementButton::GuiElementButton(
 
 }
 
-GuiElementButton::~GuiElementButton()
-{
-
-}
-
 const GuiEvent& GuiElementButton::ProcessInput()
 {
     const bool isJustActivated =

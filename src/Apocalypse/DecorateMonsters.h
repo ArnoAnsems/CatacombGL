@@ -25,24 +25,24 @@
 #include "EgaGraphApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 
-const uint16_t actorIdMonsterNemesis = 52;
-const uint16_t actorIdMonsterBounce = 53;
-const uint16_t actorIdMonsterBlob = 54;
-const uint16_t actorIdMonsterTimeLord = 55;
-const uint16_t actorIdMonsterAndroidMage = 56;
-const uint16_t actorIdMonsterCyborgDemon = 57;
-const uint16_t actorIdMonsterStompy = 58;
-const uint16_t actorIdMonsterWizard = 59;
-const uint16_t actorIdMonsterBug = 60;
-const uint16_t actorIdMonsterRunningEye = 61;
-const uint16_t actorIdMonsterDemon = 62;
-const uint16_t actorIdMonsterAquaMan = 63;
-const uint16_t actorIdMonsterTroll = 64;
-const uint16_t actorIdMonsterRay = 65;
-const uint16_t actorIdMonsterSkeleton = 66;
-const uint16_t actorIdMonsterRoboTank = 67;
-const uint16_t actorIdMonsterShooterEye = 68;
-const uint16_t actorIdMonsterInvisDude = 69;
+constexpr uint16_t actorIdMonsterNemesis = 52;
+constexpr uint16_t actorIdMonsterBounce = 53;
+constexpr uint16_t actorIdMonsterBlob = 54;
+constexpr uint16_t actorIdMonsterTimeLord = 55;
+constexpr uint16_t actorIdMonsterAndroidMage = 56;
+constexpr uint16_t actorIdMonsterCyborgDemon = 57;
+constexpr uint16_t actorIdMonsterStompy = 58;
+constexpr uint16_t actorIdMonsterWizard = 59;
+constexpr uint16_t actorIdMonsterBug = 60;
+constexpr uint16_t actorIdMonsterRunningEye = 61;
+constexpr uint16_t actorIdMonsterDemon = 62;
+constexpr uint16_t actorIdMonsterAquaMan = 63;
+constexpr uint16_t actorIdMonsterTroll = 64;
+constexpr uint16_t actorIdMonsterRay = 65;
+constexpr uint16_t actorIdMonsterSkeleton = 66;
+constexpr uint16_t actorIdMonsterRoboTank = 67;
+constexpr uint16_t actorIdMonsterShooterEye = 68;
+constexpr uint16_t actorIdMonsterInvisDude = 69;
 
 //
 // NEMESIS

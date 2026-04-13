@@ -20,11 +20,12 @@
 class GuiElementHighScores : public GuiElementBase
 {
 public:
-    GuiElementHighScores(
+    explicit GuiElementHighScores(
         const PlayerInput& playerInput,
         HighScores& highscores,
-        uint32_t& timestamp
+        const uint32_t& timestamp
     );
+    ~GuiElementHighScores() override = default;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
@@ -33,6 +34,6 @@ private:
     static bool KeyIsSuitableForName(const SDL_Keycode keyCode);
 
     HighScores& m_highScores;
-    uint32_t& m_timestamp;
-    const GuiEvent m_nameFinishedEvent = { GuiActionHighScoreFinished, 0 };
+    const uint32_t& m_timestamp;
+    static constexpr GuiEvent m_nameFinishedEvent = { GuiActionHighScoreFinished, 0 };
 };

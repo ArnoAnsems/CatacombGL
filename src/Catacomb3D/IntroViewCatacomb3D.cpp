@@ -28,11 +28,6 @@ IntroViewCatacomb3D::IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph
 
 }
 
-IntroViewCatacomb3D::~IntroViewCatacomb3D()
-{
-
-}
-
 void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
 {
     if (timeStamp < 100)

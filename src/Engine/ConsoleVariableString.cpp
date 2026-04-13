@@ -23,11 +23,6 @@ ConsoleVariableString::ConsoleVariableString(const std::string& nameInMenu, cons
 
 }
 
-ConsoleVariableString::~ConsoleVariableString()
-{
-
-}
-
 const std::string ConsoleVariableString::Serialize() const
 {
     return m_value;

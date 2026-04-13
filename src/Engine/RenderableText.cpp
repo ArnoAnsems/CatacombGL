@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #include "RenderableText.h"
+#include "Font.h"
 #include <cstring>
 #include <cstdlib>
 #include <numeric>
@@ -76,7 +77,7 @@ void RenderableText::LeftAlignedTruncated(
         return;
     }
 
-    const uint8_t charIndexDot = '.';
+    constexpr uint8_t charIndexDot = '.';
     const uint16_t dotsLength = m_font.GetCharacterWidth(charIndexDot) * 3;
 
     uint16_t combinedWidth = 0;
@@ -87,7 +88,7 @@ void RenderableText::LeftAlignedTruncated(
         combinedWidth += charWidth;
     }
 
-    char truncatedText[300];
+    char truncatedText[300]{};
     if (combinedWidth <= maxLength)
     {
         std::strcpy(truncatedText, text.c_str());
@@ -134,7 +135,7 @@ uint8_t RenderableText::LeftAlignedMultiLine(
     }
     else
     {
-        const uint16_t maxWidth = 600;
+        constexpr uint16_t maxWidth = 600;
         uint16_t chari = 0;
         uint16_t startLine = 0;
         char dest[200];
@@ -201,7 +202,7 @@ void RenderableText::Number(
     const int16_t offsetX,
     const int16_t offsetY)
 {
-    char str[10];
+    char str[10]{};
 
     snprintf(str, 10, "%d", value);
 
@@ -229,7 +230,7 @@ uint16_t RenderableText::SplitTextInTwo(const std::string& text, std::vector<std
     std::string bestSplitString2 = "";
     uint16_t bestSplitWidthInPixels = GetWidthInPixels(text);
 
-    const char separator = ' ';
+    constexpr char separator = ' ';
     size_t separatorPos = text.find(separator);
 
     // Find optimal split
@@ -274,7 +275,7 @@ uint16_t RenderableText::SplitTextInThree(const std::string& text, std::vector<s
     std::string bestSplitString3 = "";
     uint16_t bestSplitWidthInPixels = GetWidthInPixels(text);
 
-    const char separator = ' ';
+    constexpr char separator = ' ';
     size_t separator1Pos = text.find(separator);
 
     // Find optimal split

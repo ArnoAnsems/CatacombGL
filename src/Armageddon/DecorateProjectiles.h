@@ -24,13 +24,13 @@
 #include "EgaGraphArmageddon.h"
 #include "AudioRepositoryArmageddon.h"
 
-const uint16_t actorIdProjectilePlayerShot = 70;
-const uint16_t actorIdProjectilePlayerBigShot = 71;
-const uint16_t actorIdProjectileMageShot = 72;
-const uint16_t actorIdProjectileEyeShot = 73;
-const uint16_t actorIdProjectileNemesisShot = 74;
-const uint16_t actorIdProjectileSuccubusShot = 75;
-const uint16_t actorIdProjectileDragonShot = 76;
+constexpr uint16_t actorIdProjectilePlayerShot = 70;
+constexpr uint16_t actorIdProjectilePlayerBigShot = 71;
+constexpr uint16_t actorIdProjectileMageShot = 72;
+constexpr uint16_t actorIdProjectileEyeShot = 73;
+constexpr uint16_t actorIdProjectileNemesisShot = 74;
+constexpr uint16_t actorIdProjectileSuccubusShot = 75;
+constexpr uint16_t actorIdProjectileDragonShot = 76;
 
 //
 // PLAYER SHOT

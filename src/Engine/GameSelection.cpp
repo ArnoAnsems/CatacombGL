@@ -21,11 +21,6 @@ GameSelection::GameSelection(IRenderer& renderer) :
 
 }
 
-GameSelection::~GameSelection()
-{
-
-}
-
 void GameSelection::DrawBox(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const std::string& title, RenderableText& renderableText)
 {
     constexpr uint8_t shadowHor = 1u;
@@ -130,7 +125,7 @@ void GameSelection::Draw(const GameSelectionPresentation& presentation)
     m_renderer.Render2DBar(310, 194, 16, 3, EgaLightGray);
 
     renderableText.LeftAlignedTruncated(presentation.searchFolder.string(), EgaBrightYellow, 18, 138, 550);
-    const uint32_t maxSubFoldersVisible = 4;
+    constexpr uint32_t maxSubFoldersVisible = 4;
     const uint32_t endOfSubFolders = ((uint32_t)presentation.subFolders.size() - presentation.subFolderOffset > maxSubFoldersVisible ? presentation.subFolderOffset + maxSubFoldersVisible : (uint32_t)presentation.subFolders.size());
     for (uint32_t subFolderIndex = presentation.subFolderOffset; subFolderIndex < endOfSubFolders; subFolderIndex++)
     {

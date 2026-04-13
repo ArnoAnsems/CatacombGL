@@ -24,14 +24,14 @@
 #include "DecorateProjectiles.h"
 #include "EgaGraphCatacomb3D.h"
 
-const uint16_t actorIdNone = 0;
-const uint16_t actorIdExplodingWall = 4;
-const uint16_t actorIdWarpToLevel = 5;
-const uint16_t actorIdWarpPortal1 = 6;
-const uint16_t actorIdWarpPortal2 = 7;
-const uint16_t actorIdWarpPortal3 = 8;
-const uint16_t actorIdWarpPortal4 = 9;
-const uint16_t actorIdPlayer = 11;
+constexpr uint16_t actorIdNone = 0;
+constexpr uint16_t actorIdExplodingWall = 4;
+constexpr uint16_t actorIdWarpToLevel = 5;
+constexpr uint16_t actorIdWarpPortal1 = 6;
+constexpr uint16_t actorIdWarpPortal2 = 7;
+constexpr uint16_t actorIdWarpPortal3 = 8;
+constexpr uint16_t actorIdWarpPortal4 = 9;
+constexpr uint16_t actorIdPlayer = 11;
 
 
 //

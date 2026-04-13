@@ -25,19 +25,19 @@
 #include "EgaGraphApocalypse.h"
 #include "AudioRepositoryApocalypse.h"
 
-const uint16_t actorIdProjectilePlayerShot = 70;
-const uint16_t actorIdProjectilePlayerBigShot = 71;
-const uint16_t actorIdProjectileWizardShot = 72;
-const uint16_t actorIdProjectileBlobShot = 73;
-const uint16_t actorIdProjectileBugShot = 74;
-const uint16_t actorIdProjectileTimeLordShot = 75;
-const uint16_t actorIdProjectileAndroidMageShot = 76;
-const uint16_t actorIdProjectileStompyShot = 77;
-const uint16_t actorIdProjectileRayShot = 78;
-const uint16_t actorIdProjectileSkeletonShot = 79;
-const uint16_t actorIdProjectileRoboTankShot = 80;
-const uint16_t actorIdProjectileEyeShot = 81;
-const uint16_t actorIdProjectileNemesisShot = 82;
+constexpr uint16_t actorIdProjectilePlayerShot = 70;
+constexpr uint16_t actorIdProjectilePlayerBigShot = 71;
+constexpr uint16_t actorIdProjectileWizardShot = 72;
+constexpr uint16_t actorIdProjectileBlobShot = 73;
+constexpr uint16_t actorIdProjectileBugShot = 74;
+constexpr uint16_t actorIdProjectileTimeLordShot = 75;
+constexpr uint16_t actorIdProjectileAndroidMageShot = 76;
+constexpr uint16_t actorIdProjectileStompyShot = 77;
+constexpr uint16_t actorIdProjectileRayShot = 78;
+constexpr uint16_t actorIdProjectileSkeletonShot = 79;
+constexpr uint16_t actorIdProjectileRoboTankShot = 80;
+constexpr uint16_t actorIdProjectileEyeShot = 81;
+constexpr uint16_t actorIdProjectileNemesisShot = 82;
 
 //
 // PLAYER SHOT

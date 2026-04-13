@@ -21,7 +21,7 @@ GuiElementBoolSelectionCat3D::GuiElementBoolSelectionCat3D(
     const int16_t offsetXValue,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
-    bool& flashIcon) :
+    const bool& flashIcon) :
     GuiElementBoolSelection(playerInput, cvarBool, offsetXValue, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)

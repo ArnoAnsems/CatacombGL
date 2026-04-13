@@ -23,11 +23,6 @@ Score::Score() :
 
 }
 
-Score::~Score()
-{
-
-}
-
 const uint32_t Score::GetPoints() const
 {
     return m_points;

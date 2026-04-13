@@ -20,9 +20,10 @@
 //
 #pragma once
 
-#include "FileChunk.h"
 #include <string>
 #include "SavedGameInDosFormatConfig.h"
+
+class FileChunk;
 
 class SavedGameInDosFormat
 {
@@ -59,8 +60,8 @@ public:
         int16_t prev;
     } ObjectInDosFormat;
 
-    SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config);
-    SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config, const std::string& name);
+    explicit SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config);
+    explicit SavedGameInDosFormat(const FileChunk* fileChunk, const SavedGameInDosFormatConfig& config, const std::string& name);
     ~SavedGameInDosFormat();
 
     bool Load();

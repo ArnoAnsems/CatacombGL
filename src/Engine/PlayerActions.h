@@ -28,7 +28,7 @@ class PlayerActions
 {
 public:
     PlayerActions();
-    ~PlayerActions();
+    ~PlayerActions() = default;
 
     uint16_t GetHandHeight() const;
     bool UpdateShoot(const uint32_t timeStamp, const bool autoFire, ManaBar& manaBar);

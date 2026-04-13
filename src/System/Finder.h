@@ -32,8 +32,7 @@
 class Finder
 {
 public:
-    Finder() = default;
-    Finder(const ConfigurationSettings& config);
+    explicit Finder(const ConfigurationSettings& config);
 
     void FindGamesInWorkingPath();
     void FindInPath(const std::filesystem::path& path);

@@ -32,8 +32,8 @@ typedef huffmanNode huffmanTable[256];
 class Huffman
 {
 public:
-    Huffman(const huffmanTable table);
-    ~Huffman();
+    explicit Huffman(const huffmanTable table);
+    ~Huffman() = default;
 
     FileChunk* Decompress(unsigned char* compressedChunk, const unsigned long compressedSize, const unsigned long decompressedSize);
 

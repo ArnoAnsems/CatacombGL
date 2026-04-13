@@ -66,11 +66,6 @@ Actor::Actor(std::ifstream& file, const std::map<uint16_t, const DecorateActor>&
     file.read((char*)&m_angle, sizeof(m_angle));
 }
 
-Actor::~Actor()
-{
-
-}
-
 const DecorateActor& Actor::GetDecorateActorFromFile(std::ifstream& file, const std::map<uint16_t, const DecorateActor>& decorateActors) const
 {
     uint16_t actorId = 0;

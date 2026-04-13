@@ -19,12 +19,12 @@
 class GuiElementButton : public GuiElementBase
 {
 public:
-    GuiElementButton(
+    explicit GuiElementButton(
         const PlayerInput& playerInput,
         const std::string& buttonLabel,
         const GuiEvent& guiEventWhenActivated,
         RenderableText& renderableText);
-    ~GuiElementButton() override;
+    ~GuiElementButton() override = default;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;

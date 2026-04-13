@@ -142,10 +142,6 @@ SavedGameConverterCatacomb3D::SavedGameConverterCatacomb3D(const GameId gameId) 
 {
 }
 
-SavedGameConverterCatacomb3D::~SavedGameConverterCatacomb3D()
-{
-}
-
 const uint16_t SavedGameConverterCatacomb3D::GetActorIdOfBonus(const uint16_t state16, const int16_t temp1) const
 {
     const uint8_t i = GetGameIndex();

@@ -26,7 +26,7 @@ class AutoMap
 {
 public:
     AutoMap();
-    ~AutoMap();
+    ~AutoMap() = default;
 
     void SetCheat(const bool enabled);
     void DrawClassic(IRenderer& renderer, EgaGraph& egaGraph, Level& level, const uint16_t additionalMargin);

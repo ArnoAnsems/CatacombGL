@@ -21,9 +21,10 @@
 #pragma once
 
 #include "EgaColor.h"
-#include "Font.h"
 #include <vector>
 #include <string>
+
+class Font;
 
 class RenderableText
 {

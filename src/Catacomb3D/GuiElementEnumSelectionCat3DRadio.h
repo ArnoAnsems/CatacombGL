@@ -19,12 +19,12 @@
 class GuiElementEnumSelectionCat3DRadio : public GuiElementEnumSelectionCat3D
 {
 public:
-    GuiElementEnumSelectionCat3DRadio(
+    explicit GuiElementEnumSelectionCat3DRadio(
         const PlayerInput& playerInput,
         ConsoleVariableEnum& cvarEnum,
         RenderableText& renderableText,
         RenderableTiles& renderableTiles,
-        bool& flashIcon,
+        const bool& flashIcon,
         const std::vector<std::string>& enumNames);
 
     virtual const GuiEvent& ProcessInput() override;

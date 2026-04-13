@@ -138,7 +138,7 @@ void RenderableAutoMapIso::AddWallCap(
 {
     if (centerColor != mainColor)
     {
-        const float border = 0.2f;
+        constexpr float border = 0.2f;
         quadCoordinates quad =
         {
             (float)x + border, (float)y + border,
@@ -182,7 +182,7 @@ void RenderableAutoMapIso::AddWallCap(
     }
     else
     {
-        quadCoordinates quad =
+        const quadCoordinates quad =
         {
             (float)x,
             (float)y,

@@ -21,13 +21,13 @@
 class GuiElementBindKey : public GuiElementBase
 {
 public:
-    GuiElementBindKey(
+    explicit GuiElementBindKey(
         const PlayerInput& playerInput,
         ControlsMap& controlsMap,
         ControlAction controlAction,
         const int16_t offsetXValue,
         RenderableText& renderableText);
-    ~GuiElementBindKey() override;
+    ~GuiElementBindKey() override = default;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;

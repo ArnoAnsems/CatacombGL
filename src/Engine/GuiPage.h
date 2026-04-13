@@ -20,7 +20,7 @@
 class GuiPage : public GuiElementBase
 {
 public:
-    GuiPage(
+    explicit GuiPage(
         const PlayerInput& playerInput);
     ~GuiPage() override;
 
@@ -32,11 +32,11 @@ public:
 private:
     struct PageElement
     {
-        GuiElementBase* element;
-        int16_t offsetX;
-        int16_t offsetY;
+        GuiElementBase* element = nullptr;
+        int16_t offsetX = 0;
+        int16_t offsetY = 0;
     };
 
     std::vector<PageElement> m_elements;
-    const GuiEvent m_closeEvent = { GuiActionClose, 0 };
+    static constexpr GuiEvent m_closeEvent = { GuiActionClose, 0 };
 };

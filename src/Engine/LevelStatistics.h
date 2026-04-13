@@ -27,7 +27,7 @@ class LevelStatistics
 {
 public:
     LevelStatistics();
-    ~LevelStatistics();
+    ~LevelStatistics() = default;
 
     void SetCountersAtStartOfLevel(const Level& level);
     void UpdateMonstersKilled(const Level& level);

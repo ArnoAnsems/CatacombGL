@@ -27,7 +27,7 @@ class GameTimer
 {
 public:
     GameTimer();
-    ~GameTimer();
+    ~GameTimer() = default;
 
     uint32_t GetMillisecondsForPlayer() const;
     uint32_t GetTicksForPlayer() const;

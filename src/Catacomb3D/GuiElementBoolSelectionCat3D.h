@@ -20,18 +20,18 @@
 class GuiElementBoolSelectionCat3D : public GuiElementBoolSelection
 {
 public:
-    GuiElementBoolSelectionCat3D(
+    explicit GuiElementBoolSelectionCat3D(
         const PlayerInput& playerInput,
         ConsoleVariableBool& cvarBool,
         const int16_t offsetXValue,
         RenderableText& renderableText,
         RenderableTiles& renderableTiles,
-        bool& flashIcon);
+        const bool& flashIcon);
 
     virtual void Draw(IRenderer& renderer) const override;
 
 private:
     RenderableTiles& m_renderableTiles;
-    bool& m_flashIcon;
+    const bool& m_flashIcon;
 };
 

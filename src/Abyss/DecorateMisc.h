@@ -25,18 +25,18 @@
 #include "EgaGraphAbyss.h"
 #include "AudioRepositoryAbyss.h"
 
-const uint16_t actorIdNone = 0;
-const uint16_t actorIdTomb1 = 1;
-const uint16_t actorIdTomb2 = 2;
-const uint16_t actorIdTomb3 = 3;
-const uint16_t actorIdExplodingWall = 4;
-const uint16_t actorIdWarpPit = 5;
-const uint16_t actorIdWarpPortal1 = 6;
-const uint16_t actorIdWarpPortal2 = 7;
-const uint16_t actorIdWarpPortal3 = 8;
-const uint16_t actorIdWarpPortal4 = 9;
-const uint16_t actorIdWarpPortal5 = 10;
-const uint16_t actorIdPlayer = 11;
+constexpr uint16_t actorIdNone = 0;
+constexpr uint16_t actorIdTomb1 = 1;
+constexpr uint16_t actorIdTomb2 = 2;
+constexpr uint16_t actorIdTomb3 = 3;
+constexpr uint16_t actorIdExplodingWall = 4;
+constexpr uint16_t actorIdWarpPit = 5;
+constexpr uint16_t actorIdWarpPortal1 = 6;
+constexpr uint16_t actorIdWarpPortal2 = 7;
+constexpr uint16_t actorIdWarpPortal3 = 8;
+constexpr uint16_t actorIdWarpPortal4 = 9;
+constexpr uint16_t actorIdWarpPortal5 = 10;
+constexpr uint16_t actorIdPlayer = 11;
 
 //
 // TOMBSTONE 1

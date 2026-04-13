@@ -28,7 +28,7 @@
 class IntroViewApocalypse : public IIntroView
 {
 public:
-    IntroViewApocalypse(IRenderer& renderer, const std::filesystem::path& path);
+    explicit IntroViewApocalypse(IRenderer& renderer, const std::filesystem::path& path);
     ~IntroViewApocalypse();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();

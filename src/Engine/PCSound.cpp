@@ -56,7 +56,7 @@ uint8_t PCSound::GetInverseFrequency(const uint32_t index) const
     return (m_inverseFrequency != nullptr && index < m_length) ? m_inverseFrequency[index] : 0;
 }
 
-uint8_t* PCSound::GetData()
+uint8_t* PCSound::GetData() const
 {
     return m_inverseFrequency;
 }

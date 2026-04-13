@@ -32,7 +32,7 @@ class EgaGraph;
 class IntroViewAbyss : public IIntroView
 {
 public:
-    IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path);
+    explicit IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path);
     ~IntroViewAbyss();
     void DrawIntroduction(const uint32_t timeStamp);
     void DrawRequestDifficultyLevel();

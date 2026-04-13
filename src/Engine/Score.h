@@ -26,7 +26,7 @@ class Score
 {
 public:
     Score();
-    ~Score();
+    ~Score() = default;
 
     const uint32_t GetPoints() const;
     void SetPoints(const uint32_t points);

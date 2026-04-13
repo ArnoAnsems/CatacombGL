@@ -77,7 +77,7 @@ void UpdatePlayerInput(const SDL_Window* const window, const GameController& gam
 	}
 
 	const uint32_t timestamp = SDL_GetTicks();
-	const uint32_t minimumTimeBetweenMouseUpdates = 10u; // in milliseconds
+	constexpr uint32_t minimumTimeBetweenMouseUpdates = 10u; // in milliseconds
 	if (timestamp >= input.GetMouseUpdateTick() + minimumTimeBetweenMouseUpdates)
 	{
 		int x = 0;

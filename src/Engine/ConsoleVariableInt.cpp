@@ -31,11 +31,6 @@ ConsoleVariableInt::ConsoleVariableInt(
 
 }
 
-ConsoleVariableInt::~ConsoleVariableInt()
-{
-
-}
-
 const std::string ConsoleVariableInt::Serialize() const
 {
     return std::to_string(m_value);

@@ -58,7 +58,7 @@ typedef struct egaGraphStaticData
 class EgaGraph
 {
 public:
-    EgaGraph(const egaGraphStaticData& staticData, const std::filesystem::path& path, IRenderer& renderer);
+    explicit EgaGraph(const egaGraphStaticData& staticData, const std::filesystem::path& path, IRenderer& renderer);
     ~EgaGraph();
 
     Picture* GetPicture(const uint16_t index);

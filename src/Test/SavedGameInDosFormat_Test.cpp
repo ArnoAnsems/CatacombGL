@@ -15,6 +15,7 @@
 
 #include <gtest/gtest.h>
 #include "../Engine/SavedGameInDosFormat.h"
+#include "../Engine/FileChunk.h"
 #include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
 #include "../Abyss/SavedGameInDosFormatConfigAbyss.h"
 #include "../Armageddon/SavesGameInDosFormatConfigArmageddon.h"

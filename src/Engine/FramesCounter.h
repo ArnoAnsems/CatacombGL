@@ -25,7 +25,7 @@ class FramesCounter
 {
 public:
     FramesCounter();
-    ~FramesCounter();
+    ~FramesCounter() = default;
 
     void AddFrame(const uint32_t timeStamp);
     uint32_t GetFramesPerSecond() const;

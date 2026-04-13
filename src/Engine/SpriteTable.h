@@ -20,12 +20,14 @@
 //
 #pragma once
 
-#include "FileChunk.h"
+#include <stdint.h>
+
+class FileChunk;
 
 class SpriteTable
 {
 public:
-    SpriteTable(FileChunk* decompressedChunk);
+    explicit SpriteTable(FileChunk* decompressedChunk);
     ~SpriteTable();
 
     uint16_t GetWidth(const uint16_t index);

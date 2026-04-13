@@ -34,7 +34,7 @@ public:
         MenuHeaderSaveGame
     };
 
-    GuiPageFrameCat3D(
+    explicit GuiPageFrameCat3D(
         const PlayerInput& playerInput,
         EgaGraph& egaGraph,
         const MenuHeader menuHeader,

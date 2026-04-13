@@ -28,12 +28,12 @@ public:
         const std::string itemNameInConfigAlt;
     } EnumItem;
 
-    ConsoleVariableEnum(
+    explicit ConsoleVariableEnum(
         const std::string& nameInMenu,
         const std::string& nameInConfigFile,
         const std::vector<EnumItem>& items,
         const uint8_t defaultItemIndex);
-    ~ConsoleVariableEnum();
+    ~ConsoleVariableEnum() = default;
 
     const std::string Serialize() const override;
     void Deserialize(const std::string& str) override;

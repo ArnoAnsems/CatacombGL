@@ -18,7 +18,9 @@
 // Based on GELIB.C from the Catacomb Abyss source code, with modifications from the Reflection Keen source port.
 
 #include "Shape.h"
+#include "Picture.h"
 #include "IRenderer.h"
+#include "Logging.h"
 #include "Decompressor.h"
 #include "FileChunk.h"
 #include "Uint16Utility.h"

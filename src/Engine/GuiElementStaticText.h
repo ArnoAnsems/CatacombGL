@@ -20,12 +20,12 @@
 class GuiElementStaticText : public GuiElementBase
 {
 public:
-    GuiElementStaticText(
+    explicit GuiElementStaticText(
         const PlayerInput& playerInput,
         const std::string& text,
         const egaColor color,
         RenderableText& renderableText);
-    ~GuiElementStaticText() override;
+    ~GuiElementStaticText() override = default;
 
     virtual const GuiEvent& ProcessInput() override;
     virtual void Draw(IRenderer& renderer) const override;
