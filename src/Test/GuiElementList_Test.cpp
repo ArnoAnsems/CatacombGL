@@ -18,6 +18,8 @@
 #include "../Engine/GuiElementList.h"
 #include "../Engine/GuiElementButton.h"
 #include "../Engine/DefaultFont.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/RenderableText.h"
 #include "RendererStub.h"
 
 class GuiElementList_Test : public Gui_TestBase

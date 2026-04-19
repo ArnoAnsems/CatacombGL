@@ -15,6 +15,8 @@
 
 #include "GuiElementHighScores.h"
 #include <SDL_keyboard.h>
+#include "HighScores.h"
+#include "PlayerInput.h"
 
 GuiElementHighScores::GuiElementHighScores(
     const PlayerInput& playerInput,

@@ -21,11 +21,11 @@
 //
 #pragma once
 
-#include "Font.h"
-#include "IRenderer.h"
+#include <stdint.h>
 
-static Font* defaultFontHeight7 = nullptr;
-static Font* defaultFontHeight10 = nullptr;
+class Font;
+class IRenderer;
+class TextureAtlas;
 
 class DefaultFont
 {

@@ -16,6 +16,7 @@
 #include "stdlib.h"
 #include "math.h"
 #include "AdlibSound.h"
+#include "FileChunk.h"
 
 AdlibSound::AdlibSound() :
     m_length(0),
@@ -30,7 +31,7 @@ AdlibSound::AdlibSound() :
     }
 }
 
-AdlibSound::AdlibSound(const FileChunk* decompressedChunk) :
+AdlibSound::AdlibSound(const FileChunk& decompressedChunk) :
     m_length(0),
     m_priority(0),
     m_instruments{},
@@ -38,20 +39,22 @@ AdlibSound::AdlibSound(const FileChunk* decompressedChunk) :
     m_data(nullptr)
 {
     constexpr uint32_t headerSize = sizeof(m_length) + sizeof(m_priority) + sizeof(m_instruments) + sizeof(m_octave);
-    if (decompressedChunk->GetSize() > headerSize)
+    const uint32_t decompressedSize = decompressedChunk.GetSize();
+    if (decompressedSize > headerSize)
     {
-        m_length = *(uint32_t*)&decompressedChunk->GetChunk()[0];
-        m_length = (m_length > decompressedChunk->GetSize() - headerSize) ? decompressedChunk->GetSize() - headerSize : m_length;
-        m_priority = *(uint16_t*)&decompressedChunk->GetChunk()[4];
+        const uint8_t* const decompressedData = decompressedChunk.GetChunk();
+        m_length = *(uint32_t*)&decompressedData[0];
+        m_length = (m_length > decompressedSize - headerSize) ? decompressedSize - headerSize : m_length;
+        m_priority = *(uint16_t*)&decompressedData[4];
         for (uint8_t j = 0; j < 16; j++)
         {
-            m_instruments[j] = *(uint8_t*)&decompressedChunk->GetChunk()[6 + j];
+            m_instruments[j] = *(uint8_t*)&decompressedData[6 + j];
         }
-        m_octave = *(uint8_t*)&decompressedChunk->GetChunk()[22];
+        m_octave = *(uint8_t*)&decompressedData[22];
         m_data = new uint8_t[m_length];
         for (uint32_t i = 0; i < m_length; i++)
         {
-            m_data[i] = decompressedChunk->GetChunk()[i + headerSize];
+            m_data[i] = decompressedData[i + headerSize];
         }
     }
 }

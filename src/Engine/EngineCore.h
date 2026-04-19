@@ -21,28 +21,29 @@
 #pragma once
 
 #include "IGame.h"
-#include "Shape.h"
 #include "Radar.h"
 #include "PlayerInventory.h"
 #include "PlayerActions.h"
 #include "FramesCounter.h"
-#include "ControlsMap.h"
-#include "PlayerInput.h"
-#include "ConfigurationSettings.h"
-#include "ExtraMenu.h"
 #include "GameTimer.h"
-#include "ISystem.h"
-#include "Logging.h"
 #include "Score.h"
 #include "FadeEffect.h"
 #include "AutoMap.h"
 #include "ManaBar.h"
 #include "RenderableOverscanBorder.h"
 #include "OverscanBorder.h"
+#include "Renderable3DScene.h"
+#include "RenderableAutoMapIso.h"
+#include "RenderableAutoMapTopDown.h"
 #include "RenderableLevelStatistics.h"
 #include "LevelStatistics.h"
 #include "SavedGamesInDosFormat.h"
 #include <filesystem>
+
+class IMenu;
+class ISystem;
+class ConfigurationSettings;
+class PlayerInput;
 
 class EngineCore
 {

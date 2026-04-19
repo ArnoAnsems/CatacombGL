@@ -22,20 +22,18 @@
 //
 #pragma once
 
-#include "Picture.h"
 #include "EgaColor.h"
-#include "ViewPorts.h"
-#include "RenderableText.h"
-#include "RenderableTiles.h"
-#include "RenderableSprites.h"
-#include "Renderable3DWalls.h"
-#include "Renderable3DTiles.h"
-#include "RenderableAutoMapTopDown.h"
-#include "RenderableAutoMapIso.h"
-#include "Renderable3DScene.h"
 #include <vector>
 #include <map>
 #include <string>
+#include <stdint.h>
+
+class Picture;
+class RenderableTiles;
+class RenderableText;
+class Renderable3DScene;
+class RenderableAutoMapTopDown;
+class RenderableAutoMapIso;
 
 class IRenderer
 {

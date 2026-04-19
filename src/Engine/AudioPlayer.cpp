@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "AudioPlayer.h"
-#include <stdlib.h>
+#include "AudioRepository.h"
 #include "../../ThirdParty/ReflectionHLE/id_sd.h"
 
 AudioPlayer::AudioPlayer(AudioRepository* const audioRepository) :

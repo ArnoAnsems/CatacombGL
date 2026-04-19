@@ -17,6 +17,7 @@
 #include "SavedGameInDosFormat_Data.h"
 #include "../Engine/SavedGamesInDosFormat.h"
 #include "../Engine/FileChunk.h"
+#include "../Engine/SavedGameInDosFormat.h"
 #include "../Catacomb3D/SavedInGameInDosFormatConfigCatacomb3D.h"
 #include <cstring>
 

@@ -14,8 +14,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "SavedGameInDosFormat.h"
 #include <vector>
+#include <string>
+#include "SavedGameInDosFormatConfig.h"
+
+class SavedGameInDosFormat;
+class FileChunk;
 
 class SavedGamesInDosFormat
 {

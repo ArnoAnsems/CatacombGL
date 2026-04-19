@@ -15,6 +15,7 @@
 
 #include "HighScores.h"
 #include "Logging.h"
+#include "RenderableText.h"
 #include <cstring>
 #include <fstream>
 

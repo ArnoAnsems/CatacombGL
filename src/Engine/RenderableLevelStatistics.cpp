@@ -16,6 +16,7 @@
 #include "RenderableLevelStatistics.h"
 #include "LevelStatistics.h"
 #include "IRenderer.h"
+#include "RenderableText.h"
 
 RenderableLevelStatistics::RenderableLevelStatistics(const LevelStatistics& levelStatistics) :
     m_levelStatistics(levelStatistics)

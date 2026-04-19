@@ -15,6 +15,7 @@
 #pragma once
 
 #include "GuiElementEnumSelectionCat3D.h"
+#include <vector>
 
 class GuiElementEnumSelectionCat3DRadio : public GuiElementEnumSelectionCat3D
 {

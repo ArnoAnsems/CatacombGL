@@ -14,6 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementBoolSelectionCat3D.h"
+#include "../Engine/ConsoleVariableBool.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 
 GuiElementBoolSelectionCat3D::GuiElementBoolSelectionCat3D(
     const PlayerInput& playerInput,

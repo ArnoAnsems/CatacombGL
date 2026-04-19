@@ -16,7 +16,8 @@
 
 #include "GuiElementBase.h"
 #include "ControlsMap.h"
-#include "RenderableText.h"
+
+class RenderableText;
 
 class GuiElementBindGameController : public GuiElementBase
 {

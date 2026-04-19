@@ -23,6 +23,8 @@
 #include "PictureTable.h"
 #include "SpriteTable.h"
 #include "Uint16Utility.h"
+#include "Logging.h"
+#include "TextureAtlas.h"
 
 #include <cstring>
 #include <filesystem>

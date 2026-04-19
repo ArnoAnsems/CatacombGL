@@ -14,11 +14,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Finder.h"
+#include "../Engine/ConfigurationSettings.h"
 #include "../Engine/Logging.h"
-#include <cstddef>
-#include <cstdint>
-#include <cstring>
-#include <filesystem>
+#include "../Abyss/GameDetectionAbyss.h"
+#include "../Armageddon/GameDetectionArmageddon.h"
+#include "../Apocalypse/GameDetectionApocalypse.h"
+#include "../Catacomb3D/GameDetectionCatacomb3D.h"
 
 #ifdef _WIN32
 #include <shlwapi.h>

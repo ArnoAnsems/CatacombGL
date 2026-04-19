@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ManaBar.h"
+#include "IRenderer.h"
 
 const uint32_t maxMana = 2500u;
 const uint32_t manaRequiredForOneShot = 500u;

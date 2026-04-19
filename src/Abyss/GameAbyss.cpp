@@ -17,9 +17,14 @@
 #include "GameMapsAbyss.h"
 #include "IntroViewAbyss.h"
 #include "SavedGameInDosFormatConfigAbyss.h"
+#include "../Engine/Actor.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
 #include "../Engine/Shape.h"
+#include "../Engine/RenderableTiles.h"
+#include "../Engine/HelpPages.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/AudioPlayer.h"
 
 // Decorate
 #include "DecorateAll.h"

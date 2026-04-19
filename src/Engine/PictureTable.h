@@ -20,7 +20,9 @@
 //
 #pragma once
 
-#include "FileChunk.h"
+#include <stdint.h>
+
+class FileChunk;
 
 class PictureTable
 {

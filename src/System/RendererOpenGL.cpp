@@ -15,11 +15,19 @@
 
 #include "RendererOpenGL.h"
 #include "OpenGLUtilityLocal.h"
+#include "../Engine/Font.h"
 #include "../Engine/Logging.h"
 #include "../Engine/Console.h"
 #include "../Engine/OverscanBorder.h"
+#include "../Engine/Picture.h"
 #include "../Engine/ViewPorts.h"
 #include "../Engine/Uint16Utility.h"
+#include "../Engine/TextureAtlas.h"
+#include "../Engine/Renderable3DScene.h"
+#include "../Engine/Renderable3DTiles.h"
+#include "../Engine/RenderableAutoMapTopDown.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 
 #ifdef _WIN32
 #include <windows.h>

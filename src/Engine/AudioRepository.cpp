@@ -18,6 +18,7 @@
 #include "PCSound.h"
 #include <cstring>
 #include <fstream>
+#include "Logging.h"
 
 namespace fs = std::filesystem;
 
@@ -120,7 +121,7 @@ AdlibSound* AudioRepository::GetAdlibSound(const uint16_t index)
         uint32_t compressedSize = GetChunkSize(index + m_staticData.lastSound) - sizeof(uint32_t);
         uint32_t uncompressedSize = *(uint32_t*)compressedSound;
         FileChunk* soundChunk = m_huffman->Decompress(&compressedSound[sizeof(uint32_t)], compressedSize, uncompressedSize);
-        m_adlibSounds[index] = new AdlibSound(soundChunk);
+        m_adlibSounds[index] = new AdlibSound(*soundChunk);
         delete soundChunk;
     }
 

@@ -15,6 +15,7 @@
 
 #include "PlayerInventory.h"
 #include "IGame.h"
+#include "SavedGameInDosFormat.h"
 
 PlayerInventory::PlayerInventory(IGame& game) :
     m_game(game),

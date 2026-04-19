@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementStaticText.h"
+#include "RenderableText.h"
 
 GuiElementStaticText::GuiElementStaticText(
     const PlayerInput& playerInput,

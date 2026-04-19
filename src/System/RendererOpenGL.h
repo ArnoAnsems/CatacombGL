@@ -14,13 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "../Engine/Decompressor.h"
-#include "../Engine/EgaColor.h"
-#include "../Engine/FileChunk.h"
-#include "../Engine/Font.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/OpenGLFrameBuffer.h"
-#include "../Engine/Picture.h"
+#include "../Engine/RenderableAutoMapIso.h"
 
 #ifdef _WIN32
 #include <windows.h>

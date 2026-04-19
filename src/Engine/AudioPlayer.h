@@ -14,7 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "AudioRepository.h"
+#include <stdint.h>
+
+class AudioRepository;
 
 class AudioPlayer
 {

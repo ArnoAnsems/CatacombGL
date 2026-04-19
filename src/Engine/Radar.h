@@ -22,9 +22,9 @@
 
 #include "EgaColor.h"
 #include <stdint.h>
-#include "PlayerInventory.h"
 
 class Actor;
+class PlayerInventory;
 
 typedef struct radarBlipStruct
 {

@@ -18,6 +18,7 @@
 // https://github.com/CatacombGames/CatacombApocalypse/blob/master/LZHUF.C
 
 #include "Decompressor.h"
+#include "FileChunk.h"
 #include <string.h>
 #include <cstring>
 

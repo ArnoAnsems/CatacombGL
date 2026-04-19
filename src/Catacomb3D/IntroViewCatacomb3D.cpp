@@ -15,6 +15,8 @@
 
 #include "IntroViewCatacomb3D.h"
 #include "../Engine/DefaultFont.h"
+#include "../Engine/EgaGraph.h"
+#include "../Engine/HighScores.h"
 #include "EgaGraphCatacomb3D.h"
 
 namespace fs = std::filesystem;

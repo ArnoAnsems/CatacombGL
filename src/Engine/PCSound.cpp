@@ -16,6 +16,7 @@
 #include "stdlib.h"
 #include "math.h"
 #include "PCSound.h"
+#include "FileChunk.h"
 
 PCSound::PCSound(const FileChunk* decompressedChunk) :
     m_length(0),

@@ -17,6 +17,8 @@
 #include <fstream>
 #include "Decompressor.h"
 #include "SavedGameInDosFormat.h"
+#include "Logging.h"
+#include "FileChunk.h"
 
 namespace fs = std::filesystem;
 

@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "LevelStatistics.h"
+#include "Level.h"
+#include "Actor.h"
 #include <cstring>
 
 LevelStatistics::LevelStatistics() :

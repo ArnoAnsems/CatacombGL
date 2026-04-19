@@ -16,8 +16,18 @@
 #include "Catacomb3DMenu.h"
 #include "AudioRepositoryCatacomb3D.h"
 #include "../Engine/DefaultFont.h"
+#include "../Engine/Font.h"
 #include "../Engine/IRenderer.h"
+#include "../Engine/TextureAtlas.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 #include "../Engine/GuiElementList.h"
+#include "../Engine/GuiElementHighScores.h"
+#include "../Engine/GuiPage.h"
+#include "../Engine/EgaGraph.h"
+#include "../Engine/ConfigurationSettings.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/HighScores.h"
 #include "GuiElementBoolSelectionCat3D.h"
 #include "GuiElementEnumSelectionCat3D.h"
 #include "GuiElementIntSelectionCat3D.h"
@@ -27,9 +37,8 @@
 #include "GuiElementSaveSlotEditableCat3D.h"
 #include "GuiElementButtonCat3D.h"
 #include "GuiElementEnumSelectionCat3DRadio.h"
-#include "../Engine/GuiElementHighScores.h"
-#include "../Engine/GuiPage.h"
-// #include <SDL_keyboard.h>
+#include "SkullNBones.h"
+#include "EgaGraphCatacomb3D.h"
 
 const uint16_t browseMenuSound = 0;
 

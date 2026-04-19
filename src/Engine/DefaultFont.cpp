@@ -15,6 +15,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "DefaultFont.h"
+#include "Font.h"
+#include "IRenderer.h"
+#include "TextureAtlas.h"
 
 // Characters 0 to 127 follow the ASCII encoding and are based on the font from the games.
 // Characters 128 to 255 are additional characters from the Latin alphabet, following the Windows-1252 encoding.
@@ -5360,12 +5363,14 @@ constexpr uint8_t defaultFontWidthHeight7[256] =
 
 const Font* DefaultFont::Get(IRenderer& renderer, const uint16_t lineHeight)
 {
+    static Font* defaultFontHeight10 = nullptr;
     if (lineHeight == 10 && defaultFontHeight10 == nullptr)
     {
         const TextureAtlas* const textureAtlas = CreateTextureAtlasForFont(renderer, defaultFontDataHeight10, 10);
         defaultFontHeight10 = new Font(defaultFontWidthHeight10, textureAtlas);
     }
 
+    static Font* defaultFontHeight7 = nullptr;
     if (lineHeight == 7 && defaultFontHeight7 == nullptr)
     {
         const TextureAtlas* const textureAtlas = CreateTextureAtlasForFont(renderer, defaultFontDataHeight7, 7);

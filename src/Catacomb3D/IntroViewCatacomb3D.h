@@ -21,11 +21,12 @@
 #pragma once
 
 #include "../Engine/IIntroView.h"
-#include "../Engine/EgaGraph.h"
-#include "../Engine/HighScores.h"
 #include "../Engine/FadeEffect.h"
 #include <filesystem>
 #include <string>
+
+class EgaGraph;
+class HighScores;
 
 class IntroViewCatacomb3D : public IIntroView
 {

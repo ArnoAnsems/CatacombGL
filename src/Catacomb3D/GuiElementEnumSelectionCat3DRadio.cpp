@@ -14,6 +14,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementEnumSelectionCat3DRadio.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/ConsoleVariableEnum.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 
 GuiElementEnumSelectionCat3DRadio::GuiElementEnumSelectionCat3DRadio(
     const PlayerInput& playerInput,

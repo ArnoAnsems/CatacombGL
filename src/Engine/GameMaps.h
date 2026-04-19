@@ -23,11 +23,10 @@
 #include <filesystem>
 #include <stdint.h>
 #include <vector>
-#include "FileChunk.h"
 #include "Level.h"
-#include "Logging.h"
 
 class SavedGameInDosFormat;
+class FileChunk;
 
 constexpr uint16_t wallSolid = 1;
 constexpr uint16_t wallSpecial = 2;

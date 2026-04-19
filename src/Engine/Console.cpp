@@ -14,7 +14,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Console.h"
+#include "Logging.h"
+#include "IRenderer.h"
+#include "PlayerInput.h"
 #include "DefaultFont.h"
+#include "RenderableText.h"
 #include <SDL_timer.h>
 
 Console::Console(const std::string& label) :

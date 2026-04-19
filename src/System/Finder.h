@@ -13,21 +13,16 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "../Engine/ConfigurationSettings.h"
+#pragma once
+
 #include "../Engine/GameDetection.h"
 #include "../Engine/GameId.h"
-
-#include "../Abyss/GameDetectionAbyss.h"
-#include "../Armageddon/GameDetectionArmageddon.h"
-#include "../Apocalypse/GameDetectionApocalypse.h"
-#include "../Catacomb3D/GameDetectionCatacomb3D.h"
-
-#include <cstddef>
-#include <cstdint>
+#include <stdint.h>
 #include <string>
 #include <map>
-#include <vector>
 #include <filesystem>
+
+class ConfigurationSettings;
 
 class Finder
 {

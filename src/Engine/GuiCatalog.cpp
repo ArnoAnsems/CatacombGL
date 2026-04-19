@@ -14,6 +14,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiCatalog.h"
+#include "Shape.h"
+#include "IRenderer.h"
+#include "PlayerInput.h"
+#include "Picture.h"
 
 namespace fs = std::filesystem;
 

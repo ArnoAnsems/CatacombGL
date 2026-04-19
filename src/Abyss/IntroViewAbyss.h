@@ -21,12 +21,12 @@
 #pragma once
 
 #include "../Engine/IIntroView.h"
-#include "../Engine/Shape.h"
 #include "../Engine/GameId.h"
 #include "../Engine/FadeEffect.h"
 #include <filesystem>
 #include <string>
 
+class Shape;
 class EgaGraph;
 
 class IntroViewAbyss : public IIntroView

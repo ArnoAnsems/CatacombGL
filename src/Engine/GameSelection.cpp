@@ -14,6 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #include "GameSelection.h"
 #include "DefaultFont.h"
+#include "IRenderer.h"
+#include "RenderableText.h"
+#include "ViewPorts.h"
 
 GameSelection::GameSelection(IRenderer& renderer) :
     m_renderer(renderer)

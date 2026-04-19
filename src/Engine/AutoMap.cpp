@@ -14,7 +14,14 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "AutoMap.h"
+#include "Actor.h"
+#include "Logging.h"
+#include "IRenderer.h"
+#include "PlayerInput.h"
+#include "EgaGraph.h"
 #include "LevelLocationNames.h"
+#include "ConfigurationSettings.h"
+#include "RenderableAutoMapIso.h"
 
 AutoMap::AutoMap() :
     m_originX(0.0f),

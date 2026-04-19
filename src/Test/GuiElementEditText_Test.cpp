@@ -17,6 +17,8 @@
 #include "Gui_TestBase.h"
 #include "../Engine/GuiElementEditText.h"
 #include "../Engine/DefaultFont.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/RenderableText.h"
 #include "RendererStub.h"
 
 class GuiElementEditText_Test : public Gui_TestBase

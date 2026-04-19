@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "PlayerActions.h"
+#include "ManaBar.h"
 
 static constexpr int32_t nukeDelay = 667; // ms
 static constexpr int32_t maxBolts = 10;

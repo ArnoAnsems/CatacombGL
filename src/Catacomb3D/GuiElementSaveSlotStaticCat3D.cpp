@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementSaveSlotStaticCat3D.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/IRenderer.h"
 
 GuiElementSaveSlotStaticCat3D::GuiElementSaveSlotStaticCat3D(
     const PlayerInput& playerInput,

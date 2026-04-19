@@ -14,6 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementSaveSlotEditableCat3D.h"
+#include "GuiPageFrameCat3D.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/IRenderer.h"
 
 GuiElementSaveSlotEditableCat3D::GuiElementSaveSlotEditableCat3D(
     const PlayerInput& playerInput,

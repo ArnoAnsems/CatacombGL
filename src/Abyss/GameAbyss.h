@@ -21,15 +21,16 @@
 #pragma once
 
 #include "../Engine/IGame.h"
-#include "../Engine/IRenderer.h"
-#include "../Engine/HelpPages.h"
-#include "../Engine/Logging.h"
+#include "../Engine/ManaBar.h"
 #include <map>
 #include "SavedGameConverterAbyss.h"
 #include "GameMapsAbyssV112.h"
 #include "DecorateV112.h"
 
 class Shape;
+class HelpPages;
+class RenderableText;
+class RenderableTiles;
 
 class GameAbyss: public IGame
 {

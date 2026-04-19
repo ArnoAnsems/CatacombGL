@@ -21,10 +21,11 @@
 
 #include <map>
 #include "ViewPorts.h"
-#include "Picture.h"
 #include "RenderableText.h"
 #include "Renderable3DTiles.h"
 #include "RenderableTiles.h"
+
+class Picture;
 
 class RenderableAutoMapTopDown
 {

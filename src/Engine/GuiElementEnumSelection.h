@@ -14,9 +14,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
+#include <string>
 #include "GuiElementBase.h"
-#include "ConsoleVariableEnum.h"
-#include "RenderableText.h"
+
+class ConsoleVariableEnum;
+class RenderableText;
+class PlayerInput;
 
 class GuiElementEnumSelection : public GuiElementBase
 {

@@ -14,9 +14,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "PlayerInput.h"
-#include "IRenderer.h"
+#include <stdint.h>
+#include <string>
 #include "EgaColor.h"
+
+class PlayerInput;
+class IRenderer;
 
 constexpr uint8_t GuiActionNone = 0;
 constexpr uint8_t GuiActionKeyBinding = 1;

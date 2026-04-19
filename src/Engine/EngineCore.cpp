@@ -16,10 +16,24 @@
 
 #include "EngineCore.h"
 #include "../../ThirdParty/ReflectionHLE/id_sd.h"
+#include "Actor.h"
+#include "ControlsMap.h"
 #include "DefaultFont.h"
 #include "LevelLocationNames.h"
+#include "EgaGraph.h"
+#include "GameMaps.h"
+#include "IIntroView.h"
+#include "AudioPlayer.h"
+#include "IMenu.h"
+#include "IRenderer.h"
+#include "ISystem.h"
 #include "Macros.h"
 #include "RenderableTiles.h"
+#include "Picture.h"
+#include "SavedGameInDosFormat.h"
+#include "ConfigurationSettings.h"
+#include "PlayerInput.h"
+#include "Logging.h"
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -1565,8 +1579,8 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         else
         {
             Chase(actor, true, ChasePlayer);
-            break;
         }
+        break;
     }
     case ActionRunAway:
     {

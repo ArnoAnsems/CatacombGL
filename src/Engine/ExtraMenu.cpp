@@ -14,6 +14,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "ExtraMenu.h"
+#include "PlayerInput.h"
+#include "AudioPlayer.h"
+#include "ConfigurationSettings.h"
+#include "IRenderer.h"
+#include "EgaGraph.h"
 #include "DefaultFont.h"
 #include "GuiElementBase.h"
 #include "GuiElementBoolSelection.h"
@@ -25,6 +30,7 @@
 #include "GuiElementBindGameController.h"
 #include "GuiElementButton.h"
 #include "GuiElementEditText.h"
+#include "GuiPage.h"
 #include "GuiCatalog.h"
 #include <SDL_keyboard.h>
 

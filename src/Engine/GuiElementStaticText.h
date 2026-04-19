@@ -14,8 +14,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
+#include <string>
 #include "GuiElementBase.h"
-#include "RenderableText.h"
+#include "EgaColor.h"
+
+class RenderableText;
 
 class GuiElementStaticText : public GuiElementBase
 {

@@ -14,8 +14,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
+#include <string>
 #include "GuiElementBase.h"
-#include "RenderableText.h"
+#include "SDL_keycode.h"
+
+class PlayerInput;
+class RenderableText;
 
 class GuiElementEditText : public GuiElementBase
 {

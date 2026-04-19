@@ -20,7 +20,14 @@
 #include "AudioRepositoryCatacomb3D.h"
 #include "DecorateAll.h"
 #include "SavedInGameInDosFormatConfigCatacomb3D.h"
+#include "../Engine/Actor.h"
 #include "../Engine/IRenderer.h"
+#include "../Engine/RenderableTiles.h"
+#include "../Engine/AudioPlayer.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/EgaGraph.h"
+#include "../Engine/Picture.h"
+#include "../Engine/HighScores.h"
 #include "Catacomb3DMenu.h"
 
 namespace fs = std::filesystem;

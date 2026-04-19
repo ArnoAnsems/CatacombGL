@@ -21,11 +21,11 @@
 #pragma once
 
 #include "../Engine/IGame.h"
-#include "../Engine/IRenderer.h"
-#include "../Engine/Logging.h"
 #include "SavedGameConverterApocalypse.h"
 #include <filesystem>
 #include <map>
+
+class RenderableTiles;
 
 class GameApocalypse : public IGame
 {

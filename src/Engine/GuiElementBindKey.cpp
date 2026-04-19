@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementBindKey.h"
+#include "RenderableText.h"
+#include "PlayerInput.h"
 
 GuiElementBindKey::GuiElementBindKey(
     const PlayerInput& playerInput,

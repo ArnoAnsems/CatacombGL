@@ -21,9 +21,10 @@
 #pragma once
 
 #include "../Engine/IIntroView.h"
-#include "../Engine/Shape.h"
 #include <filesystem>
 #include <string>
+
+class Shape;
 
 class IntroViewArmageddon : public IIntroView
 {

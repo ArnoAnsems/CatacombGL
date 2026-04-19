@@ -24,16 +24,19 @@
 #include "EgaColor.h"
 #include <string>
 #include <vector>
+#include <map>
 #include "PlayerInventory.h"
-#include "Actor.h"
-#include "IRenderer.h"
-#include "Logging.h"
-#include "Renderable3DScene.h"
-#include "RenderableAutoMapIso.h"
+#include "Decorate.h"
 
+class Actor;
 class EgaGraph;
 class SavedGameInDosFormat;
 class ISavedGameConverter;
+class RenderableAutoMapIso;
+class RenderableAutoMapIso;
+class RenderableAutoMapTopDown;
+class IRenderer;
+class Renderable3DScene;
 
 struct LevelInfo
 {

@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementBindKeyCat3D.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 
 GuiElementBindKeyCat3D::GuiElementBindKeyCat3D(
     const PlayerInput& playerInput,

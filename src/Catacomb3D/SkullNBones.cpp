@@ -16,6 +16,11 @@
 #include "SkullNBones.h"
 #include "EgaGraphCatacomb3D.h"
 #include "AudioRepositoryCatacomb3D.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/EgaGraph.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/AudioPlayer.h"
+#include "../Engine/RenderableText.h"
 
 constexpr float SkullMinX = 76.0f;
 constexpr float SkullMaxX = 228.0f;

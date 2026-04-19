@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "FadeEffect.h"
+#include "IRenderer.h"
+#include "Picture.h"
 
 FadeEffect::FadeEffect() :
     m_picture(nullptr),

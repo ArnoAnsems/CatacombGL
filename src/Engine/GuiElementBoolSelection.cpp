@@ -14,6 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementBoolSelection.h"
+#include "ConsoleVariableBool.h"
+#include "RenderableText.h"
+#include "PlayerInput.h"
 
 GuiElementBoolSelection::GuiElementBoolSelection(
     const PlayerInput& playerInput,

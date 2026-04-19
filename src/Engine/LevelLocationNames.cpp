@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "LevelLocationNames.h"
+#include "FileChunk.h"
 #include <string.h>
 
 const std::string UnnamedLocation = "";

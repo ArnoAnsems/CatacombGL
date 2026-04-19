@@ -15,8 +15,9 @@
 #pragma once
 
 #include "GuiElementBase.h"
-#include "ConsoleVariableBool.h"
-#include "RenderableText.h"
+
+class ConsoleVariableBool;
+class RenderableText;
 
 class GuiElementBoolSelection : public GuiElementBase
 {

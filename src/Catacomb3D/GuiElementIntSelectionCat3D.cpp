@@ -14,6 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementIntSelectionCat3D.h"
+#include "../Engine/ConsoleVariableInt.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 
 GuiElementIntSelectionCat3D::GuiElementIntSelectionCat3D(
     const PlayerInput& playerInput,

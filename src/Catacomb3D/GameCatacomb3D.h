@@ -21,13 +21,12 @@
 #pragma once
 
 #include "SavedGameConverterCatacomb3D.h"
-#include "../Engine/HighScores.h"
 #include "../Engine/IGame.h"
-#include "../Engine/IRenderer.h"
-#include "../Engine/Logging.h"
 #include <filesystem>
 #include <map>
 #include <memory>
+
+class HighScores;
 
 class GameCatacomb3D : public IGame
 {

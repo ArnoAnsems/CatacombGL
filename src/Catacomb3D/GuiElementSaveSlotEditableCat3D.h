@@ -15,7 +15,8 @@
 #pragma once
 
 #include "../Engine/GuiElementEditText.h"
-#include "GuiPageFrameCat3D.h"
+
+class GuiPageFrameCat3D;
 
 class GuiElementSaveSlotEditableCat3D : public GuiElementEditText
 {

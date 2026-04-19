@@ -15,7 +15,9 @@
 #pragma once
 
 #include "GuiElementBase.h"
-#include "HighScores.h"
+#include "SDL_keycode.h"
+
+class HighScores;
 
 class GuiElementHighScores : public GuiElementBase
 {

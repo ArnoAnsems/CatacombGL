@@ -15,6 +15,7 @@
 
 #include "Radar.h"
 #include "Actor.h"
+#include "PlayerInventory.h"
 #include <math.h>
 
 enum gemTypes

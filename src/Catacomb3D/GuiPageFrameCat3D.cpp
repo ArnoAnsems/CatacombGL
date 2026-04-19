@@ -15,6 +15,8 @@
 
 #include "GuiPageFrameCat3D.h"
 #include "EgaGraphCatacomb3D.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/RenderableText.h"
 
 GuiPageFrameCat3D::GuiPageFrameCat3D(
     const PlayerInput& playerInput,

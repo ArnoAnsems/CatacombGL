@@ -21,7 +21,9 @@
 #pragma once
 
 #include <stdint.h>
-#include "IRenderer.h"
+#include "EgaColor.h"
+
+class IRenderer;
 
 class ManaBar
 {

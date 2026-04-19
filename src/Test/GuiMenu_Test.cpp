@@ -19,6 +19,8 @@
 #include "../Engine/GuiElementButton.h"
 #include "../Engine/GuiPage.h"
 #include "../Engine/DefaultFont.h"
+#include "../Engine/PlayerInput.h"
+#include "../Engine/RenderableText.h"
 #include "RendererStub.h"
 
 class GuiMenu_Test : public Gui_TestBase

@@ -14,9 +14,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
+#include <string>
 #include "GuiElementBase.h"
-#include "ConsoleVariableInt.h"
-#include "RenderableText.h"
+
+class ConsoleVariableInt;
+class RenderableText;
 
 class GuiElementIntSelection : public GuiElementBase
 {

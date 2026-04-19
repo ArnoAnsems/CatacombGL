@@ -22,9 +22,11 @@
 
 #include <filesystem>
 #include <stdint.h>
-#include "PlayerInput.h"
-#include "IRenderer.h"
-#include "EgaGraph.h"
+#include <vector>
+
+class PlayerInput;
+class IRenderer;
+class EgaGraph;
 
 enum MenuCommand
 {

@@ -15,7 +15,13 @@
 #pragma once
 
 #include "../Engine/GuiElementBase.h"
-#include "../Engine/EgaGraph.h"
+#include <string>
+
+class EgaGraph;
+class GuiPageFrameCat3D;
+class IRenderer;
+class RenderableText;
+class Picture;
 
 class GuiPageFrameCat3D : public GuiElementBase
 {

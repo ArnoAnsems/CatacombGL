@@ -21,7 +21,9 @@
 //
 #pragma once
 
-#include "Level.h"
+#include <stdint.h>
+
+class Level;
 
 class LevelStatistics
 {

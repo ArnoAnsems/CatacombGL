@@ -14,9 +14,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "Logging.h"
-#include "IRenderer.h"
-#include "PlayerInput.h"
+#include <string>
+#include <stdint.h>
+
+class IRenderer;
+class PlayerInput;
 
 class Console
 {

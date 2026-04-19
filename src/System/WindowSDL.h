@@ -13,8 +13,7 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-#include "../Engine/ConfigurationSettings.h"
-#include "../Engine/IRenderer.h"
+#pragma once
 
 #ifdef _WIN32
 #include <windows.h>
@@ -26,6 +25,8 @@
 #include <GL/gl.h>
 #endif
 #include <SDL.h>
+
+class IRenderer;
 
 void CreateGLWindow(int width, int height, int /*bits*/, SDL_Window*& window, SDL_GLContext& context );
 GLvoid KillGLWindow(SDL_Window* window, SDL_GLContext& context);

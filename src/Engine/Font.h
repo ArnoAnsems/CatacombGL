@@ -20,8 +20,9 @@
 //
 #pragma once
 
-#include "FileChunk.h"
-#include "TextureAtlas.h"
+#include <stdint.h>
+
+class TextureAtlas;
 
 class Font
 {

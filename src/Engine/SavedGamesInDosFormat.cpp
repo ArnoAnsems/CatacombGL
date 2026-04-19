@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "SavedGamesInDosFormat.h"
+#include "SavedGameInDosFormat.h"
+#include "FileChunk.h"
 
 SavedGamesInDosFormat::SavedGamesInDosFormat(const SavedGameInDosFormatConfig& config) :
     m_config(config),

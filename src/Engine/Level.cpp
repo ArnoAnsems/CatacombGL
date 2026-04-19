@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Level.h"
+#include "Actor.h"
 #include "EgaGraph.h"
 #include "LevelLocationNames.h"
 #include "Logging.h"
@@ -26,6 +27,8 @@
 #include "SavedGameInDosFormat.h"
 #include "SavedGameInDosFormatLoader.h"
 #include "ISavedGameConverter.h"
+#include "IRenderer.h"
+#include "Picture.h"
 #include <cmath>
 #include <cstddef>
 

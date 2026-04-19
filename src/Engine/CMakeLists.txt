@@ -110,6 +110,7 @@ add_library( CatacombGL_Engine OBJECT
     LevelStatistics.h
     Logging.cpp
     Logging.h
+    Macros.h
     ManaBar.cpp
     ManaBar.h
     OpenGLBasic.cpp

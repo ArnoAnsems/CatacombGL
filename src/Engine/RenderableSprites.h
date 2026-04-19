@@ -20,9 +20,11 @@
 //
 #pragma once
 
-#include "Picture.h"
+#include <stdint.h>
 #include <vector>
 #include <string>
+
+class Picture;
 
 class RenderableSprites
 {

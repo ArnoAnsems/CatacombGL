@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "IntroViewArmageddon.h"
+#include "../Engine/IRenderer.h"
+#include "../Engine/Shape.h"
 
 namespace fs = std::filesystem;
 

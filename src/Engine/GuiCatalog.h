@@ -15,8 +15,10 @@
 #pragma once
 
 #include "GuiElementBase.h"
-#include "Shape.h"
 #include <filesystem>
+#include <vector>
+
+class Shape;
 
 class GuiCatalog : public GuiElementBase
 {

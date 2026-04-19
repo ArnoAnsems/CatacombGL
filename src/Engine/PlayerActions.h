@@ -22,7 +22,8 @@
 
 #include <stdint.h>
 #include "ControlsMap.h"
-#include "ManaBar.h"
+
+class ManaBar;
 
 class PlayerActions
 {

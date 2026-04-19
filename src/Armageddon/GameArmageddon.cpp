@@ -20,8 +20,12 @@
 #include "AudioRepositoryArmageddon.h"
 #include "DecorateAll.h"
 #include "SavesGameInDosFormatConfigArmageddon.h"
+#include "../Engine/Actor.h"
 #include "../Engine/IRenderer.h"
 #include "../Engine/ExtraMenu.h"
+#include "../Engine/RenderableTiles.h"
+#include "../Engine/AudioPlayer.h"
+#include "../Engine/PlayerInput.h"
 
 namespace fs = std::filesystem;
 

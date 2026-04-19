@@ -15,6 +15,9 @@
 
 #include "IntroViewAbyss.h"
 #include "../Engine/EgaGraph.h"
+#include "../Engine/Shape.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/IRenderer.h"
 
 IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path) :
     IIntroView(renderer),

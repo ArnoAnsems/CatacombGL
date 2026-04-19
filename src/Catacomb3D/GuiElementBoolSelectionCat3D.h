@@ -15,7 +15,8 @@
 #pragma once
 
 #include "../Engine/GuiElementBoolSelection.h"
-#include "../Engine/RenderableTiles.h"
+
+class RenderableTiles;
 
 class GuiElementBoolSelectionCat3D : public GuiElementBoolSelection
 {

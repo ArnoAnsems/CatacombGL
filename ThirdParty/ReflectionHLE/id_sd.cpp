@@ -18,6 +18,9 @@
 
 
 #include "id_sd.h"
+#include "../../src/Engine/FileChunk.h"
+#include "../../src/Engine/PCSound.h"
+#include "../../src/Engine/AdlibSound.h"
 
 extern "C" {
 #include "be_st.h"

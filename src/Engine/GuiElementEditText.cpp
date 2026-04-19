@@ -15,6 +15,8 @@
 
 #include "GuiElementEditText.h"
 #include <SDL_keyboard.h>
+#include "PlayerInput.h"
+#include "RenderableText.h"
 
 GuiElementEditText::GuiElementEditText(
     const PlayerInput& playerInput,

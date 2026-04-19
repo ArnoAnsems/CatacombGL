@@ -15,7 +15,8 @@
 #pragma once
 
 #include "../Engine/GuiElementEnumSelection.h"
-#include "../Engine/RenderableTiles.h"
+
+class RenderableTiles;
 
 class GuiElementEnumSelectionCat3D : public GuiElementEnumSelection
 {

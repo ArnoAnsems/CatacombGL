@@ -22,15 +22,19 @@
 #pragma once
 
 #include <stdint.h>
-#include "PlayerInput.h"
-#include "AudioPlayer.h"
-#include "ConfigurationSettings.h"
-#include "IRenderer.h"
-#include "EgaGraph.h"
+#include <vector>
+#include <string>
 #include "IMenu.h"
-#include "GuiPage.h"
 #include "GuiMenu.h"
+#include "RenderableText.h"
 #include "IGame.h"
+
+class AudioPlayer;
+class ConfigurationSettings;
+class PlayerInput;
+class EgaGraph;
+class SavedGamesInDosFormat;
+class IRenderer;
 
 class ExtraMenu: public IMenu
 {

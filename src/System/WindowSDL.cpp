@@ -15,6 +15,8 @@
 
 #include "WindowSDL.h"
 #include "RendererOpenGL.h"
+#include "../Engine/ConfigurationSettings.h"
+#include "../Engine/IRenderer.h"
 #include "../Engine/Logging.h"
 #include "../Engine/EngineCore.h"
 

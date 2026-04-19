@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "PictureTable.h"
+#include "FileChunk.h"
 
 PictureTable::PictureTable(const FileChunk& decompressedChunk) :
     m_count(static_cast<uint16_t>(decompressedChunk.GetSize() / 4)),

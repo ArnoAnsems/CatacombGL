@@ -21,8 +21,9 @@
 //
 #pragma once
 
-#include "IRenderer.h"
-#include "Logging.h"
+#include <stdint.h>
+
+class IRenderer;
 
 class IIntroView
 {

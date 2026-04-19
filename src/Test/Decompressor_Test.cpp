@@ -15,6 +15,7 @@
 
 #include <gtest/gtest.h>
 #include "../Engine/Decompressor.h"
+#include "../Engine/FileChunk.h"
 
 class Decompressor_Test : public ::testing::Test
 {

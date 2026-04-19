@@ -14,6 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementEnumSelectionCat3D.h"
+#include "../Engine/ConsoleVariableEnum.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 
 GuiElementEnumSelectionCat3D::GuiElementEnumSelectionCat3D(
     const PlayerInput& playerInput,

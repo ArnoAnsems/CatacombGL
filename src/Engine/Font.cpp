@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Font.h"
+#include "TextureAtlas.h"
 #include <cstring>
 
 Font::Font(const uint8_t width[256], const TextureAtlas* const textureAtlas) :

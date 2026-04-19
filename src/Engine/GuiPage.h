@@ -15,7 +15,7 @@
 #pragma once
 
 #include "GuiElementBase.h"
-#include "RenderableText.h"
+#include <vector>
 
 class GuiPage : public GuiElementBase
 {

@@ -14,6 +14,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementEnumSelection.h"
+#include "PlayerInput.h"
+#include "RenderableText.h"
+#include "ConsoleVariableEnum.h"
 
 GuiElementEnumSelection::GuiElementEnumSelection(
     const PlayerInput& playerInput,

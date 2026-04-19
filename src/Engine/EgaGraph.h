@@ -25,14 +25,14 @@
 #include <string>
 #include <vector>
 #include "Huffman.h"
-#include "IRenderer.h"
-#include "Logging.h"
 
 class Picture;
 class Font;
 class PictureTable;
 class SpriteTable;
 class LevelLocationNames;
+class IRenderer;
+class TextureAtlas;
 
 typedef struct egaGraphStaticData
 {

@@ -15,6 +15,7 @@
 
 #include <gtest/gtest.h>
 #include "../Engine/LevelLocationNames.h"
+#include "../Engine/FileChunk.h"
 
 class LevelLocationNames_Test : public ::testing::Test
 {

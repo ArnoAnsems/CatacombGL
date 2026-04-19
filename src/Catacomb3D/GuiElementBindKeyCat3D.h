@@ -15,7 +15,8 @@
 #pragma once
 
 #include "../Engine/GuiElementBindKey.h"
-#include "../Engine/RenderableTiles.h"
+
+class RenderableTiles;
 
 class GuiElementBindKeyCat3D : public GuiElementBindKey
 {

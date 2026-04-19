@@ -15,7 +15,8 @@
 #pragma once
 
 #include "../Engine/GuiElementButton.h"
-#include "../Engine/RenderableTiles.h"
+
+class RenderableTiles;
 
 class GuiElementButtonCat3D : public GuiElementButton
 {

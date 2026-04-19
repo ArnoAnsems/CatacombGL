@@ -14,7 +14,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "IRenderer.h"
+#include <stdint.h>
+
+class Picture;
+class IRenderer;
 
 class FadeEffect
 {

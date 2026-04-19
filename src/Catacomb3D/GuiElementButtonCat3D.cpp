@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementButtonCat3D.h"
+#include "../Engine/RenderableText.h"
+#include "../Engine/RenderableTiles.h"
 
 GuiElementButtonCat3D::GuiElementButtonCat3D(
     const PlayerInput& playerInput,

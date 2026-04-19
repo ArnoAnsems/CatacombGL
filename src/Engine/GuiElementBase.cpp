@@ -14,6 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementBase.h"
+#include "PlayerInput.h"
+#include "IRenderer.h"
 
 GuiElementBase::GuiElementBase(const PlayerInput& playerInput) :
     m_playerInput(playerInput),

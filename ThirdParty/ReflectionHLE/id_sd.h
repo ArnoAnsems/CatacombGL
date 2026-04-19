@@ -19,9 +19,9 @@
 
 #include <stdint.h>
 
-#include "../../src/Engine/PCSound.h"
-#include "../../src/Engine/AdlibSound.h"
-
+class FileChunk;
+class AdlibSound;
+class PCSound;
 
 #ifndef	__ID_SD__
 #define	__ID_SD__

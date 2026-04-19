@@ -19,7 +19,6 @@
 #include <vector>
 #include <string>
 #include "Huffman.h"
-#include "Logging.h"
 
 class AdlibSound;
 class PCSound;

@@ -14,13 +14,14 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "Logging.h"
-#include "IRenderer.h"
-#include "PlayerInput.h"
-#include "EgaGraph.h"
 #include "Level.h"
-#include "ConfigurationSettings.h"
-#include "RenderableAutoMapIso.h"
+#include "ViewPorts.h"
+
+class PlayerInput;
+class EgaGraph;
+class RenderableAutoMapIso;
+class RenderableAutoMapTopDown;
+class IRenderer;
 
 class AutoMap
 {

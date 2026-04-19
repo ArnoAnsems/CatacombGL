@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GameStub.h"
+#include "../Engine/Actor.h"
 
 void GameStub::SpawnActors(Level* /*level*/, const DifficultyLevel /*difficultyLevel*/)
 {

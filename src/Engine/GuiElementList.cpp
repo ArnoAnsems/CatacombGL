@@ -14,6 +14,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementList.h"
+#include "Picture.h"
+#include "PlayerInput.h"
+#include "IRenderer.h"
+#include <string>
 
 GuiElementList::GuiElementList(
     const PlayerInput& playerInput,

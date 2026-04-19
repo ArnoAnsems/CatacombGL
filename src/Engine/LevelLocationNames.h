@@ -21,9 +21,11 @@
 //
 #pragma once
 
-#include "FileChunk.h"
 #include <string>
 #include <vector>
+#include <stdint.h>
+
+class FileChunk;
 
 class LevelLocationNames
 {

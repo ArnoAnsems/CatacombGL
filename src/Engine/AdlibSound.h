@@ -14,13 +14,15 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "FileChunk.h"
+#include <stdint.h>
+
+class FileChunk;
 
 class AdlibSound
 {
 public:
     AdlibSound();
-    AdlibSound(const FileChunk* decompressedChunk);
+    AdlibSound(const FileChunk& decompressedChunk);
     ~AdlibSound();
 
     uint32_t GetLength() const;
