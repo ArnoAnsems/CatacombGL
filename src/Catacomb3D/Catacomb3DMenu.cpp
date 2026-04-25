@@ -31,6 +31,7 @@
 #include "GuiElementBoolSelectionCat3D.h"
 #include "GuiElementEnumSelectionCat3D.h"
 #include "GuiElementIntSelectionCat3D.h"
+#include "GuiElementBindGameControllerCat3D.h"
 #include "GuiElementBindKeyCat3D.h"
 #include "GuiPageFrameCat3D.h"
 #include "GuiElementSaveSlotStaticCat3D.h"
@@ -40,26 +41,28 @@
 #include "SkullNBones.h"
 #include "EgaGraphCatacomb3D.h"
 
-const uint16_t browseMenuSound = 0;
+constexpr uint16_t browseMenuSound = 0;
 
-const int16_t restoreGameListId = 1;
-const int16_t saveGameListId = 2;
-const int16_t pageMainId = 3;
-const int16_t pageVideoId = 4;
-const int16_t pageControlsId = 5;
-const int16_t pageSoundId = 6;
-const int16_t pageMusicId = 7;
-const int16_t pageGameplayId = 8;
-const int16_t pageRestoreGameId = 9;
-const int16_t pageSaveGameId = 10;
-const int16_t pageHighScoresId = 11;
-const int16_t pageSkullNBonesId = 12;
-const int16_t pageNewGameId = 13;
-const int16_t pageOptionsId = 14;
-const int16_t goToSaveGameId = 15;
-const int16_t endGameId = 16;
-const int16_t selectVSyncId = 17;
-const int16_t selectScreenResolutionId = 18;
+constexpr int16_t restoreGameListId = 1;
+constexpr int16_t saveGameListId = 2;
+constexpr int16_t pageMainId = 3;
+constexpr int16_t pageVideoId = 4;
+constexpr int16_t pageCustomizeMouseAndKeyboardId = 5;
+constexpr int16_t pageCustomizeGameControllerId = 6;
+constexpr int16_t pageSoundId = 7;
+constexpr int16_t pageMusicId = 8;
+constexpr int16_t pageGameplayId = 9;
+constexpr int16_t pageRestoreGameId = 10;
+constexpr int16_t pageSaveGameId = 11;
+constexpr int16_t pageHighScoresId = 12;
+constexpr int16_t pageSkullNBonesId = 13;
+constexpr int16_t pageNewGameId = 14;
+constexpr int16_t pageOptionsId = 15;
+constexpr int16_t goToSaveGameId = 16;
+constexpr int16_t endGameId = 17;
+constexpr int16_t selectVSyncId = 18;
+constexpr int16_t selectScreenResolutionId = 19;
+constexpr int16_t selectGameControllerId = 20;
 
 const std::vector<std::string> enumNamesSound = { "NO SOUND EFFECTS", "PC SPEAKER", "ADLIB/SOUNDBLASTER" };
 
@@ -129,7 +132,10 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageOptions->AddChild(pageFrameOptions);
 
     GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "CUSTOMIZE CONTROLS", { GuiActionNavigateTo, pageControlsId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "CUSTOMIZE MOUSE KEYBOARD", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementButtonCat3D* goToGameControllerButton = new GuiElementButtonCat3D(playerInput, "CUSTOMIZE GAME CONTROLLER", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText, m_renderableTiles, m_flashIcon);
+    goToGameControllerButton->SetId(selectGameControllerId);
+    elementListOptions->AddChild(goToGameControllerButton);
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "VIDEO OPTIONS", { GuiActionNavigateTo, pageVideoId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "SOUND OPTIONS", { GuiActionNavigateTo, pageSoundId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC OPTIONS", { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
@@ -177,28 +183,46 @@ Catacomb3DMenu::Catacomb3DMenu(
     elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 104, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageVideo->AddChild(elementListVideo, 76, 62);
 
-    // Controls menu
-    GuiPage* guiPageControls = new GuiPage(playerInput);
-    guiPageControls->SetId(pageControlsId);
-    GuiPageFrameCat3D* pageFrameControls = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
-    pageFrameControls->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
-    guiPageControls->AddChild(pageFrameControls);
-    GuiElementList* elementListControls = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
+    // Mouse and keyboard menu
+    GuiPage* guiPageMouseAndKeyboard = new GuiPage(playerInput);
+    guiPageMouseAndKeyboard->SetId(pageCustomizeMouseAndKeyboardId);
+    GuiPageFrameCat3D* pageFrameMouseAndKeyboard = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
+    pageFrameMouseAndKeyboard->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    guiPageMouseAndKeyboard->AddChild(pageFrameMouseAndKeyboard);
+    GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListControls->AddChild(new GuiElementBindKeyCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
+            elementListMouseAndKeyboard->AddChild(new GuiElementBindKeyCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
         }
     }
-    elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListControls->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListControls->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    guiPageControls->AddChild(elementListControls, 76, 62);
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    guiPageMouseAndKeyboard->AddChild(elementListMouseAndKeyboard, 76, 62);
+
+    // Game controller menu
+    GuiPage* guiPageGameController = new GuiPage(playerInput);
+    guiPageGameController->SetId(pageCustomizeGameControllerId);
+
+    GuiPageFrameCat3D* pageFrameGameController = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
+    pageFrameGameController->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    guiPageGameController->AddChild(pageFrameGameController);
+
+    GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
+    for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
+    {
+        if (actionLabel.first != None)
+        {
+            elementListGameController->AddChild(new GuiElementBindGameControllerCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
+        }
+    }
+    guiPageGameController->AddChild(elementListGameController, 76, 62);
 
     // Gameplay menu
     GuiPage* guiPageGameplay = new GuiPage(playerInput);
@@ -302,7 +326,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_guiMenu.AddChild(guiPageOptions);
     m_guiMenu.AddChild(guiPageNewGame);
     m_guiMenu.AddChild(guiPageVideo);
-    m_guiMenu.AddChild(guiPageControls);
+    m_guiMenu.AddChild(guiPageMouseAndKeyboard);
+    m_guiMenu.AddChild(guiPageGameController);
     m_guiMenu.AddChild(guiPageSound);
     m_guiMenu.AddChild(guiPageMusic);
     m_guiMenu.AddChild(guiPageGameplay);
@@ -310,6 +335,9 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_guiMenu.AddChild(guiPageSaveGame);
     m_guiMenu.AddChild(guiPageHighScores);
     m_guiMenu.AddChild(skullNBones);
+
+    // Check if a game controller is detected
+    m_guiMenu.SetEnabled(playerInput.IsGameControllerDetected(), selectGameControllerId);
 }
 
 bool Catacomb3DMenu::IsActive() const

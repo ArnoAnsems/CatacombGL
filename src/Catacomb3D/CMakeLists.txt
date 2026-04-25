@@ -15,6 +15,8 @@ add_library( CatacombGL_Catacomb3D OBJECT
     GameCatacomb3D.h
     GameDetectionCatacomb3D.h
     GameMapsCatacomb3D.h
+    GuiElementBindGameControllerCat3D.cpp
+    GuiElementBindGameControllerCat3D.h
     GuiElementBindKeyCat3D.cpp
     GuiElementBindKeyCat3D.h
     GuiElementBoolSelectionCat3D.cpp

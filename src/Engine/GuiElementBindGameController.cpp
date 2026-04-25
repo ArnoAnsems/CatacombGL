@@ -87,7 +87,7 @@ void GuiElementBindGameController::Draw(IRenderer& renderer) const
     }
     else
     {
-        // The name of the keys is shown with the default font, as the original font from the game lacks some required characters.
+        // The name of the buttons is shown with the default font, as the original font from the game lacks some required characters.
         m_renderableText.LeftAligned(m_controlsMap.GetGameControllerStringFromAction(m_controlAction), color, m_originX + m_offsetXValue, m_originY);
     }
 }
