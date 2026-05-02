@@ -132,14 +132,14 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageOptions->AddChild(pageFrameOptions);
 
     GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "CUSTOMIZE MOUSE KEYBOARD", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    GuiElementButtonCat3D* goToGameControllerButton = new GuiElementButtonCat3D(playerInput, "CUSTOMIZE GAME CONTROLLER", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText, m_renderableTiles, m_flashIcon);
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MOUSE KEYBOARD", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementButtonCat3D* goToGameControllerButton = new GuiElementButtonCat3D(playerInput, "GAME CONTROLLER", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText, m_renderableTiles, m_flashIcon);
     goToGameControllerButton->SetId(selectGameControllerId);
     elementListOptions->AddChild(goToGameControllerButton);
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "VIDEO OPTIONS", { GuiActionNavigateTo, pageVideoId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "SOUND OPTIONS", { GuiActionNavigateTo, pageSoundId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC OPTIONS", { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "GAMEPLAY OPTIONS", { GuiActionNavigateTo, pageGameplayId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "VIDEO", { GuiActionNavigateTo, pageVideoId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "SOUND", { GuiActionNavigateTo, pageSoundId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC", { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "GAMEPLAY", { GuiActionNavigateTo, pageGameplayId }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO DEFAULTS", { GuiActionResetToDefaults, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO CLASSIC LOOK", { GuiActionResetToClassic, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
 
@@ -186,7 +186,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     // Mouse and keyboard menu
     GuiPage* guiPageMouseAndKeyboard = new GuiPage(playerInput);
     guiPageMouseAndKeyboard->SetId(pageCustomizeMouseAndKeyboardId);
-    GuiPageFrameCat3D* pageFrameMouseAndKeyboard = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
+    GuiPageFrameCat3D* pageFrameMouseAndKeyboard = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMouseKeyboard, m_renderableText);
     pageFrameMouseAndKeyboard->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageMouseAndKeyboard->AddChild(pageFrameMouseAndKeyboard);
     GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
@@ -210,7 +210,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageGameController = new GuiPage(playerInput);
     guiPageGameController->SetId(pageCustomizeGameControllerId);
 
-    GuiPageFrameCat3D* pageFrameGameController = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderControls, m_renderableText);
+    GuiPageFrameCat3D* pageFrameGameController = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderGameController, m_renderableText);
     pageFrameGameController->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
     guiPageGameController->AddChild(pageFrameGameController);
 

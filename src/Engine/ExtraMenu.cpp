@@ -106,13 +106,13 @@ ExtraMenu::ExtraMenu(
     pageOptions->SetId(pageOptionsId);
 
     GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Customize Mouse & Keyboard", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText));
-    GuiElementButton* goToGameControllerButton = new GuiElementButton(playerInput, "Customize Game Controller", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText);
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Mouse & Keyboard", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText));
+    GuiElementButton* goToGameControllerButton = new GuiElementButton(playerInput, "Game Controller", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText);
     goToGameControllerButton->SetId(selectGameControllerId);
     elementListOptions->AddChild(goToGameControllerButton);
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Video Options", { GuiActionNavigateTo, pageVideoOptionsId }, m_renderableText));
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Sound Options", { GuiActionNavigateTo, pageSoundOptionsId }, m_renderableText));
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Gameplay Options", { GuiActionNavigateTo, pageGameplayOptionsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Video", { GuiActionNavigateTo, pageVideoOptionsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Sound", { GuiActionNavigateTo, pageSoundOptionsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Gameplay", { GuiActionNavigateTo, pageGameplayOptionsId }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Defaults", { GuiActionResetToDefaults, 0 }, m_renderableText));
     elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Classic Look", { GuiActionResetToClassic, 0 }, m_renderableText));
     pageOptions->AddChild(elementListOptions, 120, 30);
@@ -141,7 +141,7 @@ ExtraMenu::ExtraMenu(
     elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 132, m_renderableText));
     pageVideo->AddChild(elementListVideo, 60, 30);
 
-    GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video Options", EgaBrightYellow, m_renderableText);
+    GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video Menu", EgaBrightYellow, m_renderableText);
     pageVideo->AddChild(pageLabelVideo, 160, 12);
 
     // Customize mouse and keyboard menu
@@ -166,7 +166,7 @@ ExtraMenu::ExtraMenu(
 
     pageMouseAndKeyboard->AddChild(elementListMouseAndKeyboard, 60, 30);
 
-    GuiElementStaticText* pageLabelMouseAndKeyboard = new GuiElementStaticText(playerInput, "Customize Mouse & Keyboard", EgaBrightYellow, m_renderableText);
+    GuiElementStaticText* pageLabelMouseAndKeyboard = new GuiElementStaticText(playerInput, "Mouse & Keyboard Setup", EgaBrightYellow, m_renderableText);
     pageMouseAndKeyboard->AddChild(pageLabelMouseAndKeyboard, 160, 12);
 
     // Customize game controller menu
@@ -183,7 +183,7 @@ ExtraMenu::ExtraMenu(
     }
     pageGameController->AddChild(elementListGameController, 60, 30);
 
-    GuiElementStaticText* pageLabelGameController = new GuiElementStaticText(playerInput, "Customize Game Controller", EgaBrightYellow, m_renderableText);
+    GuiElementStaticText* pageLabelGameController = new GuiElementStaticText(playerInput, "Game Controller Setup", EgaBrightYellow, m_renderableText);
     pageGameController->AddChild(pageLabelGameController, 160, 12);
 
     // Gameplay menu
@@ -196,7 +196,7 @@ ExtraMenu::ExtraMenu(
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdInstantChests), 120, m_renderableText));
     pageGameplay->AddChild(elementListGameplay, 60, 30);
 
-    GuiElementStaticText* pageLabelGameplay = new GuiElementStaticText(playerInput, "Gameplay Options", EgaBrightYellow, m_renderableText);
+    GuiElementStaticText* pageLabelGameplay = new GuiElementStaticText(playerInput, "Gameplay Menu", EgaBrightYellow, m_renderableText);
     pageGameplay->AddChild(pageLabelGameplay, 160, 12);
 
     // Sound menu
@@ -208,7 +208,7 @@ ExtraMenu::ExtraMenu(
     elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicModeAdventureTrilogy), 140, m_renderableText));
     pageSound->AddChild(elementListSound, 60, 30);
 
-    GuiElementStaticText* pageLabelSound = new GuiElementStaticText(playerInput, "Sound Options", EgaBrightYellow, m_renderableText);
+    GuiElementStaticText* pageLabelSound = new GuiElementStaticText(playerInput, "Sound Effects Menu", EgaBrightYellow, m_renderableText);
     pageSound->AddChild(pageLabelSound, 160, 12);
 
     // Load game menu

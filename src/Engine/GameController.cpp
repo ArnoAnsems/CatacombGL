@@ -35,7 +35,6 @@ GameController::GameController()
     if (m_sdlGameController != nullptr)
     {
         const std::string gameControllerName = SDL_GameControllerName(m_sdlGameController);
-        const SDL_GameControllerType gameControllerType = SDL_GameControllerGetType(m_sdlGameController);
         const std::string logMessage = "Detected game controller: " + gameControllerName;
         Logging::Instance().AddLogMessage(logMessage);
     }

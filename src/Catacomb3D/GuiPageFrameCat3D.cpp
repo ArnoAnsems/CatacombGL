@@ -69,9 +69,32 @@ void GuiPageFrameCat3D::Draw(IRenderer& renderer) const
         renderer.Render2DPictureSegment(m_pictureLoadGame, 105, 48, 10, 0, 7, 12); // O
         renderer.Render2DPictureSegment(m_pictureMainMenu, 112, 48, 30, 0, 34, 12); // MENU
     }
-    else if (m_menuHeader == MenuHeaderControls)
+    else if (m_menuHeader == MenuHeaderMouseKeyboard)
     {
-        renderer.Render2DPicture(m_pictureControls, 80, 48);
+        renderer.Render2DPictureSegment(m_pictureMainMenu, 80, 48, 30, 0, 11, 12); // M
+        renderer.Render2DPictureSegment(m_pictureLoadGame, 91, 48, 10, 0, 7, 12); // O
+        renderer.Render2DPictureSegment(m_pictureMainMenu, 98, 48, 54, 0, 7, 12); // U
+        renderer.Render2DPictureSegment(m_pictureOptions, 105, 48, 41, 0, 7, 12); // S
+        renderer.Render2DPictureSegment(m_pictureSaveGame, 112, 48, 24, 0, 7, 12); // E
+        renderer.Render2DPictureSegment(m_pictureMusic, 119, 48, 34, 0, 3, 12); // space
+        renderer.Render2DPictureSegment(m_pictureKeyboard, 122, 48, 3, 0, 55, 12); // KEYBOARD
+        renderer.Render2DPictureSegment(m_pictureControls, 177, 48, 44, 0, 40, 12); // SETUP
+    }
+    else if (m_menuHeader == MenuHeaderGameController)
+    {
+        renderer.Render2DPictureSegment(m_pictureNewGame, 80, 48, 26, 0, 31, 12); // GAME
+        renderer.Render2DPictureSegment(m_pictureMusic, 111, 48, 34, 0, 3, 12); // space
+        renderer.Render2DPictureSegment(m_pictureMusic, 114, 48, 28, 0, 7, 12); // C
+        renderer.Render2DPictureSegment(m_pictureLoadGame, 121, 48, 10, 0, 7, 12); // O
+        renderer.Render2DPictureSegment(m_pictureNewGame, 128, 48, 3, 0, 7, 12); // N
+        renderer.Render2DPictureSegment(m_pictureOptions, 135, 48, 17, 0, 7, 12); // T
+        renderer.Render2DPictureSegment(m_pictureKeyboard, 142, 48, 44, 0, 7, 12); // R
+        renderer.Render2DPictureSegment(m_pictureLoadGame, 149, 48, 10, 0, 7, 12); // O
+        renderer.Render2DPictureSegment(m_pictureLoadGame, 156, 48, 3, 0, 7, 12); // L
+        renderer.Render2DPictureSegment(m_pictureLoadGame, 163, 48, 3, 0, 7, 12); // L
+        renderer.Render2DPictureSegment(m_pictureSaveGame, 170, 48, 24, 0, 7, 12); // E
+        renderer.Render2DPictureSegment(m_pictureKeyboard, 177, 48, 44, 0, 7, 12); // R
+        renderer.Render2DPictureSegment(m_pictureControls, 184, 48, 44, 0, 40, 12); // SETUP
     }
     else if (m_menuHeader == MenuHeaderSound)
     {
