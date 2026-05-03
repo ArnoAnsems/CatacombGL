@@ -161,8 +161,6 @@ ExtraMenu::ExtraMenu(
     elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 95, m_renderableText));
     elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 95, m_renderableText));
     elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 95, m_renderableText));
-    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 95, m_renderableText));
-    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 95, m_renderableText));
 
     pageMouseAndKeyboard->AddChild(elementListMouseAndKeyboard, 60, 30);
 
@@ -181,6 +179,7 @@ ExtraMenu::ExtraMenu(
             elementListGameController->AddChild(new GuiElementBindGameController(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
         }
     }
+    elementListGameController->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 95, m_renderableText));
     pageGameController->AddChild(elementListGameController, 60, 30);
 
     GuiElementStaticText* pageLabelGameController = new GuiElementStaticText(playerInput, "Game Controller Setup", EgaBrightYellow, m_renderableText);
@@ -191,6 +190,8 @@ ExtraMenu::ExtraMenu(
     pageGameplay->SetId(pageGameplayOptionsId);
 
     GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 120, m_renderableText));
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 120, m_renderableText));
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 120, m_renderableText));
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdPreventSoftlock), 120, m_renderableText));
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdInstantChests), 120, m_renderableText));

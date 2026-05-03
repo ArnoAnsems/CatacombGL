@@ -59,6 +59,7 @@ static constexpr uint8_t CVarIdPreventSoftlock = 43;
 static constexpr uint8_t CVarIdStickyWalls = 44;
 static constexpr uint8_t CVarIdMusicModeAdventureTrilogy = 45;
 static constexpr uint8_t CVarIdInstantChests = 46;
+static constexpr uint8_t CVarIdGameControllerAimSensitivity = 47;
 
 static constexpr uint8_t CVarItemIdScreenModeWindowed = 0;
 static constexpr uint8_t CVarItemIdScreenModeFullscreen = 1;
@@ -166,4 +167,5 @@ private:
     ConsoleVariableInt m_turnSpeed;
     ConsoleVariableInt m_windowedScreenWidth;
     ConsoleVariableInt m_windowedScreenHeight;
+    ConsoleVariableInt m_gameControllerAimSensitivity;
 };

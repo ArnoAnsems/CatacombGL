@@ -202,8 +202,6 @@ Catacomb3DMenu::Catacomb3DMenu(
     elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageMouseAndKeyboard->AddChild(elementListMouseAndKeyboard, 76, 62);
 
     // Game controller menu
@@ -222,6 +220,7 @@ Catacomb3DMenu::Catacomb3DMenu(
             elementListGameController->AddChild(new GuiElementBindGameControllerCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
         }
     }
+    elementListGameController->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageGameController->AddChild(elementListGameController, 76, 62);
 
     // Gameplay menu
@@ -232,6 +231,8 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageGameplay->AddChild(pageFrameGameplay);
 
     GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
+    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdStickyWalls), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageGameplay->AddChild(elementListGameplay, 76, 62);

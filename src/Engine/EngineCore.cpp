@@ -1370,7 +1370,8 @@ bool EngineCore::Think()
                     // Turn left with the game controller
                     constexpr int16_t maxGameControllerAxisDeflection = -32768;
                     const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
+                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
                 }
                 else if (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) > minGameControllerAxisDeflection)
@@ -1378,7 +1379,8 @@ bool EngineCore::Think()
                     // Turn right with the game controller
                     constexpr int16_t maxGameControllerAxisDeflection = 32767;
                     const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor;
+                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
                 }
 

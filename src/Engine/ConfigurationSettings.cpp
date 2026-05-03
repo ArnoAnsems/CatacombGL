@@ -149,13 +149,15 @@ ConfigurationSettings::ConfigurationSettings() :
     m_turnSpeed("Turn Speed", "turnSpeed", 100, 250, 100),
     m_windowedScreenWidth("Win. Screen Width", "WindowedScreenWidth", 320, 8192, 800),
     m_windowedScreenHeight("Win. Screen Height", "WindowedScreenHeight", 200, 8192, 600),
+    m_gameControllerAimSensitivity("Aim Sensitivity", "controllerAimSensitivity", 5, 20, 10),
     m_cvarsInt(
         {
             std::make_pair(CVarIdFov, &m_fov),
             std::make_pair(CVarIdMouseSensitivity, &m_mouseSensitivity),
             std::make_pair(CVarIdTurnSpeed, &m_turnSpeed),
             std::make_pair(CVarIdWindowedScreenWidth, &m_windowedScreenWidth),
-            std::make_pair(CVarIdWindowedScreenHeight, &m_windowedScreenHeight)
+            std::make_pair(CVarIdWindowedScreenHeight, &m_windowedScreenHeight),
+            std::make_pair(CVarIdGameControllerAimSensitivity, &m_gameControllerAimSensitivity)
         })
 {
 
@@ -214,6 +216,7 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
         DeserializeCVar(keyValuePairs, CVarIdPreventSoftlock);
         DeserializeCVar(keyValuePairs, CVarIdStickyWalls);
         DeserializeCVar(keyValuePairs, CVarIdInstantChests);
+        DeserializeCVar(keyValuePairs, CVarIdGameControllerAimSensitivity);
 
         m_controlsMap.Clear();
 
@@ -305,12 +308,13 @@ void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
         SerializeCVar(file, CVarIdMouseLook);
         SerializeCVar(file, CVarIdMouseSensitivity);
         SerializeCVar(file, CVarIdTurnSpeed);
-        SerializeCVar(file, CVarIdAlwaysRun);
-        SerializeCVar(file, CVarIdAutoFire);
+        SerializeCVar(file, CVarIdGameControllerAimSensitivity);
         file << "# Gameplay settings\n";
         SerializeCVar(file, CVarIdManaBar);
         SerializeCVar(file, CVarIdPreventSoftlock);
         SerializeCVar(file, CVarIdStickyWalls);
+        SerializeCVar(file, CVarIdAlwaysRun);
+        SerializeCVar(file, CVarIdAutoFire);
         SerializeCVar(file, CVarIdInstantChests);
         file << "# Mouse and keyboard bindings\n";
         for (uint8_t i = static_cast<uint8_t>(MoveForward); i < static_cast<uint8_t>(MaxControlAction); i++)

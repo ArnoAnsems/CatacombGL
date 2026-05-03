@@ -367,7 +367,7 @@ void PlayerInput::SetGameControllerAxisPressed(const SDL_GameControllerAxis game
     const int16_t previousValue = m_gameControllerAxisPressed.at(gameControllerAxis);
     m_gameControllerAxisPressed.at(gameControllerAxis) = value;
 
-    const int16_t minGameControllerAxisDeflection = 10000;
+    const int16_t minGameControllerAxisDeflection = 15000;
     const bool justPressedTowardsNegative = (previousValue >= -minGameControllerAxisDeflection) && (value < -minGameControllerAxisDeflection);
     const bool justPressedTowardsPositive = (previousValue <= minGameControllerAxisDeflection) && (value > minGameControllerAxisDeflection);
     if (justPressedTowardsNegative)
