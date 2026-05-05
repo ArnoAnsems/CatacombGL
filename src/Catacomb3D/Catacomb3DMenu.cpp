@@ -76,6 +76,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     std::vector<std::string>& savedGames,
     HighScores& highScores,
     SavedGamesInDosFormat& savedGamesInDosFormat) :
+    m_gameControllerDetected(playerInput.IsGameControllerDetected()),
     m_menuActive (false),
     m_saveGameEnabled (false),
     m_configurationSettings (configurationSettings),
@@ -101,11 +102,16 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_returnToGameButton(nullptr),
     m_savedGamesInDosFormat(savedGamesInDosFormat)
 {
+
+    const std::string firstInstruction = m_gameControllerDetected ? "D-pad move" : "Arrows move";
+    const std::string secondInstruction = m_gameControllerDetected ? "(A) selects" : "Enter selects";
+    const std::string thirdInstruction = m_gameControllerDetected ? "(B) to back out" : "Esc to back out";
+
     // Main menu
     GuiPage* guiPageMain = new GuiPage(playerInput);
     guiPageMain->SetId(pageMainId);
     GuiPageFrameCat3D* pageFrameMain = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMain, m_renderableText);
-    pageFrameMain->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameMain->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageMain->AddChild(pageFrameMain);
 
     GuiElementList* elementListMain = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
@@ -128,7 +134,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageOptions = new GuiPage(playerInput);
     guiPageOptions->SetId(pageOptionsId);
     GuiPageFrameCat3D* pageFrameOptions = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderOptions, m_renderableText);
-    pageFrameOptions->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameOptions->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageOptions->AddChild(pageFrameOptions);
 
     GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
@@ -149,7 +155,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageNewGame = new GuiPage(playerInput);
     guiPageNewGame->SetId(pageNewGameId);
     GuiPageFrameCat3D* pageFrameNewGame = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderNewGame, m_renderableText);
-    pageFrameNewGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameNewGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageNewGame->AddChild(pageFrameNewGame);
 
     GuiElementList* elementListNewGame = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
@@ -163,7 +169,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageVideo = new GuiPage(playerInput);
     guiPageVideo->SetId(pageVideoId);
     GuiPageFrameCat3D* pageFrameVideo = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderVideo, m_renderableText);
-    pageFrameVideo->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameVideo->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageVideo->AddChild(pageFrameVideo);
 
     GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
@@ -187,7 +193,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageMouseAndKeyboard = new GuiPage(playerInput);
     guiPageMouseAndKeyboard->SetId(pageCustomizeMouseAndKeyboardId);
     GuiPageFrameCat3D* pageFrameMouseAndKeyboard = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMouseKeyboard, m_renderableText);
-    pageFrameMouseAndKeyboard->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameMouseAndKeyboard->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageMouseAndKeyboard->AddChild(pageFrameMouseAndKeyboard);
     GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
@@ -209,7 +215,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageGameController->SetId(pageCustomizeGameControllerId);
 
     GuiPageFrameCat3D* pageFrameGameController = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderGameController, m_renderableText);
-    pageFrameGameController->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameGameController->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageGameController->AddChild(pageFrameGameController);
 
     GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
@@ -227,7 +233,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageGameplay = new GuiPage(playerInput);
     guiPageGameplay->SetId(pageGameplayId);
     GuiPageFrameCat3D* pageFrameGameplay = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderGameplay, m_renderableText);
-    pageFrameGameplay->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameGameplay->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageGameplay->AddChild(pageFrameGameplay);
 
     GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
@@ -242,7 +248,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageLoadGame->SetId(pageRestoreGameId);
 
     GuiPageFrameCat3D* pageFrameLoadGame = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderLoadGame, m_renderableText);
-    pageFrameLoadGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameLoadGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageLoadGame->AddChild(pageFrameLoadGame);
 
     GuiElementList* elementListRestoreGame = new GuiElementList(playerInput, 6, 11, nullptr, browseMenuSound);
@@ -276,7 +282,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageSaveGame->SetId(pageSaveGameId);
 
     GuiPageFrameCat3D* pageFrameSaveGame = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderSaveGame, m_renderableText);
-    pageFrameSaveGame->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameSaveGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageSaveGame->AddChild(pageFrameSaveGame);
 
     GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 6, 11, nullptr, browseMenuSound);
@@ -300,7 +306,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageSound = new GuiPage(playerInput);
     guiPageSound->SetId(pageSoundId);
     GuiPageFrameCat3D* pageFrameSound = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderSound, m_renderableText);
-    pageFrameSound->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameSound->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageSound->AddChild(pageFrameSound);
 
     guiPageSound->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), m_renderableText, m_renderableTiles, m_flashIcon, enumNamesSound), 88, 62);
@@ -309,7 +315,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPage* guiPageMusic = new GuiPage(playerInput);
     guiPageMusic->SetId(pageMusicId);
     GuiPageFrameCat3D* pageFrameMusic = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMusic, m_renderableText);
-    pageFrameMusic->SetInstructions("Arrows move", "Enter selects", "Esc to back out");
+    pageFrameMusic->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageMusic->AddChild(pageFrameMusic);
 
     guiPageMusic->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicMode), m_renderableText, m_renderableTiles, m_flashIcon, enumNamesMusic), 88, 62);
@@ -338,7 +344,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     m_guiMenu.AddChild(skullNBones);
 
     // Check if a game controller is detected
-    m_guiMenu.SetEnabled(playerInput.IsGameControllerDetected(), selectGameControllerId);
+    m_guiMenu.SetEnabled(m_gameControllerDetected, selectGameControllerId);
 }
 
 bool Catacomb3DMenu::IsActive() const
@@ -359,57 +365,58 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
 {
     MenuCommand command = MenuCommandNone;
     const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+    const SDL_GameControllerButton buttonCode = playerInput.GetFirstGameControllerButtonPressed();
     if (m_askForOverwrite)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, buttonCode))
         {
             m_askForOverwrite = false;
             command = MenuCommandSaveGame;
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, buttonCode))
         {
             m_askForOverwrite = false;
         }
     }
     else if (m_askForReset)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, buttonCode))
         {
             m_configurationSettings.ResetToDefaults();
             m_askForReset = false;
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, buttonCode))
         {
             m_askForReset = false;
         }
     }
     else if (m_askForResetClassic)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, buttonCode))
         {
             m_configurationSettings.ResetToClassic();
             m_askForResetClassic = false;
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, buttonCode))
         {
             m_askForResetClassic = false;
         }
     }
     else if (m_askForQuit)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, buttonCode))
         {
             command = MenuCommandExitGame;
             m_askForQuit = false;
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, buttonCode))
         {
             m_askForQuit = false;
         }
     }
     else if (m_askForEndGame)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, buttonCode))
         {
             m_askForEndGame = false;
             if (m_askForEndGameGuiAction == GuiActionNewGameEasy)
@@ -437,7 +444,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
                 command = MenuCommandEndGame;
             }
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, buttonCode))
         {
             m_askForEndGame = false;
             command = MenuCommandNone;
@@ -636,35 +643,38 @@ void Catacomb3DMenu::Draw(IRenderer& renderer, EgaGraph* const egaGraph, const u
     renderer.RenderText(m_renderableText);
     renderer.RenderText(m_renderableTextDefaultFont);
 
+    const std::string acceptButon = m_gameControllerDetected ? "(A)" : "Y";
+    const std::string backOutButton = m_gameControllerDetected ? "(B)" : "ESC";
+
     if (m_askForEndGame)
     {
         if (m_askForEndGameGuiAction == GuiActionNewGameEasy ||
             m_askForEndGameGuiAction == GuiActionNewGameNormal ||
             m_askForEndGameGuiAction == GuiActionNewGameHard)
         {
-            DrawConfirmationDialog(renderer, *egaGraph, 142, "YOU'RE IN A GAME", "PRESS Y FOR NEW GAME", "ESC TO BACK OUT");
+            DrawConfirmationDialog(renderer, *egaGraph, 142, "YOU'RE IN A GAME", "PRESS " + acceptButon + " FOR NEW GAME", backOutButton + " TO BACK OUT");
         }
         else if (m_askForEndGameGuiAction == GuiActionEndGame)
         {
-            DrawConfirmationDialog(renderer, *egaGraph, 142, "REALLY END CURRENT GAME?", "PRESS Y TO END IT", "ESC TO BACK OUT");
+            DrawConfirmationDialog(renderer, *egaGraph, 142, "REALLY END CURRENT GAME?", "PRESS " + acceptButon + " TO END IT", backOutButton + " TO BACK OUT");
         }
         else if (m_askForEndGameGuiAction == GuiActionLoadGame || m_askForEndGameGuiAction == GuiActionLoadDosGame)
         {
-            DrawConfirmationDialog(renderer, *egaGraph, 142, "YOU'RE IN A GAME", "PRESS Y TO LOAD GAME", "ESC TO BACK OUT");
+            DrawConfirmationDialog(renderer, *egaGraph, 142, "YOU'RE IN A GAME", "PRESS " + acceptButon + " TO LOAD GAME", backOutButton + " TO BACK OUT");
         }
     }
 
     if (m_askForQuit)
     {
-        DrawConfirmationDialog(renderer, *egaGraph, 90, "REALLY QUIT?", "PRESS Y TO QUIT", "ESC TO BACK OUT");
+        DrawConfirmationDialog(renderer, *egaGraph, 90, "REALLY QUIT?", "PRESS " + acceptButon + " TO QUIT", backOutButton + " TO BACK OUT");
     }
     else if (m_askForReset)
     {
-        DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO DEFAULTS?", "PRESS Y TO CONFIRM", "ESC TO BACK OUT");
+        DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO DEFAULTS?", "PRESS " + acceptButon + " TO CONFIRM", backOutButton + " TO BACK OUT");
     }
     else if (m_askForResetClassic)
     {
-        DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO CLASSIC LOOK?", "PRESS Y TO CONFIRM", "ESC TO BACK OUT");
+        DrawConfirmationDialog(renderer, *egaGraph, 120, "RESET TO CLASSIC LOOK?", "PRESS " + acceptButon + " TO CONFIRM", backOutButton + " TO BACK OUT");
     }
     
     if (!m_savingPopupName.empty())
@@ -749,17 +759,19 @@ void Catacomb3DMenu::CheckHighScore(const uint16_t level, const uint32_t score)
     m_highScores.TryToAddNewScore(score, level + 1);
 }
 
-bool Catacomb3DMenu::RepliedWithYes(const SDL_Keycode keyCode)
+bool Catacomb3DMenu::RepliedWithYes(const SDL_Keycode keyCode, const SDL_GameControllerButton buttonCode)
 {
     return (keyCode == SDLK_y ||
         keyCode == SDLK_RETURN ||
-        keyCode == SDLK_KP_ENTER);
+        keyCode == SDLK_KP_ENTER ||
+        buttonCode == SDL_CONTROLLER_BUTTON_A);
 }
 
-bool Catacomb3DMenu::RepliedWithNo(const SDL_Keycode keyCode)
+bool Catacomb3DMenu::RepliedWithNo(const SDL_Keycode keyCode, const SDL_GameControllerButton buttonCode)
 {
     return (keyCode == SDLK_n ||
-        keyCode == SDLK_ESCAPE);
+        keyCode == SDLK_ESCAPE ||
+        buttonCode == SDL_CONTROLLER_BUTTON_B);
 }
 
 void Catacomb3DMenu::ShowSavingPopup(const std::string& name, const uint32_t timeStamp)

@@ -17,6 +17,7 @@
 #include "GuiPageFrameCat3D.h"
 #include "../Engine/RenderableText.h"
 #include "../Engine/IRenderer.h"
+#include "../Engine/PlayerInput.h"
 
 GuiElementSaveSlotEditableCat3D::GuiElementSaveSlotEditableCat3D(
     const PlayerInput& playerInput,
@@ -55,7 +56,13 @@ void GuiElementSaveSlotEditableCat3D::Draw(IRenderer& renderer) const
 
     if (m_pageFrame != nullptr)
     {
-        const std::string firstInstruction = (m_enteringText) ? "Type name" : "Arrows move";
-        m_pageFrame->SetInstructions(firstInstruction, "Enter accepts", "Esc to back out");
+        const bool isGameControllerDetected = m_playerInput.IsGameControllerDetected();
+        const std::string firstInstruction =
+            m_enteringText ? "Type name" :
+            isGameControllerDetected ? "D-pad move" :
+            "Arrows move";
+        const std::string secondInstruction = isGameControllerDetected ? "(A) accepts" : "Enter accepts";
+        const std::string thirdInstruction = isGameControllerDetected ? "(B) to back out" : "Esc to back out";
+        m_pageFrame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     }
 }

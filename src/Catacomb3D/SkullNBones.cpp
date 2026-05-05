@@ -65,7 +65,8 @@ SkullNBones::SkullNBones(
 
 const GuiEvent& SkullNBones::ProcessInput()
 {
-    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
+    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) ||
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B))
     {
         Reset();
         return m_closeEvent;
@@ -81,8 +82,17 @@ const GuiEvent& SkullNBones::ProcessInput()
     }
     else
     {
-        m_playerMovesLeft = m_playerInput.IsKeyPressed(SDLK_LEFT);
-        m_playerMovesRight = m_playerInput.IsKeyPressed(SDLK_RIGHT);
+        constexpr int16_t minGameControllerAxisDeflection = 10000;
+        m_playerMovesLeft =
+            m_playerInput.IsKeyPressed(SDLK_LEFT) ||
+            m_playerInput.IsGameControllerButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
+            m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) < -minGameControllerAxisDeflection ||
+            m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) < -minGameControllerAxisDeflection;
+        m_playerMovesRight =
+            m_playerInput.IsKeyPressed(SDLK_RIGHT) ||
+            m_playerInput.IsGameControllerButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
+            m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) > minGameControllerAxisDeflection ||
+            m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) > minGameControllerAxisDeflection;
     }
 
     if (m_timeStampOfPreviousFrame == 0)

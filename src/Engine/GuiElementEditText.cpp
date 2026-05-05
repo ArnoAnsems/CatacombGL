@@ -14,7 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementEditText.h"
-#include <SDL_keyboard.h>
+#include "SDL_keyboard.h"
+#include "SDL_gamecontroller.h"
 #include "PlayerInput.h"
 #include "RenderableText.h"
 
@@ -42,7 +43,8 @@ const GuiEvent& GuiElementEditText::ProcessInput()
     if (m_enabled)
     {
         const SDL_Keycode keyCode = m_playerInput.GetFirstKeyPressed();
-        if (keyCode == SDLK_RETURN)
+        const SDL_GameControllerButton buttonCode = m_playerInput.GetFirstGameControllerButtonPressed();
+        if (keyCode == SDLK_RETURN || buttonCode == SDL_CONTROLLER_BUTTON_A)
         {
             if (m_enteringText)
             {
@@ -69,7 +71,7 @@ const GuiEvent& GuiElementEditText::ProcessInput()
             {
                 m_outputText.pop_back();
             }
-            else if (keyCode == SDLK_ESCAPE)
+            else if (keyCode == SDLK_ESCAPE || buttonCode == SDL_CONTROLLER_BUTTON_B)
             {
                 m_outputText.clear();
                 m_enteringText = false;
