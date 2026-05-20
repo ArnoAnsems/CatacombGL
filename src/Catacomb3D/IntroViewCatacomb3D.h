@@ -34,7 +34,7 @@ public:
     explicit IntroViewCatacomb3D(IRenderer& renderer, EgaGraph* egagraph, const std::filesystem::path& path, HighScores& highScores);
     ~IntroViewCatacomb3D() = default;
     void DrawIntroduction(const uint32_t timeStamp);
-    void DrawRequestDifficultyLevel();
+    void DrawRequestDifficultyLevel(bool showGameControllerHint);
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();

@@ -23,6 +23,7 @@
 #include "../Engine/IIntroView.h"
 #include "../Engine/GameId.h"
 #include "../Engine/FadeEffect.h"
+#include "../Engine/GameControllerHint.h"
 #include <filesystem>
 #include <string>
 
@@ -35,7 +36,7 @@ public:
     explicit IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path);
     ~IntroViewAbyss();
     void DrawIntroduction(const uint32_t timeStamp);
-    void DrawRequestDifficultyLevel();
+    void DrawRequestDifficultyLevel(bool showGameControllerHint);
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();
@@ -55,5 +56,6 @@ private:
     Shape* m_shapeWarrior = nullptr;
     Shape* m_shapeStandBeforeGate = nullptr;
     FadeEffect m_fadeEffect;
+    GameControllerHint m_gameControllerHint;
 };
 

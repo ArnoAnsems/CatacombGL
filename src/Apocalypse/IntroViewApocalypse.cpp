@@ -19,8 +19,9 @@
 
 namespace fs = std::filesystem;
 
-IntroViewApocalypse::IntroViewApocalypse(IRenderer& renderer, const fs::path& path) :
-    IIntroView(renderer)
+IntroViewApocalypse::IntroViewApocalypse(IRenderer& renderer, EgaGraph& egaGraph, const fs::path& path) :
+    IIntroView(renderer),
+    m_gameControllerHint(renderer, egaGraph)
 {
     m_shapeEntering = new Shape(renderer);
     const fs::path shp8 = path / "SHP8.APC";
@@ -158,9 +159,14 @@ void IntroViewApocalypse::DrawIntroduction(const uint32_t timeStamp)
     }
 }
 
-void IntroViewApocalypse::DrawRequestDifficultyLevel()
+void IntroViewApocalypse::DrawRequestDifficultyLevel(bool showGameControllerHint)
 {
     m_renderer.Render2DPicture(m_shapeSelectDifficulty->GetPicture(), m_shapeSelectDifficulty->GetOffsetX(), m_shapeSelectDifficulty->GetOffsetY());
+
+    if (showGameControllerHint)
+    {
+        m_gameControllerHint.DrawDifficultySelection();
+    }
 }
 
 void IntroViewApocalypse::DrawNoviceSelected()

@@ -31,7 +31,7 @@ public:
     IIntroView(IRenderer& renderer);
     virtual ~IIntroView() {};
     virtual void DrawIntroduction(const uint32_t timeStamp) = 0;
-    virtual void DrawRequestDifficultyLevel() = 0;
+    virtual void DrawRequestDifficultyLevel(bool showGameControllerHint) = 0;
     virtual void DrawNoviceSelected() = 0;
     virtual void DrawWarriorSelected() = 0;
     virtual void DrawStandBeforeGate() = 0;

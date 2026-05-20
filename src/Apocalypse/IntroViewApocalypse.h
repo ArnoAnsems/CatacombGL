@@ -21,6 +21,7 @@
 #pragma once
 
 #include "../Engine/IIntroView.h"
+#include "../Engine/GameControllerHint.h"
 #include <filesystem>
 #include <string>
 
@@ -29,10 +30,10 @@ class Shape;
 class IntroViewApocalypse : public IIntroView
 {
 public:
-    explicit IntroViewApocalypse(IRenderer& renderer, const std::filesystem::path& path);
+    explicit IntroViewApocalypse(IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path);
     ~IntroViewApocalypse();
     void DrawIntroduction(const uint32_t timeStamp);
-    void DrawRequestDifficultyLevel();
+    void DrawRequestDifficultyLevel(bool showGameControllerHint);
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();
@@ -51,5 +52,6 @@ private:
     Shape* m_shapeNovice;
     Shape* m_shapeWarrior;
     Shape* m_shapeStandBeforeGate;
+    GameControllerHint m_gameControllerHint;
 };
 

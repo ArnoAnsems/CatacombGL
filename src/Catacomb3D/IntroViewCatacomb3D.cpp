@@ -79,7 +79,7 @@ void IntroViewCatacomb3D::DrawIntroduction(const uint32_t timeStamp)
     }
 }
 
-void IntroViewCatacomb3D::DrawRequestDifficultyLevel()
+void IntroViewCatacomb3D::DrawRequestDifficultyLevel(bool)
 {
     // Not applicable
 }

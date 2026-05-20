@@ -589,7 +589,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
     }
     if (m_state == RequestDifficultyLevel)
     {
-        m_game.GetIntroView()->DrawRequestDifficultyLevel();
+        m_game.GetIntroView()->DrawRequestDifficultyLevel(m_playerInput.IsGameControllerDetected());
     }
     if (m_state == ShowDifficultyLevel && m_difficultyLevel == Easy)
     {

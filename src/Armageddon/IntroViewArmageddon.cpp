@@ -19,8 +19,9 @@
 
 namespace fs = std::filesystem;
 
-IntroViewArmageddon::IntroViewArmageddon(IRenderer& renderer, const fs::path& path) :
-    IIntroView(renderer)
+IntroViewArmageddon::IntroViewArmageddon(IRenderer& renderer, EgaGraph& egaGraph, const fs::path& path) :
+    IIntroView(renderer),
+    m_gameControllerHint(renderer, egaGraph)
 {
     m_shapeEntering = new Shape(renderer);
     const fs::path shp8 = path / "SHP8.ARM";
@@ -158,9 +159,14 @@ void IntroViewArmageddon::DrawIntroduction(const uint32_t timeStamp)
     }
 }
 
-void IntroViewArmageddon::DrawRequestDifficultyLevel()
+void IntroViewArmageddon::DrawRequestDifficultyLevel(bool showGameControllerHint)
 {
     m_renderer.Render2DPicture(m_shapeSelectDifficulty->GetPicture(), m_shapeSelectDifficulty->GetOffsetX(), m_shapeSelectDifficulty->GetOffsetY());
+
+    if (showGameControllerHint)
+    {
+        m_gameControllerHint.DrawDifficultySelection();
+    }
 }
 
 void IntroViewArmageddon::DrawNoviceSelected()

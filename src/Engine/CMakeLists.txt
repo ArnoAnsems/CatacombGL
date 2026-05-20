@@ -52,6 +52,8 @@ add_library( CatacombGL_Engine OBJECT
     FramesCounter.h
     GameController.cpp
     GameController.h
+    GameControllerHint.cpp
+    GameControllerHint.h
     GameDetection.cpp
     GameDetection.h
     GameId.h

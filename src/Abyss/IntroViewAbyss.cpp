@@ -22,7 +22,8 @@
 IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& egaGraph, const std::filesystem::path& path) :
     IIntroView(renderer),
     m_egaGraph(egaGraph),
-    m_gameId(gameId)
+    m_gameId(gameId),
+    m_gameControllerHint(renderer, egaGraph)
 {
     if (m_gameId == GameId::CatacombAbyssv112)
     {
@@ -227,11 +228,16 @@ void IntroViewAbyss::DrawIntroduction(const uint32_t timeStamp)
     }
 }
 
-void IntroViewAbyss::DrawRequestDifficultyLevel()
+void IntroViewAbyss::DrawRequestDifficultyLevel(bool showGameControllerHint)
 {
     if (m_gameId != GameId::CatacombAbyssv112)
     {
         m_renderer.Render2DPicture(m_shapeSelectDifficulty->GetPicture(), m_shapeSelectDifficulty->GetOffsetX(), m_shapeSelectDifficulty->GetOffsetY());
+
+        if (showGameControllerHint)
+        {
+            m_gameControllerHint.DrawDifficultySelection();
+        }
     }
 }
 

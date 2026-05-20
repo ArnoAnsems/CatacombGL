@@ -530,7 +530,7 @@ IIntroView* GameArmageddon::GetIntroView()
 {
     if (m_introView == nullptr)
     {
-        m_introView = new IntroViewArmageddon(m_renderer, m_gamePath);
+        m_introView = new IntroViewArmageddon(m_renderer, *m_egaGraph, m_gamePath);
     }
 
     return m_introView;
