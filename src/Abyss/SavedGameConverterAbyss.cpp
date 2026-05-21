@@ -45,7 +45,7 @@ constexpr uint16_t obclassRedDemon = 24;
 constexpr uint16_t obclassFreeze = 25;
 constexpr uint16_t obclassSolid = 26;
 
-// State pointers as conveniently documented in Reflection Keen (statetype_ptr_conversion.c).
+// State pointers as conveniently documented in ReflectionHLE (statetype_ptr_conversion.c).
 // State pointers are stored as an array, as different versions of Catacomb Abyss use different pointers.
 // The arrays contain { v1.12, v1.13, v1.24 }.
 constexpr uint16_t s_pshot1[] = { 0x2032, 0x1F0A, 0x1EC4 };
