@@ -73,8 +73,8 @@ CatacombGL would not have been possible without reusing code that was generously
 * The Catacomb Abyss, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombAbyss). 
 * The Catacomb Armageddon, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombArmageddon). 
 * The Catacomb Apocalypse, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombApocalypse). 
-* Reflection Keen, developed by NY00123, released under the GPLv2 license, see gpl2.txt (https://github.com/NY00123/refkeen). 
-* DOSBox OPL emulator, developed by the DOSBox Team, released under the GPLv2 license, see gpl2.txt (https://github.com/NY00123/refkeen/tree/master/src/opl).
+* ReflectionHLE, developed by NY00123, released under the GPLv2 license, see gpl2.txt (https://github.com/ReflectionHLE/ReflectionHLE).
+* Nuked OPL3 emulator, developed by Nuke.YKT, released under the LGPLv2.1 license, see lgpl2.1.txt (https://github.com/nukeykt/Nuked-OPL3).
 * Simple DirectMedia Layer, developed by Sam Lantinga. See SDL2.txt for license details. (http://www.libsdl.org/)
 * GoogleTest, developed by the GoogleTest team. See GoogleTest.txt for license details. (https://github.com/google/googletest). 
 
@@ -91,7 +91,7 @@ Special thanks goes to:
 * Flatrock Software for releasing the source code of the Catacomb 3D games.
 * GOG.com and catacomb.games for providing a platform to obtain the Catacomb 3D games.
 * Roland Ansems for playtesting every level and reporting various bugs.
-* NY00123 for developing the Reflection Keen source port. The part of Reflection Keen that handles music and sound effects is reused in CatacombGL.
+* NY00123 for developing the ReflectionHLE source port. The part of ReflectionHLE that handles music and sound effects is reused in CatacombGL.
 * GoGoOtaku for porting CatacombGL to Linux and CMake.
 
 # History
