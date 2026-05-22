@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
-// Based on GELIB.C from the Catacomb Abyss source code, with modifications from the Reflection Keen source port.
+// Based on GELIB.C from the Catacomb Abyss source code, with modifications from the ReflectionHLE source port.
 
 #include "Shape.h"
 #include "Picture.h"

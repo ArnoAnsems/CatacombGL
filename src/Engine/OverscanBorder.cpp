@@ -43,7 +43,7 @@ const uint16_t OverscanBorder::GetBorderHeight()
     return 3u;
 }
 
-// This function is taken from BEL_ST_ConvertEGASignalToEGAEntry in Reflection Keen.
+// This function is taken from BEL_ST_ConvertEGASignalToEGAEntry in ReflectionHLE.
 // It gets a value representing a 6 bit EGA signal and converts it into the 
 // regular "Blue Green Red Intensity" 4 bit format.
 egaColor OverscanBorder::ConvertEgaSignalToEgaColor(const uint8_t egaSignal)
