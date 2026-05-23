@@ -83,7 +83,7 @@ void AutoMap::ProcessInput(
         (autoMapMode == CVarItemIdAutoMapOriginal) ? (float)(level.GetLevelHeight() - 9.0f) :
         (float)(level.GetLevelHeight() - 5.0f); // Isometric
     const float stepSize = (autoMapMode == CVarItemIdAutoMapOriginal) ? 1.0f : 0.125f;
-    const uint32_t timeInterval = (autoMapMode == CVarItemIdAutoMapOriginal) ? 200 : 25;
+    const uint32_t timeInterval = (autoMapMode == CVarItemIdAutoMapOriginal) ? 200 : 10;
     const float mouseSensitivityScaled = (autoMapMode == CVarItemIdAutoMapOriginal) ? (mouseSensitivity / 400.0f) : (mouseSensitivity / 50.0f);
     m_accumulatedMouseX += playerInput.GetMouseXPos();
     m_accumulatedMouseY += playerInput.GetMouseYPos();
