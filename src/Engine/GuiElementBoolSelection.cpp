@@ -17,6 +17,7 @@
 #include "ConsoleVariableBool.h"
 #include "RenderableText.h"
 #include "PlayerInput.h"
+#include "SDL_mouse.h"
 
 GuiElementBoolSelection::GuiElementBoolSelection(
     const PlayerInput& playerInput,
@@ -35,6 +36,7 @@ const GuiEvent& GuiElementBoolSelection::ProcessInput()
 {
     const bool isJustActivated =
         m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
+        m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
         m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A);
 
     if (m_enabled && isJustActivated)

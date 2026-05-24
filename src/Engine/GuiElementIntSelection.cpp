@@ -17,6 +17,7 @@
 #include "PlayerInput.h"
 #include "RenderableText.h"
 #include "ConsoleVariableInt.h"
+#include "SDL_mouse.h"
 
 GuiElementIntSelection::GuiElementIntSelection(
     const PlayerInput& playerInput,
@@ -44,7 +45,8 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
             m_playerInput.IsKeyJustPressed(SDLK_RIGHT) ||
             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTX) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTX);
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTX) ||
+            m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT);
 
         if (isLeftJustActivated)
         {

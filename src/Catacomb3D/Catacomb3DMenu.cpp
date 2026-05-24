@@ -40,6 +40,7 @@
 #include "GuiElementEnumSelectionCat3DRadio.h"
 #include "SkullNBones.h"
 #include "EgaGraphCatacomb3D.h"
+#include "SDL_mouse.h"
 
 constexpr uint16_t browseMenuSound = 0;
 
@@ -365,58 +366,59 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
 {
     MenuCommand command = MenuCommandNone;
     const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
-    const SDL_GameControllerButton buttonCode = playerInput.GetFirstGameControllerButtonPressed();
+    const uint8_t mouseButtonCode = playerInput.GetFirstMouseButtonPressed();
+    const SDL_GameControllerButton gameControllerButtonCode = playerInput.GetFirstGameControllerButtonPressed();
     if (m_askForOverwrite)
     {
-        if (RepliedWithYes(keyCode, buttonCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForOverwrite = false;
             command = MenuCommandSaveGame;
         }
-        else if (RepliedWithNo(keyCode, buttonCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForOverwrite = false;
         }
     }
     else if (m_askForReset)
     {
-        if (RepliedWithYes(keyCode, buttonCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_configurationSettings.ResetToDefaults();
             m_askForReset = false;
         }
-        else if (RepliedWithNo(keyCode, buttonCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForReset = false;
         }
     }
     else if (m_askForResetClassic)
     {
-        if (RepliedWithYes(keyCode, buttonCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_configurationSettings.ResetToClassic();
             m_askForResetClassic = false;
         }
-        else if (RepliedWithNo(keyCode, buttonCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForResetClassic = false;
         }
     }
     else if (m_askForQuit)
     {
-        if (RepliedWithYes(keyCode, buttonCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             command = MenuCommandExitGame;
             m_askForQuit = false;
         }
-        else if (RepliedWithNo(keyCode, buttonCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForQuit = false;
         }
     }
     else if (m_askForEndGame)
     {
-        if (RepliedWithYes(keyCode, buttonCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForEndGame = false;
             if (m_askForEndGameGuiAction == GuiActionNewGameEasy)
@@ -444,7 +446,7 @@ MenuCommand Catacomb3DMenu::ProcessInput(const PlayerInput& playerInput)
                 command = MenuCommandEndGame;
             }
         }
-        else if (RepliedWithNo(keyCode, buttonCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForEndGame = false;
             command = MenuCommandNone;
@@ -759,19 +761,21 @@ void Catacomb3DMenu::CheckHighScore(const uint16_t level, const uint32_t score)
     m_highScores.TryToAddNewScore(score, level + 1);
 }
 
-bool Catacomb3DMenu::RepliedWithYes(const SDL_Keycode keyCode, const SDL_GameControllerButton buttonCode)
+bool Catacomb3DMenu::RepliedWithYes(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode)
 {
     return (keyCode == SDLK_y ||
         keyCode == SDLK_RETURN ||
         keyCode == SDLK_KP_ENTER ||
-        buttonCode == SDL_CONTROLLER_BUTTON_A);
+        mouseButtonCode == SDL_BUTTON_LEFT ||
+        gameControllerButtonCode == SDL_CONTROLLER_BUTTON_A);
 }
 
-bool Catacomb3DMenu::RepliedWithNo(const SDL_Keycode keyCode, const SDL_GameControllerButton buttonCode)
+bool Catacomb3DMenu::RepliedWithNo(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode)
 {
     return (keyCode == SDLK_n ||
         keyCode == SDLK_ESCAPE ||
-        buttonCode == SDL_CONTROLLER_BUTTON_B);
+        mouseButtonCode == SDL_BUTTON_RIGHT ||
+        gameControllerButtonCode == SDL_CONTROLLER_BUTTON_B);
 }
 
 void Catacomb3DMenu::ShowSavingPopup(const std::string& name, const uint32_t timeStamp)

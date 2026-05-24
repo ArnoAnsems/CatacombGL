@@ -39,12 +39,16 @@ public:
     void SetMouseButtonPressed(const uint8_t buttonCode, const bool pressed);
     bool IsMouseButtonPressed(const uint8_t buttonCode) const;
     bool IsMouseButtonJustPressed(const uint8_t buttonCode) const;
-    uint32_t GetMouseUpdateTick() const;
-    void SetMouseUpdateTick(const uint32_t ticks);
     int32_t GetMouseXPos() const;
     void SetMouseXPos(const int32_t pos);
     int32_t GetMouseYPos() const;
     void SetMouseYPos(const int32_t pos);
+    uint32_t GetMouseUpdateTick() const;
+    void SetMouseUpdateTick(const uint32_t ticks);
+    int32_t GetRelativeMouseXPos() const;
+    void SetRelativeMouseXPos(const int32_t pos);
+    int32_t GetRelativeMouseYPos() const;
+    void SetRelativeMouseYPos(const int32_t pos);
     SDL_Keycode GetFirstKeyPressed() const;
     uint8_t GetFirstMouseButtonPressed() const;
     SDL_GameControllerButton GetFirstGameControllerButtonPressed() const;
@@ -72,6 +76,8 @@ private:
     uint32_t m_mouseUpdateTick;
     int32_t m_mouseXPos;
     int32_t m_mouseYPos;
+    int32_t m_relativeMouseXPos;
+    int32_t m_relativeMouseYPos;
     bool m_hasFocus;
     std::map<SDL_GameControllerAxis, int16_t> m_gameControllerAxisPressed;
     std::map<SDL_GameControllerAxis, bool> m_gameControllerAxisJustPressedTowardsNegative;

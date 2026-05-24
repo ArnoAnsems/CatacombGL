@@ -16,6 +16,7 @@
 #include "GuiElementButton.h"
 #include "PlayerInput.h"
 #include "RenderableText.h"
+#include "SDL_mouse.h"
 
 GuiElementButton::GuiElementButton(
     const PlayerInput& playerInput,
@@ -34,7 +35,8 @@ const GuiEvent& GuiElementButton::ProcessInput()
 {
     const bool isJustActivated =
         m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
-        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A);
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A) ||
+        m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT);
 
     return (m_enabled && isJustActivated) ? m_guiEventWhenActivated : GetEvent();
 }

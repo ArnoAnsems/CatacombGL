@@ -65,7 +65,7 @@ namespace fs = std::filesystem;
 
 GameId selectedGame = GameId::NotDetected;
 
-void UpdatePlayerInput(const SDL_Window* const window, const GameController& gameController, PlayerInput& input)
+void UpdatePlayerInput(SDL_Window* const window, const GameController& gameController, PlayerInput& input)
 {
 	SDL_PumpEvents();
 	int numKeys = 0;
@@ -82,14 +82,25 @@ void UpdatePlayerInput(const SDL_Window* const window, const GameController& gam
 	{
 		int x = 0;
 		int y = 0;
-		const uint32_t mouseState = SDL_GetRelativeMouseState(&x, &y);
-		input.SetMouseXPos(x);
-		input.SetMouseYPos(y);
+		const uint32_t mouseState = SDL_GetMouseState(&x, &y);
+		int w = 0;
+		int h = 0;
+		SDL_GetWindowSize(window, &w, &h);
+		ViewPorts::ViewPortRect2D rect = ViewPorts::GetOrtho2D(w, h, false);
+		const double factorX = static_cast<double>(rect.right - rect.left) / static_cast<double>(w);
+		const double factorY = static_cast<double>(rect.bottom - rect.top) / static_cast<double>(h);
+		const int32_t ortho2dX = (x * factorX) + rect.left;
+		const int32_t ortho2dY = (y * factorY) + rect.top;
+		input.SetMouseXPos(ortho2dX);
+		input.SetMouseYPos(ortho2dY);
 		input.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseState & SDL_BUTTON_LMASK);
 		input.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseState & SDL_BUTTON_MMASK);
 		input.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseState & SDL_BUTTON_RMASK);
 		input.SetMouseButtonPressed(SDL_BUTTON_X1, mouseState & SDL_BUTTON_X1MASK);
 		input.SetMouseButtonPressed(SDL_BUTTON_X2, mouseState & SDL_BUTTON_X2MASK);
+		const uint32_t relativeMouseState = SDL_GetRelativeMouseState(&x, &y);
+		input.SetRelativeMouseXPos(x);
+		input.SetRelativeMouseYPos(y);
 		input.SetHasFocus(SDL_GetMouseFocus() == window);
 		input.SetMouseUpdateTick(timestamp);
 	}

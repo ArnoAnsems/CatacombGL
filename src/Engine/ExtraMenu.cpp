@@ -32,7 +32,8 @@
 #include "GuiElementEditText.h"
 #include "GuiPage.h"
 #include "GuiCatalog.h"
-#include <SDL_keyboard.h>
+#include "SDL_keyboard.h"
+#include "SDL_mouse.h"
 
 namespace fs = std::filesystem;
 
@@ -305,38 +306,40 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
     MenuCommand command = MenuCommandNone;
 
     const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
+    const uint8_t mouseButtonCode = playerInput.GetFirstMouseButtonPressed();
+    const SDL_GameControllerButton gameControllerButtonCode = playerInput.GetFirstGameControllerButtonPressed();
     if (m_askForOverwrite)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForOverwrite = false;
             command = MenuCommandSaveGame;
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForOverwrite = false;
         }
     }
     else if (m_askForReset)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_configurationSettings.ResetToDefaults();
             m_askForReset = false;
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForReset = false;
         }
     }
     else if (m_askForResetClassic)
     {
-        if (RepliedWithYes(keyCode))
+        if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_configurationSettings.ResetToClassic();
             m_askForResetClassic = false;
         }
-        else if (RepliedWithNo(keyCode))
+        else if (RepliedWithNo(keyCode, mouseButtonCode, gameControllerButtonCode))
         {
             m_askForResetClassic = false;
         }
@@ -532,17 +535,21 @@ void ExtraMenu::CheckHighScore(const uint16_t level, const uint32_t score)
     // Not applicable
 }
 
-bool ExtraMenu::RepliedWithYes(const SDL_Keycode keyCode)
+bool ExtraMenu::RepliedWithYes(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode)
 {
     return (keyCode == SDLK_y ||
-            keyCode == SDLK_RETURN ||
-            keyCode == SDLK_KP_ENTER);
+        keyCode == SDLK_RETURN ||
+        keyCode == SDLK_KP_ENTER ||
+        mouseButtonCode == SDL_BUTTON_LEFT ||
+        gameControllerButtonCode == SDL_CONTROLLER_BUTTON_A);
 }
 
-bool ExtraMenu::RepliedWithNo(const SDL_Keycode keyCode)
+bool ExtraMenu::RepliedWithNo(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode)
 {
     return (keyCode == SDLK_n ||
-            keyCode == SDLK_ESCAPE);
+        keyCode == SDLK_ESCAPE ||
+        mouseButtonCode == SDL_BUTTON_RIGHT ||
+        gameControllerButtonCode == SDL_CONTROLLER_BUTTON_B);
 }
 
 void ExtraMenu::ShowSavingPopup(const std::string& name, const uint32_t timeStamp)

@@ -16,6 +16,7 @@
 #include "GuiElementBindGameController.h"
 #include "RenderableText.h"
 #include "PlayerInput.h"
+#include "SDL_mouse.h"
 
 GuiElementBindGameController::GuiElementBindGameController(
     const PlayerInput& playerInput,
@@ -56,7 +57,9 @@ const GuiEvent& GuiElementBindGameController::ProcessInput()
         }
         else
         {
-            if (m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
+            if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
+                m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
+                m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
             {
                 m_waitingForGameController = true;
                 SetEvent(GuiActionKeyBinding, 0);

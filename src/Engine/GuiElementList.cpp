@@ -143,6 +143,29 @@ const GuiEvent& GuiElementList::ProcessInput()
                 }
             }
         }
+
+        if (m_playerInput.GetRelativeMouseXPos() != 0 || m_playerInput.GetRelativeMouseYPos() != 0)
+        {
+            // The mouse moved. Check to which element the mouse is pointing to, if any.
+            const int32_t mouseX = m_playerInput.GetMouseXPos();
+            const int32_t mouseY = m_playerInput.GetMouseYPos();
+            uint16_t index = 0;
+            const size_t elementsInView = (m_elements.size() > m_maxElementsDrawn) ? m_maxElementsDrawn : m_elements.size();
+            while (index < elementsInView)
+            {
+                constexpr uint16_t elementWidth = 120u;
+                const int16_t offsetY = m_originY + (index * m_elementHeight);
+                if (mouseX >= m_originX &&
+                    mouseX < m_originX + elementWidth &&
+                    mouseY >= offsetY &&
+                    mouseY < offsetY + m_elementHeight)
+                {
+                    const uint8_t itemIndex = index + m_firstElementDrawn;
+                    m_elementSelected = itemIndex;
+                }
+                index++;
+            }
+        }
     }
 
     // Update origin of elements

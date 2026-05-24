@@ -19,6 +19,8 @@ PlayerInput::PlayerInput() :
     m_mouseUpdateTick(0),
     m_mouseXPos(0),
     m_mouseYPos(0),
+    m_relativeMouseXPos(0),
+    m_relativeMouseYPos(0),
     m_hasFocus(true)
 {
     m_keyPressed.clear();
@@ -201,6 +203,26 @@ void PlayerInput::SetMouseYPos(const int32_t pos)
     m_mouseYPos = pos;
 }
 
+int32_t PlayerInput::GetRelativeMouseXPos() const
+{
+    return m_relativeMouseXPos;
+}
+
+void PlayerInput::SetRelativeMouseXPos(const int32_t pos)
+{
+    m_relativeMouseXPos = pos;
+}
+
+int32_t PlayerInput::GetRelativeMouseYPos() const
+{
+    return m_relativeMouseYPos;
+}
+
+void PlayerInput::SetRelativeMouseYPos(const int32_t pos)
+{
+    m_relativeMouseYPos = pos;
+}
+
 SDL_Keycode PlayerInput::GetFirstKeyPressed() const
 {
     SDL_Keycode keyCode = SDLK_UNKNOWN; 
@@ -219,7 +241,7 @@ SDL_Keycode PlayerInput::GetFirstKeyPressed() const
 uint8_t PlayerInput::GetFirstMouseButtonPressed() const
 {
     uint8_t i = 0;
-    while (i < 6 && m_buttonPressed[i] == false)
+    while (i < 6 && m_buttonJustPressed[i] == false)
     {
         i++;
     }
@@ -291,6 +313,17 @@ void PlayerInput::ClearAll()
     for (uint8_t i = 0; i < 6; i++)
     {
         m_buttonPressed[i] = false;
+    }
+
+    for (auto& pair : m_gameControllerButtonPressed)
+    {
+        pair.second = false;
+    }
+
+    for (int i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; i++)
+    {
+        const auto axis = static_cast<SDL_GameControllerAxis>(i);
+        m_gameControllerAxisPressed.at(axis) = 0;
     }
 }
 

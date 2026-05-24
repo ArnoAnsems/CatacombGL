@@ -64,8 +64,8 @@ private:
     static void DrawConfirmationDialog(IRenderer& renderer, EgaGraph& egaGraph, const uint16_t width, const std::string& message1, const std::string& message2, const std::string& message3);
     void DrawCenteredTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t width, const uint16_t height);
     void DrawTiledWindow(IRenderer& renderer, EgaGraph* const egaGraph, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
-    static bool RepliedWithYes(const SDL_Keycode keyCode, const SDL_GameControllerButton buttonCode);
-    static bool RepliedWithNo(const SDL_Keycode keyCode, const SDL_GameControllerButton buttonCode);
+    static bool RepliedWithYes(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode);
+    static bool RepliedWithNo(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode);
 
     const bool m_gameControllerDetected;
     bool m_menuActive;

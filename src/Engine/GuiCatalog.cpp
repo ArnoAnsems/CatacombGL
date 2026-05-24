@@ -18,6 +18,7 @@
 #include "IRenderer.h"
 #include "PlayerInput.h"
 #include "Picture.h"
+#include "SDL_mouse.h"
 
 namespace fs = std::filesystem;
 
@@ -43,7 +44,9 @@ GuiCatalog::GuiCatalog(
 const GuiEvent& GuiCatalog::ProcessInput()
 {
     const uint16_t lastPage = (uint16_t)m_catalogFilenames.size() - 1;
-    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B))
+    if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) ||
+        m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_RIGHT) ||
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B))
     {
         m_mostRecentPageWithFullscreenImage = 0;
         m_currentPage = 0;
@@ -73,6 +76,7 @@ const GuiEvent& GuiCatalog::ProcessInput()
              m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
              m_playerInput.IsKeyJustPressed(SDLK_PAGEDOWN) ||
              m_playerInput.IsKeyJustPressed(SDLK_KP_3) ||
+             m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
              m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
              m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
              m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTX) ||

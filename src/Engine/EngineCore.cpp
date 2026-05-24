@@ -376,7 +376,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,12);
             std::snprintf(tileStr, 40, "X: %d Y: %d Angle: %d", (uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY(), (uint16_t)m_level->GetPlayerActor()->GetAngle());
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,22);
-            std::snprintf(tileStr, 40, "MouseX: %d", m_playerInput.GetMouseXPos());
+            std::snprintf(tileStr, 40, "MouseX: %d", m_playerInput.GetRelativeMouseXPos());
             renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,32);
 #endif
         }
@@ -891,10 +891,10 @@ bool EngineCore::Think()
             // When mouse look is disabled, the Y-movement of the mouse will let the player walk forward and backward.
             if (!IsActionActive(MoveForward))
             {
-                if (m_playerInput.GetMouseYPos() < 0)
+                if (m_playerInput.GetRelativeMouseYPos() < 0)
                 {
                     m_timeStampLastMouseMoveForward = m_timeStampOfPlayerCurrentFrame;
-                    m_playerInput.SetMouseYPos(0);
+                    m_playerInput.SetRelativeMouseYPos(0);
                 }
                 if (m_timeStampLastMouseMoveForward + 100 > m_timeStampOfPlayerCurrentFrame)
                 {
@@ -903,10 +903,10 @@ bool EngineCore::Think()
             }
             if (!IsActionActive(MoveBackward))
             {
-                if (m_playerInput.GetMouseYPos() > 0)
+                if (m_playerInput.GetRelativeMouseYPos() > 0)
                 {
                     m_timeStampLastMouseMoveBackward = m_timeStampOfPlayerCurrentFrame;
-                    m_playerInput.SetMouseYPos(0);
+                    m_playerInput.SetRelativeMouseYPos(0);
                 }
                 if (m_timeStampLastMouseMoveBackward + 100 > m_timeStampOfPlayerCurrentFrame)
                 {
@@ -962,8 +962,8 @@ bool EngineCore::Think()
             m_gameTimer.GetActualTime(),
             m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex(),
             m_game.GetOriginal3DViewArea());
-        m_playerInput.SetMouseXPos(0);
-        m_playerInput.SetMouseYPos(0);
+        m_playerInput.SetRelativeMouseXPos(0);
+        m_playerInput.SetRelativeMouseYPos(0);
     }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
@@ -1431,11 +1431,11 @@ bool EngineCore::Think()
                 {
                     Thrust(90, distance);
                 }
-                if (m_playerInput.GetMouseXPos() != 0)
+                if (m_playerInput.GetRelativeMouseXPos() != 0)
                 {
-                    const float mouseMovement = (float)m_playerInput.GetMouseXPos() * ((float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue() / 50.0f);
+                    const float mouseMovement = (float)m_playerInput.GetRelativeMouseXPos() * ((float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue() / 50.0f);
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
-                    m_playerInput.SetMouseXPos(0);
+                    m_playerInput.SetRelativeMouseXPos(0);
                 }
 
                 m_level->UpdateVisibilityMap(m_renderable3DScene.GetCameraX(), m_renderable3DScene.GetCameraY());
