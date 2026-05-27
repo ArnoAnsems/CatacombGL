@@ -136,10 +136,11 @@ const GuiEvent& GuiElementList::ProcessInput()
                     }
                 }
 
-                if (elementFound)
+                if (elementFound && m_elementSelected != elementToCheck)
                 {
                     m_elementSelected = elementToCheck;
                     m_firstElementDrawn = (m_elementSelected >= m_maxElementsDrawn) ? m_elementSelected - m_maxElementsDrawn + 1 : 0;
+                    makeBrowseSound = true;
                 }
             }
         }
@@ -161,7 +162,11 @@ const GuiEvent& GuiElementList::ProcessInput()
                     mouseY < offsetY + m_elementHeight)
                 {
                     const uint8_t itemIndex = index + m_firstElementDrawn;
-                    m_elementSelected = itemIndex;
+                    if (itemIndex != m_elementSelected)
+                    {
+                        m_elementSelected = itemIndex;
+                        makeBrowseSound = true;
+                    }
                 }
                 index++;
             }
