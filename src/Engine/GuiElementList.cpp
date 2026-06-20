@@ -17,7 +17,10 @@
 #include "Picture.h"
 #include "PlayerInput.h"
 #include "IRenderer.h"
+#include "SDL_mouse.h"
 #include <string>
+#include <cmath>
+#include <algorithm>
 
 GuiElementList::GuiElementList(
     const PlayerInput& playerInput,
@@ -26,6 +29,9 @@ GuiElementList::GuiElementList(
     const Picture* cursorPicture,
     const uint16_t soundWhenBrowsing) :
     GuiElementBase(playerInput),
+    m_scrollbarWidth(10u),
+    m_scrollbarHeight(78u),
+    m_scrollbarOffsetX(200),
     m_maxElementsDrawn(maxElementsDrawn),
     m_elementHeight(elementHeight),
     m_elementSelected(0),
@@ -145,16 +151,17 @@ const GuiEvent& GuiElementList::ProcessInput()
             }
         }
 
+        const int32_t mouseX = m_playerInput.GetMouseXPos();
+        const int32_t mouseY = m_playerInput.GetMouseYPos();
+
         if (m_playerInput.GetRelativeMouseXPos() != 0 || m_playerInput.GetRelativeMouseYPos() != 0)
         {
             // The mouse moved. Check to which element the mouse is pointing to, if any.
-            const int32_t mouseX = m_playerInput.GetMouseXPos();
-            const int32_t mouseY = m_playerInput.GetMouseYPos();
             uint16_t index = 0;
             const size_t elementsInView = (m_elements.size() > m_maxElementsDrawn) ? m_maxElementsDrawn : m_elements.size();
             while (index < elementsInView)
             {
-                constexpr uint16_t elementWidth = 120u;
+                constexpr uint16_t elementWidth = 140u;
                 const int16_t offsetY = m_originY + (index * m_elementHeight);
                 if (mouseX >= m_originX &&
                     mouseX < m_originX + elementWidth &&
@@ -169,6 +176,53 @@ const GuiEvent& GuiElementList::ProcessInput()
                     }
                 }
                 index++;
+            }
+        }
+
+        if (m_elements.size() > m_maxElementsDrawn)
+        {
+            const int16_t scrollbarOriginX = m_originX + m_scrollbarOffsetX;
+            const int16_t scrollbarOriginY = m_originY;
+            const bool isMousePressedAboveScrollbar =
+                m_playerInput.IsMouseButtonPressed(SDL_BUTTON_LEFT) &&
+                mouseX >= scrollbarOriginX &&
+                mouseX < scrollbarOriginX + m_scrollbarWidth &&
+                mouseY >= scrollbarOriginY &&
+                mouseY < scrollbarOriginY + m_scrollbarHeight;
+
+            if (isMousePressedAboveScrollbar)
+            {
+                uint16_t elementPointedAt = 0u;
+                if (mouseY < scrollbarOriginY + 3u)
+                {
+                    elementPointedAt = 0u;
+                }
+                else if (mouseY > scrollbarOriginY + m_scrollbarHeight - 3u)
+                {
+                    elementPointedAt = m_elements.size() - 1u;
+                }
+                else
+                {
+                    elementPointedAt = ((mouseY - scrollbarOriginY - 3u) * m_elements.size()) / (m_scrollbarHeight - 6u);
+                }
+                const uint16_t halfList = m_maxElementsDrawn / 2u;
+                if (elementPointedAt < halfList)
+                {
+                    m_firstElementDrawn = 0u;
+                }
+                else
+                {
+                    m_firstElementDrawn = std::min(elementPointedAt - halfList, static_cast<uint16_t>(m_elements.size()) - m_maxElementsDrawn);
+                }
+
+                if (m_elementSelected < m_firstElementDrawn)
+                {
+                    m_elementSelected = m_firstElementDrawn;
+                }
+                else if (m_elementSelected > m_firstElementDrawn + m_maxElementsDrawn - 1u)
+                {
+                    m_elementSelected = m_firstElementDrawn + m_maxElementsDrawn - 1u;
+                }
             }
         }
     }
@@ -204,6 +258,38 @@ void GuiElementList::Draw(IRenderer& renderer) const
         const GuiElementBase* element = m_elements.at(itemIndex);
         element->Draw(renderer);
         index++;
+    }
+
+    DrawScrollbar(renderer);
+}
+
+void GuiElementList::DrawScrollbar(IRenderer& renderer) const
+{
+    if (m_elements.size() > m_maxElementsDrawn)
+    {
+        const uint16_t scrollbarInnerHeight = m_scrollbarHeight - 6u;
+        const int16_t scrollbarOriginX = m_originX + m_scrollbarOffsetX;
+        const int16_t scrollbarOriginY = m_originY;
+
+        // Top border
+        renderer.Render2DBar(scrollbarOriginX, scrollbarOriginY, m_scrollbarWidth, 1u, EgaBrightWhite);
+        renderer.Render2DBar(scrollbarOriginX + 2u, scrollbarOriginY + 2u, m_scrollbarWidth - 4u, 1u, EgaBlue);
+
+        // Right border
+        renderer.Render2DBar(scrollbarOriginX + m_scrollbarWidth - 1u, scrollbarOriginY + 1u, 1u, m_scrollbarHeight - 1u, EgaBrightWhite);
+        renderer.Render2DBar(scrollbarOriginX + m_scrollbarWidth - 3u, scrollbarOriginY + 3u, 1u, m_scrollbarHeight - 5u, EgaBlue);
+
+        // Left border
+        renderer.Render2DBar(scrollbarOriginX, scrollbarOriginY + 1u, 1u, m_scrollbarHeight - 1u, EgaDarkGray);
+        renderer.Render2DBar(scrollbarOriginX + 2u, scrollbarOriginY + 3u, 1u, m_scrollbarHeight - 5u, EgaBrightCyan);
+
+        // Bottom border
+        renderer.Render2DBar(scrollbarOriginX + 1u, scrollbarOriginY + m_scrollbarHeight - 1u, m_scrollbarWidth - 2u, 1u, EgaDarkGray);
+        renderer.Render2DBar(scrollbarOriginX + 3u, scrollbarOriginY + m_scrollbarHeight - 3u, m_scrollbarWidth - 6u, 1u, EgaBrightCyan);
+
+        const uint16_t visibleSectionHeight = std::ceil(static_cast<double>(scrollbarInnerHeight * m_maxElementsDrawn) / static_cast<double>(m_elements.size()));
+        const uint16_t visibleSectionOffset = scrollbarInnerHeight * m_firstElementDrawn / m_elements.size();
+        renderer.Render2DBar(scrollbarOriginX + 3u, scrollbarOriginY + 3u + visibleSectionOffset, m_scrollbarWidth - 6u, visibleSectionHeight, EgaBrightWhite);
     }
 }
 

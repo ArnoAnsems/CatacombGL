@@ -57,8 +57,17 @@ const GuiEvent& GuiElementBindKey::ProcessInput()
         }
         else
         {
+            const int32_t mouseX = m_playerInput.GetMouseXPos();
+            const int32_t mouseY = m_playerInput.GetMouseYPos();
+            const bool isJustActivatedByMouse =
+                m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) &&
+                mouseX >= m_originX + m_offsetXValue &&
+                mouseX < m_originX + m_offsetXValue + 70 &&
+                mouseY >= m_originY &&
+                mouseY < m_originY + 10;
+
             if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
-                m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
+                isJustActivatedByMouse ||
                 m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
             {
                 m_waitingForKey = true;

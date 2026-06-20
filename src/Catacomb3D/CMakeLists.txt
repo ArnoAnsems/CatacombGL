@@ -29,6 +29,8 @@ add_library( CatacombGL_Catacomb3D OBJECT
     GuiElementEnumSelectionCat3DRadio.h
     GuiElementIntSelectionCat3D.cpp
     GuiElementIntSelectionCat3D.h
+    GuiElementListCat3D.cpp
+    GuiElementListCat3D.h
     GuiElementSaveSlotEditableCat3D.cpp
     GuiElementSaveSlotEditableCat3D.h
     GuiElementSaveSlotStaticCat3D.cpp

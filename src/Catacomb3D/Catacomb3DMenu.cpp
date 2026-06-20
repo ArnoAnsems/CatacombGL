@@ -38,6 +38,7 @@
 #include "GuiElementSaveSlotEditableCat3D.h"
 #include "GuiElementButtonCat3D.h"
 #include "GuiElementEnumSelectionCat3DRadio.h"
+#include "GuiElementListCat3D.h"
 #include "SkullNBones.h"
 #include "EgaGraphCatacomb3D.h"
 #include "SDL_mouse.h"
@@ -196,7 +197,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPageFrameCat3D* pageFrameMouseAndKeyboard = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMouseKeyboard, m_renderableText);
     pageFrameMouseAndKeyboard->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageMouseAndKeyboard->AddChild(pageFrameMouseAndKeyboard);
-    GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListMouseAndKeyboard = new GuiElementListCat3D(playerInput, 8, 8, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
@@ -219,7 +220,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameGameController->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageGameController->AddChild(pageFrameGameController);
 
-    GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListGameController = new GuiElementListCat3D(playerInput, 8, 8, nullptr, browseMenuSound);
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
@@ -252,7 +253,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameLoadGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageLoadGame->AddChild(pageFrameLoadGame);
 
-    GuiElementList* elementListRestoreGame = new GuiElementList(playerInput, 6, 11, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListRestoreGame = new GuiElementListCat3D(playerInput, 6, 11, nullptr, browseMenuSound);
     elementListRestoreGame->SetId(restoreGameListId);
     if (savedGames.size() > 0)
     {
@@ -286,7 +287,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameSaveGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageSaveGame->AddChild(pageFrameSaveGame);
 
-    GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 6, 11, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListSaveGame = new GuiElementListCat3D(playerInput, 6, 11, nullptr, browseMenuSound);
     GuiEvent guiEvent = { GuiActionSaveGame, -1 };
     GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, guiEvent, m_flashIcon, pageFrameSaveGame);
     elementListSaveGame->SetId(saveGameListId);

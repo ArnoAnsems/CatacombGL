@@ -35,12 +35,19 @@ public:
     virtual void Draw(IRenderer& renderer) const override;
     virtual void SetEnabled(const bool enabled, const int16_t id = 0) override;
 
-private:
+    virtual void DrawScrollbar(IRenderer& renderer) const;
+
+protected:
+    uint16_t m_scrollbarWidth;
+    uint16_t m_scrollbarHeight;
+    int16_t m_scrollbarOffsetX;
     std::vector<GuiElementBase*> m_elements;
-    const uint16_t m_elementHeight;
     const uint16_t m_maxElementsDrawn;
-    uint16_t m_elementSelected;
     uint16_t m_firstElementDrawn;
+
+private:
+    const uint16_t m_elementHeight;
+    uint16_t m_elementSelected;
     const Picture* m_cursorPicture;
     const GuiEvent m_guiEventPlayBrowseSound;
 };
