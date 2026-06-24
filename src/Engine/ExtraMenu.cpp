@@ -32,8 +32,8 @@
 #include "GuiElementEditText.h"
 #include "GuiPage.h"
 #include "GuiCatalog.h"
-#include "SDL_keyboard.h"
-#include "SDL_mouse.h"
+#include "SDL3/SDL_keyboard.h"
+#include "SDL3/SDL_mouse.h"
 
 namespace fs = std::filesystem;
 
@@ -307,7 +307,7 @@ MenuCommand ExtraMenu::ProcessInput(const PlayerInput& playerInput)
 
     const SDL_Keycode keyCode = playerInput.GetFirstKeyPressed();
     const uint8_t mouseButtonCode = playerInput.GetFirstMouseButtonPressed();
-    const SDL_GameControllerButton gameControllerButtonCode = playerInput.GetFirstGameControllerButtonPressed();
+    const SDL_GamepadButton gameControllerButtonCode = playerInput.GetFirstGameControllerButtonPressed();
     if (m_askForOverwrite)
     {
         if (RepliedWithYes(keyCode, mouseButtonCode, gameControllerButtonCode))
@@ -535,21 +535,21 @@ void ExtraMenu::CheckHighScore(const uint16_t level, const uint32_t score)
     // Not applicable
 }
 
-bool ExtraMenu::RepliedWithYes(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode)
+bool ExtraMenu::RepliedWithYes(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GamepadButton gameControllerButtonCode)
 {
-    return (keyCode == SDLK_y ||
+    return (keyCode == SDLK_Y ||
         keyCode == SDLK_RETURN ||
         keyCode == SDLK_KP_ENTER ||
         mouseButtonCode == SDL_BUTTON_LEFT ||
-        gameControllerButtonCode == SDL_CONTROLLER_BUTTON_A);
+        gameControllerButtonCode == SDL_GAMEPAD_BUTTON_SOUTH);
 }
 
-bool ExtraMenu::RepliedWithNo(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode)
+bool ExtraMenu::RepliedWithNo(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GamepadButton gameControllerButtonCode)
 {
-    return (keyCode == SDLK_n ||
+    return (keyCode == SDLK_N ||
         keyCode == SDLK_ESCAPE ||
         mouseButtonCode == SDL_BUTTON_RIGHT ||
-        gameControllerButtonCode == SDL_CONTROLLER_BUTTON_B);
+        gameControllerButtonCode == SDL_GAMEPAD_BUTTON_EAST);
 }
 
 void ExtraMenu::ShowSavingPopup(const std::string& name, const uint32_t timeStamp)

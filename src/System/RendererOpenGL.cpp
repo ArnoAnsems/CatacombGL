@@ -46,7 +46,7 @@
 static constexpr unsigned int GL_CLAMP_TO_EDGE = 0x812F;
 #endif
 #endif
-#include <SDL_video.h>
+#include "SDL3/SDL_video.h"
 #include <cmath>
 #include <cstring>
 #include <string>
@@ -78,7 +78,7 @@ void RendererOpenGL::Setup()
         m_singleColorTexture[color] = GenerateSingleColorTexture(color);
     }
 
-    m_isVSyncSupported = (SDL_GL_SetSwapInterval(0) == 0);
+    m_isVSyncSupported = SDL_GL_SetSwapInterval(0);
     const std::string vSyncLogMessage = m_isVSyncSupported ? "VSync is supported" : "VSync is NOT supported";
     Logging::Instance().AddLogMessage(vSyncLogMessage);
 

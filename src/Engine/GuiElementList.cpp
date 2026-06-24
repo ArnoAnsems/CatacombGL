@@ -17,7 +17,7 @@
 #include "Picture.h"
 #include "PlayerInput.h"
 #include "IRenderer.h"
-#include "SDL_mouse.h"
+#include "SDL3/SDL_mouse.h"
 #include <string>
 #include <cmath>
 #include <algorithm>
@@ -68,14 +68,14 @@ const GuiEvent& GuiElementList::ProcessInput()
 
         const bool isUpJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_UP) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTY) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTY);
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_UP) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_RIGHTY);
         const bool isDownJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTY) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTY);
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_DOWN) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_RIGHTY);
 
         if (isUpJustActivated)
         {
@@ -128,7 +128,7 @@ const GuiEvent& GuiElementList::ProcessInput()
                     {
                         const char firstLetter = label.at(0);
                         const char firstLetterLowerCase = (firstLetter >= 'A' && firstLetter <= 'Z') ? firstLetter - 'A' + 'a' : firstLetter;
-                        const SDL_Keycode keyToCheck = firstLetterLowerCase - 'a' + SDLK_a;
+                        const SDL_Keycode keyToCheck = firstLetterLowerCase - 'a' + SDLK_A;
 
                         if (m_playerInput.IsKeyJustPressed(keyToCheck))
                         {

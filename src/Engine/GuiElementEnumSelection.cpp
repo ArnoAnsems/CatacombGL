@@ -17,7 +17,7 @@
 #include "PlayerInput.h"
 #include "RenderableText.h"
 #include "ConsoleVariableEnum.h"
-#include "SDL_mouse.h"
+#include "SDL3/SDL_mouse.h"
 
 GuiElementEnumSelection::GuiElementEnumSelection(
     const PlayerInput& playerInput,
@@ -37,7 +37,7 @@ const GuiEvent& GuiElementEnumSelection::ProcessInput()
     const bool isJustActivated =
         m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
         m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
-        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A);
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH);
 
     if (m_enabled && isJustActivated)
     {

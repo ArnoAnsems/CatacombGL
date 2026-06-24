@@ -17,7 +17,7 @@
 #include "PlayerInput.h"
 #include "RenderableText.h"
 #include "ConsoleVariableInt.h"
-#include "SDL_mouse.h"
+#include "SDL3/SDL_mouse.h"
 
 GuiElementIntSelection::GuiElementIntSelection(
     const PlayerInput& playerInput,
@@ -38,14 +38,14 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
     {
         const bool isLeftJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_LEFT) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTX) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTX);
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_LEFT) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_LEFTX) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_RIGHTX);
         const bool isRightJustActivated =
             m_playerInput.IsKeyJustPressed(SDLK_RIGHT) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTX) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTX) ||
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_RIGHT) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_LEFTX) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_RIGHTX) ||
             m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT);
 
         if (isLeftJustActivated)

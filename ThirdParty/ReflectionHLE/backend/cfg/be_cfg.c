@@ -48,7 +48,6 @@ typedef enum {
 	BE_ST_CFG_VAL_INT,
 	BE_ST_CFG_VAL_DIMS,
 	BE_ST_CFG_VAL_STR,
-	BE_ST_CFG_VAL_DISPLAY_NUM,
 	BE_ST_CFG_VAL_SDL_RENDERER,
 } BE_ST_CFG_VAL_T;
 
@@ -67,7 +66,7 @@ typedef struct {
 	intptr_t aux1, aux2;
 } BE_ST_CFG_Setting_T;
 
-// Enumerated by SDL_GameControllerButton, for most
+// Enumerated by SDL_GamepadButton, for most
 static const char *g_sdlControlSchemeKeyMapCfgVals[] = {
 	"a", "b", "x", "y", "", "", "", "lstick", "rstick", "lshoulder", "rshoulder", "dpadup", "dpaddown", "dpadleft", "dpadright", "", "paddle1", "paddle2", "paddle3", "paddle4",
 	"ltrigger", "rtrigger", // Actually axes but these are added as extras
@@ -160,7 +159,6 @@ static BE_ST_CFG_Setting_T g_be_st_settings[] = {
 #endif
 	DEF_STR(lastSelectedGameExe, "lastselectedgameexe")
 	//DEF_ENUM(lastSelectedGameVer, "lastselectedgamever", refkeen_gamever_strs, BE_GAMEVER_LAST)
-	DEF_CUSTOM_INT(displayNum, "displaynum", BE_ST_CFG_VAL_DISPLAY_NUM, 0)
 	DEF_BOOL(rememberDisplayNum, "rememberdisplaynum", true)
 	DEF_CUSTOM_INT(sdlRendererDriver, "sdlrenderer", BE_ST_CFG_VAL_SDL_RENDERER, -1)
 	DEF_ENUM(vSync, "vsync", g_be_setting_vsync_vals, VSYNC_OFF)
@@ -171,6 +169,7 @@ static BE_ST_CFG_Setting_T g_be_st_settings[] = {
 	DEF_BOOL(showEndoom, "showendoom", true)
 	DEF_ENUM(mouseGrab, "mousegrab", g_be_setting_mousegrab_vals, MOUSEGRAB_AUTO)
 	DEF_INT(sndInterThreadBufferRatio, "sndinterthreadbufferratio", 2, 1, INT_MAX)
+	DEF_BOOL(sndLowLatency, "sndlowlatency", false)
 	// 49716 may lead to unexpected behaviors on Android
 	DEF_INT(sndSampleRate, "sndsamplerate", 48000, 1, INT_MAX)
 	DEF_BOOL(sndSubSystem, "sndsubsystem", true)
@@ -339,7 +338,6 @@ static BE_ST_CFG_Setting_T g_be_st_wolf3d_legacy_settings[] = {
 #endif
 
 // These ones are implementation-defined
-void BEL_ST_ParseSetting_DisplayNum(int *displayNum, const char *buffer);
 void BEL_ST_ParseSetting_SDLRendererDriver(int *driver, const char *buffer);
 void BEL_ST_SaveSDLRendererDriverToConfig(FILE *fp, const char *key, int driver);
 
@@ -434,9 +432,6 @@ static void BEL_ST_ParseSetting(BE_ST_CFG_Setting_T *setting, const char *valStr
 	case BE_ST_CFG_VAL_INT:
 		BEL_ST_ParseInt((int *)setting->setting, setting->aux1, setting->aux2, valStr);
 		break;
-	case BE_ST_CFG_VAL_DISPLAY_NUM:
-		BEL_ST_ParseSetting_DisplayNum((int *)setting->setting, valStr);
-		break;
 	case BE_ST_CFG_VAL_SDL_RENDERER:
 		BEL_ST_ParseSetting_SDLRendererDriver((int *)setting->setting, valStr);
 		break;
@@ -460,9 +455,6 @@ static void BEL_ST_SaveSetting(FILE *fp, const BE_ST_CFG_Setting_T *setting)
 		BEL_ST_WriteHexInt(fp, setting->key, *(int *)setting->setting);
 		break;
 	case BE_ST_CFG_VAL_INT:
-		BEL_ST_WriteInt(fp, setting->key, *(int *)setting->setting);
-		break;
-	case BE_ST_CFG_VAL_DISPLAY_NUM:
 		BEL_ST_WriteInt(fp, setting->key, *(int *)setting->setting);
 		break;
 	case BE_ST_CFG_VAL_SDL_RENDERER:

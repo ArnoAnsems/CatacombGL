@@ -37,15 +37,15 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
 {
     if (m_enabled)
     {
-        if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
+        if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
         {
             m_cvarEnum.SetItemIndex(m_elementSelected);
         }
         else if
             (m_playerInput.IsKeyJustPressed(SDLK_DOWN) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTY) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTY))
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_DOWN) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_RIGHTY))
         {
             if (m_elementSelected == m_enumNames.size() - 1)
             {
@@ -58,9 +58,9 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
         }
         else if
             (m_playerInput.IsKeyJustPressed(SDLK_UP) ||
-            m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTY) ||
-            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTY))
+            m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_UP) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_LEFTY) ||
+            m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_RIGHTY))
         {
             if (m_elementSelected == 0)
             {

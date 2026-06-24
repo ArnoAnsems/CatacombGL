@@ -32,7 +32,7 @@ add_subdirectory(src/Catacomb3D)
 
 if(WIN32)
     if (MSVC)
-        # On Visual Studio for Windows, the SDL2 development package is fetched from Github.
+        # On Visual Studio for Windows, the SDL3 development package is fetched from Github.
         include(FetchContent)
 
         if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
@@ -41,30 +41,30 @@ if(WIN32)
 
         FetchContent_Declare(
             sdldev
-            URL     https://github.com/libsdl-org/SDL/releases/download/release-2.30.6/SDL2-devel-2.30.6-VC.zip
-            URL_MD5 54e68b9c4627627107105fa108bf7eed
+            URL      https://github.com/libsdl-org/SDL/releases/download/release-3.4.10/SDL3-devel-3.4.10-VC.zip
+            URL_HASH SHA256=e2b336b10b037934af98308027410732ef7b22f2c6697d58092aa1c209fae7d7
         )
 
         FetchContent_MakeAvailable(sdldev)
-        set(SDL2_PATH ${sdldev_SOURCE_DIR})
-        find_package(SDL2 REQUIRED CONFIG PATHS ${sdldev_SOURCE_DIR}/cmake NO_DEFAULT_PATH)
+        set(SDL3_PATH ${sdldev_SOURCE_DIR})
+        find_package(SDL3 REQUIRED CONFIG PATHS ${sdldev_SOURCE_DIR}/cmake NO_DEFAULT_PATH)
     else()
-        # On MinGW, uses the system library of SDL2
-        find_package(SDL2 REQUIRED)
+        # On MinGW, uses the system library of SDL3
+        find_package(SDL3 REQUIRED)
     endif()
 
     target_link_libraries( CatacombGL_Engine
         "shlwapi"
-        SDL2::SDL2main
+        SDL3::SDL3
     )
     target_link_libraries( CatacombGL_ThirdParty
         "shlwapi"
-        SDL2::SDL2main
+        SDL3::SDL3
     )
 
 else()
-    # On Linux, it is assumed that the SDL2 development package is already installed.
-    find_package(SDL2 REQUIRED)
+    # On Linux, it is assumed that the SDL3 development package is already installed.
+    find_package(SDL3 REQUIRED)
 
 endif()
 
@@ -78,15 +78,6 @@ function(link_each_target_to_libs libs targets)
     endforeach()
 endfunction()
 
-function(add_include_dirs_for_each_target dirs targets)
-    foreach(target ${targets})
-        target_include_directories( ${target}
-            PRIVATE
-            ${dirs}
-        )
-    endforeach()
-endfunction()
-
 set( CATACOMBGL_TARGETS
     "CatacombGL_Engine"
     "CatacombGL_Abyss"
@@ -96,20 +87,9 @@ set( CATACOMBGL_TARGETS
     "CatacombGL_ThirdParty"
 )
 
-if(SDL2_VERSION VERSION_GREATER_EQUAL "2.0.12")
-    link_each_target_to_libs( SDL2::SDL2
-        "${CATACOMBGL_TARGETS}"
-    )
-
-else()
-    link_each_target_to_libs( ${SDL2_LIBRARIES}
-        "${CATACOMBGL_TARGETS}"
-    )
-    add_include_dirs_for_each_target( ${SDL2_INCLUDE_DIRS}
-        "CatacombGL;${CATACOMBGL_TARGETS}"
-    )
-
-endif()
+link_each_target_to_libs( SDL3::SDL3
+    "${CATACOMBGL_TARGETS}"
+)
 
 add_subdirectory(src/System)
 

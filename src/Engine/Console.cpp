@@ -19,7 +19,7 @@
 #include "PlayerInput.h"
 #include "DefaultFont.h"
 #include "RenderableText.h"
-#include <SDL_timer.h>
+#include "SDL3/SDL_timer.h"
 
 Console::Console(const std::string& label) :
     m_active(false),
@@ -65,7 +65,7 @@ void Console::Draw(IRenderer& renderer)
 
 void Console::ProcessInput(PlayerInput& playerInput)
 {
-    if (playerInput.IsKeyJustPressed(SDLK_BACKQUOTE))
+    if (playerInput.IsKeyJustPressed(SDLK_GRAVE))
     {
         const uint32_t timestamp = SDL_GetTicks();
         if (m_active)

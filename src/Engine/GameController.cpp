@@ -18,13 +18,14 @@
 
 GameController::GameController()
 {
-    const int numJoysticks = SDL_NumJoysticks();
+    int numJoysticks = 0;
+    SDL_JoystickID* joysticks = SDL_GetJoysticks(&numJoysticks);
     int joyStickIndex = 0;
     while (m_sdlGameController == nullptr && joyStickIndex < numJoysticks)
     {
-        if (SDL_IsGameController(joyStickIndex) == SDL_TRUE)
+        if (SDL_IsGamepad(joysticks[joyStickIndex]))
         {
-            m_sdlGameController = SDL_GameControllerOpen(joyStickIndex);
+            m_sdlGameController = SDL_OpenGamepad(joysticks[joyStickIndex]);
         }
         else
         {
@@ -34,7 +35,7 @@ GameController::GameController()
 
     if (m_sdlGameController != nullptr)
     {
-        const std::string gameControllerName = SDL_GameControllerName(m_sdlGameController);
+        const std::string gameControllerName = SDL_GetGamepadName(m_sdlGameController);
         const std::string logMessage = "Detected game controller: " + gameControllerName;
         Logging::Instance().AddLogMessage(logMessage);
     }
@@ -48,7 +49,7 @@ GameController::~GameController()
 {
     if (m_sdlGameController != nullptr)
     {
-        SDL_GameControllerClose(m_sdlGameController);
+        SDL_CloseGamepad(m_sdlGameController);
     }
 }
 
@@ -57,19 +58,19 @@ bool GameController::IsDetected() const
     return (m_sdlGameController != nullptr);
 }
 
-bool GameController::IsButtonPressed(const SDL_GameControllerButton gameControllerButton) const
+bool GameController::IsButtonPressed(const SDL_GamepadButton gameControllerButton) const
 {
-    return (m_sdlGameController != nullptr) ? SDL_GameControllerGetButton(m_sdlGameController, gameControllerButton) == 1u : false;
+    return (m_sdlGameController != nullptr) ? SDL_GetGamepadButton(m_sdlGameController, gameControllerButton) == 1u : false;
 }
 
-int16_t GameController::GetAxis(const SDL_GameControllerAxis axis) const
+int16_t GameController::GetAxis(const SDL_GamepadAxis axis) const
 {
     int16_t value = 0;
     if (m_sdlGameController != nullptr)
     {
-        if (SDL_GameControllerHasAxis(m_sdlGameController, axis))
+        if (SDL_GamepadHasAxis(m_sdlGameController, axis))
         {
-            value = SDL_GameControllerGetAxis(m_sdlGameController, axis);
+            value = SDL_GetGamepadAxis(m_sdlGameController, axis);
         }
     }
 

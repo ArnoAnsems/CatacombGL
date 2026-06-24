@@ -15,7 +15,7 @@
 
 #include "SystemSDL.h"
 #include "../Engine/Logging.h"
-#include <SDL_platform.h>
+#include "SDL3/SDL_platform.h"
 #include <filesystem>
 #include <string>
 #include <vector>

@@ -14,8 +14,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementEditText.h"
-#include "SDL_keyboard.h"
-#include "SDL_gamecontroller.h"
+#include "SDL3/SDL_keyboard.h"
+#include "SDL3/SDL_gamepad.h"
 #include "PlayerInput.h"
 #include "RenderableText.h"
 
@@ -43,8 +43,8 @@ const GuiEvent& GuiElementEditText::ProcessInput()
     if (m_enabled)
     {
         const SDL_Keycode keyCode = m_playerInput.GetFirstKeyPressed();
-        const SDL_GameControllerButton buttonCode = m_playerInput.GetFirstGameControllerButtonPressed();
-        if (keyCode == SDLK_RETURN || buttonCode == SDL_CONTROLLER_BUTTON_A)
+        const SDL_GamepadButton buttonCode = m_playerInput.GetFirstGameControllerButtonPressed();
+        if (keyCode == SDLK_RETURN || buttonCode == SDL_GAMEPAD_BUTTON_SOUTH)
         {
             if (m_enteringText)
             {
@@ -71,7 +71,7 @@ const GuiEvent& GuiElementEditText::ProcessInput()
             {
                 m_outputText.pop_back();
             }
-            else if (keyCode == SDLK_ESCAPE || buttonCode == SDL_CONTROLLER_BUTTON_B)
+            else if (keyCode == SDLK_ESCAPE || buttonCode == SDL_GAMEPAD_BUTTON_EAST)
             {
                 m_outputText.clear();
                 m_enteringText = false;
@@ -100,6 +100,6 @@ void GuiElementEditText::Draw(IRenderer& renderer) const
 
 bool GuiElementEditText::KeyIsSuitableForText(const SDL_Keycode keyCode)
 {
-    return ((keyCode >= SDLK_a && keyCode <= SDLK_z) ||
+    return ((keyCode >= SDLK_A && keyCode <= SDLK_Z) ||
         (keyCode >= SDLK_0 && keyCode <= SDLK_9));
 }

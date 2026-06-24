@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,7 +28,7 @@
 
 #include "refkeen_config.h"
 
-#include "SDL.h"
+#include <SDL3/SDL.h>
 
 #include "be_cross.h"
 #include "be_st.h"
@@ -37,54 +37,100 @@
 #include "be_audio_private.h"
 
 #ifdef REFKEEN_CONFIG_THREADS
-static SDL_mutex* g_sdlCallbackMutex = NULL;
+static SDL_Mutex* g_sdlCallbackMutex = NULL;
 #endif
 static int g_sdlAudioChannels;
-/*static*/ SDL_AudioDeviceID g_sdlAudioDevice;
+/*static*/ SDL_AudioStream* g_sdlAudioStream;
 
 extern bool g_sdlAudioSubsystemUp;
 
 #ifdef BE_ST_FILL_AUDIO_IN_MAIN_THREAD
-void BEL_ST_InterThread_CallBack(void *unused, Uint8 *stream, int len);
+void BEL_ST_InterThread_CallBack(void* unused, Uint8* stream, int len);
 #endif
 
-static void BEL_ST_MixerCallback(void *unused, Uint8 *stream, int len)
+static void BEL_ST_MixerCallback(void* unused_userdata, SDL_AudioStream* stream,
+	int additional_amount, int unused_total_amount)
 {
-	BEL_ST_AudioMixerCallback((BE_ST_SndSample_T *)stream,
-	                          len / (g_sdlAudioChannels * sizeof(BE_ST_SndSample_T)));
+	if (additional_amount > 0)
+	{
+		Uint8* data = SDL_stack_alloc(Uint8, additional_amount);
+		if (data)
+		{
+#ifdef BE_ST_FILL_AUDIO_IN_MAIN_THREAD
+			BEL_ST_InterThread_CallBack(unused_userdata, data,
+				additional_amount);
+#else
+			BEL_ST_AudioMixerCallback((BE_ST_SndSample_T*)data,
+				additional_amount / (g_sdlAudioChannels * sizeof(BE_ST_SndSample_T)));
+#endif
+			SDL_PutAudioStreamData(stream, data, additional_amount);
+			SDL_stack_free(data);
+		}
+	}
 }
 
-bool BEL_ST_InitAudioSubsystem(int *freq, int *channels, int *bufferLen)
+static void BEL_ST_LowLatencySetup(const SDL_AudioSpec* spec)
 {
-	SDL_AudioSpec desiredSpec, obtainedSpec;
-	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+	// As of SDL 3.4 the device sample frames hint doesn't scale based on
+	// sample rate. SDL also at the time of writing has a minimum device
+	// sample rate of 44.1kHz. We could assume the current logic, but we can
+	// also open the device and query what sample rate we got. We do need to
+	// re-open it with adjusted latency.
+	SDL_AudioDeviceID dev = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, spec);
+	if (dev == 0)
+	{
+		BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "Cannot temporarily open SDL audio device for low latency probe,\n%s\n", SDL_GetError());
+		return;
+	}
+
+	int sampleRate;
+	SDL_AudioSpec devSpec;
+	if (SDL_GetAudioDeviceFormat(dev, &devSpec, NULL))
+	{
+		sampleRate = devSpec.freq;
+	}
+	else
+	{
+		// If we can't query the actual frequency then we can try just assuming
+		// we will get what we requested.
+		sampleRate = spec->freq;
+	}
+
+	SDL_CloseAudioDevice(dev);
+
+	// Hint that we want 700Hz callback timing
+	char* sampleFramesStr = NULL;
+	if (SDL_asprintf(&sampleFramesStr, "%d", sampleRate / 700) != -1)
+	{
+		SDL_SetHint(SDL_HINT_AUDIO_DEVICE_SAMPLE_FRAMES, sampleFramesStr);
+		SDL_free(sampleFramesStr);
+	}
+}
+
+bool BEL_ST_InitAudioSubsystem(int* freq, int* channels, int* bufferLen)
+{
+	SDL_AudioSpec spec;
+	if (!SDL_InitSubSystem(SDL_INIT_AUDIO))
 	{
 		BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "SDL audio system initialization failed,\n%s\n", SDL_GetError());
 		return false;
 	}
-	desiredSpec.freq = g_refKeenCfg.sndSampleRate;
+	spec.freq = g_refKeenCfg.sndSampleRate;
 #ifdef MIXER_SAMPLE_FORMAT_FLOAT
-	desiredSpec.format = AUDIO_F32SYS;
+	spec.format = SDL_AUDIO_F32;
 #elif (defined MIXER_SAMPLE_FORMAT_SINT16)
-	desiredSpec.format = AUDIO_S16SYS;
+	spec.format = SDL_AUDIO_S16;
 #endif
-	desiredSpec.channels = MIXER_DEFAULT_CHANNELS_COUNT;
-	// Should be some power-of-two roughly proportional to the sample rate; Using 1024 for 48000Hz.
-	for (desiredSpec.samples = 1; desiredSpec.samples < g_refKeenCfg.sndSampleRate/64; desiredSpec.samples *= 2)
-		;
-
-#ifdef BE_ST_FILL_AUDIO_IN_MAIN_THREAD
-	desiredSpec.callback = BEL_ST_InterThread_CallBack;
-#else
-	desiredSpec.callback = BEL_ST_MixerCallback;
-#endif
-
-	desiredSpec.userdata = NULL;
-	BE_Cross_LogMessage(BE_LOG_MSG_NORMAL, "Initializing audio subsystem, requested spec: freq %d, format %u, channels %d, samples %u\n", (int)desiredSpec.freq, (unsigned int)desiredSpec.format, (int)desiredSpec.channels, (unsigned int)desiredSpec.samples);
-	g_sdlAudioDevice = SDL_OpenAudioDevice(NULL, 0, &desiredSpec, &obtainedSpec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
-	if (g_sdlAudioDevice <= 0)
+	spec.channels = MIXER_DEFAULT_CHANNELS_COUNT;
+	if (g_refKeenCfg.sndLowLatency)
 	{
-		BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "Cannot open SDL audio device,\n%s\n", SDL_GetError());
+		BEL_ST_LowLatencySetup(&spec);
+	}
+	BE_Cross_LogMessage(BE_LOG_MSG_NORMAL, "Initializing audio subsystem, requested spec: freq %d, format %u, channels %d\n", (int)spec.freq, (unsigned int)spec.format, (int)spec.channels);
+	g_sdlAudioStream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, BEL_ST_MixerCallback, 0);
+	if (!g_sdlAudioStream)
+	{
+		BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "Cannot open SDL audio stream,\n%s\n", SDL_GetError());
 		SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		return false;
 	}
@@ -93,36 +139,42 @@ bool BEL_ST_InitAudioSubsystem(int *freq, int *channels, int *bufferLen)
 	if (!g_sdlCallbackMutex)
 	{
 		BE_Cross_LogMessage(BE_LOG_MSG_ERROR, "Cannot create recursive mutex for SDL audio callback,\n%s\nClosing SDL audio subsystem\n", SDL_GetError());
-		SDL_CloseAudioDevice(g_sdlAudioDevice);
+		SDL_DestroyAudioStream(g_sdlAudioStream);
 		SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		return false;
 	}
 #endif
-	BE_Cross_LogMessage(BE_LOG_MSG_NORMAL, "Audio subsystem initialized, received spec: freq %d, format %u, channels %d, samples %u, size %u\n", (int)obtainedSpec.freq, (unsigned int)obtainedSpec.format, (int)obtainedSpec.channels, (unsigned int)obtainedSpec.samples, (unsigned int)obtainedSpec.size);
+	SDL_AudioSpec devSpec;
+	int sampleFrames;
+	if (!SDL_GetAudioDeviceFormat(SDL_GetAudioStreamDevice(g_sdlAudioStream), &devSpec, &sampleFrames))
+	{
+		devSpec = spec;
+		sampleFrames = g_refKeenCfg.sndSampleRate / 64; // An approximation
+	}
+	BE_Cross_LogMessage(BE_LOG_MSG_NORMAL, "Audio subsystem initialized, audio driver: %s, service rate: ~%fHz\n", SDL_GetCurrentAudioDriver(), (double)devSpec.freq / sampleFrames);
 
-	// Size may be reported as "0" on Android
-	*freq = obtainedSpec.freq;
-	*channels = g_sdlAudioChannels = obtainedSpec.channels;
-	*bufferLen = obtainedSpec.size ?
-	             (obtainedSpec.size / sizeof(BE_ST_SndSample_T)) : obtainedSpec.samples;
+	*freq = spec.freq;
+	*channels = g_sdlAudioChannels = spec.channels;
+	*bufferLen = sampleFrames;
+
 	return true;
 }
 
 void BEL_ST_ShutdownAudioSubsystem(void)
 {
-	SDL_PauseAudioDevice(g_sdlAudioDevice, 1);
+	SDL_PauseAudioDevice(SDL_GetAudioStreamDevice(g_sdlAudioStream));
 	BEL_ST_AudioMixerShutdown();
 #ifdef REFKEEN_CONFIG_THREADS
 	SDL_DestroyMutex(g_sdlCallbackMutex);
 	g_sdlCallbackMutex = NULL;
 #endif
-	SDL_CloseAudioDevice(g_sdlAudioDevice);
+	SDL_DestroyAudioStream(g_sdlAudioStream);
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
 void BEL_ST_StartAudioSubsystem(void)
 {
-	SDL_PauseAudioDevice(g_sdlAudioDevice, 0);
+	SDL_ResumeAudioDevice(SDL_GetAudioStreamDevice(g_sdlAudioStream));
 }
 
 void BE_ST_LockAudioRecursively(void)

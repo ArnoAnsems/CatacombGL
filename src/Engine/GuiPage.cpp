@@ -15,7 +15,7 @@
 
 #include "GuiPage.h"
 #include "PlayerInput.h"
-#include "SDL_mouse.h"
+#include "SDL3/SDL_mouse.h"
 
 GuiPage::GuiPage(
     const PlayerInput& playerInput) :
@@ -47,8 +47,8 @@ const GuiEvent& GuiPage::ProcessInput()
     const bool isJustClosed =
         m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) ||
         m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_RIGHT) ||
-        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B) ||
-        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_START);
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_EAST) ||
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_START);
 
     if (isJustClosed)
     {

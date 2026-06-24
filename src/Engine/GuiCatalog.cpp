@@ -18,7 +18,7 @@
 #include "IRenderer.h"
 #include "PlayerInput.h"
 #include "Picture.h"
-#include "SDL_mouse.h"
+#include "SDL3/SDL_mouse.h"
 
 namespace fs = std::filesystem;
 
@@ -46,7 +46,7 @@ const GuiEvent& GuiCatalog::ProcessInput()
     const uint16_t lastPage = (uint16_t)m_catalogFilenames.size() - 1;
     if (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) ||
         m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_RIGHT) ||
-        m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B))
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_EAST))
     {
         m_mostRecentPageWithFullscreenImage = 0;
         m_currentPage = 0;
@@ -56,12 +56,12 @@ const GuiEvent& GuiCatalog::ProcessInput()
              m_playerInput.IsKeyJustPressed(SDLK_UP) ||
              m_playerInput.IsKeyJustPressed(SDLK_PAGEUP) ||
              m_playerInput.IsKeyJustPressed(SDLK_KP_9) ||
-             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
-             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTX) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTX) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_LEFTY) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_CONTROLLER_AXIS_RIGHTY))
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_LEFT) ||
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_UP) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_LEFTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_RIGHTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_LEFTY) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsNegative(SDL_GAMEPAD_AXIS_RIGHTY))
     {
         if (m_currentPage > 0)
         {
@@ -77,12 +77,12 @@ const GuiEvent& GuiCatalog::ProcessInput()
              m_playerInput.IsKeyJustPressed(SDLK_PAGEDOWN) ||
              m_playerInput.IsKeyJustPressed(SDLK_KP_3) ||
              m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
-             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
-             m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTX) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTX) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_LEFTY) ||
-             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_CONTROLLER_AXIS_RIGHTY))
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_RIGHT) ||
+             m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_DOWN) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_LEFTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_RIGHTX) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_LEFTY) ||
+             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_RIGHTY))
 
     {
         if (m_currentPage < lastPage)

@@ -28,7 +28,7 @@
 #include "GuiMenu.h"
 #include "RenderableText.h"
 #include "IGame.h"
-#include "SDL_gamecontroller.h"
+#include "SDL3/SDL_gamepad.h"
 
 class AudioPlayer;
 class ConfigurationSettings;
@@ -67,8 +67,8 @@ public:
 
 private:
     bool IsNewSaveGameNameAlreadyInUse() const;
-    static bool RepliedWithYes(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode);
-    static bool RepliedWithNo(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GameControllerButton gameControllerButtonCode);
+    static bool RepliedWithYes(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GamepadButton gameControllerButtonCode);
+    static bool RepliedWithNo(const SDL_Keycode keyCode, const int mouseButtonCode, const SDL_GamepadButton gameControllerButtonCode);
 
     bool m_menuActive;
 

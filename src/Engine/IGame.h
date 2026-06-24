@@ -24,7 +24,7 @@
 #include "GameId.h"
 #include "ManaBar.h"
 #include "SavedGameInDosFormatConfig.h"
-#include <SDL_keycode.h>
+#include "SDL3/SDL_keycode.h"
 #include <filesystem>
 #include <map>
 

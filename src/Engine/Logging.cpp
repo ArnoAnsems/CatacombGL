@@ -15,7 +15,7 @@
 #include "Logging.h"
 #include <fstream>
 #include <iostream>
-#include <SDL_messagebox.h>
+#include "SDL3/SDL_messagebox.h"
 
 namespace fs = std::filesystem;
 

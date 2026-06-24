@@ -16,7 +16,7 @@
 #include "GuiElementBindGameController.h"
 #include "RenderableText.h"
 #include "PlayerInput.h"
-#include "SDL_mouse.h"
+#include "SDL3/SDL_mouse.h"
 
 GuiElementBindGameController::GuiElementBindGameController(
     const PlayerInput& playerInput,
@@ -41,15 +41,15 @@ const GuiEvent& GuiElementBindGameController::ProcessInput()
         if (m_waitingForGameController)
         {
             // Check which key is pressed
-            const SDL_GameControllerButton button = m_playerInput.GetFirstGameControllerButtonPressed();
-            if (button != SDL_CONTROLLER_BUTTON_INVALID && m_controlsMap.AssignActionToGameControllerButton(m_controlAction, button))
+            const SDL_GamepadButton button = m_playerInput.GetFirstGameControllerButtonPressed();
+            if (button != SDL_GAMEPAD_BUTTON_INVALID && m_controlsMap.AssignActionToGameControllerButton(m_controlAction, button))
             {
                 m_waitingForGameController = false;
             }
             else
             {
-                const SDL_GameControllerAxis axis = m_playerInput.GetFirstGameControllerAxisPressed();
-                if (axis != SDL_CONTROLLER_AXIS_INVALID && m_controlsMap.AssignActionToGameControllerAxis(m_controlAction, axis))
+                const SDL_GamepadAxis axis = m_playerInput.GetFirstGameControllerAxisPressed();
+                if (axis != SDL_GAMEPAD_AXIS_INVALID && m_controlsMap.AssignActionToGameControllerAxis(m_controlAction, axis))
                 {
                     m_waitingForGameController = false;
                 }
@@ -59,7 +59,7 @@ const GuiEvent& GuiElementBindGameController::ProcessInput()
         {
             if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
                 m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
-                m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
+                m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
             {
                 m_waitingForGameController = true;
                 SetEvent(GuiActionKeyBinding, 0);

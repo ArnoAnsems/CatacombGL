@@ -966,7 +966,7 @@ bool EngineCore::Think()
         m_playerInput.SetRelativeMouseYPos(0);
     }
 
-    if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A))
+    if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
     {
         EnterKeyReleased();
     }
@@ -976,27 +976,27 @@ bool EngineCore::Think()
         if (m_playerInput.IsKeyPressed(m_game.GetCheatsKeyCode()))
         {
             // Check for cheat codes
-            if (m_playerInput.IsKeyPressed(SDLK_w)) // W = warp to level
+            if (m_playerInput.IsKeyPressed(SDLK_W)) // W = warp to level
             {
                 ShowWarpCheatDialog();
             }
-            if (m_playerInput.IsKeyPressed(SDLK_g)) // G = toggle God mode
+            if (m_playerInput.IsKeyPressed(SDLK_G)) // G = toggle God mode
             {
                 ShowGodModeCheatDialog();
             }
-            if (m_playerInput.IsKeyPressed(SDLK_i)) // I = free items
+            if (m_playerInput.IsKeyPressed(SDLK_I)) // I = free items
             {
                 ShowFreeItemsCheatDialog();
             }
-            if (m_playerInput.IsKeyPressed(SDLK_z)) // Z = freeze time
+            if (m_playerInput.IsKeyPressed(SDLK_Z)) // Z = freeze time
             {
                 FreezeTimeCheat();
             }
-            if (m_playerInput.IsKeyPressed(SDLK_o)) // O = overhead map
+            if (m_playerInput.IsKeyPressed(SDLK_O)) // O = overhead map
             {
                 ShowAutoMap(true);
             }
-            if (m_playerInput.IsKeyPressed(SDLK_e)) // E = Exit level (Catacomb 3D)
+            if (m_playerInput.IsKeyPressed(SDLK_E)) // E = Exit level (Catacomb 3D)
             {
                 if (m_game.IsCatacomb3D() &&
                     m_state == InGame &&
@@ -1019,7 +1019,7 @@ bool EngineCore::Think()
                 }
             }
 
-            if (m_playerInput.IsKeyJustPressed(SDLK_n) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_B)) // N
+            if (m_playerInput.IsKeyJustPressed(SDLK_N) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_EAST)) // N
             {
                 KeyNPressed();
             }
@@ -1043,12 +1043,12 @@ bool EngineCore::Think()
                 }
             }
 
-            if (m_playerInput.IsKeyJustPressed(SDLK_w) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_X)) // W
+            if (m_playerInput.IsKeyJustPressed(SDLK_W) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_WEST)) // W
             {
                 KeyWPressed();
             }
 
-            if (m_playerInput.IsKeyJustPressed(SDLK_y) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_A)) // Y
+            if (m_playerInput.IsKeyJustPressed(SDLK_Y) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH)) // Y
             {
                 KeyYPressed();
             }
@@ -1078,7 +1078,7 @@ bool EngineCore::Think()
         m_state != GodModeCheatDialog &&
         m_state != FreeItemsCheatDialog &&
         !m_menu->IsActive() &&
-        (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) || m_playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_START))) // Escape
+        (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_START))) // Escape
     {
         OpenMenu();
         m_game.GetAudioPlayer()->StopMusic();
@@ -1365,20 +1365,20 @@ bool EngineCore::Think()
                 }
 
                 constexpr int16_t minGameControllerAxisDeflection = 10000;
-                if (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
+                if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
                 {
                     // Turn left with the game controller
                     constexpr int16_t maxGameControllerAxisDeflection = -32768;
-                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
+                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
                     const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
                 }
-                else if (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) > minGameControllerAxisDeflection)
+                else if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) > minGameControllerAxisDeflection)
                 {
                     // Turn right with the game controller
                     constexpr int16_t maxGameControllerAxisDeflection = 32767;
-                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
+                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
                     const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
                     const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
                     m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
@@ -1391,14 +1391,14 @@ bool EngineCore::Think()
                 
                 const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
                     (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) < -minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) < -minGameControllerAxisDeflection);
                 const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
                     (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight))) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) > minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) > minGameControllerAxisDeflection);
                 const bool moveForward = m_playerActions.GetActionActive(MoveForward) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY) < -minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) < -minGameControllerAxisDeflection);
                 const bool moveBackward = m_playerActions.GetActionActive(MoveBackward) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY) > minGameControllerAxisDeflection);
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) > minGameControllerAxisDeflection);
                 if (moveForward && strafeLeft)
                 { 
                     Thrust(315, distance);
@@ -3236,21 +3236,21 @@ bool EngineCore::IsActionActive(const ControlAction action) const
     }
     if (!isActive)
     {
-        const std::vector<SDL_GameControllerButton> gameControllerButtons = m_configurationSettings.GetConstControlsMap().GetGameControllerButtonsFromAction(action);
-        for (SDL_GameControllerButton gameControllerButton : gameControllerButtons)
+        const std::vector<SDL_GamepadButton> gameControllerButtons = m_configurationSettings.GetConstControlsMap().GetGameControllerButtonsFromAction(action);
+        for (SDL_GamepadButton gameControllerButton : gameControllerButtons)
         {
             isActive |= m_playerInput.IsGameControllerButtonPressed(gameControllerButton);
         }
     }
     if (!isActive)
     {
-        const std::vector<SDL_GameControllerAxis> gameControllerAxes = m_configurationSettings.GetConstControlsMap().GetGameControllerAxisFromAction(action);
-        for (SDL_GameControllerAxis gameControllerAxis : gameControllerAxes)
+        const std::vector<SDL_GamepadAxis> gameControllerAxes = m_configurationSettings.GetConstControlsMap().GetGameControllerAxisFromAction(action);
+        for (SDL_GamepadAxis gameControllerAxis : gameControllerAxes)
         {
             constexpr int16_t minimumAxisDeflection = 5000;
             const bool isAxisActive =
-                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERLEFT && m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERLEFT) > minimumAxisDeflection) ||
-                (gameControllerAxis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT && m_playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > minimumAxisDeflection);
+                (gameControllerAxis == SDL_GAMEPAD_AXIS_LEFT_TRIGGER && m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFT_TRIGGER) > minimumAxisDeflection) ||
+                (gameControllerAxis == SDL_GAMEPAD_AXIS_RIGHT_TRIGGER && m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHT_TRIGGER) > minimumAxisDeflection);
             isActive |= isAxisActive;
         }
     }
@@ -3276,8 +3276,8 @@ bool EngineCore::IsActionJustPressed(const ControlAction action) const
     }
     if (!isJustPressed)
     {
-        const std::vector<SDL_GameControllerButton> gameControllerButtons = m_configurationSettings.GetConstControlsMap().GetGameControllerButtonsFromAction(action);
-        for (SDL_GameControllerButton gameControllerButton : gameControllerButtons)
+        const std::vector<SDL_GamepadButton> gameControllerButtons = m_configurationSettings.GetConstControlsMap().GetGameControllerButtonsFromAction(action);
+        for (SDL_GamepadButton gameControllerButton : gameControllerButtons)
         {
             isJustPressed |= m_playerInput.IsGameControllerButtonJustPressed(gameControllerButton);
         }

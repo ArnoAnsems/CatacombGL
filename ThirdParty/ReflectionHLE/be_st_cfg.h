@@ -69,7 +69,6 @@ typedef struct
 #endif
 	char lastSelectedGameExe[SELECTED_EXE_FILENAME_BUFFERLEN];
 	int lastSelectedGameVer;
-	int displayNum;
 	int/*bool*/ rememberDisplayNum;
 	int sdlRendererDriver;
 	int vSync;
@@ -80,6 +79,10 @@ typedef struct
 	int/*bool*/ showEndoom;
 	int mouseGrab;
 	int sndInterThreadBufferRatio;
+	// Low latency audio tries to get close to 700Hz timing on audio callback.
+	// Typically there's no reason for a user to enable this due to emulated
+	// audio devices being flexible on timing.
+	int/*bool*/ sndLowLatency;
 	int sndSampleRate;
 	int/*bool*/ sndSubSystem;
 	int/*bool*/ oplEmulation;

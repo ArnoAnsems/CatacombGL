@@ -14,7 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "GuiElementHighScores.h"
-#include <SDL_keyboard.h>
+#include "SDL3/SDL_keyboard.h"
 #include "HighScores.h"
 #include "PlayerInput.h"
 
@@ -57,6 +57,6 @@ void GuiElementHighScores::Draw(IRenderer& renderer) const
 
 bool GuiElementHighScores::KeyIsSuitableForName(const SDL_Keycode keyCode)
 {
-    return ((keyCode >= SDLK_a && keyCode <= SDLK_z) ||
+    return ((keyCode >= SDLK_A && keyCode <= SDLK_Z) ||
         (keyCode >= SDLK_0 && keyCode <= SDLK_9));
 }

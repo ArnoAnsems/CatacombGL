@@ -54,7 +54,7 @@ TEST_F(GuiElementEditText_Test, EnterTextAndPressEnter)
 
     // Press "c"
     renderableText.Reset();
-    GuiElementEditText_Test::PressKey(playerInput, SDLK_c);
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_C);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub);
 
@@ -64,7 +64,7 @@ TEST_F(GuiElementEditText_Test, EnterTextAndPressEnter)
 
     // Press "a"
     renderableText.Reset();
-    GuiElementEditText_Test::PressKey(playerInput, SDLK_a);
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_A);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub);
 
@@ -74,7 +74,7 @@ TEST_F(GuiElementEditText_Test, EnterTextAndPressEnter)
 
     // Press "t"
     renderableText.Reset();
-    GuiElementEditText_Test::PressKey(playerInput, SDLK_t);
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_T);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub);
 
@@ -130,7 +130,7 @@ TEST_F(GuiElementEditText_Test, ClearTextWithBackspace)
 
     // Press "D"
     renderableText.Reset();
-    GuiElementEditText_Test::PressKey(playerInput, SDLK_d);
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_D);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub);
 
@@ -190,7 +190,7 @@ TEST_F(GuiElementEditText_Test, CancelEditWithEsc)
 
     // Press "Z"
     renderableText.Reset();
-    GuiElementEditText_Test::PressKey(playerInput, SDLK_z);
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_Z);
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
     guiElementEditText.Draw(rendererStub);
 
@@ -263,7 +263,7 @@ TEST_F(GuiElementEditText_Test, CheckMaxTextLength)
     // Press keys until maximum text length is reached
     for (uint16_t i = 0; i < maxTextLength; i++)
     {
-        GuiElementEditText_Test::PressKey(playerInput, SDLK_a);
+        GuiElementEditText_Test::PressKey(playerInput, SDLK_A);
         EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionBusy);
         playerInput.ClearAll();
     }
@@ -275,7 +275,7 @@ TEST_F(GuiElementEditText_Test, CheckMaxTextLength)
     EXPECT_EQ(GuiElementEditText_Test::RenderableTextToString(renderableText), "AAAAA_");
 
     // Press one more key
-    GuiElementEditText_Test::PressKey(playerInput, SDLK_b);
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_B);
     guiElementEditText.ProcessInput();
 
     // Check that output did not change
@@ -306,7 +306,7 @@ TEST_F(GuiElementEditText_Test, CheckDisabled)
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
 
     // Press one more key
-    GuiElementEditText_Test::PressKey(playerInput, SDLK_b);
+    GuiElementEditText_Test::PressKey(playerInput, SDLK_B);
 
     // Input is still ignored
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);

@@ -37,9 +37,9 @@ PlayerInput::PlayerInput() :
         m_buttonJustPressed[i] = false;
     }
 
-    for (int i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; i++)
+    for (int i = SDL_GAMEPAD_AXIS_LEFTX; i < SDL_GAMEPAD_AXIS_COUNT; i++)
     {
-        const auto axis = static_cast<SDL_GameControllerAxis>(i);
+        const auto axis = static_cast<SDL_GamepadAxis>(i);
         m_gameControllerAxisPressed.insert(std::make_pair(axis, 0u));
         m_gameControllerAxisJustPressedTowardsNegative.insert(std::make_pair(axis, false));
         m_gameControllerAxisJustPressedTowardsPositive.insert(std::make_pair(axis, false));
@@ -146,9 +146,9 @@ void PlayerInput::ClearJustPressed()
         pair.second = false;
     }
 
-    for (int i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; i++)
+    for (int i = SDL_GAMEPAD_AXIS_LEFTX; i < SDL_GAMEPAD_AXIS_COUNT; i++)
     {
-        const auto axis = static_cast<SDL_GameControllerAxis>(i);
+        const auto axis = static_cast<SDL_GamepadAxis>(i);
         m_gameControllerAxisJustPressedTowardsNegative.at(axis) = false;
         m_gameControllerAxisJustPressedTowardsPositive.at(axis) = false;
     }
@@ -249,9 +249,9 @@ uint8_t PlayerInput::GetFirstMouseButtonPressed() const
     return (i == 6) ? 0 : i;
 }
 
-SDL_GameControllerButton PlayerInput::GetFirstGameControllerButtonPressed() const
+SDL_GamepadButton PlayerInput::GetFirstGameControllerButtonPressed() const
 {
-    SDL_GameControllerButton button = SDL_CONTROLLER_BUTTON_INVALID;
+    SDL_GamepadButton button = SDL_GAMEPAD_BUTTON_INVALID;
     for (auto& pair : m_gameControllerButtonJustPressed)
     {
         if (pair.second == true)
@@ -264,9 +264,9 @@ SDL_GameControllerButton PlayerInput::GetFirstGameControllerButtonPressed() cons
     return button;
 }
 
-SDL_GameControllerAxis PlayerInput::GetFirstGameControllerAxisPressed() const
+SDL_GamepadAxis PlayerInput::GetFirstGameControllerAxisPressed() const
 {
-    SDL_GameControllerAxis axis = SDL_CONTROLLER_AXIS_INVALID;
+    SDL_GamepadAxis axis = SDL_GAMEPAD_AXIS_INVALID;
     for (auto& pair : m_gameControllerAxisJustPressedTowardsNegative)
     {
         if (pair.second == true)
@@ -276,7 +276,7 @@ SDL_GameControllerAxis PlayerInput::GetFirstGameControllerAxisPressed() const
         }
     }
 
-    if (axis == SDL_CONTROLLER_AXIS_INVALID)
+    if (axis == SDL_GAMEPAD_AXIS_INVALID)
     {
         for (auto& pair : m_gameControllerAxisJustPressedTowardsPositive)
         {
@@ -320,14 +320,14 @@ void PlayerInput::ClearAll()
         pair.second = false;
     }
 
-    for (int i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; i++)
+    for (int i = SDL_GAMEPAD_AXIS_LEFTX; i < SDL_GAMEPAD_AXIS_COUNT; i++)
     {
-        const auto axis = static_cast<SDL_GameControllerAxis>(i);
+        const auto axis = static_cast<SDL_GamepadAxis>(i);
         m_gameControllerAxisPressed.at(axis) = 0;
     }
 }
 
-void PlayerInput::SetGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton, const bool pressed)
+void PlayerInput::SetGameControllerButtonPressed(const SDL_GamepadButton gameControllerButton, const bool pressed)
 {
     auto it = m_gameControllerButtonPressed.find(gameControllerButton);
     if (it != m_gameControllerButtonPressed.end())
@@ -341,7 +341,7 @@ void PlayerInput::SetGameControllerButtonPressed(const SDL_GameControllerButton 
             }
             else
             {
-                const std::pair<SDL_GameControllerButton, bool> pair = std::make_pair(gameControllerButton, true);
+                const std::pair<SDL_GamepadButton, bool> pair = std::make_pair(gameControllerButton, true);
                 m_gameControllerButtonJustPressed.insert(pair);
             }
         }
@@ -349,7 +349,7 @@ void PlayerInput::SetGameControllerButtonPressed(const SDL_GameControllerButton 
     }
     else
     {
-        const std::pair<SDL_GameControllerButton, bool> pair = std::make_pair(gameControllerButton, pressed);
+        const std::pair<SDL_GamepadButton, bool> pair = std::make_pair(gameControllerButton, pressed);
         m_gameControllerButtonPressed.insert(pair);
 
         if (pressed)
@@ -361,14 +361,14 @@ void PlayerInput::SetGameControllerButtonPressed(const SDL_GameControllerButton 
             }
             else
             {
-                const std::pair<SDL_GameControllerButton, bool> pair = std::make_pair(gameControllerButton, true);
+                const std::pair<SDL_GamepadButton, bool> pair = std::make_pair(gameControllerButton, true);
                 m_gameControllerButtonJustPressed.insert(pair);
             }
         }
     }
 }
 
-bool PlayerInput::IsGameControllerButtonJustPressed(const SDL_GameControllerButton gameControllerButton) const
+bool PlayerInput::IsGameControllerButtonJustPressed(const SDL_GamepadButton gameControllerButton) const
 {
     const auto it = m_gameControllerButtonJustPressed.find(gameControllerButton);
     if (it != m_gameControllerButtonJustPressed.end())
@@ -379,7 +379,7 @@ bool PlayerInput::IsGameControllerButtonJustPressed(const SDL_GameControllerButt
     return false;
 }
 
-bool PlayerInput::IsGameControllerButtonPressed(const SDL_GameControllerButton gameControllerButton) const
+bool PlayerInput::IsGameControllerButtonPressed(const SDL_GamepadButton gameControllerButton) const
 {
     const auto it = m_gameControllerButtonPressed.find(gameControllerButton);
     if (it != m_gameControllerButtonPressed.end())
@@ -390,12 +390,12 @@ bool PlayerInput::IsGameControllerButtonPressed(const SDL_GameControllerButton g
     return false;
 }
 
-int16_t PlayerInput::GetGameControllerAxisPressed(const SDL_GameControllerAxis gameControllerAxis) const
+int16_t PlayerInput::GetGameControllerAxisPressed(const SDL_GamepadAxis gameControllerAxis) const
 {
     return m_gameControllerAxisPressed.at(gameControllerAxis);
 }
 
-void PlayerInput::SetGameControllerAxisPressed(const SDL_GameControllerAxis gameControllerAxis, const int16_t value)
+void PlayerInput::SetGameControllerAxisPressed(const SDL_GamepadAxis gameControllerAxis, const int16_t value)
 {
     const int16_t previousValue = m_gameControllerAxisPressed.at(gameControllerAxis);
     m_gameControllerAxisPressed.at(gameControllerAxis) = value;
@@ -413,12 +413,12 @@ void PlayerInput::SetGameControllerAxisPressed(const SDL_GameControllerAxis game
     }
 }
 
-bool PlayerInput::GetGameControllerAxisJustPressedTowardsNegative(const SDL_GameControllerAxis gameControllerAxis) const
+bool PlayerInput::GetGameControllerAxisJustPressedTowardsNegative(const SDL_GamepadAxis gameControllerAxis) const
 {
     return m_gameControllerAxisJustPressedTowardsNegative.at(gameControllerAxis);
 }
 
-bool PlayerInput::GetGameControllerAxisJustPressedTowardsPositive(const SDL_GameControllerAxis gameControllerAxis) const
+bool PlayerInput::GetGameControllerAxisJustPressedTowardsPositive(const SDL_GamepadAxis gameControllerAxis) const
 {
     return m_gameControllerAxisJustPressedTowardsPositive.at(gameControllerAxis);
 }

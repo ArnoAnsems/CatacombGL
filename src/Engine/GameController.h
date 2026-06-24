@@ -20,7 +20,7 @@
 //
 #pragma once
 
-#include <SDL_gamecontroller.h>
+#include "SDL3/SDL_gamepad.h"
 
 class GameController
 {
@@ -29,9 +29,9 @@ public:
     ~GameController();
 
     bool IsDetected() const;
-    bool IsButtonPressed(const SDL_GameControllerButton gameControllerButton) const;
-    int16_t GetAxis(const SDL_GameControllerAxis axis) const;
+    bool IsButtonPressed(const SDL_GamepadButton gameControllerButton) const;
+    int16_t GetAxis(const SDL_GamepadAxis axis) const;
 
 private:
-    SDL_GameController* m_sdlGameController = nullptr;
+    SDL_Gamepad* m_sdlGameController = nullptr;
 };

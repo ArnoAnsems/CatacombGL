@@ -16,7 +16,7 @@
 
 #include <string>
 #include "GuiElementBase.h"
-#include "SDL_keycode.h"
+#include "SDL3/SDL_keycode.h"
 
 class PlayerInput;
 class RenderableText;

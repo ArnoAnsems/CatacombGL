@@ -17,7 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <SDL_keyboard.h>
+#include "SDL3/SDL_keyboard.h"
 
 namespace fs = std::filesystem;
 
@@ -68,7 +68,7 @@ ConfigurationSettings::ConfigurationSettings() :
     m_screenMode("Screen Mode", "screenmode",
         {
             {"Windowed", "windowed", ""},
-            {"Fullscreen", "fullscreen", ""} ,
+            {"Fullscreen", "fullscreen", ""},
             {"Borderless", "borderlesswindowed", ""}
         },
         CVarItemIdScreenModeWindowed),
@@ -241,9 +241,9 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
             }
         }
 
-        for (uint8_t i = static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_A); i < static_cast<uint8_t>(SDL_CONTROLLER_BUTTON_MAX); i++)
+        for (uint8_t i = static_cast<uint8_t>(SDL_GAMEPAD_BUTTON_SOUTH); i < static_cast<uint8_t>(SDL_GAMEPAD_BUTTON_COUNT); i++)
         {
-            const SDL_GameControllerButton button = static_cast<SDL_GameControllerButton>(i);
+            const SDL_GamepadButton button = static_cast<SDL_GamepadButton>(i);
             const std::string buttonName = ControlsMap::GetGameControllerButtonName(button);
             const auto buttonPair = keyValuePairs.find(buttonName);
             if (buttonPair != keyValuePairs.end())
@@ -253,9 +253,9 @@ void ConfigurationSettings::LoadFromFile(const fs::path& configurationFile)
             }
         }
 
-        for (uint8_t i = static_cast<uint8_t>(SDL_CONTROLLER_AXIS_LEFTX); i < static_cast<uint8_t>(SDL_CONTROLLER_AXIS_MAX); i++)
+        for (uint8_t i = static_cast<uint8_t>(SDL_GAMEPAD_AXIS_LEFTX); i < static_cast<uint8_t>(SDL_GAMEPAD_AXIS_COUNT); i++)
         {
-            const SDL_GameControllerAxis axis = static_cast<SDL_GameControllerAxis>(i);
+            const SDL_GamepadAxis axis = static_cast<SDL_GamepadAxis>(i);
             const std::string axisName = ControlsMap::GetGameControllerAxisName(axis);
             if (!axisName.empty())
             {
@@ -338,14 +338,14 @@ void ConfigurationSettings::StoreToFile(const fs::path& configurationFile) const
         for (uint8_t i = static_cast<uint8_t>(MoveForward); i < static_cast<uint8_t>(MaxControlAction); i++)
         {
             const ControlAction action = static_cast<ControlAction>(i);
-            const std::vector<SDL_GameControllerButton> gameControllerButtonsForAction = m_controlsMap.GetGameControllerButtonsFromAction(action);
+            const std::vector<SDL_GamepadButton> gameControllerButtonsForAction = m_controlsMap.GetGameControllerButtonsFromAction(action);
             const std::string& actionLabel = m_controlsMap.GetActionLabels().at(action);
             for (uint8_t j = 0; j < gameControllerButtonsForAction.size(); j++)
             {
                 const std::string gameControllerButtonLabel = ControlsMap::GetGameControllerButtonName(gameControllerButtonsForAction.at(j));
                 file << gameControllerButtonLabel << "=" << actionLabel << "\n";
             }
-            const std::vector<SDL_GameControllerAxis>gameControllerAxisForAction = m_controlsMap.GetGameControllerAxisFromAction(action);
+            const std::vector<SDL_GamepadAxis>gameControllerAxisForAction = m_controlsMap.GetGameControllerAxisFromAction(action);
             for (uint8_t j = 0; j < gameControllerAxisForAction.size(); j++)
             {
                 const std::string gameControllerAxisLabel = ControlsMap::GetGameControllerAxisName(gameControllerAxisForAction.at(j));

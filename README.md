@@ -18,11 +18,11 @@ CatacombGL does not run standalone, but requires the original game data (levels,
 The CatacombGL.exe (Windows) or CatacombGL.a (Linux) can be run from any location. When started, a selection screen with an overview of all the supported games is shown. In case the Catacombs Pack was installed via the GOG installer (Windows), the game data will be auto-detected. Otherwise, it is possible to manually browse to the folder which contains either the Catacombs Pack or the shareware version.
 
 # How to build on Linux
-With the following steps, CatacombGL was built on Ubuntu 24.04 LTS:
+With the following steps, CatacombGL was built on Ubuntu 26.04 LTS:
 * sudo apt-get update
 * sudo apt-get install build-essential cmake cmake-data
 * sudo add-apt-repository universe
-* sudo apt-get install libsdl2-dev
+* sudo apt-get install libsdl3-dev
 
 Ccmake gui is optional (sudo apt-get install ccmake-curses-gui) <br />
 <br />
@@ -37,7 +37,7 @@ make -j3
  ```
  
 With the following steps, CatacombGL was built on RaspberryPi:
-* sudo apt-get install git build-essential cmake-curses-gui libsdl2-dev
+* sudo apt-get install git build-essential cmake-curses-gui libsdl3-dev
 * git clone "https://github.com/arnoansems/catacombgl"
 * ccmake <path to CatacombGL source>
 * Configure and generate the build via the CMake GUI
@@ -75,7 +75,7 @@ CatacombGL would not have been possible without reusing code that was generously
 * The Catacomb Apocalypse, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombApocalypse). 
 * ReflectionHLE, developed by NY00123, released under the GPLv2 license, see gpl2.txt (https://github.com/ReflectionHLE/ReflectionHLE).
 * Nuked OPL3 emulator, developed by Nuke.YKT, released under the LGPLv2.1 license, see lgpl2.1.txt (https://github.com/nukeykt/Nuked-OPL3).
-* Simple DirectMedia Layer, developed by Sam Lantinga. See SDL2.txt for license details. (http://www.libsdl.org/)
+* Simple DirectMedia Layer, developed by Sam Lantinga. See SDL3.txt for license details. (http://www.libsdl.org/)
 * GoogleTest, developed by the GoogleTest team. See GoogleTest.txt for license details. (https://github.com/google/googletest). 
 
 # Tools

@@ -31,7 +31,7 @@
 #ifndef BE_ST_SDL_PRIVATE_H
 #define BE_ST_SDL_PRIVATE_H
 
-#include "SDL.h"
+#include "SDL3/SDL.h"
 
 #ifdef REFKEEN_PLATFORM_EMSCRIPTEN
 #include <emscripten.h>

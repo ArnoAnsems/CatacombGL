@@ -34,7 +34,7 @@ static constexpr unsigned int GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER = 0x8CDB;
 static constexpr unsigned int GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER = 0x8CDC;
 static constexpr unsigned int GL_FRAMEBUFFER_UNSUPPORTED = 0x8CDD;
 #endif
-#include <SDL_video.h>
+#include "SDL3/SDL_video.h"
 
 OpenGLFrameBuffer::OpenGLFrameBuffer(const OpenGLBasic& openGLBasic) :
     m_openGLBasic(openGLBasic),

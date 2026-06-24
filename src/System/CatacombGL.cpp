@@ -48,9 +48,9 @@ extern "C" {
 };
 #include "../../ThirdParty/ReflectionHLE/id_sd.h"
 
-#include <SDL.h>
-#include <SDL_mouse.h>
-#include <SDL_video.h>
+#include "SDL3/SDL.h"
+#include "SDL3/SDL_mouse.h"
+#include "SDL3/SDL_video.h"
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -69,20 +69,20 @@ void UpdatePlayerInput(SDL_Window* const window, const GameController& gameContr
 {
 	SDL_PumpEvents();
 	int numKeys = 0;
-	const Uint8* state = SDL_GetKeyboardState(&numKeys);
+	const bool* state = SDL_GetKeyboardState(&numKeys);
 
 	for (int i = 0; i < numKeys; i++)
 	{
-		input.SetKeyPressed(SDL_GetKeyFromScancode((SDL_Scancode)(i)), state[i]);
+		input.SetKeyPressed(SDL_GetKeyFromScancode((SDL_Scancode)(i), SDL_KMOD_NONE, false), state[i]);
 	}
 
 	const uint32_t timestamp = SDL_GetTicks();
 	constexpr uint32_t minimumTimeBetweenMouseUpdates = 10u; // in milliseconds
 	if (timestamp >= input.GetMouseUpdateTick() + minimumTimeBetweenMouseUpdates)
 	{
-		int x = 0;
-		int y = 0;
-		const uint32_t mouseState = SDL_GetMouseState(&x, &y);
+		float x = 0;
+		float y = 0;
+		const SDL_MouseButtonFlags mouseFlags = SDL_GetMouseState(&x, &y);
 		int w = 0;
 		int h = 0;
 		SDL_GetWindowSize(window, &w, &h);
@@ -93,11 +93,11 @@ void UpdatePlayerInput(SDL_Window* const window, const GameController& gameContr
 		const int32_t ortho2dY = (y * factorY) + rect.top;
 		input.SetMouseXPos(ortho2dX);
 		input.SetMouseYPos(ortho2dY);
-		input.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseState & SDL_BUTTON_LMASK);
-		input.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseState & SDL_BUTTON_MMASK);
-		input.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseState & SDL_BUTTON_RMASK);
-		input.SetMouseButtonPressed(SDL_BUTTON_X1, mouseState & SDL_BUTTON_X1MASK);
-		input.SetMouseButtonPressed(SDL_BUTTON_X2, mouseState & SDL_BUTTON_X2MASK);
+		input.SetMouseButtonPressed(SDL_BUTTON_LEFT, mouseFlags & SDL_BUTTON_LMASK);
+		input.SetMouseButtonPressed(SDL_BUTTON_MIDDLE, mouseFlags & SDL_BUTTON_MMASK);
+		input.SetMouseButtonPressed(SDL_BUTTON_RIGHT, mouseFlags & SDL_BUTTON_RMASK);
+		input.SetMouseButtonPressed(SDL_BUTTON_X1, mouseFlags & SDL_BUTTON_X1MASK);
+		input.SetMouseButtonPressed(SDL_BUTTON_X2, mouseFlags & SDL_BUTTON_X2MASK);
 		const uint32_t relativeMouseState = SDL_GetRelativeMouseState(&x, &y);
 		input.SetRelativeMouseXPos(x);
 		input.SetRelativeMouseYPos(y);
@@ -107,34 +107,32 @@ void UpdatePlayerInput(SDL_Window* const window, const GameController& gameContr
 
 	if (gameController.IsDetected())
 	{
-		for (int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++)
+		for (int i = 0; i < SDL_GAMEPAD_BUTTON_COUNT; i++)
 		{
-			const SDL_GameControllerButton gameControllerButton = static_cast<SDL_GameControllerButton>(i);
+			const SDL_GamepadButton gameControllerButton = static_cast<SDL_GamepadButton>(i);
 			input.SetGameControllerButtonPressed(gameControllerButton, gameController.IsButtonPressed(gameControllerButton));
 		}
 
-		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX, gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTX));
-		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY, gameController.GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
-		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX, gameController.GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
-		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTY, gameController.GetAxis(SDL_CONTROLLER_AXIS_RIGHTY));
-		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERLEFT, gameController.GetAxis(SDL_CONTROLLER_AXIS_TRIGGERLEFT));
-		input.SetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERRIGHT, gameController.GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
+		input.SetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX, gameController.GetAxis(SDL_GAMEPAD_AXIS_LEFTX));
+		input.SetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY, gameController.GetAxis(SDL_GAMEPAD_AXIS_LEFTY));
+		input.SetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX, gameController.GetAxis(SDL_GAMEPAD_AXIS_RIGHTX));
+		input.SetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTY, gameController.GetAxis(SDL_GAMEPAD_AXIS_RIGHTY));
+		input.SetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFT_TRIGGER, gameController.GetAxis(SDL_GAMEPAD_AXIS_LEFT_TRIGGER));
+		input.SetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHT_TRIGGER, gameController.GetAxis(SDL_GAMEPAD_AXIS_RIGHT_TRIGGER));
 	}
 }
 
 void InitializeSDL()
 {
-	SDL_version sdlVersion;
-	memset(&sdlVersion, 0, sizeof(sdlVersion));
-	SDL_GetVersion(&sdlVersion);
+	const int linkedSdlVersion = SDL_GetVersion();
 	const std::string sdlLogMessage =
 		"Initializing SDL " +
-		std::to_string(sdlVersion.major) + "." +
-		std::to_string(sdlVersion.minor) + "." +
-		std::to_string(sdlVersion.patch);
+		std::to_string(SDL_VERSIONNUM_MAJOR(linkedSdlVersion)) + "." +
+		std::to_string(SDL_VERSIONNUM_MINOR(linkedSdlVersion)) + "." +
+		std::to_string(SDL_VERSIONNUM_MICRO(linkedSdlVersion));
 	Logging::Instance().AddLogMessage(sdlLogMessage);
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD))
 	{
 		Logging::Instance().FatalError("SDL_Init failed: " + std::string(SDL_GetError()));
 	}
@@ -245,7 +243,7 @@ int main(int argc, char* argv[])
 			memset(&event, 0, sizeof(event));
 			while (SDL_PollEvent(&event))
 			{
-				if (event.type == SDL_WINDOWEVENT)
+				if (event.type >= SDL_EVENT_WINDOW_FIRST && event.type <= SDL_EVENT_WINDOW_LAST)
 				{
 					active = HandleWindowEvent(&event.window, window, renderer);
 				}
@@ -469,7 +467,7 @@ int main(int argc, char* argv[])
 		memset(&event, 0, sizeof(event));
 		while (SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_WINDOWEVENT)
+			if (event.type >= SDL_EVENT_WINDOW_FIRST && event.type <= SDL_EVENT_WINDOW_LAST)
 			{
 				active = HandleWindowEvent(&event.window, window, renderer);
 			}
@@ -481,7 +479,7 @@ int main(int argc, char* argv[])
 		}
 		else                                // Not Time To Quit, Update Screen
 		{
-			SDL_SetRelativeMouseMode(engine->RequiresMouseCapture() ? SDL_TRUE : SDL_FALSE);
+			SDL_SetWindowRelativeMouseMode(window, engine->RequiresMouseCapture());
 			UpdatePlayerInput(window, gameController, input);
 			console->ProcessInput(input);
 			if (screenMode != engine->GetScreenMode())

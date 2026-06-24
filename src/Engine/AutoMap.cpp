@@ -135,9 +135,9 @@ void AutoMap::ProcessInput(
 
         constexpr int16_t minGameControllerAxisDeflection = 10000;
         if (playerInput.IsKeyPressed(SDLK_RIGHT) ||
-            playerInput.IsGameControllerButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) > minGameControllerAxisDeflection ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) > minGameControllerAxisDeflection)
+            playerInput.IsGameControllerButtonPressed(SDL_GAMEPAD_BUTTON_DPAD_RIGHT) ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) > minGameControllerAxisDeflection ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) > minGameControllerAxisDeflection)
         {
             m_originX += stepSize;
             if (autoMapMode == CVarItemIdAutoMapIsometric)
@@ -146,9 +146,9 @@ void AutoMap::ProcessInput(
             }
         }
         if (playerInput.IsKeyPressed(SDLK_LEFT)||
-            playerInput.IsGameControllerButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTX) < -minGameControllerAxisDeflection ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
+            playerInput.IsGameControllerButtonPressed(SDL_GAMEPAD_BUTTON_DPAD_LEFT) ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) < -minGameControllerAxisDeflection ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
         {
             m_originX -= stepSize;
             if (autoMapMode == CVarItemIdAutoMapIsometric)
@@ -157,9 +157,9 @@ void AutoMap::ProcessInput(
             }
         }
         if (playerInput.IsKeyPressed(SDLK_DOWN) ||
-            playerInput.IsGameControllerButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY) > minGameControllerAxisDeflection ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTY) > minGameControllerAxisDeflection)
+            playerInput.IsGameControllerButtonPressed(SDL_GAMEPAD_BUTTON_DPAD_DOWN) ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) > minGameControllerAxisDeflection ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTY) > minGameControllerAxisDeflection)
         {
             m_originY += stepSize;
             if (autoMapMode == CVarItemIdAutoMapIsometric)
@@ -168,9 +168,9 @@ void AutoMap::ProcessInput(
             }
         }
         if (playerInput.IsKeyPressed(SDLK_UP) ||
-            playerInput.IsGameControllerButtonPressed(SDL_CONTROLLER_BUTTON_DPAD_UP) ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_LEFTY) < -minGameControllerAxisDeflection ||
-            playerInput.GetGameControllerAxisPressed(SDL_CONTROLLER_AXIS_RIGHTY) < -minGameControllerAxisDeflection)
+            playerInput.IsGameControllerButtonPressed(SDL_GAMEPAD_BUTTON_DPAD_UP) ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) < -minGameControllerAxisDeflection ||
+            playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTY) < -minGameControllerAxisDeflection)
         {
             m_originY -= stepSize;
             if (autoMapMode == CVarItemIdAutoMapIsometric)
@@ -202,7 +202,7 @@ void AutoMap::ProcessInput(
 
     if (playerInput.IsKeyJustPressed(SDLK_LCTRL) ||
         playerInput.IsKeyJustPressed(SDLK_RCTRL) ||
-        playerInput.IsGameControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_Y))
+        playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_NORTH))
     {
         m_autoMapType = (AutoMapType)(m_autoMapType + 1);
         if (m_autoMapType == MaxAutoMapType)

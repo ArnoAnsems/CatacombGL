@@ -36,6 +36,8 @@
 #include "be_st.h"
 #include "be_st_sdl_private.h"
 
+#include <stdlib.h>
+
 // Use this rate, measured in BYTES, if the audio subsystem is disabled
 // for most (same units as used in values returned by BEL_ST_GetTicksMS())
 #define NUM_OF_BYTES_FOR_SOUND_CALLBACK_WITH_DISABLED_SUBSYSTEM 1000
