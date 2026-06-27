@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,8 +26,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "be_st.h"
+#include "refkeen.h"
 #include "be_audio_mixer.h"
+#include "../timing/be_timing.h"
 #include "nukedopl/opl3.h"
 
 bool g_sdlEmulatedOPLChipReady;
@@ -107,11 +108,14 @@ void BE_ST_OPL2Write(uint8_t reg, uint8_t val)
 	OPL3_WriteReg(&g_oplChip, reg, val);
 	// FIXME: For now we roughly simulate the above delays with a
 	// hack, using a "magic number" that appears to make this work.
-	unsigned int length = OPL_SAMPLE_RATE / 10000;
+	unsigned int length = OPL_WRITE_TIMING_MAGIC_SAMPLES;
 
 	if (length > g_oplMixerSource->in.size - g_oplMixerSource->in.num)
 	{
-		BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "BE_ST_OPL2Write overflow, want %u, have %u\n", length, g_oplMixerSource->in.size - g_oplMixerSource->in.num); // FIXME - other thread
+		// If the timer interrupt isn't running then we expect this buffer isn't
+		// being flushed so we can quietly skip over the timing emulation
+		if (g_sdlTimerIntFuncPtr)
+			BE_Cross_LogMessage(BE_LOG_MSG_WARNING, "BE_ST_OPL2Write overflow, want %u, have %u\n", length, g_oplMixerSource->in.size - g_oplMixerSource->in.num); // FIXME - other thread
 		length = g_oplMixerSource->in.size - g_oplMixerSource->in.num;
 	}
 	if (length)

@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,6 +39,7 @@
 #endif
 
 #include "be_cross.h"
+//#include "be_features.h"
 #include "be_st.h" // For BE_ST_ExitWithErrorMsg
 
 // Used for debugging
@@ -103,6 +104,14 @@ int BE_Cross_strncasecmp(const char *s1, const char *s2, size_t count)
 	uc1 = (unsigned char)((char)(BE_Cross_toupper(*s1)));
 	uc2 = (unsigned char)((char)(BE_Cross_toupper(*s2)));
 	return ((int)uc1 - (int)uc2);
+}
+
+void *BE_Cross_safeandfastmemcopy_strict(void *dest, void *destEnd, const void *src, size_t count)
+{
+	if ((char *)destEnd - (char *)dest < count)
+		return NULL;
+	memcpy(dest, src, count);
+	return (char *)dest + count; // WARNING: This differs from memcpy!
 }
 
 // Technically a little hack...

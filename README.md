@@ -74,7 +74,7 @@ CatacombGL would not have been possible without reusing code that was generously
 * The Catacomb Armageddon, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombArmageddon). 
 * The Catacomb Apocalypse, developed by Softdisk Publishing. The source code was published by Flatrock Software under the GNU GPLv2 license, see gpl2.txt (https://github.com/CatacombGames/CatacombApocalypse). 
 * ReflectionHLE, developed by NY00123, released under the GPLv2 license, see gpl2.txt (https://github.com/ReflectionHLE/ReflectionHLE).
-* Nuked OPL3 emulator, developed by Nuke.YKT, released under the LGPLv2.1 license, see lgpl2.1.txt (https://github.com/nukeykt/Nuked-OPL3).
+* Nuked-OPL3-fast, developed by Tony Gies, based on the Nuked OPL3 emulator by Nuke.YKT, released under the LGPLv2.1 license, see lgpl2.1.txt (https://github.com/tgies/Nuked-OPL3-fast).
 * Simple DirectMedia Layer, developed by Sam Lantinga. See SDL3.txt for license details. (http://www.libsdl.org/)
 * GoogleTest, developed by the GoogleTest team. See GoogleTest.txt for license details. (https://github.com/google/googletest). 
 

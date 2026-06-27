@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,7 +26,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "be_st.h"
+#include "refkeen.h"
 #include "../timing/be_timing.h"
 #include "be_audio_mixer.h"
 #include "be_audio_resampling.h"
@@ -34,7 +34,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 /* These tables are based on dB values described here by James-F:
    https://www.vogons.org/viewtopic.php?t=54269 */
@@ -221,7 +220,7 @@ uint8_t BEL_ST_GetSBProVolumesFromSource(const BE_ST_AudioMixerSource *src)
 void BEL_ST_AudioMixerCallback(BE_ST_SndSample_T *stream, int len)
 {
 	int samplesToGenerate = len;
-	int samplesToGenerateNextTime = g_stAudioMixer.freq / 100; // ~10ms
+	int samplesToGenerateNextTime = BE_Cross_TypedMin(int, len, g_stAudioMixer.freq / 100); // ~10ms unless buffer is too small
 	int i, j, k;
 	BE_ST_AudioMixerSource *src;
 

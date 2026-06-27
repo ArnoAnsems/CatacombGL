@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

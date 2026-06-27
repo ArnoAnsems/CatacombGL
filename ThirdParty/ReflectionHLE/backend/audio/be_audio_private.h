@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,6 +37,15 @@
 #define PC_PIT_RATE 1193182
 
 #define OPL_SAMPLE_RATE 49716
+// Number of OPL samples to generate for each register write, for details see
+// comments in BE_ST_OPL2Write.
+#define OPL_WRITE_TIMING_MAGIC_SAMPLES (OPL_SAMPLE_RATE/10000)
+// Number of OPL register writes we need to potentially buffer before audio
+// output gets to flushing.
+#define OPL_WRITE_TIMING_BUFFER 256
+// Minimum number of samples we need to be able to generate to accomplish
+// timing simulation without overflowing.
+#define OPL_MIN_INPUT_SAMPLES (OPL_WRITE_TIMING_MAGIC_SAMPLES*OPL_WRITE_TIMING_BUFFER)
 
 #if (defined REFKEEN_RESAMPLER_LIBSAMPLERATE) || (defined REFKEEN_RESAMPLER_LIBRESAMPLE)
 #define MIXER_SAMPLE_FORMAT_FLOAT

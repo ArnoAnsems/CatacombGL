@@ -18,6 +18,7 @@ add_library( CatacombGL_ThirdParty OBJECT
     ReflectionHLE/backend/audio/be_audio_sdl.c
     ReflectionHLE/backend/cfg/be_cfg.c
     ReflectionHLE/backend/cfg/be_cfg_sdl.c
+    ReflectionHLE/backend/filesystem/be_filesystem_len_bounds.h
     ReflectionHLE/backend/threading/be_atomic.h
     ReflectionHLE/backend/threading/be_atomic_sdl.h
     ReflectionHLE/backend/threading/be_mutex.h
@@ -27,6 +28,7 @@ add_library( CatacombGL_ThirdParty OBJECT
     ReflectionHLE/backend/timing/be_timing_callback.c
     ReflectionHLE/nukedopl/opl3.c
     ReflectionHLE/nukedopl/opl3.h
+    ReflectionHLE/nukedopl/wf_rom.h
     ReflectionHLE/be_cross.c
     ReflectionHLE/be_cross.h
     ReflectionHLE/be_sound_device_flags.h
@@ -35,5 +37,6 @@ add_library( CatacombGL_ThirdParty OBJECT
     ReflectionHLE/be_st_sdl_private.h
     ReflectionHLE/id_sd.cpp
     ReflectionHLE/id_sd.h
+    ReflectionHLE/refkeen.h
     ReflectionHLE/refkeen_config.h
 )

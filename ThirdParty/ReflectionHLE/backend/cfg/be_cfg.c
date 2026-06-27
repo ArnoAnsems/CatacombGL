@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,8 @@
  */
 
 #include <limits.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../audio/be_audio_private.h"
 //#include "../input/be_input_tables.h"
@@ -44,6 +44,7 @@ RefkeenDynamicConfig g_refKeenDynamicCfg;
 
 typedef enum {
 	BE_ST_CFG_VAL_ENUM,
+	BE_ST_CFG_VAL_FLOAT,
 	BE_ST_CFG_VAL_HEX_INT,
 	BE_ST_CFG_VAL_INT,
 	BE_ST_CFG_VAL_DIMS,
@@ -64,6 +65,7 @@ typedef struct {
 	// allowed to hold a pointer, but doesn't have to.
 	int aux0;
 	intptr_t aux1, aux2;
+	float faux0, faux1, faux2;
 } BE_ST_CFG_Setting_T;
 
 // Enumerated by SDL_GamepadButton, for most
@@ -86,9 +88,15 @@ static const char *g_be_setting_sb_vals[] = {"off", "sb", "sbpro" ,"sb16"};
 #ifdef REFKEEN_CONFIG_ENABLE_TOUCHINPUT
 static const char *g_be_setting_touchinput_vals[] = {"auto", "off", "forced"};
 #endif
+static const char *g_be_setting_axisbind_vals[] = {"off", "move", "look"};
+static const char *g_be_setting_stick_vals[] = {"off", "left", "right"};
+static const char *g_be_setting_gyroscope_vals[] = {"off", "main", "left", "right"};
 
 #define DEF_ENUM(setting, key, strs, def) \
 	{&g_refKeenCfg.setting, 0, key, BE_ST_CFG_VAL_ENUM, def, (intptr_t)strs, BE_Cross_ArrayLen(strs)},
+#define DEF_FLOAT(setting, key, def, min, max) \
+	{&g_refKeenCfg.setting, 0, key, BE_ST_CFG_VAL_FLOAT, \
+	 0, 0, 0, def, min, max},
 #define DEF_INT(setting, key, def, min, max) \
 	{&g_refKeenCfg.setting, 0, key, BE_ST_CFG_VAL_INT, def, min, max},
 #define DEF_DIMS(width, height, key, defw, defh) \
@@ -134,6 +142,17 @@ static const char *g_be_setting_touchinput_vals[] = {"auto", "off", "forced"};
 #define DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(i, k, def) \
 	DEF_ENUM(wolf3d.binds[BE_ST_CTRL_BIND_WOLF3D_ ## i].pad, "altcontrolscheme_" k, g_sdlControlSchemeKeyMapCfgVals, def)
 
+#define DEF_CTRL_NONKEY_BINDS_BMENACE_ENUMS(i, k, def) \
+	DEF_ENUM(bmenace.binds[BE_ST_CTRL_BIND_BMENACE_ ## i].mouse, "mbind_" k, g_be_st_mouseFeatureIdToNameMap, BE_ST_CTRL_MOUSE_BUT_MAX) \
+	DEF_ENUM(bmenace.binds[BE_ST_CTRL_BIND_BMENACE_ ## i].pad, "pbind_" k, g_be_st_padFeatureIdToNameMap, def)
+
+#define DEF_CTRL_BINDS_BMENACE_ENUMS(i, k, def) \
+	DEF_ENUM(bmenace.binds[BE_ST_CTRL_BIND_BMENACE_ ## i].key, "kbind_" k, g_be_st_keyIdToNameMap, 0) \
+	DEF_CTRL_NONKEY_BINDS_BMENACE_ENUMS(i, k, def)
+
+#define DEF_CTRL_LEGACY_BINDS_BMENACE_ENUMS(i, k, def) \
+	DEF_ENUM(bmenace.binds[BE_ST_CTRL_BIND_BMENACE_ ## i].pad, "altcontrolscheme_" k, g_sdlControlSchemeKeyMapCfgVals, def)
+
 #define DEF_HIDDEN_ENUM(setting, key, strs, def) \
 	{&g_refKeenCfg.setting, &g_refKeenCfg.setting, key, BE_ST_CFG_VAL_ENUM, def, (intptr_t)strs, BE_Cross_ArrayLen(strs)},
 
@@ -147,19 +166,25 @@ static const char *g_be_setting_touchinput_vals[] = {"auto", "off", "forced"};
 static BE_ST_CFG_Setting_T g_be_st_settings[] = {
 #ifdef REFKEEN_CONFIG_USER_FULLSCREEN_TOGGLE
 	DEF_BOOL(isFullscreen, "fullscreen", false)
+#else
+	DEF_BOOL(isFullscreen, NULL, true)
 #endif
 #ifdef REFKEEN_CONFIG_USER_FULLSCREEN_RES_SETTING
 	DEF_DIMS(fullWidth, fullHeight, "fullres", 0, 0)
+	DEF_FLOAT(fullscreenPixelDensity, "fullscrpixdensity", 0.f,
+	          -1024.f, 1024.f)
 #endif
 	DEF_DIMS(winWidth, winHeight, "windowres", 0, 0)
 #ifdef REFKEEN_ENABLE_LAUNCHER
 //	DEF_DIMS(launcherWinWidth, launcherWinHeight, "launcherwindowres", 0, 0)
+  #ifdef REFKEEN_CONFIG_USER_FULLSCREEN_TOGGLE
 	DEF_ENUM(launcherWinType, "launcherwindowtype", g_be_setting_wintype_vals, LAUNCHER_WINDOW_DEFAULT)
-	DEF_STR(launcherExeArgs, "launcherexeargs")
+  #else
+	DEF_ENUM(launcherWinType, NULL, g_be_setting_wintype_vals, LAUNCHER_WINDOW_FULL)
+  #endif
 #endif
 	DEF_STR(lastSelectedGameExe, "lastselectedgameexe")
 	//DEF_ENUM(lastSelectedGameVer, "lastselectedgamever", refkeen_gamever_strs, BE_GAMEVER_LAST)
-	DEF_BOOL(rememberDisplayNum, "rememberdisplaynum", true)
 	DEF_CUSTOM_INT(sdlRendererDriver, "sdlrenderer", BE_ST_CFG_VAL_SDL_RENDERER, -1)
 	DEF_ENUM(vSync, "vsync", g_be_setting_vsync_vals, VSYNC_OFF)
 	DEF_BOOL(isBilinear, "bilinear", true)
@@ -185,6 +210,9 @@ static BE_ST_CFG_Setting_T g_be_st_settings[] = {
 #ifndef REFKEEN_RESAMPLER_NONE
 	DEF_BOOL(useResampler, "useresampler", true)
 #endif
+#ifdef REFKEEN_CONFIG_LPT_PASSTHROUGH
+	DEF_BOOL(lptPassthrough, "lptpassthrough", false)
+#endif
 #ifdef REFKEEN_CONFIG_ENABLE_TOUCHINPUT
 	#ifdef REFKEEN_CONFIG_AUTODETECT_TOUCHINPUT_BY_DEFAULT
 	DEF_ENUM(touchInputToggle, "touchinput", g_be_setting_touchinput_vals, TOUCHINPUT_AUTO)
@@ -194,15 +222,43 @@ static BE_ST_CFG_Setting_T g_be_st_settings[] = {
 	DEF_BOOL(touchInputDebugging, "touchinputdebugging", false)
 #endif
 	DEF_BOOL(altControlScheme, "altcontrolscheme", true)
+	DEF_BOOL(swapConfirmCancel, "swapconfirmcancel", false)
 
-	DEF_HIDDEN_BOOL(manualGameVerMode, "manualgamevermode", false)
 #ifdef BE_CROSS_ENABLE_FARPTR_CFG
 	DEF_HIDDEN_HEX_INT(farPtrSegOffset, "farptrsegoffset", BE_ST_DEFAULT_FARPTRSEGOFFSET, 0U, 65535U)
 #endif
 };
 
 #ifdef REFKEEN_HAS_VER_KDREAMS
+static BE_ST_CFG_Setting_T g_be_st_migrated_to_kdreams_legacy_settings[] = {
+#ifdef REFKEEN_ENABLE_LAUNCHER
+	DEF_STR(kdreams.launcherExeArgs, "launcherexeargs")
+#endif
+};
+#endif
+
+#ifdef REFKEEN_HAS_VER_CATACOMB_ALL
+static BE_ST_CFG_Setting_T g_be_st_migrated_to_cat3d_legacy_settings[] = {
+#ifdef REFKEEN_ENABLE_LAUNCHER
+	DEF_STR(cat3d.launcherExeArgs, "launcherexeargs")
+#endif
+};
+#endif
+
+#ifdef REFKEEN_HAS_VER_WOLF3D_ALL
+static BE_ST_CFG_Setting_T g_be_st_migrated_to_wolf3d_legacy_settings[] = {
+#ifdef REFKEEN_ENABLE_LAUNCHER
+	DEF_STR(wolf3d.launcherExeArgs, "launcherexeargs")
+#endif
+};
+#endif
+
+#ifdef REFKEEN_HAS_VER_KDREAMS
 static BE_ST_CFG_Setting_T g_be_st_kdreams_settings[] = {
+#ifdef REFKEEN_ENABLE_LAUNCHER
+	DEF_STR(kdreams.launcherExeArgs, "launcherexeargs")
+	DEF_STR(kdreams.launcherModPath, "launchermod")
+#endif
 	DEF_BOOL(kdreams.absMouseMotion, "absmousemotion", false)
 	DEF_BOOL(kdreams.useLeftStick, "lstick", true)
 	DEF_BOOL(kdreams.useRightStick, "rstick", false)
@@ -213,7 +269,7 @@ static BE_ST_CFG_Setting_T g_be_st_kdreams_settings[] = {
 	DEF_CTRL_BINDS_KDREAMS_ENUMS(JUMP, "jump", BE_ST_CTRL_BUT_A)
 	DEF_CTRL_BINDS_KDREAMS_ENUMS(THROW, "throw", BE_ST_CTRL_BUT_B)
 	DEF_CTRL_BINDS_KDREAMS_ENUMS(STATS, "stats", BE_ST_CTRL_BUT_X)
-	DEF_CTRL_NONKEY_BINDS_KDREAMS_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_BUT_MAX) // HACK for left trigger
+	DEF_CTRL_NONKEY_BINDS_KDREAMS_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_EXTRA_BUT_LTRIGGER)
 	DEF_CTRL_NONKEY_BINDS_KDREAMS_ENUMS(DEBUGKEYS, "debugkeys", BE_ST_CTRL_BUT_LSTICK)
 };
 
@@ -227,16 +283,21 @@ static BE_ST_CFG_Setting_T g_be_st_kdreams_legacy_settings[] = {
 	DEF_CTRL_LEGACY_BINDS_KDREAMS_ENUMS(JUMP, "jump", BE_ST_CTRL_BUT_A)
 	DEF_CTRL_LEGACY_BINDS_KDREAMS_ENUMS(THROW, "throw", BE_ST_CTRL_BUT_B)
 	DEF_CTRL_LEGACY_BINDS_KDREAMS_ENUMS(STATS, "stats", BE_ST_CTRL_BUT_X)
-	DEF_CTRL_LEGACY_BINDS_KDREAMS_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_BUT_MAX) // HACK for left trigger
+	DEF_CTRL_LEGACY_BINDS_KDREAMS_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_EXTRA_BUT_LTRIGGER)
 	DEF_CTRL_LEGACY_BINDS_KDREAMS_ENUMS(DEBUGKEYS, "debugkeys", BE_ST_CTRL_BUT_LSTICK)
 };
 #endif
 
 #ifdef REFKEEN_HAS_VER_CATACOMB_ALL
 static BE_ST_CFG_Setting_T g_be_st_cat3d_settings[] = {
+#ifdef REFKEEN_ENABLE_LAUNCHER
+	DEF_STR(cat3d.launcherExeArgs, "launcherexeargs")
+	DEF_STR(cat3d.launcherModPath, "launchermod")
+#endif
 	DEF_BOOL(cat3d.useLeftStick, "lstick", true)
 	DEF_BOOL(cat3d.useRightStick, "rstick", false)
 	DEF_BOOL(cat3d.analogMotion, "analogmotion", false)
+	DEF_ENUM(cat3d.gyroscope, "gyroscope", g_be_setting_gyroscope_vals, BE_ST_CTRL_GYRO_DEVICE_NONE)
 	DEF_BOOL(cat3d.novert, "novert", false)
 	// FIXME: HACK (extra 2 are for triggers)
 	DEF_CTRL_BINDS_CAT3D_ENUMS(UP, "up", BE_ST_CTRL_BUT_GUIDE)
@@ -250,10 +311,10 @@ static BE_ST_CFG_Setting_T g_be_st_cat3d_settings[] = {
 	DEF_CTRL_BINDS_CAT3D_ENUMS(NUKE, "nuke", BE_ST_CTRL_BUT_Y)
 	DEF_CTRL_BINDS_CAT3D_ENUMS(FASTTURN, "fastturn", BE_ST_CTRL_BUT_RSHOULDER)
 #if (defined REFKEEN_HAS_VER_CAT3D) || (defined REFKEEN_HAS_VER_CATABYSS)
-	DEF_CTRL_NONKEY_BINDS_CAT3D_ENUMS(SCROLLS, "scrolls", BE_ST_CTRL_BUT_MAX+1) // HACK for right trigger
+	DEF_CTRL_NONKEY_BINDS_CAT3D_ENUMS(SCROLLS, "scrolls", BE_ST_CTRL_EXTRA_BUT_RTRIGGER)
 #endif
 #ifdef REFKEEN_HAS_VER_CATADVENTURES
-	DEF_CTRL_NONKEY_BINDS_CAT3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_BUT_MAX) // HACK for left trigger
+	DEF_CTRL_NONKEY_BINDS_CAT3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_EXTRA_BUT_LTRIGGER)
 #endif
 	DEF_CTRL_NONKEY_BINDS_CAT3D_ENUMS(DEBUGKEYS, "debugkeys", BE_ST_CTRL_BUT_LSTICK)
 };
@@ -275,10 +336,10 @@ static BE_ST_CFG_Setting_T g_be_st_cat3d_legacy_settings[] = {
 	DEF_CTRL_LEGACY_BINDS_CAT3D_ENUMS(NUKE, "nuke", BE_ST_CTRL_BUT_Y)
 	DEF_CTRL_LEGACY_BINDS_CAT3D_ENUMS(FASTTURN, "fastturn", BE_ST_CTRL_BUT_RSHOULDER)
 #if (defined REFKEEN_HAS_VER_CAT3D) || (defined REFKEEN_HAS_VER_CATABYSS)
-	DEF_CTRL_LEGACY_BINDS_CAT3D_ENUMS(SCROLLS, "scrolls", BE_ST_CTRL_BUT_MAX+1) // HACK for right trigger
+	DEF_CTRL_LEGACY_BINDS_CAT3D_ENUMS(SCROLLS, "scrolls", BE_ST_CTRL_EXTRA_BUT_RTRIGGER)
 #endif
 #ifdef REFKEEN_HAS_VER_CATADVENTURES
-	DEF_CTRL_LEGACY_BINDS_CAT3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_BUT_MAX) // HACK for left trigger
+	DEF_CTRL_LEGACY_BINDS_CAT3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_EXTRA_BUT_LTRIGGER)
 #endif
 	DEF_CTRL_LEGACY_BINDS_CAT3D_ENUMS(DEBUGKEYS, "debugkeys", BE_ST_CTRL_BUT_LSTICK)
 };
@@ -287,10 +348,19 @@ static BE_ST_CFG_Setting_T g_be_st_cat3d_legacy_settings[] = {
 
 #ifdef REFKEEN_HAS_VER_WOLF3D_ALL
 static BE_ST_CFG_Setting_T g_be_st_wolf3d_settings[] = {
+#ifdef REFKEEN_ENABLE_LAUNCHER
+	DEF_STR(wolf3d.launcherExeArgs, "launcherexeargs")
+	DEF_STR(wolf3d.launcherModPath, "launchermod")
+#endif
 	DEF_BOOL(wolf3d.lowFPS, "lowfps", false)
 	DEF_BOOL(wolf3d.useLeftStick, "lstick", true)
 	DEF_BOOL(wolf3d.useRightStick, "rstick", false)
 	DEF_BOOL(wolf3d.analogMotion, "analogmotion", false)
+	DEF_ENUM(wolf3d.gyroscope, "gyroscope", g_be_setting_gyroscope_vals, BE_ST_CTRL_GYRO_DEVICE_NONE)
+	DEF_BOOL(wolf3d.vrMouse, "vrmouse", false)
+	DEF_ENUM(wolf3d.vrStick, "vrstick", g_be_setting_stick_vals, BE_ST_CTRL_STICK_DEVICE_NONE)
+	DEF_ENUM(wolf3d.vrGyro, "vrgyro", g_be_setting_gyroscope_vals, BE_ST_CTRL_GYRO_DEVICE_NONE)
+	DEF_BOOL(wolf3d.invertStrafe, "invertstrafe", false)
 	DEF_BOOL(wolf3d.novert, "novert", false)
 	// FIXME: HACK (extra 2 are for triggers)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(UP, "up", BE_ST_CTRL_BUT_GUIDE)
@@ -299,7 +369,7 @@ static BE_ST_CFG_Setting_T g_be_st_wolf3d_settings[] = {
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(RIGHT, "right", BE_ST_CTRL_BUT_GUIDE)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(FIRE, "fire", BE_ST_CTRL_BUT_LSHOULDER)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(STRAFE, "strafe", BE_ST_CTRL_BUT_B)
-	DEF_CTRL_BINDS_WOLF3D_ENUMS(USE, "use", BE_ST_CTRL_BUT_MAX+1) // HACK for right trigger
+	DEF_CTRL_BINDS_WOLF3D_ENUMS(USE, "use", BE_ST_CTRL_EXTRA_BUT_RTRIGGER)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(RUN, "run", BE_ST_CTRL_BUT_RSHOULDER)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(WEAPON1, "weapon1", BE_ST_CTRL_BUT_DPAD_DOWN)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(WEAPON2, "weapon2", BE_ST_CTRL_BUT_DPAD_RIGHT)
@@ -308,7 +378,8 @@ static BE_ST_CFG_Setting_T g_be_st_wolf3d_settings[] = {
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(WEAPON5, "weapon5", BE_ST_CTRL_BUT_X)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(WEAPON6, "weapon6", BE_ST_CTRL_BUT_Y)
 	DEF_CTRL_BINDS_WOLF3D_ENUMS(MAP, "map", BE_ST_CTRL_BUT_A)
-	DEF_CTRL_NONKEY_BINDS_WOLF3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_BUT_MAX) // HACK for left trigger
+	DEF_CTRL_NONKEY_BINDS_WOLF3D_ENUMS(WEAPONSEL, "weaponsel", BE_ST_CTRL_BUT_GUIDE)
+	DEF_CTRL_NONKEY_BINDS_WOLF3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_EXTRA_BUT_LTRIGGER)
 	DEF_CTRL_NONKEY_BINDS_WOLF3D_ENUMS(DEBUGKEYS, "debugkeys", BE_ST_CTRL_BUT_LSTICK)
 };
 
@@ -323,7 +394,7 @@ static BE_ST_CFG_Setting_T g_be_st_wolf3d_legacy_settings[] = {
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(RIGHT, "right", BE_ST_CTRL_BUT_GUIDE)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(FIRE, "fire", BE_ST_CTRL_BUT_LSHOULDER)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(STRAFE, "strafe", BE_ST_CTRL_BUT_B)
-	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(USE, "use", BE_ST_CTRL_BUT_MAX+1) // HACK for right trigger
+	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(USE, "use", BE_ST_CTRL_EXTRA_BUT_RTRIGGER)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(RUN, "run", BE_ST_CTRL_BUT_RSHOULDER)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(WEAPON1, "weapon1", BE_ST_CTRL_BUT_DPAD_DOWN)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(WEAPON2, "weapon2", BE_ST_CTRL_BUT_DPAD_RIGHT)
@@ -332,8 +403,35 @@ static BE_ST_CFG_Setting_T g_be_st_wolf3d_legacy_settings[] = {
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(WEAPON5, "weapon5", BE_ST_CTRL_BUT_X)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(WEAPON6, "weapon6", BE_ST_CTRL_BUT_Y)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(MAP, "map", BE_ST_CTRL_BUT_A)
-	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_BUT_MAX) // HACK for left trigger
+	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_EXTRA_BUT_LTRIGGER)
 	DEF_CTRL_LEGACY_BINDS_WOLF3D_ENUMS(DEBUGKEYS, "debugkeys", BE_ST_CTRL_BUT_LSTICK)
+};
+#endif
+
+#ifdef REFKEEN_HAS_VER_BMENACE_ALL
+static BE_ST_CFG_Setting_T g_be_st_bmenace_settings[] = {
+#ifdef REFKEEN_ENABLE_LAUNCHER
+	DEF_STR(bmenace.launcherExeArgs, "launcherexeargs")
+	DEF_STR(bmenace.launcherModPath, "launchermod")
+#endif
+	DEF_BOOL(bmenace.betaFixes, "betafixes", true)
+	DEF_BOOL(bmenace.leftStickX, "lstickx", true)
+	DEF_ENUM(bmenace.leftStickY, "lsticky", g_be_setting_axisbind_vals, BE_ST_CTRL_AXIS_BIND_MOVE)
+	DEF_BOOL(bmenace.rightStickX, "rstickx", false)
+	DEF_ENUM(bmenace.rightStickY, "rsticky", g_be_setting_axisbind_vals, BE_ST_CTRL_AXIS_BIND_OFF)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(UP, "up", BE_ST_CTRL_BUT_DPAD_UP)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(DOWN, "down", BE_ST_CTRL_BUT_DPAD_DOWN)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(LEFT, "left", BE_ST_CTRL_BUT_DPAD_LEFT)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(RIGHT, "right", BE_ST_CTRL_BUT_DPAD_RIGHT)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(JUMP, "jump", BE_ST_CTRL_BUT_A)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(SHOOT, "shoot", BE_ST_CTRL_BUT_LSHOULDER)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(STATS, "stats", BE_ST_CTRL_BUT_X)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(GRENADE, "grenade", BE_ST_CTRL_BUT_RSHOULDER)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(LOOKUP, "lookup", BE_ST_CTRL_BUT_Y)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(LOOKDOWN, "lookdown", BE_ST_CTRL_BUT_B)
+	DEF_CTRL_BINDS_BMENACE_ENUMS(SCOREBOX, "scorebox", BE_ST_CTRL_EXTRA_BUT_RTRIGGER)
+	DEF_CTRL_NONKEY_BINDS_BMENACE_ENUMS(FUNCKEYS, "funckeys", BE_ST_CTRL_EXTRA_BUT_LTRIGGER)
+	DEF_CTRL_NONKEY_BINDS_BMENACE_ENUMS(DEBUGKEYS, "debugkeys", BE_ST_CTRL_BUT_LSTICK)
 };
 #endif
 
@@ -351,6 +449,9 @@ static void BEL_ST_SetConfigDefaults(BE_ST_CFG_Setting_T *settings, int n)
 		case BE_ST_CFG_VAL_DIMS:
 			*(int *)settings[i].setting = settings[i].aux0;
 			*(int *)settings[i].ptraux = settings[i].aux1;
+			break;
+		case BE_ST_CFG_VAL_FLOAT:
+			*(float *)settings[i].setting = settings[i].faux0;
 			break;
 		default:
 			*(int *)settings[i].setting = settings[i].aux0;
@@ -370,6 +471,18 @@ static void BEL_ST_ParseEnum(int *val, const char *list[], int len, const char *
 static void BEL_ST_WriteEnum(FILE *fp, const char *key, const char *list[], int len, int val)
 {
 	fprintf(fp, "%s=%s\n", key, ((val >= 0) && (val < len)) ? list[val] : "");
+}
+
+static void BEL_ST_ParseFloat(float *val, float min, float max, const char *buffer)
+{
+	float ret = atof(buffer);
+	if ((ret >= min) && (ret <= max))
+		*val = ret;
+}
+
+static void BEL_ST_WriteFloat(FILE *fp, const char *key, float val)
+{
+	fprintf(fp, "%s=%.6f\n", key, val);
 }
 
 static void BEL_ST_ParseHexInt(int *val, int min, int max, const char *buffer)
@@ -426,6 +539,9 @@ static void BEL_ST_ParseSetting(BE_ST_CFG_Setting_T *setting, const char *valStr
 	case BE_ST_CFG_VAL_DIMS:
 		BEL_ST_ParseDims((int *)setting->setting, (int *)setting->ptraux, valStr);
 		break;
+	case BE_ST_CFG_VAL_FLOAT:
+		BEL_ST_ParseFloat((float *)setting->setting, setting->faux1, setting->faux2, valStr);
+		break;
 	case BE_ST_CFG_VAL_HEX_INT:
 		BEL_ST_ParseHexInt((int *)setting->setting, setting->aux1, setting->aux2, valStr);
 		break;
@@ -450,6 +566,9 @@ static void BEL_ST_SaveSetting(FILE *fp, const BE_ST_CFG_Setting_T *setting)
 		break;
 	case BE_ST_CFG_VAL_DIMS:
 		BEL_ST_WriteDims(fp, setting->key, *(int *)setting->setting, *(int *)setting->ptraux);
+		break;
+	case BE_ST_CFG_VAL_FLOAT:
+		BEL_ST_WriteFloat(fp, setting->key, *(float *)setting->setting);
 		break;
 	case BE_ST_CFG_VAL_HEX_INT:
 		BEL_ST_WriteHexInt(fp, setting->key, *(int *)setting->setting);

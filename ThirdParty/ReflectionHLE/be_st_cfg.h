@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,6 +30,7 @@
 #define BE_ST_CFG_H
 
 //#include "be_features.h"
+#include "backend/filesystem/be_filesystem_len_bounds.h"
 #include "be_st.h"
 #include "refkeen_config.h"
 
@@ -51,13 +52,12 @@ enum { BE_AUDIO_VOL_MIN = 0, BE_AUDIO_VOL_MAX = 15 };
 typedef enum { LAUNCHER_WINDOW_DEFAULT, LAUNCHER_WINDOW_FULL, LAUNCHER_WINDOW_SOFTWARE } LauncherWindowSettingType;
 #endif
 
-#define SELECTED_EXE_FILENAME_BUFFERLEN 13
-
 // Notes: Certain bool fields are actually int for compatibility with be_cfg.c.
 // Generally speaking, only a limited set of field types is used.
 
 typedef struct
 {
+	float fullscreenPixelDensity;
 	int/*bool*/ isFullscreen;
 	int fullWidth, fullHeight;
 	int winWidth, winHeight;
@@ -65,11 +65,9 @@ typedef struct
 	// Now using just winWidth and winHeight due to seamless launcher->game transitions
 	//int launcherWinWidth, launcherWinHeight;
 	int launcherWinType;
-	char launcherExeArgs[LAUNCHER_EXE_ARGS_BUFFERLEN];
 #endif
-	char lastSelectedGameExe[SELECTED_EXE_FILENAME_BUFFERLEN];
+	char lastSelectedGameExe[BE_CROSS_DOS_FILENAME_LEN_BOUND];
 	int lastSelectedGameVer;
-	int/*bool*/ rememberDisplayNum;
 	int sdlRendererDriver;
 	int vSync;
 	int/*bool*/ isBilinear;
@@ -91,10 +89,13 @@ typedef struct
 #ifndef REFKEEN_RESAMPLER_NONE
 	int/*bool*/ useResampler;
 #endif
+#ifdef REFKEEN_CONFIG_LPT_PASSTHROUGH
+	int/*bool*/ lptPassthrough;
+#endif
 	int touchInputToggle;
 	int/*bool*/ touchInputDebugging;
 	int/*bool*/ altControlScheme;
-	int/*bool*/ manualGameVerMode;
+	int/*bool*/ swapConfirmCancel;
 	unsigned int farPtrSegOffset; // Actually used just in The Catacomb Armageddon/Apocalypse
 
 	// Game specific settings
@@ -110,6 +111,10 @@ typedef struct
 			int mouse;
 			int pad;
 		} binds[BE_ST_CTRL_BIND_KDREAMS_TOTAL];
+#ifdef REFKEEN_ENABLE_LAUNCHER
+		char launcherExeArgs[LAUNCHER_EXE_ARGS_BUFFERLEN];
+		char launcherModPath[BE_CROSS_PATH_LEN_BOUND];
+#endif
 	} kdreams;
 #endif
 #ifdef REFKEEN_HAS_VER_CATACOMB_ALL
@@ -118,6 +123,7 @@ typedef struct
 		int/*bool*/ useLeftStick;
 		int/*bool*/ useRightStick;
 		int/*bool*/ analogMotion;
+		int gyroscope;
 		int/*bool*/ novert;
 		struct
 		{
@@ -125,6 +131,10 @@ typedef struct
 			int mouse;
 			int pad;
 		} binds[BE_ST_CTRL_BIND_CAT3D_TOTAL];
+#ifdef REFKEEN_ENABLE_LAUNCHER
+		char launcherExeArgs[LAUNCHER_EXE_ARGS_BUFFERLEN];
+		char launcherModPath[BE_CROSS_PATH_LEN_BOUND];
+#endif
 	} cat3d;
 #endif
 #ifdef REFKEEN_HAS_VER_WOLF3D_ALL
@@ -134,6 +144,11 @@ typedef struct
 		int/*bool*/ useLeftStick;
 		int/*bool*/ useRightStick;
 		int/*bool*/ analogMotion;
+		int gyroscope;
+		int/*bool*/ vrMouse;
+		int vrStick;
+		int vrGyro;
+		int/*bool*/ invertStrafe;
 		int/*bool*/ novert;
 		struct
 		{
@@ -141,7 +156,29 @@ typedef struct
 			int mouse;
 			int pad;
 		} binds[BE_ST_CTRL_BIND_WOLF3D_TOTAL];
+#ifdef REFKEEN_ENABLE_LAUNCHER
+		char launcherExeArgs[LAUNCHER_EXE_ARGS_BUFFERLEN];
+		char launcherModPath[BE_CROSS_PATH_LEN_BOUND];
+#endif
 	} wolf3d;
+#endif
+#ifdef REFKEEN_HAS_VER_BMENACE_ALL
+	struct
+	{
+		int/*bool*/ betaFixes;
+		int leftStickX, leftStickY;
+		int rightStickX, rightStickY;
+		struct
+		{
+			int key;
+			int mouse;
+			int pad;
+		} binds[BE_ST_CTRL_BIND_BMENACE_TOTAL];
+#ifdef REFKEEN_ENABLE_LAUNCHER
+		char launcherExeArgs[LAUNCHER_EXE_ARGS_BUFFERLEN];
+		char launcherModPath[BE_CROSS_PATH_LEN_BOUND];
+#endif
+	} bmenace;
 #endif
 } RefKeenConfig;
 

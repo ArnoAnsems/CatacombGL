@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -111,6 +111,12 @@ static inline char *BE_Cross_itoa_dec(int16_t n, char *buffer)
 	return buffer;
 }
 
+static inline char *BE_Cross_itoa_hex(int16_t n, char *buffer)
+{
+	sprintf(buffer, "%" PRIx16, n);
+	return buffer;
+}
+
 // Used for debugging
 void BE_Cross_LogMessage(BE_Log_Message_Class_T msgClass, const char *format, ...);
 // More (possibly semi) standard C functions emulated,
@@ -126,6 +132,11 @@ static inline int BE_Cross_tolower(int c)
 static inline int BE_Cross_isupper(int c)
 {
 	return ((c >= 'A') && (c <= 'Z'));
+}
+
+static bool BE_Cross_isascii(char c)
+{
+  return (((unsigned)c >= 32) && ((unsigned)c < 127));
 }
 
 int BE_Cross_strcasecmp(const char *s1, const char *s2);
@@ -177,6 +188,15 @@ static inline char *BE_Cross_safeandfastcstringcopy_4strs(char *dest, char *dest
 	return BE_Cross_safeandfastcstringcopy(BE_Cross_safeandfastcstringcopy(BE_Cross_safeandfastcstringcopy(BE_Cross_safeandfastcstringcopy(dest, destEnd, src0), destEnd, src1), destEnd, src2), destEnd, src3);
 }
 
+// A safe(r) memory copying function,
+// similar in idea to BE_Cross_safeandfastcstringcopy.
+// Function is strict in the sense that if there's no sufficient room
+// for copying characters, a null pointer will be returned instead
+//
+// Note that as in memcpy, pointers must be non-null
+// and the memory regions must not overlap.
+void *BE_Cross_safeandfastmemcopy_strict(void *dest, void *destEnd, const void *src, size_t count);
+
 
 // This one should be called early
 void BE_Cross_PrepareAppPaths(void);
@@ -212,6 +232,7 @@ const char **BE_Cross_DirSelection_Start(int rootPathIndex, int *outNumOfSubDirs
 void BE_Cross_DirSelection_Finish(void); // Finish dir selection
 const char **BE_Cross_DirSelection_GetNext(int dirIndex, int *outNumOfSubDirs); // Enter dir by index into last array
 const char **BE_Cross_DirSelection_GetPrev(int *outNumOfSubDirs); // Go up in the filesystem hierarchy
+void BE_Cross_DirSelection_FillLastSelectedPath(char *buffer, size_t len);
 
 
 /*** Use for game EXEs (main functions) selection ***/
@@ -231,14 +252,21 @@ void BE_Cross_FillAccessibleEXEFileNamesForGameVer(int verId, const char **outSt
 // order in which BE_Cross_FillAccessibleEXEFileNamesForGameVer fills the descriptive strings.
 void (*BE_Cross_GetAccessibleEXEFuncPtrForGameVerByIndex(int index, int verId))(void);
 
+// Get bit flags representing audio devices which
+// are expected to be present, optionally or not.
+int BE_Cross_GetSelectedGameVerAudioDeviceFlags(void);
+
 typedef char BE_TryAddGameInstallation_ErrorMsg_T[40];
 
 // Attempt to add a game installation from currently selected dir;
-// Returns BE_GAMEVER_LAST if no new supported game version is found; Otherwise game version id is returned.
+// Returns a boolean stating if new supported game version has been found.
 // The given array is used in order to report an error for each checked version, in case of failure.
 //
 // Array MUST have at least BE_GAMEVER_LAST elements.
-int BE_Cross_DirSelection_TryAddGameInstallation(BE_TryAddGameInstallation_ErrorMsg_T errorMsgsArray[]);
+bool BE_Cross_DirSelection_TryAddGameInstallation(BE_TryAddGameInstallation_ErrorMsg_T errorMsgsArray[]);
+
+// Try opening file from currently selected dir
+FILE *BE_Cross_DirSelection_TryOpeningFileInSelectedPath(const char *name);
 
 // Often used as a replacement for file handles of type "int",
 // this one is given a different name so it's easy to swap in case of a need
@@ -265,6 +293,7 @@ void BE_Cross_unlink_rewritable(const char *filename);
 // Used for NEW files not originating from the originals (like RefKeen cfg)
 BE_FILE_T BE_Cross_open_additionalfile_for_reading(const char *filename);
 BE_FILE_T BE_Cross_open_additionalfile_for_overwriting(const char *filename);
+BE_FILE_T BE_Cross_open_additionalfile_for_appending(const char *filename);
 
 // Should be shared
 static inline void BE_Cross_close(BE_FILE_T fp)
@@ -448,7 +477,10 @@ static inline uint32_t BE_Cross_Bfarcoreleft(void)
 	return g_farBytesLeft;
 }
 
-// Use **ONLY* with memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc:
+// Use **ONLY* with:
+// - Memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc.
+// - Memory referenced by BE_Cross_EMM_GetPageFrame.
+// - Chunks of memory loaded from the original DOS EXE by ReflectionHLE.
 //
 // Somewhat similar to FP_SEG, *but* returns the segment of
 // the *normalized* pointer's form (where the offset is < 16)
@@ -458,7 +490,10 @@ static inline uint16_t BE_Cross_GetPtrNormalizedSeg(void *ptr)
 	return ((uint8_t *)ptr-g_be_emulatedMemSpace)/16;
 }
 
-// Use **ONLY* with memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc:
+// Use **ONLY* with:
+// - Memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc.
+// - Memory referenced by BE_Cross_EMM_GetPageFrame.
+// - Chunks of memory loaded from the original DOS EXE by ReflectionHLE.
 //
 // Somewhat similar to FP_OFF, *but* returns the offset of
 // the *normalized* pointer's form (which is always < 16)
@@ -468,7 +503,11 @@ static inline uint16_t BE_Cross_GetPtrNormalizedOff(void *ptr)
 	return ((uint8_t *)ptr-g_be_emulatedMemSpace)%16;
 }
 
-// Use **ONLY* with memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc:
+// Use **ONLY* with:
+// - Memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc.
+// - Memory referenced by BE_Cross_EMM_GetPageFrame.
+// - Chunks of memory loaded from the original DOS EXE by ReflectionHLE.
+//
 // Converts segment to given pointer (like MK_FP(seg, 0))
 static inline void *BE_Cross_BGetPtrFromSeg(uint16_t seg)
 {
@@ -476,7 +515,10 @@ static inline void *BE_Cross_BGetPtrFromSeg(uint16_t seg)
 	return g_be_emulatedMemSpace + seg*16;
 }
 
-// Use **ONLY* with memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc:
+// - Memory allocated by BE_Cross_Bmalloc/BE_Cross_Bfarmalloc.
+// - Memory referenced by BE_Cross_EMM_GetPageFrame.
+// - Chunks of memory loaded from the original DOS EXE by ReflectionHLE.
+//
 // A kind of a MK_FP replacement.
 static inline void *BE_Cross_BMK_FP(uint16_t seg, uint16_t off)
 {
@@ -489,10 +531,10 @@ static inline void *BE_Cross_BMK_FP(uint16_t seg, uint16_t off)
 //
 // This can be done AS LONG AS a copy of the UNCOMPRESSED EXE IMAGE
 // is internally loaded to memory.
-void *BE_Cross_BmallocFromEmbeddedData(const char *name, uint16_t *pSize);
+void *BE_Cross_GetNearEmbeddedData(const char *name, uint16_t *pSize);
 
 // Same as above, but loads data to far memory
-void *BE_Cross_BfarmallocFromEmbeddedData(const char *name, uint32_t *pSize);
+void *BE_Cross_GetFarEmbeddedData(const char *name, uint32_t *pSize);
 
 // Use this in cases an original DOS program attempts to access contents of
 // segment no. 0 for some reason

@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2024 NY00123
+/* Copyright (C) 2015-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +31,7 @@
 #ifndef BE_ST_SDL_PRIVATE_H
 #define BE_ST_SDL_PRIVATE_H
 
-#include "SDL3/SDL.h"
+#include <SDL3/SDL.h>
 
 #ifdef REFKEEN_PLATFORM_EMSCRIPTEN
 #include <emscripten.h>
@@ -40,12 +40,17 @@
 #define BEL_ST_SleepMS SDL_Delay
 #endif
 
-#define BEL_ST_GetTicksMS SDL_GetTicks
+#define BEL_ST_CPUPauseInstruction SDL_CPUPauseInstruction
 
-// Hack for compilation against SDL pre-2.0.4
-#ifndef SDL_RENDER_DEVICE_RESET
-#define SDL_RENDER_DEVICE_RESET 0x2001
-#endif
+static inline uint32_t BEL_ST_GetTicksMS()
+{
+	return SDL_GetTicks();
+}
+
+static inline uint64_t BEL_ST_GetTicksNS()
+{
+	return SDL_GetTicksNS();
+}
 
 #define BE_ST_MANAGE_INT_CALLS_SEPARATELY_FROM_AUDIO 1
 

@@ -40,28 +40,28 @@
 static SDL_Mutex* g_sdlCallbackMutex = NULL;
 #endif
 static int g_sdlAudioChannels;
-/*static*/ SDL_AudioStream* g_sdlAudioStream;
+/*static*/ SDL_AudioStream *g_sdlAudioStream;
 
 extern bool g_sdlAudioSubsystemUp;
 
 #ifdef BE_ST_FILL_AUDIO_IN_MAIN_THREAD
-void BEL_ST_InterThread_CallBack(void* unused, Uint8* stream, int len);
+void BEL_ST_InterThread_CallBack(void *unused, Uint8 *stream, int len);
 #endif
 
-static void BEL_ST_MixerCallback(void* unused_userdata, SDL_AudioStream* stream,
-	int additional_amount, int unused_total_amount)
+static void BEL_ST_MixerCallback(void *unused_userdata, SDL_AudioStream *stream,
+                                 int additional_amount, int unused_total_amount)
 {
 	if (additional_amount > 0)
 	{
-		Uint8* data = SDL_stack_alloc(Uint8, additional_amount);
+		Uint8 *data = SDL_stack_alloc(Uint8, additional_amount);
 		if (data)
 		{
 #ifdef BE_ST_FILL_AUDIO_IN_MAIN_THREAD
 			BEL_ST_InterThread_CallBack(unused_userdata, data,
-				additional_amount);
+			                            additional_amount);
 #else
-			BEL_ST_AudioMixerCallback((BE_ST_SndSample_T*)data,
-				additional_amount / (g_sdlAudioChannels * sizeof(BE_ST_SndSample_T)));
+			BEL_ST_AudioMixerCallback((BE_ST_SndSample_T *)data,
+			                          additional_amount / (g_sdlAudioChannels * sizeof(BE_ST_SndSample_T)));
 #endif
 			SDL_PutAudioStreamData(stream, data, additional_amount);
 			SDL_stack_free(data);
@@ -69,7 +69,7 @@ static void BEL_ST_MixerCallback(void* unused_userdata, SDL_AudioStream* stream,
 	}
 }
 
-static void BEL_ST_LowLatencySetup(const SDL_AudioSpec* spec)
+static void BEL_ST_LowLatencySetup(const SDL_AudioSpec *spec)
 {
 	// As of SDL 3.4 the device sample frames hint doesn't scale based on
 	// sample rate. SDL also at the time of writing has a minimum device
@@ -100,14 +100,14 @@ static void BEL_ST_LowLatencySetup(const SDL_AudioSpec* spec)
 
 	// Hint that we want 700Hz callback timing
 	char* sampleFramesStr = NULL;
-	if (SDL_asprintf(&sampleFramesStr, "%d", sampleRate / 700) != -1)
+	if (SDL_asprintf(&sampleFramesStr, "%d", sampleRate/700) != -1)
 	{
 		SDL_SetHint(SDL_HINT_AUDIO_DEVICE_SAMPLE_FRAMES, sampleFramesStr);
 		SDL_free(sampleFramesStr);
 	}
 }
 
-bool BEL_ST_InitAudioSubsystem(int* freq, int* channels, int* bufferLen)
+bool BEL_ST_InitAudioSubsystem(int *freq, int *channels, int *bufferLen)
 {
 	SDL_AudioSpec spec;
 	if (!SDL_InitSubSystem(SDL_INIT_AUDIO))

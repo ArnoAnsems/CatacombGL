@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2024 NY00123
+/* Copyright (C) 2014-2026 NY00123
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -93,7 +93,7 @@ void BE_ST_InitAudio(void)
 			BEL_ST_AudioMixerAddSource(
 				OPL_SAMPLE_RATE,
 				// Leave some room for calls to BE_ST_OPL2Write
-				2*samplesForSourceBuffer,
+				BE_Cross_TypedMax(int, samplesForSourceBuffer, OPL_MIN_INPUT_SAMPLES),
 				g_refKeenCfg.oplVol,
 				BEL_ST_GenOPLSamples));
 		g_sdlEmulatedOPLChipReady = true;
