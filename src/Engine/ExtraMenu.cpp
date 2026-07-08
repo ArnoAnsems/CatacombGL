@@ -82,21 +82,24 @@ ExtraMenu::ExtraMenu(
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10)),
     m_savedGamesInDosFormat(savedGamesInDosFormat)
 {
+    constexpr uint16_t buttonWidth = 120u;
+    constexpr uint16_t buttonHeight = 10u;
+
     // Main menu
     GuiPage* pageMain = new GuiPage(playerInput);
     pageMain->SetId(pageMainId);
 
-    GuiElementList* elementListMain = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListMain->AddChild(new GuiElementButton(playerInput, "New Game", {GuiActionNewGame, 0}, m_renderableText));
-    elementListMain->AddChild(new GuiElementButton(playerInput, "Load Game", { GuiActionNavigateTo, pageLoadGameId }, m_renderableText));
-    GuiElementButton* goToSaveGameButton = new GuiElementButton(playerInput, "Save Game", { GuiActionNavigateTo, pageSaveGameId }, m_renderableText);
+    GuiElementList* elementListMain = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    elementListMain->AddChild(new GuiElementButton(playerInput, "New Game", buttonWidth, buttonHeight, {GuiActionNewGame, 0}, m_renderableText));
+    elementListMain->AddChild(new GuiElementButton(playerInput, "Load Game", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageLoadGameId }, m_renderableText));
+    GuiElementButton* goToSaveGameButton = new GuiElementButton(playerInput, "Save Game", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageSaveGameId }, m_renderableText);
     goToSaveGameButton->SetId(goToSaveGameId);
     elementListMain->AddChild(goToSaveGameButton);
-    elementListMain->AddChild(new GuiElementButton(playerInput, "Options", { GuiActionNavigateTo, pageOptionsId }, m_renderableText));
-    GuiElementButton* catalogButton = new GuiElementButton(playerInput, catalogInfo.label, { GuiActionNavigateTo, pageCatalogId }, m_renderableText);
+    elementListMain->AddChild(new GuiElementButton(playerInput, "Options", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageOptionsId }, m_renderableText));
+    GuiElementButton* catalogButton = new GuiElementButton(playerInput, catalogInfo.label, buttonWidth, buttonHeight, { GuiActionNavigateTo, pageCatalogId }, m_renderableText);
     catalogButton->SetEnabled(!catalogInfo.filenames.empty());
     elementListMain->AddChild(catalogButton);
-    elementListMain->AddChild(new GuiElementButton(playerInput, "Quit", { GuiActionQuit, 0 }, m_renderableText));
+    elementListMain->AddChild(new GuiElementButton(playerInput, "Quit", buttonWidth, buttonHeight, { GuiActionQuit, 0 }, m_renderableText));
     pageMain->AddChild(elementListMain, 120, 30);
 
     GuiElementStaticText* pageLabelMain = new GuiElementStaticText(playerInput, "Main Menu", EgaBrightYellow, m_renderableText);
@@ -106,16 +109,16 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageOptions = new GuiPage(playerInput);
     pageOptions->SetId(pageOptionsId);
 
-    GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Mouse & Keyboard", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText));
-    GuiElementButton* goToGameControllerButton = new GuiElementButton(playerInput, "Game Controller", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText);
+    GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Mouse & Keyboard", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText));
+    GuiElementButton* goToGameControllerButton = new GuiElementButton(playerInput, "Game Controller", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText);
     goToGameControllerButton->SetId(selectGameControllerId);
     elementListOptions->AddChild(goToGameControllerButton);
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Video", { GuiActionNavigateTo, pageVideoOptionsId }, m_renderableText));
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Sound", { GuiActionNavigateTo, pageSoundOptionsId }, m_renderableText));
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Gameplay", { GuiActionNavigateTo, pageGameplayOptionsId }, m_renderableText));
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Defaults", { GuiActionResetToDefaults, 0 }, m_renderableText));
-    elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Classic Look", { GuiActionResetToClassic, 0 }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Video", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageVideoOptionsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Sound", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageSoundOptionsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Gameplay", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageGameplayOptionsId }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Defaults", buttonWidth, buttonHeight, { GuiActionResetToDefaults, 0 }, m_renderableText));
+    elementListOptions->AddChild(new GuiElementButton(playerInput, "Reset To Classic Look", buttonWidth, buttonHeight, { GuiActionResetToClassic, 0 }, m_renderableText));
     pageOptions->AddChild(elementListOptions, 120, 30);
 
     GuiElementStaticText* pageLabelOptions = new GuiElementStaticText(playerInput, "Options", EgaBrightYellow, m_renderableText);
@@ -125,7 +128,7 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageVideo = new GuiPage(playerInput);
     pageVideo->SetId(pageVideoOptionsId);
 
-    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 132, m_renderableText));
     GuiElementEnumSelection* VScreenResolutionSelection = new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 132, m_renderableText);
     VScreenResolutionSelection->SetId(selectScreenResolutionId);
@@ -149,14 +152,14 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageMouseAndKeyboard = new GuiPage(playerInput);
     pageMouseAndKeyboard->SetId(pageCustomizeMouseAndKeyboardId);
 
-    GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 200u, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListMouseAndKeyboard->AddChild(new GuiElementBindKey(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
+            elementListMouseAndKeyboard->AddChild(new GuiElementBindKey(playerInput, 200u, buttonHeight, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
         }
     }
     elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 95, m_renderableText));
@@ -172,12 +175,12 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageGameController = new GuiPage(playerInput);
     pageGameController->SetId(pageCustomizeGameControllerId);
 
-    GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, 200u, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListGameController->AddChild(new GuiElementBindGameController(playerInput, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
+            elementListGameController->AddChild(new GuiElementBindGameController(playerInput, 200u, buttonHeight, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
         }
     }
     elementListGameController->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 95, m_renderableText));
@@ -190,7 +193,7 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageGameplay = new GuiPage(playerInput);
     pageGameplay->SetId(pageGameplayOptionsId);
 
-    GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 120, m_renderableText));
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 120, m_renderableText));
     elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 120, m_renderableText));
@@ -205,7 +208,7 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageSound = new GuiPage(playerInput);
     pageSound->SetId(pageSoundOptionsId);
 
-    GuiElementList* elementListSound = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListSound = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), 140, m_renderableText));
     elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicModeAdventureTrilogy), 140, m_renderableText));
     pageSound->AddChild(elementListSound, 60, 30);
@@ -217,14 +220,14 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageLoadGame = new GuiPage(playerInput);
     pageLoadGame->SetId(pageLoadGameId);
 
-    GuiElementList* elementListLoadGame = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListLoadGame = new GuiElementList(playerInput, 8, 180u, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     elementListLoadGame->SetId(loadGameListId);
     if (savedGames.size() > 0)
     {
         int16_t savedGameIndex = 0;
         for (const auto& savedGame : savedGames)
         {
-            elementListLoadGame->AddChild(new GuiElementButton(playerInput, savedGame, { GuiActionLoadGame, savedGameIndex }, m_renderableText));
+            elementListLoadGame->AddChild(new GuiElementButton(playerInput, savedGame, 180u, buttonHeight, { GuiActionLoadGame, savedGameIndex }, m_renderableText));
             savedGameIndex++;
         }
     }
@@ -235,7 +238,7 @@ ExtraMenu::ExtraMenu(
         for (const SavedGameInDosFormat* savedGameInDosFormat : m_savedGamesInDosFormat.GetSavedGameInDosFormat())
         {
             const std::string savedGameName = savedGameInDosFormat->GetName() + " [DOS]";
-            elementListLoadGame->AddChild(new GuiElementButton(playerInput, savedGameName, { GuiActionLoadDosGame, savedGameIndex }, m_renderableText));
+            elementListLoadGame->AddChild(new GuiElementButton(playerInput, savedGameName, 180u, buttonHeight, { GuiActionLoadDosGame, savedGameIndex }, m_renderableText));
             savedGameIndex++;
         }
     }
@@ -250,8 +253,8 @@ ExtraMenu::ExtraMenu(
     pageSaveGame->SetId(pageSaveGameId);
 
     GuiEvent event = GuiEvent({GuiActionSaveGame, -1});
-    GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 8, 10, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    GuiElementEditText* saveGameEditText = new GuiElementEditText(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, event );
+    GuiElementList* elementListSaveGame = new GuiElementList(playerInput, 8, 180u, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementEditText* saveGameEditText = new GuiElementEditText(playerInput, 180u, buttonHeight, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, event );
     elementListSaveGame->SetId(saveGameListId);
     elementListSaveGame->AddChild(saveGameEditText);
     
@@ -260,7 +263,7 @@ ExtraMenu::ExtraMenu(
         int16_t savedGameIndex = 0;
         for (const auto& savedGame : savedGames)
         {
-            elementListSaveGame->AddChild(new GuiElementButton(playerInput, savedGame, { GuiActionSaveGame, savedGameIndex }, m_renderableText));
+            elementListSaveGame->AddChild(new GuiElementButton(playerInput, savedGame, 180u, buttonHeight, { GuiActionSaveGame, savedGameIndex }, m_renderableText));
             savedGameIndex++;
         }
     }
@@ -491,8 +494,8 @@ const std::string& ExtraMenu::GetNewSaveGameName() const
 
 void ExtraMenu::AddNewSavedGame(const PlayerInput& playerInput, const std::string& name)
 {
-    m_guiMenu.AddChild(new GuiElementButton(playerInput, name, { GuiActionLoadGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText), 0, 0, loadGameListId);
-    m_guiMenu.AddChild(new GuiElementButton(playerInput, name, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText), 0, 0, saveGameListId);
+    m_guiMenu.AddChild(new GuiElementButton(playerInput, name, 180u, 10u, { GuiActionLoadGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText), 0, 0, loadGameListId);
+    m_guiMenu.AddChild(new GuiElementButton(playerInput, name, 180u, 10u, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText), 0, 0, saveGameListId);
 }
 
 void ExtraMenu::OpenRestoreGameMenu()

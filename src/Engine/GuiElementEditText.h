@@ -15,17 +15,19 @@
 #pragma once
 
 #include <string>
-#include "GuiElementBase.h"
+#include "GuiElementClickable.h"
 #include "SDL3/SDL_keycode.h"
 
 class PlayerInput;
 class RenderableText;
 
-class GuiElementEditText : public GuiElementBase
+class GuiElementEditText : public GuiElementClickable
 {
 public:
     explicit GuiElementEditText(
         const PlayerInput& playerInput,
+        const uint16_t elementWidth,
+        const uint16_t elementHeight,
         std::string& outputText,
         const std::string& initialText,
         const uint16_t maxTextLength,

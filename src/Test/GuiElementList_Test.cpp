@@ -38,13 +38,13 @@ TEST_F(GuiElementList_Test, ScrollThroughListThatFitsOnScreen)
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementList_Test::GetDefaultFont());
 
-    GuiElementList guiElementList(playerInput, 4, 16, nullptr, soundWhenBrowsing);
+    GuiElementList guiElementList(playerInput, 4u, 120u, 16u, nullptr, soundWhenBrowsing);
 
-    GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
+    GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", 30u, 10u, { actionFirstButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(firstButton);
-    GuiElementButton* secondButton = new GuiElementButton(playerInput, "Second button", { actionSecondButtonPressed, 0 }, renderableText);
+    GuiElementButton* secondButton = new GuiElementButton(playerInput, "Second button", 30u, 10u, { actionSecondButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(secondButton);
-    GuiElementButton* thirdButton = new GuiElementButton(playerInput, "Third button", { actionThirdButtonPressed, 0 }, renderableText);
+    GuiElementButton* thirdButton = new GuiElementButton(playerInput, "Third button", 30u, 10u, { actionThirdButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(thirdButton);
 
     // Initially no key is pressed
@@ -116,15 +116,15 @@ TEST_F(GuiElementList_Test, ScrollThroughListThatDoesNotFitOnScreen)
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementList_Test::GetDefaultFont());
 
-    GuiElementList guiElementList(playerInput, 3, 16, nullptr, soundWhenBrowsing);
+    GuiElementList guiElementList(playerInput, 3u, 120u, 16u, nullptr, soundWhenBrowsing);
 
-    GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", { actionFirstButtonPressed, 0 }, renderableText);
+    GuiElementButton* firstButton = new GuiElementButton(playerInput, "First button", 30u, 10u, { actionFirstButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(firstButton);
-    GuiElementButton* secondButton = new GuiElementButton(playerInput, "Second button", { actionSecondButtonPressed, 0 }, renderableText);
+    GuiElementButton* secondButton = new GuiElementButton(playerInput, "Second button", 30u, 10u, { actionSecondButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(secondButton);
-    GuiElementButton* thirdButton = new GuiElementButton(playerInput, "Third button", { actionThirdButtonPressed, 0 }, renderableText);
+    GuiElementButton* thirdButton = new GuiElementButton(playerInput, "Third button", 30u, 10u, { actionThirdButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(thirdButton);
-    GuiElementButton* fourthButton = new GuiElementButton(playerInput, "Fourth button", { actionFourthButtonPressed, 0 }, renderableText);
+    GuiElementButton* fourthButton = new GuiElementButton(playerInput, "Fourth button", 30u, 10u, { actionFourthButtonPressed, 0 }, renderableText);
     guiElementList.AddChild(fourthButton);
 
     // Initially no key is pressed

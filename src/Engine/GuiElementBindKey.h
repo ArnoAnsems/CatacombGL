@@ -14,16 +14,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "GuiElementBase.h"
+#include "GuiElementClickable.h"
 #include "ControlsMap.h"
 
 class RenderableText;
 
-class GuiElementBindKey : public GuiElementBase
+class GuiElementBindKey : public GuiElementClickable
 {
 public:
     explicit GuiElementBindKey(
         const PlayerInput& playerInput,
+        const uint16_t elementWidth,
+        const uint16_t elementHeight,
         ControlsMap& controlsMap,
         ControlAction controlAction,
         const int16_t offsetXValue,

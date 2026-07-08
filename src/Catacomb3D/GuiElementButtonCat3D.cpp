@@ -20,11 +20,13 @@
 GuiElementButtonCat3D::GuiElementButtonCat3D(
     const PlayerInput& playerInput,
     const std::string& buttonLabel,
+    const uint16_t buttonWidth,
+    const uint16_t buttonHeight,
     const GuiEvent& guiEventWhenActivated,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
     const bool& flashIcon) :
-    GuiElementButton(playerInput, buttonLabel, guiEventWhenActivated, renderableText),
+    GuiElementButton(playerInput, buttonLabel, buttonWidth, buttonHeight, guiEventWhenActivated, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)
 {

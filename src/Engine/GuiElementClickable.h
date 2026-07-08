@@ -14,27 +14,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "../Engine/GuiElementBindGameController.h"
+#include "GuiElementBase.h"
 
-class RenderableTiles;
-
-class GuiElementBindGameControllerCat3D : public GuiElementBindGameController
+class GuiElementClickable: public GuiElementBase
 {
 public:
-    explicit GuiElementBindGameControllerCat3D(
-        const PlayerInput& playerInput,
-        const uint16_t elementWidth,
-        const uint16_t elementHeight,
-        ControlsMap& controlsMap,
-        ControlAction controlAction,
-        const int16_t offsetXValue,
-        RenderableText& renderableText,
-        RenderableTiles& renderableTiles,
-        const bool& flashIcon);
+    explicit GuiElementClickable(const PlayerInput& playerInput, uint16_t elementWidth, uint16_t elementHeight);
+    virtual ~GuiElementClickable() = default;
 
-    virtual void Draw(IRenderer& renderer) const override;
+protected:
+    bool isClicked() const;
 
 private:
-    RenderableTiles& m_renderableTiles;
-    const bool& m_flashIcon;
+    const uint16_t m_elementWidth;
+    const uint16_t m_elementHeight;
 };

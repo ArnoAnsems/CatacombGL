@@ -20,11 +20,13 @@
 
 GuiElementBindKey::GuiElementBindKey(
     const PlayerInput& playerInput,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     ControlsMap& controlsMap,
     ControlAction controlAction,
     const int16_t offsetXValue,
     RenderableText& renderableText) :
-    GuiElementBase(playerInput),
+    GuiElementClickable(playerInput, elementWidth, elementHeight),
     m_controlsMap(controlsMap),
     m_controlAction(controlAction),
     m_offsetXValue(offsetXValue),
@@ -57,17 +59,8 @@ const GuiEvent& GuiElementBindKey::ProcessInput()
         }
         else
         {
-            const int32_t mouseX = m_playerInput.GetMouseXPos();
-            const int32_t mouseY = m_playerInput.GetMouseYPos();
-            const bool isJustActivatedByMouse =
-                m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) &&
-                mouseX >= m_originX + m_offsetXValue &&
-                mouseX < m_originX + m_offsetXValue + 70 &&
-                mouseY >= m_originY &&
-                mouseY < m_originY + 10;
-
             if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
-                isJustActivatedByMouse ||
+                isClicked() ||
                 m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
             {
                 m_waitingForKey = true;

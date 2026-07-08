@@ -25,6 +25,7 @@
 GuiElementList::GuiElementList(
     const PlayerInput& playerInput,
     const uint16_t maxElementsDrawn,
+    const uint16_t elementWidth,
     const uint16_t elementHeight,
     const Picture* cursorPicture,
     const uint16_t soundWhenBrowsing) :
@@ -33,6 +34,7 @@ GuiElementList::GuiElementList(
     m_scrollbarHeight(78u),
     m_scrollbarOffsetX(200),
     m_maxElementsDrawn(maxElementsDrawn),
+    m_elementWidth(elementWidth),
     m_elementHeight(elementHeight),
     m_elementSelected(0),
     m_firstElementDrawn(0),
@@ -161,10 +163,9 @@ const GuiEvent& GuiElementList::ProcessInput()
             const size_t elementsInView = (m_elements.size() > m_maxElementsDrawn) ? m_maxElementsDrawn : m_elements.size();
             while (index < elementsInView)
             {
-                constexpr uint16_t elementWidth = 140u;
                 const int16_t offsetY = m_originY + (index * m_elementHeight);
                 if (mouseX >= m_originX &&
-                    mouseX < m_originX + elementWidth &&
+                    mouseX < m_originX + m_elementWidth &&
                     mouseY >= offsetY &&
                     mouseY < offsetY + m_elementHeight)
                 {

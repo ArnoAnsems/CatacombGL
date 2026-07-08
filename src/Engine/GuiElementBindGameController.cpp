@@ -20,11 +20,13 @@
 
 GuiElementBindGameController::GuiElementBindGameController(
     const PlayerInput& playerInput,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     ControlsMap& controlsMap,
     ControlAction controlAction,
     const int16_t offsetXValue,
     RenderableText& renderableText) :
-    GuiElementBase(playerInput),
+    GuiElementClickable(playerInput, elementWidth, elementHeight),
     m_controlsMap(controlsMap),
     m_controlAction(controlAction),
     m_offsetXValue(offsetXValue),
@@ -58,7 +60,7 @@ const GuiEvent& GuiElementBindGameController::ProcessInput()
         else
         {
             if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
-                m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
+                isClicked() ||
                 m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
             {
                 m_waitingForGameController = true;

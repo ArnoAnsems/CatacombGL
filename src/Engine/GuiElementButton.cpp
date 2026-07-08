@@ -21,9 +21,11 @@
 GuiElementButton::GuiElementButton(
     const PlayerInput& playerInput,
     const std::string& buttonLabel,
+    const uint16_t buttonWidth,
+    const uint16_t buttonHeight,
     const GuiEvent& guiEventWhenActivated,
     RenderableText& renderableText) :
-    GuiElementBase(playerInput),
+    GuiElementClickable(playerInput, buttonWidth, buttonHeight),
     m_buttonLabel(buttonLabel),
     m_guiEventWhenActivated(guiEventWhenActivated),
     m_renderableText(renderableText)
@@ -33,19 +35,10 @@ GuiElementButton::GuiElementButton(
 
 const GuiEvent& GuiElementButton::ProcessInput()
 {
-    const int32_t mouseX = m_playerInput.GetMouseXPos();
-    const int32_t mouseY = m_playerInput.GetMouseYPos();
-    const bool isJustActivatedByMouse = 
-        m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) &&
-        mouseX >= m_originX &&
-        mouseX < m_originX + 120 &&
-        mouseY >= m_originY &&
-        mouseY < m_originY + 10;
-
     const bool isJustActivated =
         m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
         m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH) ||
-        isJustActivatedByMouse;
+        isClicked();
 
     return (m_enabled && isJustActivated) ? m_guiEventWhenActivated : GetEvent();
 }

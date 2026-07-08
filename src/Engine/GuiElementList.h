@@ -25,6 +25,7 @@ public:
     explicit GuiElementList(
         const PlayerInput& playerInput,
         const uint16_t maxElementsDrawn,
+        const uint16_t elementWidth,
         const uint16_t elementHeight,
         const Picture* cursorPicture,
         const uint16_t soundWhenBrowsing);
@@ -46,6 +47,7 @@ protected:
     uint16_t m_firstElementDrawn;
 
 private:
+    const uint16_t m_elementWidth;
     const uint16_t m_elementHeight;
     uint16_t m_elementSelected;
     const Picture* m_cursorPicture;

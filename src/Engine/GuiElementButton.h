@@ -15,17 +15,19 @@
 #pragma once
 
 #include <string>
-#include "GuiElementBase.h"
+#include "GuiElementClickable.h"
 
 class PlayerInput;
 class RenderableText;
 
-class GuiElementButton : public GuiElementBase
+class GuiElementButton : public GuiElementClickable
 {
 public:
     explicit GuiElementButton(
         const PlayerInput& playerInput,
         const std::string& buttonLabel,
+        const uint16_t buttonWidth,
+        const uint16_t buttonHeight,
         const GuiEvent& guiEventWhenActivated,
         RenderableText& renderableText);
     ~GuiElementButton() override = default;

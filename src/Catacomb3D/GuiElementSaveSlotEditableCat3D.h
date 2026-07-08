@@ -23,6 +23,8 @@ class GuiElementSaveSlotEditableCat3D : public GuiElementEditText
 public:
     explicit GuiElementSaveSlotEditableCat3D(
         const PlayerInput& playerInput,
+        const uint16_t elementWidth,
+        const uint16_t elementHeight,
         std::string& outputText,
         const std::string& initialText,
         const uint16_t maxTextLength,

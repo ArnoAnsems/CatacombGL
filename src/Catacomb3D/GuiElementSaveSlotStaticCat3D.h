@@ -22,6 +22,8 @@ public:
     explicit GuiElementSaveSlotStaticCat3D(
         const PlayerInput& playerInput,
         const std::string& buttonLabel,
+        const uint16_t buttonWidth,
+        const uint16_t buttonHeight,
         const GuiEvent& guiEventWhenActivated,
         RenderableText& renderableText,
         const bool& flashIcon);

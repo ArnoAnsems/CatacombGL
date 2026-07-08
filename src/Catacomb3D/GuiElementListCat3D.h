@@ -25,6 +25,7 @@ public:
     explicit GuiElementListCat3D(
         const PlayerInput& playerInput,
         const uint16_t maxElementsDrawn,
+        const uint16_t elementWidth,
         const uint16_t elementHeight,
         const Picture* cursorPicture,
         const uint16_t soundWhenBrowsing);

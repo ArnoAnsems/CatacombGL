@@ -23,6 +23,8 @@ class GuiElementBindKeyCat3D : public GuiElementBindKey
 public:
     explicit GuiElementBindKeyCat3D(
         const PlayerInput& playerInput,
+        const uint16_t elementWidth,
+        const uint16_t elementHeight,
         ControlsMap& controlsMap,
         ControlAction controlAction,
         const int16_t offsetXValue,

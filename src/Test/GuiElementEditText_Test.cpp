@@ -32,7 +32,7 @@ TEST_F(GuiElementEditText_Test, EnterTextAndPressEnter)
     GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, 100u, 10u, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Initially no key is pressed
     EXPECT_EQ(guiElementEditText.ProcessInput().guiAction, GuiActionNone);
@@ -106,7 +106,7 @@ TEST_F(GuiElementEditText_Test, ClearTextWithBackspace)
     GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, 100u, 10u, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Press Enter to start typing
     renderableText.Reset();
@@ -176,7 +176,7 @@ TEST_F(GuiElementEditText_Test, CancelEditWithEsc)
     GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, 100u, 10u, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Press Enter to start typing
     renderableText.Reset();
@@ -216,7 +216,7 @@ TEST_F(GuiElementEditText_Test, CheckOtherKeysAreIgnored)
     GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", 5, renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, 100u, 10u, outputText, "Type text ...", 5, renderableText, completeEvent);
 
     // Press UP
     renderableText.Reset();
@@ -253,7 +253,7 @@ TEST_F(GuiElementEditText_Test, CheckMaxTextLength)
     GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, 100u, 10u, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
 
     // Press Enter to start typing
     renderableText.Reset();
@@ -293,7 +293,7 @@ TEST_F(GuiElementEditText_Test, CheckDisabled)
     GuiEvent completeEvent{ GuiActionLoadGame, 2 };
     RendererStub rendererStub;
     RenderableText renderableText(GuiElementEditText_Test::GetDefaultFont());
-    GuiElementEditText guiElementEditText(playerInput, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
+    GuiElementEditText guiElementEditText(playerInput, 100u, 10u, outputText, "Type text ...", maxTextLength, renderableText, completeEvent);
 
     // Disable
     guiElementEditText.SetEnabled(false);

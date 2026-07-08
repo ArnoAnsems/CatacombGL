@@ -20,10 +20,11 @@
 GuiElementListCat3D::GuiElementListCat3D(
     const PlayerInput& playerInput,
     const uint16_t maxElementsDrawn,
+    const uint16_t elementWidth,
     const uint16_t elementHeight,
     const Picture* cursorPicture,
     const uint16_t soundWhenBrowsing) :
-    GuiElementList(playerInput, maxElementsDrawn, elementHeight, cursorPicture, soundWhenBrowsing)
+    GuiElementList(playerInput, maxElementsDrawn, elementWidth, elementHeight, cursorPicture, soundWhenBrowsing)
 {
     m_scrollbarHeight = 65u;
     m_scrollbarWidth = 8u;

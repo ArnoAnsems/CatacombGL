@@ -42,21 +42,21 @@ TEST_F(GuiMenu_Test, NavigateThroughPages)
     GuiPage* guiPage1 = new GuiPage(playerInput);
     guiPage1->SetId(pageId1);
     GuiEvent eventGotoPage2 = { GuiActionNavigateTo, pageId2 };
-    GuiElementButton* guiButton1 = new GuiElementButton(playerInput, "Button on first page", eventGotoPage2, renderableText);
+    GuiElementButton* guiButton1 = new GuiElementButton(playerInput, "Button on first page", 30u, 10u, eventGotoPage2, renderableText);
     guiPage1->AddChild(guiButton1, 0, 0, pageId1);
     guiMenu.AddChild(guiPage1, 0, 0, 0);
 
     GuiPage* guiPage2 = new GuiPage(playerInput);
     guiPage2->SetId(pageId2);
     GuiEvent eventGotoPage3 = { GuiActionNavigateTo, pageId3 };
-    GuiElementButton* guiButton2 = new GuiElementButton(playerInput, "Button on second page", eventGotoPage3, renderableText);
+    GuiElementButton* guiButton2 = new GuiElementButton(playerInput, "Button on second page", 30u, 10u, eventGotoPage3, renderableText);
     guiPage2->AddChild(guiButton2, 0, 0, pageId2);
     guiMenu.AddChild(guiPage2, 0, 0, 0);
 
     GuiPage* guiPage3 = new GuiPage(playerInput);
     guiPage3->SetId(pageId3);
     GuiEvent eventNone = { GuiActionNone, 0 };
-    GuiElementButton* guiButton3 = new GuiElementButton(playerInput, "Button on third page", eventNone, renderableText);
+    GuiElementButton* guiButton3 = new GuiElementButton(playerInput, "Button on third page", 30u, 10u, eventNone, renderableText);
     guiPage3->AddChild(guiButton3, 0, 0, pageId3);
     guiMenu.AddChild(guiPage3, 0, 0, 0);
 

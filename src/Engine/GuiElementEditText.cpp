@@ -21,12 +21,14 @@
 
 GuiElementEditText::GuiElementEditText(
     const PlayerInput& playerInput,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     std::string& outputText,
     const std::string& initialText,
     const uint16_t maxTextLength,
     RenderableText& renderableText,
     GuiEvent& textCompleteAction) :
-    GuiElementBase(playerInput),
+    GuiElementClickable(playerInput, elementWidth, elementHeight),
     m_outputText(outputText),
     m_initialText(initialText),
     m_renderableText(renderableText),
@@ -44,7 +46,7 @@ const GuiEvent& GuiElementEditText::ProcessInput()
     {
         const SDL_Keycode keyCode = m_playerInput.GetFirstKeyPressed();
         const SDL_GamepadButton buttonCode = m_playerInput.GetFirstGameControllerButtonPressed();
-        if (keyCode == SDLK_RETURN || buttonCode == SDL_GAMEPAD_BUTTON_SOUTH)
+        if (keyCode == SDLK_RETURN || buttonCode == SDL_GAMEPAD_BUTTON_SOUTH || isClicked())
         {
             if (m_enteringText)
             {

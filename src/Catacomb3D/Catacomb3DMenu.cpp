@@ -109,6 +109,9 @@ Catacomb3DMenu::Catacomb3DMenu(
     const std::string secondInstruction = m_gameControllerDetected ? "(A) selects" : "Enter selects";
     const std::string thirdInstruction = m_gameControllerDetected ? "(B) to back out" : "Esc to back out";
 
+    constexpr uint16_t buttonWidth = 120u;
+    constexpr uint16_t buttonHeight = 8u;
+
     // Main menu
     GuiPage* guiPageMain = new GuiPage(playerInput);
     guiPageMain->SetId(pageMainId);
@@ -116,20 +119,20 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameMain->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageMain->AddChild(pageFrameMain);
 
-    GuiElementList* elementListMain = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
-    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "NEW GAME", { GuiActionNavigateTo, pageNewGameId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "LOAD GAME", { GuiActionNavigateTo, pageRestoreGameId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    GuiElementButton* goToSaveGameButton = new GuiElementButtonCat3D(playerInput, "SAVE GAME", { GuiActionNavigateTo, pageSaveGameId }, m_renderableText, m_renderableTiles, m_flashIcon);
+    GuiElementList* elementListMain = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
+    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "NEW GAME", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageNewGameId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "LOAD GAME", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageRestoreGameId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementButton* goToSaveGameButton = new GuiElementButtonCat3D(playerInput, "SAVE GAME", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageSaveGameId }, m_renderableText, m_renderableTiles, m_flashIcon);
     goToSaveGameButton->SetId(goToSaveGameId);
     elementListMain->AddChild(goToSaveGameButton);
-    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "OPTIONS", { GuiActionNavigateTo, pageOptionsId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    m_returnToGameButton = new GuiElementButtonCat3D(playerInput, "RETURN TO DEMO", { GuiActionClose, 0 }, m_renderableText, m_renderableTiles, m_flashIcon);
+    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "OPTIONS", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageOptionsId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    m_returnToGameButton = new GuiElementButtonCat3D(playerInput, "RETURN TO DEMO", buttonWidth, buttonHeight, { GuiActionClose, 0 }, m_renderableText, m_renderableTiles, m_flashIcon);
     elementListMain->AddChild(m_returnToGameButton);
-    GuiElementButton* endGameButton = new GuiElementButtonCat3D(playerInput, "END GAME", { GuiActionEndGame, pageNewGameId }, m_renderableText, m_renderableTiles, m_flashIcon);
+    GuiElementButton* endGameButton = new GuiElementButtonCat3D(playerInput, "END GAME", buttonWidth, buttonHeight, { GuiActionEndGame, pageNewGameId }, m_renderableText, m_renderableTiles, m_flashIcon);
     endGameButton->SetId(endGameId);
     elementListMain->AddChild(endGameButton);
-    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "SKULL 'N' BONES", { GuiActionNavigateTo, pageSkullNBonesId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "QUIT", { GuiActionQuit, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "SKULL 'N' BONES", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageSkullNBonesId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMain->AddChild(new GuiElementButtonCat3D(playerInput, "QUIT", buttonWidth, buttonHeight, { GuiActionQuit, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageMain->AddChild(elementListMain, 112, 62);
 
     // Options
@@ -139,17 +142,17 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameOptions->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageOptions->AddChild(pageFrameOptions);
 
-    GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MOUSE KEYBOARD", { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    GuiElementButtonCat3D* goToGameControllerButton = new GuiElementButtonCat3D(playerInput, "GAME CONTROLLER", { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText, m_renderableTiles, m_flashIcon);
+    GuiElementList* elementListOptions = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MOUSE KEYBOARD", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageCustomizeMouseAndKeyboardId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementButtonCat3D* goToGameControllerButton = new GuiElementButtonCat3D(playerInput, "GAME CONTROLLER", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageCustomizeGameControllerId }, m_renderableText, m_renderableTiles, m_flashIcon);
     goToGameControllerButton->SetId(selectGameControllerId);
     elementListOptions->AddChild(goToGameControllerButton);
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "VIDEO", { GuiActionNavigateTo, pageVideoId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "SOUND", { GuiActionNavigateTo, pageSoundId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC", { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "GAMEPLAY", { GuiActionNavigateTo, pageGameplayId }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO DEFAULTS", { GuiActionResetToDefaults, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO CLASSIC LOOK", { GuiActionResetToClassic, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "VIDEO", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageVideoId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "SOUND", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageSoundId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "MUSIC", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageMusicId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "GAMEPLAY", buttonWidth, buttonHeight, { GuiActionNavigateTo, pageGameplayId }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO DEFAULTS", buttonWidth, buttonHeight, { GuiActionResetToDefaults, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListOptions->AddChild(new GuiElementButtonCat3D(playerInput, "RESET TO CLASSIC LOOK", buttonWidth, buttonHeight, { GuiActionResetToClassic, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
 
     guiPageOptions->AddChild(elementListOptions, 88, 62);
 
@@ -160,10 +163,10 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameNewGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageNewGame->AddChild(pageFrameNewGame);
 
-    GuiElementList* elementListNewGame = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
-    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN EASY GAME", { GuiActionNewGameEasy, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN NORMAL GAME", { GuiActionNewGameNormal, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN HARD GAME", { GuiActionNewGameHard, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementList* elementListNewGame = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
+    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN EASY GAME", buttonWidth, buttonHeight, { GuiActionNewGameEasy, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN NORMAL GAME", buttonWidth, buttonHeight, { GuiActionNewGameNormal, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListNewGame->AddChild(new GuiElementButtonCat3D(playerInput, "BEGIN HARD GAME", buttonWidth, buttonHeight, { GuiActionNewGameHard, 0 }, m_renderableText, m_renderableTiles, m_flashIcon));
 
     guiPageNewGame->AddChild(elementListNewGame, 88, 62);
 
@@ -174,7 +177,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameVideo->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageVideo->AddChild(pageFrameVideo);
 
-    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
     elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
     GuiElementEnumSelectionCat3D* VScreenResolutionSelection = new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 104, m_renderableText, m_renderableTiles, m_flashIcon);
     VScreenResolutionSelection->SetId(selectScreenResolutionId);
@@ -197,14 +200,14 @@ Catacomb3DMenu::Catacomb3DMenu(
     GuiPageFrameCat3D* pageFrameMouseAndKeyboard = new GuiPageFrameCat3D(playerInput, *egaGraph, GuiPageFrameCat3D::MenuHeaderMouseKeyboard, m_renderableText);
     pageFrameMouseAndKeyboard->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageMouseAndKeyboard->AddChild(pageFrameMouseAndKeyboard);
-    GuiElementListCat3D* elementListMouseAndKeyboard = new GuiElementListCat3D(playerInput, 8, 8, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListMouseAndKeyboard = new GuiElementListCat3D(playerInput, 8, 150u, buttonHeight, nullptr, browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListMouseAndKeyboard->AddChild(new GuiElementBindKeyCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
+            elementListMouseAndKeyboard->AddChild(new GuiElementBindKeyCat3D(playerInput, 150u, buttonHeight, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
         }
     }
     elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
@@ -220,12 +223,12 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameGameController->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageGameController->AddChild(pageFrameGameController);
 
-    GuiElementListCat3D* elementListGameController = new GuiElementListCat3D(playerInput, 8, 8, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListGameController = new GuiElementListCat3D(playerInput, 8, 150u, buttonHeight, nullptr, browseMenuSound);
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListGameController->AddChild(new GuiElementBindGameControllerCat3D(playerInput, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
+            elementListGameController->AddChild(new GuiElementBindGameControllerCat3D(playerInput, 150u, buttonHeight, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
         }
     }
     elementListGameController->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
@@ -238,7 +241,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameGameplay->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageGameplay->AddChild(pageFrameGameplay);
 
-    GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, 8, nullptr, browseMenuSound);
+    GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
     elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
     elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
@@ -253,14 +256,14 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameLoadGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageLoadGame->AddChild(pageFrameLoadGame);
 
-    GuiElementListCat3D* elementListRestoreGame = new GuiElementListCat3D(playerInput, 6, 11, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListRestoreGame = new GuiElementListCat3D(playerInput, 6u, 150u, 11u, nullptr, browseMenuSound);
     elementListRestoreGame->SetId(restoreGameListId);
     if (savedGames.size() > 0)
     {
         int16_t savedGameIndex = 0;
         for (const std::string& savedGame : savedGames)
         {
-            elementListRestoreGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, { GuiActionLoadGame, savedGameIndex }, m_renderableText, m_flashIcon));
+            elementListRestoreGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, 150u, buttonHeight, { GuiActionLoadGame, savedGameIndex }, m_renderableText, m_flashIcon));
             savedGameIndex++;
         }
     }
@@ -271,7 +274,7 @@ Catacomb3DMenu::Catacomb3DMenu(
         for (const SavedGameInDosFormat* savedGameInDosFormat : m_savedGamesInDosFormat.GetSavedGameInDosFormat())
         {
             const std::string savedGameName = savedGameInDosFormat->GetName() + " [DOS]";
-            elementListRestoreGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGameName, { GuiActionLoadDosGame, savedGameIndex }, m_renderableText, m_flashIcon));
+            elementListRestoreGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGameName, 150u, buttonHeight,{ GuiActionLoadDosGame, savedGameIndex }, m_renderableText, m_flashIcon));
             savedGameIndex++;
         }
     }
@@ -287,9 +290,9 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameSaveGame->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageSaveGame->AddChild(pageFrameSaveGame);
 
-    GuiElementListCat3D* elementListSaveGame = new GuiElementListCat3D(playerInput, 6, 11, nullptr, browseMenuSound);
+    GuiElementListCat3D* elementListSaveGame = new GuiElementListCat3D(playerInput, 6u, 150u, 11u, nullptr, browseMenuSound);
     GuiEvent guiEvent = { GuiActionSaveGame, -1 };
-    GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, guiEvent, m_flashIcon, pageFrameSaveGame);
+    GuiElementSaveSlotEditableCat3D* saveGameEditText = new GuiElementSaveSlotEditableCat3D(playerInput, 150u, 11u, m_newSaveGameName, "<< new saved game >>", 20, m_renderableText, guiEvent, m_flashIcon, pageFrameSaveGame);
     elementListSaveGame->SetId(saveGameListId);
     elementListSaveGame->AddChild(saveGameEditText);
 
@@ -298,7 +301,7 @@ Catacomb3DMenu::Catacomb3DMenu(
         int16_t savedGameIndex = 0;
         for (const std::string& savedGame : savedGames)
         {
-            elementListSaveGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, { GuiActionSaveGame, savedGameIndex }, m_renderableText, m_flashIcon));
+            elementListSaveGame->AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, savedGame, 150u, 11u, { GuiActionSaveGame, savedGameIndex }, m_renderableText, m_flashIcon));
             savedGameIndex++;
         }
     }
@@ -718,8 +721,8 @@ const std::string& Catacomb3DMenu::GetNewSaveGameName() const
 
 void Catacomb3DMenu::AddNewSavedGame(const PlayerInput& playerInput, const std::string& name)
 {
-    m_guiMenu.AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionLoadGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, restoreGameListId);
-    m_guiMenu.AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, saveGameListId);
+    m_guiMenu.AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, 150u, 8u, { GuiActionLoadGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, restoreGameListId);
+    m_guiMenu.AddChild(new GuiElementSaveSlotStaticCat3D(playerInput, name, 150u, 8u, { GuiActionSaveGame, (int16_t)(m_savedGames.size() - 1) }, m_renderableText, m_flashIcon), 0, 0, saveGameListId);
 }
 
 void Catacomb3DMenu::OpenRestoreGameMenu()

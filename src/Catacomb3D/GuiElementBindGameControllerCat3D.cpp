@@ -19,13 +19,15 @@
 
 GuiElementBindGameControllerCat3D::GuiElementBindGameControllerCat3D(
     const PlayerInput& playerInput,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     ControlsMap& controlsMap,
     ControlAction controlAction,
     const int16_t offsetXValue,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
     const bool& flashIcon) :
-    GuiElementBindGameController(playerInput, controlsMap, controlAction, offsetXValue, renderableText),
+    GuiElementBindGameController(playerInput, elementWidth, elementHeight, controlsMap, controlAction, offsetXValue, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)
 {
