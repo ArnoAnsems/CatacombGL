@@ -32,6 +32,8 @@
 #include "GuiElementEditText.h"
 #include "GuiPage.h"
 #include "GuiCatalog.h"
+#include "SavedGamesInDosFormat.h"
+#include "SavedGameInDosFormat.h"
 #include "SDL3/SDL_keyboard.h"
 #include "SDL3/SDL_mouse.h"
 

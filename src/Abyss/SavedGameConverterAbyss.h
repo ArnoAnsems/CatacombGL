@@ -32,6 +32,7 @@ public:
     const DecorateStateId GetDecorateStateId(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const uint16_t GetAnimationFrame(const SavedGameInDosFormat::ObjectInDosFormat& dosObject) const override;
     const bool IsInertObject(const uint16_t obclass) const override;
+    const bool IsActive(const uint16_t dosObjectActive) const override;
     void SetFarPointerOffset(const uint32_t playerState32) override;
 
 private:

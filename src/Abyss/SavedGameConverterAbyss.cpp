@@ -1079,6 +1079,11 @@ const bool SavedGameConverterAbyss::IsInertObject(const uint16_t obclass) const
     return obclass == obclassInert;
 }
 
+const bool SavedGameConverterAbyss::IsActive(const uint16_t dosObjectActive) const
+{
+    return dosObjectActive == 2 || dosObjectActive == 3;
+}
+
 const uint8_t SavedGameConverterAbyss::GetGameIndex() const
 {
     return

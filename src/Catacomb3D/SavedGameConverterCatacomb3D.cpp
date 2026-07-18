@@ -547,6 +547,11 @@ const uint8_t SavedGameConverterCatacomb3D::GetGameIndex() const
     return (m_gameId == GameId::Catacomb3Dv100) ? 0 : 1;
 }
 
+const bool SavedGameConverterCatacomb3D::IsActive(const uint16_t dosObjectActive) const
+{
+    return dosObjectActive == 1;
+}
+
 void SavedGameConverterCatacomb3D::SetFarPointerOffset(const uint32_t /*playerState32*/)
 {
     // No far pointer offset used.

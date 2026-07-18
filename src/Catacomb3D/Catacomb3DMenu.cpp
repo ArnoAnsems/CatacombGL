@@ -28,6 +28,8 @@
 #include "../Engine/ConfigurationSettings.h"
 #include "../Engine/PlayerInput.h"
 #include "../Engine/HighScores.h"
+#include "../Engine/SavedGamesInDosFormat.h"
+#include "../Engine/SavedGameInDosFormat.h"
 #include "GuiElementBoolSelectionCat3D.h"
 #include "GuiElementEnumSelectionCat3D.h"
 #include "GuiElementIntSelectionCat3D.h"

@@ -3484,10 +3484,6 @@ void EngineCore::LoadDosGameFromFile(const std::string filename)
 
         // Information that is not stored in the DOS format is set to default values.
         m_godModeIsOn = false;
-
-        // TODO
-        // m_level->LoadActors
-        // m_gameTimer.LoadFromFile(file)
         m_gameTimer.Reset();
 
         // Temporarily load the same level from scratch to setup the level statistics correctly.

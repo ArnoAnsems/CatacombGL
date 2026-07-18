@@ -246,4 +246,5 @@ private:
     bool* m_wallXVisible;
     bool* m_wallYVisible;
     std::map<uint8_t, locationNameBestPos> m_locationNameBestPositions;
+    bool m_levelIsLoadedFromDosSavedGame;
 };

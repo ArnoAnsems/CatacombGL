@@ -52,7 +52,8 @@ Level::Level(
     m_blockingActors(nullptr),
     m_nonBlockingActors(nullptr),
     m_wallXVisible(nullptr),
-    m_wallYVisible(nullptr)
+    m_wallYVisible(nullptr),
+    m_levelIsLoadedFromDosSavedGame(false)
 {
     const uint16_t mapSize = m_levelWidth * m_levelHeight;
     m_plane0 = new uint16_t[mapSize];
@@ -143,6 +144,7 @@ bool Level::LoadActorsFromDosSavedGame(
     m_playerActor = loader.LoadPlayerActor();
     savedGameConverter.SetFarPointerOffset(loader.GetPlayerState32());
     loader.LoadActors(m_blockingActors, m_nonBlockingActors, m_levelWidth, m_levelHeight);
+    m_levelIsLoadedFromDosSavedGame = true;
     return true;
 }
 
@@ -400,7 +402,8 @@ const char* Level::GetLevelName() const
 
 const egaColor Level::GetSkyColor(const uint32_t timeStamp)
 {
-    if (m_levelInfo.showDusk && timeStamp < 2500 * 4)
+    if (m_levelInfo.showDusk && timeStamp < 2500 * 4 &&
+        !m_levelIsLoadedFromDosSavedGame) // The timestamp is not stored in a DOS saved game. Assume that dusk has already passed.
     {
         static constexpr egaColor sky_daytonight[]={EgaBrightBlue,EgaBlue,EgaDarkGray,EgaBlack};
         return sky_daytonight[timeStamp / 2500];

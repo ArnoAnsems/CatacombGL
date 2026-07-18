@@ -84,7 +84,7 @@ void SavedGameInDosFormatLoader::LoadActors(
                 Actor* actor = new Actor(x, y, 0, decorateActor);
                 actor->SetTile((uint8_t)dosObject.tilex, (uint8_t)dosObject.tiley);
                 actor->SetAngle(DosToGLAngle(dosObject.angle));
-                actor->SetActive(dosObject.active != 0);
+                actor->SetActive(m_savedGameConverter.IsActive(dosObject.active));
                 actor->SetHealth(dosObject.hitpoints);
                 actor->SetTemp1(dosObject.temp1);
                 actor->SetTemp2(dosObject.temp2);

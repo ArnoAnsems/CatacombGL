@@ -1234,6 +1234,11 @@ const bool SavedGameConverterArmageddon::IsInertObject(const uint16_t obclass) c
     return obclass == inertobj;
 }
 
+const bool SavedGameConverterArmageddon::IsActive(const uint16_t dosObjectActive) const
+{
+    return dosObjectActive == 2 || dosObjectActive == 3;
+}
+
 void SavedGameConverterArmageddon::SetFarPointerOffset(const uint32_t playerState32)
 {
     m_farPointerOffset = playerState32 - s_player;
