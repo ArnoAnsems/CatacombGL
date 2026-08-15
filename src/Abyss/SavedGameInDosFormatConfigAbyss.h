@@ -32,6 +32,23 @@ static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyssV112 =
     }   // objectItems
 };
 
+static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyssV113 =
+{
+    "CATACOMB ABYSS 3-D", // gameName
+    "0.93", // saveVersion
+    {
+        HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
+        HeaderItemFreezeTime
+    },   // headerItems
+    {
+        ObjectActive, ObjectTiccount, ObjectObclass, ObjectState16, ObjectFlags,
+        ObjectDistance, ObjectDir, ObjectX, ObjectY, ObjectTileX, ObjectTileY, ObjectViewX, ObjectViewHeight,
+        ObjectAngle, ObjectHitpoints, ObjectSpeed, ObjectSize, ObjectXL, ObjectXH, ObjectYL, ObjectYH,
+        ObjectTemp1, ObjectTemp2, ObjectNext, ObjectPrev
+    }   // objectItems
+};
+
 static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyss =
 {
     "CATACOMB ABYSS 3-D", // gameName

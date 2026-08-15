@@ -3483,6 +3483,9 @@ void EngineCore::LoadDosGameFromFile(const std::string filename)
             DifficultyLevel::Hard;
 
         // Information that is not stored in the DOS format is set to default values.
+        // Note that the lack of a timestamp in the DOS saved game means that the time starts from zero
+        // and therefore the dusk effect in the sky will be rendered in The Towne Cemetery immediately
+        // after loading the game. The same behavior happens in the DOS game itself.
         m_godModeIsOn = false;
         m_gameTimer.Reset();
 

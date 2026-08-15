@@ -1038,6 +1038,7 @@ const SavedGameInDosFormatConfig& GameAbyss::GetSavedGameInDosFormatConfig() con
 {
     return 
         (m_gameId == GameId::CatacombAbyssv112) ? savedGameInDosFormatConfigAbyssV112 :
+        (m_gameId == GameId::CatacombAbyssv113) ? savedGameInDosFormatConfigAbyssV113 :
         savedGameInDosFormatConfigAbyss;
 }
 
