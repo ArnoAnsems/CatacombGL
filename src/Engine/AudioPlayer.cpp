@@ -15,6 +15,7 @@
 
 #include "AudioPlayer.h"
 #include "AudioRepository.h"
+#include "SDL3/SDL_timer.h"
 #include "../../ThirdParty/ReflectionHLE/id_sd.h"
 
 AudioPlayer::AudioPlayer(AudioRepository* const audioRepository) :
@@ -25,20 +26,29 @@ AudioPlayer::AudioPlayer(AudioRepository* const audioRepository) :
 
 void AudioPlayer::Play(const uint16_t index)
 {
-    if (SD_GetSoundMode() == sdm_AdLib)
+    // Prevent flooding of the OPL emulator.
+    // Skip sounds when they are played too close after eachother.
+    constexpr uint64_t minimumTimeBetweenSoundsInMs = 50u;
+    const uint64_t currentTicks = SDL_GetTicks();
+    if (currentTicks > m_ticksOfLastPlayedSound + minimumTimeBetweenSoundsInMs)
     {
-        AdlibSound* sound = m_audioRepository->GetAdlibSound(index);
-        if (sound != nullptr)
+        m_ticksOfLastPlayedSound = currentTicks;
+
+        if (SD_GetSoundMode() == sdm_AdLib)
         {
-            SDL_ALPlaySound(sound);
+            AdlibSound* sound = m_audioRepository->GetAdlibSound(index);
+            if (sound != nullptr)
+            {
+                SDL_ALPlaySound(sound);
+            }
         }
-    }
-    else if (SD_GetSoundMode() == sdm_PC)
-    {
-        PCSound* sound = m_audioRepository->GetPCSound(index);
-        if (sound != nullptr)
+        else if (SD_GetSoundMode() == sdm_PC)
         {
-            SDL_PCPlaySound(sound);
+            PCSound* sound = m_audioRepository->GetPCSound(index);
+            if (sound != nullptr)
+            {
+                SDL_PCPlaySound(sound);
+            }
         }
     }
 }

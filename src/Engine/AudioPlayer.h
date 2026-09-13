@@ -31,4 +31,5 @@ public:
 
 private:
     AudioRepository* const m_audioRepository;
+    uint64_t m_ticksOfLastPlayedSound = 0u;
 };
