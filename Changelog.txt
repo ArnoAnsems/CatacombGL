@@ -15,8 +15,10 @@ Changelog
   * Fix: allow picking up multiple chests simultaneously. Reported by WhiteMagicRaven.
   * Fix: set initial health in Catacomb 3-D to 64.
   * Fix: build for GCC15. Fix provided by carlo-bramini.
-  * Fix: added second frame to Apocalypse wizard attack animation
-  * Fix: add third frame to Apocalypse old water chest animation
+  * Fix: do not show hidden monsters on the radar.
+  * Fix: skeletons in Catacomb Abyss should have a shorter pain animation.
+  * Fix: added second frame to Apocalypse wizard attack animation.
+  * Fix: added third frame to Apocalypse old water chest animation.
 
 * Version 0.5.7 (2025-01-04) New in this release:
   * Fix: prevent crash when taking certain exit portals, such as the exit portal that takes the player from The Warrens (level 14) to Access Floor (level 9) in Catacomb 3D. Reported by DEA1HYT.

@@ -193,7 +193,7 @@ const DecorateState skeletonStateAttack =
 
 const DecorateAnimation skeletonPainAnimation =
 {
-    { SKELETON_OUCHPIC, 18, ActionNone }
+    { SKELETON_OUCHPIC, 8, ActionNone }
 };
 
 const DecorateState skeletonStatePain =

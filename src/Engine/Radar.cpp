@@ -70,7 +70,7 @@ void Radar::AddActors(const Actor** actors, const uint16_t numberOfActors)
             continue;
         }
 
-        if (!actor->IsActive() || actor->IsDead())
+        if (!actor->IsActive() || actor->IsDead() || actor->GetState() == StateIdHidden)
         {
             continue;
         }
