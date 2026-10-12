@@ -156,7 +156,7 @@ const GuiEvent& GuiElementList::ProcessInput()
         const int32_t mouseX = m_playerInput.GetMouseXPos();
         const int32_t mouseY = m_playerInput.GetMouseYPos();
 
-        if (m_playerInput.GetRelativeMouseXPos() != 0 || m_playerInput.GetRelativeMouseYPos() != 0)
+        if (std::abs(m_playerInput.GetRelativeMouseXPos()) > 0.1 || std::abs(m_playerInput.GetRelativeMouseYPos()) > 0.1)
         {
             // The mouse moved. Check to which element the mouse is pointing to, if any.
             uint16_t index = 0;

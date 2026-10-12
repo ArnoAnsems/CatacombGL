@@ -203,22 +203,22 @@ void PlayerInput::SetMouseYPos(const int32_t pos)
     m_mouseYPos = pos;
 }
 
-int32_t PlayerInput::GetRelativeMouseXPos() const
+float PlayerInput::GetRelativeMouseXPos() const
 {
     return m_relativeMouseXPos;
 }
 
-void PlayerInput::SetRelativeMouseXPos(const int32_t pos)
+void PlayerInput::SetRelativeMouseXPos(const float pos)
 {
     m_relativeMouseXPos = pos;
 }
 
-int32_t PlayerInput::GetRelativeMouseYPos() const
+float PlayerInput::GetRelativeMouseYPos() const
 {
     return m_relativeMouseYPos;
 }
 
-void PlayerInput::SetRelativeMouseYPos(const int32_t pos)
+void PlayerInput::SetRelativeMouseYPos(const float pos)
 {
     m_relativeMouseYPos = pos;
 }

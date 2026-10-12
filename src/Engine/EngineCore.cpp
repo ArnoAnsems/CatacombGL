@@ -369,15 +369,18 @@ void EngineCore::DrawScene(IRenderer& renderer)
             m_manaBar.Draw(renderer);
 
 #ifdef DRAWTILEINFO
+            static RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
             char tileStr[40];
             std::snprintf(tileStr, 40, "tile: %d", m_level->GetFloorTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
-            renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,2);
+            renderableText.LeftAligned(tileStr, EgaBrightYellow, 2, 2);
             std::snprintf(tileStr, 40, "wall: %d", m_level->GetWallTile((uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY()));
-            renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,12);
+            renderableText.LeftAligned(tileStr, EgaBrightYellow, 2, 12);
             std::snprintf(tileStr, 40, "X: %d Y: %d Angle: %d", (uint16_t)m_level->GetPlayerActor()->GetX(), (uint16_t)m_level->GetPlayerActor()->GetY(), (uint16_t)m_level->GetPlayerActor()->GetAngle());
-            renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,22);
-            std::snprintf(tileStr, 40, "MouseX: %d", m_playerInput.GetRelativeMouseXPos());
-            renderer.RenderTextLeftAligned(tileStr,m_game.GetEgaGraph()->GetFont(3), EgaBrightYellow,2,32);
+            renderableText.LeftAligned(tileStr, EgaBrightYellow, 2, 22);
+            std::snprintf(tileStr, 40, "MouseX: %f", m_playerInput.GetRelativeMouseXPos());
+            renderableText.LeftAligned(tileStr, EgaBrightYellow, 2, 32);
+            renderer.RenderText(renderableText);
+            renderableText.Reset();
 #endif
         }
     }
@@ -891,10 +894,9 @@ bool EngineCore::Think()
             // When mouse look is disabled, the Y-movement of the mouse will let the player walk forward and backward.
             if (!IsActionActive(MoveForward))
             {
-                if (m_playerInput.GetRelativeMouseYPos() < 0)
+                if (m_playerInput.GetRelativeMouseYPos() < -1.0)
                 {
                     m_timeStampLastMouseMoveForward = m_timeStampOfPlayerCurrentFrame;
-                    m_playerInput.SetRelativeMouseYPos(0);
                 }
                 if (m_timeStampLastMouseMoveForward + 100 > m_timeStampOfPlayerCurrentFrame)
                 {
@@ -903,10 +905,9 @@ bool EngineCore::Think()
             }
             if (!IsActionActive(MoveBackward))
             {
-                if (m_playerInput.GetRelativeMouseYPos() > 0)
+                if (m_playerInput.GetRelativeMouseYPos() > 1.0)
                 {
                     m_timeStampLastMouseMoveBackward = m_timeStampOfPlayerCurrentFrame;
-                    m_playerInput.SetRelativeMouseYPos(0);
                 }
                 if (m_timeStampLastMouseMoveBackward + 100 > m_timeStampOfPlayerCurrentFrame)
                 {
@@ -957,13 +958,10 @@ bool EngineCore::Think()
     {
         m_autoMap.ProcessInput(
             m_playerInput,
-            (float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue(),
             *m_level,
             m_gameTimer.GetActualTime(),
             m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex(),
             m_game.GetOriginal3DViewArea());
-        m_playerInput.SetRelativeMouseXPos(0);
-        m_playerInput.SetRelativeMouseYPos(0);
     }
 
     if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
@@ -1265,6 +1263,106 @@ bool EngineCore::Think()
             {
                 m_manaBar.Update(m_timeStampOfPlayerCurrentFrame);
 
+                //
+                // Update player angle based on the control inputs.
+                //
+                const float degreesPerTic = (m_playerActions.GetActionActive(QuickTurn)) ? 3.0f : 1.0f;
+                const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
+                const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
+                const float deltaTimeInTics = (truncatedDeltaTimeInMs * 70.0f) / 1000.0f;
+                const float turnSpeedFactor = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed).GetValue() / 100.0f;
+                if (m_playerActions.GetActionActive(TurnLeft) && !m_playerActions.GetActionActive(Strafe))
+                {
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
+                }
+                if (m_playerActions.GetActionActive(TurnRight) && !m_playerActions.GetActionActive(Strafe))
+                {
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
+                }
+
+                constexpr int16_t minGameControllerAxisDeflection = 10000;
+                if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
+                {
+                    // Turn left with the game controller
+                    constexpr int16_t maxGameControllerAxisDeflection = -32768;
+                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
+                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
+                }
+                else if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) > minGameControllerAxisDeflection)
+                {
+                    // Turn right with the game controller
+                    constexpr int16_t maxGameControllerAxisDeflection = 32767;
+                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
+                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
+                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
+                }
+
+                // Turning with the mouse
+                if (std::abs(m_playerInput.GetRelativeMouseXPos()) > 0.001)
+                {
+                    const float mouseMovement = m_playerInput.GetRelativeMouseXPos() * deltaTimeInTics * ((float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue() / 50.0f);
+                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
+                }
+
+                //
+                // Now that the player angle is updated; check if the player walks.
+                //
+                constexpr float playerSpeed = 5120.0f / 65536.0f;
+                const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
+                const bool isRunning = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun).IsEnabled() != m_playerActions.GetActionActive(Run);
+                const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
+
+                const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
+                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) < -minGameControllerAxisDeflection);
+                const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
+                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight))) ||
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) > minGameControllerAxisDeflection);
+                const bool moveForward = m_playerActions.GetActionActive(MoveForward) ||
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) < -minGameControllerAxisDeflection);
+                const bool moveBackward = m_playerActions.GetActionActive(MoveBackward) ||
+                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) > minGameControllerAxisDeflection);
+                if (moveForward && strafeLeft)
+                {
+                    Thrust(315, distance);
+                }
+                else if (moveBackward && strafeLeft)
+                {
+                    Thrust(225, distance);
+                }
+                else if (moveForward && strafeRight)
+                {
+                    Thrust(45, distance);
+                }
+                else if (moveBackward && strafeRight)
+                {
+                    Thrust(135, distance);
+                }
+                else if (moveForward)
+                {
+                    Thrust(0, distance);
+                }
+                else if (moveBackward)
+                {
+                    Thrust(180, distance);
+                }
+                else if (strafeLeft)
+                {
+                    Thrust(270, distance);
+                }
+                else if (strafeRight)
+                {
+                    Thrust(90, distance);
+                }
+
+                //
+                // Now that both angle and position of the player are updated; check if the player shoots.
+                //
                 bool shoot = false;
                 const bool autoFire = m_configurationSettings.GetCVarBool(CVarIdAutoFire).IsEnabled();
                 if (m_game.IsCatacombAdventureSeries())
@@ -1296,8 +1394,6 @@ bool EngineCore::Think()
                         projectile->SetActive(true);
                         m_level->AddNonBlockingActor(projectile);
                     }
-
-                    
                 }
                 if (m_playerActions.IsReadyToShootBolt(m_timeStampOfPlayerCurrentFrame))
                 {
@@ -1348,95 +1444,6 @@ bool EngineCore::Think()
                         m_game.PlaySoundNoItem();
                     }
                 }
-                const float degreesPerTic = (m_playerActions.GetActionActive(QuickTurn)) ? 3.0f : 1.0f;
-                const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
-                const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-                const float deltaTimeInTics = (truncatedDeltaTimeInMs * 70.0f) / 1000.0f;
-                const float turnSpeedFactor = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed).GetValue() / 100.0f;
-                if (m_playerActions.GetActionActive(TurnLeft) && !m_playerActions.GetActionActive(Strafe))
-                {
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
-                }
-                if (m_playerActions.GetActionActive(TurnRight) && !m_playerActions.GetActionActive(Strafe))
-                {
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
-                }
-
-                constexpr int16_t minGameControllerAxisDeflection = 10000;
-                if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
-                {
-                    // Turn left with the game controller
-                    constexpr int16_t maxGameControllerAxisDeflection = -32768;
-                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
-                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
-                }
-                else if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) > minGameControllerAxisDeflection)
-                {
-                    // Turn right with the game controller
-                    constexpr int16_t maxGameControllerAxisDeflection = 32767;
-                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
-                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
-                }
-
-                constexpr float playerSpeed = 5120.0f / 65536.0f;
-                const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
-                const bool isRunning = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun).IsEnabled() != m_playerActions.GetActionActive(Run);
-                const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
-                
-                const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
-                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) < -minGameControllerAxisDeflection);
-                const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
-                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight))) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) > minGameControllerAxisDeflection);
-                const bool moveForward = m_playerActions.GetActionActive(MoveForward) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) < -minGameControllerAxisDeflection);
-                const bool moveBackward = m_playerActions.GetActionActive(MoveBackward) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) > minGameControllerAxisDeflection);
-                if (moveForward && strafeLeft)
-                { 
-                    Thrust(315, distance);
-                }
-                else if (moveBackward && strafeLeft)
-                {
-                    Thrust(225, distance);
-                }
-                else if (moveForward && strafeRight)
-                {
-                    Thrust(45, distance);
-                }
-                else if (moveBackward && strafeRight)
-                {
-                    Thrust(135, distance);
-                }
-                else if (moveForward)
-                {
-                    Thrust(0, distance);
-                }
-                else if (moveBackward)
-                {
-                    Thrust(180, distance);
-                }
-                else if (strafeLeft)
-                {
-                    Thrust(270, distance);
-                }
-                else if (strafeRight)
-                {
-                    Thrust(90, distance);
-                }
-                if (m_playerInput.GetRelativeMouseXPos() != 0)
-                {
-                    const float mouseMovement = (float)m_playerInput.GetRelativeMouseXPos() * ((float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue() / 50.0f);
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
-                    m_playerInput.SetRelativeMouseXPos(0);
-                }
 
                 m_level->UpdateVisibilityMap(m_renderable3DScene.GetCameraX(), m_renderable3DScene.GetCameraY());
 
@@ -1444,17 +1451,26 @@ bool EngineCore::Think()
                 ThinkNonBlockingActors();
             }
 
-            if (!m_menu->IsActive() && m_readingScroll == NotReadingAnyScroll && m_playerInventory.HasItemsInChest())
+            if (!m_menu->IsActive() && m_readingScroll == NotReadingAnyScroll)
             {
-                if (!m_game.GetAudioPlayer()->IsPlaying() || !m_takingChest)
+                if (m_takingChest)
+                {
+                    if (!m_game.GetAudioPlayer()->IsPlaying())
+                    {
+                        if (m_playerInventory.HasItemsInChest())
+                        {
+                            m_playerInventory.GiveNextItemInChest();
+                        }
+                        else
+                        {
+                            m_takingChest = false;
+                            m_gameTimer.Resume();
+                        }
+                    }
+                }
+                else if (m_playerInventory.HasItemsInChest())
                 {
                     m_playerInventory.GiveNextItemInChest();
-
-                    if (m_takingChest && !m_playerInventory.HasItemsInChest())
-                    {
-                        m_takingChest = false;
-                        m_gameTimer.Resume();
-                    }
                 }
             }
         }
@@ -2570,8 +2586,9 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
             m_game.PlaySoundWalk((ticks & 32) == 0);
         }
     }
-    const float xmove = -distance * (float)std::sin((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
-    const float ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180 + angle) * 3.14159265 / 180.0);
+    constexpr float pi = 3.141592653589793;
+    const float xmove = -distance * (float)std::sin((m_level->GetPlayerActor()->GetAngle() + 180.0 + (float)angle) * pi / 180.0);
+    const float ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180.0 + (float)angle) * pi / 180.0);
 
     const float playerPosXBeforeMove = m_level->GetPlayerActor()->GetX();
     const float playerPosYBeforeMove = m_level->GetPlayerActor()->GetY();

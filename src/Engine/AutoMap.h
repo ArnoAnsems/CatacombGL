@@ -45,7 +45,6 @@ public:
         const uint16_t additionalMargin);
     void ProcessInput(
         const PlayerInput& playerInput,
-        const float mouseSensitivity,
         Level& level,
         const uint32_t timestamp,
         const uint8_t autoMapMode,
@@ -58,8 +57,8 @@ private:
     uint32_t m_lastActionTimestamp;
     AutoMapType m_autoMapType;
     bool m_cheat;
-    int32_t m_accumulatedMouseX;
-    int32_t m_accumulatedMouseY;
+    float m_accumulatedMouseX;
+    float m_accumulatedMouseY;
 
 };
 
