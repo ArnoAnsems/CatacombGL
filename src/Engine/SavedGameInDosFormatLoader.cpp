@@ -25,15 +25,15 @@ namespace
     const actorDirection DosDirToDirection(const uint16_t dir)
     {
         return
-            (dir == 0u) ? northwest :
-            (dir == 1u) ? north :
-            (dir == 2u) ? northeast :
+            (dir == 0u) ? north :
+            (dir == 1u) ? east :
+            (dir == 2u) ? south :
             (dir == 3u) ? west :
-            (dir == 4u) ? nodir :
-            (dir == 5u) ? east :
+            (dir == 4u) ? northeast :
+            (dir == 5u) ? southeast :
             (dir == 6u) ? southwest :
-            (dir == 7u) ? south :
-            (dir == 8u) ? southeast :
+            (dir == 7u) ? northwest :
+            (dir == 8u) ? nodir :
             nodir;
     }
 
