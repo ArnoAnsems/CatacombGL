@@ -23,8 +23,10 @@ GuiElementIntSelection::GuiElementIntSelection(
     const PlayerInput& playerInput,
     ConsoleVariableInt& cvarInt,
     const int16_t offsetXValue,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     RenderableText& renderableText) :
-    GuiElementBase(playerInput),
+    GuiElementClickable(playerInput, elementWidth, elementHeight),
     m_cvarInt(cvarInt),
     m_offsetXValue(offsetXValue),
     m_renderableText(renderableText)
@@ -46,7 +48,7 @@ const GuiEvent& GuiElementIntSelection::ProcessInput()
             m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_DPAD_RIGHT) ||
             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_LEFTX) ||
             m_playerInput.GetGameControllerAxisJustPressedTowardsPositive(SDL_GAMEPAD_AXIS_RIGHTX) ||
-            m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT);
+            isClicked();
 
         if (isLeftJustActivated)
         {

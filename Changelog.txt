@@ -14,6 +14,7 @@ Changelog
   * Fix: corrected references to ReflectionHLE and NukedOPL3. Fix provided by NY00123.
   * Fix: allow picking up multiple chests simultaneously. Reported by WhiteMagicRaven.
   * Fix: set initial health in Catacomb 3-D to 64.
+  * Fix: prevent stuttering when the monitor refresh rate is above 100 Hz. Reported by 7HEPOW.
   * Fix: build for GCC15. Fix provided by carlo-bramini.
   * Fix: do not show hidden monsters on the radar.
   * Fix: skeletons in Catacomb Abyss should have a shorter pain animation.

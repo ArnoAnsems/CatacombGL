@@ -38,3 +38,16 @@ bool GuiElementClickable::isClicked() const
 
     return isJustClickedByMouse;
 }
+
+bool GuiElementClickable::isMouseHoveringAboveHorizontalArea(const int16_t y, const int16_t height) const
+{
+    const int32_t mouseX = m_playerInput.GetMouseXPos();
+    const int32_t mouseY = m_playerInput.GetMouseYPos();
+    const bool isAboveArea =
+        mouseX >= m_originX &&
+        mouseX < m_originX + m_elementWidth &&
+        mouseY >= y &&
+        mouseY < y + height;
+
+    return isAboveArea;
+}

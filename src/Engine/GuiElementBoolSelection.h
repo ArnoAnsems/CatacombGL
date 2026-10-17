@@ -14,18 +14,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 #pragma once
 
-#include "GuiElementBase.h"
+#include "GuiElementClickable.h"
 
 class ConsoleVariableBool;
 class RenderableText;
 
-class GuiElementBoolSelection : public GuiElementBase
+class GuiElementBoolSelection : public GuiElementClickable
 {
 public:
     explicit GuiElementBoolSelection(
         const PlayerInput& playerInput,
         ConsoleVariableBool& cvarBool,
         const int16_t offsetXValue,
+        const uint16_t elementWidth,
+        const uint16_t elementHeight,
         RenderableText& renderableText);
     ~GuiElementBoolSelection() override = default;
 

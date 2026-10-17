@@ -24,6 +24,7 @@ public:
 
 protected:
     bool isClicked() const;
+    bool isMouseHoveringAboveHorizontalArea(const int16_t y, const int16_t height) const;
 
 private:
     const uint16_t m_elementWidth;

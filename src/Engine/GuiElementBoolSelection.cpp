@@ -23,8 +23,10 @@ GuiElementBoolSelection::GuiElementBoolSelection(
     const PlayerInput& playerInput,
     ConsoleVariableBool& cvarBool,
     const int16_t offsetXValue,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     RenderableText& renderableText) :
-    GuiElementBase(playerInput),
+    GuiElementClickable(playerInput, elementWidth, elementHeight),
     m_cvarBool(cvarBool),
     m_offsetXValue(offsetXValue),
     m_renderableText(renderableText)
@@ -36,8 +38,8 @@ const GuiEvent& GuiElementBoolSelection::ProcessInput()
 {
     const bool isJustActivated =
         m_playerInput.IsKeyJustPressed(SDLK_RETURN) ||
-        m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT) ||
-        m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH);
+        m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH) ||
+        isClicked();
 
     if (m_enabled && isJustActivated)
     {

@@ -23,6 +23,8 @@ public:
     explicit GuiElementEnumSelectionCat3DRadio(
         const PlayerInput& playerInput,
         ConsoleVariableEnum& cvarEnum,
+        const uint16_t elementWidth,
+        const uint16_t elementHeight,
         RenderableText& renderableText,
         RenderableTiles& renderableTiles,
         const bool& flashIcon,

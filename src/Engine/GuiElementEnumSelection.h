@@ -15,19 +15,21 @@
 #pragma once
 
 #include <string>
-#include "GuiElementBase.h"
+#include "GuiElementClickable.h"
 
 class ConsoleVariableEnum;
 class RenderableText;
 class PlayerInput;
 
-class GuiElementEnumSelection : public GuiElementBase
+class GuiElementEnumSelection : public GuiElementClickable
 {
 public:
     explicit GuiElementEnumSelection(
         const PlayerInput& playerInput,
         ConsoleVariableEnum& cvarEnum,
         const int16_t offsetXValue,
+        const uint16_t elementWidth,
+        const uint16_t elementHeight,
         RenderableText& renderableText);
     ~GuiElementEnumSelection() override = default;
 

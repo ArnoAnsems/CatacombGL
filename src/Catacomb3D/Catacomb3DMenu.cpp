@@ -21,7 +21,6 @@
 #include "../Engine/TextureAtlas.h"
 #include "../Engine/RenderableText.h"
 #include "../Engine/RenderableTiles.h"
-#include "../Engine/GuiElementList.h"
 #include "../Engine/GuiElementHighScores.h"
 #include "../Engine/GuiPage.h"
 #include "../Engine/EgaGraph.h"
@@ -111,7 +110,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     const std::string secondInstruction = m_gameControllerDetected ? "(A) selects" : "Enter selects";
     const std::string thirdInstruction = m_gameControllerDetected ? "(B) to back out" : "Esc to back out";
 
-    constexpr uint16_t buttonWidth = 120u;
+    constexpr uint16_t buttonWidth = 148u;
     constexpr uint16_t buttonHeight = 8u;
 
     // Main menu
@@ -179,21 +178,21 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameVideo->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageVideo->AddChild(pageFrameVideo);
 
-    GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
-    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    GuiElementEnumSelectionCat3D* VScreenResolutionSelection = new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 104, m_renderableText, m_renderableTiles, m_flashIcon);
+    GuiElementListCat3D* elementListVideo = new GuiElementListCat3D(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementEnumSelectionCat3D* VScreenResolutionSelection = new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon);
     VScreenResolutionSelection->SetId(selectScreenResolutionId);
     elementListVideo->AddChild(VScreenResolutionSelection);
-    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListVideo->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListVideo->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    GuiElementBoolSelectionCat3D* VSyncSelection = new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), 104, m_renderableText, m_renderableTiles, m_flashIcon);
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    GuiElementBoolSelectionCat3D* VSyncSelection = new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon);
     VSyncSelection->SetId(selectVSyncId);
     elementListVideo->AddChild(VSyncSelection);
-    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 104, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 104, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListVideo->AddChild(new GuiElementEnumSelectionCat3D(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 104, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageVideo->AddChild(elementListVideo, 76, 62);
 
     // Mouse and keyboard menu
@@ -212,9 +211,9 @@ Catacomb3DMenu::Catacomb3DMenu(
             elementListMouseAndKeyboard->AddChild(new GuiElementBindKeyCat3D(playerInput, 150u, buttonHeight, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
         }
     }
-    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageMouseAndKeyboard->AddChild(elementListMouseAndKeyboard, 76, 62);
 
     // Game controller menu
@@ -233,7 +232,7 @@ Catacomb3DMenu::Catacomb3DMenu(
             elementListGameController->AddChild(new GuiElementBindGameControllerCat3D(playerInput, 150u, buttonHeight, controlsMap, actionLabel.first, 84, m_renderableTextDefaultFont, m_renderableTiles, m_flashIcon));
         }
     }
-    elementListGameController->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListGameController->AddChild(new GuiElementIntSelectionCat3D(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageGameController->AddChild(elementListGameController, 76, 62);
 
     // Gameplay menu
@@ -244,10 +243,10 @@ Catacomb3DMenu::Catacomb3DMenu(
     guiPageGameplay->AddChild(pageFrameGameplay);
 
     GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, nullptr, browseMenuSound);
-    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, m_renderableText, m_renderableTiles, m_flashIcon));
-    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdStickyWalls), 84, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
+    elementListGameplay->AddChild(new GuiElementBoolSelectionCat3D(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdStickyWalls), 84, buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon));
     guiPageGameplay->AddChild(elementListGameplay, 76, 62);
 
     // Restore game menu
@@ -316,7 +315,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameSound->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageSound->AddChild(pageFrameSound);
 
-    guiPageSound->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), m_renderableText, m_renderableTiles, m_flashIcon, enumNamesSound), 88, 62);
+    guiPageSound->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon, enumNamesSound), 88, 62);
 
     // Music menu
     GuiPage* guiPageMusic = new GuiPage(playerInput);
@@ -325,7 +324,7 @@ Catacomb3DMenu::Catacomb3DMenu(
     pageFrameMusic->SetInstructions(firstInstruction, secondInstruction, thirdInstruction);
     guiPageMusic->AddChild(pageFrameMusic);
 
-    guiPageMusic->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicMode), m_renderableText, m_renderableTiles, m_flashIcon, enumNamesMusic), 88, 62);
+    guiPageMusic->AddChild(new GuiElementEnumSelectionCat3DRadio(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicMode), buttonWidth, buttonHeight, m_renderableText, m_renderableTiles, m_flashIcon, enumNamesMusic), 88, 62);
 
     // High scores
     GuiPage* guiPageHighScores = new GuiPage(playerInput);

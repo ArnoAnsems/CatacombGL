@@ -84,7 +84,7 @@ ExtraMenu::ExtraMenu(
     m_renderableTextDefaultFont(*egaGraph->GetDefaultFont(10)),
     m_savedGamesInDosFormat(savedGamesInDosFormat)
 {
-    constexpr uint16_t buttonWidth = 120u;
+    constexpr uint16_t buttonWidth = 200u;
     constexpr uint16_t buttonHeight = 10u;
 
     // Main menu
@@ -131,20 +131,20 @@ ExtraMenu::ExtraMenu(
     pageVideo->SetId(pageVideoOptionsId);
 
     GuiElementList* elementListVideo = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 132, m_renderableText));
-    GuiElementEnumSelection* VScreenResolutionSelection = new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 132, m_renderableText);
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenMode), 132, buttonWidth, buttonHeight, m_renderableText));
+    GuiElementEnumSelection* VScreenResolutionSelection = new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdScreenResolution), 132, buttonWidth, buttonHeight, m_renderableText);
     VScreenResolutionSelection->SetId(selectScreenResolutionId);
     elementListVideo->AddChild(VScreenResolutionSelection);
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 132, m_renderableText));
-    GuiElementBoolSelection* VSyncSelection = new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), 132, m_renderableText);
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAspectRatio), 132, buttonWidth, buttonHeight, m_renderableText));
+    elementListVideo->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdFov), 132, buttonWidth, buttonHeight, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdTextureFilter), 132, buttonWidth, buttonHeight, m_renderableText));
+    elementListVideo->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdDepthShading), 132, buttonWidth, buttonHeight, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdShowFpsMode), 132, buttonWidth, buttonHeight, m_renderableText));
+    GuiElementBoolSelection* VSyncSelection = new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdVSync), 132, buttonWidth, buttonHeight, m_renderableText);
     VSyncSelection->SetId(selectVSyncId);
     elementListVideo->AddChild(VSyncSelection);
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 132, m_renderableText));
-    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 132, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdAutoMapMode), 132, buttonWidth, buttonHeight, m_renderableText));
+    elementListVideo->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdCameraPosition), 132, buttonWidth, buttonHeight, m_renderableText));
     pageVideo->AddChild(elementListVideo, 60, 30);
 
     GuiElementStaticText* pageLabelVideo = new GuiElementStaticText(playerInput, "Video Menu", EgaBrightYellow, m_renderableText);
@@ -154,19 +154,19 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageMouseAndKeyboard = new GuiPage(playerInput);
     pageMouseAndKeyboard->SetId(pageCustomizeMouseAndKeyboardId);
 
-    GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, 200u, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListMouseAndKeyboard = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     ControlsMap& controlsMap = configurationSettings.GetControlsMap();
     const std::map<ControlAction, std::string>& actionLabels = controlsMap.GetActionLabels();
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListMouseAndKeyboard->AddChild(new GuiElementBindKey(playerInput, 200u, buttonHeight, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
+            elementListMouseAndKeyboard->AddChild(new GuiElementBindKey(playerInput, buttonWidth, buttonHeight, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
         }
     }
-    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 95, m_renderableText));
-    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 95, m_renderableText));
-    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 95, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdMouseLook), 95, buttonWidth, buttonHeight, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdMouseSensitivity), 95, buttonWidth, buttonHeight, m_renderableText));
+    elementListMouseAndKeyboard->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdTurnSpeed), 95, buttonWidth, buttonHeight, m_renderableText));
 
     pageMouseAndKeyboard->AddChild(elementListMouseAndKeyboard, 60, 30);
 
@@ -177,15 +177,15 @@ ExtraMenu::ExtraMenu(
     GuiPage* pageGameController = new GuiPage(playerInput);
     pageGameController->SetId(pageCustomizeGameControllerId);
 
-    GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, 200u, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
+    GuiElementList* elementListGameController = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
     for (const std::pair<ControlAction, std::string>& actionLabel : actionLabels)
     {
         if (actionLabel.first != None)
         {
-            elementListGameController->AddChild(new GuiElementBindGameController(playerInput, 200u, buttonHeight, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
+            elementListGameController->AddChild(new GuiElementBindGameController(playerInput, buttonWidth, buttonHeight, controlsMap, actionLabel.first, 95, m_renderableTextDefaultFont));
         }
     }
-    elementListGameController->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 95, m_renderableText));
+    elementListGameController->AddChild(new GuiElementIntSelection(playerInput, configurationSettings.GetCVarIntMutable(CVarIdGameControllerAimSensitivity), 95, buttonWidth, buttonHeight, m_renderableText));
     pageGameController->AddChild(elementListGameController, 60, 30);
 
     GuiElementStaticText* pageLabelGameController = new GuiElementStaticText(playerInput, "Game Controller Setup", EgaBrightYellow, m_renderableText);
@@ -196,11 +196,11 @@ ExtraMenu::ExtraMenu(
     pageGameplay->SetId(pageGameplayOptionsId);
 
     GuiElementList* elementListGameplay = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 120, m_renderableText));
-    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 120, m_renderableText));
-    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 120, m_renderableText));
-    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdPreventSoftlock), 120, m_renderableText));
-    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdInstantChests), 120, m_renderableText));
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAlwaysRun), 120, buttonWidth, buttonHeight, m_renderableText));
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdAutoFire), 120, buttonWidth, buttonHeight, m_renderableText));
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdManaBar), 120, buttonWidth, buttonHeight, m_renderableText));
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdPreventSoftlock), 120, buttonWidth, buttonHeight, m_renderableText));
+    elementListGameplay->AddChild(new GuiElementBoolSelection(playerInput, configurationSettings.GetCVarBoolMutable(CVarIdInstantChests), 120, buttonWidth, buttonHeight, m_renderableText));
     pageGameplay->AddChild(elementListGameplay, 60, 30);
 
     GuiElementStaticText* pageLabelGameplay = new GuiElementStaticText(playerInput, "Gameplay Menu", EgaBrightYellow, m_renderableText);
@@ -211,8 +211,8 @@ ExtraMenu::ExtraMenu(
     pageSound->SetId(pageSoundOptionsId);
 
     GuiElementList* elementListSound = new GuiElementList(playerInput, 8, buttonWidth, buttonHeight, egaGraph->GetPicture(menuCursorPic), browseMenuSound);
-    elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), 140, m_renderableText));
-    elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicModeAdventureTrilogy), 140, m_renderableText));
+    elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdSoundMode), 140, buttonWidth, buttonHeight, m_renderableText));
+    elementListSound->AddChild(new GuiElementEnumSelection(playerInput, configurationSettings.GetCVarEnumMutable(CVarIdMusicModeAdventureTrilogy), 140, buttonWidth, buttonHeight, m_renderableText));
     pageSound->AddChild(elementListSound, 60, 30);
 
     GuiElementStaticText* pageLabelSound = new GuiElementStaticText(playerInput, "Sound Effects Menu", EgaBrightYellow, m_renderableText);

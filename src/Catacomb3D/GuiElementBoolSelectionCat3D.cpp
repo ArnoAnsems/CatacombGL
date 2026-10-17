@@ -22,10 +22,12 @@ GuiElementBoolSelectionCat3D::GuiElementBoolSelectionCat3D(
     const PlayerInput& playerInput,
     ConsoleVariableBool& cvarBool,
     const int16_t offsetXValue,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
     const bool& flashIcon) :
-    GuiElementBoolSelection(playerInput, cvarBool, offsetXValue, renderableText),
+    GuiElementBoolSelection(playerInput, cvarBool, offsetXValue, elementWidth, elementHeight, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)
 {

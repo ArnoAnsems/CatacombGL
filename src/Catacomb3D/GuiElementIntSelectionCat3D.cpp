@@ -22,10 +22,12 @@ GuiElementIntSelectionCat3D::GuiElementIntSelectionCat3D(
     const PlayerInput& playerInput,
     ConsoleVariableInt& cvarInt,
     const int16_t offsetXValue,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
     const bool& flashIcon) :
-    GuiElementIntSelection (playerInput, cvarInt, offsetXValue, renderableText),
+    GuiElementIntSelection (playerInput, cvarInt, offsetXValue, elementWidth, elementHeight, renderableText),
     m_renderableTiles(renderableTiles),
     m_flashIcon(flashIcon)
 {

@@ -18,15 +18,18 @@
 #include "../Engine/ConsoleVariableEnum.h"
 #include "../Engine/RenderableText.h"
 #include "../Engine/RenderableTiles.h"
+#include "SDL3/SDL_mouse.h"
 
 GuiElementEnumSelectionCat3DRadio::GuiElementEnumSelectionCat3DRadio(
     const PlayerInput& playerInput,
     ConsoleVariableEnum& cvarEnum,
+    const uint16_t elementWidth,
+    const uint16_t elementHeight,
     RenderableText& renderableText,
     RenderableTiles& renderableTiles,
     const bool& flashIcon,
     const std::vector<std::string>& enumNames) :
-    GuiElementEnumSelectionCat3D(playerInput, cvarEnum, 0, renderableText, renderableTiles, flashIcon),
+    GuiElementEnumSelectionCat3D(playerInput, cvarEnum, 0, elementWidth, elementHeight, renderableText, renderableTiles, flashIcon),
     m_enumNames(enumNames),
     m_elementSelected(0)
 {
@@ -69,6 +72,20 @@ const GuiEvent& GuiElementEnumSelectionCat3DRadio::ProcessInput()
             else
             {
                 m_elementSelected--;
+            }
+        }
+        else if (m_playerInput.IsMouseButtonJustPressed(SDL_BUTTON_LEFT))
+        {
+            m_cvarEnum.SetItemIndex(m_elementSelected);
+        }
+        else
+        {
+            for (uint8_t element = 0u; element < (uint8_t)(m_enumNames.size()); element++)
+            {
+                if (isMouseHoveringAboveHorizontalArea(m_originY + (element * 8u), 8u))
+                {
+                    m_elementSelected = element;
+                }
             }
         }
     }
