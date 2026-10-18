@@ -222,10 +222,19 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
         }
     }
 
-    // Remove unreachable skeleton in Mike's Blastable Passage
-    if ((m_game.GetId() == GameId::CatacombAbyssv112 || m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124) && m_level->GetLevelIndex() == 5)
+    if ((m_game.GetId() == GameId::CatacombAbyssv112 || m_game.GetId() == GameId::CatacombAbyssv113 || m_game.GetId() == GameId::CatacombAbyssv124))
     {
-        m_level->SetFloorTile(7, 17, 0);
+        if (m_level->GetLevelIndex() == 5)
+        {
+            // Remove unreachable skeleton in Mike's Blastable Passage
+            m_level->SetFloorTile(7, 17, 0);
+        }
+
+        if (m_level->GetLevelIndex() == 7)
+        {
+            // Change misplaced area name from "The Chamber of the Well" to "Crumbling Walls" in "The Subterranean Vault".
+            m_level->SetWallTile(19, 25, 190);
+        }
     }
 
     m_game.SpawnActors(m_level, m_difficultyLevel);
