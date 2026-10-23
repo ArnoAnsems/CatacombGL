@@ -59,8 +59,6 @@ GameMaps::~GameMaps()
 
 Level* GameMaps::GetLevelFromStart(const uint8_t mapIndex) const
 {
-    Logging::Instance().AddLogMessage("Loading map " + std::to_string(mapIndex) + " from start");
-
     constexpr uint16_t rlewTag = 0xABCD;    
     const uint8_t* headerStart = m_rawData->GetChunk() + m_staticData.offsets.at(mapIndex);
     const uint32_t plane0Offset = *(uint32_t*)(headerStart);
@@ -205,9 +203,9 @@ Level* GameMaps::GetLevelFromSavedGame(std::ifstream& file) const
 
 Level* GameMaps::GetLevelFromDosSavedGame(const SavedGameInDosFormat* savedGameInDosFormat) const
 {
-    Logging::Instance().AddLogMessage("Loading map " + savedGameInDosFormat->GetName() + " from DOS saved game");
-
     const uint8_t mapIndex = (uint8_t)savedGameInDosFormat->GetMapOn();
+
+    Logging::Instance().AddLogMessage("Loading map " + std::to_string(mapIndex) + " from DOS saved game " + savedGameInDosFormat->GetName());
 
     // The dimensions of the map are retrieved from the GameMaps data
     const uint8_t* headerStart = m_rawData->GetChunk() + m_staticData.offsets.at(mapIndex);

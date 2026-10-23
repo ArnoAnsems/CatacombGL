@@ -206,6 +206,7 @@ void EngineCore::LoadLevel(const uint8_t mapIndex)
     int16_t health = (m_level == nullptr) ? 100 : m_level->GetPlayerActor()->GetHealth();
     UnloadLevel();
 
+    Logging::Instance().AddLogMessage("Loading map " + std::to_string(mapIndex) + " from start");
     m_level = m_game.GetGameMaps()->GetLevelFromStart(mapIndex);
 
     // Fix bugs in levels by manipulating the tiles
@@ -452,7 +453,11 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 }
                 char freezeMessage[100];
                 std::snprintf(freezeMessage, 100, "Time Stopped: %d", remainingFreezeTimeTicks);
-                const char* statusMessage = (m_statusMessage != nullptr) ? m_statusMessage : (remainingFreezeTime != 0) ? freezeMessage : m_playerActions.GetStatusMessage();
+                const char* statusMessage =
+                    (m_statusMessage != nullptr) ? m_statusMessage :
+                    (m_readingScroll != NotReadingAnyScroll) ? "Reading Scroll" :
+                    (remainingFreezeTime != 0) ? freezeMessage :
+                    m_playerActions.GetStatusMessage();
                 RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
                 renderableText.Centered(statusMessage, EgaBrightYellow, 156, 189);
                 renderer.RenderText(renderableText);

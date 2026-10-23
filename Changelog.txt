@@ -21,6 +21,7 @@ Changelog
   * Fix: added second frame to Apocalypse wizard attack animation.
   * Fix: added third frame to Apocalypse old water chest animation.
   * Fix: replaced misplaced area name at tile (19,25) in "The Subterranean Vault" with a better fitting area name.
+  * Fix: show status message "Reading Scroll" when a scroll is displayed.
 
 * Version 0.5.7 (2025-01-04) New in this release:
   * Fix: prevent crash when taking certain exit portals, such as the exit portal that takes the player from The Warrens (level 14) to Access Floor (level 9) in Catacomb 3D. Reported by DEA1HYT.
