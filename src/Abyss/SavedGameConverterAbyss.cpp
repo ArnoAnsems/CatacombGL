@@ -475,7 +475,7 @@ const uint16_t SavedGameConverterAbyss::GetActorId(const SavedGameInDosFormat::O
         actorId = actorIdMonsterSkeleton;
         break;
     case obclassTroll:
-        actorId = actorIdMonsterSkeleton;
+        actorId = actorIdMonsterTroll;
         break;
     case obclassDemon:
         actorId = actorIdMonsterDemon;
@@ -567,7 +567,6 @@ const DecorateStateId SavedGameConverterAbyss::GetDecorateStateId(const SavedGam
         state16 == s_bonus_die[i] ||
         state16 == s_trolldie1[i] ||
         state16 == s_trolldie2[i] ||
-        state16 == s_trolldie3[i] ||
         state16 == s_wet_die1[i] ||
         state16 == s_wet_die2[i] ||
         state16 == s_wet_die3[i] ||
@@ -707,6 +706,7 @@ const DecorateStateId SavedGameConverterAbyss::GetDecorateStateId(const SavedGam
         state16 == s_walldie6[i] ||
         state16 == s_zombie_death3[i] ||
         state16 == s_skel_die3[i] ||
+        state16 == s_trolldie3[i] ||
         state16 == s_orcdie3[i] ||
         state16 == s_demondie3[i] ||
         state16 == s_magedie2[i] ||

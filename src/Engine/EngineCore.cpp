@@ -2461,7 +2461,9 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
         }
     }
 
-    if (playerTouchesTile && m_level->IsDoor(tileX, tileY))
+    if (playerTouchesTile &&
+        m_gameTimer.GetRemainingFreezeTime() == 0 && // Doors cannot be used when time is frozen
+        m_level->IsDoor(tileX, tileY))
     {
         moveOk = false;
 
@@ -3520,6 +3522,8 @@ void EngineCore::LoadDosGameFromFile(const std::string filename)
         m_godModeIsOn = false;
         m_gameTimer.Reset();
 
+        m_gameTimer.LoadFreezeTimeFromDosSavedGame(savedGame->GetFreezeTime());
+
         // Temporarily load the same level from scratch to setup the level statistics correctly.
         Level* levelFromScratch = m_game.GetGameMaps()->GetLevelFromStart(m_level->GetLevelIndex());
         m_game.SpawnActors(levelFromScratch, m_difficultyLevel);
@@ -3534,6 +3538,7 @@ void EngineCore::LoadDosGameFromFile(const std::string filename)
         m_playerActions.ResetForNewLevel();
         m_manaBar.Reset(m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled());
         m_warpToLevel = m_level->GetLevelIndex();
+        m_timeStampEndOfStatusMessage = 0;
         m_menu->SetActive(false);
         m_state = InGame;
 

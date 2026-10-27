@@ -59,6 +59,7 @@ add_library( CatacombGL_Engine OBJECT
     GameId.h
     GameMaps.cpp
     GameMaps.h
+    GameMath.h
     GameSelection.cpp
     GameSelection.h
     GameTimer.cpp

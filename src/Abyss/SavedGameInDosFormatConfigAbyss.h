@@ -18,10 +18,10 @@
 
 static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyssV112 =
 {
-    "CATACOMB ABYSS 3-D", // gameName
+    "CATACOMB ABYSS", // gameName
     "0.93", // saveVersion
     {
-        HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
         HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower
     },   // headerItems
     {
@@ -34,12 +34,13 @@ static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyssV112 =
 
 static const SavedGameInDosFormatConfig savedGameInDosFormatConfigAbyssV113 =
 {
-    "CATACOMB ABYSS 3-D", // gameName
+    "CATACOMB ABYSS  ", // gameName
     "0.93", // saveVersion
     {
-        HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
+        HeaderItemFreezeTime, HeaderItemDifficulty, HeaderItemMapOn, HeaderItemBolts, HeaderItemNukes, HeaderItemPotions,
         HeaderItemKeys, HeaderItemScrolls, HeaderItemGems, HeaderItemScore, HeaderItemBody, HeaderItemShotpower,
-        HeaderItemFreezeTime
+        HeaderItemEasyModeOn
+        
     },   // headerItems
     {
         ObjectActive, ObjectTiccount, ObjectObclass, ObjectState16, ObjectFlags,

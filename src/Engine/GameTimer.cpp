@@ -16,6 +16,13 @@
 #include "GameTimer.h"
 #include "SDL3/SDL_timer.h"
 #include <fstream>
+#include <algorithm>
+#include "GameMath.h"
+
+namespace
+{
+    constexpr uint32_t cStandardFreezeTimeInTics = 3000u;
+}
 
 GameTimer::GameTimer()
 {
@@ -25,6 +32,7 @@ GameTimer::GameTimer()
     m_pauseTime = currentTime;
     m_freezeStartTime = 0;
     m_totalFrozenTime = 0;
+    m_freezeTimeDuration = 0u;
 }
 
 uint32_t GameTimer::GetMillisecondsForPlayer() const
@@ -41,19 +49,27 @@ uint32_t GameTimer::GetTicksForPlayer() const
 uint32_t GameTimer::GetMilliSecondsForWorld()
 {
     const uint32_t deltaMilliSeconds = GetMillisecondsForPlayer();
-    if (m_freezeStartTime != 0)
+    if (m_freezeTimeDuration > 0)
     {
-        if (m_freezeStartTime + GetStandardFreezePeriod() > deltaMilliSeconds)
+        // The world is frozen due to the Crystal Hour Glass.
+        if (m_freezeStartTime + m_freezeTimeDuration > deltaMilliSeconds)
         {
+            // The Crystal Hour Glass timer is still running.
             return (uint32_t)(m_freezeStartTime - m_totalFrozenTime);
         }
         else
         {
+            // Freeze time is up. Count up how long the world was frozen.
             m_totalFrozenTime += (deltaMilliSeconds - m_freezeStartTime);
+
+            // Unfreeze the world.
+            m_freezeTimeDuration = 0;
             m_freezeStartTime = 0;
         }
     }
 
+    // The time of the world is equal to the time of the player subtracted with the
+    // total time that the world was frozen.
     return (uint32_t)(deltaMilliSeconds - m_totalFrozenTime);
 }
 
@@ -69,6 +85,7 @@ void GameTimer::Reset()
     m_pauseTime = currentTime;
     m_freezeStartTime = 0;
     m_totalFrozenTime = 0;
+    m_freezeTimeDuration = 0;
     m_paused = false;
 }
 
@@ -104,9 +121,11 @@ void GameTimer::FreezeTime()
     const uint32_t playerTime = GetMillisecondsForPlayer();
     if (m_freezeStartTime != 0)
     {
+        // Time was already frozen. Add up the frozen time so far to the total frozen time.
         m_totalFrozenTime += (playerTime - m_freezeStartTime);
     }
     m_freezeStartTime = playerTime;
+    m_freezeTimeDuration = GetStandardFreezePeriod();
 }
 
 uint32_t GameTimer::GetCurrentTime()
@@ -116,12 +135,12 @@ uint32_t GameTimer::GetCurrentTime()
 
 uint32_t GameTimer::GetRemainingFreezeTime()
 {
-    if (m_freezeStartTime == 0)
+    if (m_freezeTimeDuration == 0)
     {
         return 0;
     }
 
-    const int64_t delta = m_freezeStartTime + GetStandardFreezePeriod() - GetMillisecondsForPlayer();
+    const int64_t delta = m_freezeStartTime + m_freezeTimeDuration - GetMillisecondsForPlayer();
     if (delta < 0)
     {
         return 0;
@@ -160,7 +179,18 @@ bool GameTimer::LoadFromFile(std::ifstream& file)
     return true;
 }
 
+void GameTimer::LoadFreezeTimeFromDosSavedGame(int16_t storedFreezeTime)
+{
+    if (storedFreezeTime > 0)
+    {
+        const uint32_t remainingFreezeTimeInTics = std::clamp<uint32_t>(storedFreezeTime, 0u, cStandardFreezeTimeInTics);
+        m_freezeTimeDuration = gamemath::TicsToMilliseconds(remainingFreezeTimeInTics);
+        m_freezeStartTime = GetMillisecondsForPlayer();
+    }
+}
+
 constexpr uint32_t GameTimer::GetStandardFreezePeriod()
 {
-    return ((3000 * 1000) / 70);
+    constexpr uint32_t standardFreezeTimeInMs = gamemath::TicsToMilliseconds(cStandardFreezeTimeInTics);
+    return standardFreezeTimeInMs;
 }

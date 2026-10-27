@@ -44,6 +44,7 @@ public:
 
     void StoreToFile(std::ofstream& file) const;
     bool LoadFromFile(std::ifstream& file);
+    void LoadFreezeTimeFromDosSavedGame(int16_t storedFreezeTime);
 
 private:
     static uint32_t GetCurrentTime();
@@ -53,5 +54,6 @@ private:
     uint32_t m_pauseTime;
     uint32_t m_freezeStartTime;
     uint32_t m_totalFrozenTime;
+    uint32_t m_freezeTimeDuration;
     bool m_paused;
 };
