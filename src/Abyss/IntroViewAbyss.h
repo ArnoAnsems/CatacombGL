@@ -26,6 +26,7 @@
 #include "../Engine/GameControllerHint.h"
 #include <filesystem>
 #include <string>
+#include <memory>
 
 class Shape;
 class EgaGraph;
@@ -40,21 +41,24 @@ public:
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();
+    void DrawBackForMore();
+    bool CanShowBackForMore();
 
 private:
     const GameId m_gameId;
     EgaGraph& m_egaGraph;
-    Shape* m_shapeEntering = nullptr;
-    Shape* m_shapePresents = nullptr;
-    Shape* m_shapeSoftdisk = nullptr;
-    Shape* m_shapeTitle = nullptr;
-    Shape* m_shapeCredits = nullptr;
-    Shape* m_shapeTrilogy = nullptr;
-    Shape* m_shapeSelectDifficulty = nullptr;
-    Shape* m_shapeConfirmDifficulty = nullptr;
-    Shape* m_shapeNovice = nullptr;
-    Shape* m_shapeWarrior = nullptr;
-    Shape* m_shapeStandBeforeGate = nullptr;
+    std::unique_ptr<Shape> m_shapeEntering;
+    std::unique_ptr<Shape> m_shapePresents;
+    std::unique_ptr<Shape> m_shapeSoftdisk;
+    std::unique_ptr<Shape> m_shapeTitle;
+    std::unique_ptr<Shape> m_shapeCredits;
+    std::unique_ptr<Shape> m_shapeTrilogy;
+    std::unique_ptr<Shape> m_shapeSelectDifficulty;
+    std::unique_ptr<Shape> m_shapeConfirmDifficulty;
+    std::unique_ptr<Shape> m_shapeNovice;
+    std::unique_ptr<Shape> m_shapeWarrior;
+    std::unique_ptr<Shape> m_shapeStandBeforeGate;
+    std::unique_ptr<Shape> m_shapeBackForMore;
     FadeEffect m_fadeEffect;
     GameControllerHint m_gameControllerHint;
 };

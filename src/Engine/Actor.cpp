@@ -16,6 +16,7 @@
 #include "Actor.h"
 #include <cmath>
 #include <fstream>
+#include "GameMath.h"
 
 Actor::Actor(const float x, const float y, const uint32_t timestamp, const DecorateActor& decorateActor) :
     m_x(x),
@@ -136,7 +137,7 @@ uint16_t Actor::GetPictureIndex() const
 
 void Actor::Think(const uint32_t currentTimestamp)
 {
-    const uint16_t deltaTicks = (uint16_t)(((currentTimestamp - m_timestamp) * 70) / 1000);
+    const uint16_t deltaTicks = (uint16_t)gamemath::MillisecondsToTicks(currentTimestamp - m_timestamp);
     const DecorateState& currentState = m_decorateActor.states.find(m_stateId)->second;
     const DecorateAnimationFrame& currentFrame = currentState.animation.at(m_animationFrame);
     if (deltaTicks > currentFrame.durationInTics)

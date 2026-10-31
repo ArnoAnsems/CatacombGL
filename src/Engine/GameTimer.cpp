@@ -184,13 +184,13 @@ void GameTimer::LoadFreezeTimeFromDosSavedGame(int16_t storedFreezeTime)
     if (storedFreezeTime > 0)
     {
         const uint32_t remainingFreezeTimeInTics = std::clamp<uint32_t>(storedFreezeTime, 0u, cStandardFreezeTimeInTics);
-        m_freezeTimeDuration = gamemath::TicsToMilliseconds(remainingFreezeTimeInTics);
+        m_freezeTimeDuration = gamemath::TicksToMilliseconds(remainingFreezeTimeInTics);
         m_freezeStartTime = GetMillisecondsForPlayer();
     }
 }
 
 constexpr uint32_t GameTimer::GetStandardFreezePeriod()
 {
-    constexpr uint32_t standardFreezeTimeInMs = gamemath::TicsToMilliseconds(cStandardFreezeTimeInTics);
+    constexpr uint32_t standardFreezeTimeInMs = gamemath::TicksToMilliseconds(cStandardFreezeTimeInTics);
     return standardFreezeTimeInMs;
 }

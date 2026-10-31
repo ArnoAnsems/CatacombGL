@@ -15,6 +15,7 @@
 
 #include "PlayerActions.h"
 #include "ManaBar.h"
+#include "GameMath.h"
 
 static constexpr int32_t nukeDelay = 667; // ms
 static constexpr int32_t maxBolts = 10;
@@ -91,7 +92,7 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire, M
         }
 
         // While the fire button is in a pressed state, keep raising the hand.
-        const uint16_t deltaTicksSinceFire = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+        const uint16_t deltaTicksSinceFire = (uint16_t)gamemath::MillisecondsToTicks(timeStamp - m_shotFiredTimeStamp) / 2u;
         m_handHeight = m_shotFiredHandHeight + (deltaTicksSinceFire + 2) * 6;
         if (m_handHeight > 72)
         {
@@ -108,7 +109,7 @@ bool PlayerActions::UpdateShoot(const uint32_t timeStamp, const bool autoFire, M
             m_shotFired = false;
         }
 
-        const uint16_t deltaTicksSinceRelease = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+        const uint16_t deltaTicksSinceRelease = (uint16_t)gamemath::MillisecondsToTicks(timeStamp - m_shotFiredTimeStamp) / 2u;
         if (deltaTicksSinceRelease < 60)
         {
             // Fire button was released less than 60 ticks ago. Keep hand height as-is.
@@ -150,7 +151,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
         }
 
         // While the fire button is in a pressed state, keep raising the hand.
-        const uint16_t deltaTicksSincePress = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+        const uint16_t deltaTicksSincePress = (uint16_t)gamemath::MillisecondsToTicks(timeStamp - m_shotFiredTimeStamp) / 2;
         m_shotPower = (deltaTicksSincePress > 56) ? 56 : deltaTicksSincePress;
 
         m_handHeight = m_shotFiredHandHeight + (deltaTicksSincePress + 2) * 6;
@@ -178,7 +179,7 @@ bool PlayerActions::UpdateShootWithCharge(const uint32_t timeStamp, const bool a
         {
             m_shotPower = 0;
 
-            const uint16_t deltaTicksSinceRelease = (uint16_t)(((timeStamp - m_shotFiredTimeStamp) * 70) / 1000) / 2;
+            const uint16_t deltaTicksSinceRelease = (uint16_t)gamemath::MillisecondsToTicks(timeStamp - m_shotFiredTimeStamp) / 2u;
             if (deltaTicksSinceRelease < 60)
             {
                 // Fire button was pressed less than 60 ticks ago. Keep hand height as-is.

@@ -34,6 +34,7 @@
 #include "ConfigurationSettings.h"
 #include "PlayerInput.h"
 #include "Logging.h"
+#include "GameMath.h"
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -421,7 +422,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                 if (!m_insideBorderFlashLocation && borderShouldFlash)
                 {
                     m_insideBorderFlashLocation = true;
-                    constexpr uint32_t borderFlashTime = (uint32_t)(20 * (1000.0 / 70.0));
+                    constexpr uint32_t borderFlashTime = gamemath::TicksToMilliseconds(20u);
                     m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 15 | 56, borderFlashTime);
 
                 }
@@ -469,7 +470,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     constexpr float radarCenterY = 153.5f;
                     constexpr float radarXRadius = 21.0f;
                     constexpr float radarYRadius = 15.0f;
-                    const float playerAngleInRadians = m_level->GetPlayerActor()->GetAngle() * 3.14159265f / 180.0f;
+                    const float playerAngleInRadians = gamemath::DegreesToRadians(m_level->GetPlayerActor()->GetAngle());
                     const float northIconoffsetFromCenterX = radarXRadius * sin(playerAngleInRadians);
                     const float northIconoffsetFromCenterY = radarYRadius * cos(playerAngleInRadians);
                     const uint16_t northIconScreenOffsetX = (uint16_t)(radarCenterX - northIconoffsetFromCenterX - 4.5f);
@@ -619,6 +620,10 @@ void EngineCore::DrawScene(IRenderer& renderer)
     if (m_state == StandBeforeGate)
     {
         m_game.GetIntroView()->DrawStandBeforeGate();
+    }
+    if (m_state == BackForMore)
+    {
+        m_game.GetIntroView()->DrawBackForMore();
     }
 
     if (m_state == InGame || m_state == EnteringLevel)
@@ -1079,6 +1084,10 @@ bool EngineCore::Think()
         }
         if (m_playerInput.IsKeyPressed(SDLK_F4))
         {
+            if (m_state == Introduction && m_game.GetIntroView()->CanShowBackForMore())
+            {
+                m_state = BackForMore;
+            }
             m_menu->OpenRestoreGameMenu();
             m_game.GetAudioPlayer()->StopMusic();
             m_gameTimer.Pause();
@@ -1283,7 +1292,7 @@ bool EngineCore::Think()
                 const float degreesPerTic = (m_playerActions.GetActionActive(QuickTurn)) ? 3.0f : 1.0f;
                 const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
                 const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-                const float deltaTimeInTics = (truncatedDeltaTimeInMs * 70.0f) / 1000.0f;
+                const float deltaTimeInTics = gamemath::MillisecondsToTicks(truncatedDeltaTimeInMs);
                 const float turnSpeedFactor = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed).GetValue() / 100.0f;
                 if (m_playerActions.GetActionActive(TurnLeft) && !m_playerActions.GetActionActive(Strafe))
                 {
@@ -1327,9 +1336,9 @@ bool EngineCore::Think()
                 // Now that the player angle is updated; check if the player walks.
                 //
                 constexpr float playerSpeed = 5120.0f / 65536.0f;
-                const float tics = ((float)(truncatedDeltaTimeInMs) / 1000.0f) * 70.0f;
+                const float ticks = gamemath::MillisecondsToTicks(truncatedDeltaTimeInMs);
                 const bool isRunning = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun).IsEnabled() != m_playerActions.GetActionActive(Run);
-                const float distance = isRunning ? playerSpeed * tics * 1.5f : playerSpeed * tics;
+                const float distance = isRunning ? playerSpeed * ticks * 1.5f : playerSpeed * ticks;
 
                 const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
                     (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
@@ -1630,7 +1639,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         if (actor->GetTimeToNextAction() == 0)
         {
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 70));
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + gamemath::TicksToMilliseconds((uint32_t)actor->GetTemp2()));
             actor->SetSolid(action == ActionStatue);
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
@@ -1718,9 +1727,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                     m_level->GetPlayerActor()->Damage(damage);
                     m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                     const uint8_t borderSignal = m_game.IsCatacombAdventureSeries() ? 12 : 5;
-                    const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                    constexpr uint32_t borderFlashTime = gamemath::TicksToMilliseconds(16u);
                     m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
-                    DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
+                    DisplayStatusMessage("Damaging blows!", (uint16_t)gamemath::TicksToMilliseconds(80u));
                 }
             }
         }
@@ -1860,7 +1869,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         if (isBonusItem)
         {
             DisplayStatusMessage("Item destroyed", 80 * 14);
-            constexpr uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+            constexpr uint32_t borderFlashTime = gamemath::TicksToMilliseconds(16u);
             m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), 14 | 56, borderFlashTime);
         }
         m_level->SpawnBigExplosion(actor->GetX(),actor->GetY(),12,(16l<<16L), m_timeStampOfWorldCurrentFrame, m_game.GetExplosionActor());
@@ -2034,7 +2043,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         if (actor->GetTimeToNextAction() == 0)
         {
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 70));
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + gamemath::TicksToMilliseconds((uint32_t)actor->GetTemp2()));
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
         {
@@ -2056,9 +2065,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                 const uint8_t borderSignal = m_game.IsCatacombAdventureSeries() ? 12 : 5;
-                const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                constexpr uint32_t borderFlashTime = gamemath::TicksToMilliseconds(16u);
                 m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
-                DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
+                DisplayStatusMessage("Damaging blows!", (uint16_t)gamemath::TicksToMilliseconds(80u));
             }
         }
         actor->SetActionPerformed(true);
@@ -2078,8 +2087,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 distance = 1.0;
             }
             const float angle = actor->GetAngle();
-            const float xmove = distance * (float)sin(angle * 3.14159265 / 180.0);
-            const float ymove = - distance * (float)cos(angle * 3.14159265 / 180.0);
+            const float angleInRadians = gamemath::DegreesToRadians(angle);
+            const float xmove = distance * sin(angleInRadians);
+            const float ymove = - distance * cos(angleInRadians);
 
             const float basex = actor->GetX() + xmove;
             const float basey = actor->GetY() + ymove;
@@ -2206,9 +2216,9 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                         m_level->GetPlayerActor()->Damage(damage);
                         m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                         const uint8_t borderSignal = m_game.IsCatacombAdventureSeries() ? 12 : 5;
-                        const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                        constexpr uint32_t borderFlashTime = gamemath::TicksToMilliseconds(16u);
                         m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
-                        DisplayStatusMessage("Damaging blows!", (uint16_t)(80 * (1000.0 / 70.0)));
+                        DisplayStatusMessage("Damaging blows!", gamemath::TicksToMilliseconds(80u));
                     }
                     moveOk = false;
                 }
@@ -2280,7 +2290,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
                 m_level->GetPlayerActor()->Damage(damage);
                 m_game.PlaySoundPlayerHurt(m_level->GetPlayerActor()->GetHealth());
                 const uint8_t borderSignal = m_game.IsCatacombAdventureSeries() ? 12 : 5;
-                const uint32_t borderFlashTime = (uint32_t)(16 * (1000.0 / 70.0));
+                constexpr uint32_t borderFlashTime = gamemath::TicksToMilliseconds(16u);
                 m_overscanBorder.SetColor(m_gameTimer.GetActualTime(), borderSignal, borderFlashTime);
             }
         }
@@ -2308,7 +2318,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     {
         if (actor->GetTimeToNextAction() == 0)
         {
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)actor->GetTemp2() * 1000 / 70));
+            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + gamemath::TicksToMilliseconds((uint32_t)actor->GetTemp2()));
             actor->SetSolid(false);
         }
         if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
@@ -2602,9 +2612,9 @@ void EngineCore::Thrust(const uint16_t angle, const float distance)
             m_game.PlaySoundWalk((ticks & 32) == 0);
         }
     }
-    constexpr float pi = 3.141592653589793;
-    const float xmove = -distance * (float)std::sin((m_level->GetPlayerActor()->GetAngle() + 180.0 + (float)angle) * pi / 180.0);
-    const float ymove = distance * (float)std::cos((m_level->GetPlayerActor()->GetAngle() + 180.0 + (float)angle) * pi / 180.0);
+    const float thrustAngleInRadians = gamemath::DegreesToRadians(m_level->GetPlayerActor()->GetAngle() + 180.0 + angle);
+    const float xmove = -distance * std::sin(thrustAngleInRadians);
+    const float ymove = distance * std::cos(thrustAngleInRadians);
 
     const float playerPosXBeforeMove = m_level->GetPlayerActor()->GetX();
     const float playerPosYBeforeMove = m_level->GetPlayerActor()->GetY();
@@ -3074,7 +3084,7 @@ void EngineCore::PlayerUsesPotion()
         if (m_playerInventory.UsePotion())
         {
             m_level->GetPlayerActor()->SetHealth(initialHealth);
-            DisplayStatusMessage("Curing", (uint16_t)(30 * (1000.0 / 70.0)));
+            DisplayStatusMessage("Curing", (uint16_t)gamemath::TicksToMilliseconds(30u));
         }
     }
 }

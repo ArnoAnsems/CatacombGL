@@ -21,6 +21,7 @@
 #include "../Engine/PlayerInput.h"
 #include "../Engine/AudioPlayer.h"
 #include "../Engine/RenderableText.h"
+#include "../Engine/GameMath.h"
 
 constexpr float SkullMinX = 76.0f;
 constexpr float SkullMaxX = 228.0f;
@@ -188,8 +189,8 @@ void SkullNBones::UpdateFrame()
         m_timeStampOfComputer = m_timeStampOfCurrentFrame;
     }
 
-    constexpr float distanceInPixelsPerTic = 2.0f;
-    constexpr float distanceInPixelsPerMilliSec = distanceInPixelsPerTic * 70.0f / 1000.0f;
+    constexpr float distanceInPixelsPerTick = 2.0f;
+    constexpr float distanceInPixelsPerMilliSec = gamemath::MillisecondsToTicks(distanceInPixelsPerTick);;
     const float distanceInFrame = deltaTime * distanceInPixelsPerMilliSec;
     if (m_playerMovesLeft && !m_playerMovesRight)
     {

@@ -38,6 +38,8 @@ public:
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();
+    void DrawBackForMore();
+    bool CanShowBackForMore();
 
 private:
     EgaGraph* m_egaGraph;

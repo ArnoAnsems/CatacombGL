@@ -24,6 +24,7 @@
 #include "../Engine/GameControllerHint.h"
 #include <filesystem>
 #include <string>
+#include <memory>
 
 class Shape;
 
@@ -37,21 +38,24 @@ public:
     void DrawNoviceSelected();
     void DrawWarriorSelected();
     void DrawStandBeforeGate();
+    void DrawBackForMore();
+    bool CanShowBackForMore();
 
 private:
-    Shape* m_shapeEntering;
-    Shape* m_shapePresents;
-    Shape* m_shapeSoftdisk;
-    Shape* m_shapeTitle;
-    Shape* m_shapeCreditsProgramming;
-    Shape* m_shapeCreditsArt;
-    Shape* m_shapeCreditsQA;
-    Shape* m_shapeCreditsDesign;
-    Shape* m_shapeSelectDifficulty;
-    Shape* m_shapeConfirmDifficulty;
-    Shape* m_shapeNovice;
-    Shape* m_shapeWarrior;
-    Shape* m_shapeStandBeforeGate;
+    std::unique_ptr<Shape> m_shapeEntering;
+    std::unique_ptr<Shape> m_shapePresents;
+    std::unique_ptr<Shape> m_shapeSoftdisk;
+    std::unique_ptr<Shape> m_shapeTitle;
+    std::unique_ptr<Shape> m_shapeCreditsProgramming;
+    std::unique_ptr<Shape> m_shapeCreditsArt;
+    std::unique_ptr<Shape> m_shapeCreditsQA;
+    std::unique_ptr<Shape> m_shapeCreditsDesign;
+    std::unique_ptr<Shape> m_shapeSelectDifficulty;
+    std::unique_ptr<Shape> m_shapeConfirmDifficulty;
+    std::unique_ptr<Shape> m_shapeNovice;
+    std::unique_ptr<Shape> m_shapeWarrior;
+    std::unique_ptr<Shape> m_shapeStandBeforeGate;
+    std::unique_ptr<Shape> m_shapeBackForMore;
     GameControllerHint m_gameControllerHint;
 };
 

@@ -98,3 +98,13 @@ void IntroViewCatacomb3D::DrawStandBeforeGate()
 {
     // Not applicable
 }
+
+void IntroViewCatacomb3D::DrawBackForMore()
+{
+    // Not applicable
+}
+
+bool IntroViewCatacomb3D::CanShowBackForMore()
+{
+    return false;
+}

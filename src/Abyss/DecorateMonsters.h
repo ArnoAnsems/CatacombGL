@@ -530,7 +530,7 @@ const DecorateState demonStateAttack =
 
 const DecorateAnimation demonPainAnimation =
 {
-    { DEMONOUCHPIC, 14, ActionChase }
+    { DEMONOUCHPIC, 15, ActionChase }
 };
 
 const DecorateState demonStatePain =

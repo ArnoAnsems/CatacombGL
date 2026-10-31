@@ -82,7 +82,8 @@ private:
         VerifyGateExit,
         ExitGame,
         Help,
-        AutoMapDialog
+        AutoMapDialog,
+        BackForMore
     };
 
     void LoadLevel(const uint8_t mapIndex);

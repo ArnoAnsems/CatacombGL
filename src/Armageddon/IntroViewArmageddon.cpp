@@ -23,87 +23,65 @@ IntroViewArmageddon::IntroViewArmageddon(IRenderer& renderer, EgaGraph& egaGraph
     IIntroView(renderer),
     m_gameControllerHint(renderer, egaGraph)
 {
-    m_shapeEntering = new Shape(renderer);
+    m_shapeEntering = std::make_unique<Shape>(renderer);
     const fs::path shp8 = path / "SHP8.ARM";
     m_shapeEntering->LoadFromFile(shp8);
 
-    m_shapePresents = new Shape(renderer);
+    m_shapePresents = std::make_unique<Shape>(renderer);
     const fs::path shp14 = path / "SHP14.ARM";
     m_shapePresents->LoadFromFile(shp14);
 
-    m_shapeSoftdisk = new Shape(renderer);
+    m_shapeSoftdisk = std::make_unique<Shape>(renderer);
     const fs::path shp1 = path / "SHP1.ARM";
     m_shapeSoftdisk->LoadFromFile(shp1);
 
-    m_shapeTitle = new Shape(renderer);
+    m_shapeTitle = std::make_unique<Shape>(renderer);
     const fs::path shp2 = path / "SHP2.ARM";
     m_shapeTitle->LoadFromFile(shp2);
 
-    m_shapeCreditsProgramming = new Shape(renderer);
+    m_shapeCreditsProgramming = std::make_unique<Shape>(renderer);
     const fs::path shp3 = path / "SHP3.ARM";
     m_shapeCreditsProgramming->LoadFromFile(shp3);
 
-    m_shapeCreditsArt = new Shape(renderer);
+    m_shapeCreditsArt = std::make_unique<Shape>(renderer);
     const fs::path shp4 = path / "SHP4.ARM";
     m_shapeCreditsArt->LoadFromFile(shp4);
 
-    m_shapeCreditsQA = new Shape(renderer);
+    m_shapeCreditsQA = std::make_unique<Shape>(renderer);
     const fs::path shp5 = path / "SHP5.ARM";
     m_shapeCreditsQA->LoadFromFile(shp5);
 
-    m_shapeCreditsDesign = new Shape(renderer);
+    m_shapeCreditsDesign = std::make_unique<Shape>(renderer);
     const fs::path shp6 = path / "SHP6.ARM";
     m_shapeCreditsDesign->LoadFromFile(shp6);
 
-    m_shapeSelectDifficulty = new Shape(renderer);
+    m_shapeSelectDifficulty = std::make_unique<Shape>(renderer);
     const fs::path shp10 = path / "SHP10.ARM";
     m_shapeSelectDifficulty->LoadFromFile(shp10);
 
-    m_shapeConfirmDifficulty = new Shape(renderer);
+    m_shapeConfirmDifficulty = std::make_unique<Shape>(renderer);
     const fs::path shp9 = path / "SHP9.ARM";
     m_shapeConfirmDifficulty->LoadFromFile(shp9);
 
-    m_shapeNovice = new Shape(renderer);
+    m_shapeNovice = std::make_unique<Shape>(renderer);
     const fs::path shp11 = path / "SHP11.ARM";
     m_shapeNovice->LoadFromFile(shp11);
 
-    m_shapeWarrior = new Shape(renderer);
+    m_shapeWarrior = std::make_unique<Shape>(renderer);
     const fs::path shp12 = path / "SHP12.ARM";
     m_shapeWarrior->LoadFromFile(shp12);
 
-    m_shapeStandBeforeGate = new Shape(renderer);
+    m_shapeStandBeforeGate = std::make_unique<Shape>(renderer);
     const fs::path shp7 = path / "SHP7.ARM";
     m_shapeStandBeforeGate->LoadFromFile(shp7);
+
+    m_shapeBackForMore = std::make_unique<Shape>(renderer);
+    const fs::path shp13 = path / "SHP13.ARM";
+    m_shapeBackForMore->LoadFromFile(shp13);
 }
 
 IntroViewArmageddon::~IntroViewArmageddon()
 {
-    delete m_shapeEntering;
-    m_shapeEntering = nullptr;
-    delete m_shapePresents;
-    m_shapePresents = nullptr;
-    delete m_shapeSoftdisk;
-    m_shapeSoftdisk = nullptr;
-    delete m_shapeTitle;
-    m_shapeTitle = nullptr;
-    delete m_shapeCreditsProgramming;
-    m_shapeCreditsProgramming = nullptr;
-    delete m_shapeCreditsArt;
-    m_shapeCreditsArt = nullptr;
-    delete m_shapeCreditsQA;
-    m_shapeCreditsQA = nullptr;
-    delete m_shapeCreditsDesign;
-    m_shapeCreditsDesign = nullptr;
-    delete m_shapeSelectDifficulty;
-    m_shapeSelectDifficulty = nullptr;
-    delete m_shapeConfirmDifficulty;
-    m_shapeConfirmDifficulty = nullptr;
-    delete m_shapeNovice;
-    m_shapeNovice = nullptr;
-    delete m_shapeWarrior;
-    m_shapeWarrior = nullptr;
-    delete m_shapeStandBeforeGate;
-    m_shapeStandBeforeGate = nullptr;
 }
 
 void IntroViewArmageddon::DrawIntroduction(const uint32_t timeStamp)
@@ -184,4 +162,15 @@ void IntroViewArmageddon::DrawWarriorSelected()
 void IntroViewArmageddon::DrawStandBeforeGate()
 {
     m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
+}
+
+void IntroViewArmageddon::DrawBackForMore()
+{
+    m_renderer.Render2DPicture(m_shapeConfirmDifficulty->GetPicture(), 0, 0);
+    m_renderer.Render2DPicture(m_shapeBackForMore->GetPicture(), 64, 192);
+}
+
+bool IntroViewArmageddon::CanShowBackForMore()
+{
+    return true;
 }

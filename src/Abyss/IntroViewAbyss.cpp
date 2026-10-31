@@ -27,112 +27,76 @@ IntroViewAbyss::IntroViewAbyss(GameId gameId, IRenderer& renderer, EgaGraph& ega
 {
     if (m_gameId == GameId::CatacombAbyssv112)
     {
-        m_shapeSoftdisk = new Shape(renderer);
+        m_shapeSoftdisk = std::make_unique<Shape>(renderer);
         const std::filesystem::path sdlogo = path / "SDLOGO.ABS";
         m_shapeSoftdisk->LoadFromFile(sdlogo);
 
-        m_shapeTitle = new Shape(renderer);
+        m_shapeTitle = std::make_unique<Shape>(renderer);
         const std::filesystem::path title = path / "TITLE.ABS";
         m_shapeTitle->LoadFromFile(title);
 
-        m_shapeCredits = new Shape(renderer);
+        m_shapeCredits = std::make_unique<Shape>(renderer);
         const std::filesystem::path credits = path / "CREDITS.ABS";
         m_shapeCredits->LoadFromFile(credits);
 
-        m_shapeStandBeforeGate = new Shape(renderer);
+        m_shapeStandBeforeGate = std::make_unique<Shape>(renderer);
         const std::filesystem::path standBeforeGate = path / "BEGIN.ABS";
         m_shapeStandBeforeGate->LoadFromFile(standBeforeGate);
     }
     else
     {
-        m_shapeEntering = new Shape(renderer);
+        m_shapeEntering = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp05 = path / "SHP05.ABS";
         m_shapeEntering->LoadFromFile(shp05);
 
-        m_shapePresents = new Shape(renderer);
+        m_shapePresents = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp12 = path / "SHP12.ABS";
         m_shapePresents->LoadFromFile(shp12);
 
-        m_shapeSoftdisk = new Shape(renderer);
+        m_shapeSoftdisk = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp01 = path / "SHP01.ABS";
         m_shapeSoftdisk->LoadFromFile(shp01);
 
-        m_shapeTitle = new Shape(renderer);
+        m_shapeTitle = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp02 = path / "SHP02.ABS";
         m_shapeTitle->LoadFromFile(shp02);
 
-        m_shapeCredits = new Shape(renderer);
+        m_shapeCredits = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp03 = path / "SHP03.ABS";
         m_shapeCredits->LoadFromFile(shp03);
 
-        m_shapeTrilogy = new Shape(renderer);
+        m_shapeTrilogy = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp11 = path / "SHP11.ABS";
         m_shapeTrilogy->LoadFromFile(shp11);
 
-        m_shapeSelectDifficulty = new Shape(renderer);
+        m_shapeSelectDifficulty = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp07 = path / "SHP07.ABS";
         m_shapeSelectDifficulty->LoadFromFile(shp07);
 
-        m_shapeConfirmDifficulty = new Shape(renderer);
+        m_shapeConfirmDifficulty = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp06 = path / "SHP06.ABS";
         m_shapeConfirmDifficulty->LoadFromFile(shp06);
 
-        m_shapeNovice = new Shape(renderer);
+        m_shapeNovice = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp08 = path / "SHP08.ABS";
         m_shapeNovice->LoadFromFile(shp08);
 
-        m_shapeWarrior = new Shape(renderer);
+        m_shapeWarrior = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp09 = path / "SHP09.ABS";
         m_shapeWarrior->LoadFromFile(shp09);
 
-        m_shapeStandBeforeGate = new Shape(renderer);
+        m_shapeStandBeforeGate = std::make_unique<Shape>(renderer);
         const std::filesystem::path shp04 = path / "SHP04.ABS";
         m_shapeStandBeforeGate->LoadFromFile(shp04);
 
-        // SHP04 = Stand before gate
-        // SHP05 = Prepare
-        // SHP06 = Nemesis
-        // SHP08 = Ha! Another novice!
-        // SHP09 = Warriors blood!
-        // SHP10 = Back for more!
-        // SHP11 = Trilogy
+        m_shapeBackForMore = std::make_unique<Shape>(renderer);
+        const std::filesystem::path shp10 = path / "SHP10.ABS";
+        m_shapeBackForMore->LoadFromFile(shp10);
     }
 }
 
 IntroViewAbyss::~IntroViewAbyss()
 {
-    delete m_shapeEntering;
-    m_shapeEntering = nullptr;
-
-    delete m_shapePresents;
-    m_shapePresents = nullptr;
-
-    delete m_shapeSoftdisk;
-    m_shapeSoftdisk = nullptr;
-
-    delete m_shapeTitle;
-    m_shapeTitle = nullptr;
-
-    delete m_shapeCredits;
-    m_shapeCredits = nullptr;
-
-    delete m_shapeTrilogy;
-    m_shapeTrilogy = nullptr;
-
-    delete m_shapeSelectDifficulty;
-    m_shapeSelectDifficulty = nullptr;
-
-    delete m_shapeConfirmDifficulty;
-    m_shapeConfirmDifficulty = nullptr;
-
-    delete m_shapeNovice;
-    m_shapeNovice = nullptr;
-
-    delete m_shapeWarrior;
-    m_shapeWarrior = nullptr;
-
-    delete m_shapeStandBeforeGate;
-    m_shapeStandBeforeGate = nullptr;
 }
 
 void IntroViewAbyss::DrawIntroduction(const uint32_t timeStamp)
@@ -283,4 +247,18 @@ void IntroViewAbyss::DrawStandBeforeGate()
     {
         m_renderer.Render2DPicture(m_shapeStandBeforeGate->GetPicture(), 0, 0);
     }
+}
+
+void IntroViewAbyss::DrawBackForMore()
+{
+    if (m_gameId != GameId::CatacombAbyssv112)
+    {
+        m_renderer.Render2DPicture(m_shapeConfirmDifficulty->GetPicture(), 0, 0);
+        m_renderer.Render2DPicture(m_shapeBackForMore->GetPicture(), 64, 192);
+    }
+}
+
+bool IntroViewAbyss::CanShowBackForMore()
+{
+    return (m_gameId != GameId::CatacombAbyssv112);
 }

@@ -20,12 +20,23 @@
 
 namespace gamemath
 {
-    static constexpr uint32_t TicsPerSecond = 70u;
+    static constexpr uint32_t TicksPerSecond = 70u;
+    static constexpr uint32_t MillisecondsPerSecond = 1000u;
 
-    constexpr uint32_t TicsToMilliseconds(const uint32_t tics)
+    constexpr uint32_t TicksToMilliseconds(const uint32_t ticks)
     {
-        constexpr uint32_t millisecondsPerSecond = 1000u;
-        return (tics * millisecondsPerSecond) / TicsPerSecond;
+        return (ticks * MillisecondsPerSecond) / TicksPerSecond;
+    }
+
+    constexpr float MillisecondsToTicks(const uint32_t milliseconds)
+    {
+        return static_cast<float>(milliseconds * TicksPerSecond) / static_cast<float>(MillisecondsPerSecond);
+    }
+
+    constexpr float DegreesToRadians(const float degrees)
+    {
+        constexpr float pi = 3.141592653589793;
+        return (degrees * pi) / 180.0f;
     }
 
 };

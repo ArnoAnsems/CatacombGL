@@ -14,6 +14,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/ 
 
 #include "Renderable3DScene.h"
+#include "GameMath.h"
 #include <cmath>
 
 Renderable3DScene::Renderable3DScene(const ViewPorts::ViewPortRect3D original3DViewArea) :
@@ -58,7 +59,7 @@ void Renderable3DScene::FinalizeFrame()
 
 void Renderable3DScene::UpdateCamera(const float playerX, const float playerY, const float angle, const bool cameraBehindPlayer)
 {
-    const float angleInRadians = (angle + 180.0f) * 3.14159265f / 180.0f;
+    const float angleInRadians = gamemath::DegreesToRadians(angle + 180.0f);
     // In the original DOS games, the camera position is slightly behind the player position, see the function
     // ThreeDRefresh in C3_DRAW.C. This behavior is optionally emulated here, depending on the flag cameraBehindPlayer.
     constexpr float distanceFromPlayerToCamera = 0.4f;

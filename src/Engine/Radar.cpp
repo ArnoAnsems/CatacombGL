@@ -16,6 +16,7 @@
 #include "Radar.h"
 #include "Actor.h"
 #include "PlayerInventory.h"
+#include "GameMath.h"
 #include <math.h>
 
 enum gemTypes
@@ -88,8 +89,9 @@ void Radar::AddActors(const Actor** actors, const uint16_t numberOfActors)
             continue;
         }
 
-        const float psin = (float)sin(m_playerAngle * 3.14159265 / 180.0);
-        const float pcos = (float)cos(m_playerAngle * 3.14159265 / 180.0);
+        const float playerAngleInRadians = gamemath::DegreesToRadians(m_playerAngle);
+        const float psin = sin(playerAngleInRadians);
+        const float pcos = cos(playerAngleInRadians);
         constexpr float radarHalfWidth = 25.5f;
 
         const float xl = m_playerPosX - radarHalfWidth;

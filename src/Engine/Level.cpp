@@ -29,6 +29,7 @@
 #include "ISavedGameConverter.h"
 #include "IRenderer.h"
 #include "Picture.h"
+#include "GameMath.h"
 #include <cmath>
 #include <cstddef>
 
@@ -411,7 +412,7 @@ const egaColor Level::GetSkyColor(const uint32_t timeStamp)
         {
             // Time to show the lightning
             static constexpr egaColor sky_lightning[]={EgaBlue,EgaBrightBlue,EgaBrightWhite,EgaDarkGray,EgaBlack};
-            constexpr uint32_t lightningFrameDuration = 28; //ms (70 Hz)
+            constexpr uint32_t lightningFrameDuration = gamemath::TicksToMilliseconds(2u);
             constexpr int8_t lightningNoFrames = sizeof(sky_lightning) / sizeof(egaColor);
             constexpr uint32_t lightningDuration = lightningFrameDuration * lightningNoFrames;
             const uint32_t timeSinceStartLightning = timeStamp - m_lightningStartTimestamp;
@@ -1444,8 +1445,8 @@ void Level::Setup3DScene(
 
     const float x1 = renderable3DScene.GetCameraX();
     const float y1 = renderable3DScene.GetCameraY();
-    const float x2 = x1 - 1.0f * (float)std::sin((m_playerActor->GetAngle() + 270.0f) * 3.14159265f / 180.0f);
-    const float y2 = y1 + 1.0f * (float)std::cos((m_playerActor->GetAngle() + 270.0f) * 3.14159265f / 180.0f);
+    const float x2 = x1 - 1.0f * std::sin(gamemath::DegreesToRadians(m_playerActor->GetAngle() + 270.0f));
+    const float y2 = y1 + 1.0f * std::cos(gamemath::DegreesToRadians(m_playerActor->GetAngle() + 270.0f));
 
     for (uint16_t y = 1; y < m_levelHeight; y++)
     {

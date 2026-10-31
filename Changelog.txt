@@ -9,6 +9,7 @@ Changelog
   * Added option for instantly picking up chests. Suggested by WhiteMagicRaven.
   * Added compatibility with MacOS. Provided by LifeKILLED.
   * Added command line parameter --savedir. Suggested by zognic.
+  * Added slide of Nemesis with "Good! Back for more I see!" when pressing F4 (load game) in the introduction slides of the Catacomb Adventure trilogy.
   * Upgraded from SDL2 to SDL3.
   * Upgraded audio backend to ReflectionHLE version 0.66.0.
   * Fix: corrected references to ReflectionHLE and NukedOPL3. Fix provided by NY00123.
