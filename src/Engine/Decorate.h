@@ -32,7 +32,7 @@ typedef enum {ActionNone, ActionChase, ActionChaseLikeMage, ActionChaseLikeWetMa
               ActionWaitForPickup, ActionWaitForPickupDestructable, ActionFreezeTime, ActionGiveChest, ActionGiveBolt, ActionGiveNuke, ActionGivePotion,
               ActionGiveKey, ActionGiveGem, ActionGiveScroll, ActionGivePoints, ActionGivePointsForChest,
               ActionItemDestroyed, ActionExplosionDelay,
-              ActionExplodeWall1,  ActionExplodeWall2,  ActionExplodeWall3, ActionExplodeWall4, ActionWarpToOtherLevel, ActionWarpInsideLevel, ActionFakeWall, ActionVictory} actorAction;
+              ActionExplodeWall1,  ActionExplodeWall2,  ActionExplodeWall3, ActionExplodeWall4, ActionWarpToOtherLevel, ActionWarpInsideLevel, ActionFakeWall, ActionVictory, ActionChaseLikeEye} actorAction;
 typedef enum {Always, Never, Flickering, WithBlueGem, WithRedGem, WithYellowGem, WithGreenGem, WithPurpleGem, WithAllGems} actorRadarVisibility;
 
 typedef enum

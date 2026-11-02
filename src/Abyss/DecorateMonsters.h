@@ -886,7 +886,7 @@ const DecorateState mageStateWalk =
 const DecorateAnimation mageAttackAnimation =
 {
     { MAGEATTACKPIC, 30, ActionAttack },
-    { MAGE1PIC, 10, ActionChaseLikeMage }
+    { MAGE1PIC, 10, ActionNone }
 };
 
 const DecorateState mageStateAttack =
@@ -962,10 +962,10 @@ const DecorateActor decorateMage =
 
 const DecorateAnimation eyeWalkAnimation =
 {
-    { EYE_WALK1PIC, 20, ActionChaseLikeMage },
-    { EYE_WALK2PIC, 20, ActionChaseLikeMage },
-    { EYE_WALK3PIC, 20, ActionChaseLikeMage },
-    { EYE_WALK2PIC, 20, ActionChaseLikeMage }
+    { EYE_WALK1PIC, 20, ActionChaseLikeEye },
+    { EYE_WALK2PIC, 20, ActionChaseLikeEye },
+    { EYE_WALK3PIC, 20, ActionChaseLikeEye },
+    { EYE_WALK2PIC, 20, ActionChaseLikeEye }
 };
 
 const DecorateState eyeStateWalk =
@@ -976,7 +976,7 @@ const DecorateState eyeStateWalk =
 
 const DecorateAnimation eyeAttackAnimation =
 {
-    { EYE_WALK1PIC, 40, ActionAttack }
+    { EYE_WALK1PIC, 10, ActionAttack }
 };
 
 const DecorateState eyeStateAttack =

@@ -100,8 +100,10 @@ private:
     bool Chase(Actor* actor, const bool diagonal, const ChaseTarget target);
     void RunAway(Actor* actor);
     void ChaseLikeRunningEye(Actor* actor);
+    void ChaseLikeMage(Actor* actor);
     void BunnyHopping(Actor* actor);
     void Bounce(Actor* actor);
+    void TryToShootPlayerWithProjectile(Actor* actor);
 
     const char* GetKeyName(const KeyId keyId) const;
 

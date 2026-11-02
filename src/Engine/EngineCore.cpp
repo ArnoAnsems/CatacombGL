@@ -1582,27 +1582,24 @@ void EngineCore::PerformActionOnActor(Actor* actor)
     }
     case ActionChaseLikeMage:
     {
-        if (actor->GetTimeToNextAction() == 0)
+        ChaseLikeMage(actor);
+        break;
+    }
+    case ActionChaseLikeEye:
+    {
+        ChaseLikeMage(actor);
+
+        // In the original code (function T_Eye in C4_ACT1.C), the eye would shoot a projectile
+        // roughly once every two frames. That works well on slow hardware, but when the frame rate
+        // is at 70 Hz, too many projectiles get fired.
+        // Instead of wiring the rate of fire to the framerate, we simply fire one projectile every 250 ms.
+        const uint16_t simplifiedTimestamp = (m_timeStampOfWorldCurrentFrame % 1000u) / 250u;
+        if (simplifiedTimestamp != actor->GetTemp2())
         {
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)10000));
+            actor->SetTemp2(simplifiedTimestamp);
+            TryToShootPlayerWithProjectile(actor);
         }
-        if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
-        {
-            // Choose next target
-            const bool shouldChasePlayer = (rand() % 2 == 0);
-            if (shouldChasePlayer)
-            {
-                actor->SetTemp1(ChasePlayer);
-            }
-            else
-            {
-                const int16_t otherTarget = (rand() % 4);
-                actor->SetTemp1(otherTarget + 1);
-            }
-            actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)10000));
-        }
-        ChaseTarget target = (ChaseTarget)actor->GetTemp1();
-        Chase(actor, true, target);
+
         break;
     }
     case ActionChaseLikeInvisDude:
@@ -1735,26 +1732,7 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         }
         else
         {
-            // Ranged attack with projectiles
-            const int16_t angleInt = m_level->AngleNearPlayer(actor);
-            if (angleInt != -1)
-            {
-                Actor* projectile = nullptr;
-                if (actor->GetDecorateActor().projectileId != 0)
-                {
-                    const auto iterator = m_game.GetDecorateActors().find(actor->GetDecorateActor().projectileId);
-                    if (iterator != m_game.GetDecorateActors().end())
-                    {
-                        projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, iterator->second);
-                        if (actor->GetTemp2() > 0 && actor->GetDecorateActor().initialState != StateIdHidden)
-                        {
-                            projectile->SetTemp2(actor->GetTemp2()); // Shot power
-                        }
-                        projectile->SetAngle((float)angleInt);
-                        m_level->AddNonBlockingActor(projectile);
-                    }
-                }
-            }
+            TryToShootPlayerWithProjectile(actor);
         }
 
         actor->SetActionPerformed(true);
@@ -2368,6 +2346,55 @@ void EngineCore::PerformActionOnActor(Actor* actor)
         Logging::Instance().FatalError("Unknown action (" + std::to_string(action) + ") for actor with id (" + std::to_string(actor->GetDecorateActor().id) + ") and state (" + std::to_string(actor->GetState()) + ")");
         break;
     }
+    }
+}
+
+void EngineCore::ChaseLikeMage(Actor* actor)
+{
+    if (actor->GetTimeToNextAction() == 0)
+    {
+        actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)10000));
+    }
+    if (m_timeStampOfWorldCurrentFrame >= actor->GetTimeToNextAction())
+    {
+        // Choose next target
+        const bool shouldChasePlayer = (rand() % 2 == 0);
+        if (shouldChasePlayer)
+        {
+            actor->SetTemp1(ChasePlayer);
+        }
+        else
+        {
+            const int16_t otherTarget = (rand() % 4);
+            actor->SetTemp1(otherTarget + 1);
+        }
+        actor->SetTimeToNextAction(m_timeStampOfWorldCurrentFrame + ((uint32_t)10000));
+    }
+    ChaseTarget target = (ChaseTarget)actor->GetTemp1();
+    Chase(actor, true, target);
+}
+
+void EngineCore::TryToShootPlayerWithProjectile(Actor* actor)
+{
+    // Ranged attack with projectiles
+    const int16_t angleInt = m_level->AngleNearPlayer(actor);
+    if (angleInt != -1)
+    {
+        Actor* projectile = nullptr;
+        if (actor->GetDecorateActor().projectileId != 0)
+        {
+            const auto iterator = m_game.GetDecorateActors().find(actor->GetDecorateActor().projectileId);
+            if (iterator != m_game.GetDecorateActors().end())
+            {
+                projectile = new Actor(actor->GetX(), actor->GetY(), m_timeStampOfWorldCurrentFrame, iterator->second);
+                if (actor->GetTemp2() > 0 && actor->GetDecorateActor().initialState != StateIdHidden)
+                {
+                    projectile->SetTemp2(actor->GetTemp2()); // Shot power
+                }
+                projectile->SetAngle((float)angleInt);
+                m_level->AddNonBlockingActor(projectile);
+            }
+        }
     }
 }
 
