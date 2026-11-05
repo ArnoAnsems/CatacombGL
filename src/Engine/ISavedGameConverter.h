@@ -34,4 +34,5 @@ public:
     virtual const bool IsInertObject(const uint16_t obclass) const = 0;
     virtual const bool IsActive(const uint16_t dosObjectActive) const = 0;
     virtual void SetFarPointerOffset(const uint32_t playerState32) = 0;
+    virtual bool ShouldAlwaysDropItem() const = 0;
 };

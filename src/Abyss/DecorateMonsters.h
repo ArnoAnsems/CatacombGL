@@ -946,7 +946,7 @@ const DecorateActor decorateMage =
     5,  // initialHealth;
     35 * pixelRadius,    // size;
     WithAllGems,  // radarVisibility;
-    EgaBrightWhite,   // radarColor;
+    EgaBrightRed,   // radarColor;
     mageStates,
     StateIdWalk,   // initialState;
     0,  // meleeDamage;

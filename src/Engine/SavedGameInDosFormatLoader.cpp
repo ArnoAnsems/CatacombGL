@@ -94,6 +94,15 @@ void SavedGameInDosFormatLoader::LoadActors(
                 actor->SetTimeToNextAction(0);
                 actor->SetSolid(IsSolid(actor->GetState()));
                 actor->SetActionPerformed(true);
+                
+                if (CanDropItem(decorateActor))
+                {
+                    if (m_savedGameConverter.ShouldAlwaysDropItem() || actor->GetTemp1() != 0)
+                    {
+                        // Drop a red key
+                        actor->SetTemp1(35);
+                    }
+                }
 
                 if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
                 {
@@ -143,4 +152,18 @@ constexpr bool SavedGameInDosFormatLoader::IsSolid(const DecorateStateId stateId
          stateId == StateIdRise ||
          stateId == StateIdSink ||
          stateId == StateIdDecoration);
+}
+
+bool SavedGameInDosFormatLoader::CanDropItem(const DecorateActor& decorateActor)
+{
+    bool canDropItem = false;
+    for (const auto& state : decorateActor.states)
+    {
+        for (const auto& animation : state.second.animation)
+        {
+            canDropItem |= (animation.action == ActionDropItem);
+        }
+    }
+
+    return canDropItem;
 }

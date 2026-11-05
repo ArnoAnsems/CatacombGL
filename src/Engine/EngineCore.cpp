@@ -332,6 +332,7 @@ void EngineCore::DrawScene(IRenderer& renderer)
                     m_configurationSettings.GetCVarInt(CVarIdFov).GetValue(),
                     renderer.IsOriginalScreenResolutionSupported() && m_configurationSettings.GetCVarEnum(CVarIdScreenResolution).GetItemIndex() == CVarItemIdScreenResolutionOriginal,
                     m_configurationSettings.GetCVarEnum(CVarIdCameraPosition).GetItemIndex() == CVarItemIdCameraBehindPlayer);
+                m_level->UpdateVisibilityMap(m_renderable3DScene.GetCameraX(), m_renderable3DScene.GetCameraY());
                 m_level->Setup3DScene(
                     *m_game.GetEgaGraph(),
                     m_renderable3DScene,
@@ -1467,8 +1468,6 @@ bool EngineCore::Think()
                         m_game.PlaySoundNoItem();
                     }
                 }
-
-                m_level->UpdateVisibilityMap(m_renderable3DScene.GetCameraX(), m_renderable3DScene.GetCameraY());
 
                 ThinkActors();
                 ThinkNonBlockingActors();

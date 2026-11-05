@@ -16,8 +16,10 @@ Changelog
   * Fix: allow picking up multiple chests simultaneously. Reported by WhiteMagicRaven.
   * Fix: set initial health in Catacomb 3-D to 64.
   * Fix: prevent stuttering when the monitor refresh rate is above 100 Hz. Reported by 7HEPOW.
+  * Fix: prevent black rendering artifacts when rounding a corner. The artefact was the result of calculating wall visibility based on the players position from the previous frame.
   * Fix: build for GCC15. Fix provided by carlo-bramini.
   * Fix: do not show hidden monsters on the radar.
+  * Fix: mages in Catacomb Abyss should be a bright red dot on the radar.
   * Fix: doors should not be usable when time is frozen.
   * Fix: skeletons in Catacomb Abyss should have a shorter pain animation.
   * Fix: increased fire rate of the Eye in Catacomb Abyss.

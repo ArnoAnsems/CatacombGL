@@ -34,6 +34,7 @@ public:
     const bool IsInertObject(const uint16_t obclass) const override;
     const bool IsActive(const uint16_t dosObjectActive) const override;
     void SetFarPointerOffset(const uint32_t playerState32) override;
+    bool ShouldAlwaysDropItem() const override;
 
 private:
     const uint16_t GetActorIdOfBonus(const uint32_t state32) const;

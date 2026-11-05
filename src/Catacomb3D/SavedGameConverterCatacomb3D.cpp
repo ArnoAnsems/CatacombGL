@@ -556,3 +556,8 @@ void SavedGameConverterCatacomb3D::SetFarPointerOffset(const uint32_t /*playerSt
 {
     // No far pointer offset used.
 }
+
+bool SavedGameConverterCatacomb3D::ShouldAlwaysDropItem() const
+{
+    return false;
+}

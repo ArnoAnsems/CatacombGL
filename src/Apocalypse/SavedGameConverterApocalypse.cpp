@@ -1329,3 +1329,8 @@ void SavedGameConverterApocalypse::SetFarPointerOffset(const uint32_t playerStat
 {
     m_farPointerOffset = playerState32 - s_player;
 }
+
+bool SavedGameConverterApocalypse::ShouldAlwaysDropItem() const
+{
+    return false;
+}

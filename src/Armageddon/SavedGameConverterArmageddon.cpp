@@ -1243,3 +1243,8 @@ void SavedGameConverterArmageddon::SetFarPointerOffset(const uint32_t playerStat
 {
     m_farPointerOffset = playerState32 - s_player;
 }
+
+bool SavedGameConverterArmageddon::ShouldAlwaysDropItem() const
+{
+    return false;
+}

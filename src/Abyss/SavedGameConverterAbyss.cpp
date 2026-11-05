@@ -1096,3 +1096,8 @@ void SavedGameConverterAbyss::SetFarPointerOffset(const uint32_t /*playerState32
 {
     // No far pointer offset used.
 }
+
+bool SavedGameConverterAbyss::ShouldAlwaysDropItem() const
+{
+    return true;
+}
