@@ -694,70 +694,67 @@ void EngineCore::DrawTiledWindow(IRenderer& renderer, const uint16_t x, const ui
 
 void EngineCore::EnterKeyReleased()
 {
-    if (!m_menu->IsActive())
+    if (m_readingScroll != NotReadingAnyScroll)
     {
-        if (m_readingScroll != NotReadingAnyScroll)
+        m_readingScroll = NotReadingAnyScroll;
+        if (!m_takingChest)
         {
-            m_readingScroll = NotReadingAnyScroll;
-            if (!m_takingChest)
-            {
-                m_gameTimer.Resume();
-            }
+            m_gameTimer.Resume();
         }
+    }
 
-        if (m_state == Introduction)
+    if (m_state == Introduction)
+    {
+        if (m_game.IsCatacomb3D())
         {
-            if (m_game.IsCatacomb3D())
+            OpenMenu();
+        }
+        else
+        {
+            if (m_game.GetId() == GameId::CatacombAbyssv112)
             {
-                OpenMenu();
+                m_state = StandBeforeGate;
+                m_difficultyLevel = Hard; // Warrior
             }
             else
             {
-                if (m_game.GetId() == GameId::CatacombAbyssv112)
-                {
-                    m_state = StandBeforeGate;
-                    m_difficultyLevel = Hard; // Warrior
-                }
-                else
-                {
-                    m_state = RequestDifficultyLevel;
-                }
+                m_state = RequestDifficultyLevel;
             }
         }
-        else if (m_state == ShowDifficultyLevel)
+    }
+    else if (m_state == ShowDifficultyLevel)
+    {
+        m_state = StandBeforeGate;
+    }
+    else if (m_state == StandBeforeGate)
+    {
+        m_state = EnteringLevel;
+        m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
+        m_warpToLevel = 0;
+    }
+    else if (m_state == WarpCheatDialog)
+    {
+        m_state = InGame;
+        // Warp to level
+        const int levelIndexOnScreen = atoi(m_warpCheatTextField.c_str());
+        // In Catacomb 3-D, the on-screen level indices start at 1 instead of 0.
+        const int levelIndexInGameMaps = m_game.IsCatacomb3D() ? levelIndexOnScreen - 1 : levelIndexOnScreen;
+        if (levelIndexInGameMaps >= 0 && levelIndexInGameMaps < m_game.GetGameMaps()->GetNumberOfLevels())
         {
-            m_state = StandBeforeGate;
+            m_warpToLevel = (uint8_t)levelIndexInGameMaps;
         }
-        else if (m_state == StandBeforeGate)
+        m_warpCheatTextField.clear();
+        if (!m_takingChest)
         {
-            m_state = EnteringLevel;
-            m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
-            m_warpToLevel = 0;
+            m_gameTimer.Resume();
         }
-        else if (m_state == WarpCheatDialog)
+    }
+    else if (m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog)
+    {
+        m_state = InGame;
+        if (!m_takingChest)
         {
-            m_state = InGame;
-            // Warp to level
-            const int levelIndexOnScreen = atoi(m_warpCheatTextField.c_str());
-            // In Catacomb 3-D, the on-screen level indices start at 1 instead of 0.
-            const int levelIndexInGameMaps = m_game.IsCatacomb3D() ? levelIndexOnScreen - 1 : levelIndexOnScreen;
-            if (levelIndexInGameMaps >= 0 && levelIndexInGameMaps < m_game.GetGameMaps()->GetNumberOfLevels())
-            {
-                m_warpToLevel = (uint8_t)levelIndexInGameMaps;
-            }
-            m_warpCheatTextField.clear();
-            if (!m_takingChest)
-            {
-                m_gameTimer.Resume();
-            }
-        }
-        else if (m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog || m_state == AutoMapDialog)
-        {
-            m_state = InGame;
-            if (!m_takingChest)
-            {
-                m_gameTimer.Resume();
-            }
+            m_gameTimer.Resume();
         }
     }
 }
@@ -896,101 +893,102 @@ bool EngineCore::Think()
             return false;
         }
     }
-
-    if (m_state == InGame && !m_menu->IsActive())
+    else
     {
-        if (m_score.Update(m_timeStampOfPlayerCurrentFrame))
-        {
-            m_game.PlaySoundGetPoints();
-        }
+        // menu not active
 
-        for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
+        if (m_state == InGame)
         {
-	        m_playerActions.SetActionActive((ControlAction)i, IsActionActive((ControlAction)i));
-        }
+            if (m_score.Update(m_timeStampOfPlayerCurrentFrame))
+            {
+                m_game.PlaySoundGetPoints();
+            }
 
-        if (!m_configurationSettings.GetCVarBool(CVarIdMouseLook).IsEnabled())
-        {
-            // When mouse look is disabled, the Y-movement of the mouse will let the player walk forward and backward.
-            if (!IsActionActive(MoveForward))
+            for (uint8_t i = (uint8_t)MoveForward; i < (uint8_t)MaxControlAction; i++)
             {
-                if (m_playerInput.GetRelativeMouseYPos() < -1.0)
-                {
-                    m_timeStampLastMouseMoveForward = m_timeStampOfPlayerCurrentFrame;
-                }
-                if (m_timeStampLastMouseMoveForward + 100 > m_timeStampOfPlayerCurrentFrame)
-                {
-                    m_playerActions.SetActionActive(MoveForward, true);
-                }
+                m_playerActions.SetActionActive((ControlAction)i, IsActionActive((ControlAction)i));
             }
-            if (!IsActionActive(MoveBackward))
-            {
-                if (m_playerInput.GetRelativeMouseYPos() > 1.0)
-                {
-                    m_timeStampLastMouseMoveBackward = m_timeStampOfPlayerCurrentFrame;
-                }
-                if (m_timeStampLastMouseMoveBackward + 100 > m_timeStampOfPlayerCurrentFrame)
-                {
-                    m_playerActions.SetActionActive(MoveBackward, true);
-                }
-            }
-        }
-    }
 
-    if (m_state == WarpCheatDialog && !m_menu->IsActive())
-    {
-        for (int i = SDLK_0; i <= SDLK_9; i++)
-        {
-            if (m_playerInput.IsKeyJustPressed(i))
+            if (!m_configurationSettings.GetCVarBool(CVarIdMouseLook).IsEnabled())
             {
-                TextFieldInput((char)i);
-            }
-        }
-        for (int i = SDLK_KP_1; i <= SDLK_KP_0; i++)
-        {
-            if (m_playerInput.IsKeyJustPressed(i))
-            {
-                const char numericChar = (char)(i == SDLK_KP_0 ? SDLK_0 : i - SDLK_KP_1 + SDLK_1);
-                TextFieldInput(numericChar);
+                // When mouse look is disabled, the Y-movement of the mouse will let the player walk forward and backward.
+                if (!IsActionActive(MoveForward))
+                {
+                    if (m_playerInput.GetRelativeMouseYPos() < -1.0)
+                    {
+                        m_timeStampLastMouseMoveForward = m_timeStampOfPlayerCurrentFrame;
+                    }
+                    if (m_timeStampLastMouseMoveForward + 100 > m_timeStampOfPlayerCurrentFrame)
+                    {
+                        m_playerActions.SetActionActive(MoveForward, true);
+                    }
+                }
+                if (!IsActionActive(MoveBackward))
+                {
+                    if (m_playerInput.GetRelativeMouseYPos() > 1.0)
+                    {
+                        m_timeStampLastMouseMoveBackward = m_timeStampOfPlayerCurrentFrame;
+                    }
+                    if (m_timeStampLastMouseMoveBackward + 100 > m_timeStampOfPlayerCurrentFrame)
+                    {
+                        m_playerActions.SetActionActive(MoveBackward, true);
+                    }
+                }
             }
         }
 
-        if (m_playerInput.IsKeyJustPressed(SDLK_BACKSPACE))
+        if (m_state == WarpCheatDialog)
         {
-            BackspacePressed();
+            for (int i = SDLK_0; i <= SDLK_9; i++)
+            {
+                if (m_playerInput.IsKeyJustPressed(i))
+                {
+                    TextFieldInput((char)i);
+                }
+            }
+            for (int i = SDLK_KP_1; i <= SDLK_KP_0; i++)
+            {
+                if (m_playerInput.IsKeyJustPressed(i))
+                {
+                    const char numericChar = (char)(i == SDLK_KP_0 ? SDLK_0 : i - SDLK_KP_1 + SDLK_1);
+                    TextFieldInput(numericChar);
+                }
+            }
+
+            if (m_playerInput.IsKeyJustPressed(SDLK_BACKSPACE))
+            {
+                BackspacePressed();
+            }
         }
-    }
 
-    if (m_playerInput.IsKeyPressed(SDLK_F10) && m_state == Introduction && m_game.GetId() == GameId::CatacombAbyssv113)
-    {
-        // Catacomb Abyss Shareware Demo
-        m_menu->OpenDemo();
-    }
+        if (m_playerInput.IsKeyPressed(SDLK_F10) && m_state == Introduction && m_game.GetId() == GameId::CatacombAbyssv113)
+        {
+            // Catacomb Abyss Shareware Demo
+            m_menu->OpenDemo();
+        }
 
-    if (!m_playerInput.HasFocus() && m_state == InGame && !m_menu->IsActive())
-    {
-        OpenMenu();
-        m_game.GetAudioPlayer()->StopMusic();
-        m_playerInput.ClearAll();
-    }
+        if (!m_playerInput.HasFocus() && m_state == InGame && !m_menu->IsActive())
+        {
+            OpenMenu();
+            m_game.GetAudioPlayer()->StopMusic();
+            m_playerInput.ClearAll();
+        }
 
-    if (m_state == AutoMapDialog && !m_menu->IsActive() && m_level != nullptr)
-    {
-        m_autoMap.ProcessInput(
-            m_playerInput,
-            *m_level,
-            m_gameTimer.GetActualTime(),
-            m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex(),
-            m_game.GetOriginal3DViewArea());
-    }
+        if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
+        {
+            EnterKeyReleased();
+        }
 
-    if (m_playerInput.IsKeyJustPressed(SDLK_RETURN) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_SOUTH))
-    {
-        EnterKeyReleased();
-    }
+        if (m_state == AutoMapDialog && m_level != nullptr)
+        {
+            m_autoMap.ProcessInput(
+                m_playerInput,
+                *m_level,
+                m_gameTimer.GetActualTime(),
+                m_configurationSettings.GetCVarEnum(CVarIdAutoMapMode).GetItemIndex(),
+                m_game.GetOriginal3DViewArea());
+        }
 
-    if (!m_menu->IsActive())
-    {
         if (m_playerInput.IsKeyPressed(m_game.GetCheatsKeyCode()))
         {
             // Check for cheat codes
@@ -1093,56 +1091,431 @@ bool EngineCore::Think()
             m_game.GetAudioPlayer()->StopMusic();
             m_gameTimer.Pause();
         }
-    }
 
-    if (m_state != Help &&
-        m_state != WarpCheatDialog &&
-        m_state != GodModeCheatDialog &&
-        m_state != FreeItemsCheatDialog &&
-        !m_menu->IsActive() &&
-        (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_START))) // Escape
-    {
-        OpenMenu();
-        m_game.GetAudioPlayer()->StopMusic();
-        if (m_level != NULL && m_level->GetPlayerActor()->IsDead())
+        if (m_state != Help &&
+            m_state != WarpCheatDialog &&
+            m_state != GodModeCheatDialog &&
+            m_state != FreeItemsCheatDialog &&
+            (m_playerInput.IsKeyJustPressed(SDLK_ESCAPE) || m_playerInput.IsGameControllerButtonJustPressed(SDL_GAMEPAD_BUTTON_START))) // Escape
         {
+            OpenMenu();
+            m_game.GetAudioPlayer()->StopMusic();
+            if (m_level != NULL && m_level->GetPlayerActor()->IsDead())
+            {
+                m_score.UpdateAll();
+                m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
+            }
+        }
+        else if (m_state == Help)
+        {
+            if (m_game.ProcessInputOnHelpPage(m_playerInput))
+            {
+                m_state = InGame;
+            }
+        }
+        else if (m_state == InGame && m_game.IsCatacombAdventureSeries() && m_playerInput.IsKeyJustPressed(SDLK_F1))
+        {
+            m_state = Help;
+
+            // Close menu
+            if (m_menu->IsActive())
+            {
+                m_menu->SetActive(false);
+            }
+        }
+        else if (m_state == Victory && m_victoryState == VictoryStateDone && m_playerInput.IsAnyKeyPressed())
+        {
+            // Open the menu when any key is pressed in the victory screen.
             m_score.UpdateAll();
+            m_menu->SetActive(true);
             m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
         }
-    }
-    else if (m_state == Help)
-    {
-        if (m_game.ProcessInputOnHelpPage(m_playerInput))
+        else if ((m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog)
+            && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
         {
+            // Close the dialog and erase the input
             m_state = InGame;
+            m_warpCheatTextField.clear();
+            if (!m_takingChest)
+            {
+                m_gameTimer.Resume();
+            }
         }
-    }
-    else if (m_state == InGame && m_game.IsCatacombAdventureSeries() && m_playerInput.IsKeyJustPressed(SDLK_F1))
-    {
-        m_state = Help;
 
-        // Close menu
-        if (m_menu->IsActive())
+        if (m_state == EnteringLevel)
         {
-            m_menu->SetActive(false);
+            if (m_timeStampToEnterGame < m_gameTimer.GetActualTime())
+            {
+                m_state = InGame;
+                m_setOverlayOnNextDraw = true;
+                StartMusicIfNeeded();
+            }
         }
-    }
-    else if (m_state == Victory && m_victoryState == VictoryStateDone && m_playerInput.IsAnyKeyPressed() && !m_menu->IsActive())
-    {
-        // Open the menu when any key is pressed in the victory screen.
-        m_score.UpdateAll();
-        m_menu->SetActive(true);
-        m_menu->CheckHighScore(m_level->GetLevelIndex(), m_score.GetPoints());
-    }
-    else if ((m_state == WarpCheatDialog || m_state == GodModeCheatDialog || m_state == FreeItemsCheatDialog)
-             && m_playerInput.IsKeyJustPressed(SDLK_ESCAPE))
-    {
-        // Close the dialog and erase the input
-        m_state = InGame;
-        m_warpCheatTextField.clear();
-        if (!m_takingChest)
+
+        if (m_state == InGame || m_state == EnteringLevel)
         {
-            m_gameTimer.Resume();
+            if (m_level == nullptr)
+            {
+                LoadLevel(m_warpToLevel);
+            }
+        }
+
+        if (m_state == Victory)
+        {
+            switch (m_victoryState)
+            {
+            case VictoryStatePlayGetBolt:
+                {
+                    m_game.PlaySoundGetBolt();
+                    m_victoryState++;
+                    break;
+                }
+            case VictoryStatePlayGetNuke:
+                {
+                    m_game.PlaySoundGetNuke();
+                    m_victoryState++;
+                    break;
+                }
+            case VictoryStatePlayGetPotion:
+                {
+                    m_game.PlaySoundGetPotion();
+                    m_victoryState++;
+                    break;
+                }
+            case VictoryStatePlayGetKey:
+                {
+                    m_game.PlaySoundGetKey();
+                    m_victoryState++;
+                    break;
+                }
+            case VictoryStatePlayGetScroll:
+                {
+                    m_game.PlaySoundGetScroll();
+                    m_victoryState++;
+                    break;
+                }
+            case VictoryStatePlayGetPoint:
+                {
+                    m_game.PlaySoundGetPoints();
+                    m_victoryState++;
+                    break;
+                }
+            case VictoryStatePlayingGetBolt:
+            case VictoryStatePlayingGetNuke:
+            case VictoryStatePlayingGetPotion:
+            case VictoryStatePlayingGetKey:
+            case VictoryStatePlayingGetScroll:
+            case VictoryStatePlayingGetPoint:
+                {
+                    if (!m_game.GetAudioPlayer()->IsPlaying())
+                    {
+                        m_victoryState++;
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (m_state == InGame)
+        {
+            const bool manaBarEnabledInConfig = m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled();
+            if (manaBarEnabledInConfig != m_manaBar.IsEnabled())
+            {
+                m_manaBar.Reset(manaBarEnabledInConfig);
+            }
+
+            if (!m_level->GetPlayerActor()->IsDead())
+            {
+                if (m_keyToTake != NoKey)
+                {
+                    if (m_game.IsCatacomb3D())
+                    {
+                        // In Catacomb 3D there is no popup. Use the key immediately.
+                        m_playerInventory.TakeKey(m_keyToTake);
+                        m_startTakeKey = 0;
+                        m_keyToTake = NoKey;
+                        m_game.PlaySoundUseKey();
+                    }
+                    else
+                    {
+                        if (m_startTakeKey != 0)
+                        {
+                            if (m_startTakeKey + 2000 < m_gameTimer.GetActualTime())
+                            {
+                                m_messageInPopup[0] = 0;
+                                m_playerInventory.TakeKey(m_keyToTake);
+                                m_gameTimer.Resume();
+                                m_startTakeKey = 0;
+                                m_keyToTake = NoKey;
+                            }
+                        }
+                        else
+                        {
+                            m_startTakeKey = m_gameTimer.GetActualTime();
+                            m_gameTimer.Pause();
+                            std::snprintf(m_messageInPopup, 256, "You use a %s key", GetKeyName((KeyId)m_keyToTake));
+                            m_game.PlaySoundUseKey();
+                        }
+                    }
+                }
+
+                if (m_messageInPopup[0] != 0)
+                {
+                    if (m_startTakeKey == 0 && m_playerInput.IsAnyKeyPressed())
+                    {
+                        m_messageInPopup[0] = 0;
+                        m_gameTimer.Resume();
+                    }
+                }
+
+                if (m_timeStampOfPlayerCurrentFrame > m_timeStampOfPlayerPreviousFrame)
+                {
+                    m_manaBar.Update(m_timeStampOfPlayerCurrentFrame);
+
+                    //
+                    // Update player angle based on the control inputs.
+                    //
+                    const float degreesPerTic = (m_playerActions.GetActionActive(QuickTurn)) ? 3.0f : 1.0f;
+                    const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
+                    const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
+                    const float deltaTimeInTics = gamemath::MillisecondsToTicks(truncatedDeltaTimeInMs);
+                    const float turnSpeedFactor = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed).GetValue() / 100.0f;
+                    if (m_playerActions.GetActionActive(TurnLeft) && !m_playerActions.GetActionActive(Strafe))
+                    {
+                        const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
+                        m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
+                    }
+                    if (m_playerActions.GetActionActive(TurnRight) && !m_playerActions.GetActionActive(Strafe))
+                    {
+                        const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
+                        m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
+                    }
+
+                    constexpr int16_t minGameControllerAxisDeflection = 10000;
+                    if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
+                    {
+                        // Turn left with the game controller
+                        constexpr int16_t maxGameControllerAxisDeflection = -32768;
+                        const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
+                        const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
+                        const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
+                        m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
+                    }
+                    else if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) > minGameControllerAxisDeflection)
+                    {
+                        // Turn right with the game controller
+                        constexpr int16_t maxGameControllerAxisDeflection = 32767;
+                        const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
+                        const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
+                        const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
+                        m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
+                    }
+
+                    // Turning with the mouse
+                    if (std::abs(m_playerInput.GetRelativeMouseXPos()) > 0.001)
+                    {
+                        const float mouseMovement = m_playerInput.GetRelativeMouseXPos() * deltaTimeInTics * ((float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue() / 50.0f);
+                        m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
+                    }
+
+                    //
+                    // Now that the player angle is updated; check if the player walks.
+                    //
+                    constexpr float playerSpeed = 5120.0f / 65536.0f;
+                    const float ticks = gamemath::MillisecondsToTicks(truncatedDeltaTimeInMs);
+                    const bool isRunning = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun).IsEnabled() != m_playerActions.GetActionActive(Run);
+                    const float distance = isRunning ? playerSpeed * ticks * 1.5f : playerSpeed * ticks;
+
+                    const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
+                        (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
+                        (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) < -minGameControllerAxisDeflection);
+                    const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
+                        (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight))) ||
+                        (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) > minGameControllerAxisDeflection);
+                    const bool moveForward = m_playerActions.GetActionActive(MoveForward) ||
+                        (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) < -minGameControllerAxisDeflection);
+                    const bool moveBackward = m_playerActions.GetActionActive(MoveBackward) ||
+                        (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) > minGameControllerAxisDeflection);
+                    if (moveForward && strafeLeft)
+                    {
+                        Thrust(315, distance);
+                    }
+                    else if (moveBackward && strafeLeft)
+                    {
+                        Thrust(225, distance);
+                    }
+                    else if (moveForward && strafeRight)
+                    {
+                        Thrust(45, distance);
+                    }
+                    else if (moveBackward && strafeRight)
+                    {
+                        Thrust(135, distance);
+                    }
+                    else if (moveForward)
+                    {
+                        Thrust(0, distance);
+                    }
+                    else if (moveBackward)
+                    {
+                        Thrust(180, distance);
+                    }
+                    else if (strafeLeft)
+                    {
+                        Thrust(270, distance);
+                    }
+                    else if (strafeRight)
+                    {
+                        Thrust(90, distance);
+                    }
+
+                    //
+                    // Now that both angle and position of the player are updated; check if the player shoots.
+                    //
+                    bool shoot = false;
+                    const bool autoFire = m_configurationSettings.GetCVarBool(CVarIdAutoFire).IsEnabled();
+                    if (m_game.IsCatacombAdventureSeries())
+                    {
+                        shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
+                    }
+                    else
+                    {
+                        shoot = m_playerActions.UpdateShootWithCharge(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
+                    }
+                    if (shoot)
+                    {
+                        uint16_t projectileId = m_level->GetPlayerActor()->GetDecorateActor().projectileId;
+                        if (m_playerActions.GetShotPower() == 56 && !m_playerActions.GetActionActive(Shoot))
+                        {
+                            // Big shot
+                            projectileId++;
+                            m_game.PlaySoundBoom();
+                        }
+                        else
+                        {
+                            m_game.PlaySoundShoot();
+                        }
+                        const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
+                        if (decorateProjectilePair != m_game.GetDecorateActors().end())
+                        {
+                            Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfPlayerCurrentFrame, decorateProjectilePair->second);
+                            projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
+                            projectile->SetActive(true);
+                            m_level->AddNonBlockingActor(projectile);
+                        }
+                    }
+                    if (m_playerActions.IsReadyToShootBolt(m_timeStampOfPlayerCurrentFrame))
+                    {
+                        if (m_playerInventory.TakeBolt())
+                        {
+                            m_playerActions.ShootBolt(m_timeStampOfPlayerCurrentFrame);
+                            m_game.PlaySoundUseBolt();
+                        }
+                        else
+                        {
+                            m_game.PlaySoundNoItem();
+                        }
+                    }
+
+                    if (m_playerActions.UpdateContinueBolt(m_timeStampOfPlayerCurrentFrame))
+                    {
+                        const uint16_t projectileId = m_game.IsCatacomb3D() ? m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1 : m_level->GetPlayerActor()->GetDecorateActor().projectileId;
+                        const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
+                        if (decorateProjectilePair != m_game.GetDecorateActors().end())
+                        {
+                            Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decorateProjectilePair->second);
+                            projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
+                            projectile->SetActive(true);
+                            m_level->AddNonBlockingActor(projectile);
+                        }
+                    }
+
+                    if (m_playerActions.UpdateShootNuke(m_timeStampOfPlayerCurrentFrame))
+                    {
+                        if (m_playerInventory.TakeNuke())
+                        {
+                            m_game.PlaySoundUseNuke();
+
+                            const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1);
+                            if (decorateProjectilePair != m_game.GetDecorateActors().end())
+                            {
+                                for (uint16_t i = 0; i < 16; i++)
+                                {
+                                    Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decorateProjectilePair->second);
+                                    projectile->SetAngle(i * 22.5f);
+                                    projectile->SetActive(true);
+                                    m_level->AddNonBlockingActor(projectile);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            m_game.PlaySoundNoItem();
+                        }
+                    }
+
+                    ThinkActors();
+                    ThinkNonBlockingActors();
+                }
+
+                if (m_readingScroll == NotReadingAnyScroll)
+                {
+                    if (m_takingChest)
+                    {
+                        if (!m_game.GetAudioPlayer()->IsPlaying())
+                        {
+                            if (m_playerInventory.HasItemsInChest())
+                            {
+                                m_playerInventory.GiveNextItemInChest();
+                            }
+                            else
+                            {
+                                m_takingChest = false;
+                                m_gameTimer.Resume();
+                            }
+                        }
+                    }
+                    else if (m_playerInventory.HasItemsInChest())
+                    {
+                        m_playerInventory.GiveNextItemInChest();
+                    }
+                }
+            }
+
+            // Check for player dead
+            if (m_level->GetPlayerActor()->IsDead())
+            {
+                if (!m_gameTimer.IsPaused())
+                {
+                    m_gameTimer.Pause();
+
+                    if (m_game.IsCatacomb3D())
+                    {
+                        m_setOverlayOnNextDraw = true;
+                    }
+                }
+            }
+
+            // Update radar
+
+            m_radarModel.ResetRadar(m_level->GetPlayerActor(), m_playerInventory, m_timeStampOfPlayerCurrentFrame);
+            const uint16_t mapSize = m_level->GetLevelWidth() * m_level->GetLevelHeight();
+            m_radarModel.AddActors((const Actor**)m_level->GetBlockingActors(), mapSize);
+            m_radarModel.AddActors((const Actor**)m_level->GetNonBlockingActors(), m_level->GetMaxNonBlockingActors());
+
+            if (m_level->GetLevelIndex() != m_warpToLevel && m_state != VerifyGateExit && m_keyToTake == NoKey)
+            {
+                LoadLevel(m_warpToLevel);
+                m_playerActions.ResetForNewLevel();
+                m_state = EnteringLevel;
+                m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
+                if (m_game.IsCatacomb3D())
+                {
+                    m_setOverlayOnNextDraw = true;
+                    m_timeStampToEnterGame += 1000;
+                    m_game.GetAudioPlayer()->StopMusic();
+                }
+            }
         }
     }
 
@@ -1155,382 +1528,6 @@ bool EngineCore::Think()
     if (m_state == ExitGame && m_statusMessage == nullptr)
     {
         return true;
-    }
-
-    if (m_state == EnteringLevel)
-    {
-        if (m_timeStampToEnterGame < m_gameTimer.GetActualTime())
-        {
-            m_state = InGame;
-            m_setOverlayOnNextDraw = true;
-            StartMusicIfNeeded();
-        }
-    }
-
-    if (m_state == InGame || m_state == EnteringLevel)
-    {
-        if (m_level == nullptr)
-        {
-            LoadLevel(m_warpToLevel);
-        }
-    }
-
-    if (m_state == Victory)
-    {
-        switch (m_victoryState)
-        {
-        case VictoryStatePlayGetBolt:
-            {
-                m_game.PlaySoundGetBolt();
-                m_victoryState++;
-                break;
-            }
-        case VictoryStatePlayGetNuke:
-            {
-                m_game.PlaySoundGetNuke();
-                m_victoryState++;
-                break;
-            }
-        case VictoryStatePlayGetPotion:
-            {
-                m_game.PlaySoundGetPotion();
-                m_victoryState++;
-                break;
-            }
-        case VictoryStatePlayGetKey:
-            {
-                m_game.PlaySoundGetKey();
-                m_victoryState++;
-                break;
-            }
-        case VictoryStatePlayGetScroll:
-            {
-                m_game.PlaySoundGetScroll();
-                m_victoryState++;
-                break;
-            }
-        case VictoryStatePlayGetPoint:
-            {
-                m_game.PlaySoundGetPoints();
-                m_victoryState++;
-                break;
-            }
-        case VictoryStatePlayingGetBolt:
-        case VictoryStatePlayingGetNuke:
-        case VictoryStatePlayingGetPotion:
-        case VictoryStatePlayingGetKey:
-        case VictoryStatePlayingGetScroll:
-        case VictoryStatePlayingGetPoint:
-            {
-                if (!m_game.GetAudioPlayer()->IsPlaying())
-                {
-                    m_victoryState++;
-                }
-                break;
-            }
-        }
-    }
-
-    if (m_state == InGame)
-    {
-        const bool manaBarEnabledInConfig = m_configurationSettings.GetCVarBool(CVarIdManaBar).IsEnabled();
-        if (manaBarEnabledInConfig != m_manaBar.IsEnabled())
-        {
-            m_manaBar.Reset(manaBarEnabledInConfig);
-        }
-
-        if (!m_level->GetPlayerActor()->IsDead())
-        {
-            if (m_keyToTake != NoKey)
-            {
-                if (m_game.IsCatacomb3D())
-                {
-                    // In Catacomb 3D there is no popup. Use the key immediately.
-                    m_playerInventory.TakeKey(m_keyToTake);
-                    m_startTakeKey = 0;
-                    m_keyToTake = NoKey;
-                    m_game.PlaySoundUseKey();
-                }
-                else
-                {
-                    if (m_startTakeKey != 0)
-                    {
-                        if (m_startTakeKey + 2000 < m_gameTimer.GetActualTime())
-                        {
-                            m_messageInPopup[0] = 0;
-                            m_playerInventory.TakeKey(m_keyToTake);
-                            m_gameTimer.Resume();
-                            m_startTakeKey = 0;
-                            m_keyToTake = NoKey;
-                        }
-                    }
-                    else
-                    {
-                        m_startTakeKey = m_gameTimer.GetActualTime();
-                        m_gameTimer.Pause();
-                        std::snprintf(m_messageInPopup, 256, "You use a %s key", GetKeyName((KeyId)m_keyToTake));
-                        m_game.PlaySoundUseKey();
-                    }
-                }
-            }
-
-            if (m_messageInPopup[0] != 0)
-            {
-                if (m_startTakeKey == 0 && m_playerInput.IsAnyKeyPressed())
-                {
-                    m_messageInPopup[0] = 0;
-                    m_gameTimer.Resume();
-                }
-            }
-
-            if (m_timeStampOfPlayerCurrentFrame > m_timeStampOfPlayerPreviousFrame)
-            {
-                m_manaBar.Update(m_timeStampOfPlayerCurrentFrame);
-
-                //
-                // Update player angle based on the control inputs.
-                //
-                const float degreesPerTic = (m_playerActions.GetActionActive(QuickTurn)) ? 3.0f : 1.0f;
-                const uint32_t deltaTimeInMs = m_timeStampOfPlayerCurrentFrame - m_timeStampOfPlayerPreviousFrame;
-                const uint32_t truncatedDeltaTimeInMs = (deltaTimeInMs < 50) ? deltaTimeInMs : 50;
-                const float deltaTimeInTics = gamemath::MillisecondsToTicks(truncatedDeltaTimeInMs);
-                const float turnSpeedFactor = m_configurationSettings.GetCVarInt(CVarIdTurnSpeed).GetValue() / 100.0f;
-                if (m_playerActions.GetActionActive(TurnLeft) && !m_playerActions.GetActionActive(Strafe))
-                {
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
-                }
-                if (m_playerActions.GetActionActive(TurnRight) && !m_playerActions.GetActionActive(Strafe))
-                {
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * turnSpeedFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
-                }
-
-                constexpr int16_t minGameControllerAxisDeflection = 10000;
-                if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) < -minGameControllerAxisDeflection)
-                {
-                    // Turn left with the game controller
-                    constexpr int16_t maxGameControllerAxisDeflection = -32768;
-                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
-                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() - deltaDegrees);
-                }
-                else if (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) > minGameControllerAxisDeflection)
-                {
-                    // Turn right with the game controller
-                    constexpr int16_t maxGameControllerAxisDeflection = 32767;
-                    const float factor = m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_RIGHTX) / maxGameControllerAxisDeflection;
-                    const float sensitivityFactor = m_configurationSettings.GetCVarInt(CVarIdGameControllerAimSensitivity).GetValue() * 0.1f;
-                    const float deltaDegrees = degreesPerTic * deltaTimeInTics * factor * sensitivityFactor;
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + deltaDegrees);
-                }
-
-                // Turning with the mouse
-                if (std::abs(m_playerInput.GetRelativeMouseXPos()) > 0.001)
-                {
-                    const float mouseMovement = m_playerInput.GetRelativeMouseXPos() * deltaTimeInTics * ((float)m_configurationSettings.GetCVarInt(CVarIdMouseSensitivity).GetValue() / 50.0f);
-                    m_level->GetPlayerActor()->SetAngle(m_level->GetPlayerActor()->GetAngle() + mouseMovement);
-                }
-
-                //
-                // Now that the player angle is updated; check if the player walks.
-                //
-                constexpr float playerSpeed = 5120.0f / 65536.0f;
-                const float ticks = gamemath::MillisecondsToTicks(truncatedDeltaTimeInMs);
-                const bool isRunning = m_configurationSettings.GetCVarBool(CVarIdAlwaysRun).IsEnabled() != m_playerActions.GetActionActive(Run);
-                const float distance = isRunning ? playerSpeed * ticks * 1.5f : playerSpeed * ticks;
-
-                const bool strafeLeft = (m_playerActions.GetActionActive(StrafeLeft) ||
-                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnLeft))) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) < -minGameControllerAxisDeflection);
-                const bool strafeRight = (m_playerActions.GetActionActive(StrafeRight) ||
-                    (m_playerActions.GetActionActive(Strafe) && m_playerActions.GetActionActive(TurnRight))) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTX) > minGameControllerAxisDeflection);
-                const bool moveForward = m_playerActions.GetActionActive(MoveForward) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) < -minGameControllerAxisDeflection);
-                const bool moveBackward = m_playerActions.GetActionActive(MoveBackward) ||
-                    (m_playerInput.GetGameControllerAxisPressed(SDL_GAMEPAD_AXIS_LEFTY) > minGameControllerAxisDeflection);
-                if (moveForward && strafeLeft)
-                {
-                    Thrust(315, distance);
-                }
-                else if (moveBackward && strafeLeft)
-                {
-                    Thrust(225, distance);
-                }
-                else if (moveForward && strafeRight)
-                {
-                    Thrust(45, distance);
-                }
-                else if (moveBackward && strafeRight)
-                {
-                    Thrust(135, distance);
-                }
-                else if (moveForward)
-                {
-                    Thrust(0, distance);
-                }
-                else if (moveBackward)
-                {
-                    Thrust(180, distance);
-                }
-                else if (strafeLeft)
-                {
-                    Thrust(270, distance);
-                }
-                else if (strafeRight)
-                {
-                    Thrust(90, distance);
-                }
-
-                //
-                // Now that both angle and position of the player are updated; check if the player shoots.
-                //
-                bool shoot = false;
-                const bool autoFire = m_configurationSettings.GetCVarBool(CVarIdAutoFire).IsEnabled();
-                if (m_game.IsCatacombAdventureSeries())
-                {
-                    shoot = m_playerActions.UpdateShoot(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
-                }
-                else
-                {
-                    shoot = m_playerActions.UpdateShootWithCharge(m_timeStampOfPlayerCurrentFrame, autoFire, m_manaBar);
-                }
-                if (shoot)
-                {
-                    uint16_t projectileId = m_level->GetPlayerActor()->GetDecorateActor().projectileId;
-                    if (m_playerActions.GetShotPower() == 56 && !m_playerActions.GetActionActive(Shoot))
-                    {
-                        // Big shot
-                        projectileId++;
-                        m_game.PlaySoundBoom();
-                    }
-                    else
-                    {
-                        m_game.PlaySoundShoot();
-                    }
-                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
-                    if (decorateProjectilePair != m_game.GetDecorateActors().end())
-                    {
-                        Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfPlayerCurrentFrame, decorateProjectilePair->second);
-                        projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
-                        projectile->SetActive(true);
-                        m_level->AddNonBlockingActor(projectile);
-                    }
-                }
-                if (m_playerActions.IsReadyToShootBolt(m_timeStampOfPlayerCurrentFrame))
-                {
-                    if (m_playerInventory.TakeBolt())
-                    {
-                        m_playerActions.ShootBolt(m_timeStampOfPlayerCurrentFrame);
-                        m_game.PlaySoundUseBolt();
-                    }
-                    else
-                    {
-                        m_game.PlaySoundNoItem();
-                    }
-                }
-
-                if (m_playerActions.UpdateContinueBolt(m_timeStampOfPlayerCurrentFrame))
-                {
-                    const uint16_t projectileId = m_game.IsCatacomb3D() ? m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1 : m_level->GetPlayerActor()->GetDecorateActor().projectileId;
-                    const auto decorateProjectilePair = m_game.GetDecorateActors().find(projectileId);
-                    if (decorateProjectilePair != m_game.GetDecorateActors().end())
-                    {
-                        Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decorateProjectilePair->second);
-                        projectile->SetAngle(m_level->GetPlayerActor()->GetAngle());
-                        projectile->SetActive(true);
-                        m_level->AddNonBlockingActor(projectile);
-                    }
-                }             
-           
-                if (m_playerActions.UpdateShootNuke(m_timeStampOfPlayerCurrentFrame))
-                {
-                    if (m_playerInventory.TakeNuke())
-                    {
-                        m_game.PlaySoundUseNuke();
-
-                        const auto decorateProjectilePair = m_game.GetDecorateActors().find(m_level->GetPlayerActor()->GetDecorateActor().projectileId + 1);
-                        if (decorateProjectilePair != m_game.GetDecorateActors().end())
-                        {
-                            for (uint16_t i = 0; i < 16; i++)
-                            {
-                                Actor* projectile = new Actor(m_level->GetPlayerActor()->GetX(), m_level->GetPlayerActor()->GetY(), m_timeStampOfWorldCurrentFrame, decorateProjectilePair->second);
-                                projectile->SetAngle(i * 22.5f);
-                                projectile->SetActive(true);
-                                m_level->AddNonBlockingActor(projectile);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        m_game.PlaySoundNoItem();
-                    }
-                }
-
-                ThinkActors();
-                ThinkNonBlockingActors();
-            }
-
-            if (!m_menu->IsActive() && m_readingScroll == NotReadingAnyScroll)
-            {
-                if (m_takingChest)
-                {
-                    if (!m_game.GetAudioPlayer()->IsPlaying())
-                    {
-                        if (m_playerInventory.HasItemsInChest())
-                        {
-                            m_playerInventory.GiveNextItemInChest();
-                        }
-                        else
-                        {
-                            m_takingChest = false;
-                            m_gameTimer.Resume();
-                        }
-                    }
-                }
-                else if (m_playerInventory.HasItemsInChest())
-                {
-                    m_playerInventory.GiveNextItemInChest();
-                }
-            }
-        }
-
-        // Check for player dead
-        if (m_level->GetPlayerActor()->IsDead())
-        {
-            if (!m_gameTimer.IsPaused())
-            {
-                m_gameTimer.Pause();
-
-                if (m_game.IsCatacomb3D())
-                {
-                    m_setOverlayOnNextDraw = true;
-                }
-            }
-        }
-
-        // Update radar
-        
-        m_radarModel.ResetRadar(m_level->GetPlayerActor(), m_playerInventory, m_timeStampOfPlayerCurrentFrame);
-        const uint16_t mapSize = m_level->GetLevelWidth() * m_level->GetLevelHeight();
-        m_radarModel.AddActors((const Actor**)m_level->GetBlockingActors(), mapSize);
-        m_radarModel.AddActors((const Actor**)m_level->GetNonBlockingActors(), m_level->GetMaxNonBlockingActors());
-
-        if (m_level->GetLevelIndex() != m_warpToLevel && m_state != VerifyGateExit && m_keyToTake == NoKey)
-        {
-            LoadLevel(m_warpToLevel);
-            m_playerActions.ResetForNewLevel();
-            m_state = EnteringLevel;
-            m_timeStampToEnterGame = m_gameTimer.GetActualTime() + 2000u;
-            if (m_game.IsCatacomb3D())
-            {
-                m_setOverlayOnNextDraw = true;
-                m_timeStampToEnterGame += 1000;
-                m_game.GetAudioPlayer()->StopMusic();
-            }
-        }
     }
 
     m_playerInput.ClearJustPressed();
@@ -3365,7 +3362,7 @@ void EngineCore::StartNewGameWithDifficultySelection()
 void EngineCore::StartNewGameWithoutDifficultySelection()
 {
     // Skip the difficulty selection
-    m_state = ShowDifficultyLevel;
+    m_state = StandBeforeGate;
     m_difficultyLevel = Hard; // Warrior
     m_playerInventory.ResetForNewGame();
     UnloadLevel();
