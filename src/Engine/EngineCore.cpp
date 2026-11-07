@@ -1110,10 +1110,13 @@ bool EngineCore::Think()
         {
             if (m_game.ProcessInputOnHelpPage(m_playerInput))
             {
-                m_state = InGame;
+                m_state = (m_level == nullptr) ? Introduction : InGame;
             }
         }
-        else if (m_state == InGame && m_game.IsCatacombAdventureSeries() && m_playerInput.IsKeyJustPressed(SDLK_F1))
+        else if (
+            (m_state == InGame || m_state == Introduction && m_game.GetId() == GameId::CatacombAbyssv112) &&
+            m_game.IsCatacombAdventureSeries() &&
+            m_playerInput.IsKeyJustPressed(SDLK_F1))
         {
             m_state = Help;
 

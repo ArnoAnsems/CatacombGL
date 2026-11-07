@@ -4,6 +4,7 @@ Changelog
 
 * Post-release:
   * Added support for Catacomb 3-D version 1.00, as included in the 2024 physical Big Box releases from Romero Games.
+  * Added support for Catacomb Abyss version 1.12, an early shareware version with limited functionality.
   * Added support for game controllers.
   * Increased auto map scroll speed. Suggested by pagb666.
   * Added option for instantly picking up chests. Suggested by WhiteMagicRaven.

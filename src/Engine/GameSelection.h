@@ -25,8 +25,7 @@ class RenderableText;
 enum GameDetectionState
 {
     Detected,
-    NotDetected,
-    NotSupported
+    NotDetected
 };
 
 struct GameSelectionPresentation
