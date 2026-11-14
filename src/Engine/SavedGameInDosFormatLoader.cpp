@@ -104,6 +104,11 @@ void SavedGameInDosFormatLoader::LoadActors(
                     }
                 }
 
+                if (SpawnsAsStatue(decorateActor) && actor->GetState() == StateIdHidden)
+                {
+                    actor->SetHealth(decorateActor.initialHealth);
+                }
+
                 if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
                 {
                     nonBlockingActors[nonBlockingIndex] = actor;
@@ -166,4 +171,16 @@ bool SavedGameInDosFormatLoader::CanDropItem(const DecorateActor& decorateActor)
     }
 
     return canDropItem;
+}
+
+bool SavedGameInDosFormatLoader::SpawnsAsStatue(const DecorateActor& decorateActor)
+{
+    bool spawnsAsStatue = false;
+    const auto& hiddenState = decorateActor.states.find(StateIdHidden);
+    if (hiddenState != decorateActor.states.end())
+    {
+        spawnsAsStatue = (hiddenState->second.animation.front().pictureIndex != 0);
+    }
+
+    return spawnsAsStatue;
 }

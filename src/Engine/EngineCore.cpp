@@ -531,7 +531,8 @@ void EngineCore::DrawScene(IRenderer& renderer)
     {
         if (STR_CASE_CMP(m_messageInPopup, "") != 0)
         {
-            DrawCenteredTiledWindow(renderer, 20, 4);
+            const uint16_t popupWidthInTiles = strlen(m_messageInPopup) > 24 ? 30u : 20u;
+            DrawCenteredTiledWindow(renderer, popupWidthInTiles, 4);
             RenderableText renderableText(*m_game.GetEgaGraph()->GetFont(3));
             renderableText.Centered(m_messageInPopup, EgaDarkGray, 160, 49);
             renderer.RenderText(renderableText);
@@ -2525,7 +2526,14 @@ bool EngineCore::ClipWithTile(const uint16_t tileX, const uint16_t tileY, const 
                 if (m_game.IsCatacombAdventureSeries())
                 {
                     m_gameTimer.Pause();
-                    std::snprintf(m_messageInPopup, 256, "The door is blocked");
+                    if (m_game.GetId() == GameId::CatacombArmageddonv102 || m_game.GetId() == GameId::CatacombApocalypsev101)
+                    {
+                        std::snprintf(m_messageInPopup, 256, "This door is permanently blocked");
+                    }
+                    else
+                    {
+                        std::snprintf(m_messageInPopup, 256, "The door is blocked");
+                    }
                     WaitForAnyKeyPressed();
                     m_game.PlaySoundHitGate();
                 }

@@ -86,8 +86,8 @@ constexpr uint32_t s_bgem2bonus = 0x1A700000;
 constexpr uint32_t s_pgem2bonus = 0x1A710000;
 constexpr uint32_t s_bonus_die =  0x1A720000;
 constexpr uint32_t s_tombs0 = 0x1A730000;
-constexpr uint32_t s_tombs1 = 0x1A740000;
-constexpr uint32_t s_tombs2 = 0x1A750000;
+constexpr uint32_t s_tombs1 = 0x1A73000C;
+constexpr uint32_t s_tombs2 = 0x1A730018;
 constexpr uint32_t s_ftimebonus = 0x1A760000;
 constexpr uint32_t s_ftimebonus2 = 0x1A770000;
 constexpr uint32_t s_walldie1 = 0x1A780000;
@@ -484,9 +484,24 @@ const uint16_t SavedGameConverterArmageddon::GetActorIdOfSolid(const uint32_t st
 {
     const uint32_t localState32 = state32 - m_farPointerOffset;
     const uint16_t actorId =
+        (localState32 == s_arch_1) ? actorIdArch1 :
+        (localState32 == s_arch_2) ? actorIdArch2 :
+        (localState32 == s_arch_3) ? actorIdArch3 :
+        (localState32 == s_arch_4) ? actorIdArch4 :
+        (localState32 == s_arch_5) ? actorIdArch5 :
+        (localState32 == s_arch_6) ? actorIdArch6 :
+        (localState32 == s_arch_7) ? actorIdArch7 :
+        (localState32 == s_arch_8) ? actorIdArch8 :
+        (localState32 == s_arch_9) ? actorIdArch9 :
+        (localState32 == s_arch_10) ? actorIdArch10 :
+        (localState32 == s_arch_11) ? actorIdArch11 :
+        (localState32 == s_arch_12) ? actorIdArch12 :
+        (localState32 == s_arch_13) ? actorIdArch13 :
         (localState32 == s_force_field_1 || localState32 == s_force_field_2 || localState32 == s_force_field_3 ||
          localState32 == s_force_field_4 || localState32 == s_force_field_die || localState32 == s_force_field_die1) ? actorIdForceField :
         (localState32 == s_skeleton_hanging) ? actorIdMonsterSkeletonHanging :
+        (localState32 == s_tree_death1 || localState32 == s_tree_death2 || localState32 == s_tree_death3 || 
+         localState32 == s_tree_death4 || localState32 == s_tree_death5) ? actorIdMonsterTree :
         0;
     return actorId;
 }

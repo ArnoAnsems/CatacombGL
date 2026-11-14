@@ -141,16 +141,21 @@ void Actor::Think(const uint32_t currentTimestamp)
     const DecorateState& currentState = m_decorateActor.states.find(m_stateId)->second;
     const DecorateAnimationFrame& currentFrame = currentState.animation.at(m_animationFrame);
     if (deltaTicks > currentFrame.durationInTics)
-    {
-        // Goto next frame
-        m_animationFrame++;
+    {        
         m_timestamp = currentTimestamp;
         m_actionPerformed = false;
-        if (currentState.animation.size() <= m_animationFrame)
+
+        // The burning tree action directly sets the next animation frame.
+        if (currentFrame.action != ActionBurningTree)
         {
-            // We're at the end of an animation; go to the first frame of the next state
-            m_stateId = currentState.nextState;
-            m_animationFrame = 0;
+            // Goto next frame
+            m_animationFrame++;
+            if (currentState.animation.size() <= m_animationFrame)
+            {
+                // We're at the end of an animation; go to the first frame of the next state
+                m_stateId = currentState.nextState;
+                m_animationFrame = 0;
+            }
         }
     }
 }
