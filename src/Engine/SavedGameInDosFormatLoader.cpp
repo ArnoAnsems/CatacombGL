@@ -109,6 +109,12 @@ void SavedGameInDosFormatLoader::LoadActors(
                     actor->SetHealth(decorateActor.initialHealth);
                 }
 
+                if (SpawnsAsBunny(decorateActor) && (actor->GetState() == StateIdPeekAlternative || actor->GetState() == StateIdPeek))
+                {
+                    actor->SetHealth(decorateActor.initialHealth);
+                    actor->SetTemp2(actor->GetTemp2() * 20);
+                }
+
                 if (decorateActor.initialState == StateIdProjectileFly || m_savedGameConverter.IsInertObject(dosObject.obclass))
                 {
                     nonBlockingActors[nonBlockingIndex] = actor;
@@ -183,4 +189,9 @@ bool SavedGameInDosFormatLoader::SpawnsAsStatue(const DecorateActor& decorateAct
     }
 
     return spawnsAsStatue;
+}
+
+bool SavedGameInDosFormatLoader::SpawnsAsBunny(const DecorateActor& decorateActor)
+{
+    return decorateActor.initialState == StateIdPeekAlternative;
 }

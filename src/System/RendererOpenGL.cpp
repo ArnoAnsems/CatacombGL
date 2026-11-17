@@ -564,7 +564,7 @@ void RendererOpenGL::RenderSprites(const RenderableSprites& renderableSprites)
         glTranslatef(offsetX, offsetY, 0.0f);
         const float angle =
             (orientation == RenderableSprites::RotatedTowardsPlayer) ? renderableSprites.GetAngle() :
-            (orientation == RenderableSprites::Isometric) ? 135.0f :
+            (orientation == RenderableSprites::Isometric) ? 315.0f :
             (orientation == RenderableSprites::AlongYAxis) ? 90.0f :
             0.0f;
 

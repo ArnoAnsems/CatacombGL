@@ -567,6 +567,7 @@ TEST_F(SavedGameConverterArmageddon_Test, ConvertRealSolid)
 {
     constexpr uint16_t obClassRealSolid = 33;
     constexpr uint32_t allState32[] = {
+        0x1A730000 + m_farPointerOffset, 0x1A73000C + m_farPointerOffset, 0x1A730018 + m_farPointerOffset,
         0x1B130000 + m_farPointerOffset, 0x1B140000 + m_farPointerOffset, 0x1B390000 + m_farPointerOffset,
         0x1B540000 + m_farPointerOffset, 0x1B550000 + m_farPointerOffset, 0x1B560000 + m_farPointerOffset,
         0x1B570000 + m_farPointerOffset, 0x1B580000 + m_farPointerOffset, 0x1B590000 + m_farPointerOffset,

@@ -47,6 +47,7 @@ private:
     static constexpr bool IsSolid(const DecorateStateId stateId);
     static bool CanDropItem(const DecorateActor& decorateActor);
     static bool SpawnsAsStatue(const DecorateActor& decorateActor);
+    static bool SpawnsAsBunny(const DecorateActor& decorateActor);
 
     const SavedGameInDosFormat& m_savedGameInDosFormat;
     const ISavedGameConverter& m_savedGameConverter;
